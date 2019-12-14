@@ -1308,19 +1308,15 @@ impl AssociateKmsKeyError {
 }
 impl fmt::Display for AssociateKmsKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateKmsKeyError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateKmsKeyError::InvalidParameter(ref cause) => cause,
-            AssociateKmsKeyError::OperationAborted(ref cause) => cause,
-            AssociateKmsKeyError::ResourceNotFound(ref cause) => cause,
-            AssociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
+            AssociateKmsKeyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateKmsKeyError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            AssociateKmsKeyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateKmsKeyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateKmsKeyError {}
 /// Errors returned by CancelExportTask
 #[derive(Debug, PartialEq)]
 pub enum CancelExportTaskError {
@@ -1359,19 +1355,15 @@ impl CancelExportTaskError {
 }
 impl fmt::Display for CancelExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelExportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CancelExportTaskError::InvalidOperation(ref cause) => cause,
-            CancelExportTaskError::InvalidParameter(ref cause) => cause,
-            CancelExportTaskError::ResourceNotFound(ref cause) => cause,
-            CancelExportTaskError::ServiceUnavailable(ref cause) => cause,
+            CancelExportTaskError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            CancelExportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelExportTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelExportTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelExportTaskError {}
 /// Errors returned by CreateExportTask
 #[derive(Debug, PartialEq)]
 pub enum CreateExportTaskError {
@@ -1422,21 +1414,17 @@ impl CreateExportTaskError {
 }
 impl fmt::Display for CreateExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateExportTaskError {
-    fn description(&self) -> &str {
         match *self {
-            CreateExportTaskError::InvalidParameter(ref cause) => cause,
-            CreateExportTaskError::LimitExceeded(ref cause) => cause,
-            CreateExportTaskError::OperationAborted(ref cause) => cause,
-            CreateExportTaskError::ResourceAlreadyExists(ref cause) => cause,
-            CreateExportTaskError::ResourceNotFound(ref cause) => cause,
-            CreateExportTaskError::ServiceUnavailable(ref cause) => cause,
+            CreateExportTaskError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateExportTaskError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateExportTaskError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            CreateExportTaskError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateExportTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateExportTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateExportTaskError {}
 /// Errors returned by CreateLogGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateLogGroupError {
@@ -1482,20 +1470,16 @@ impl CreateLogGroupError {
 }
 impl fmt::Display for CreateLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLogGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLogGroupError::InvalidParameter(ref cause) => cause,
-            CreateLogGroupError::LimitExceeded(ref cause) => cause,
-            CreateLogGroupError::OperationAborted(ref cause) => cause,
-            CreateLogGroupError::ResourceAlreadyExists(ref cause) => cause,
-            CreateLogGroupError::ServiceUnavailable(ref cause) => cause,
+            CreateLogGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateLogGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateLogGroupError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            CreateLogGroupError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateLogGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLogGroupError {}
 /// Errors returned by CreateLogStream
 #[derive(Debug, PartialEq)]
 pub enum CreateLogStreamError {
@@ -1536,19 +1520,15 @@ impl CreateLogStreamError {
 }
 impl fmt::Display for CreateLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLogStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLogStreamError::InvalidParameter(ref cause) => cause,
-            CreateLogStreamError::ResourceAlreadyExists(ref cause) => cause,
-            CreateLogStreamError::ResourceNotFound(ref cause) => cause,
-            CreateLogStreamError::ServiceUnavailable(ref cause) => cause,
+            CreateLogStreamError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateLogStreamError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateLogStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLogStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLogStreamError {}
 /// Errors returned by DeleteDestination
 #[derive(Debug, PartialEq)]
 pub enum DeleteDestinationError {
@@ -1589,19 +1569,15 @@ impl DeleteDestinationError {
 }
 impl fmt::Display for DeleteDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDestinationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDestinationError::InvalidParameter(ref cause) => cause,
-            DeleteDestinationError::OperationAborted(ref cause) => cause,
-            DeleteDestinationError::ResourceNotFound(ref cause) => cause,
-            DeleteDestinationError::ServiceUnavailable(ref cause) => cause,
+            DeleteDestinationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteDestinationError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteDestinationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDestinationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDestinationError {}
 /// Errors returned by DeleteLogGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteLogGroupError {
@@ -1640,19 +1616,15 @@ impl DeleteLogGroupError {
 }
 impl fmt::Display for DeleteLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLogGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLogGroupError::InvalidParameter(ref cause) => cause,
-            DeleteLogGroupError::OperationAborted(ref cause) => cause,
-            DeleteLogGroupError::ResourceNotFound(ref cause) => cause,
-            DeleteLogGroupError::ServiceUnavailable(ref cause) => cause,
+            DeleteLogGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteLogGroupError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteLogGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLogGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLogGroupError {}
 /// Errors returned by DeleteLogStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteLogStreamError {
@@ -1691,19 +1663,15 @@ impl DeleteLogStreamError {
 }
 impl fmt::Display for DeleteLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLogStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLogStreamError::InvalidParameter(ref cause) => cause,
-            DeleteLogStreamError::OperationAborted(ref cause) => cause,
-            DeleteLogStreamError::ResourceNotFound(ref cause) => cause,
-            DeleteLogStreamError::ServiceUnavailable(ref cause) => cause,
+            DeleteLogStreamError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteLogStreamError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteLogStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLogStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLogStreamError {}
 /// Errors returned by DeleteMetricFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteMetricFilterError {
@@ -1744,19 +1712,15 @@ impl DeleteMetricFilterError {
 }
 impl fmt::Display for DeleteMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMetricFilterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMetricFilterError::InvalidParameter(ref cause) => cause,
-            DeleteMetricFilterError::OperationAborted(ref cause) => cause,
-            DeleteMetricFilterError::ResourceNotFound(ref cause) => cause,
-            DeleteMetricFilterError::ServiceUnavailable(ref cause) => cause,
+            DeleteMetricFilterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteMetricFilterError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteMetricFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMetricFilterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMetricFilterError {}
 /// Errors returned by DeleteResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourcePolicyError {
@@ -1796,18 +1760,14 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourcePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourcePolicyError::InvalidParameter(ref cause) => cause,
-            DeleteResourcePolicyError::ResourceNotFound(ref cause) => cause,
-            DeleteResourcePolicyError::ServiceUnavailable(ref cause) => cause,
+            DeleteResourcePolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourcePolicyError {}
 /// Errors returned by DeleteRetentionPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRetentionPolicyError {
@@ -1854,19 +1814,15 @@ impl DeleteRetentionPolicyError {
 }
 impl fmt::Display for DeleteRetentionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRetentionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRetentionPolicyError::InvalidParameter(ref cause) => cause,
-            DeleteRetentionPolicyError::OperationAborted(ref cause) => cause,
-            DeleteRetentionPolicyError::ResourceNotFound(ref cause) => cause,
-            DeleteRetentionPolicyError::ServiceUnavailable(ref cause) => cause,
+            DeleteRetentionPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRetentionPolicyError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteRetentionPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRetentionPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRetentionPolicyError {}
 /// Errors returned by DeleteSubscriptionFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriptionFilterError {
@@ -1913,19 +1869,15 @@ impl DeleteSubscriptionFilterError {
 }
 impl fmt::Display for DeleteSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSubscriptionFilterError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSubscriptionFilterError::InvalidParameter(ref cause) => cause,
-            DeleteSubscriptionFilterError::OperationAborted(ref cause) => cause,
-            DeleteSubscriptionFilterError::ResourceNotFound(ref cause) => cause,
-            DeleteSubscriptionFilterError::ServiceUnavailable(ref cause) => cause,
+            DeleteSubscriptionFilterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriptionFilterError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriptionFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSubscriptionFilterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSubscriptionFilterError {}
 /// Errors returned by DescribeDestinations
 #[derive(Debug, PartialEq)]
 pub enum DescribeDestinationsError {
@@ -1958,17 +1910,13 @@ impl DescribeDestinationsError {
 }
 impl fmt::Display for DescribeDestinationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDestinationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDestinationsError::InvalidParameter(ref cause) => cause,
-            DescribeDestinationsError::ServiceUnavailable(ref cause) => cause,
+            DescribeDestinationsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeDestinationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDestinationsError {}
 /// Errors returned by DescribeExportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportTasksError {
@@ -2001,17 +1949,13 @@ impl DescribeExportTasksError {
 }
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExportTasksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExportTasksError::InvalidParameter(ref cause) => cause,
-            DescribeExportTasksError::ServiceUnavailable(ref cause) => cause,
+            DescribeExportTasksError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeExportTasksError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExportTasksError {}
 /// Errors returned by DescribeLogGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeLogGroupsError {
@@ -2042,17 +1986,13 @@ impl DescribeLogGroupsError {
 }
 impl fmt::Display for DescribeLogGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLogGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLogGroupsError::InvalidParameter(ref cause) => cause,
-            DescribeLogGroupsError::ServiceUnavailable(ref cause) => cause,
+            DescribeLogGroupsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeLogGroupsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLogGroupsError {}
 /// Errors returned by DescribeLogStreams
 #[derive(Debug, PartialEq)]
 pub enum DescribeLogStreamsError {
@@ -2088,18 +2028,14 @@ impl DescribeLogStreamsError {
 }
 impl fmt::Display for DescribeLogStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLogStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLogStreamsError::InvalidParameter(ref cause) => cause,
-            DescribeLogStreamsError::ResourceNotFound(ref cause) => cause,
-            DescribeLogStreamsError::ServiceUnavailable(ref cause) => cause,
+            DescribeLogStreamsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeLogStreamsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeLogStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLogStreamsError {}
 /// Errors returned by DescribeMetricFilters
 #[derive(Debug, PartialEq)]
 pub enum DescribeMetricFiltersError {
@@ -2139,18 +2075,14 @@ impl DescribeMetricFiltersError {
 }
 impl fmt::Display for DescribeMetricFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMetricFiltersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMetricFiltersError::InvalidParameter(ref cause) => cause,
-            DescribeMetricFiltersError::ResourceNotFound(ref cause) => cause,
-            DescribeMetricFiltersError::ServiceUnavailable(ref cause) => cause,
+            DescribeMetricFiltersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeMetricFiltersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeMetricFiltersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMetricFiltersError {}
 /// Errors returned by DescribeQueries
 #[derive(Debug, PartialEq)]
 pub enum DescribeQueriesError {
@@ -2184,18 +2116,14 @@ impl DescribeQueriesError {
 }
 impl fmt::Display for DescribeQueriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeQueriesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeQueriesError::InvalidParameter(ref cause) => cause,
-            DescribeQueriesError::ResourceNotFound(ref cause) => cause,
-            DescribeQueriesError::ServiceUnavailable(ref cause) => cause,
+            DescribeQueriesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeQueriesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeQueriesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeQueriesError {}
 /// Errors returned by DescribeResourcePolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePoliciesError {
@@ -2228,17 +2156,13 @@ impl DescribeResourcePoliciesError {
 }
 impl fmt::Display for DescribeResourcePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeResourcePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeResourcePoliciesError::InvalidParameter(ref cause) => cause,
-            DescribeResourcePoliciesError::ServiceUnavailable(ref cause) => cause,
+            DescribeResourcePoliciesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeResourcePoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeResourcePoliciesError {}
 /// Errors returned by DescribeSubscriptionFilters
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscriptionFiltersError {
@@ -2280,18 +2204,16 @@ impl DescribeSubscriptionFiltersError {
 }
 impl fmt::Display for DescribeSubscriptionFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubscriptionFiltersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSubscriptionFiltersError::InvalidParameter(ref cause) => cause,
-            DescribeSubscriptionFiltersError::ResourceNotFound(ref cause) => cause,
-            DescribeSubscriptionFiltersError::ServiceUnavailable(ref cause) => cause,
+            DescribeSubscriptionFiltersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeSubscriptionFiltersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeSubscriptionFiltersError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeSubscriptionFiltersError {}
 /// Errors returned by DisassociateKmsKey
 #[derive(Debug, PartialEq)]
 pub enum DisassociateKmsKeyError {
@@ -2332,19 +2254,15 @@ impl DisassociateKmsKeyError {
 }
 impl fmt::Display for DisassociateKmsKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateKmsKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateKmsKeyError::InvalidParameter(ref cause) => cause,
-            DisassociateKmsKeyError::OperationAborted(ref cause) => cause,
-            DisassociateKmsKeyError::ResourceNotFound(ref cause) => cause,
-            DisassociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
+            DisassociateKmsKeyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateKmsKeyError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            DisassociateKmsKeyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateKmsKeyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateKmsKeyError {}
 /// Errors returned by FilterLogEvents
 #[derive(Debug, PartialEq)]
 pub enum FilterLogEventsError {
@@ -2378,18 +2296,14 @@ impl FilterLogEventsError {
 }
 impl fmt::Display for FilterLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FilterLogEventsError {
-    fn description(&self) -> &str {
         match *self {
-            FilterLogEventsError::InvalidParameter(ref cause) => cause,
-            FilterLogEventsError::ResourceNotFound(ref cause) => cause,
-            FilterLogEventsError::ServiceUnavailable(ref cause) => cause,
+            FilterLogEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            FilterLogEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            FilterLogEventsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for FilterLogEventsError {}
 /// Errors returned by GetLogEvents
 #[derive(Debug, PartialEq)]
 pub enum GetLogEventsError {
@@ -2423,18 +2337,14 @@ impl GetLogEventsError {
 }
 impl fmt::Display for GetLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLogEventsError {
-    fn description(&self) -> &str {
         match *self {
-            GetLogEventsError::InvalidParameter(ref cause) => cause,
-            GetLogEventsError::ResourceNotFound(ref cause) => cause,
-            GetLogEventsError::ServiceUnavailable(ref cause) => cause,
+            GetLogEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLogEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLogEventsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLogEventsError {}
 /// Errors returned by GetLogGroupFields
 #[derive(Debug, PartialEq)]
 pub enum GetLogGroupFieldsError {
@@ -2475,19 +2385,15 @@ impl GetLogGroupFieldsError {
 }
 impl fmt::Display for GetLogGroupFieldsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLogGroupFieldsError {
-    fn description(&self) -> &str {
         match *self {
-            GetLogGroupFieldsError::InvalidParameter(ref cause) => cause,
-            GetLogGroupFieldsError::LimitExceeded(ref cause) => cause,
-            GetLogGroupFieldsError::ResourceNotFound(ref cause) => cause,
-            GetLogGroupFieldsError::ServiceUnavailable(ref cause) => cause,
+            GetLogGroupFieldsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLogGroupFieldsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetLogGroupFieldsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLogGroupFieldsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLogGroupFieldsError {}
 /// Errors returned by GetLogRecord
 #[derive(Debug, PartialEq)]
 pub enum GetLogRecordError {
@@ -2526,19 +2432,15 @@ impl GetLogRecordError {
 }
 impl fmt::Display for GetLogRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLogRecordError {
-    fn description(&self) -> &str {
         match *self {
-            GetLogRecordError::InvalidParameter(ref cause) => cause,
-            GetLogRecordError::LimitExceeded(ref cause) => cause,
-            GetLogRecordError::ResourceNotFound(ref cause) => cause,
-            GetLogRecordError::ServiceUnavailable(ref cause) => cause,
+            GetLogRecordError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLogRecordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetLogRecordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLogRecordError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLogRecordError {}
 /// Errors returned by GetQueryResults
 #[derive(Debug, PartialEq)]
 pub enum GetQueryResultsError {
@@ -2572,18 +2474,14 @@ impl GetQueryResultsError {
 }
 impl fmt::Display for GetQueryResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueryResultsError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueryResultsError::InvalidParameter(ref cause) => cause,
-            GetQueryResultsError::ResourceNotFound(ref cause) => cause,
-            GetQueryResultsError::ServiceUnavailable(ref cause) => cause,
+            GetQueryResultsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetQueryResultsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetQueryResultsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueryResultsError {}
 /// Errors returned by ListTagsLogGroup
 #[derive(Debug, PartialEq)]
 pub enum ListTagsLogGroupError {
@@ -2612,17 +2510,13 @@ impl ListTagsLogGroupError {
 }
 impl fmt::Display for ListTagsLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsLogGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsLogGroupError::ResourceNotFound(ref cause) => cause,
-            ListTagsLogGroupError::ServiceUnavailable(ref cause) => cause,
+            ListTagsLogGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsLogGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsLogGroupError {}
 /// Errors returned by PutDestination
 #[derive(Debug, PartialEq)]
 pub enum PutDestinationError {
@@ -2656,18 +2550,14 @@ impl PutDestinationError {
 }
 impl fmt::Display for PutDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDestinationError {
-    fn description(&self) -> &str {
         match *self {
-            PutDestinationError::InvalidParameter(ref cause) => cause,
-            PutDestinationError::OperationAborted(ref cause) => cause,
-            PutDestinationError::ServiceUnavailable(ref cause) => cause,
+            PutDestinationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutDestinationError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            PutDestinationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDestinationError {}
 /// Errors returned by PutDestinationPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutDestinationPolicyError {
@@ -2707,18 +2597,14 @@ impl PutDestinationPolicyError {
 }
 impl fmt::Display for PutDestinationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDestinationPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutDestinationPolicyError::InvalidParameter(ref cause) => cause,
-            PutDestinationPolicyError::OperationAborted(ref cause) => cause,
-            PutDestinationPolicyError::ServiceUnavailable(ref cause) => cause,
+            PutDestinationPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutDestinationPolicyError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            PutDestinationPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutDestinationPolicyError {}
 /// Errors returned by PutLogEvents
 #[derive(Debug, PartialEq)]
 pub enum PutLogEventsError {
@@ -2767,21 +2653,17 @@ impl PutLogEventsError {
 }
 impl fmt::Display for PutLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLogEventsError {
-    fn description(&self) -> &str {
         match *self {
-            PutLogEventsError::DataAlreadyAccepted(ref cause) => cause,
-            PutLogEventsError::InvalidParameter(ref cause) => cause,
-            PutLogEventsError::InvalidSequenceToken(ref cause) => cause,
-            PutLogEventsError::ResourceNotFound(ref cause) => cause,
-            PutLogEventsError::ServiceUnavailable(ref cause) => cause,
-            PutLogEventsError::UnrecognizedClient(ref cause) => cause,
+            PutLogEventsError::DataAlreadyAccepted(ref cause) => write!(f, "{}", cause),
+            PutLogEventsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutLogEventsError::InvalidSequenceToken(ref cause) => write!(f, "{}", cause),
+            PutLogEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutLogEventsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutLogEventsError::UnrecognizedClient(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLogEventsError {}
 /// Errors returned by PutMetricFilter
 #[derive(Debug, PartialEq)]
 pub enum PutMetricFilterError {
@@ -2825,20 +2707,16 @@ impl PutMetricFilterError {
 }
 impl fmt::Display for PutMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutMetricFilterError {
-    fn description(&self) -> &str {
         match *self {
-            PutMetricFilterError::InvalidParameter(ref cause) => cause,
-            PutMetricFilterError::LimitExceeded(ref cause) => cause,
-            PutMetricFilterError::OperationAborted(ref cause) => cause,
-            PutMetricFilterError::ResourceNotFound(ref cause) => cause,
-            PutMetricFilterError::ServiceUnavailable(ref cause) => cause,
+            PutMetricFilterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutMetricFilterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutMetricFilterError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            PutMetricFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutMetricFilterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutMetricFilterError {}
 /// Errors returned by PutResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutResourcePolicyError {
@@ -2874,18 +2752,14 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutResourcePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutResourcePolicyError::InvalidParameter(ref cause) => cause,
-            PutResourcePolicyError::LimitExceeded(ref cause) => cause,
-            PutResourcePolicyError::ServiceUnavailable(ref cause) => cause,
+            PutResourcePolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutResourcePolicyError {}
 /// Errors returned by PutRetentionPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRetentionPolicyError {
@@ -2926,19 +2800,15 @@ impl PutRetentionPolicyError {
 }
 impl fmt::Display for PutRetentionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRetentionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutRetentionPolicyError::InvalidParameter(ref cause) => cause,
-            PutRetentionPolicyError::OperationAborted(ref cause) => cause,
-            PutRetentionPolicyError::ResourceNotFound(ref cause) => cause,
-            PutRetentionPolicyError::ServiceUnavailable(ref cause) => cause,
+            PutRetentionPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRetentionPolicyError {}
 /// Errors returned by PutSubscriptionFilter
 #[derive(Debug, PartialEq)]
 pub enum PutSubscriptionFilterError {
@@ -2990,20 +2860,16 @@ impl PutSubscriptionFilterError {
 }
 impl fmt::Display for PutSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutSubscriptionFilterError {
-    fn description(&self) -> &str {
         match *self {
-            PutSubscriptionFilterError::InvalidParameter(ref cause) => cause,
-            PutSubscriptionFilterError::LimitExceeded(ref cause) => cause,
-            PutSubscriptionFilterError::OperationAborted(ref cause) => cause,
-            PutSubscriptionFilterError::ResourceNotFound(ref cause) => cause,
-            PutSubscriptionFilterError::ServiceUnavailable(ref cause) => cause,
+            PutSubscriptionFilterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutSubscriptionFilterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutSubscriptionFilterError::OperationAborted(ref cause) => write!(f, "{}", cause),
+            PutSubscriptionFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutSubscriptionFilterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutSubscriptionFilterError {}
 /// Errors returned by StartQuery
 #[derive(Debug, PartialEq)]
 pub enum StartQueryError {
@@ -3047,20 +2913,16 @@ impl StartQueryError {
 }
 impl fmt::Display for StartQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartQueryError {
-    fn description(&self) -> &str {
         match *self {
-            StartQueryError::InvalidParameter(ref cause) => cause,
-            StartQueryError::LimitExceeded(ref cause) => cause,
-            StartQueryError::MalformedQuery(ref cause) => cause,
-            StartQueryError::ResourceNotFound(ref cause) => cause,
-            StartQueryError::ServiceUnavailable(ref cause) => cause,
+            StartQueryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartQueryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartQueryError::MalformedQuery(ref cause) => write!(f, "{}", cause),
+            StartQueryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartQueryError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartQueryError {}
 /// Errors returned by StopQuery
 #[derive(Debug, PartialEq)]
 pub enum StopQueryError {
@@ -3094,18 +2956,14 @@ impl StopQueryError {
 }
 impl fmt::Display for StopQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopQueryError {
-    fn description(&self) -> &str {
         match *self {
-            StopQueryError::InvalidParameter(ref cause) => cause,
-            StopQueryError::ResourceNotFound(ref cause) => cause,
-            StopQueryError::ServiceUnavailable(ref cause) => cause,
+            StopQueryError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopQueryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopQueryError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopQueryError {}
 /// Errors returned by TagLogGroup
 #[derive(Debug, PartialEq)]
 pub enum TagLogGroupError {
@@ -3134,17 +2992,13 @@ impl TagLogGroupError {
 }
 impl fmt::Display for TagLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagLogGroupError {
-    fn description(&self) -> &str {
         match *self {
-            TagLogGroupError::InvalidParameter(ref cause) => cause,
-            TagLogGroupError::ResourceNotFound(ref cause) => cause,
+            TagLogGroupError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagLogGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagLogGroupError {}
 /// Errors returned by TestMetricFilter
 #[derive(Debug, PartialEq)]
 pub enum TestMetricFilterError {
@@ -3173,17 +3027,13 @@ impl TestMetricFilterError {
 }
 impl fmt::Display for TestMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestMetricFilterError {
-    fn description(&self) -> &str {
         match *self {
-            TestMetricFilterError::InvalidParameter(ref cause) => cause,
-            TestMetricFilterError::ServiceUnavailable(ref cause) => cause,
+            TestMetricFilterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TestMetricFilterError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestMetricFilterError {}
 /// Errors returned by UntagLogGroup
 #[derive(Debug, PartialEq)]
 pub enum UntagLogGroupError {
@@ -3207,16 +3057,12 @@ impl UntagLogGroupError {
 }
 impl fmt::Display for UntagLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagLogGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UntagLogGroupError::ResourceNotFound(ref cause) => cause,
+            UntagLogGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagLogGroupError {}
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
 pub trait CloudWatchLogs {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>

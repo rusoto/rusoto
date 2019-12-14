@@ -8402,20 +8402,16 @@ impl CreateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
-CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause
+                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateCloudFrontOriginAccessIdentityError {}
 /// Errors returned by CreateDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionError {
@@ -8534,59 +8530,55 @@ impl CreateDistributionError {
 }
 impl fmt::Display for CreateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDistributionError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateDistributionError::AccessDenied(ref cause) => cause,
-CreateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-CreateDistributionError::DistributionAlreadyExists(ref cause) => cause,
-CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-CreateDistributionError::InconsistentQuantities(ref cause) => cause,
-CreateDistributionError::InvalidArgument(ref cause) => cause,
-CreateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
-CreateDistributionError::InvalidErrorCode(ref cause) => cause,
-CreateDistributionError::InvalidForwardCookies(ref cause) => cause,
-CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
-CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
-CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-CreateDistributionError::InvalidLocationCode(ref cause) => cause,
-CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
-CreateDistributionError::InvalidOrigin(ref cause) => cause,
-CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-CreateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-CreateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
-CreateDistributionError::InvalidProtocolSettings(ref cause) => cause,
-CreateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
-CreateDistributionError::InvalidRelativePath(ref cause) => cause,
-CreateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
-CreateDistributionError::InvalidResponseCode(ref cause) => cause,
-CreateDistributionError::InvalidTTLOrder(ref cause) => cause,
-CreateDistributionError::InvalidViewerCertificate(ref cause) => cause,
-CreateDistributionError::InvalidWebACLId(ref cause) => cause,
-CreateDistributionError::MissingBody(ref cause) => cause,
-CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionError::NoSuchOrigin(ref cause) => cause,
-CreateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
-CreateDistributionError::TooManyCertificates(ref cause) => cause,
-CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
-CreateDistributionError::TooManyDistributions(ref cause) => cause,
-CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
-CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
-CreateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-CreateDistributionError::TooManyOrigins(ref cause) => cause,
-CreateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
-CreateDistributionError::TooManyTrustedSigners(ref cause) => cause,
-CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause
+                            CreateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::DistributionAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidProtocolSettings(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateDistributionError {}
 /// Errors returned by CreateDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionWithTagsError {
@@ -8709,60 +8701,56 @@ impl CreateDistributionWithTagsError {
 }
 impl fmt::Display for CreateDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDistributionWithTagsError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateDistributionWithTagsError::AccessDenied(ref cause) => cause,
-CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
-CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => cause,
-CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidArgument(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidOriginReadTimeout(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidTagging(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => cause,
-CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => cause,
-CreateDistributionWithTagsError::MissingBody(ref cause) => cause,
-CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCertificates(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributions(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyOrigins(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => cause,
-CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
-CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause
+                            CreateDistributionWithTagsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateDistributionWithTagsError {}
 /// Errors returned by CreateFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateFieldLevelEncryptionConfigError {
@@ -8811,23 +8799,19 @@ impl CreateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => cause,
-CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => cause
+                            CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateFieldLevelEncryptionConfigError {}
 /// Errors returned by CreateFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateFieldLevelEncryptionProfileError {
@@ -8876,23 +8860,19 @@ impl CreateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-                            CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => cause,
-CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(ref cause) => cause
+                            CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => write!(f, "{}", cause),
+CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for CreateFieldLevelEncryptionProfileError {}
 /// Errors returned by CreateInvalidation
 #[derive(Debug, PartialEq)]
 pub enum CreateInvalidationError {
@@ -8974,22 +8954,20 @@ impl CreateInvalidationError {
 }
 impl fmt::Display for CreateInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInvalidationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInvalidationError::AccessDenied(ref cause) => cause,
-            CreateInvalidationError::BatchTooLarge(ref cause) => cause,
-            CreateInvalidationError::InconsistentQuantities(ref cause) => cause,
-            CreateInvalidationError::InvalidArgument(ref cause) => cause,
-            CreateInvalidationError::MissingBody(ref cause) => cause,
-            CreateInvalidationError::NoSuchDistribution(ref cause) => cause,
-            CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => cause,
+            CreateInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::BatchTooLarge(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::MissingBody(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateInvalidationError {}
 /// Errors returned by CreatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicKeyError {
@@ -9041,18 +9019,14 @@ impl CreatePublicKeyError {
 }
 impl fmt::Display for CreatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePublicKeyError::InvalidArgument(ref cause) => cause,
-            CreatePublicKeyError::PublicKeyAlreadyExists(ref cause) => cause,
-            CreatePublicKeyError::TooManyPublicKeys(ref cause) => cause,
+            CreatePublicKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreatePublicKeyError::PublicKeyAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePublicKeyError::TooManyPublicKeys(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePublicKeyError {}
 /// Errors returned by CreateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionError {
@@ -9185,31 +9159,39 @@ impl CreateStreamingDistributionError {
 }
 impl fmt::Display for CreateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamingDistributionError::AccessDenied(ref cause) => cause,
-            CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-            CreateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidArgument(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidOrigin(ref cause) => cause,
-            CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-            CreateStreamingDistributionError::MissingBody(ref cause) => cause,
+            CreateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::InvalidOrigin(ref cause) => write!(f, "{}", cause),
+            CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
             CreateStreamingDistributionError::StreamingDistributionAlreadyExists(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
             CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => cause,
-            CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
-            CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+            CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStreamingDistributionError {}
 /// Errors returned by CreateStreamingDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionWithTagsError {
@@ -9268,36 +9250,50 @@ impl CreateStreamingDistributionWithTagsError {
 }
 impl fmt::Display for CreateStreamingDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamingDistributionWithTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => {
-                cause
+            CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
             CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateStreamingDistributionWithTagsError {}
 /// Errors returned by DeleteCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum DeleteCloudFrontOriginAccessIdentityError {
@@ -9340,24 +9336,26 @@ impl DeleteCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for DeleteCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(
                 ref cause,
-            ) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteCloudFrontOriginAccessIdentityError {}
 /// Errors returned by DeleteDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteDistributionError {
@@ -9423,20 +9421,16 @@ impl DeleteDistributionError {
 }
 impl fmt::Display for DeleteDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDistributionError::AccessDenied(ref cause) => cause,
-            DeleteDistributionError::DistributionNotDisabled(ref cause) => cause,
-            DeleteDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            DeleteDistributionError::NoSuchDistribution(ref cause) => cause,
-            DeleteDistributionError::PreconditionFailed(ref cause) => cause,
+            DeleteDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::DistributionNotDisabled(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDistributionError {}
 /// Errors returned by DeleteFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteFieldLevelEncryptionConfigError {
@@ -9514,24 +9508,26 @@ impl DeleteFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigInUse(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => cause,
+            DeleteFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFieldLevelEncryptionConfigError {}
 /// Errors returned by DeleteFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteFieldLevelEncryptionProfileError {
@@ -9605,24 +9601,26 @@ impl DeleteFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
-            DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(ref cause) => {
-                cause
+            DeleteFieldLevelEncryptionProfileError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
             }
-            DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => cause,
+            DeleteFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(
                 ref cause,
-            ) => cause,
-            DeleteFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            DeleteFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteFieldLevelEncryptionProfileError {}
 /// Errors returned by DeletePublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeletePublicKeyError {
@@ -9688,20 +9686,16 @@ impl DeletePublicKeyError {
 }
 impl fmt::Display for DeletePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePublicKeyError::AccessDenied(ref cause) => cause,
-            DeletePublicKeyError::InvalidIfMatchVersion(ref cause) => cause,
-            DeletePublicKeyError::NoSuchPublicKey(ref cause) => cause,
-            DeletePublicKeyError::PreconditionFailed(ref cause) => cause,
-            DeletePublicKeyError::PublicKeyInUse(ref cause) => cause,
+            DeletePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            DeletePublicKeyError::PublicKeyInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePublicKeyError {}
 /// Errors returned by DeleteStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamingDistributionError {
@@ -9777,20 +9771,24 @@ impl DeleteStreamingDistributionError {
 }
 impl fmt::Display for DeleteStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamingDistributionError::AccessDenied(ref cause) => cause,
-            DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
-            DeleteStreamingDistributionError::PreconditionFailed(ref cause) => cause,
-            DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => cause,
+            DeleteStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteStreamingDistributionError {}
 /// Errors returned by GetCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityError {
@@ -9827,19 +9825,17 @@ impl GetCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCloudFrontOriginAccessIdentityError {}
 /// Errors returned by GetCloudFrontOriginAccessIdentityConfig
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityConfigError {
@@ -9876,19 +9872,17 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCloudFrontOriginAccessIdentityConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCloudFrontOriginAccessIdentityConfigError {}
 /// Errors returned by GetDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionError {
@@ -9933,17 +9927,13 @@ impl GetDistributionError {
 }
 impl fmt::Display for GetDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDistributionError::AccessDenied(ref cause) => cause,
-            GetDistributionError::NoSuchDistribution(ref cause) => cause,
+            GetDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDistributionError {}
 /// Errors returned by GetDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionConfigError {
@@ -9988,17 +9978,13 @@ impl GetDistributionConfigError {
 }
 impl fmt::Display for GetDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDistributionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetDistributionConfigError::AccessDenied(ref cause) => cause,
-            GetDistributionConfigError::NoSuchDistribution(ref cause) => cause,
+            GetDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionConfigError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDistributionConfigError {}
 /// Errors returned by GetFieldLevelEncryption
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionError {
@@ -10045,17 +10031,15 @@ impl GetFieldLevelEncryptionError {
 }
 impl fmt::Display for GetFieldLevelEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionError::AccessDenied(ref cause) => cause,
-            GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
+            GetFieldLevelEncryptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFieldLevelEncryptionError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionError {}
 /// Errors returned by GetFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionConfigError {
@@ -10104,19 +10088,15 @@ impl GetFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
             GetFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionConfigError {}
 /// Errors returned by GetFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionProfileError {
@@ -10165,19 +10145,15 @@ impl GetFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
             GetFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GetFieldLevelEncryptionProfileError {}
 /// Errors returned by GetFieldLevelEncryptionProfileConfig
 #[derive(Debug, PartialEq)]
 pub enum GetFieldLevelEncryptionProfileConfigError {
@@ -10214,19 +10190,17 @@ impl GetFieldLevelEncryptionProfileConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFieldLevelEncryptionProfileConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetFieldLevelEncryptionProfileConfigError::AccessDenied(ref cause) => cause,
+            GetFieldLevelEncryptionProfileConfigError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
             GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFieldLevelEncryptionProfileConfigError {}
 /// Errors returned by GetInvalidation
 #[derive(Debug, PartialEq)]
 pub enum GetInvalidationError {
@@ -10278,18 +10252,14 @@ impl GetInvalidationError {
 }
 impl fmt::Display for GetInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInvalidationError {
-    fn description(&self) -> &str {
         match *self {
-            GetInvalidationError::AccessDenied(ref cause) => cause,
-            GetInvalidationError::NoSuchDistribution(ref cause) => cause,
-            GetInvalidationError::NoSuchInvalidation(ref cause) => cause,
+            GetInvalidationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetInvalidationError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            GetInvalidationError::NoSuchInvalidation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInvalidationError {}
 /// Errors returned by GetPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyError {
@@ -10334,17 +10304,13 @@ impl GetPublicKeyError {
 }
 impl fmt::Display for GetPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPublicKeyError::AccessDenied(ref cause) => cause,
-            GetPublicKeyError::NoSuchPublicKey(ref cause) => cause,
+            GetPublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPublicKeyError {}
 /// Errors returned by GetPublicKeyConfig
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyConfigError {
@@ -10389,17 +10355,13 @@ impl GetPublicKeyConfigError {
 }
 impl fmt::Display for GetPublicKeyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPublicKeyConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetPublicKeyConfigError::AccessDenied(ref cause) => cause,
-            GetPublicKeyConfigError::NoSuchPublicKey(ref cause) => cause,
+            GetPublicKeyConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPublicKeyConfigError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPublicKeyConfigError {}
 /// Errors returned by GetStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionError {
@@ -10446,17 +10408,15 @@ impl GetStreamingDistributionError {
 }
 impl fmt::Display for GetStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            GetStreamingDistributionError::AccessDenied(ref cause) => cause,
-            GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
+            GetStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetStreamingDistributionError {}
 /// Errors returned by GetStreamingDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionConfigError {
@@ -10505,17 +10465,15 @@ impl GetStreamingDistributionConfigError {
 }
 impl fmt::Display for GetStreamingDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetStreamingDistributionConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetStreamingDistributionConfigError::AccessDenied(ref cause) => cause,
-            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => cause,
+            GetStreamingDistributionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetStreamingDistributionConfigError {}
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
@@ -10557,16 +10515,14 @@ impl ListCloudFrontOriginAccessIdentitiesError {
 }
 impl fmt::Display for ListCloudFrontOriginAccessIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCloudFrontOriginAccessIdentitiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => cause,
+            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListCloudFrontOriginAccessIdentitiesError {}
 /// Errors returned by ListDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsError {
@@ -10604,16 +10560,12 @@ impl ListDistributionsError {
 }
 impl fmt::Display for ListDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDistributionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDistributionsError::InvalidArgument(ref cause) => cause,
+            ListDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDistributionsError {}
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
@@ -10660,17 +10612,13 @@ impl ListDistributionsByWebACLIdError {
 }
 impl fmt::Display for ListDistributionsByWebACLIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDistributionsByWebACLIdError {
-    fn description(&self) -> &str {
         match *self {
-            ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => cause,
-            ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => cause,
+            ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDistributionsByWebACLIdError {}
 /// Errors returned by ListFieldLevelEncryptionConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionConfigsError {
@@ -10712,16 +10660,14 @@ impl ListFieldLevelEncryptionConfigsError {
 }
 impl fmt::Display for ListFieldLevelEncryptionConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFieldLevelEncryptionConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFieldLevelEncryptionConfigsError::InvalidArgument(ref cause) => cause,
+            ListFieldLevelEncryptionConfigsError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFieldLevelEncryptionConfigsError {}
 /// Errors returned by ListFieldLevelEncryptionProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionProfilesError {
@@ -10763,16 +10709,14 @@ impl ListFieldLevelEncryptionProfilesError {
 }
 impl fmt::Display for ListFieldLevelEncryptionProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFieldLevelEncryptionProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFieldLevelEncryptionProfilesError::InvalidArgument(ref cause) => cause,
+            ListFieldLevelEncryptionProfilesError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListFieldLevelEncryptionProfilesError {}
 /// Errors returned by ListInvalidations
 #[derive(Debug, PartialEq)]
 pub enum ListInvalidationsError {
@@ -10824,18 +10768,14 @@ impl ListInvalidationsError {
 }
 impl fmt::Display for ListInvalidationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInvalidationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInvalidationsError::AccessDenied(ref cause) => cause,
-            ListInvalidationsError::InvalidArgument(ref cause) => cause,
-            ListInvalidationsError::NoSuchDistribution(ref cause) => cause,
+            ListInvalidationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListInvalidationsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListInvalidationsError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInvalidationsError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
@@ -10873,16 +10813,12 @@ impl ListPublicKeysError {
 }
 impl fmt::Display for ListPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPublicKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListPublicKeysError::InvalidArgument(ref cause) => cause,
+            ListPublicKeysError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPublicKeysError {}
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
@@ -10922,16 +10858,12 @@ impl ListStreamingDistributionsError {
 }
 impl fmt::Display for ListStreamingDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamingDistributionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamingDistributionsError::InvalidArgument(ref cause) => cause,
+            ListStreamingDistributionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamingDistributionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -10990,19 +10922,15 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::InvalidArgument(ref cause) => cause,
-            ListTagsForResourceError::InvalidTagging(ref cause) => cause,
-            ListTagsForResourceError::NoSuchResource(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11061,19 +10989,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::InvalidArgument(ref cause) => cause,
-            TagResourceError::InvalidTagging(ref cause) => cause,
-            TagResourceError::NoSuchResource(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11132,19 +11056,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::InvalidArgument(ref cause) => cause,
-            UntagResourceError::InvalidTagging(ref cause) => cause,
-            UntagResourceError::NoSuchResource(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidTagging(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NoSuchResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum UpdateCloudFrontOriginAccessIdentityError {
@@ -11193,25 +11113,35 @@ impl UpdateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for UpdateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCloudFrontOriginAccessIdentityError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
+            UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
                 ref cause,
-            ) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+            ) => write!(f, "{}", cause),
+            UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateCloudFrontOriginAccessIdentityError {}
 /// Errors returned by UpdateDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateDistributionError {
@@ -11330,59 +11260,55 @@ impl UpdateDistributionError {
 }
 impl fmt::Display for UpdateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDistributionError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateDistributionError::AccessDenied(ref cause) => cause,
-UpdateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => cause,
-UpdateDistributionError::IllegalUpdate(ref cause) => cause,
-UpdateDistributionError::InconsistentQuantities(ref cause) => cause,
-UpdateDistributionError::InvalidArgument(ref cause) => cause,
-UpdateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
-UpdateDistributionError::InvalidErrorCode(ref cause) => cause,
-UpdateDistributionError::InvalidForwardCookies(ref cause) => cause,
-UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
-UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
-UpdateDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
-UpdateDistributionError::InvalidLocationCode(ref cause) => cause,
-UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
-UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-UpdateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
-UpdateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
-UpdateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
-UpdateDistributionError::InvalidRelativePath(ref cause) => cause,
-UpdateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
-UpdateDistributionError::InvalidResponseCode(ref cause) => cause,
-UpdateDistributionError::InvalidTTLOrder(ref cause) => cause,
-UpdateDistributionError::InvalidViewerCertificate(ref cause) => cause,
-UpdateDistributionError::InvalidWebACLId(ref cause) => cause,
-UpdateDistributionError::MissingBody(ref cause) => cause,
-UpdateDistributionError::NoSuchDistribution(ref cause) => cause,
-UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateDistributionError::NoSuchOrigin(ref cause) => cause,
-UpdateDistributionError::PreconditionFailed(ref cause) => cause,
-UpdateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
-UpdateDistributionError::TooManyCertificates(ref cause) => cause,
-UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
-UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
-UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
-UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
-UpdateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => cause,
-UpdateDistributionError::TooManyOrigins(ref cause) => cause,
-UpdateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
-UpdateDistributionError::TooManyTrustedSigners(ref cause) => cause,
-UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause
+                            UpdateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::CNAMEAlreadyExists(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidLocationCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidOriginReadTimeout(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidQueryStringParameters(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidRelativePath(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidRequiredProtocol(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidResponseCode(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateDistributionError {}
 /// Errors returned by UpdateFieldLevelEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateFieldLevelEncryptionConfigError {
@@ -11437,26 +11363,22 @@ impl UpdateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFieldLevelEncryptionConfigError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateFieldLevelEncryptionConfigError::AccessDenied(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::IllegalUpdate(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => cause,
-UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => cause
+                            UpdateFieldLevelEncryptionConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateFieldLevelEncryptionConfigError {}
 /// Errors returned by UpdateFieldLevelEncryptionProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateFieldLevelEncryptionProfileError {
@@ -11513,27 +11435,23 @@ impl UpdateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFieldLevelEncryptionProfileError {
-    fn description(&self) -> &str {
         match *self {
-                            UpdateFieldLevelEncryptionProfileError::AccessDenied(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::IllegalUpdate(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => cause,
-UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => cause
+                            UpdateFieldLevelEncryptionProfileError::AccessDenied(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(ref cause) => write!(f, "{}", cause),
+UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(ref cause) => write!(f, "{}", cause)
                         }
     }
 }
+impl Error for UpdateFieldLevelEncryptionProfileError {}
 /// Errors returned by UpdatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdatePublicKeyError {
@@ -11615,22 +11533,20 @@ impl UpdatePublicKeyError {
 }
 impl fmt::Display for UpdatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePublicKeyError::AccessDenied(ref cause) => cause,
-            UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(ref cause) => cause,
-            UpdatePublicKeyError::IllegalUpdate(ref cause) => cause,
-            UpdatePublicKeyError::InvalidArgument(ref cause) => cause,
-            UpdatePublicKeyError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdatePublicKeyError::NoSuchPublicKey(ref cause) => cause,
-            UpdatePublicKeyError::PreconditionFailed(ref cause) => cause,
+            UpdatePublicKeyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::CannotChangeImmutablePublicKeyFields(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdatePublicKeyError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::NoSuchPublicKey(ref cause) => write!(f, "{}", cause),
+            UpdatePublicKeyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePublicKeyError {}
 /// Errors returned by UpdateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamingDistributionError {
@@ -11772,30 +11688,42 @@ impl UpdateStreamingDistributionError {
 }
 impl fmt::Display for UpdateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStreamingDistributionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStreamingDistributionError::AccessDenied(ref cause) => cause,
-            UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
-            UpdateStreamingDistributionError::IllegalUpdate(ref cause) => cause,
-            UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidArgument(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
-            UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
-            UpdateStreamingDistributionError::MissingBody(ref cause) => cause,
-            UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
-            UpdateStreamingDistributionError::PreconditionFailed(ref cause) => cause,
-            UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
-                cause
+            UpdateStreamingDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
             }
-            UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
-            UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+            UpdateStreamingDistributionError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+            UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::PreconditionFailed(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateStreamingDistributionError {}
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 pub trait CloudFront {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>

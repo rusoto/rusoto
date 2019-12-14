@@ -5905,22 +5905,20 @@ impl BatchCreatePartitionError {
 }
 impl fmt::Display for BatchCreatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchCreatePartitionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchCreatePartitionError::AlreadyExists(ref cause) => cause,
-            BatchCreatePartitionError::EntityNotFound(ref cause) => cause,
-            BatchCreatePartitionError::GlueEncryption(ref cause) => cause,
-            BatchCreatePartitionError::InternalService(ref cause) => cause,
-            BatchCreatePartitionError::InvalidInput(ref cause) => cause,
-            BatchCreatePartitionError::OperationTimeout(ref cause) => cause,
-            BatchCreatePartitionError::ResourceNumberLimitExceeded(ref cause) => cause,
+            BatchCreatePartitionError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            BatchCreatePartitionError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchCreatePartitionError {}
 /// Errors returned by BatchDeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteConnectionError {
@@ -5953,17 +5951,13 @@ impl BatchDeleteConnectionError {
 }
 impl fmt::Display for BatchDeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteConnectionError::InternalService(ref cause) => cause,
-            BatchDeleteConnectionError::OperationTimeout(ref cause) => cause,
+            BatchDeleteConnectionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchDeleteConnectionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteConnectionError {}
 /// Errors returned by BatchDeletePartition
 #[derive(Debug, PartialEq)]
 pub enum BatchDeletePartitionError {
@@ -6006,19 +6000,15 @@ impl BatchDeletePartitionError {
 }
 impl fmt::Display for BatchDeletePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeletePartitionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeletePartitionError::EntityNotFound(ref cause) => cause,
-            BatchDeletePartitionError::InternalService(ref cause) => cause,
-            BatchDeletePartitionError::InvalidInput(ref cause) => cause,
-            BatchDeletePartitionError::OperationTimeout(ref cause) => cause,
+            BatchDeletePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeletePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchDeletePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchDeletePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeletePartitionError {}
 /// Errors returned by BatchDeleteTable
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteTableError {
@@ -6057,19 +6047,15 @@ impl BatchDeleteTableError {
 }
 impl fmt::Display for BatchDeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteTableError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteTableError::EntityNotFound(ref cause) => cause,
-            BatchDeleteTableError::InternalService(ref cause) => cause,
-            BatchDeleteTableError::InvalidInput(ref cause) => cause,
-            BatchDeleteTableError::OperationTimeout(ref cause) => cause,
+            BatchDeleteTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteTableError {}
 /// Errors returned by BatchDeleteTableVersion
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteTableVersionError {
@@ -6116,19 +6102,15 @@ impl BatchDeleteTableVersionError {
 }
 impl fmt::Display for BatchDeleteTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteTableVersionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteTableVersionError::EntityNotFound(ref cause) => cause,
-            BatchDeleteTableVersionError::InternalService(ref cause) => cause,
-            BatchDeleteTableVersionError::InvalidInput(ref cause) => cause,
-            BatchDeleteTableVersionError::OperationTimeout(ref cause) => cause,
+            BatchDeleteTableVersionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchDeleteTableVersionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchDeleteTableVersionError {}
 /// Errors returned by BatchGetCrawlers
 #[derive(Debug, PartialEq)]
 pub enum BatchGetCrawlersError {
@@ -6157,17 +6139,13 @@ impl BatchGetCrawlersError {
 }
 impl fmt::Display for BatchGetCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetCrawlersError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetCrawlersError::InvalidInput(ref cause) => cause,
-            BatchGetCrawlersError::OperationTimeout(ref cause) => cause,
+            BatchGetCrawlersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetCrawlersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetCrawlersError {}
 /// Errors returned by BatchGetDevEndpoints
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDevEndpointsError {
@@ -6210,19 +6188,15 @@ impl BatchGetDevEndpointsError {
 }
 impl fmt::Display for BatchGetDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetDevEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetDevEndpointsError::AccessDenied(ref cause) => cause,
-            BatchGetDevEndpointsError::InternalService(ref cause) => cause,
-            BatchGetDevEndpointsError::InvalidInput(ref cause) => cause,
-            BatchGetDevEndpointsError::OperationTimeout(ref cause) => cause,
+            BatchGetDevEndpointsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            BatchGetDevEndpointsError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchGetDevEndpointsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetDevEndpointsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetDevEndpointsError {}
 /// Errors returned by BatchGetJobs
 #[derive(Debug, PartialEq)]
 pub enum BatchGetJobsError {
@@ -6256,18 +6230,14 @@ impl BatchGetJobsError {
 }
 impl fmt::Display for BatchGetJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetJobsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetJobsError::InternalService(ref cause) => cause,
-            BatchGetJobsError::InvalidInput(ref cause) => cause,
-            BatchGetJobsError::OperationTimeout(ref cause) => cause,
+            BatchGetJobsError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchGetJobsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetJobsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetJobsError {}
 /// Errors returned by BatchGetPartition
 #[derive(Debug, PartialEq)]
 pub enum BatchGetPartitionError {
@@ -6311,20 +6281,16 @@ impl BatchGetPartitionError {
 }
 impl fmt::Display for BatchGetPartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetPartitionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetPartitionError::EntityNotFound(ref cause) => cause,
-            BatchGetPartitionError::GlueEncryption(ref cause) => cause,
-            BatchGetPartitionError::InternalService(ref cause) => cause,
-            BatchGetPartitionError::InvalidInput(ref cause) => cause,
-            BatchGetPartitionError::OperationTimeout(ref cause) => cause,
+            BatchGetPartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchGetPartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            BatchGetPartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchGetPartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetPartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetPartitionError {}
 /// Errors returned by BatchGetTriggers
 #[derive(Debug, PartialEq)]
 pub enum BatchGetTriggersError {
@@ -6358,18 +6324,14 @@ impl BatchGetTriggersError {
 }
 impl fmt::Display for BatchGetTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetTriggersError::InternalService(ref cause) => cause,
-            BatchGetTriggersError::InvalidInput(ref cause) => cause,
-            BatchGetTriggersError::OperationTimeout(ref cause) => cause,
+            BatchGetTriggersError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchGetTriggersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetTriggersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetTriggersError {}
 /// Errors returned by BatchGetWorkflows
 #[derive(Debug, PartialEq)]
 pub enum BatchGetWorkflowsError {
@@ -6403,18 +6365,14 @@ impl BatchGetWorkflowsError {
 }
 impl fmt::Display for BatchGetWorkflowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetWorkflowsError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetWorkflowsError::InternalService(ref cause) => cause,
-            BatchGetWorkflowsError::InvalidInput(ref cause) => cause,
-            BatchGetWorkflowsError::OperationTimeout(ref cause) => cause,
+            BatchGetWorkflowsError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchGetWorkflowsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchGetWorkflowsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetWorkflowsError {}
 /// Errors returned by BatchStopJobRun
 #[derive(Debug, PartialEq)]
 pub enum GlueBatchStopJobRunError {
@@ -6450,18 +6408,14 @@ impl GlueBatchStopJobRunError {
 }
 impl fmt::Display for GlueBatchStopJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GlueBatchStopJobRunError {
-    fn description(&self) -> &str {
         match *self {
-            GlueBatchStopJobRunError::InternalService(ref cause) => cause,
-            GlueBatchStopJobRunError::InvalidInput(ref cause) => cause,
-            GlueBatchStopJobRunError::OperationTimeout(ref cause) => cause,
+            GlueBatchStopJobRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            GlueBatchStopJobRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GlueBatchStopJobRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GlueBatchStopJobRunError {}
 /// Errors returned by CancelMLTaskRun
 #[derive(Debug, PartialEq)]
 pub enum CancelMLTaskRunError {
@@ -6500,19 +6454,15 @@ impl CancelMLTaskRunError {
 }
 impl fmt::Display for CancelMLTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelMLTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            CancelMLTaskRunError::EntityNotFound(ref cause) => cause,
-            CancelMLTaskRunError::InternalService(ref cause) => cause,
-            CancelMLTaskRunError::InvalidInput(ref cause) => cause,
-            CancelMLTaskRunError::OperationTimeout(ref cause) => cause,
+            CancelMLTaskRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CancelMLTaskRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            CancelMLTaskRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CancelMLTaskRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelMLTaskRunError {}
 /// Errors returned by CreateClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateClassifierError {
@@ -6546,18 +6496,14 @@ impl CreateClassifierError {
 }
 impl fmt::Display for CreateClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            CreateClassifierError::AlreadyExists(ref cause) => cause,
-            CreateClassifierError::InvalidInput(ref cause) => cause,
-            CreateClassifierError::OperationTimeout(ref cause) => cause,
+            CreateClassifierError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateClassifierError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateClassifierError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateClassifierError {}
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
@@ -6603,20 +6549,16 @@ impl CreateConnectionError {
 }
 impl fmt::Display for CreateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConnectionError::AlreadyExists(ref cause) => cause,
-            CreateConnectionError::GlueEncryption(ref cause) => cause,
-            CreateConnectionError::InvalidInput(ref cause) => cause,
-            CreateConnectionError::OperationTimeout(ref cause) => cause,
-            CreateConnectionError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateConnectionError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConnectionError {}
 /// Errors returned by CreateCrawler
 #[derive(Debug, PartialEq)]
 pub enum CreateCrawlerError {
@@ -6657,19 +6599,15 @@ impl CreateCrawlerError {
 }
 impl fmt::Display for CreateCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCrawlerError::AlreadyExists(ref cause) => cause,
-            CreateCrawlerError::InvalidInput(ref cause) => cause,
-            CreateCrawlerError::OperationTimeout(ref cause) => cause,
-            CreateCrawlerError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateCrawlerError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateCrawlerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateCrawlerError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCrawlerError {}
 /// Errors returned by CreateDatabase
 #[derive(Debug, PartialEq)]
 pub enum CreateDatabaseError {
@@ -6720,21 +6658,17 @@ impl CreateDatabaseError {
 }
 impl fmt::Display for CreateDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDatabaseError::AlreadyExists(ref cause) => cause,
-            CreateDatabaseError::GlueEncryption(ref cause) => cause,
-            CreateDatabaseError::InternalService(ref cause) => cause,
-            CreateDatabaseError::InvalidInput(ref cause) => cause,
-            CreateDatabaseError::OperationTimeout(ref cause) => cause,
-            CreateDatabaseError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateDatabaseError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDatabaseError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreateDatabaseError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDatabaseError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateDatabaseError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDatabaseError {}
 /// Errors returned by CreateDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateDevEndpointError {
@@ -6792,22 +6726,22 @@ impl CreateDevEndpointError {
 }
 impl fmt::Display for CreateDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDevEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDevEndpointError::AccessDenied(ref cause) => cause,
-            CreateDevEndpointError::AlreadyExists(ref cause) => cause,
-            CreateDevEndpointError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDevEndpointError::InternalService(ref cause) => cause,
-            CreateDevEndpointError::InvalidInput(ref cause) => cause,
-            CreateDevEndpointError::OperationTimeout(ref cause) => cause,
-            CreateDevEndpointError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateDevEndpointError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDevEndpointError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDevEndpointError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDevEndpointError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateDevEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDevEndpointError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateDevEndpointError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateDevEndpointError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -6865,22 +6799,18 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::AlreadyExists(ref cause) => cause,
-            CreateJobError::ConcurrentModification(ref cause) => cause,
-            CreateJobError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateJobError::InternalService(ref cause) => cause,
-            CreateJobError::InvalidInput(ref cause) => cause,
-            CreateJobError::OperationTimeout(ref cause) => cause,
-            CreateJobError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateJobError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateJobError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateJobError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateJobError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by CreateMLTransform
 #[derive(Debug, PartialEq)]
 pub enum CreateMLTransformError {
@@ -6938,22 +6868,22 @@ impl CreateMLTransformError {
 }
 impl fmt::Display for CreateMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMLTransformError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMLTransformError::AccessDenied(ref cause) => cause,
-            CreateMLTransformError::AlreadyExists(ref cause) => cause,
-            CreateMLTransformError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateMLTransformError::InternalService(ref cause) => cause,
-            CreateMLTransformError::InvalidInput(ref cause) => cause,
-            CreateMLTransformError::OperationTimeout(ref cause) => cause,
-            CreateMLTransformError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateMLTransformError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateMLTransformError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateMLTransformError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMLTransformError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateMLTransformError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateMLTransformError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateMLTransformError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMLTransformError {}
 /// Errors returned by CreatePartition
 #[derive(Debug, PartialEq)]
 pub enum CreatePartitionError {
@@ -7009,22 +6939,18 @@ impl CreatePartitionError {
 }
 impl fmt::Display for CreatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePartitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePartitionError::AlreadyExists(ref cause) => cause,
-            CreatePartitionError::EntityNotFound(ref cause) => cause,
-            CreatePartitionError::GlueEncryption(ref cause) => cause,
-            CreatePartitionError::InternalService(ref cause) => cause,
-            CreatePartitionError::InvalidInput(ref cause) => cause,
-            CreatePartitionError::OperationTimeout(ref cause) => cause,
-            CreatePartitionError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreatePartitionError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreatePartitionError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePartitionError {}
 /// Errors returned by CreateScript
 #[derive(Debug, PartialEq)]
 pub enum CreateScriptError {
@@ -7058,18 +6984,14 @@ impl CreateScriptError {
 }
 impl fmt::Display for CreateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateScriptError {
-    fn description(&self) -> &str {
         match *self {
-            CreateScriptError::InternalService(ref cause) => cause,
-            CreateScriptError::InvalidInput(ref cause) => cause,
-            CreateScriptError::OperationTimeout(ref cause) => cause,
+            CreateScriptError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateScriptError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateScriptError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateScriptError {}
 /// Errors returned by CreateSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateSecurityConfigurationError {
@@ -7125,20 +7047,18 @@ impl CreateSecurityConfigurationError {
 }
 impl fmt::Display for CreateSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSecurityConfigurationError::AlreadyExists(ref cause) => cause,
-            CreateSecurityConfigurationError::InternalService(ref cause) => cause,
-            CreateSecurityConfigurationError::InvalidInput(ref cause) => cause,
-            CreateSecurityConfigurationError::OperationTimeout(ref cause) => cause,
-            CreateSecurityConfigurationError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateSecurityConfigurationError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateSecurityConfigurationError {}
 /// Errors returned by CreateTable
 #[derive(Debug, PartialEq)]
 pub enum CreateTableError {
@@ -7194,22 +7114,18 @@ impl CreateTableError {
 }
 impl fmt::Display for CreateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTableError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTableError::AlreadyExists(ref cause) => cause,
-            CreateTableError::EntityNotFound(ref cause) => cause,
-            CreateTableError::GlueEncryption(ref cause) => cause,
-            CreateTableError::InternalService(ref cause) => cause,
-            CreateTableError::InvalidInput(ref cause) => cause,
-            CreateTableError::OperationTimeout(ref cause) => cause,
-            CreateTableError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateTableError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTableError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreateTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateTableError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTableError {}
 /// Errors returned by CreateTrigger
 #[derive(Debug, PartialEq)]
 pub enum CreateTriggerError {
@@ -7274,23 +7190,19 @@ impl CreateTriggerError {
 }
 impl fmt::Display for CreateTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTriggerError::AlreadyExists(ref cause) => cause,
-            CreateTriggerError::ConcurrentModification(ref cause) => cause,
-            CreateTriggerError::EntityNotFound(ref cause) => cause,
-            CreateTriggerError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateTriggerError::InternalService(ref cause) => cause,
-            CreateTriggerError::InvalidInput(ref cause) => cause,
-            CreateTriggerError::OperationTimeout(ref cause) => cause,
-            CreateTriggerError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateTriggerError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateTriggerError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTriggerError {}
 /// Errors returned by CreateUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateUserDefinedFunctionError {
@@ -7358,22 +7270,20 @@ impl CreateUserDefinedFunctionError {
 }
 impl fmt::Display for CreateUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserDefinedFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserDefinedFunctionError::AlreadyExists(ref cause) => cause,
-            CreateUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
-            CreateUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
-            CreateUserDefinedFunctionError::InternalService(ref cause) => cause,
-            CreateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
-            CreateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
-            CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateUserDefinedFunctionError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateUserDefinedFunctionError {}
 /// Errors returned by CreateWorkflow
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkflowError {
@@ -7426,21 +7336,17 @@ impl CreateWorkflowError {
 }
 impl fmt::Display for CreateWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkflowError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkflowError::AlreadyExists(ref cause) => cause,
-            CreateWorkflowError::ConcurrentModification(ref cause) => cause,
-            CreateWorkflowError::InternalService(ref cause) => cause,
-            CreateWorkflowError::InvalidInput(ref cause) => cause,
-            CreateWorkflowError::OperationTimeout(ref cause) => cause,
-            CreateWorkflowError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateWorkflowError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateWorkflowError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateWorkflowError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateWorkflowError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateWorkflowError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            CreateWorkflowError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkflowError {}
 /// Errors returned by DeleteClassifier
 #[derive(Debug, PartialEq)]
 pub enum DeleteClassifierError {
@@ -7469,17 +7375,13 @@ impl DeleteClassifierError {
 }
 impl fmt::Display for DeleteClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteClassifierError::EntityNotFound(ref cause) => cause,
-            DeleteClassifierError::OperationTimeout(ref cause) => cause,
+            DeleteClassifierError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteClassifierError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteClassifierError {}
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
@@ -7508,17 +7410,13 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteConnectionError::EntityNotFound(ref cause) => cause,
-            DeleteConnectionError::OperationTimeout(ref cause) => cause,
+            DeleteConnectionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteCrawler
 #[derive(Debug, PartialEq)]
 pub enum DeleteCrawlerError {
@@ -7559,19 +7457,15 @@ impl DeleteCrawlerError {
 }
 impl fmt::Display for DeleteCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCrawlerError::CrawlerRunning(ref cause) => cause,
-            DeleteCrawlerError::EntityNotFound(ref cause) => cause,
-            DeleteCrawlerError::OperationTimeout(ref cause) => cause,
-            DeleteCrawlerError::SchedulerTransitioning(ref cause) => cause,
+            DeleteCrawlerError::CrawlerRunning(ref cause) => write!(f, "{}", cause),
+            DeleteCrawlerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            DeleteCrawlerError::SchedulerTransitioning(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCrawlerError {}
 /// Errors returned by DeleteDatabase
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatabaseError {
@@ -7610,19 +7504,15 @@ impl DeleteDatabaseError {
 }
 impl fmt::Display for DeleteDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDatabaseError::EntityNotFound(ref cause) => cause,
-            DeleteDatabaseError::InternalService(ref cause) => cause,
-            DeleteDatabaseError::InvalidInput(ref cause) => cause,
-            DeleteDatabaseError::OperationTimeout(ref cause) => cause,
+            DeleteDatabaseError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDatabaseError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDatabaseError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDatabaseError {}
 /// Errors returned by DeleteDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteDevEndpointError {
@@ -7661,19 +7551,15 @@ impl DeleteDevEndpointError {
 }
 impl fmt::Display for DeleteDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDevEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDevEndpointError::EntityNotFound(ref cause) => cause,
-            DeleteDevEndpointError::InternalService(ref cause) => cause,
-            DeleteDevEndpointError::InvalidInput(ref cause) => cause,
-            DeleteDevEndpointError::OperationTimeout(ref cause) => cause,
+            DeleteDevEndpointError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDevEndpointError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteDevEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDevEndpointError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDevEndpointError {}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
@@ -7707,18 +7593,14 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobError::InternalService(ref cause) => cause,
-            DeleteJobError::InvalidInput(ref cause) => cause,
-            DeleteJobError::OperationTimeout(ref cause) => cause,
+            DeleteJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteJobError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobError {}
 /// Errors returned by DeleteMLTransform
 #[derive(Debug, PartialEq)]
 pub enum DeleteMLTransformError {
@@ -7757,19 +7639,15 @@ impl DeleteMLTransformError {
 }
 impl fmt::Display for DeleteMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMLTransformError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMLTransformError::EntityNotFound(ref cause) => cause,
-            DeleteMLTransformError::InternalService(ref cause) => cause,
-            DeleteMLTransformError::InvalidInput(ref cause) => cause,
-            DeleteMLTransformError::OperationTimeout(ref cause) => cause,
+            DeleteMLTransformError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMLTransformError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteMLTransformError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteMLTransformError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMLTransformError {}
 /// Errors returned by DeletePartition
 #[derive(Debug, PartialEq)]
 pub enum DeletePartitionError {
@@ -7808,19 +7686,15 @@ impl DeletePartitionError {
 }
 impl fmt::Display for DeletePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePartitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePartitionError::EntityNotFound(ref cause) => cause,
-            DeletePartitionError::InternalService(ref cause) => cause,
-            DeletePartitionError::InvalidInput(ref cause) => cause,
-            DeletePartitionError::OperationTimeout(ref cause) => cause,
+            DeletePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeletePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeletePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePartitionError {}
 /// Errors returned by DeleteResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourcePolicyError {
@@ -7870,20 +7744,16 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResourcePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResourcePolicyError::ConditionCheckFailure(ref cause) => cause,
-            DeleteResourcePolicyError::EntityNotFound(ref cause) => cause,
-            DeleteResourcePolicyError::InternalService(ref cause) => cause,
-            DeleteResourcePolicyError::InvalidInput(ref cause) => cause,
-            DeleteResourcePolicyError::OperationTimeout(ref cause) => cause,
+            DeleteResourcePolicyError::ConditionCheckFailure(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResourcePolicyError {}
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
@@ -7932,19 +7802,15 @@ impl DeleteSecurityConfigurationError {
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSecurityConfigurationError::EntityNotFound(ref cause) => cause,
-            DeleteSecurityConfigurationError::InternalService(ref cause) => cause,
-            DeleteSecurityConfigurationError::InvalidInput(ref cause) => cause,
-            DeleteSecurityConfigurationError::OperationTimeout(ref cause) => cause,
+            DeleteSecurityConfigurationError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityConfigurationError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityConfigurationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityConfigurationError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSecurityConfigurationError {}
 /// Errors returned by DeleteTable
 #[derive(Debug, PartialEq)]
 pub enum DeleteTableError {
@@ -7983,19 +7849,15 @@ impl DeleteTableError {
 }
 impl fmt::Display for DeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTableError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTableError::EntityNotFound(ref cause) => cause,
-            DeleteTableError::InternalService(ref cause) => cause,
-            DeleteTableError::InvalidInput(ref cause) => cause,
-            DeleteTableError::OperationTimeout(ref cause) => cause,
+            DeleteTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTableError {}
 /// Errors returned by DeleteTableVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteTableVersionError {
@@ -8034,19 +7896,15 @@ impl DeleteTableVersionError {
 }
 impl fmt::Display for DeleteTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTableVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTableVersionError::EntityNotFound(ref cause) => cause,
-            DeleteTableVersionError::InternalService(ref cause) => cause,
-            DeleteTableVersionError::InvalidInput(ref cause) => cause,
-            DeleteTableVersionError::OperationTimeout(ref cause) => cause,
+            DeleteTableVersionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTableVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteTableVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTableVersionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTableVersionError {}
 /// Errors returned by DeleteTrigger
 #[derive(Debug, PartialEq)]
 pub enum DeleteTriggerError {
@@ -8087,19 +7945,15 @@ impl DeleteTriggerError {
 }
 impl fmt::Display for DeleteTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTriggerError::ConcurrentModification(ref cause) => cause,
-            DeleteTriggerError::InternalService(ref cause) => cause,
-            DeleteTriggerError::InvalidInput(ref cause) => cause,
-            DeleteTriggerError::OperationTimeout(ref cause) => cause,
+            DeleteTriggerError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTriggerError {}
 /// Errors returned by DeleteUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserDefinedFunctionError {
@@ -8146,19 +8000,15 @@ impl DeleteUserDefinedFunctionError {
 }
 impl fmt::Display for DeleteUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserDefinedFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
-            DeleteUserDefinedFunctionError::InternalService(ref cause) => cause,
-            DeleteUserDefinedFunctionError::InvalidInput(ref cause) => cause,
-            DeleteUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
+            DeleteUserDefinedFunctionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteUserDefinedFunctionError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteUserDefinedFunctionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteUserDefinedFunctionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserDefinedFunctionError {}
 /// Errors returned by DeleteWorkflow
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkflowError {
@@ -8199,19 +8049,15 @@ impl DeleteWorkflowError {
 }
 impl fmt::Display for DeleteWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkflowError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkflowError::ConcurrentModification(ref cause) => cause,
-            DeleteWorkflowError::InternalService(ref cause) => cause,
-            DeleteWorkflowError::InvalidInput(ref cause) => cause,
-            DeleteWorkflowError::OperationTimeout(ref cause) => cause,
+            DeleteWorkflowError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteWorkflowError::InternalService(ref cause) => write!(f, "{}", cause),
+            DeleteWorkflowError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteWorkflowError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkflowError {}
 /// Errors returned by GetCatalogImportStatus
 #[derive(Debug, PartialEq)]
 pub enum GetCatalogImportStatusError {
@@ -8244,17 +8090,13 @@ impl GetCatalogImportStatusError {
 }
 impl fmt::Display for GetCatalogImportStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCatalogImportStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetCatalogImportStatusError::InternalService(ref cause) => cause,
-            GetCatalogImportStatusError::OperationTimeout(ref cause) => cause,
+            GetCatalogImportStatusError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetCatalogImportStatusError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCatalogImportStatusError {}
 /// Errors returned by GetClassifier
 #[derive(Debug, PartialEq)]
 pub enum GetClassifierError {
@@ -8283,17 +8125,13 @@ impl GetClassifierError {
 }
 impl fmt::Display for GetClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            GetClassifierError::EntityNotFound(ref cause) => cause,
-            GetClassifierError::OperationTimeout(ref cause) => cause,
+            GetClassifierError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetClassifierError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetClassifierError {}
 /// Errors returned by GetClassifiers
 #[derive(Debug, PartialEq)]
 pub enum GetClassifiersError {
@@ -8317,16 +8155,12 @@ impl GetClassifiersError {
 }
 impl fmt::Display for GetClassifiersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetClassifiersError {
-    fn description(&self) -> &str {
         match *self {
-            GetClassifiersError::OperationTimeout(ref cause) => cause,
+            GetClassifiersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetClassifiersError {}
 /// Errors returned by GetConnection
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionError {
@@ -8365,19 +8199,15 @@ impl GetConnectionError {
 }
 impl fmt::Display for GetConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectionError::EntityNotFound(ref cause) => cause,
-            GetConnectionError::GlueEncryption(ref cause) => cause,
-            GetConnectionError::InvalidInput(ref cause) => cause,
-            GetConnectionError::OperationTimeout(ref cause) => cause,
+            GetConnectionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectionError {}
 /// Errors returned by GetConnections
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionsError {
@@ -8416,19 +8246,15 @@ impl GetConnectionsError {
 }
 impl fmt::Display for GetConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectionsError::EntityNotFound(ref cause) => cause,
-            GetConnectionsError::GlueEncryption(ref cause) => cause,
-            GetConnectionsError::InvalidInput(ref cause) => cause,
-            GetConnectionsError::OperationTimeout(ref cause) => cause,
+            GetConnectionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetConnectionsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectionsError {}
 /// Errors returned by GetCrawler
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlerError {
@@ -8457,17 +8283,13 @@ impl GetCrawlerError {
 }
 impl fmt::Display for GetCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            GetCrawlerError::EntityNotFound(ref cause) => cause,
-            GetCrawlerError::OperationTimeout(ref cause) => cause,
+            GetCrawlerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCrawlerError {}
 /// Errors returned by GetCrawlerMetrics
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlerMetricsError {
@@ -8491,16 +8313,12 @@ impl GetCrawlerMetricsError {
 }
 impl fmt::Display for GetCrawlerMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCrawlerMetricsError {
-    fn description(&self) -> &str {
         match *self {
-            GetCrawlerMetricsError::OperationTimeout(ref cause) => cause,
+            GetCrawlerMetricsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCrawlerMetricsError {}
 /// Errors returned by GetCrawlers
 #[derive(Debug, PartialEq)]
 pub enum GetCrawlersError {
@@ -8524,16 +8342,12 @@ impl GetCrawlersError {
 }
 impl fmt::Display for GetCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCrawlersError {
-    fn description(&self) -> &str {
         match *self {
-            GetCrawlersError::OperationTimeout(ref cause) => cause,
+            GetCrawlersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCrawlersError {}
 /// Errors returned by GetDataCatalogEncryptionSettings
 #[derive(Debug, PartialEq)]
 pub enum GetDataCatalogEncryptionSettingsError {
@@ -8575,18 +8389,20 @@ impl GetDataCatalogEncryptionSettingsError {
 }
 impl fmt::Display for GetDataCatalogEncryptionSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataCatalogEncryptionSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
-            GetDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
-            GetDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetDataCatalogEncryptionSettingsError {}
 /// Errors returned by GetDatabase
 #[derive(Debug, PartialEq)]
 pub enum GetDatabaseError {
@@ -8630,20 +8446,16 @@ impl GetDatabaseError {
 }
 impl fmt::Display for GetDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            GetDatabaseError::EntityNotFound(ref cause) => cause,
-            GetDatabaseError::GlueEncryption(ref cause) => cause,
-            GetDatabaseError::InternalService(ref cause) => cause,
-            GetDatabaseError::InvalidInput(ref cause) => cause,
-            GetDatabaseError::OperationTimeout(ref cause) => cause,
+            GetDatabaseError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDatabaseError {}
 /// Errors returned by GetDatabases
 #[derive(Debug, PartialEq)]
 pub enum GetDatabasesError {
@@ -8682,19 +8494,15 @@ impl GetDatabasesError {
 }
 impl fmt::Display for GetDatabasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDatabasesError {
-    fn description(&self) -> &str {
         match *self {
-            GetDatabasesError::GlueEncryption(ref cause) => cause,
-            GetDatabasesError::InternalService(ref cause) => cause,
-            GetDatabasesError::InvalidInput(ref cause) => cause,
-            GetDatabasesError::OperationTimeout(ref cause) => cause,
+            GetDatabasesError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetDatabasesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDatabasesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDatabasesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDatabasesError {}
 /// Errors returned by GetDataflowGraph
 #[derive(Debug, PartialEq)]
 pub enum GetDataflowGraphError {
@@ -8728,18 +8536,14 @@ impl GetDataflowGraphError {
 }
 impl fmt::Display for GetDataflowGraphError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataflowGraphError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataflowGraphError::InternalService(ref cause) => cause,
-            GetDataflowGraphError::InvalidInput(ref cause) => cause,
-            GetDataflowGraphError::OperationTimeout(ref cause) => cause,
+            GetDataflowGraphError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDataflowGraphError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDataflowGraphError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataflowGraphError {}
 /// Errors returned by GetDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum GetDevEndpointError {
@@ -8778,19 +8582,15 @@ impl GetDevEndpointError {
 }
 impl fmt::Display for GetDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDevEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            GetDevEndpointError::EntityNotFound(ref cause) => cause,
-            GetDevEndpointError::InternalService(ref cause) => cause,
-            GetDevEndpointError::InvalidInput(ref cause) => cause,
-            GetDevEndpointError::OperationTimeout(ref cause) => cause,
+            GetDevEndpointError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDevEndpointError {}
 /// Errors returned by GetDevEndpoints
 #[derive(Debug, PartialEq)]
 pub enum GetDevEndpointsError {
@@ -8829,19 +8629,15 @@ impl GetDevEndpointsError {
 }
 impl fmt::Display for GetDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDevEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            GetDevEndpointsError::EntityNotFound(ref cause) => cause,
-            GetDevEndpointsError::InternalService(ref cause) => cause,
-            GetDevEndpointsError::InvalidInput(ref cause) => cause,
-            GetDevEndpointsError::OperationTimeout(ref cause) => cause,
+            GetDevEndpointsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDevEndpointsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDevEndpointsError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
@@ -8880,19 +8676,15 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobError::EntityNotFound(ref cause) => cause,
-            GetJobError::InternalService(ref cause) => cause,
-            GetJobError::InvalidInput(ref cause) => cause,
-            GetJobError::OperationTimeout(ref cause) => cause,
+            GetJobError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetJobError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobError {}
 /// Errors returned by GetJobBookmark
 #[derive(Debug, PartialEq)]
 pub enum GetJobBookmarkError {
@@ -8931,19 +8723,15 @@ impl GetJobBookmarkError {
 }
 impl fmt::Display for GetJobBookmarkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobBookmarkError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobBookmarkError::EntityNotFound(ref cause) => cause,
-            GetJobBookmarkError::InternalService(ref cause) => cause,
-            GetJobBookmarkError::InvalidInput(ref cause) => cause,
-            GetJobBookmarkError::OperationTimeout(ref cause) => cause,
+            GetJobBookmarkError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobBookmarkError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetJobBookmarkError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetJobBookmarkError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobBookmarkError {}
 /// Errors returned by GetJobRun
 #[derive(Debug, PartialEq)]
 pub enum GetJobRunError {
@@ -8982,19 +8770,15 @@ impl GetJobRunError {
 }
 impl fmt::Display for GetJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobRunError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobRunError::EntityNotFound(ref cause) => cause,
-            GetJobRunError::InternalService(ref cause) => cause,
-            GetJobRunError::InvalidInput(ref cause) => cause,
-            GetJobRunError::OperationTimeout(ref cause) => cause,
+            GetJobRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetJobRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetJobRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobRunError {}
 /// Errors returned by GetJobRuns
 #[derive(Debug, PartialEq)]
 pub enum GetJobRunsError {
@@ -9033,19 +8817,15 @@ impl GetJobRunsError {
 }
 impl fmt::Display for GetJobRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobRunsError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobRunsError::EntityNotFound(ref cause) => cause,
-            GetJobRunsError::InternalService(ref cause) => cause,
-            GetJobRunsError::InvalidInput(ref cause) => cause,
-            GetJobRunsError::OperationTimeout(ref cause) => cause,
+            GetJobRunsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobRunsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetJobRunsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetJobRunsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobRunsError {}
 /// Errors returned by GetJobs
 #[derive(Debug, PartialEq)]
 pub enum GetJobsError {
@@ -9084,19 +8864,15 @@ impl GetJobsError {
 }
 impl fmt::Display for GetJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobsError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobsError::EntityNotFound(ref cause) => cause,
-            GetJobsError::InternalService(ref cause) => cause,
-            GetJobsError::InvalidInput(ref cause) => cause,
-            GetJobsError::OperationTimeout(ref cause) => cause,
+            GetJobsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetJobsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetJobsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetJobsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobsError {}
 /// Errors returned by GetMLTaskRun
 #[derive(Debug, PartialEq)]
 pub enum GetMLTaskRunError {
@@ -9135,19 +8911,15 @@ impl GetMLTaskRunError {
 }
 impl fmt::Display for GetMLTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLTaskRunError::EntityNotFound(ref cause) => cause,
-            GetMLTaskRunError::InternalService(ref cause) => cause,
-            GetMLTaskRunError::InvalidInput(ref cause) => cause,
-            GetMLTaskRunError::OperationTimeout(ref cause) => cause,
+            GetMLTaskRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLTaskRunError {}
 /// Errors returned by GetMLTaskRuns
 #[derive(Debug, PartialEq)]
 pub enum GetMLTaskRunsError {
@@ -9186,19 +8958,15 @@ impl GetMLTaskRunsError {
 }
 impl fmt::Display for GetMLTaskRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLTaskRunsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLTaskRunsError::EntityNotFound(ref cause) => cause,
-            GetMLTaskRunsError::InternalService(ref cause) => cause,
-            GetMLTaskRunsError::InvalidInput(ref cause) => cause,
-            GetMLTaskRunsError::OperationTimeout(ref cause) => cause,
+            GetMLTaskRunsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLTaskRunsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLTaskRunsError {}
 /// Errors returned by GetMLTransform
 #[derive(Debug, PartialEq)]
 pub enum GetMLTransformError {
@@ -9237,19 +9005,15 @@ impl GetMLTransformError {
 }
 impl fmt::Display for GetMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLTransformError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLTransformError::EntityNotFound(ref cause) => cause,
-            GetMLTransformError::InternalService(ref cause) => cause,
-            GetMLTransformError::InvalidInput(ref cause) => cause,
-            GetMLTransformError::OperationTimeout(ref cause) => cause,
+            GetMLTransformError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMLTransformError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMLTransformError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLTransformError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLTransformError {}
 /// Errors returned by GetMLTransforms
 #[derive(Debug, PartialEq)]
 pub enum GetMLTransformsError {
@@ -9288,19 +9052,15 @@ impl GetMLTransformsError {
 }
 impl fmt::Display for GetMLTransformsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMLTransformsError {
-    fn description(&self) -> &str {
         match *self {
-            GetMLTransformsError::EntityNotFound(ref cause) => cause,
-            GetMLTransformsError::InternalService(ref cause) => cause,
-            GetMLTransformsError::InvalidInput(ref cause) => cause,
-            GetMLTransformsError::OperationTimeout(ref cause) => cause,
+            GetMLTransformsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMLTransformsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMLTransformsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMLTransformsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMLTransformsError {}
 /// Errors returned by GetMapping
 #[derive(Debug, PartialEq)]
 pub enum GetMappingError {
@@ -9339,19 +9099,15 @@ impl GetMappingError {
 }
 impl fmt::Display for GetMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetMappingError {
-    fn description(&self) -> &str {
         match *self {
-            GetMappingError::EntityNotFound(ref cause) => cause,
-            GetMappingError::InternalService(ref cause) => cause,
-            GetMappingError::InvalidInput(ref cause) => cause,
-            GetMappingError::OperationTimeout(ref cause) => cause,
+            GetMappingError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetMappingError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetMappingError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetMappingError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetMappingError {}
 /// Errors returned by GetPartition
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionError {
@@ -9395,20 +9151,16 @@ impl GetPartitionError {
 }
 impl fmt::Display for GetPartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPartitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPartitionError::EntityNotFound(ref cause) => cause,
-            GetPartitionError::GlueEncryption(ref cause) => cause,
-            GetPartitionError::InternalService(ref cause) => cause,
-            GetPartitionError::InvalidInput(ref cause) => cause,
-            GetPartitionError::OperationTimeout(ref cause) => cause,
+            GetPartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetPartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetPartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetPartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPartitionError {}
 /// Errors returned by GetPartitions
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionsError {
@@ -9452,20 +9204,16 @@ impl GetPartitionsError {
 }
 impl fmt::Display for GetPartitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPartitionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetPartitionsError::EntityNotFound(ref cause) => cause,
-            GetPartitionsError::GlueEncryption(ref cause) => cause,
-            GetPartitionsError::InternalService(ref cause) => cause,
-            GetPartitionsError::InvalidInput(ref cause) => cause,
-            GetPartitionsError::OperationTimeout(ref cause) => cause,
+            GetPartitionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetPartitionsError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetPartitionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetPartitionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPartitionsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPartitionsError {}
 /// Errors returned by GetPlan
 #[derive(Debug, PartialEq)]
 pub enum GetPlanError {
@@ -9499,18 +9247,14 @@ impl GetPlanError {
 }
 impl fmt::Display for GetPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPlanError {
-    fn description(&self) -> &str {
         match *self {
-            GetPlanError::InternalService(ref cause) => cause,
-            GetPlanError::InvalidInput(ref cause) => cause,
-            GetPlanError::OperationTimeout(ref cause) => cause,
+            GetPlanError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetPlanError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPlanError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPlanError {}
 /// Errors returned by GetResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetResourcePolicyError {
@@ -9549,19 +9293,15 @@ impl GetResourcePolicyError {
 }
 impl fmt::Display for GetResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResourcePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetResourcePolicyError::EntityNotFound(ref cause) => cause,
-            GetResourcePolicyError::InternalService(ref cause) => cause,
-            GetResourcePolicyError::InvalidInput(ref cause) => cause,
-            GetResourcePolicyError::OperationTimeout(ref cause) => cause,
+            GetResourcePolicyError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResourcePolicyError {}
 /// Errors returned by GetSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetSecurityConfigurationError {
@@ -9608,19 +9348,15 @@ impl GetSecurityConfigurationError {
 }
 impl fmt::Display for GetSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetSecurityConfigurationError::EntityNotFound(ref cause) => cause,
-            GetSecurityConfigurationError::InternalService(ref cause) => cause,
-            GetSecurityConfigurationError::InvalidInput(ref cause) => cause,
-            GetSecurityConfigurationError::OperationTimeout(ref cause) => cause,
+            GetSecurityConfigurationError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSecurityConfigurationError {}
 /// Errors returned by GetSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum GetSecurityConfigurationsError {
@@ -9667,19 +9403,15 @@ impl GetSecurityConfigurationsError {
 }
 impl fmt::Display for GetSecurityConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSecurityConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            GetSecurityConfigurationsError::EntityNotFound(ref cause) => cause,
-            GetSecurityConfigurationsError::InternalService(ref cause) => cause,
-            GetSecurityConfigurationsError::InvalidInput(ref cause) => cause,
-            GetSecurityConfigurationsError::OperationTimeout(ref cause) => cause,
+            GetSecurityConfigurationsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetSecurityConfigurationsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSecurityConfigurationsError {}
 /// Errors returned by GetTable
 #[derive(Debug, PartialEq)]
 pub enum GetTableError {
@@ -9723,20 +9455,16 @@ impl GetTableError {
 }
 impl fmt::Display for GetTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTableError {
-    fn description(&self) -> &str {
         match *self {
-            GetTableError::EntityNotFound(ref cause) => cause,
-            GetTableError::GlueEncryption(ref cause) => cause,
-            GetTableError::InternalService(ref cause) => cause,
-            GetTableError::InvalidInput(ref cause) => cause,
-            GetTableError::OperationTimeout(ref cause) => cause,
+            GetTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTableError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTableError {}
 /// Errors returned by GetTableVersion
 #[derive(Debug, PartialEq)]
 pub enum GetTableVersionError {
@@ -9780,20 +9508,16 @@ impl GetTableVersionError {
 }
 impl fmt::Display for GetTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTableVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetTableVersionError::EntityNotFound(ref cause) => cause,
-            GetTableVersionError::GlueEncryption(ref cause) => cause,
-            GetTableVersionError::InternalService(ref cause) => cause,
-            GetTableVersionError::InvalidInput(ref cause) => cause,
-            GetTableVersionError::OperationTimeout(ref cause) => cause,
+            GetTableVersionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTableVersionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetTableVersionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTableVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTableVersionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTableVersionError {}
 /// Errors returned by GetTableVersions
 #[derive(Debug, PartialEq)]
 pub enum GetTableVersionsError {
@@ -9837,20 +9561,16 @@ impl GetTableVersionsError {
 }
 impl fmt::Display for GetTableVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTableVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTableVersionsError::EntityNotFound(ref cause) => cause,
-            GetTableVersionsError::GlueEncryption(ref cause) => cause,
-            GetTableVersionsError::InternalService(ref cause) => cause,
-            GetTableVersionsError::InvalidInput(ref cause) => cause,
-            GetTableVersionsError::OperationTimeout(ref cause) => cause,
+            GetTableVersionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTableVersionsError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetTableVersionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTableVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTableVersionsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTableVersionsError {}
 /// Errors returned by GetTables
 #[derive(Debug, PartialEq)]
 pub enum GetTablesError {
@@ -9894,20 +9614,16 @@ impl GetTablesError {
 }
 impl fmt::Display for GetTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTablesError {
-    fn description(&self) -> &str {
         match *self {
-            GetTablesError::EntityNotFound(ref cause) => cause,
-            GetTablesError::GlueEncryption(ref cause) => cause,
-            GetTablesError::InternalService(ref cause) => cause,
-            GetTablesError::InvalidInput(ref cause) => cause,
-            GetTablesError::OperationTimeout(ref cause) => cause,
+            GetTablesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTablesError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetTablesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTablesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTablesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTablesError {}
 /// Errors returned by GetTags
 #[derive(Debug, PartialEq)]
 pub enum GetTagsError {
@@ -9946,19 +9662,15 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTagsError {
-    fn description(&self) -> &str {
         match *self {
-            GetTagsError::EntityNotFound(ref cause) => cause,
-            GetTagsError::InternalService(ref cause) => cause,
-            GetTagsError::InvalidInput(ref cause) => cause,
-            GetTagsError::OperationTimeout(ref cause) => cause,
+            GetTagsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTagsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTagsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTagsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTagsError {}
 /// Errors returned by GetTrigger
 #[derive(Debug, PartialEq)]
 pub enum GetTriggerError {
@@ -9997,19 +9709,15 @@ impl GetTriggerError {
 }
 impl fmt::Display for GetTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            GetTriggerError::EntityNotFound(ref cause) => cause,
-            GetTriggerError::InternalService(ref cause) => cause,
-            GetTriggerError::InvalidInput(ref cause) => cause,
-            GetTriggerError::OperationTimeout(ref cause) => cause,
+            GetTriggerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTriggerError {}
 /// Errors returned by GetTriggers
 #[derive(Debug, PartialEq)]
 pub enum GetTriggersError {
@@ -10048,19 +9756,15 @@ impl GetTriggersError {
 }
 impl fmt::Display for GetTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            GetTriggersError::EntityNotFound(ref cause) => cause,
-            GetTriggersError::InternalService(ref cause) => cause,
-            GetTriggersError::InvalidInput(ref cause) => cause,
-            GetTriggersError::OperationTimeout(ref cause) => cause,
+            GetTriggersError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetTriggersError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetTriggersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTriggersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTriggersError {}
 /// Errors returned by GetUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum GetUserDefinedFunctionError {
@@ -10112,20 +9816,16 @@ impl GetUserDefinedFunctionError {
 }
 impl fmt::Display for GetUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserDefinedFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
-            GetUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
-            GetUserDefinedFunctionError::InternalService(ref cause) => cause,
-            GetUserDefinedFunctionError::InvalidInput(ref cause) => cause,
-            GetUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
+            GetUserDefinedFunctionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserDefinedFunctionError {}
 /// Errors returned by GetUserDefinedFunctions
 #[derive(Debug, PartialEq)]
 pub enum GetUserDefinedFunctionsError {
@@ -10179,20 +9879,16 @@ impl GetUserDefinedFunctionsError {
 }
 impl fmt::Display for GetUserDefinedFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserDefinedFunctionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserDefinedFunctionsError::EntityNotFound(ref cause) => cause,
-            GetUserDefinedFunctionsError::GlueEncryption(ref cause) => cause,
-            GetUserDefinedFunctionsError::InternalService(ref cause) => cause,
-            GetUserDefinedFunctionsError::InvalidInput(ref cause) => cause,
-            GetUserDefinedFunctionsError::OperationTimeout(ref cause) => cause,
+            GetUserDefinedFunctionsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionsError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetUserDefinedFunctionsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserDefinedFunctionsError {}
 /// Errors returned by GetWorkflow
 #[derive(Debug, PartialEq)]
 pub enum GetWorkflowError {
@@ -10231,19 +9927,15 @@ impl GetWorkflowError {
 }
 impl fmt::Display for GetWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkflowError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkflowError::EntityNotFound(ref cause) => cause,
-            GetWorkflowError::InternalService(ref cause) => cause,
-            GetWorkflowError::InvalidInput(ref cause) => cause,
-            GetWorkflowError::OperationTimeout(ref cause) => cause,
+            GetWorkflowError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetWorkflowError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetWorkflowError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetWorkflowError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWorkflowError {}
 /// Errors returned by GetWorkflowRun
 #[derive(Debug, PartialEq)]
 pub enum GetWorkflowRunError {
@@ -10282,19 +9974,15 @@ impl GetWorkflowRunError {
 }
 impl fmt::Display for GetWorkflowRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkflowRunError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkflowRunError::EntityNotFound(ref cause) => cause,
-            GetWorkflowRunError::InternalService(ref cause) => cause,
-            GetWorkflowRunError::InvalidInput(ref cause) => cause,
-            GetWorkflowRunError::OperationTimeout(ref cause) => cause,
+            GetWorkflowRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWorkflowRunError {}
 /// Errors returned by GetWorkflowRunProperties
 #[derive(Debug, PartialEq)]
 pub enum GetWorkflowRunPropertiesError {
@@ -10341,19 +10029,15 @@ impl GetWorkflowRunPropertiesError {
 }
 impl fmt::Display for GetWorkflowRunPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkflowRunPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkflowRunPropertiesError::EntityNotFound(ref cause) => cause,
-            GetWorkflowRunPropertiesError::InternalService(ref cause) => cause,
-            GetWorkflowRunPropertiesError::InvalidInput(ref cause) => cause,
-            GetWorkflowRunPropertiesError::OperationTimeout(ref cause) => cause,
+            GetWorkflowRunPropertiesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunPropertiesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunPropertiesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunPropertiesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWorkflowRunPropertiesError {}
 /// Errors returned by GetWorkflowRuns
 #[derive(Debug, PartialEq)]
 pub enum GetWorkflowRunsError {
@@ -10392,19 +10076,15 @@ impl GetWorkflowRunsError {
 }
 impl fmt::Display for GetWorkflowRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkflowRunsError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkflowRunsError::EntityNotFound(ref cause) => cause,
-            GetWorkflowRunsError::InternalService(ref cause) => cause,
-            GetWorkflowRunsError::InvalidInput(ref cause) => cause,
-            GetWorkflowRunsError::OperationTimeout(ref cause) => cause,
+            GetWorkflowRunsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunsError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetWorkflowRunsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWorkflowRunsError {}
 /// Errors returned by ImportCatalogToGlue
 #[derive(Debug, PartialEq)]
 pub enum ImportCatalogToGlueError {
@@ -10435,17 +10115,13 @@ impl ImportCatalogToGlueError {
 }
 impl fmt::Display for ImportCatalogToGlueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportCatalogToGlueError {
-    fn description(&self) -> &str {
         match *self {
-            ImportCatalogToGlueError::InternalService(ref cause) => cause,
-            ImportCatalogToGlueError::OperationTimeout(ref cause) => cause,
+            ImportCatalogToGlueError::InternalService(ref cause) => write!(f, "{}", cause),
+            ImportCatalogToGlueError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportCatalogToGlueError {}
 /// Errors returned by ListCrawlers
 #[derive(Debug, PartialEq)]
 pub enum ListCrawlersError {
@@ -10469,16 +10145,12 @@ impl ListCrawlersError {
 }
 impl fmt::Display for ListCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCrawlersError {
-    fn description(&self) -> &str {
         match *self {
-            ListCrawlersError::OperationTimeout(ref cause) => cause,
+            ListCrawlersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCrawlersError {}
 /// Errors returned by ListDevEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListDevEndpointsError {
@@ -10517,19 +10189,15 @@ impl ListDevEndpointsError {
 }
 impl fmt::Display for ListDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDevEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            ListDevEndpointsError::EntityNotFound(ref cause) => cause,
-            ListDevEndpointsError::InternalService(ref cause) => cause,
-            ListDevEndpointsError::InvalidInput(ref cause) => cause,
-            ListDevEndpointsError::OperationTimeout(ref cause) => cause,
+            ListDevEndpointsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListDevEndpointsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListDevEndpointsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListDevEndpointsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDevEndpointsError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -10568,19 +10236,15 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::EntityNotFound(ref cause) => cause,
-            ListJobsError::InternalService(ref cause) => cause,
-            ListJobsError::InvalidInput(ref cause) => cause,
-            ListJobsError::OperationTimeout(ref cause) => cause,
+            ListJobsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListJobsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListTriggers
 #[derive(Debug, PartialEq)]
 pub enum ListTriggersError {
@@ -10619,19 +10283,15 @@ impl ListTriggersError {
 }
 impl fmt::Display for ListTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTriggersError {
-    fn description(&self) -> &str {
         match *self {
-            ListTriggersError::EntityNotFound(ref cause) => cause,
-            ListTriggersError::InternalService(ref cause) => cause,
-            ListTriggersError::InvalidInput(ref cause) => cause,
-            ListTriggersError::OperationTimeout(ref cause) => cause,
+            ListTriggersError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListTriggersError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListTriggersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTriggersError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTriggersError {}
 /// Errors returned by ListWorkflows
 #[derive(Debug, PartialEq)]
 pub enum ListWorkflowsError {
@@ -10665,18 +10325,14 @@ impl ListWorkflowsError {
 }
 impl fmt::Display for ListWorkflowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkflowsError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkflowsError::InternalService(ref cause) => cause,
-            ListWorkflowsError::InvalidInput(ref cause) => cause,
-            ListWorkflowsError::OperationTimeout(ref cause) => cause,
+            ListWorkflowsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListWorkflowsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListWorkflowsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWorkflowsError {}
 /// Errors returned by PutDataCatalogEncryptionSettings
 #[derive(Debug, PartialEq)]
 pub enum PutDataCatalogEncryptionSettingsError {
@@ -10718,18 +10374,20 @@ impl PutDataCatalogEncryptionSettingsError {
 }
 impl fmt::Display for PutDataCatalogEncryptionSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutDataCatalogEncryptionSettingsError {
-    fn description(&self) -> &str {
         match *self {
-            PutDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
-            PutDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
-            PutDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutDataCatalogEncryptionSettingsError {}
 /// Errors returned by PutResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutResourcePolicyError {
@@ -10775,20 +10433,16 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutResourcePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutResourcePolicyError::ConditionCheckFailure(ref cause) => cause,
-            PutResourcePolicyError::EntityNotFound(ref cause) => cause,
-            PutResourcePolicyError::InternalService(ref cause) => cause,
-            PutResourcePolicyError::InvalidInput(ref cause) => cause,
-            PutResourcePolicyError::OperationTimeout(ref cause) => cause,
+            PutResourcePolicyError::ConditionCheckFailure(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutResourcePolicyError {}
 /// Errors returned by PutWorkflowRunProperties
 #[derive(Debug, PartialEq)]
 pub enum PutWorkflowRunPropertiesError {
@@ -10856,22 +10510,22 @@ impl PutWorkflowRunPropertiesError {
 }
 impl fmt::Display for PutWorkflowRunPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutWorkflowRunPropertiesError {
-    fn description(&self) -> &str {
         match *self {
-            PutWorkflowRunPropertiesError::AlreadyExists(ref cause) => cause,
-            PutWorkflowRunPropertiesError::ConcurrentModification(ref cause) => cause,
-            PutWorkflowRunPropertiesError::EntityNotFound(ref cause) => cause,
-            PutWorkflowRunPropertiesError::InternalService(ref cause) => cause,
-            PutWorkflowRunPropertiesError::InvalidInput(ref cause) => cause,
-            PutWorkflowRunPropertiesError::OperationTimeout(ref cause) => cause,
-            PutWorkflowRunPropertiesError::ResourceNumberLimitExceeded(ref cause) => cause,
+            PutWorkflowRunPropertiesError::AlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutWorkflowRunPropertiesError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutWorkflowRunPropertiesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            PutWorkflowRunPropertiesError::InternalService(ref cause) => write!(f, "{}", cause),
+            PutWorkflowRunPropertiesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutWorkflowRunPropertiesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            PutWorkflowRunPropertiesError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutWorkflowRunPropertiesError {}
 /// Errors returned by ResetJobBookmark
 #[derive(Debug, PartialEq)]
 pub enum ResetJobBookmarkError {
@@ -10910,19 +10564,15 @@ impl ResetJobBookmarkError {
 }
 impl fmt::Display for ResetJobBookmarkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetJobBookmarkError {
-    fn description(&self) -> &str {
         match *self {
-            ResetJobBookmarkError::EntityNotFound(ref cause) => cause,
-            ResetJobBookmarkError::InternalService(ref cause) => cause,
-            ResetJobBookmarkError::InvalidInput(ref cause) => cause,
-            ResetJobBookmarkError::OperationTimeout(ref cause) => cause,
+            ResetJobBookmarkError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ResetJobBookmarkError::InternalService(ref cause) => write!(f, "{}", cause),
+            ResetJobBookmarkError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ResetJobBookmarkError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetJobBookmarkError {}
 /// Errors returned by SearchTables
 #[derive(Debug, PartialEq)]
 pub enum SearchTablesError {
@@ -10956,18 +10606,14 @@ impl SearchTablesError {
 }
 impl fmt::Display for SearchTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchTablesError {
-    fn description(&self) -> &str {
         match *self {
-            SearchTablesError::InternalService(ref cause) => cause,
-            SearchTablesError::InvalidInput(ref cause) => cause,
-            SearchTablesError::OperationTimeout(ref cause) => cause,
+            SearchTablesError::InternalService(ref cause) => write!(f, "{}", cause),
+            SearchTablesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SearchTablesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchTablesError {}
 /// Errors returned by StartCrawler
 #[derive(Debug, PartialEq)]
 pub enum StartCrawlerError {
@@ -11001,18 +10647,14 @@ impl StartCrawlerError {
 }
 impl fmt::Display for StartCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            StartCrawlerError::CrawlerRunning(ref cause) => cause,
-            StartCrawlerError::EntityNotFound(ref cause) => cause,
-            StartCrawlerError::OperationTimeout(ref cause) => cause,
+            StartCrawlerError::CrawlerRunning(ref cause) => write!(f, "{}", cause),
+            StartCrawlerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartCrawlerError {}
 /// Errors returned by StartCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum StartCrawlerScheduleError {
@@ -11062,20 +10704,16 @@ impl StartCrawlerScheduleError {
 }
 impl fmt::Display for StartCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartCrawlerScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StartCrawlerScheduleError::EntityNotFound(ref cause) => cause,
-            StartCrawlerScheduleError::NoSchedule(ref cause) => cause,
-            StartCrawlerScheduleError::OperationTimeout(ref cause) => cause,
-            StartCrawlerScheduleError::SchedulerRunning(ref cause) => cause,
-            StartCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
+            StartCrawlerScheduleError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartCrawlerScheduleError::NoSchedule(ref cause) => write!(f, "{}", cause),
+            StartCrawlerScheduleError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StartCrawlerScheduleError::SchedulerRunning(ref cause) => write!(f, "{}", cause),
+            StartCrawlerScheduleError::SchedulerTransitioning(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartCrawlerScheduleError {}
 /// Errors returned by StartExportLabelsTaskRun
 #[derive(Debug, PartialEq)]
 pub enum StartExportLabelsTaskRunError {
@@ -11122,19 +10760,15 @@ impl StartExportLabelsTaskRunError {
 }
 impl fmt::Display for StartExportLabelsTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartExportLabelsTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartExportLabelsTaskRunError::EntityNotFound(ref cause) => cause,
-            StartExportLabelsTaskRunError::InternalService(ref cause) => cause,
-            StartExportLabelsTaskRunError::InvalidInput(ref cause) => cause,
-            StartExportLabelsTaskRunError::OperationTimeout(ref cause) => cause,
+            StartExportLabelsTaskRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartExportLabelsTaskRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartExportLabelsTaskRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartExportLabelsTaskRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartExportLabelsTaskRunError {}
 /// Errors returned by StartImportLabelsTaskRun
 #[derive(Debug, PartialEq)]
 pub enum StartImportLabelsTaskRunError {
@@ -11188,20 +10822,18 @@ impl StartImportLabelsTaskRunError {
 }
 impl fmt::Display for StartImportLabelsTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImportLabelsTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartImportLabelsTaskRunError::EntityNotFound(ref cause) => cause,
-            StartImportLabelsTaskRunError::InternalService(ref cause) => cause,
-            StartImportLabelsTaskRunError::InvalidInput(ref cause) => cause,
-            StartImportLabelsTaskRunError::OperationTimeout(ref cause) => cause,
-            StartImportLabelsTaskRunError::ResourceNumberLimitExceeded(ref cause) => cause,
+            StartImportLabelsTaskRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartImportLabelsTaskRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartImportLabelsTaskRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartImportLabelsTaskRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StartImportLabelsTaskRunError::ResourceNumberLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartImportLabelsTaskRunError {}
 /// Errors returned by StartJobRun
 #[derive(Debug, PartialEq)]
 pub enum StartJobRunError {
@@ -11252,21 +10884,17 @@ impl StartJobRunError {
 }
 impl fmt::Display for StartJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartJobRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartJobRunError::ConcurrentRunsExceeded(ref cause) => cause,
-            StartJobRunError::EntityNotFound(ref cause) => cause,
-            StartJobRunError::InternalService(ref cause) => cause,
-            StartJobRunError::InvalidInput(ref cause) => cause,
-            StartJobRunError::OperationTimeout(ref cause) => cause,
-            StartJobRunError::ResourceNumberLimitExceeded(ref cause) => cause,
+            StartJobRunError::ConcurrentRunsExceeded(ref cause) => write!(f, "{}", cause),
+            StartJobRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartJobRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartJobRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartJobRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StartJobRunError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartJobRunError {}
 /// Errors returned by StartMLEvaluationTaskRun
 #[derive(Debug, PartialEq)]
 pub enum StartMLEvaluationTaskRunError {
@@ -11327,21 +10955,19 @@ impl StartMLEvaluationTaskRunError {
 }
 impl fmt::Display for StartMLEvaluationTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMLEvaluationTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartMLEvaluationTaskRunError::ConcurrentRunsExceeded(ref cause) => cause,
-            StartMLEvaluationTaskRunError::EntityNotFound(ref cause) => cause,
-            StartMLEvaluationTaskRunError::InternalService(ref cause) => cause,
-            StartMLEvaluationTaskRunError::InvalidInput(ref cause) => cause,
-            StartMLEvaluationTaskRunError::MLTransformNotReady(ref cause) => cause,
-            StartMLEvaluationTaskRunError::OperationTimeout(ref cause) => cause,
+            StartMLEvaluationTaskRunError::ConcurrentRunsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMLEvaluationTaskRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartMLEvaluationTaskRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartMLEvaluationTaskRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartMLEvaluationTaskRunError::MLTransformNotReady(ref cause) => write!(f, "{}", cause),
+            StartMLEvaluationTaskRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMLEvaluationTaskRunError {}
 /// Errors returned by StartMLLabelingSetGenerationTaskRun
 #[derive(Debug, PartialEq)]
 pub enum StartMLLabelingSetGenerationTaskRunError {
@@ -11397,20 +11023,26 @@ impl StartMLLabelingSetGenerationTaskRunError {
 }
 impl fmt::Display for StartMLLabelingSetGenerationTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMLLabelingSetGenerationTaskRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartMLLabelingSetGenerationTaskRunError::ConcurrentRunsExceeded(ref cause) => cause,
-            StartMLLabelingSetGenerationTaskRunError::EntityNotFound(ref cause) => cause,
-            StartMLLabelingSetGenerationTaskRunError::InternalService(ref cause) => cause,
-            StartMLLabelingSetGenerationTaskRunError::InvalidInput(ref cause) => cause,
-            StartMLLabelingSetGenerationTaskRunError::OperationTimeout(ref cause) => cause,
+            StartMLLabelingSetGenerationTaskRunError::ConcurrentRunsExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMLLabelingSetGenerationTaskRunError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMLLabelingSetGenerationTaskRunError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMLLabelingSetGenerationTaskRunError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartMLLabelingSetGenerationTaskRunError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartMLLabelingSetGenerationTaskRunError {}
 /// Errors returned by StartTrigger
 #[derive(Debug, PartialEq)]
 pub enum StartTriggerError {
@@ -11461,21 +11093,17 @@ impl StartTriggerError {
 }
 impl fmt::Display for StartTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            StartTriggerError::ConcurrentRunsExceeded(ref cause) => cause,
-            StartTriggerError::EntityNotFound(ref cause) => cause,
-            StartTriggerError::InternalService(ref cause) => cause,
-            StartTriggerError::InvalidInput(ref cause) => cause,
-            StartTriggerError::OperationTimeout(ref cause) => cause,
-            StartTriggerError::ResourceNumberLimitExceeded(ref cause) => cause,
+            StartTriggerError::ConcurrentRunsExceeded(ref cause) => write!(f, "{}", cause),
+            StartTriggerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StartTriggerError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartTriggerError {}
 /// Errors returned by StartWorkflowRun
 #[derive(Debug, PartialEq)]
 pub enum StartWorkflowRunError {
@@ -11528,21 +11156,17 @@ impl StartWorkflowRunError {
 }
 impl fmt::Display for StartWorkflowRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartWorkflowRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartWorkflowRunError::ConcurrentRunsExceeded(ref cause) => cause,
-            StartWorkflowRunError::EntityNotFound(ref cause) => cause,
-            StartWorkflowRunError::InternalService(ref cause) => cause,
-            StartWorkflowRunError::InvalidInput(ref cause) => cause,
-            StartWorkflowRunError::OperationTimeout(ref cause) => cause,
-            StartWorkflowRunError::ResourceNumberLimitExceeded(ref cause) => cause,
+            StartWorkflowRunError::ConcurrentRunsExceeded(ref cause) => write!(f, "{}", cause),
+            StartWorkflowRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StartWorkflowRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartWorkflowRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StartWorkflowRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StartWorkflowRunError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartWorkflowRunError {}
 /// Errors returned by StopCrawler
 #[derive(Debug, PartialEq)]
 pub enum StopCrawlerError {
@@ -11581,19 +11205,15 @@ impl StopCrawlerError {
 }
 impl fmt::Display for StopCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            StopCrawlerError::CrawlerNotRunning(ref cause) => cause,
-            StopCrawlerError::CrawlerStopping(ref cause) => cause,
-            StopCrawlerError::EntityNotFound(ref cause) => cause,
-            StopCrawlerError::OperationTimeout(ref cause) => cause,
+            StopCrawlerError::CrawlerNotRunning(ref cause) => write!(f, "{}", cause),
+            StopCrawlerError::CrawlerStopping(ref cause) => write!(f, "{}", cause),
+            StopCrawlerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StopCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopCrawlerError {}
 /// Errors returned by StopCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum StopCrawlerScheduleError {
@@ -11638,19 +11258,15 @@ impl StopCrawlerScheduleError {
 }
 impl fmt::Display for StopCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopCrawlerScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StopCrawlerScheduleError::EntityNotFound(ref cause) => cause,
-            StopCrawlerScheduleError::OperationTimeout(ref cause) => cause,
-            StopCrawlerScheduleError::SchedulerNotRunning(ref cause) => cause,
-            StopCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
+            StopCrawlerScheduleError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StopCrawlerScheduleError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            StopCrawlerScheduleError::SchedulerNotRunning(ref cause) => write!(f, "{}", cause),
+            StopCrawlerScheduleError::SchedulerTransitioning(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopCrawlerScheduleError {}
 /// Errors returned by StopTrigger
 #[derive(Debug, PartialEq)]
 pub enum StopTriggerError {
@@ -11694,20 +11310,16 @@ impl StopTriggerError {
 }
 impl fmt::Display for StopTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            StopTriggerError::ConcurrentModification(ref cause) => cause,
-            StopTriggerError::EntityNotFound(ref cause) => cause,
-            StopTriggerError::InternalService(ref cause) => cause,
-            StopTriggerError::InvalidInput(ref cause) => cause,
-            StopTriggerError::OperationTimeout(ref cause) => cause,
+            StopTriggerError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StopTriggerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StopTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTriggerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -11746,19 +11358,15 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::EntityNotFound(ref cause) => cause,
-            TagResourceError::InternalService(ref cause) => cause,
-            TagResourceError::InvalidInput(ref cause) => cause,
-            TagResourceError::OperationTimeout(ref cause) => cause,
+            TagResourceError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -11797,19 +11405,15 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::EntityNotFound(ref cause) => cause,
-            UntagResourceError::InternalService(ref cause) => cause,
-            UntagResourceError::InvalidInput(ref cause) => cause,
-            UntagResourceError::OperationTimeout(ref cause) => cause,
+            UntagResourceError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalService(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateClassifier
 #[derive(Debug, PartialEq)]
 pub enum UpdateClassifierError {
@@ -11848,19 +11452,15 @@ impl UpdateClassifierError {
 }
 impl fmt::Display for UpdateClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateClassifierError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateClassifierError::EntityNotFound(ref cause) => cause,
-            UpdateClassifierError::InvalidInput(ref cause) => cause,
-            UpdateClassifierError::OperationTimeout(ref cause) => cause,
-            UpdateClassifierError::VersionMismatch(ref cause) => cause,
+            UpdateClassifierError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClassifierError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateClassifierError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateClassifierError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateClassifierError {}
 /// Errors returned by UpdateConnection
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectionError {
@@ -11899,19 +11499,15 @@ impl UpdateConnectionError {
 }
 impl fmt::Display for UpdateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConnectionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConnectionError::EntityNotFound(ref cause) => cause,
-            UpdateConnectionError::GlueEncryption(ref cause) => cause,
-            UpdateConnectionError::InvalidInput(ref cause) => cause,
-            UpdateConnectionError::OperationTimeout(ref cause) => cause,
+            UpdateConnectionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConnectionError {}
 /// Errors returned by UpdateCrawler
 #[derive(Debug, PartialEq)]
 pub enum UpdateCrawlerError {
@@ -11955,20 +11551,16 @@ impl UpdateCrawlerError {
 }
 impl fmt::Display for UpdateCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCrawlerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCrawlerError::CrawlerRunning(ref cause) => cause,
-            UpdateCrawlerError::EntityNotFound(ref cause) => cause,
-            UpdateCrawlerError::InvalidInput(ref cause) => cause,
-            UpdateCrawlerError::OperationTimeout(ref cause) => cause,
-            UpdateCrawlerError::VersionMismatch(ref cause) => cause,
+            UpdateCrawlerError::CrawlerRunning(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCrawlerError {}
 /// Errors returned by UpdateCrawlerSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateCrawlerScheduleError {
@@ -12020,20 +11612,16 @@ impl UpdateCrawlerScheduleError {
 }
 impl fmt::Display for UpdateCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCrawlerScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateCrawlerScheduleError::EntityNotFound(ref cause) => cause,
-            UpdateCrawlerScheduleError::InvalidInput(ref cause) => cause,
-            UpdateCrawlerScheduleError::OperationTimeout(ref cause) => cause,
-            UpdateCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
-            UpdateCrawlerScheduleError::VersionMismatch(ref cause) => cause,
+            UpdateCrawlerScheduleError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerScheduleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerScheduleError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerScheduleError::SchedulerTransitioning(ref cause) => write!(f, "{}", cause),
+            UpdateCrawlerScheduleError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateCrawlerScheduleError {}
 /// Errors returned by UpdateDatabase
 #[derive(Debug, PartialEq)]
 pub enum UpdateDatabaseError {
@@ -12077,20 +11665,16 @@ impl UpdateDatabaseError {
 }
 impl fmt::Display for UpdateDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDatabaseError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDatabaseError::EntityNotFound(ref cause) => cause,
-            UpdateDatabaseError::GlueEncryption(ref cause) => cause,
-            UpdateDatabaseError::InternalService(ref cause) => cause,
-            UpdateDatabaseError::InvalidInput(ref cause) => cause,
-            UpdateDatabaseError::OperationTimeout(ref cause) => cause,
+            UpdateDatabaseError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDatabaseError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            UpdateDatabaseError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateDatabaseError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDatabaseError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDatabaseError {}
 /// Errors returned by UpdateDevEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateDevEndpointError {
@@ -12129,19 +11713,15 @@ impl UpdateDevEndpointError {
 }
 impl fmt::Display for UpdateDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDevEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDevEndpointError::EntityNotFound(ref cause) => cause,
-            UpdateDevEndpointError::InternalService(ref cause) => cause,
-            UpdateDevEndpointError::InvalidInput(ref cause) => cause,
-            UpdateDevEndpointError::OperationTimeout(ref cause) => cause,
+            UpdateDevEndpointError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDevEndpointError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateDevEndpointError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDevEndpointError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDevEndpointError {}
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
@@ -12185,20 +11765,16 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobError::ConcurrentModification(ref cause) => cause,
-            UpdateJobError::EntityNotFound(ref cause) => cause,
-            UpdateJobError::InternalService(ref cause) => cause,
-            UpdateJobError::InvalidInput(ref cause) => cause,
-            UpdateJobError::OperationTimeout(ref cause) => cause,
+            UpdateJobError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateJobError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobError {}
 /// Errors returned by UpdateMLTransform
 #[derive(Debug, PartialEq)]
 pub enum UpdateMLTransformError {
@@ -12242,20 +11818,16 @@ impl UpdateMLTransformError {
 }
 impl fmt::Display for UpdateMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMLTransformError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMLTransformError::AccessDenied(ref cause) => cause,
-            UpdateMLTransformError::EntityNotFound(ref cause) => cause,
-            UpdateMLTransformError::InternalService(ref cause) => cause,
-            UpdateMLTransformError::InvalidInput(ref cause) => cause,
-            UpdateMLTransformError::OperationTimeout(ref cause) => cause,
+            UpdateMLTransformError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateMLTransformError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMLTransformError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateMLTransformError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateMLTransformError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMLTransformError {}
 /// Errors returned by UpdatePartition
 #[derive(Debug, PartialEq)]
 pub enum UpdatePartitionError {
@@ -12299,20 +11871,16 @@ impl UpdatePartitionError {
 }
 impl fmt::Display for UpdatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePartitionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePartitionError::EntityNotFound(ref cause) => cause,
-            UpdatePartitionError::GlueEncryption(ref cause) => cause,
-            UpdatePartitionError::InternalService(ref cause) => cause,
-            UpdatePartitionError::InvalidInput(ref cause) => cause,
-            UpdatePartitionError::OperationTimeout(ref cause) => cause,
+            UpdatePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            UpdatePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdatePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdatePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePartitionError {}
 /// Errors returned by UpdateTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateTableError {
@@ -12368,22 +11936,18 @@ impl UpdateTableError {
 }
 impl fmt::Display for UpdateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTableError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTableError::ConcurrentModification(ref cause) => cause,
-            UpdateTableError::EntityNotFound(ref cause) => cause,
-            UpdateTableError::GlueEncryption(ref cause) => cause,
-            UpdateTableError::InternalService(ref cause) => cause,
-            UpdateTableError::InvalidInput(ref cause) => cause,
-            UpdateTableError::OperationTimeout(ref cause) => cause,
-            UpdateTableError::ResourceNumberLimitExceeded(ref cause) => cause,
+            UpdateTableError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+            UpdateTableError::ResourceNumberLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTableError {}
 /// Errors returned by UpdateTrigger
 #[derive(Debug, PartialEq)]
 pub enum UpdateTriggerError {
@@ -12429,20 +11993,16 @@ impl UpdateTriggerError {
 }
 impl fmt::Display for UpdateTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTriggerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTriggerError::ConcurrentModification(ref cause) => cause,
-            UpdateTriggerError::EntityNotFound(ref cause) => cause,
-            UpdateTriggerError::InternalService(ref cause) => cause,
-            UpdateTriggerError::InvalidInput(ref cause) => cause,
-            UpdateTriggerError::OperationTimeout(ref cause) => cause,
+            UpdateTriggerError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateTriggerError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTriggerError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateTriggerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateTriggerError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTriggerError {}
 /// Errors returned by UpdateUserDefinedFunction
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserDefinedFunctionError {
@@ -12496,20 +12056,16 @@ impl UpdateUserDefinedFunctionError {
 }
 impl fmt::Display for UpdateUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserDefinedFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
-            UpdateUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
-            UpdateUserDefinedFunctionError::InternalService(ref cause) => cause,
-            UpdateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
-            UpdateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
+            UpdateUserDefinedFunctionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateUserDefinedFunctionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            UpdateUserDefinedFunctionError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateUserDefinedFunctionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateUserDefinedFunctionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserDefinedFunctionError {}
 /// Errors returned by UpdateWorkflow
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkflowError {
@@ -12555,20 +12111,16 @@ impl UpdateWorkflowError {
 }
 impl fmt::Display for UpdateWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWorkflowError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWorkflowError::ConcurrentModification(ref cause) => cause,
-            UpdateWorkflowError::EntityNotFound(ref cause) => cause,
-            UpdateWorkflowError::InternalService(ref cause) => cause,
-            UpdateWorkflowError::InvalidInput(ref cause) => cause,
-            UpdateWorkflowError::OperationTimeout(ref cause) => cause,
+            UpdateWorkflowError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateWorkflowError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateWorkflowError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateWorkflowError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateWorkflowError::OperationTimeout(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWorkflowError {}
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
 pub trait Glue {
     /// <p>Creates one or more partitions in a batch operation.</p>

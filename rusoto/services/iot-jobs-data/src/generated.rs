@@ -297,21 +297,17 @@ impl DescribeJobExecutionError {
 }
 impl fmt::Display for DescribeJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobExecutionError::CertificateValidation(ref cause) => cause,
-            DescribeJobExecutionError::InvalidRequest(ref cause) => cause,
-            DescribeJobExecutionError::ResourceNotFound(ref cause) => cause,
-            DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            DescribeJobExecutionError::TerminalState(ref cause) => cause,
-            DescribeJobExecutionError::Throttling(ref cause) => cause,
+            DescribeJobExecutionError::CertificateValidation(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::TerminalState(ref cause) => write!(f, "{}", cause),
+            DescribeJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobExecutionError {}
 /// Errors returned by GetPendingJobExecutions
 #[derive(Debug, PartialEq)]
 pub enum GetPendingJobExecutionsError {
@@ -363,20 +359,18 @@ impl GetPendingJobExecutionsError {
 }
 impl fmt::Display for GetPendingJobExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPendingJobExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            GetPendingJobExecutionsError::CertificateValidation(ref cause) => cause,
-            GetPendingJobExecutionsError::InvalidRequest(ref cause) => cause,
-            GetPendingJobExecutionsError::ResourceNotFound(ref cause) => cause,
-            GetPendingJobExecutionsError::ServiceUnavailable(ref cause) => cause,
-            GetPendingJobExecutionsError::Throttling(ref cause) => cause,
+            GetPendingJobExecutionsError::CertificateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPendingJobExecutionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPendingJobExecutionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPendingJobExecutionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetPendingJobExecutionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPendingJobExecutionsError {}
 /// Errors returned by StartNextPendingJobExecution
 #[derive(Debug, PartialEq)]
 pub enum StartNextPendingJobExecutionError {
@@ -432,20 +426,22 @@ impl StartNextPendingJobExecutionError {
 }
 impl fmt::Display for StartNextPendingJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartNextPendingJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartNextPendingJobExecutionError::CertificateValidation(ref cause) => cause,
-            StartNextPendingJobExecutionError::InvalidRequest(ref cause) => cause,
-            StartNextPendingJobExecutionError::ResourceNotFound(ref cause) => cause,
-            StartNextPendingJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            StartNextPendingJobExecutionError::Throttling(ref cause) => cause,
+            StartNextPendingJobExecutionError::CertificateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartNextPendingJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartNextPendingJobExecutionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartNextPendingJobExecutionError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartNextPendingJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartNextPendingJobExecutionError {}
 /// Errors returned by UpdateJobExecution
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobExecutionError {
@@ -500,21 +496,17 @@ impl UpdateJobExecutionError {
 }
 impl fmt::Display for UpdateJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobExecutionError::CertificateValidation(ref cause) => cause,
-            UpdateJobExecutionError::InvalidRequest(ref cause) => cause,
-            UpdateJobExecutionError::InvalidStateTransition(ref cause) => cause,
-            UpdateJobExecutionError::ResourceNotFound(ref cause) => cause,
-            UpdateJobExecutionError::ServiceUnavailable(ref cause) => cause,
-            UpdateJobExecutionError::Throttling(ref cause) => cause,
+            UpdateJobExecutionError::CertificateValidation(ref cause) => write!(f, "{}", cause),
+            UpdateJobExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateJobExecutionError::InvalidStateTransition(ref cause) => write!(f, "{}", cause),
+            UpdateJobExecutionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateJobExecutionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateJobExecutionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobExecutionError {}
 /// Trait representing the capabilities of the AWS IoT Jobs Data Plane API. AWS IoT Jobs Data Plane clients implement this trait.
 pub trait IotJobsData {
     /// <p>Gets details of a job execution.</p>

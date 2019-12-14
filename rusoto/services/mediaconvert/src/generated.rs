@@ -4490,21 +4490,17 @@ impl AssociateCertificateError {
 }
 impl fmt::Display for AssociateCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateCertificateError::BadRequest(ref cause) => cause,
-            AssociateCertificateError::Conflict(ref cause) => cause,
-            AssociateCertificateError::Forbidden(ref cause) => cause,
-            AssociateCertificateError::InternalServerError(ref cause) => cause,
-            AssociateCertificateError::NotFound(ref cause) => cause,
-            AssociateCertificateError::TooManyRequests(ref cause) => cause,
+            AssociateCertificateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AssociateCertificateError::Conflict(ref cause) => write!(f, "{}", cause),
+            AssociateCertificateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AssociateCertificateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssociateCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            AssociateCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateCertificateError {}
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
@@ -4553,21 +4549,17 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::BadRequest(ref cause) => cause,
-            CancelJobError::Conflict(ref cause) => cause,
-            CancelJobError::Forbidden(ref cause) => cause,
-            CancelJobError::InternalServerError(ref cause) => cause,
-            CancelJobError::NotFound(ref cause) => cause,
-            CancelJobError::TooManyRequests(ref cause) => cause,
+            CancelJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CancelJobError::Conflict(ref cause) => write!(f, "{}", cause),
+            CancelJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CancelJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            CancelJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
@@ -4616,21 +4608,17 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobError::BadRequest(ref cause) => cause,
-            CreateJobError::Conflict(ref cause) => cause,
-            CreateJobError::Forbidden(ref cause) => cause,
-            CreateJobError::InternalServerError(ref cause) => cause,
-            CreateJobError::NotFound(ref cause) => cause,
-            CreateJobError::TooManyRequests(ref cause) => cause,
+            CreateJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateJobError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobError {}
 /// Errors returned by CreateJobTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateJobTemplateError {
@@ -4681,21 +4669,17 @@ impl CreateJobTemplateError {
 }
 impl fmt::Display for CreateJobTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobTemplateError::BadRequest(ref cause) => cause,
-            CreateJobTemplateError::Conflict(ref cause) => cause,
-            CreateJobTemplateError::Forbidden(ref cause) => cause,
-            CreateJobTemplateError::InternalServerError(ref cause) => cause,
-            CreateJobTemplateError::NotFound(ref cause) => cause,
-            CreateJobTemplateError::TooManyRequests(ref cause) => cause,
+            CreateJobTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobTemplateError {}
 /// Errors returned by CreatePreset
 #[derive(Debug, PartialEq)]
 pub enum CreatePresetError {
@@ -4744,21 +4728,17 @@ impl CreatePresetError {
 }
 impl fmt::Display for CreatePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresetError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePresetError::BadRequest(ref cause) => cause,
-            CreatePresetError::Conflict(ref cause) => cause,
-            CreatePresetError::Forbidden(ref cause) => cause,
-            CreatePresetError::InternalServerError(ref cause) => cause,
-            CreatePresetError::NotFound(ref cause) => cause,
-            CreatePresetError::TooManyRequests(ref cause) => cause,
+            CreatePresetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreatePresetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePresetError {}
 /// Errors returned by CreateQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateQueueError {
@@ -4807,21 +4787,17 @@ impl CreateQueueError {
 }
 impl fmt::Display for CreateQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQueueError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQueueError::BadRequest(ref cause) => cause,
-            CreateQueueError::Conflict(ref cause) => cause,
-            CreateQueueError::Forbidden(ref cause) => cause,
-            CreateQueueError::InternalServerError(ref cause) => cause,
-            CreateQueueError::NotFound(ref cause) => cause,
-            CreateQueueError::TooManyRequests(ref cause) => cause,
+            CreateQueueError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateQueueError {}
 /// Errors returned by DeleteJobTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobTemplateError {
@@ -4872,21 +4848,17 @@ impl DeleteJobTemplateError {
 }
 impl fmt::Display for DeleteJobTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobTemplateError::BadRequest(ref cause) => cause,
-            DeleteJobTemplateError::Conflict(ref cause) => cause,
-            DeleteJobTemplateError::Forbidden(ref cause) => cause,
-            DeleteJobTemplateError::InternalServerError(ref cause) => cause,
-            DeleteJobTemplateError::NotFound(ref cause) => cause,
-            DeleteJobTemplateError::TooManyRequests(ref cause) => cause,
+            DeleteJobTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobTemplateError {}
 /// Errors returned by DeletePreset
 #[derive(Debug, PartialEq)]
 pub enum DeletePresetError {
@@ -4935,21 +4907,17 @@ impl DeletePresetError {
 }
 impl fmt::Display for DeletePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePresetError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePresetError::BadRequest(ref cause) => cause,
-            DeletePresetError::Conflict(ref cause) => cause,
-            DeletePresetError::Forbidden(ref cause) => cause,
-            DeletePresetError::InternalServerError(ref cause) => cause,
-            DeletePresetError::NotFound(ref cause) => cause,
-            DeletePresetError::TooManyRequests(ref cause) => cause,
+            DeletePresetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeletePresetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePresetError {}
 /// Errors returned by DeleteQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteQueueError {
@@ -4998,21 +4966,17 @@ impl DeleteQueueError {
 }
 impl fmt::Display for DeleteQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQueueError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteQueueError::BadRequest(ref cause) => cause,
-            DeleteQueueError::Conflict(ref cause) => cause,
-            DeleteQueueError::Forbidden(ref cause) => cause,
-            DeleteQueueError::InternalServerError(ref cause) => cause,
-            DeleteQueueError::NotFound(ref cause) => cause,
-            DeleteQueueError::TooManyRequests(ref cause) => cause,
+            DeleteQueueError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteQueueError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteQueueError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteQueueError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteQueueError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteQueueError {}
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {
@@ -5063,21 +5027,17 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEndpointsError::BadRequest(ref cause) => cause,
-            DescribeEndpointsError::Conflict(ref cause) => cause,
-            DescribeEndpointsError::Forbidden(ref cause) => cause,
-            DescribeEndpointsError::InternalServerError(ref cause) => cause,
-            DescribeEndpointsError::NotFound(ref cause) => cause,
-            DescribeEndpointsError::TooManyRequests(ref cause) => cause,
+            DescribeEndpointsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointsError::Conflict(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEndpointsError {}
 /// Errors returned by DisassociateCertificate
 #[derive(Debug, PartialEq)]
 pub enum DisassociateCertificateError {
@@ -5130,21 +5090,17 @@ impl DisassociateCertificateError {
 }
 impl fmt::Display for DisassociateCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateCertificateError::BadRequest(ref cause) => cause,
-            DisassociateCertificateError::Conflict(ref cause) => cause,
-            DisassociateCertificateError::Forbidden(ref cause) => cause,
-            DisassociateCertificateError::InternalServerError(ref cause) => cause,
-            DisassociateCertificateError::NotFound(ref cause) => cause,
-            DisassociateCertificateError::TooManyRequests(ref cause) => cause,
+            DisassociateCertificateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateCertificateError::Conflict(ref cause) => write!(f, "{}", cause),
+            DisassociateCertificateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DisassociateCertificateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DisassociateCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateCertificateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateCertificateError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
@@ -5189,21 +5145,17 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobError::BadRequest(ref cause) => cause,
-            GetJobError::Conflict(ref cause) => cause,
-            GetJobError::Forbidden(ref cause) => cause,
-            GetJobError::InternalServerError(ref cause) => cause,
-            GetJobError::NotFound(ref cause) => cause,
-            GetJobError::TooManyRequests(ref cause) => cause,
+            GetJobError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetJobError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetJobError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetJobError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetJobError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobError {}
 /// Errors returned by GetJobTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetJobTemplateError {
@@ -5252,21 +5204,17 @@ impl GetJobTemplateError {
 }
 impl fmt::Display for GetJobTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetJobTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GetJobTemplateError::BadRequest(ref cause) => cause,
-            GetJobTemplateError::Conflict(ref cause) => cause,
-            GetJobTemplateError::Forbidden(ref cause) => cause,
-            GetJobTemplateError::InternalServerError(ref cause) => cause,
-            GetJobTemplateError::NotFound(ref cause) => cause,
-            GetJobTemplateError::TooManyRequests(ref cause) => cause,
+            GetJobTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetJobTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetJobTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetJobTemplateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetJobTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetJobTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetJobTemplateError {}
 /// Errors returned by GetPreset
 #[derive(Debug, PartialEq)]
 pub enum GetPresetError {
@@ -5315,21 +5263,17 @@ impl GetPresetError {
 }
 impl fmt::Display for GetPresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPresetError {
-    fn description(&self) -> &str {
         match *self {
-            GetPresetError::BadRequest(ref cause) => cause,
-            GetPresetError::Conflict(ref cause) => cause,
-            GetPresetError::Forbidden(ref cause) => cause,
-            GetPresetError::InternalServerError(ref cause) => cause,
-            GetPresetError::NotFound(ref cause) => cause,
-            GetPresetError::TooManyRequests(ref cause) => cause,
+            GetPresetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetPresetError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetPresetError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetPresetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetPresetError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetPresetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPresetError {}
 /// Errors returned by GetQueue
 #[derive(Debug, PartialEq)]
 pub enum GetQueueError {
@@ -5378,21 +5322,17 @@ impl GetQueueError {
 }
 impl fmt::Display for GetQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueueError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueueError::BadRequest(ref cause) => cause,
-            GetQueueError::Conflict(ref cause) => cause,
-            GetQueueError::Forbidden(ref cause) => cause,
-            GetQueueError::InternalServerError(ref cause) => cause,
-            GetQueueError::NotFound(ref cause) => cause,
-            GetQueueError::TooManyRequests(ref cause) => cause,
+            GetQueueError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetQueueError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetQueueError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetQueueError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetQueueError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueueError {}
 /// Errors returned by ListJobTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListJobTemplatesError {
@@ -5443,21 +5383,17 @@ impl ListJobTemplatesError {
 }
 impl fmt::Display for ListJobTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobTemplatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobTemplatesError::BadRequest(ref cause) => cause,
-            ListJobTemplatesError::Conflict(ref cause) => cause,
-            ListJobTemplatesError::Forbidden(ref cause) => cause,
-            ListJobTemplatesError::InternalServerError(ref cause) => cause,
-            ListJobTemplatesError::NotFound(ref cause) => cause,
-            ListJobTemplatesError::TooManyRequests(ref cause) => cause,
+            ListJobTemplatesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobTemplatesError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -5506,21 +5442,17 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::BadRequest(ref cause) => cause,
-            ListJobsError::Conflict(ref cause) => cause,
-            ListJobsError::Forbidden(ref cause) => cause,
-            ListJobsError::InternalServerError(ref cause) => cause,
-            ListJobsError::NotFound(ref cause) => cause,
-            ListJobsError::TooManyRequests(ref cause) => cause,
+            ListJobsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListJobsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListJobsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by ListPresets
 #[derive(Debug, PartialEq)]
 pub enum ListPresetsError {
@@ -5569,21 +5501,17 @@ impl ListPresetsError {
 }
 impl fmt::Display for ListPresetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPresetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPresetsError::BadRequest(ref cause) => cause,
-            ListPresetsError::Conflict(ref cause) => cause,
-            ListPresetsError::Forbidden(ref cause) => cause,
-            ListPresetsError::InternalServerError(ref cause) => cause,
-            ListPresetsError::NotFound(ref cause) => cause,
-            ListPresetsError::TooManyRequests(ref cause) => cause,
+            ListPresetsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListPresetsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPresetsError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {
@@ -5632,21 +5560,17 @@ impl ListQueuesError {
 }
 impl fmt::Display for ListQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            ListQueuesError::BadRequest(ref cause) => cause,
-            ListQueuesError::Conflict(ref cause) => cause,
-            ListQueuesError::Forbidden(ref cause) => cause,
-            ListQueuesError::InternalServerError(ref cause) => cause,
-            ListQueuesError::NotFound(ref cause) => cause,
-            ListQueuesError::TooManyRequests(ref cause) => cause,
+            ListQueuesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListQueuesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQueuesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5697,21 +5621,17 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::Conflict(ref cause) => cause,
-            ListTagsForResourceError::Forbidden(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
-            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -5760,21 +5680,17 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::Conflict(ref cause) => cause,
-            TagResourceError::Forbidden(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -5823,21 +5739,17 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::Conflict(ref cause) => cause,
-            UntagResourceError::Forbidden(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateJobTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobTemplateError {
@@ -5888,21 +5800,17 @@ impl UpdateJobTemplateError {
 }
 impl fmt::Display for UpdateJobTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobTemplateError::BadRequest(ref cause) => cause,
-            UpdateJobTemplateError::Conflict(ref cause) => cause,
-            UpdateJobTemplateError::Forbidden(ref cause) => cause,
-            UpdateJobTemplateError::InternalServerError(ref cause) => cause,
-            UpdateJobTemplateError::NotFound(ref cause) => cause,
-            UpdateJobTemplateError::TooManyRequests(ref cause) => cause,
+            UpdateJobTemplateError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateJobTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateJobTemplateError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateJobTemplateError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateJobTemplateError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateJobTemplateError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobTemplateError {}
 /// Errors returned by UpdatePreset
 #[derive(Debug, PartialEq)]
 pub enum UpdatePresetError {
@@ -5951,21 +5859,17 @@ impl UpdatePresetError {
 }
 impl fmt::Display for UpdatePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdatePresetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdatePresetError::BadRequest(ref cause) => cause,
-            UpdatePresetError::Conflict(ref cause) => cause,
-            UpdatePresetError::Forbidden(ref cause) => cause,
-            UpdatePresetError::InternalServerError(ref cause) => cause,
-            UpdatePresetError::NotFound(ref cause) => cause,
-            UpdatePresetError::TooManyRequests(ref cause) => cause,
+            UpdatePresetError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePresetError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdatePresetError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdatePresetError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdatePresetError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePresetError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdatePresetError {}
 /// Errors returned by UpdateQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateQueueError {
@@ -6014,21 +5918,17 @@ impl UpdateQueueError {
 }
 impl fmt::Display for UpdateQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateQueueError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateQueueError::BadRequest(ref cause) => cause,
-            UpdateQueueError::Conflict(ref cause) => cause,
-            UpdateQueueError::Forbidden(ref cause) => cause,
-            UpdateQueueError::InternalServerError(ref cause) => cause,
-            UpdateQueueError::NotFound(ref cause) => cause,
-            UpdateQueueError::TooManyRequests(ref cause) => cause,
+            UpdateQueueError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateQueueError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateQueueError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateQueueError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateQueueError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateQueueError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateQueueError {}
 /// Trait representing the capabilities of the MediaConvert API. MediaConvert clients implement this trait.
 pub trait MediaConvert {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>

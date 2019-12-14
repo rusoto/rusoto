@@ -7848,22 +7848,22 @@ impl AssociateVPCWithHostedZoneError {
 }
 impl fmt::Display for AssociateVPCWithHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateVPCWithHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateVPCWithHostedZoneError::ConflictingDomainExists(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::InvalidInput(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::InvalidVPCId(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::LimitsExceeded(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => cause,
+            AssociateVPCWithHostedZoneError::ConflictingDomainExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateVPCWithHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::InvalidVPCId(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AssociateVPCWithHostedZoneError {}
 /// Errors returned by ChangeResourceRecordSets
 #[derive(Debug, PartialEq)]
 pub enum ChangeResourceRecordSetsError {
@@ -7931,20 +7931,18 @@ impl ChangeResourceRecordSetsError {
 }
 impl fmt::Display for ChangeResourceRecordSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeResourceRecordSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeResourceRecordSetsError::InvalidChangeBatch(ref cause) => cause,
-            ChangeResourceRecordSetsError::InvalidInput(ref cause) => cause,
-            ChangeResourceRecordSetsError::NoSuchHealthCheck(ref cause) => cause,
-            ChangeResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
-            ChangeResourceRecordSetsError::PriorRequestNotComplete(ref cause) => cause,
+            ChangeResourceRecordSetsError::InvalidChangeBatch(ref cause) => write!(f, "{}", cause),
+            ChangeResourceRecordSetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ChangeResourceRecordSetsError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
+            ChangeResourceRecordSetsError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            ChangeResourceRecordSetsError::PriorRequestNotComplete(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ChangeResourceRecordSetsError {}
 /// Errors returned by ChangeTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ChangeTagsForResourceError {
@@ -8012,20 +8010,18 @@ impl ChangeTagsForResourceError {
 }
 impl fmt::Display for ChangeTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangeTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ChangeTagsForResourceError::InvalidInput(ref cause) => cause,
-            ChangeTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,
-            ChangeTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
-            ChangeTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
-            ChangeTagsForResourceError::Throttling(ref cause) => cause,
+            ChangeTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ChangeTagsForResourceError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
+            ChangeTagsForResourceError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            ChangeTagsForResourceError::PriorRequestNotComplete(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ChangeTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ChangeTagsForResourceError {}
 /// Errors returned by CreateHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum CreateHealthCheckError {
@@ -8077,18 +8073,14 @@ impl CreateHealthCheckError {
 }
 impl fmt::Display for CreateHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => cause,
-            CreateHealthCheckError::InvalidInput(ref cause) => cause,
-            CreateHealthCheckError::TooManyHealthChecks(ref cause) => cause,
+            CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateHealthCheckError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateHealthCheckError::TooManyHealthChecks(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHealthCheckError {}
 /// Errors returned by CreateHostedZone
 #[derive(Debug, PartialEq)]
 pub enum CreateHostedZoneError {
@@ -8182,24 +8174,20 @@ impl CreateHostedZoneError {
 }
 impl fmt::Display for CreateHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHostedZoneError::ConflictingDomainExists(ref cause) => cause,
-            CreateHostedZoneError::DelegationSetNotAvailable(ref cause) => cause,
-            CreateHostedZoneError::DelegationSetNotReusable(ref cause) => cause,
-            CreateHostedZoneError::HostedZoneAlreadyExists(ref cause) => cause,
-            CreateHostedZoneError::InvalidDomainName(ref cause) => cause,
-            CreateHostedZoneError::InvalidInput(ref cause) => cause,
-            CreateHostedZoneError::InvalidVPCId(ref cause) => cause,
-            CreateHostedZoneError::NoSuchDelegationSet(ref cause) => cause,
-            CreateHostedZoneError::TooManyHostedZones(ref cause) => cause,
+            CreateHostedZoneError::ConflictingDomainExists(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::DelegationSetNotAvailable(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::DelegationSetNotReusable(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::HostedZoneAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::InvalidDomainName(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::InvalidVPCId(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::NoSuchDelegationSet(ref cause) => write!(f, "{}", cause),
+            CreateHostedZoneError::TooManyHostedZones(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHostedZoneError {}
 /// Errors returned by CreateQueryLoggingConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateQueryLoggingConfigError {
@@ -8280,23 +8268,25 @@ impl CreateQueryLoggingConfigError {
 }
 impl fmt::Display for CreateQueryLoggingConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateQueryLoggingConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateQueryLoggingConfigError::ConcurrentModification(ref cause) => cause,
-            CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(ref cause) => {
-                cause
+            CreateQueryLoggingConfigError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
             }
-            CreateQueryLoggingConfigError::InvalidInput(ref cause) => cause,
-            CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(ref cause) => cause,
-            CreateQueryLoggingConfigError::NoSuchHostedZone(ref cause) => cause,
-            CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(ref cause) => cause,
+            CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateQueryLoggingConfigError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateQueryLoggingConfigError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateQueryLoggingConfigError {}
 /// Errors returned by CreateReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum CreateReusableDelegationSetError {
@@ -8386,22 +8376,26 @@ impl CreateReusableDelegationSetError {
 }
 impl fmt::Display for CreateReusableDelegationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReusableDelegationSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReusableDelegationSetError::DelegationSetAlreadyCreated(ref cause) => cause,
-            CreateReusableDelegationSetError::DelegationSetAlreadyReusable(ref cause) => cause,
-            CreateReusableDelegationSetError::DelegationSetNotAvailable(ref cause) => cause,
-            CreateReusableDelegationSetError::HostedZoneNotFound(ref cause) => cause,
-            CreateReusableDelegationSetError::InvalidArgument(ref cause) => cause,
-            CreateReusableDelegationSetError::InvalidInput(ref cause) => cause,
-            CreateReusableDelegationSetError::LimitsExceeded(ref cause) => cause,
+            CreateReusableDelegationSetError::DelegationSetAlreadyCreated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReusableDelegationSetError::DelegationSetAlreadyReusable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReusableDelegationSetError::DelegationSetNotAvailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReusableDelegationSetError::HostedZoneNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReusableDelegationSetError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateReusableDelegationSetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateReusableDelegationSetError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReusableDelegationSetError {}
 /// Errors returned by CreateTrafficPolicy
 #[derive(Debug, PartialEq)]
 pub enum CreateTrafficPolicyError {
@@ -8464,19 +8458,19 @@ impl CreateTrafficPolicyError {
 }
 impl fmt::Display for CreateTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrafficPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrafficPolicyError::InvalidInput(ref cause) => cause,
-            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(ref cause) => cause,
-            CreateTrafficPolicyError::TooManyTrafficPolicies(ref cause) => cause,
-            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(ref cause) => cause,
+            CreateTrafficPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrafficPolicyError::TooManyTrafficPolicies(ref cause) => write!(f, "{}", cause),
+            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateTrafficPolicyError {}
 /// Errors returned by CreateTrafficPolicyInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateTrafficPolicyInstanceError {
@@ -8552,22 +8546,22 @@ impl CreateTrafficPolicyInstanceError {
 }
 impl fmt::Display for CreateTrafficPolicyInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrafficPolicyInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
-            CreateTrafficPolicyInstanceError::NoSuchHostedZone(ref cause) => cause,
-            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,
-            CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(ref cause) => cause,
+            CreateTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateTrafficPolicyInstanceError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for CreateTrafficPolicyInstanceError {}
 /// Errors returned by CreateTrafficPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateTrafficPolicyVersionError {
@@ -8610,22 +8604,24 @@ impl CreateTrafficPolicyVersionError {
 }
 impl fmt::Display for CreateTrafficPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrafficPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrafficPolicyVersionError::ConcurrentModification(ref cause) => cause,
-            CreateTrafficPolicyVersionError::InvalidInput(ref cause) => cause,
-            CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => cause,
-            CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => cause,
+            CreateTrafficPolicyVersionError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrafficPolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrafficPolicyVersionError {}
 /// Errors returned by CreateVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum CreateVPCAssociationAuthorizationError {
@@ -8701,22 +8697,26 @@ impl CreateVPCAssociationAuthorizationError {
 }
 impl fmt::Display for CreateVPCAssociationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVPCAssociationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => cause,
-            CreateVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
-            CreateVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
-            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
+            CreateVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateVPCAssociationAuthorizationError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVPCAssociationAuthorizationError {}
 /// Errors returned by DeleteHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum DeleteHealthCheckError {
@@ -8768,18 +8768,14 @@ impl DeleteHealthCheckError {
 }
 impl fmt::Display for DeleteHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHealthCheckError::HealthCheckInUse(ref cause) => cause,
-            DeleteHealthCheckError::InvalidInput(ref cause) => cause,
-            DeleteHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+            DeleteHealthCheckError::HealthCheckInUse(ref cause) => write!(f, "{}", cause),
+            DeleteHealthCheckError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteHealthCheckError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHealthCheckError {}
 /// Errors returned by DeleteHostedZone
 #[derive(Debug, PartialEq)]
 pub enum DeleteHostedZoneError {
@@ -8845,20 +8841,16 @@ impl DeleteHostedZoneError {
 }
 impl fmt::Display for DeleteHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteHostedZoneError::HostedZoneNotEmpty(ref cause) => cause,
-            DeleteHostedZoneError::InvalidDomainName(ref cause) => cause,
-            DeleteHostedZoneError::InvalidInput(ref cause) => cause,
-            DeleteHostedZoneError::NoSuchHostedZone(ref cause) => cause,
-            DeleteHostedZoneError::PriorRequestNotComplete(ref cause) => cause,
+            DeleteHostedZoneError::HostedZoneNotEmpty(ref cause) => write!(f, "{}", cause),
+            DeleteHostedZoneError::InvalidDomainName(ref cause) => write!(f, "{}", cause),
+            DeleteHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteHostedZoneError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            DeleteHostedZoneError::PriorRequestNotComplete(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteHostedZoneError {}
 /// Errors returned by DeleteQueryLoggingConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteQueryLoggingConfigError {
@@ -8914,18 +8906,18 @@ impl DeleteQueryLoggingConfigError {
 }
 impl fmt::Display for DeleteQueryLoggingConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteQueryLoggingConfigError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteQueryLoggingConfigError::ConcurrentModification(ref cause) => cause,
-            DeleteQueryLoggingConfigError::InvalidInput(ref cause) => cause,
-            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
+            DeleteQueryLoggingConfigError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteQueryLoggingConfigError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteQueryLoggingConfigError {}
 /// Errors returned by DeleteReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteReusableDelegationSetError {
@@ -8992,19 +8984,21 @@ impl DeleteReusableDelegationSetError {
 }
 impl fmt::Display for DeleteReusableDelegationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReusableDelegationSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReusableDelegationSetError::DelegationSetInUse(ref cause) => cause,
-            DeleteReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
-            DeleteReusableDelegationSetError::InvalidInput(ref cause) => cause,
-            DeleteReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
+            DeleteReusableDelegationSetError::DelegationSetInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReusableDelegationSetError::DelegationSetNotReusable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReusableDelegationSetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteReusableDelegationSetError::NoSuchDelegationSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteReusableDelegationSetError {}
 /// Errors returned by DeleteTrafficPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrafficPolicyError {
@@ -9063,19 +9057,15 @@ impl DeleteTrafficPolicyError {
 }
 impl fmt::Display for DeleteTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrafficPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrafficPolicyError::ConcurrentModification(ref cause) => cause,
-            DeleteTrafficPolicyError::InvalidInput(ref cause) => cause,
-            DeleteTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
-            DeleteTrafficPolicyError::TrafficPolicyInUse(ref cause) => cause,
+            DeleteTrafficPolicyError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteTrafficPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => write!(f, "{}", cause),
+            DeleteTrafficPolicyError::TrafficPolicyInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrafficPolicyError {}
 /// Errors returned by DeleteTrafficPolicyInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrafficPolicyInstanceError {
@@ -9133,18 +9123,18 @@ impl DeleteTrafficPolicyInstanceError {
 }
 impl fmt::Display for DeleteTrafficPolicyInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrafficPolicyInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
-            DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
-            DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
+            DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteTrafficPolicyInstanceError {}
 /// Errors returned by DeleteVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteVPCAssociationAuthorizationError {
@@ -9220,22 +9210,26 @@ impl DeleteVPCAssociationAuthorizationError {
 }
 impl fmt::Display for DeleteVPCAssociationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVPCAssociationAuthorizationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => cause,
-            DeleteVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
-            DeleteVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
-            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
+            DeleteVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVPCAssociationAuthorizationError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
                 ref cause,
-            ) => cause,
+            ) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVPCAssociationAuthorizationError {}
 /// Errors returned by DisassociateVPCFromHostedZone
 #[derive(Debug, PartialEq)]
 pub enum DisassociateVPCFromHostedZoneError {
@@ -9309,20 +9303,22 @@ impl DisassociateVPCFromHostedZoneError {
 }
 impl fmt::Display for DisassociateVPCFromHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateVPCFromHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateVPCFromHostedZoneError::InvalidInput(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::InvalidVPCId(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::LastVPCAssociation(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(ref cause) => cause,
+            DisassociateVPCFromHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DisassociateVPCFromHostedZoneError::InvalidVPCId(ref cause) => write!(f, "{}", cause),
+            DisassociateVPCFromHostedZoneError::LastVPCAssociation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisassociateVPCFromHostedZoneError {}
 /// Errors returned by GetAccountLimit
 #[derive(Debug, PartialEq)]
 pub enum GetAccountLimitError {
@@ -9360,16 +9356,12 @@ impl GetAccountLimitError {
 }
 impl fmt::Display for GetAccountLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountLimitError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountLimitError::InvalidInput(ref cause) => cause,
+            GetAccountLimitError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountLimitError {}
 /// Errors returned by GetChange
 #[derive(Debug, PartialEq)]
 pub enum GetChangeError {
@@ -9414,17 +9406,13 @@ impl GetChangeError {
 }
 impl fmt::Display for GetChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetChangeError {
-    fn description(&self) -> &str {
         match *self {
-            GetChangeError::InvalidInput(ref cause) => cause,
-            GetChangeError::NoSuchChange(ref cause) => cause,
+            GetChangeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetChangeError::NoSuchChange(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetChangeError {}
 /// Errors returned by GetCheckerIpRanges
 #[derive(Debug, PartialEq)]
 pub enum GetCheckerIpRangesError {}
@@ -9454,14 +9442,10 @@ impl GetCheckerIpRangesError {
 }
 impl fmt::Display for GetCheckerIpRangesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCheckerIpRangesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetCheckerIpRangesError {}
 /// Errors returned by GetGeoLocation
 #[derive(Debug, PartialEq)]
 pub enum GetGeoLocationError {
@@ -9506,17 +9490,13 @@ impl GetGeoLocationError {
 }
 impl fmt::Display for GetGeoLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGeoLocationError {
-    fn description(&self) -> &str {
         match *self {
-            GetGeoLocationError::InvalidInput(ref cause) => cause,
-            GetGeoLocationError::NoSuchGeoLocation(ref cause) => cause,
+            GetGeoLocationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetGeoLocationError::NoSuchGeoLocation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGeoLocationError {}
 /// Errors returned by GetHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum GetHealthCheckError {
@@ -9568,18 +9548,14 @@ impl GetHealthCheckError {
 }
 impl fmt::Display for GetHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            GetHealthCheckError::IncompatibleVersion(ref cause) => cause,
-            GetHealthCheckError::InvalidInput(ref cause) => cause,
-            GetHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+            GetHealthCheckError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            GetHealthCheckError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetHealthCheckError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHealthCheckError {}
 /// Errors returned by GetHealthCheckCount
 #[derive(Debug, PartialEq)]
 pub enum GetHealthCheckCountError {}
@@ -9609,14 +9585,10 @@ impl GetHealthCheckCountError {
 }
 impl fmt::Display for GetHealthCheckCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHealthCheckCountError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetHealthCheckCountError {}
 /// Errors returned by GetHealthCheckLastFailureReason
 #[derive(Debug, PartialEq)]
 pub enum GetHealthCheckLastFailureReasonError {
@@ -9667,17 +9639,15 @@ impl GetHealthCheckLastFailureReasonError {
 }
 impl fmt::Display for GetHealthCheckLastFailureReasonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHealthCheckLastFailureReasonError {
-    fn description(&self) -> &str {
         match *self {
-            GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => cause,
-            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(ref cause) => cause,
+            GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetHealthCheckLastFailureReasonError {}
 /// Errors returned by GetHealthCheckStatus
 #[derive(Debug, PartialEq)]
 pub enum GetHealthCheckStatusError {
@@ -9722,17 +9692,13 @@ impl GetHealthCheckStatusError {
 }
 impl fmt::Display for GetHealthCheckStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHealthCheckStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetHealthCheckStatusError::InvalidInput(ref cause) => cause,
-            GetHealthCheckStatusError::NoSuchHealthCheck(ref cause) => cause,
+            GetHealthCheckStatusError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetHealthCheckStatusError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHealthCheckStatusError {}
 /// Errors returned by GetHostedZone
 #[derive(Debug, PartialEq)]
 pub enum GetHostedZoneError {
@@ -9777,17 +9743,13 @@ impl GetHostedZoneError {
 }
 impl fmt::Display for GetHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            GetHostedZoneError::InvalidInput(ref cause) => cause,
-            GetHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+            GetHostedZoneError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetHostedZoneError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHostedZoneError {}
 /// Errors returned by GetHostedZoneCount
 #[derive(Debug, PartialEq)]
 pub enum GetHostedZoneCountError {
@@ -9825,16 +9787,12 @@ impl GetHostedZoneCountError {
 }
 impl fmt::Display for GetHostedZoneCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHostedZoneCountError {
-    fn description(&self) -> &str {
         match *self {
-            GetHostedZoneCountError::InvalidInput(ref cause) => cause,
+            GetHostedZoneCountError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHostedZoneCountError {}
 /// Errors returned by GetHostedZoneLimit
 #[derive(Debug, PartialEq)]
 pub enum GetHostedZoneLimitError {
@@ -9886,18 +9844,14 @@ impl GetHostedZoneLimitError {
 }
 impl fmt::Display for GetHostedZoneLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetHostedZoneLimitError {
-    fn description(&self) -> &str {
         match *self {
-            GetHostedZoneLimitError::HostedZoneNotPrivate(ref cause) => cause,
-            GetHostedZoneLimitError::InvalidInput(ref cause) => cause,
-            GetHostedZoneLimitError::NoSuchHostedZone(ref cause) => cause,
+            GetHostedZoneLimitError::HostedZoneNotPrivate(ref cause) => write!(f, "{}", cause),
+            GetHostedZoneLimitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetHostedZoneLimitError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetHostedZoneLimitError {}
 /// Errors returned by GetQueryLoggingConfig
 #[derive(Debug, PartialEq)]
 pub enum GetQueryLoggingConfigError {
@@ -9944,17 +9898,15 @@ impl GetQueryLoggingConfigError {
 }
 impl fmt::Display for GetQueryLoggingConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueryLoggingConfigError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueryLoggingConfigError::InvalidInput(ref cause) => cause,
-            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
+            GetQueryLoggingConfigError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetQueryLoggingConfigError {}
 /// Errors returned by GetReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum GetReusableDelegationSetError {
@@ -10010,18 +9962,16 @@ impl GetReusableDelegationSetError {
 }
 impl fmt::Display for GetReusableDelegationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReusableDelegationSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
-            GetReusableDelegationSetError::InvalidInput(ref cause) => cause,
-            GetReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
+            GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetReusableDelegationSetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetReusableDelegationSetError::NoSuchDelegationSet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReusableDelegationSetError {}
 /// Errors returned by GetReusableDelegationSetLimit
 #[derive(Debug, PartialEq)]
 pub enum GetReusableDelegationSetLimitError {
@@ -10070,17 +10020,15 @@ impl GetReusableDelegationSetLimitError {
 }
 impl fmt::Display for GetReusableDelegationSetLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReusableDelegationSetLimitError {
-    fn description(&self) -> &str {
         match *self {
-            GetReusableDelegationSetLimitError::InvalidInput(ref cause) => cause,
-            GetReusableDelegationSetLimitError::NoSuchDelegationSet(ref cause) => cause,
+            GetReusableDelegationSetLimitError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetReusableDelegationSetLimitError::NoSuchDelegationSet(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetReusableDelegationSetLimitError {}
 /// Errors returned by GetTrafficPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetTrafficPolicyError {
@@ -10125,17 +10073,13 @@ impl GetTrafficPolicyError {
 }
 impl fmt::Display for GetTrafficPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTrafficPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetTrafficPolicyError::InvalidInput(ref cause) => cause,
-            GetTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
+            GetTrafficPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTrafficPolicyError {}
 /// Errors returned by GetTrafficPolicyInstance
 #[derive(Debug, PartialEq)]
 pub enum GetTrafficPolicyInstanceError {
@@ -10182,17 +10126,15 @@ impl GetTrafficPolicyInstanceError {
 }
 impl fmt::Display for GetTrafficPolicyInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTrafficPolicyInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            GetTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
-            GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+            GetTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetTrafficPolicyInstanceError {}
 /// Errors returned by GetTrafficPolicyInstanceCount
 #[derive(Debug, PartialEq)]
 pub enum GetTrafficPolicyInstanceCountError {}
@@ -10224,14 +10166,10 @@ impl GetTrafficPolicyInstanceCountError {
 }
 impl fmt::Display for GetTrafficPolicyInstanceCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTrafficPolicyInstanceCountError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetTrafficPolicyInstanceCountError {}
 /// Errors returned by ListGeoLocations
 #[derive(Debug, PartialEq)]
 pub enum ListGeoLocationsError {
@@ -10269,16 +10207,12 @@ impl ListGeoLocationsError {
 }
 impl fmt::Display for ListGeoLocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGeoLocationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGeoLocationsError::InvalidInput(ref cause) => cause,
+            ListGeoLocationsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGeoLocationsError {}
 /// Errors returned by ListHealthChecks
 #[derive(Debug, PartialEq)]
 pub enum ListHealthChecksError {
@@ -10323,17 +10257,13 @@ impl ListHealthChecksError {
 }
 impl fmt::Display for ListHealthChecksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHealthChecksError {
-    fn description(&self) -> &str {
         match *self {
-            ListHealthChecksError::IncompatibleVersion(ref cause) => cause,
-            ListHealthChecksError::InvalidInput(ref cause) => cause,
+            ListHealthChecksError::IncompatibleVersion(ref cause) => write!(f, "{}", cause),
+            ListHealthChecksError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHealthChecksError {}
 /// Errors returned by ListHostedZones
 #[derive(Debug, PartialEq)]
 pub enum ListHostedZonesError {
@@ -10385,18 +10315,14 @@ impl ListHostedZonesError {
 }
 impl fmt::Display for ListHostedZonesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHostedZonesError {
-    fn description(&self) -> &str {
         match *self {
-            ListHostedZonesError::DelegationSetNotReusable(ref cause) => cause,
-            ListHostedZonesError::InvalidInput(ref cause) => cause,
-            ListHostedZonesError::NoSuchDelegationSet(ref cause) => cause,
+            ListHostedZonesError::DelegationSetNotReusable(ref cause) => write!(f, "{}", cause),
+            ListHostedZonesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListHostedZonesError::NoSuchDelegationSet(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHostedZonesError {}
 /// Errors returned by ListHostedZonesByName
 #[derive(Debug, PartialEq)]
 pub enum ListHostedZonesByNameError {
@@ -10441,17 +10367,13 @@ impl ListHostedZonesByNameError {
 }
 impl fmt::Display for ListHostedZonesByNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHostedZonesByNameError {
-    fn description(&self) -> &str {
         match *self {
-            ListHostedZonesByNameError::InvalidDomainName(ref cause) => cause,
-            ListHostedZonesByNameError::InvalidInput(ref cause) => cause,
+            ListHostedZonesByNameError::InvalidDomainName(ref cause) => write!(f, "{}", cause),
+            ListHostedZonesByNameError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListHostedZonesByNameError {}
 /// Errors returned by ListQueryLoggingConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListQueryLoggingConfigsError {
@@ -10505,18 +10427,16 @@ impl ListQueryLoggingConfigsError {
 }
 impl fmt::Display for ListQueryLoggingConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueryLoggingConfigsError {
-    fn description(&self) -> &str {
         match *self {
-            ListQueryLoggingConfigsError::InvalidInput(ref cause) => cause,
-            ListQueryLoggingConfigsError::InvalidPaginationToken(ref cause) => cause,
-            ListQueryLoggingConfigsError::NoSuchHostedZone(ref cause) => cause,
+            ListQueryLoggingConfigsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListQueryLoggingConfigsError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListQueryLoggingConfigsError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQueryLoggingConfigsError {}
 /// Errors returned by ListResourceRecordSets
 #[derive(Debug, PartialEq)]
 pub enum ListResourceRecordSetsError {
@@ -10561,17 +10481,13 @@ impl ListResourceRecordSetsError {
 }
 impl fmt::Display for ListResourceRecordSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourceRecordSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourceRecordSetsError::InvalidInput(ref cause) => cause,
-            ListResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
+            ListResourceRecordSetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListResourceRecordSetsError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourceRecordSetsError {}
 /// Errors returned by ListReusableDelegationSets
 #[derive(Debug, PartialEq)]
 pub enum ListReusableDelegationSetsError {
@@ -10611,16 +10527,12 @@ impl ListReusableDelegationSetsError {
 }
 impl fmt::Display for ListReusableDelegationSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListReusableDelegationSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListReusableDelegationSetsError::InvalidInput(ref cause) => cause,
+            ListReusableDelegationSetsError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListReusableDelegationSetsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -10686,20 +10598,16 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidInput(ref cause) => cause,
-            ListTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,
-            ListTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
-            ListTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
-            ListTagsForResourceError::Throttling(ref cause) => cause,
+            ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::PriorRequestNotComplete(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTagsForResources
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourcesError {
@@ -10767,20 +10675,16 @@ impl ListTagsForResourcesError {
 }
 impl fmt::Display for ListTagsForResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourcesError::InvalidInput(ref cause) => cause,
-            ListTagsForResourcesError::NoSuchHealthCheck(ref cause) => cause,
-            ListTagsForResourcesError::NoSuchHostedZone(ref cause) => cause,
-            ListTagsForResourcesError::PriorRequestNotComplete(ref cause) => cause,
-            ListTagsForResourcesError::Throttling(ref cause) => cause,
+            ListTagsForResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourcesError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourcesError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourcesError::PriorRequestNotComplete(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourcesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourcesError {}
 /// Errors returned by ListTrafficPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListTrafficPoliciesError {
@@ -10818,16 +10722,12 @@ impl ListTrafficPoliciesError {
 }
 impl fmt::Display for ListTrafficPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrafficPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrafficPoliciesError::InvalidInput(ref cause) => cause,
+            ListTrafficPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTrafficPoliciesError {}
 /// Errors returned by ListTrafficPolicyInstances
 #[derive(Debug, PartialEq)]
 pub enum ListTrafficPolicyInstancesError {
@@ -10876,17 +10776,15 @@ impl ListTrafficPolicyInstancesError {
 }
 impl fmt::Display for ListTrafficPolicyInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrafficPolicyInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrafficPolicyInstancesError::InvalidInput(ref cause) => cause,
-            ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+            ListTrafficPolicyInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTrafficPolicyInstancesError {}
 /// Errors returned by ListTrafficPolicyInstancesByHostedZone
 #[derive(Debug, PartialEq)]
 pub enum ListTrafficPolicyInstancesByHostedZoneError {
@@ -10944,20 +10842,20 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
 }
 impl fmt::Display for ListTrafficPolicyInstancesByHostedZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrafficPolicyInstancesByHostedZoneError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(ref cause) => cause,
-            ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+            ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ListTrafficPolicyInstancesByHostedZoneError {}
 /// Errors returned by ListTrafficPolicyInstancesByPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListTrafficPolicyInstancesByPolicyError {
@@ -11017,20 +10915,20 @@ impl ListTrafficPolicyInstancesByPolicyError {
 }
 impl fmt::Display for ListTrafficPolicyInstancesByPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrafficPolicyInstancesByPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrafficPolicyInstancesByPolicyError::InvalidInput(ref cause) => cause,
-            ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
+            ListTrafficPolicyInstancesByPolicyError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for ListTrafficPolicyInstancesByPolicyError {}
 /// Errors returned by ListTrafficPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListTrafficPolicyVersionsError {
@@ -11077,17 +10975,15 @@ impl ListTrafficPolicyVersionsError {
 }
 impl fmt::Display for ListTrafficPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrafficPolicyVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrafficPolicyVersionsError::InvalidInput(ref cause) => cause,
-            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(ref cause) => cause,
+            ListTrafficPolicyVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTrafficPolicyVersionsError {}
 /// Errors returned by ListVPCAssociationAuthorizations
 #[derive(Debug, PartialEq)]
 pub enum ListVPCAssociationAuthorizationsError {
@@ -11147,18 +11043,20 @@ impl ListVPCAssociationAuthorizationsError {
 }
 impl fmt::Display for ListVPCAssociationAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVPCAssociationAuthorizationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => cause,
-            ListVPCAssociationAuthorizationsError::InvalidPaginationToken(ref cause) => cause,
-            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(ref cause) => cause,
+            ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVPCAssociationAuthorizationsError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListVPCAssociationAuthorizationsError {}
 /// Errors returned by TestDNSAnswer
 #[derive(Debug, PartialEq)]
 pub enum TestDNSAnswerError {
@@ -11203,17 +11101,13 @@ impl TestDNSAnswerError {
 }
 impl fmt::Display for TestDNSAnswerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TestDNSAnswerError {
-    fn description(&self) -> &str {
         match *self {
-            TestDNSAnswerError::InvalidInput(ref cause) => cause,
-            TestDNSAnswerError::NoSuchHostedZone(ref cause) => cause,
+            TestDNSAnswerError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TestDNSAnswerError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TestDNSAnswerError {}
 /// Errors returned by UpdateHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum UpdateHealthCheckError {
@@ -11267,18 +11161,14 @@ impl UpdateHealthCheckError {
 }
 impl fmt::Display for UpdateHealthCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHealthCheckError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => cause,
-            UpdateHealthCheckError::InvalidInput(ref cause) => cause,
-            UpdateHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+            UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => write!(f, "{}", cause),
+            UpdateHealthCheckError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateHealthCheckError::NoSuchHealthCheck(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHealthCheckError {}
 /// Errors returned by UpdateHostedZoneComment
 #[derive(Debug, PartialEq)]
 pub enum UpdateHostedZoneCommentError {
@@ -11323,17 +11213,13 @@ impl UpdateHostedZoneCommentError {
 }
 impl fmt::Display for UpdateHostedZoneCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateHostedZoneCommentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateHostedZoneCommentError::InvalidInput(ref cause) => cause,
-            UpdateHostedZoneCommentError::NoSuchHostedZone(ref cause) => cause,
+            UpdateHostedZoneCommentError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateHostedZoneCommentError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateHostedZoneCommentError {}
 /// Errors returned by UpdateTrafficPolicyComment
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrafficPolicyCommentError {
@@ -11391,18 +11277,18 @@ impl UpdateTrafficPolicyCommentError {
 }
 impl fmt::Display for UpdateTrafficPolicyCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrafficPolicyCommentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => cause,
-            UpdateTrafficPolicyCommentError::InvalidInput(ref cause) => cause,
-            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(ref cause) => cause,
+            UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTrafficPolicyCommentError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateTrafficPolicyCommentError {}
 /// Errors returned by UpdateTrafficPolicyInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrafficPolicyInstanceError {
@@ -11478,20 +11364,22 @@ impl UpdateTrafficPolicyInstanceError {
 }
 impl fmt::Display for UpdateTrafficPolicyInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrafficPolicyInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrafficPolicyInstanceError::ConflictingTypes(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
+            UpdateTrafficPolicyInstanceError::ConflictingTypes(ref cause) => write!(f, "{}", cause),
+            UpdateTrafficPolicyInstanceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateTrafficPolicyInstanceError {}
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
 pub trait Route53 {
     /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>

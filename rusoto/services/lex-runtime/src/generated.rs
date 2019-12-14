@@ -459,20 +459,16 @@ impl DeleteSessionError {
 }
 impl fmt::Display for DeleteSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSessionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSessionError::BadRequest(ref cause) => cause,
-            DeleteSessionError::Conflict(ref cause) => cause,
-            DeleteSessionError::InternalFailure(ref cause) => cause,
-            DeleteSessionError::LimitExceeded(ref cause) => cause,
-            DeleteSessionError::NotFound(ref cause) => cause,
+            DeleteSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSessionError {}
 /// Errors returned by GetSession
 #[derive(Debug, PartialEq)]
 pub enum GetSessionError {
@@ -511,19 +507,15 @@ impl GetSessionError {
 }
 impl fmt::Display for GetSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSessionError {
-    fn description(&self) -> &str {
         match *self {
-            GetSessionError::BadRequest(ref cause) => cause,
-            GetSessionError::InternalFailure(ref cause) => cause,
-            GetSessionError::LimitExceeded(ref cause) => cause,
-            GetSessionError::NotFound(ref cause) => cause,
+            GetSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSessionError {}
 /// Errors returned by PostContent
 #[derive(Debug, PartialEq)]
 pub enum PostContentError {
@@ -597,26 +589,22 @@ impl PostContentError {
 }
 impl fmt::Display for PostContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostContentError {
-    fn description(&self) -> &str {
         match *self {
-            PostContentError::BadGateway(ref cause) => cause,
-            PostContentError::BadRequest(ref cause) => cause,
-            PostContentError::Conflict(ref cause) => cause,
-            PostContentError::DependencyFailed(ref cause) => cause,
-            PostContentError::InternalFailure(ref cause) => cause,
-            PostContentError::LimitExceeded(ref cause) => cause,
-            PostContentError::LoopDetected(ref cause) => cause,
-            PostContentError::NotAcceptable(ref cause) => cause,
-            PostContentError::NotFound(ref cause) => cause,
-            PostContentError::RequestTimeout(ref cause) => cause,
-            PostContentError::UnsupportedMediaType(ref cause) => cause,
+            PostContentError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PostContentError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PostContentError::Conflict(ref cause) => write!(f, "{}", cause),
+            PostContentError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PostContentError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PostContentError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PostContentError::LoopDetected(ref cause) => write!(f, "{}", cause),
+            PostContentError::NotAcceptable(ref cause) => write!(f, "{}", cause),
+            PostContentError::NotFound(ref cause) => write!(f, "{}", cause),
+            PostContentError::RequestTimeout(ref cause) => write!(f, "{}", cause),
+            PostContentError::UnsupportedMediaType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostContentError {}
 /// Errors returned by PostText
 #[derive(Debug, PartialEq)]
 pub enum PostTextError {
@@ -675,23 +663,19 @@ impl PostTextError {
 }
 impl fmt::Display for PostTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PostTextError {
-    fn description(&self) -> &str {
         match *self {
-            PostTextError::BadGateway(ref cause) => cause,
-            PostTextError::BadRequest(ref cause) => cause,
-            PostTextError::Conflict(ref cause) => cause,
-            PostTextError::DependencyFailed(ref cause) => cause,
-            PostTextError::InternalFailure(ref cause) => cause,
-            PostTextError::LimitExceeded(ref cause) => cause,
-            PostTextError::LoopDetected(ref cause) => cause,
-            PostTextError::NotFound(ref cause) => cause,
+            PostTextError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PostTextError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PostTextError::Conflict(ref cause) => write!(f, "{}", cause),
+            PostTextError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PostTextError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PostTextError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PostTextError::LoopDetected(ref cause) => write!(f, "{}", cause),
+            PostTextError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PostTextError {}
 /// Errors returned by PutSession
 #[derive(Debug, PartialEq)]
 pub enum PutSessionError {
@@ -750,23 +734,19 @@ impl PutSessionError {
 }
 impl fmt::Display for PutSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutSessionError {
-    fn description(&self) -> &str {
         match *self {
-            PutSessionError::BadGateway(ref cause) => cause,
-            PutSessionError::BadRequest(ref cause) => cause,
-            PutSessionError::Conflict(ref cause) => cause,
-            PutSessionError::DependencyFailed(ref cause) => cause,
-            PutSessionError::InternalFailure(ref cause) => cause,
-            PutSessionError::LimitExceeded(ref cause) => cause,
-            PutSessionError::NotAcceptable(ref cause) => cause,
-            PutSessionError::NotFound(ref cause) => cause,
+            PutSessionError::BadGateway(ref cause) => write!(f, "{}", cause),
+            PutSessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutSessionError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutSessionError::DependencyFailed(ref cause) => write!(f, "{}", cause),
+            PutSessionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            PutSessionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutSessionError::NotAcceptable(ref cause) => write!(f, "{}", cause),
+            PutSessionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutSessionError {}
 /// Trait representing the capabilities of the Amazon Lex Runtime Service API. Amazon Lex Runtime Service clients implement this trait.
 pub trait LexRuntime {
     /// <p>Removes session information for a specified bot, alias, and user ID. </p>

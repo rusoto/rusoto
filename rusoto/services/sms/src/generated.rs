@@ -1203,20 +1203,16 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::InternalError(ref cause) => cause,
-            CreateAppError::InvalidParameter(ref cause) => cause,
-            CreateAppError::MissingRequiredParameter(ref cause) => cause,
-            CreateAppError::OperationNotPermitted(ref cause) => cause,
-            CreateAppError::UnauthorizedOperation(ref cause) => cause,
+            CreateAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            CreateAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
 /// Errors returned by CreateReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationJobError {
@@ -1296,24 +1292,26 @@ impl CreateReplicationJobError {
 }
 impl fmt::Display for CreateReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateReplicationJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateReplicationJobError::InternalError(ref cause) => cause,
-            CreateReplicationJobError::InvalidParameter(ref cause) => cause,
-            CreateReplicationJobError::MissingRequiredParameter(ref cause) => cause,
-            CreateReplicationJobError::NoConnectorsAvailable(ref cause) => cause,
-            CreateReplicationJobError::OperationNotPermitted(ref cause) => cause,
-            CreateReplicationJobError::ReplicationJobAlreadyExists(ref cause) => cause,
-            CreateReplicationJobError::ServerCannotBeReplicated(ref cause) => cause,
-            CreateReplicationJobError::TemporarilyUnavailable(ref cause) => cause,
-            CreateReplicationJobError::UnauthorizedOperation(ref cause) => cause,
+            CreateReplicationJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateReplicationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateReplicationJobError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationJobError::NoConnectorsAvailable(ref cause) => write!(f, "{}", cause),
+            CreateReplicationJobError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateReplicationJobError::ReplicationJobAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationJobError::ServerCannotBeReplicated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationJobError::TemporarilyUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateReplicationJobError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateReplicationJobError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -1357,20 +1355,16 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::InternalError(ref cause) => cause,
-            DeleteAppError::InvalidParameter(ref cause) => cause,
-            DeleteAppError::MissingRequiredParameter(ref cause) => cause,
-            DeleteAppError::OperationNotPermitted(ref cause) => cause,
-            DeleteAppError::UnauthorizedOperation(ref cause) => cause,
+            DeleteAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
 /// Errors returned by DeleteAppLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppLaunchConfigurationError {
@@ -1426,20 +1420,24 @@ impl DeleteAppLaunchConfigurationError {
 }
 impl fmt::Display for DeleteAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppLaunchConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppLaunchConfigurationError::InternalError(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::InvalidParameter(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            DeleteAppLaunchConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteAppLaunchConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppLaunchConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAppLaunchConfigurationError {}
 /// Errors returned by DeleteAppReplicationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppReplicationConfigurationError {
@@ -1495,20 +1493,26 @@ impl DeleteAppReplicationConfigurationError {
 }
 impl fmt::Display for DeleteAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppReplicationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppReplicationConfigurationError::InternalError(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::InvalidParameter(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            DeleteAppReplicationConfigurationError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppReplicationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppReplicationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAppReplicationConfigurationError {}
 /// Errors returned by DeleteReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationJobError {
@@ -1562,20 +1566,18 @@ impl DeleteReplicationJobError {
 }
 impl fmt::Display for DeleteReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteReplicationJobError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteReplicationJobError::InvalidParameter(ref cause) => cause,
-            DeleteReplicationJobError::MissingRequiredParameter(ref cause) => cause,
-            DeleteReplicationJobError::OperationNotPermitted(ref cause) => cause,
-            DeleteReplicationJobError::ReplicationJobNotFound(ref cause) => cause,
-            DeleteReplicationJobError::UnauthorizedOperation(ref cause) => cause,
+            DeleteReplicationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteReplicationJobError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteReplicationJobError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteReplicationJobError::ReplicationJobNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteReplicationJobError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteReplicationJobError {}
 /// Errors returned by DeleteServerCatalog
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerCatalogError {
@@ -1622,19 +1624,15 @@ impl DeleteServerCatalogError {
 }
 impl fmt::Display for DeleteServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerCatalogError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerCatalogError::InvalidParameter(ref cause) => cause,
-            DeleteServerCatalogError::MissingRequiredParameter(ref cause) => cause,
-            DeleteServerCatalogError::OperationNotPermitted(ref cause) => cause,
-            DeleteServerCatalogError::UnauthorizedOperation(ref cause) => cause,
+            DeleteServerCatalogError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteServerCatalogError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            DeleteServerCatalogError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteServerCatalogError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerCatalogError {}
 /// Errors returned by DisassociateConnector
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConnectorError {
@@ -1681,19 +1679,17 @@ impl DisassociateConnectorError {
 }
 impl fmt::Display for DisassociateConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateConnectorError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateConnectorError::InvalidParameter(ref cause) => cause,
-            DisassociateConnectorError::MissingRequiredParameter(ref cause) => cause,
-            DisassociateConnectorError::OperationNotPermitted(ref cause) => cause,
-            DisassociateConnectorError::UnauthorizedOperation(ref cause) => cause,
+            DisassociateConnectorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateConnectorError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateConnectorError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DisassociateConnectorError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateConnectorError {}
 /// Errors returned by GenerateChangeSet
 #[derive(Debug, PartialEq)]
 pub enum GenerateChangeSetError {
@@ -1743,20 +1739,16 @@ impl GenerateChangeSetError {
 }
 impl fmt::Display for GenerateChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateChangeSetError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateChangeSetError::InternalError(ref cause) => cause,
-            GenerateChangeSetError::InvalidParameter(ref cause) => cause,
-            GenerateChangeSetError::MissingRequiredParameter(ref cause) => cause,
-            GenerateChangeSetError::OperationNotPermitted(ref cause) => cause,
-            GenerateChangeSetError::UnauthorizedOperation(ref cause) => cause,
+            GenerateChangeSetError::InternalError(ref cause) => write!(f, "{}", cause),
+            GenerateChangeSetError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GenerateChangeSetError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GenerateChangeSetError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GenerateChangeSetError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateChangeSetError {}
 /// Errors returned by GenerateTemplate
 #[derive(Debug, PartialEq)]
 pub enum GenerateTemplateError {
@@ -1806,20 +1798,16 @@ impl GenerateTemplateError {
 }
 impl fmt::Display for GenerateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateTemplateError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateTemplateError::InternalError(ref cause) => cause,
-            GenerateTemplateError::InvalidParameter(ref cause) => cause,
-            GenerateTemplateError::MissingRequiredParameter(ref cause) => cause,
-            GenerateTemplateError::OperationNotPermitted(ref cause) => cause,
-            GenerateTemplateError::UnauthorizedOperation(ref cause) => cause,
+            GenerateTemplateError::InternalError(ref cause) => write!(f, "{}", cause),
+            GenerateTemplateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GenerateTemplateError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GenerateTemplateError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GenerateTemplateError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateTemplateError {}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
@@ -1863,20 +1851,16 @@ impl GetAppError {
 }
 impl fmt::Display for GetAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppError::InternalError(ref cause) => cause,
-            GetAppError::InvalidParameter(ref cause) => cause,
-            GetAppError::MissingRequiredParameter(ref cause) => cause,
-            GetAppError::OperationNotPermitted(ref cause) => cause,
-            GetAppError::UnauthorizedOperation(ref cause) => cause,
+            GetAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GetAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            GetAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAppError {}
 /// Errors returned by GetAppLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetAppLaunchConfigurationError {
@@ -1930,20 +1914,22 @@ impl GetAppLaunchConfigurationError {
 }
 impl fmt::Display for GetAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppLaunchConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppLaunchConfigurationError::InternalError(ref cause) => cause,
-            GetAppLaunchConfigurationError::InvalidParameter(ref cause) => cause,
-            GetAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            GetAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
-            GetAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            GetAppLaunchConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppLaunchConfigurationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppLaunchConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAppLaunchConfigurationError {}
 /// Errors returned by GetAppReplicationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetAppReplicationConfigurationError {
@@ -1999,20 +1985,24 @@ impl GetAppReplicationConfigurationError {
 }
 impl fmt::Display for GetAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAppReplicationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetAppReplicationConfigurationError::InternalError(ref cause) => cause,
-            GetAppReplicationConfigurationError::InvalidParameter(ref cause) => cause,
-            GetAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            GetAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
-            GetAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            GetAppReplicationConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppReplicationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppReplicationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAppReplicationConfigurationError {}
 /// Errors returned by GetConnectors
 #[derive(Debug, PartialEq)]
 pub enum GetConnectorsError {
@@ -2036,16 +2026,12 @@ impl GetConnectorsError {
 }
 impl fmt::Display for GetConnectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetConnectorsError {
-    fn description(&self) -> &str {
         match *self {
-            GetConnectorsError::UnauthorizedOperation(ref cause) => cause,
+            GetConnectorsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetConnectorsError {}
 /// Errors returned by GetReplicationJobs
 #[derive(Debug, PartialEq)]
 pub enum GetReplicationJobsError {
@@ -2083,18 +2069,14 @@ impl GetReplicationJobsError {
 }
 impl fmt::Display for GetReplicationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReplicationJobsError {
-    fn description(&self) -> &str {
         match *self {
-            GetReplicationJobsError::InvalidParameter(ref cause) => cause,
-            GetReplicationJobsError::MissingRequiredParameter(ref cause) => cause,
-            GetReplicationJobsError::UnauthorizedOperation(ref cause) => cause,
+            GetReplicationJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetReplicationJobsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GetReplicationJobsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReplicationJobsError {}
 /// Errors returned by GetReplicationRuns
 #[derive(Debug, PartialEq)]
 pub enum GetReplicationRunsError {
@@ -2132,18 +2114,14 @@ impl GetReplicationRunsError {
 }
 impl fmt::Display for GetReplicationRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetReplicationRunsError {
-    fn description(&self) -> &str {
         match *self {
-            GetReplicationRunsError::InvalidParameter(ref cause) => cause,
-            GetReplicationRunsError::MissingRequiredParameter(ref cause) => cause,
-            GetReplicationRunsError::UnauthorizedOperation(ref cause) => cause,
+            GetReplicationRunsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetReplicationRunsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GetReplicationRunsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetReplicationRunsError {}
 /// Errors returned by GetServers
 #[derive(Debug, PartialEq)]
 pub enum GetServersError {
@@ -2167,16 +2145,12 @@ impl GetServersError {
 }
 impl fmt::Display for GetServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServersError {
-    fn description(&self) -> &str {
         match *self {
-            GetServersError::UnauthorizedOperation(ref cause) => cause,
+            GetServersError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServersError {}
 /// Errors returned by ImportServerCatalog
 #[derive(Debug, PartialEq)]
 pub enum ImportServerCatalogError {
@@ -2230,20 +2204,16 @@ impl ImportServerCatalogError {
 }
 impl fmt::Display for ImportServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ImportServerCatalogError {
-    fn description(&self) -> &str {
         match *self {
-            ImportServerCatalogError::InvalidParameter(ref cause) => cause,
-            ImportServerCatalogError::MissingRequiredParameter(ref cause) => cause,
-            ImportServerCatalogError::NoConnectorsAvailable(ref cause) => cause,
-            ImportServerCatalogError::OperationNotPermitted(ref cause) => cause,
-            ImportServerCatalogError::UnauthorizedOperation(ref cause) => cause,
+            ImportServerCatalogError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ImportServerCatalogError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            ImportServerCatalogError::NoConnectorsAvailable(ref cause) => write!(f, "{}", cause),
+            ImportServerCatalogError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ImportServerCatalogError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ImportServerCatalogError {}
 /// Errors returned by LaunchApp
 #[derive(Debug, PartialEq)]
 pub enum LaunchAppError {
@@ -2287,20 +2257,16 @@ impl LaunchAppError {
 }
 impl fmt::Display for LaunchAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for LaunchAppError {
-    fn description(&self) -> &str {
         match *self {
-            LaunchAppError::InternalError(ref cause) => cause,
-            LaunchAppError::InvalidParameter(ref cause) => cause,
-            LaunchAppError::MissingRequiredParameter(ref cause) => cause,
-            LaunchAppError::OperationNotPermitted(ref cause) => cause,
-            LaunchAppError::UnauthorizedOperation(ref cause) => cause,
+            LaunchAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            LaunchAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            LaunchAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            LaunchAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            LaunchAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for LaunchAppError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {
@@ -2344,20 +2310,16 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppsError {
-    fn description(&self) -> &str {
         match *self {
-            ListAppsError::InternalError(ref cause) => cause,
-            ListAppsError::InvalidParameter(ref cause) => cause,
-            ListAppsError::MissingRequiredParameter(ref cause) => cause,
-            ListAppsError::OperationNotPermitted(ref cause) => cause,
-            ListAppsError::UnauthorizedOperation(ref cause) => cause,
+            ListAppsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListAppsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListAppsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            ListAppsError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ListAppsError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAppsError {}
 /// Errors returned by PutAppLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutAppLaunchConfigurationError {
@@ -2411,20 +2373,22 @@ impl PutAppLaunchConfigurationError {
 }
 impl fmt::Display for PutAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAppLaunchConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutAppLaunchConfigurationError::InternalError(ref cause) => cause,
-            PutAppLaunchConfigurationError::InvalidParameter(ref cause) => cause,
-            PutAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            PutAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
-            PutAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            PutAppLaunchConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutAppLaunchConfigurationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppLaunchConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutAppLaunchConfigurationError {}
 /// Errors returned by PutAppReplicationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutAppReplicationConfigurationError {
@@ -2480,20 +2444,24 @@ impl PutAppReplicationConfigurationError {
 }
 impl fmt::Display for PutAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAppReplicationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutAppReplicationConfigurationError::InternalError(ref cause) => cause,
-            PutAppReplicationConfigurationError::InvalidParameter(ref cause) => cause,
-            PutAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
-            PutAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
-            PutAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
+            PutAppReplicationConfigurationError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutAppReplicationConfigurationError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppReplicationConfigurationError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutAppReplicationConfigurationError {}
 /// Errors returned by StartAppReplication
 #[derive(Debug, PartialEq)]
 pub enum StartAppReplicationError {
@@ -2545,20 +2513,16 @@ impl StartAppReplicationError {
 }
 impl fmt::Display for StartAppReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAppReplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StartAppReplicationError::InternalError(ref cause) => cause,
-            StartAppReplicationError::InvalidParameter(ref cause) => cause,
-            StartAppReplicationError::MissingRequiredParameter(ref cause) => cause,
-            StartAppReplicationError::OperationNotPermitted(ref cause) => cause,
-            StartAppReplicationError::UnauthorizedOperation(ref cause) => cause,
+            StartAppReplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            StartAppReplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartAppReplicationError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            StartAppReplicationError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StartAppReplicationError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartAppReplicationError {}
 /// Errors returned by StartOnDemandReplicationRun
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandReplicationRunError {
@@ -2614,20 +2578,24 @@ impl StartOnDemandReplicationRunError {
 }
 impl fmt::Display for StartOnDemandReplicationRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartOnDemandReplicationRunError {
-    fn description(&self) -> &str {
         match *self {
-            StartOnDemandReplicationRunError::InvalidParameter(ref cause) => cause,
-            StartOnDemandReplicationRunError::MissingRequiredParameter(ref cause) => cause,
-            StartOnDemandReplicationRunError::OperationNotPermitted(ref cause) => cause,
-            StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(ref cause) => cause,
-            StartOnDemandReplicationRunError::UnauthorizedOperation(ref cause) => cause,
+            StartOnDemandReplicationRunError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartOnDemandReplicationRunError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOnDemandReplicationRunError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartOnDemandReplicationRunError::UnauthorizedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartOnDemandReplicationRunError {}
 /// Errors returned by StopAppReplication
 #[derive(Debug, PartialEq)]
 pub enum StopAppReplicationError {
@@ -2677,20 +2645,16 @@ impl StopAppReplicationError {
 }
 impl fmt::Display for StopAppReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAppReplicationError {
-    fn description(&self) -> &str {
         match *self {
-            StopAppReplicationError::InternalError(ref cause) => cause,
-            StopAppReplicationError::InvalidParameter(ref cause) => cause,
-            StopAppReplicationError::MissingRequiredParameter(ref cause) => cause,
-            StopAppReplicationError::OperationNotPermitted(ref cause) => cause,
-            StopAppReplicationError::UnauthorizedOperation(ref cause) => cause,
+            StopAppReplicationError::InternalError(ref cause) => write!(f, "{}", cause),
+            StopAppReplicationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopAppReplicationError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            StopAppReplicationError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            StopAppReplicationError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopAppReplicationError {}
 /// Errors returned by TerminateApp
 #[derive(Debug, PartialEq)]
 pub enum TerminateAppError {
@@ -2736,20 +2700,16 @@ impl TerminateAppError {
 }
 impl fmt::Display for TerminateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateAppError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateAppError::InternalError(ref cause) => cause,
-            TerminateAppError::InvalidParameter(ref cause) => cause,
-            TerminateAppError::MissingRequiredParameter(ref cause) => cause,
-            TerminateAppError::OperationNotPermitted(ref cause) => cause,
-            TerminateAppError::UnauthorizedOperation(ref cause) => cause,
+            TerminateAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            TerminateAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TerminateAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            TerminateAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            TerminateAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateAppError {}
 /// Errors returned by UpdateApp
 #[derive(Debug, PartialEq)]
 pub enum UpdateAppError {
@@ -2793,20 +2753,16 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAppError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAppError::InternalError(ref cause) => cause,
-            UpdateAppError::InvalidParameter(ref cause) => cause,
-            UpdateAppError::MissingRequiredParameter(ref cause) => cause,
-            UpdateAppError::OperationNotPermitted(ref cause) => cause,
-            UpdateAppError::UnauthorizedOperation(ref cause) => cause,
+            UpdateAppError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateAppError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAppError {}
 /// Errors returned by UpdateReplicationJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateReplicationJobError {
@@ -2879,23 +2835,23 @@ impl UpdateReplicationJobError {
 }
 impl fmt::Display for UpdateReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateReplicationJobError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateReplicationJobError::InternalError(ref cause) => cause,
-            UpdateReplicationJobError::InvalidParameter(ref cause) => cause,
-            UpdateReplicationJobError::MissingRequiredParameter(ref cause) => cause,
-            UpdateReplicationJobError::OperationNotPermitted(ref cause) => cause,
-            UpdateReplicationJobError::ReplicationJobNotFound(ref cause) => cause,
-            UpdateReplicationJobError::ServerCannotBeReplicated(ref cause) => cause,
-            UpdateReplicationJobError::TemporarilyUnavailable(ref cause) => cause,
-            UpdateReplicationJobError::UnauthorizedOperation(ref cause) => cause,
+            UpdateReplicationJobError::InternalError(ref cause) => write!(f, "{}", cause),
+            UpdateReplicationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateReplicationJobError::MissingRequiredParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateReplicationJobError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            UpdateReplicationJobError::ReplicationJobNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateReplicationJobError::ServerCannotBeReplicated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateReplicationJobError::TemporarilyUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateReplicationJobError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateReplicationJobError {}
 /// Trait representing the capabilities of the SMS API. SMS clients implement this trait.
 pub trait ServerMigrationService {
     /// <p>Creates an application. An application consists of one or more server groups. Each server group contain one or more servers.</p>

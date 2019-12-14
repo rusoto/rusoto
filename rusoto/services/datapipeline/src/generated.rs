@@ -736,19 +736,15 @@ impl ActivatePipelineError {
 }
 impl fmt::Display for ActivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ActivatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            ActivatePipelineError::InternalServiceError(ref cause) => cause,
-            ActivatePipelineError::InvalidRequest(ref cause) => cause,
-            ActivatePipelineError::PipelineDeleted(ref cause) => cause,
-            ActivatePipelineError::PipelineNotFound(ref cause) => cause,
+            ActivatePipelineError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ActivatePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ActivatePipelineError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            ActivatePipelineError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ActivatePipelineError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -787,19 +783,15 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::InternalServiceError(ref cause) => cause,
-            AddTagsError::InvalidRequest(ref cause) => cause,
-            AddTagsError::PipelineDeleted(ref cause) => cause,
-            AddTagsError::PipelineNotFound(ref cause) => cause,
+            AddTagsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AddTagsError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            AddTagsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
@@ -828,17 +820,13 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePipelineError::InternalServiceError(ref cause) => cause,
-            CreatePipelineError::InvalidRequest(ref cause) => cause,
+            CreatePipelineError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreatePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePipelineError {}
 /// Errors returned by DeactivatePipeline
 #[derive(Debug, PartialEq)]
 pub enum DeactivatePipelineError {
@@ -879,19 +867,15 @@ impl DeactivatePipelineError {
 }
 impl fmt::Display for DeactivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeactivatePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DeactivatePipelineError::InternalServiceError(ref cause) => cause,
-            DeactivatePipelineError::InvalidRequest(ref cause) => cause,
-            DeactivatePipelineError::PipelineDeleted(ref cause) => cause,
-            DeactivatePipelineError::PipelineNotFound(ref cause) => cause,
+            DeactivatePipelineError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeactivatePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeactivatePipelineError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            DeactivatePipelineError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeactivatePipelineError {}
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
 pub enum DeletePipelineError {
@@ -925,18 +909,14 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePipelineError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePipelineError::InternalServiceError(ref cause) => cause,
-            DeletePipelineError::InvalidRequest(ref cause) => cause,
-            DeletePipelineError::PipelineNotFound(ref cause) => cause,
+            DeletePipelineError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePipelineError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePipelineError {}
 /// Errors returned by DescribeObjects
 #[derive(Debug, PartialEq)]
 pub enum DescribeObjectsError {
@@ -977,19 +957,15 @@ impl DescribeObjectsError {
 }
 impl fmt::Display for DescribeObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeObjectsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeObjectsError::InternalServiceError(ref cause) => cause,
-            DescribeObjectsError::InvalidRequest(ref cause) => cause,
-            DescribeObjectsError::PipelineDeleted(ref cause) => cause,
-            DescribeObjectsError::PipelineNotFound(ref cause) => cause,
+            DescribeObjectsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeObjectsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeObjectsError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            DescribeObjectsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeObjectsError {}
 /// Errors returned by DescribePipelines
 #[derive(Debug, PartialEq)]
 pub enum DescribePipelinesError {
@@ -1030,19 +1006,15 @@ impl DescribePipelinesError {
 }
 impl fmt::Display for DescribePipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePipelinesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePipelinesError::InternalServiceError(ref cause) => cause,
-            DescribePipelinesError::InvalidRequest(ref cause) => cause,
-            DescribePipelinesError::PipelineDeleted(ref cause) => cause,
-            DescribePipelinesError::PipelineNotFound(ref cause) => cause,
+            DescribePipelinesError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribePipelinesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribePipelinesError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            DescribePipelinesError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePipelinesError {}
 /// Errors returned by EvaluateExpression
 #[derive(Debug, PartialEq)]
 pub enum EvaluateExpressionError {
@@ -1088,20 +1060,16 @@ impl EvaluateExpressionError {
 }
 impl fmt::Display for EvaluateExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EvaluateExpressionError {
-    fn description(&self) -> &str {
         match *self {
-            EvaluateExpressionError::InternalServiceError(ref cause) => cause,
-            EvaluateExpressionError::InvalidRequest(ref cause) => cause,
-            EvaluateExpressionError::PipelineDeleted(ref cause) => cause,
-            EvaluateExpressionError::PipelineNotFound(ref cause) => cause,
-            EvaluateExpressionError::TaskNotFound(ref cause) => cause,
+            EvaluateExpressionError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            EvaluateExpressionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            EvaluateExpressionError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            EvaluateExpressionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            EvaluateExpressionError::TaskNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EvaluateExpressionError {}
 /// Errors returned by GetPipelineDefinition
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineDefinitionError {
@@ -1148,19 +1116,15 @@ impl GetPipelineDefinitionError {
 }
 impl fmt::Display for GetPipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPipelineDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPipelineDefinitionError::InternalServiceError(ref cause) => cause,
-            GetPipelineDefinitionError::InvalidRequest(ref cause) => cause,
-            GetPipelineDefinitionError::PipelineDeleted(ref cause) => cause,
-            GetPipelineDefinitionError::PipelineNotFound(ref cause) => cause,
+            GetPipelineDefinitionError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetPipelineDefinitionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPipelineDefinitionError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            GetPipelineDefinitionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPipelineDefinitionError {}
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
@@ -1189,17 +1153,13 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPipelinesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPipelinesError::InternalServiceError(ref cause) => cause,
-            ListPipelinesError::InvalidRequest(ref cause) => cause,
+            ListPipelinesError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListPipelinesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPipelinesError {}
 /// Errors returned by PollForTask
 #[derive(Debug, PartialEq)]
 pub enum PollForTaskError {
@@ -1233,18 +1193,14 @@ impl PollForTaskError {
 }
 impl fmt::Display for PollForTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PollForTaskError {
-    fn description(&self) -> &str {
         match *self {
-            PollForTaskError::InternalServiceError(ref cause) => cause,
-            PollForTaskError::InvalidRequest(ref cause) => cause,
-            PollForTaskError::TaskNotFound(ref cause) => cause,
+            PollForTaskError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            PollForTaskError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PollForTaskError::TaskNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PollForTaskError {}
 /// Errors returned by PutPipelineDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutPipelineDefinitionError {
@@ -1291,19 +1247,15 @@ impl PutPipelineDefinitionError {
 }
 impl fmt::Display for PutPipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPipelineDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            PutPipelineDefinitionError::InternalServiceError(ref cause) => cause,
-            PutPipelineDefinitionError::InvalidRequest(ref cause) => cause,
-            PutPipelineDefinitionError::PipelineDeleted(ref cause) => cause,
-            PutPipelineDefinitionError::PipelineNotFound(ref cause) => cause,
+            PutPipelineDefinitionError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            PutPipelineDefinitionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            PutPipelineDefinitionError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            PutPipelineDefinitionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutPipelineDefinitionError {}
 /// Errors returned by QueryObjects
 #[derive(Debug, PartialEq)]
 pub enum QueryObjectsError {
@@ -1342,19 +1294,15 @@ impl QueryObjectsError {
 }
 impl fmt::Display for QueryObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for QueryObjectsError {
-    fn description(&self) -> &str {
         match *self {
-            QueryObjectsError::InternalServiceError(ref cause) => cause,
-            QueryObjectsError::InvalidRequest(ref cause) => cause,
-            QueryObjectsError::PipelineDeleted(ref cause) => cause,
-            QueryObjectsError::PipelineNotFound(ref cause) => cause,
+            QueryObjectsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            QueryObjectsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            QueryObjectsError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            QueryObjectsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for QueryObjectsError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -1393,19 +1341,15 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::InternalServiceError(ref cause) => cause,
-            RemoveTagsError::InvalidRequest(ref cause) => cause,
-            RemoveTagsError::PipelineDeleted(ref cause) => cause,
-            RemoveTagsError::PipelineNotFound(ref cause) => cause,
+            RemoveTagsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by ReportTaskProgress
 #[derive(Debug, PartialEq)]
 pub enum ReportTaskProgressError {
@@ -1451,20 +1395,16 @@ impl ReportTaskProgressError {
 }
 impl fmt::Display for ReportTaskProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReportTaskProgressError {
-    fn description(&self) -> &str {
         match *self {
-            ReportTaskProgressError::InternalServiceError(ref cause) => cause,
-            ReportTaskProgressError::InvalidRequest(ref cause) => cause,
-            ReportTaskProgressError::PipelineDeleted(ref cause) => cause,
-            ReportTaskProgressError::PipelineNotFound(ref cause) => cause,
-            ReportTaskProgressError::TaskNotFound(ref cause) => cause,
+            ReportTaskProgressError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ReportTaskProgressError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ReportTaskProgressError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            ReportTaskProgressError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            ReportTaskProgressError::TaskNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReportTaskProgressError {}
 /// Errors returned by ReportTaskRunnerHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum ReportTaskRunnerHeartbeatError {
@@ -1497,17 +1437,15 @@ impl ReportTaskRunnerHeartbeatError {
 }
 impl fmt::Display for ReportTaskRunnerHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ReportTaskRunnerHeartbeatError {
-    fn description(&self) -> &str {
         match *self {
-            ReportTaskRunnerHeartbeatError::InternalServiceError(ref cause) => cause,
-            ReportTaskRunnerHeartbeatError::InvalidRequest(ref cause) => cause,
+            ReportTaskRunnerHeartbeatError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ReportTaskRunnerHeartbeatError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ReportTaskRunnerHeartbeatError {}
 /// Errors returned by SetStatus
 #[derive(Debug, PartialEq)]
 pub enum SetStatusError {
@@ -1546,19 +1484,15 @@ impl SetStatusError {
 }
 impl fmt::Display for SetStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetStatusError {
-    fn description(&self) -> &str {
         match *self {
-            SetStatusError::InternalServiceError(ref cause) => cause,
-            SetStatusError::InvalidRequest(ref cause) => cause,
-            SetStatusError::PipelineDeleted(ref cause) => cause,
-            SetStatusError::PipelineNotFound(ref cause) => cause,
+            SetStatusError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            SetStatusError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetStatusError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            SetStatusError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetStatusError {}
 /// Errors returned by SetTaskStatus
 #[derive(Debug, PartialEq)]
 pub enum SetTaskStatusError {
@@ -1602,20 +1536,16 @@ impl SetTaskStatusError {
 }
 impl fmt::Display for SetTaskStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTaskStatusError {
-    fn description(&self) -> &str {
         match *self {
-            SetTaskStatusError::InternalServiceError(ref cause) => cause,
-            SetTaskStatusError::InvalidRequest(ref cause) => cause,
-            SetTaskStatusError::PipelineDeleted(ref cause) => cause,
-            SetTaskStatusError::PipelineNotFound(ref cause) => cause,
-            SetTaskStatusError::TaskNotFound(ref cause) => cause,
+            SetTaskStatusError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            SetTaskStatusError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SetTaskStatusError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            SetTaskStatusError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
+            SetTaskStatusError::TaskNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTaskStatusError {}
 /// Errors returned by ValidatePipelineDefinition
 #[derive(Debug, PartialEq)]
 pub enum ValidatePipelineDefinitionError {
@@ -1664,19 +1594,17 @@ impl ValidatePipelineDefinitionError {
 }
 impl fmt::Display for ValidatePipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ValidatePipelineDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            ValidatePipelineDefinitionError::InternalServiceError(ref cause) => cause,
-            ValidatePipelineDefinitionError::InvalidRequest(ref cause) => cause,
-            ValidatePipelineDefinitionError::PipelineDeleted(ref cause) => cause,
-            ValidatePipelineDefinitionError::PipelineNotFound(ref cause) => cause,
+            ValidatePipelineDefinitionError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ValidatePipelineDefinitionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ValidatePipelineDefinitionError::PipelineDeleted(ref cause) => write!(f, "{}", cause),
+            ValidatePipelineDefinitionError::PipelineNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ValidatePipelineDefinitionError {}
 /// Trait representing the capabilities of the AWS Data Pipeline API. AWS Data Pipeline clients implement this trait.
 pub trait DataPipeline {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>

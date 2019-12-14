@@ -2522,20 +2522,16 @@ impl AssociateWebACLError {
 }
 impl fmt::Display for AssociateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateWebACLError::WAFInternalError(ref cause) => cause,
-            AssociateWebACLError::WAFInvalidAccount(ref cause) => cause,
-            AssociateWebACLError::WAFInvalidParameter(ref cause) => cause,
-            AssociateWebACLError::WAFNonexistentItem(ref cause) => cause,
-            AssociateWebACLError::WAFUnavailableEntity(ref cause) => cause,
+            AssociateWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            AssociateWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            AssociateWebACLError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            AssociateWebACLError::WAFUnavailableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateWebACLError {}
 /// Errors returned by CreateByteMatchSet
 #[derive(Debug, PartialEq)]
 pub enum CreateByteMatchSetError {
@@ -2592,21 +2588,17 @@ impl CreateByteMatchSetError {
 }
 impl fmt::Display for CreateByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateByteMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateByteMatchSetError::WAFDisallowedName(ref cause) => cause,
-            CreateByteMatchSetError::WAFInternalError(ref cause) => cause,
-            CreateByteMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateByteMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateByteMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateByteMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateByteMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateByteMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateByteMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateByteMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateByteMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateByteMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateByteMatchSetError {}
 /// Errors returned by CreateGeoMatchSet
 #[derive(Debug, PartialEq)]
 pub enum CreateGeoMatchSetError {
@@ -2657,21 +2649,17 @@ impl CreateGeoMatchSetError {
 }
 impl fmt::Display for CreateGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGeoMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGeoMatchSetError::WAFDisallowedName(ref cause) => cause,
-            CreateGeoMatchSetError::WAFInternalError(ref cause) => cause,
-            CreateGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateGeoMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateGeoMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateGeoMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateGeoMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateGeoMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateGeoMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateGeoMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGeoMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGeoMatchSetError {}
 /// Errors returned by CreateIPSet
 #[derive(Debug, PartialEq)]
 pub enum CreateIPSetError {
@@ -2720,21 +2708,17 @@ impl CreateIPSetError {
 }
 impl fmt::Display for CreateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateIPSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateIPSetError::WAFDisallowedName(ref cause) => cause,
-            CreateIPSetError::WAFInternalError(ref cause) => cause,
-            CreateIPSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateIPSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateIPSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateIPSetError::WAFStaleData(ref cause) => cause,
+            CreateIPSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateIPSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateIPSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateIPSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateIPSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateIPSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateIPSetError {}
 /// Errors returned by CreateRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRateBasedRuleError {
@@ -2802,23 +2786,21 @@ impl CreateRateBasedRuleError {
 }
 impl fmt::Display for CreateRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRateBasedRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRateBasedRuleError::WAFBadRequest(ref cause) => cause,
-            CreateRateBasedRuleError::WAFDisallowedName(ref cause) => cause,
-            CreateRateBasedRuleError::WAFInternalError(ref cause) => cause,
-            CreateRateBasedRuleError::WAFInvalidParameter(ref cause) => cause,
-            CreateRateBasedRuleError::WAFLimitsExceeded(ref cause) => cause,
-            CreateRateBasedRuleError::WAFStaleData(ref cause) => cause,
-            CreateRateBasedRuleError::WAFTagOperation(ref cause) => cause,
-            CreateRateBasedRuleError::WAFTagOperationInternalError(ref cause) => cause,
+            CreateRateBasedRuleError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            CreateRateBasedRuleError::WAFTagOperationInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateRateBasedRuleError {}
 /// Errors returned by CreateRegexMatchSet
 #[derive(Debug, PartialEq)]
 pub enum CreateRegexMatchSetError {
@@ -2863,19 +2845,15 @@ impl CreateRegexMatchSetError {
 }
 impl fmt::Display for CreateRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRegexMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRegexMatchSetError::WAFDisallowedName(ref cause) => cause,
-            CreateRegexMatchSetError::WAFInternalError(ref cause) => cause,
-            CreateRegexMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateRegexMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateRegexMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateRegexMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRegexMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRegexMatchSetError {}
 /// Errors returned by CreateRegexPatternSet
 #[derive(Debug, PartialEq)]
 pub enum CreateRegexPatternSetError {
@@ -2920,19 +2898,15 @@ impl CreateRegexPatternSetError {
 }
 impl fmt::Display for CreateRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRegexPatternSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRegexPatternSetError::WAFDisallowedName(ref cause) => cause,
-            CreateRegexPatternSetError::WAFInternalError(ref cause) => cause,
-            CreateRegexPatternSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            CreateRegexPatternSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateRegexPatternSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateRegexPatternSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRegexPatternSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRegexPatternSetError {}
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
@@ -2992,23 +2966,19 @@ impl CreateRuleError {
 }
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRuleError::WAFBadRequest(ref cause) => cause,
-            CreateRuleError::WAFDisallowedName(ref cause) => cause,
-            CreateRuleError::WAFInternalError(ref cause) => cause,
-            CreateRuleError::WAFInvalidParameter(ref cause) => cause,
-            CreateRuleError::WAFLimitsExceeded(ref cause) => cause,
-            CreateRuleError::WAFStaleData(ref cause) => cause,
-            CreateRuleError::WAFTagOperation(ref cause) => cause,
-            CreateRuleError::WAFTagOperationInternalError(ref cause) => cause,
+            CreateRuleError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRuleError {}
 /// Errors returned by CreateRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleGroupError {
@@ -3063,22 +3033,18 @@ impl CreateRuleGroupError {
 }
 impl fmt::Display for CreateRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRuleGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRuleGroupError::WAFBadRequest(ref cause) => cause,
-            CreateRuleGroupError::WAFDisallowedName(ref cause) => cause,
-            CreateRuleGroupError::WAFInternalError(ref cause) => cause,
-            CreateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
-            CreateRuleGroupError::WAFStaleData(ref cause) => cause,
-            CreateRuleGroupError::WAFTagOperation(ref cause) => cause,
-            CreateRuleGroupError::WAFTagOperationInternalError(ref cause) => cause,
+            CreateRuleGroupError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            CreateRuleGroupError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRuleGroupError {}
 /// Errors returned by CreateSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum CreateSizeConstraintSetError {
@@ -3139,21 +3105,17 @@ impl CreateSizeConstraintSetError {
 }
 impl fmt::Display for CreateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSizeConstraintSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSizeConstraintSetError::WAFDisallowedName(ref cause) => cause,
-            CreateSizeConstraintSetError::WAFInternalError(ref cause) => cause,
-            CreateSizeConstraintSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateSizeConstraintSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateSizeConstraintSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateSizeConstraintSetError::WAFStaleData(ref cause) => cause,
+            CreateSizeConstraintSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateSizeConstraintSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateSizeConstraintSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateSizeConstraintSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateSizeConstraintSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSizeConstraintSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSizeConstraintSetError {}
 /// Errors returned by CreateSqlInjectionMatchSet
 #[derive(Debug, PartialEq)]
 pub enum CreateSqlInjectionMatchSetError {
@@ -3216,21 +3178,19 @@ impl CreateSqlInjectionMatchSetError {
 }
 impl fmt::Display for CreateSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSqlInjectionMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSqlInjectionMatchSetError::WAFDisallowedName(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::WAFInternalError(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateSqlInjectionMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateSqlInjectionMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateSqlInjectionMatchSetError::WAFInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSqlInjectionMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSqlInjectionMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSqlInjectionMatchSetError {}
 /// Errors returned by CreateWebACL
 #[derive(Debug, PartialEq)]
 pub enum CreateWebACLError {
@@ -3295,24 +3255,20 @@ impl CreateWebACLError {
 }
 impl fmt::Display for CreateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWebACLError::WAFBadRequest(ref cause) => cause,
-            CreateWebACLError::WAFDisallowedName(ref cause) => cause,
-            CreateWebACLError::WAFInternalError(ref cause) => cause,
-            CreateWebACLError::WAFInvalidAccount(ref cause) => cause,
-            CreateWebACLError::WAFInvalidParameter(ref cause) => cause,
-            CreateWebACLError::WAFLimitsExceeded(ref cause) => cause,
-            CreateWebACLError::WAFStaleData(ref cause) => cause,
-            CreateWebACLError::WAFTagOperation(ref cause) => cause,
-            CreateWebACLError::WAFTagOperationInternalError(ref cause) => cause,
+            CreateWebACLError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            CreateWebACLError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWebACLError {}
 /// Errors returned by CreateXssMatchSet
 #[derive(Debug, PartialEq)]
 pub enum CreateXssMatchSetError {
@@ -3363,21 +3319,17 @@ impl CreateXssMatchSetError {
 }
 impl fmt::Display for CreateXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateXssMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            CreateXssMatchSetError::WAFDisallowedName(ref cause) => cause,
-            CreateXssMatchSetError::WAFInternalError(ref cause) => cause,
-            CreateXssMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            CreateXssMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            CreateXssMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            CreateXssMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateXssMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            CreateXssMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            CreateXssMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            CreateXssMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateXssMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            CreateXssMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateXssMatchSetError {}
 /// Errors returned by DeleteByteMatchSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteByteMatchSetError {
@@ -3434,21 +3386,17 @@ impl DeleteByteMatchSetError {
 }
 impl fmt::Display for DeleteByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteByteMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteByteMatchSetError::WAFInternalError(ref cause) => cause,
-            DeleteByteMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteByteMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteByteMatchSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteByteMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteByteMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteByteMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteByteMatchSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteByteMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteByteMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteByteMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteByteMatchSetError {}
 /// Errors returned by DeleteGeoMatchSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteGeoMatchSetError {
@@ -3499,21 +3447,17 @@ impl DeleteGeoMatchSetError {
 }
 impl fmt::Display for DeleteGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGeoMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGeoMatchSetError::WAFInternalError(ref cause) => cause,
-            DeleteGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteGeoMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteGeoMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteGeoMatchSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteGeoMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteGeoMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteGeoMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGeoMatchSetError {}
 /// Errors returned by DeleteIPSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteIPSetError {
@@ -3562,21 +3506,17 @@ impl DeleteIPSetError {
 }
 impl fmt::Display for DeleteIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteIPSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteIPSetError::WAFInternalError(ref cause) => cause,
-            DeleteIPSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteIPSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteIPSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteIPSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteIPSetError::WAFStaleData(ref cause) => cause,
+            DeleteIPSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteIPSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteIPSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteIPSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteIPSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteIPSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteIPSetError {}
 /// Errors returned by DeleteLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoggingConfigurationError {
@@ -3618,18 +3558,16 @@ impl DeleteLoggingConfigurationError {
 }
 impl fmt::Display for DeleteLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoggingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoggingConfigurationError::WAFInternalError(ref cause) => cause,
-            DeleteLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
-            DeleteLoggingConfigurationError::WAFStaleData(ref cause) => cause,
+            DeleteLoggingConfigurationError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteLoggingConfigurationError::WAFNonexistentItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoggingConfigurationError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoggingConfigurationError {}
 /// Errors returned by DeletePermissionPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePermissionPolicyError {
@@ -3667,18 +3605,14 @@ impl DeletePermissionPolicyError {
 }
 impl fmt::Display for DeletePermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePermissionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePermissionPolicyError::WAFInternalError(ref cause) => cause,
-            DeletePermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
-            DeletePermissionPolicyError::WAFStaleData(ref cause) => cause,
+            DeletePermissionPolicyError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeletePermissionPolicyError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeletePermissionPolicyError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePermissionPolicyError {}
 /// Errors returned by DeleteRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRateBasedRuleError {
@@ -3749,23 +3683,21 @@ impl DeleteRateBasedRuleError {
 }
 impl fmt::Display for DeleteRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRateBasedRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRateBasedRuleError::WAFInternalError(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFInvalidAccount(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFReferencedItem(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFStaleData(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFTagOperation(ref cause) => cause,
-            DeleteRateBasedRuleError::WAFTagOperationInternalError(ref cause) => cause,
+            DeleteRateBasedRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            DeleteRateBasedRuleError::WAFTagOperationInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRateBasedRuleError {}
 /// Errors returned by DeleteRegexMatchSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteRegexMatchSetError {
@@ -3824,21 +3756,17 @@ impl DeleteRegexMatchSetError {
 }
 impl fmt::Display for DeleteRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRegexMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRegexMatchSetError::WAFInternalError(ref cause) => cause,
-            DeleteRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteRegexMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteRegexMatchSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteRegexMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteRegexMatchSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRegexMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteRegexMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteRegexMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRegexMatchSetError {}
 /// Errors returned by DeleteRegexPatternSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteRegexPatternSetError {
@@ -3897,21 +3825,17 @@ impl DeleteRegexPatternSetError {
 }
 impl fmt::Display for DeleteRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRegexPatternSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRegexPatternSetError::WAFInternalError(ref cause) => cause,
-            DeleteRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteRegexPatternSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteRegexPatternSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteRegexPatternSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteRegexPatternSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRegexPatternSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteRegexPatternSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteRegexPatternSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRegexPatternSetError {}
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
@@ -3972,23 +3896,19 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRuleError::WAFInternalError(ref cause) => cause,
-            DeleteRuleError::WAFInvalidAccount(ref cause) => cause,
-            DeleteRuleError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteRuleError::WAFNonexistentItem(ref cause) => cause,
-            DeleteRuleError::WAFReferencedItem(ref cause) => cause,
-            DeleteRuleError::WAFStaleData(ref cause) => cause,
-            DeleteRuleError::WAFTagOperation(ref cause) => cause,
-            DeleteRuleError::WAFTagOperationInternalError(ref cause) => cause,
+            DeleteRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRuleError {}
 /// Errors returned by DeleteRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleGroupError {
@@ -4049,23 +3969,19 @@ impl DeleteRuleGroupError {
 }
 impl fmt::Display for DeleteRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRuleGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRuleGroupError::WAFInternalError(ref cause) => cause,
-            DeleteRuleGroupError::WAFInvalidOperation(ref cause) => cause,
-            DeleteRuleGroupError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteRuleGroupError::WAFNonexistentItem(ref cause) => cause,
-            DeleteRuleGroupError::WAFReferencedItem(ref cause) => cause,
-            DeleteRuleGroupError::WAFStaleData(ref cause) => cause,
-            DeleteRuleGroupError::WAFTagOperation(ref cause) => cause,
-            DeleteRuleGroupError::WAFTagOperationInternalError(ref cause) => cause,
+            DeleteRuleGroupError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            DeleteRuleGroupError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRuleGroupError {}
 /// Errors returned by DeleteSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteSizeConstraintSetError {
@@ -4126,21 +4042,17 @@ impl DeleteSizeConstraintSetError {
 }
 impl fmt::Display for DeleteSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSizeConstraintSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSizeConstraintSetError::WAFInternalError(ref cause) => cause,
-            DeleteSizeConstraintSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteSizeConstraintSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteSizeConstraintSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteSizeConstraintSetError::WAFStaleData(ref cause) => cause,
+            DeleteSizeConstraintSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteSizeConstraintSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteSizeConstraintSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSizeConstraintSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteSizeConstraintSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteSizeConstraintSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSizeConstraintSetError {}
 /// Errors returned by DeleteSqlInjectionMatchSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteSqlInjectionMatchSetError {
@@ -4203,21 +4115,19 @@ impl DeleteSqlInjectionMatchSetError {
 }
 impl fmt::Display for DeleteSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSqlInjectionMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSqlInjectionMatchSetError::WAFInternalError(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteSqlInjectionMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteSqlInjectionMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteSqlInjectionMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSqlInjectionMatchSetError {}
 /// Errors returned by DeleteWebACL
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebACLError {
@@ -4278,23 +4188,19 @@ impl DeleteWebACLError {
 }
 impl fmt::Display for DeleteWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWebACLError::WAFInternalError(ref cause) => cause,
-            DeleteWebACLError::WAFInvalidAccount(ref cause) => cause,
-            DeleteWebACLError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteWebACLError::WAFNonexistentItem(ref cause) => cause,
-            DeleteWebACLError::WAFReferencedItem(ref cause) => cause,
-            DeleteWebACLError::WAFStaleData(ref cause) => cause,
-            DeleteWebACLError::WAFTagOperation(ref cause) => cause,
-            DeleteWebACLError::WAFTagOperationInternalError(ref cause) => cause,
+            DeleteWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            DeleteWebACLError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWebACLError {}
 /// Errors returned by DeleteXssMatchSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteXssMatchSetError {
@@ -4345,21 +4251,17 @@ impl DeleteXssMatchSetError {
 }
 impl fmt::Display for DeleteXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteXssMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteXssMatchSetError::WAFInternalError(ref cause) => cause,
-            DeleteXssMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            DeleteXssMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
-            DeleteXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            DeleteXssMatchSetError::WAFReferencedItem(ref cause) => cause,
-            DeleteXssMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteXssMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DeleteXssMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DeleteXssMatchSetError::WAFNonEmptyEntity(ref cause) => write!(f, "{}", cause),
+            DeleteXssMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            DeleteXssMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            DeleteXssMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteXssMatchSetError {}
 /// Errors returned by DisassociateWebACL
 #[derive(Debug, PartialEq)]
 pub enum DisassociateWebACLError {
@@ -4404,19 +4306,15 @@ impl DisassociateWebACLError {
 }
 impl fmt::Display for DisassociateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateWebACLError::WAFInternalError(ref cause) => cause,
-            DisassociateWebACLError::WAFInvalidAccount(ref cause) => cause,
-            DisassociateWebACLError::WAFInvalidParameter(ref cause) => cause,
-            DisassociateWebACLError::WAFNonexistentItem(ref cause) => cause,
+            DisassociateWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            DisassociateWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            DisassociateWebACLError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateWebACLError {}
 /// Errors returned by GetByteMatchSet
 #[derive(Debug, PartialEq)]
 pub enum GetByteMatchSetError {
@@ -4450,18 +4348,14 @@ impl GetByteMatchSetError {
 }
 impl fmt::Display for GetByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetByteMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetByteMatchSetError::WAFInternalError(ref cause) => cause,
-            GetByteMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            GetByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetByteMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetByteMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetByteMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetByteMatchSetError {}
 /// Errors returned by GetChangeToken
 #[derive(Debug, PartialEq)]
 pub enum GetChangeTokenError {
@@ -4485,16 +4379,12 @@ impl GetChangeTokenError {
 }
 impl fmt::Display for GetChangeTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetChangeTokenError {
-    fn description(&self) -> &str {
         match *self {
-            GetChangeTokenError::WAFInternalError(ref cause) => cause,
+            GetChangeTokenError::WAFInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetChangeTokenError {}
 /// Errors returned by GetChangeTokenStatus
 #[derive(Debug, PartialEq)]
 pub enum GetChangeTokenStatusError {
@@ -4527,17 +4417,13 @@ impl GetChangeTokenStatusError {
 }
 impl fmt::Display for GetChangeTokenStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetChangeTokenStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetChangeTokenStatusError::WAFInternalError(ref cause) => cause,
-            GetChangeTokenStatusError::WAFNonexistentItem(ref cause) => cause,
+            GetChangeTokenStatusError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetChangeTokenStatusError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetChangeTokenStatusError {}
 /// Errors returned by GetGeoMatchSet
 #[derive(Debug, PartialEq)]
 pub enum GetGeoMatchSetError {
@@ -4571,18 +4457,14 @@ impl GetGeoMatchSetError {
 }
 impl fmt::Display for GetGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGeoMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetGeoMatchSetError::WAFInternalError(ref cause) => cause,
-            GetGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            GetGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetGeoMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetGeoMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetGeoMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGeoMatchSetError {}
 /// Errors returned by GetIPSet
 #[derive(Debug, PartialEq)]
 pub enum GetIPSetError {
@@ -4616,18 +4498,14 @@ impl GetIPSetError {
 }
 impl fmt::Display for GetIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIPSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetIPSetError::WAFInternalError(ref cause) => cause,
-            GetIPSetError::WAFInvalidAccount(ref cause) => cause,
-            GetIPSetError::WAFNonexistentItem(ref cause) => cause,
+            GetIPSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetIPSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetIPSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIPSetError {}
 /// Errors returned by GetLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetLoggingConfigurationError {
@@ -4660,17 +4538,13 @@ impl GetLoggingConfigurationError {
 }
 impl fmt::Display for GetLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoggingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoggingConfigurationError::WAFInternalError(ref cause) => cause,
-            GetLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
+            GetLoggingConfigurationError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetLoggingConfigurationError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoggingConfigurationError {}
 /// Errors returned by GetPermissionPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPermissionPolicyError {
@@ -4703,17 +4577,13 @@ impl GetPermissionPolicyError {
 }
 impl fmt::Display for GetPermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPermissionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPermissionPolicyError::WAFInternalError(ref cause) => cause,
-            GetPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
+            GetPermissionPolicyError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetPermissionPolicyError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPermissionPolicyError {}
 /// Errors returned by GetRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum GetRateBasedRuleError {
@@ -4747,18 +4617,14 @@ impl GetRateBasedRuleError {
 }
 impl fmt::Display for GetRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRateBasedRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetRateBasedRuleError::WAFInternalError(ref cause) => cause,
-            GetRateBasedRuleError::WAFInvalidAccount(ref cause) => cause,
-            GetRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
+            GetRateBasedRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRateBasedRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetRateBasedRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRateBasedRuleError {}
 /// Errors returned by GetRateBasedRuleManagedKeys
 #[derive(Debug, PartialEq)]
 pub enum GetRateBasedRuleManagedKeysError {
@@ -4807,19 +4673,21 @@ impl GetRateBasedRuleManagedKeysError {
 }
 impl fmt::Display for GetRateBasedRuleManagedKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRateBasedRuleManagedKeysError {
-    fn description(&self) -> &str {
         match *self {
-            GetRateBasedRuleManagedKeysError::WAFInternalError(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::WAFInvalidAccount(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::WAFInvalidParameter(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::WAFNonexistentItem(ref cause) => cause,
+            GetRateBasedRuleManagedKeysError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRateBasedRuleManagedKeysError::WAFInvalidAccount(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRateBasedRuleManagedKeysError::WAFInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetRateBasedRuleManagedKeysError::WAFNonexistentItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetRateBasedRuleManagedKeysError {}
 /// Errors returned by GetRegexMatchSet
 #[derive(Debug, PartialEq)]
 pub enum GetRegexMatchSetError {
@@ -4853,18 +4721,14 @@ impl GetRegexMatchSetError {
 }
 impl fmt::Display for GetRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRegexMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetRegexMatchSetError::WAFInternalError(ref cause) => cause,
-            GetRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            GetRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetRegexMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRegexMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetRegexMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRegexMatchSetError {}
 /// Errors returned by GetRegexPatternSet
 #[derive(Debug, PartialEq)]
 pub enum GetRegexPatternSetError {
@@ -4902,18 +4766,14 @@ impl GetRegexPatternSetError {
 }
 impl fmt::Display for GetRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRegexPatternSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetRegexPatternSetError::WAFInternalError(ref cause) => cause,
-            GetRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
-            GetRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
+            GetRegexPatternSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRegexPatternSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetRegexPatternSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRegexPatternSetError {}
 /// Errors returned by GetRule
 #[derive(Debug, PartialEq)]
 pub enum GetRuleError {
@@ -4947,18 +4807,14 @@ impl GetRuleError {
 }
 impl fmt::Display for GetRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRuleError {
-    fn description(&self) -> &str {
         match *self {
-            GetRuleError::WAFInternalError(ref cause) => cause,
-            GetRuleError::WAFInvalidAccount(ref cause) => cause,
-            GetRuleError::WAFNonexistentItem(ref cause) => cause,
+            GetRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRuleError {}
 /// Errors returned by GetRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum GetRuleGroupError {
@@ -4987,17 +4843,13 @@ impl GetRuleGroupError {
 }
 impl fmt::Display for GetRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRuleGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetRuleGroupError::WAFInternalError(ref cause) => cause,
-            GetRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            GetRuleGroupError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetRuleGroupError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRuleGroupError {}
 /// Errors returned by GetSampledRequests
 #[derive(Debug, PartialEq)]
 pub enum GetSampledRequestsError {
@@ -5028,17 +4880,13 @@ impl GetSampledRequestsError {
 }
 impl fmt::Display for GetSampledRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSampledRequestsError {
-    fn description(&self) -> &str {
         match *self {
-            GetSampledRequestsError::WAFInternalError(ref cause) => cause,
-            GetSampledRequestsError::WAFNonexistentItem(ref cause) => cause,
+            GetSampledRequestsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetSampledRequestsError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSampledRequestsError {}
 /// Errors returned by GetSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum GetSizeConstraintSetError {
@@ -5078,18 +4926,14 @@ impl GetSizeConstraintSetError {
 }
 impl fmt::Display for GetSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSizeConstraintSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetSizeConstraintSetError::WAFInternalError(ref cause) => cause,
-            GetSizeConstraintSetError::WAFInvalidAccount(ref cause) => cause,
-            GetSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
+            GetSizeConstraintSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetSizeConstraintSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetSizeConstraintSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSizeConstraintSetError {}
 /// Errors returned by GetSqlInjectionMatchSet
 #[derive(Debug, PartialEq)]
 pub enum GetSqlInjectionMatchSetError {
@@ -5129,18 +4973,14 @@ impl GetSqlInjectionMatchSetError {
 }
 impl fmt::Display for GetSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSqlInjectionMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetSqlInjectionMatchSetError::WAFInternalError(ref cause) => cause,
-            GetSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            GetSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetSqlInjectionMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSqlInjectionMatchSetError {}
 /// Errors returned by GetWebACL
 #[derive(Debug, PartialEq)]
 pub enum GetWebACLError {
@@ -5174,18 +5014,14 @@ impl GetWebACLError {
 }
 impl fmt::Display for GetWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            GetWebACLError::WAFInternalError(ref cause) => cause,
-            GetWebACLError::WAFInvalidAccount(ref cause) => cause,
-            GetWebACLError::WAFNonexistentItem(ref cause) => cause,
+            GetWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWebACLError {}
 /// Errors returned by GetWebACLForResource
 #[derive(Debug, PartialEq)]
 pub enum GetWebACLForResourceError {
@@ -5239,20 +5075,16 @@ impl GetWebACLForResourceError {
 }
 impl fmt::Display for GetWebACLForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWebACLForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetWebACLForResourceError::WAFInternalError(ref cause) => cause,
-            GetWebACLForResourceError::WAFInvalidAccount(ref cause) => cause,
-            GetWebACLForResourceError::WAFInvalidParameter(ref cause) => cause,
-            GetWebACLForResourceError::WAFNonexistentItem(ref cause) => cause,
-            GetWebACLForResourceError::WAFUnavailableEntity(ref cause) => cause,
+            GetWebACLForResourceError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetWebACLForResourceError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetWebACLForResourceError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetWebACLForResourceError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            GetWebACLForResourceError::WAFUnavailableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWebACLForResourceError {}
 /// Errors returned by GetXssMatchSet
 #[derive(Debug, PartialEq)]
 pub enum GetXssMatchSetError {
@@ -5286,18 +5118,14 @@ impl GetXssMatchSetError {
 }
 impl fmt::Display for GetXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetXssMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            GetXssMatchSetError::WAFInternalError(ref cause) => cause,
-            GetXssMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            GetXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetXssMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            GetXssMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            GetXssMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetXssMatchSetError {}
 /// Errors returned by ListActivatedRulesInRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum ListActivatedRulesInRuleGroupError {
@@ -5339,18 +5167,20 @@ impl ListActivatedRulesInRuleGroupError {
 }
 impl fmt::Display for ListActivatedRulesInRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActivatedRulesInRuleGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ListActivatedRulesInRuleGroupError::WAFInternalError(ref cause) => cause,
-            ListActivatedRulesInRuleGroupError::WAFInvalidParameter(ref cause) => cause,
-            ListActivatedRulesInRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            ListActivatedRulesInRuleGroupError::WAFInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListActivatedRulesInRuleGroupError::WAFInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListActivatedRulesInRuleGroupError::WAFNonexistentItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListActivatedRulesInRuleGroupError {}
 /// Errors returned by ListByteMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListByteMatchSetsError {
@@ -5379,17 +5209,13 @@ impl ListByteMatchSetsError {
 }
 impl fmt::Display for ListByteMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListByteMatchSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListByteMatchSetsError::WAFInternalError(ref cause) => cause,
-            ListByteMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListByteMatchSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListByteMatchSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListByteMatchSetsError {}
 /// Errors returned by ListGeoMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListGeoMatchSetsError {
@@ -5418,17 +5244,13 @@ impl ListGeoMatchSetsError {
 }
 impl fmt::Display for ListGeoMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGeoMatchSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGeoMatchSetsError::WAFInternalError(ref cause) => cause,
-            ListGeoMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListGeoMatchSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListGeoMatchSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGeoMatchSetsError {}
 /// Errors returned by ListIPSets
 #[derive(Debug, PartialEq)]
 pub enum ListIPSetsError {
@@ -5457,17 +5279,13 @@ impl ListIPSetsError {
 }
 impl fmt::Display for ListIPSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListIPSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListIPSetsError::WAFInternalError(ref cause) => cause,
-            ListIPSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListIPSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListIPSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListIPSetsError {}
 /// Errors returned by ListLoggingConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListLoggingConfigurationsError {
@@ -5507,18 +5325,16 @@ impl ListLoggingConfigurationsError {
 }
 impl fmt::Display for ListLoggingConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLoggingConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListLoggingConfigurationsError::WAFInternalError(ref cause) => cause,
-            ListLoggingConfigurationsError::WAFInvalidParameter(ref cause) => cause,
-            ListLoggingConfigurationsError::WAFNonexistentItem(ref cause) => cause,
+            ListLoggingConfigurationsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListLoggingConfigurationsError::WAFInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLoggingConfigurationsError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLoggingConfigurationsError {}
 /// Errors returned by ListRateBasedRules
 #[derive(Debug, PartialEq)]
 pub enum ListRateBasedRulesError {
@@ -5549,17 +5365,13 @@ impl ListRateBasedRulesError {
 }
 impl fmt::Display for ListRateBasedRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRateBasedRulesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRateBasedRulesError::WAFInternalError(ref cause) => cause,
-            ListRateBasedRulesError::WAFInvalidAccount(ref cause) => cause,
+            ListRateBasedRulesError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListRateBasedRulesError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRateBasedRulesError {}
 /// Errors returned by ListRegexMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListRegexMatchSetsError {
@@ -5590,17 +5402,13 @@ impl ListRegexMatchSetsError {
 }
 impl fmt::Display for ListRegexMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRegexMatchSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRegexMatchSetsError::WAFInternalError(ref cause) => cause,
-            ListRegexMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListRegexMatchSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListRegexMatchSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRegexMatchSetsError {}
 /// Errors returned by ListRegexPatternSets
 #[derive(Debug, PartialEq)]
 pub enum ListRegexPatternSetsError {
@@ -5633,17 +5441,13 @@ impl ListRegexPatternSetsError {
 }
 impl fmt::Display for ListRegexPatternSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRegexPatternSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRegexPatternSetsError::WAFInternalError(ref cause) => cause,
-            ListRegexPatternSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListRegexPatternSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListRegexPatternSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRegexPatternSetsError {}
 /// Errors returned by ListResourcesForWebACL
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesForWebACLError {
@@ -5690,19 +5494,15 @@ impl ListResourcesForWebACLError {
 }
 impl fmt::Display for ListResourcesForWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResourcesForWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            ListResourcesForWebACLError::WAFInternalError(ref cause) => cause,
-            ListResourcesForWebACLError::WAFInvalidAccount(ref cause) => cause,
-            ListResourcesForWebACLError::WAFInvalidParameter(ref cause) => cause,
-            ListResourcesForWebACLError::WAFNonexistentItem(ref cause) => cause,
+            ListResourcesForWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListResourcesForWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            ListResourcesForWebACLError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourcesForWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResourcesForWebACLError {}
 /// Errors returned by ListRuleGroups
 #[derive(Debug, PartialEq)]
 pub enum ListRuleGroupsError {
@@ -5726,16 +5526,12 @@ impl ListRuleGroupsError {
 }
 impl fmt::Display for ListRuleGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRuleGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRuleGroupsError::WAFInternalError(ref cause) => cause,
+            ListRuleGroupsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRuleGroupsError {}
 /// Errors returned by ListRules
 #[derive(Debug, PartialEq)]
 pub enum ListRulesError {
@@ -5764,17 +5560,13 @@ impl ListRulesError {
 }
 impl fmt::Display for ListRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRulesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRulesError::WAFInternalError(ref cause) => cause,
-            ListRulesError::WAFInvalidAccount(ref cause) => cause,
+            ListRulesError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListRulesError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRulesError {}
 /// Errors returned by ListSizeConstraintSets
 #[derive(Debug, PartialEq)]
 pub enum ListSizeConstraintSetsError {
@@ -5807,17 +5599,13 @@ impl ListSizeConstraintSetsError {
 }
 impl fmt::Display for ListSizeConstraintSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSizeConstraintSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSizeConstraintSetsError::WAFInternalError(ref cause) => cause,
-            ListSizeConstraintSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListSizeConstraintSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListSizeConstraintSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSizeConstraintSetsError {}
 /// Errors returned by ListSqlInjectionMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListSqlInjectionMatchSetsError {
@@ -5850,17 +5638,13 @@ impl ListSqlInjectionMatchSetsError {
 }
 impl fmt::Display for ListSqlInjectionMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSqlInjectionMatchSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSqlInjectionMatchSetsError::WAFInternalError(ref cause) => cause,
-            ListSqlInjectionMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListSqlInjectionMatchSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListSqlInjectionMatchSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSqlInjectionMatchSetsError {}
 /// Errors returned by ListSubscribedRuleGroups
 #[derive(Debug, PartialEq)]
 pub enum ListSubscribedRuleGroupsError {
@@ -5893,17 +5677,13 @@ impl ListSubscribedRuleGroupsError {
 }
 impl fmt::Display for ListSubscribedRuleGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscribedRuleGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSubscribedRuleGroupsError::WAFInternalError(ref cause) => cause,
-            ListSubscribedRuleGroupsError::WAFNonexistentItem(ref cause) => cause,
+            ListSubscribedRuleGroupsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListSubscribedRuleGroupsError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSubscribedRuleGroupsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -5959,21 +5739,19 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::WAFBadRequest(ref cause) => cause,
-            ListTagsForResourceError::WAFInternalError(ref cause) => cause,
-            ListTagsForResourceError::WAFInvalidParameter(ref cause) => cause,
-            ListTagsForResourceError::WAFNonexistentItem(ref cause) => cause,
-            ListTagsForResourceError::WAFTagOperation(ref cause) => cause,
-            ListTagsForResourceError::WAFTagOperationInternalError(ref cause) => cause,
+            ListTagsForResourceError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::WAFTagOperationInternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebACLs
 #[derive(Debug, PartialEq)]
 pub enum ListWebACLsError {
@@ -6002,17 +5780,13 @@ impl ListWebACLsError {
 }
 impl fmt::Display for ListWebACLsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWebACLsError {
-    fn description(&self) -> &str {
         match *self {
-            ListWebACLsError::WAFInternalError(ref cause) => cause,
-            ListWebACLsError::WAFInvalidAccount(ref cause) => cause,
+            ListWebACLsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListWebACLsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWebACLsError {}
 /// Errors returned by ListXssMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListXssMatchSetsError {
@@ -6041,17 +5815,13 @@ impl ListXssMatchSetsError {
 }
 impl fmt::Display for ListXssMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListXssMatchSetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListXssMatchSetsError::WAFInternalError(ref cause) => cause,
-            ListXssMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListXssMatchSetsError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            ListXssMatchSetsError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListXssMatchSetsError {}
 /// Errors returned by PutLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutLoggingConfigurationError {
@@ -6098,19 +5868,17 @@ impl PutLoggingConfigurationError {
 }
 impl fmt::Display for PutLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLoggingConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutLoggingConfigurationError::WAFInternalError(ref cause) => cause,
-            PutLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
-            PutLoggingConfigurationError::WAFServiceLinkedRoleError(ref cause) => cause,
-            PutLoggingConfigurationError::WAFStaleData(ref cause) => cause,
+            PutLoggingConfigurationError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            PutLoggingConfigurationError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            PutLoggingConfigurationError::WAFServiceLinkedRoleError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutLoggingConfigurationError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLoggingConfigurationError {}
 /// Errors returned by PutPermissionPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutPermissionPolicyError {
@@ -6155,19 +5923,17 @@ impl PutPermissionPolicyError {
 }
 impl fmt::Display for PutPermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutPermissionPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutPermissionPolicyError::WAFInternalError(ref cause) => cause,
-            PutPermissionPolicyError::WAFInvalidPermissionPolicy(ref cause) => cause,
-            PutPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
-            PutPermissionPolicyError::WAFStaleData(ref cause) => cause,
+            PutPermissionPolicyError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            PutPermissionPolicyError::WAFInvalidPermissionPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutPermissionPolicyError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            PutPermissionPolicyError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutPermissionPolicyError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6222,22 +5988,18 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::WAFBadRequest(ref cause) => cause,
-            TagResourceError::WAFInternalError(ref cause) => cause,
-            TagResourceError::WAFInvalidParameter(ref cause) => cause,
-            TagResourceError::WAFLimitsExceeded(ref cause) => cause,
-            TagResourceError::WAFNonexistentItem(ref cause) => cause,
-            TagResourceError::WAFTagOperation(ref cause) => cause,
-            TagResourceError::WAFTagOperationInternalError(ref cause) => cause,
+            TagResourceError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            TagResourceError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -6287,21 +6049,17 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::WAFBadRequest(ref cause) => cause,
-            UntagResourceError::WAFInternalError(ref cause) => cause,
-            UntagResourceError::WAFInvalidParameter(ref cause) => cause,
-            UntagResourceError::WAFNonexistentItem(ref cause) => cause,
-            UntagResourceError::WAFTagOperation(ref cause) => cause,
-            UntagResourceError::WAFTagOperationInternalError(ref cause) => cause,
+            UntagResourceError::WAFBadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::WAFTagOperation(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::WAFTagOperationInternalError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateByteMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateByteMatchSetError {
@@ -6372,23 +6130,19 @@ impl UpdateByteMatchSetError {
 }
 impl fmt::Display for UpdateByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateByteMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateByteMatchSetError::WAFInternalError(ref cause) => cause,
-            UpdateByteMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateByteMatchSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateByteMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateByteMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateByteMatchSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateByteMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateByteMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateByteMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateByteMatchSetError {}
 /// Errors returned by UpdateGeoMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateGeoMatchSetError {
@@ -6460,24 +6214,20 @@ impl UpdateGeoMatchSetError {
 }
 impl fmt::Display for UpdateGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGeoMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGeoMatchSetError::WAFInternalError(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
-            UpdateGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateGeoMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGeoMatchSetError {}
 /// Errors returned by UpdateIPSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateIPSetError {
@@ -6541,24 +6291,20 @@ impl UpdateIPSetError {
 }
 impl fmt::Display for UpdateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateIPSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateIPSetError::WAFInternalError(ref cause) => cause,
-            UpdateIPSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateIPSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateIPSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateIPSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateIPSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateIPSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateIPSetError::WAFReferencedItem(ref cause) => cause,
-            UpdateIPSetError::WAFStaleData(ref cause) => cause,
+            UpdateIPSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateIPSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateIPSetError {}
 /// Errors returned by UpdateRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateRateBasedRuleError {
@@ -6638,24 +6384,20 @@ impl UpdateRateBasedRuleError {
 }
 impl fmt::Display for UpdateRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRateBasedRuleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRateBasedRuleError::WAFInternalError(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFInvalidAccount(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFInvalidOperation(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFInvalidParameter(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFReferencedItem(ref cause) => cause,
-            UpdateRateBasedRuleError::WAFStaleData(ref cause) => cause,
+            UpdateRateBasedRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateRateBasedRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRateBasedRuleError {}
 /// Errors returned by UpdateRegexMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateRegexMatchSetError {
@@ -6728,23 +6470,19 @@ impl UpdateRegexMatchSetError {
 }
 impl fmt::Display for UpdateRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRegexMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRegexMatchSetError::WAFDisallowedName(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFInternalError(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFDisallowedName(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateRegexMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRegexMatchSetError {}
 /// Errors returned by UpdateRegexPatternSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateRegexPatternSetError {
@@ -6817,23 +6555,21 @@ impl UpdateRegexPatternSetError {
 }
 impl fmt::Display for UpdateRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRegexPatternSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRegexPatternSetError::WAFInternalError(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFInvalidRegexPattern(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFInvalidRegexPattern(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFNonexistentContainer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRegexPatternSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateRegexPatternSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRegexPatternSetError {}
 /// Errors returned by UpdateRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateRuleError {
@@ -6897,24 +6633,20 @@ impl UpdateRuleError {
 }
 impl fmt::Display for UpdateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRuleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRuleError::WAFInternalError(ref cause) => cause,
-            UpdateRuleError::WAFInvalidAccount(ref cause) => cause,
-            UpdateRuleError::WAFInvalidOperation(ref cause) => cause,
-            UpdateRuleError::WAFInvalidParameter(ref cause) => cause,
-            UpdateRuleError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateRuleError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateRuleError::WAFNonexistentItem(ref cause) => cause,
-            UpdateRuleError::WAFReferencedItem(ref cause) => cause,
-            UpdateRuleError::WAFStaleData(ref cause) => cause,
+            UpdateRuleError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateRuleError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRuleError {}
 /// Errors returned by UpdateRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateRuleGroupError {
@@ -6970,22 +6702,18 @@ impl UpdateRuleGroupError {
 }
 impl fmt::Display for UpdateRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRuleGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRuleGroupError::WAFInternalError(ref cause) => cause,
-            UpdateRuleGroupError::WAFInvalidOperation(ref cause) => cause,
-            UpdateRuleGroupError::WAFInvalidParameter(ref cause) => cause,
-            UpdateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateRuleGroupError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateRuleGroupError::WAFNonexistentItem(ref cause) => cause,
-            UpdateRuleGroupError::WAFStaleData(ref cause) => cause,
+            UpdateRuleGroupError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateRuleGroupError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRuleGroupError {}
 /// Errors returned by UpdateSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateSizeConstraintSetError {
@@ -7067,24 +6795,22 @@ impl UpdateSizeConstraintSetError {
 }
 impl fmt::Display for UpdateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSizeConstraintSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSizeConstraintSetError::WAFInternalError(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFReferencedItem(ref cause) => cause,
-            UpdateSizeConstraintSetError::WAFStaleData(ref cause) => cause,
+            UpdateSizeConstraintSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFNonexistentContainer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSizeConstraintSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateSizeConstraintSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSizeConstraintSetError {}
 /// Errors returned by UpdateSqlInjectionMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateSqlInjectionMatchSetError {
@@ -7161,23 +6887,27 @@ impl UpdateSqlInjectionMatchSetError {
 }
 impl fmt::Display for UpdateSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSqlInjectionMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSqlInjectionMatchSetError::WAFInternalError(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateSqlInjectionMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateSqlInjectionMatchSetError::WAFInvalidOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSqlInjectionMatchSetError::WAFInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSqlInjectionMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSqlInjectionMatchSetError {}
 /// Errors returned by UpdateWebACL
 #[derive(Debug, PartialEq)]
 pub enum UpdateWebACLError {
@@ -7250,25 +6980,21 @@ impl UpdateWebACLError {
 }
 impl fmt::Display for UpdateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWebACLError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWebACLError::WAFInternalError(ref cause) => cause,
-            UpdateWebACLError::WAFInvalidAccount(ref cause) => cause,
-            UpdateWebACLError::WAFInvalidOperation(ref cause) => cause,
-            UpdateWebACLError::WAFInvalidParameter(ref cause) => cause,
-            UpdateWebACLError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateWebACLError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateWebACLError::WAFNonexistentItem(ref cause) => cause,
-            UpdateWebACLError::WAFReferencedItem(ref cause) => cause,
-            UpdateWebACLError::WAFStaleData(ref cause) => cause,
-            UpdateWebACLError::WAFSubscriptionNotFound(ref cause) => cause,
+            UpdateWebACLError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFReferencedItem(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFStaleData(ref cause) => write!(f, "{}", cause),
+            UpdateWebACLError::WAFSubscriptionNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWebACLError {}
 /// Errors returned by UpdateXssMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateXssMatchSetError {
@@ -7335,23 +7061,19 @@ impl UpdateXssMatchSetError {
 }
 impl fmt::Display for UpdateXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateXssMatchSetError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateXssMatchSetError::WAFInternalError(ref cause) => cause,
-            UpdateXssMatchSetError::WAFInvalidAccount(ref cause) => cause,
-            UpdateXssMatchSetError::WAFInvalidOperation(ref cause) => cause,
-            UpdateXssMatchSetError::WAFInvalidParameter(ref cause) => cause,
-            UpdateXssMatchSetError::WAFLimitsExceeded(ref cause) => cause,
-            UpdateXssMatchSetError::WAFNonexistentContainer(ref cause) => cause,
-            UpdateXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            UpdateXssMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateXssMatchSetError::WAFInternalError(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFInvalidAccount(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFInvalidOperation(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFInvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFLimitsExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFNonexistentContainer(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFNonexistentItem(ref cause) => write!(f, "{}", cause),
+            UpdateXssMatchSetError::WAFStaleData(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateXssMatchSetError {}
 /// Trait representing the capabilities of the WAF Regional API. WAF Regional clients implement this trait.
 pub trait WAFRegional {
     /// <p>Associates a web ACL with a resource, either an application load balancer or Amazon API Gateway stage.</p>

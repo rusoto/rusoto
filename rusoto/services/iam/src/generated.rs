@@ -11001,19 +11001,23 @@ impl AddClientIDToOpenIDConnectProviderError {
 }
 impl fmt::Display for AddClientIDToOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddClientIDToOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AddClientIDToOpenIDConnectProviderError {}
 /// Errors returned by AddRoleToInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum AddRoleToInstanceProfileError {
@@ -11081,20 +11085,16 @@ impl AddRoleToInstanceProfileError {
 }
 impl fmt::Display for AddRoleToInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddRoleToInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
-            AddRoleToInstanceProfileError::LimitExceeded(ref cause) => cause,
-            AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            AddRoleToInstanceProfileError::ServiceFailure(ref cause) => cause,
-            AddRoleToInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
+            AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            AddRoleToInstanceProfileError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddRoleToInstanceProfileError {}
 /// Errors returned by AddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AddUserToGroupError {
@@ -11146,18 +11146,14 @@ impl AddUserToGroupError {
 }
 impl fmt::Display for AddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddUserToGroupError {
-    fn description(&self) -> &str {
         match *self {
-            AddUserToGroupError::LimitExceeded(ref cause) => cause,
-            AddUserToGroupError::NoSuchEntity(ref cause) => cause,
-            AddUserToGroupError::ServiceFailure(ref cause) => cause,
+            AddUserToGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddUserToGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AddUserToGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddUserToGroupError {}
 /// Errors returned by AttachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachGroupPolicyError {
@@ -11223,20 +11219,16 @@ impl AttachGroupPolicyError {
 }
 impl fmt::Display for AttachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachGroupPolicyError::InvalidInput(ref cause) => cause,
-            AttachGroupPolicyError::LimitExceeded(ref cause) => cause,
-            AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            AttachGroupPolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachGroupPolicyError::ServiceFailure(ref cause) => cause,
+            AttachGroupPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachGroupPolicyError {}
 /// Errors returned by AttachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachRolePolicyError {
@@ -11309,21 +11301,17 @@ impl AttachRolePolicyError {
 }
 impl fmt::Display for AttachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachRolePolicyError::InvalidInput(ref cause) => cause,
-            AttachRolePolicyError::LimitExceeded(ref cause) => cause,
-            AttachRolePolicyError::NoSuchEntity(ref cause) => cause,
-            AttachRolePolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachRolePolicyError::ServiceFailure(ref cause) => cause,
-            AttachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            AttachRolePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            AttachRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachRolePolicyError {}
 /// Errors returned by AttachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachUserPolicyError {
@@ -11389,20 +11377,16 @@ impl AttachUserPolicyError {
 }
 impl fmt::Display for AttachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            AttachUserPolicyError::InvalidInput(ref cause) => cause,
-            AttachUserPolicyError::LimitExceeded(ref cause) => cause,
-            AttachUserPolicyError::NoSuchEntity(ref cause) => cause,
-            AttachUserPolicyError::PolicyNotAttachable(ref cause) => cause,
-            AttachUserPolicyError::ServiceFailure(ref cause) => cause,
+            AttachUserPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::PolicyNotAttachable(ref cause) => write!(f, "{}", cause),
+            AttachUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachUserPolicyError {}
 /// Errors returned by ChangePassword
 #[derive(Debug, PartialEq)]
 pub enum ChangePasswordError {
@@ -11477,21 +11461,17 @@ impl ChangePasswordError {
 }
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ChangePasswordError {
-    fn description(&self) -> &str {
         match *self {
-            ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            ChangePasswordError::InvalidUserType(ref cause) => cause,
-            ChangePasswordError::LimitExceeded(ref cause) => cause,
-            ChangePasswordError::NoSuchEntity(ref cause) => cause,
-            ChangePasswordError::PasswordPolicyViolation(ref cause) => cause,
-            ChangePasswordError::ServiceFailure(ref cause) => cause,
+            ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::InvalidUserType(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            ChangePasswordError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ChangePasswordError {}
 /// Errors returned by CreateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum CreateAccessKeyError {
@@ -11543,18 +11523,14 @@ impl CreateAccessKeyError {
 }
 impl fmt::Display for CreateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccessKeyError::LimitExceeded(ref cause) => cause,
-            CreateAccessKeyError::NoSuchEntity(ref cause) => cause,
-            CreateAccessKeyError::ServiceFailure(ref cause) => cause,
+            CreateAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccessKeyError {}
 /// Errors returned by CreateAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAccountAliasError {
@@ -11606,18 +11582,14 @@ impl CreateAccountAliasError {
 }
 impl fmt::Display for CreateAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAccountAliasError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAccountAliasError::EntityAlreadyExists(ref cause) => cause,
-            CreateAccountAliasError::LimitExceeded(ref cause) => cause,
-            CreateAccountAliasError::ServiceFailure(ref cause) => cause,
+            CreateAccountAliasError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateAccountAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAccountAliasError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAccountAliasError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -11676,19 +11648,15 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGroupError::EntityAlreadyExists(ref cause) => cause,
-            CreateGroupError::LimitExceeded(ref cause) => cause,
-            CreateGroupError::NoSuchEntity(ref cause) => cause,
-            CreateGroupError::ServiceFailure(ref cause) => cause,
+            CreateGroupError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGroupError {}
 /// Errors returned by CreateInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceProfileError {
@@ -11740,18 +11708,14 @@ impl CreateInstanceProfileError {
 }
 impl fmt::Display for CreateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
-            CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
-            CreateInstanceProfileError::ServiceFailure(ref cause) => cause,
+            CreateInstanceProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateInstanceProfileError {}
 /// Errors returned by CreateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateLoginProfileError {
@@ -11817,20 +11781,16 @@ impl CreateLoginProfileError {
 }
 impl fmt::Display for CreateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoginProfileError::EntityAlreadyExists(ref cause) => cause,
-            CreateLoginProfileError::LimitExceeded(ref cause) => cause,
-            CreateLoginProfileError::NoSuchEntity(ref cause) => cause,
-            CreateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
-            CreateLoginProfileError::ServiceFailure(ref cause) => cause,
+            CreateLoginProfileError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            CreateLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoginProfileError {}
 /// Errors returned by CreateOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateOpenIDConnectProviderError {
@@ -11893,19 +11853,17 @@ impl CreateOpenIDConnectProviderError {
 }
 impl fmt::Display for CreateOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => cause,
-            CreateOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
-            CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOpenIDConnectProviderError {}
 /// Errors returned by CreatePolicy
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyError {
@@ -11971,20 +11929,16 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyError::EntityAlreadyExists(ref cause) => cause,
-            CreatePolicyError::InvalidInput(ref cause) => cause,
-            CreatePolicyError::LimitExceeded(ref cause) => cause,
-            CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            CreatePolicyError::ServiceFailure(ref cause) => cause,
+            CreatePolicyError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreatePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyError {}
 /// Errors returned by CreatePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreatePolicyVersionError {
@@ -12050,20 +12004,16 @@ impl CreatePolicyVersionError {
 }
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreatePolicyVersionError::InvalidInput(ref cause) => cause,
-            CreatePolicyVersionError::LimitExceeded(ref cause) => cause,
-            CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => cause,
-            CreatePolicyVersionError::NoSuchEntity(ref cause) => cause,
-            CreatePolicyVersionError::ServiceFailure(ref cause) => cause,
+            CreatePolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreatePolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreatePolicyVersionError {}
 /// Errors returned by CreateRole
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleError {
@@ -12136,21 +12086,17 @@ impl CreateRoleError {
 }
 impl fmt::Display for CreateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRoleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRoleError::ConcurrentModification(ref cause) => cause,
-            CreateRoleError::EntityAlreadyExists(ref cause) => cause,
-            CreateRoleError::InvalidInput(ref cause) => cause,
-            CreateRoleError::LimitExceeded(ref cause) => cause,
-            CreateRoleError::MalformedPolicyDocument(ref cause) => cause,
-            CreateRoleError::ServiceFailure(ref cause) => cause,
+            CreateRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            CreateRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRoleError {}
 /// Errors returned by CreateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum CreateSAMLProviderError {
@@ -12209,19 +12155,15 @@ impl CreateSAMLProviderError {
 }
 impl fmt::Display for CreateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSAMLProviderError::EntityAlreadyExists(ref cause) => cause,
-            CreateSAMLProviderError::InvalidInput(ref cause) => cause,
-            CreateSAMLProviderError::LimitExceeded(ref cause) => cause,
-            CreateSAMLProviderError::ServiceFailure(ref cause) => cause,
+            CreateSAMLProviderError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSAMLProviderError {}
 /// Errors returned by CreateServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceLinkedRoleError {
@@ -12280,19 +12222,15 @@ impl CreateServiceLinkedRoleError {
 }
 impl fmt::Display for CreateServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceLinkedRoleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceLinkedRoleError::InvalidInput(ref cause) => cause,
-            CreateServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
-            CreateServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
-            CreateServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
+            CreateServiceLinkedRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateServiceLinkedRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServiceLinkedRoleError {}
 /// Errors returned by CreateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceSpecificCredentialError {
@@ -12352,18 +12290,18 @@ impl CreateServiceSpecificCredentialError {
 }
 impl fmt::Display for CreateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => cause,
-            CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
-            CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => cause,
+            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateServiceSpecificCredentialError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -12436,21 +12374,17 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::ConcurrentModification(ref cause) => cause,
-            CreateUserError::EntityAlreadyExists(ref cause) => cause,
-            CreateUserError::InvalidInput(ref cause) => cause,
-            CreateUserError::LimitExceeded(ref cause) => cause,
-            CreateUserError::NoSuchEntity(ref cause) => cause,
-            CreateUserError::ServiceFailure(ref cause) => cause,
+            CreateUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateUserError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            CreateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by CreateVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualMFADeviceError {
@@ -12502,18 +12436,14 @@ impl CreateVirtualMFADeviceError {
 }
 impl fmt::Display for CreateVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateVirtualMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => cause,
-            CreateVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
-            CreateVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+            CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateVirtualMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateVirtualMFADeviceError {}
 /// Errors returned by DeactivateMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeactivateMFADeviceError {
@@ -12574,19 +12504,17 @@ impl DeactivateMFADeviceError {
 }
 impl fmt::Display for DeactivateMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeactivateMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            DeactivateMFADeviceError::LimitExceeded(ref cause) => cause,
-            DeactivateMFADeviceError::NoSuchEntity(ref cause) => cause,
-            DeactivateMFADeviceError::ServiceFailure(ref cause) => cause,
+            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeactivateMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeactivateMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeactivateMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeactivateMFADeviceError {}
 /// Errors returned by DeleteAccessKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccessKeyError {
@@ -12638,18 +12566,14 @@ impl DeleteAccessKeyError {
 }
 impl fmt::Display for DeleteAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccessKeyError::LimitExceeded(ref cause) => cause,
-            DeleteAccessKeyError::NoSuchEntity(ref cause) => cause,
-            DeleteAccessKeyError::ServiceFailure(ref cause) => cause,
+            DeleteAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccessKeyError {}
 /// Errors returned by DeleteAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAliasError {
@@ -12701,18 +12625,14 @@ impl DeleteAccountAliasError {
 }
 impl fmt::Display for DeleteAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountAliasError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountAliasError::LimitExceeded(ref cause) => cause,
-            DeleteAccountAliasError::NoSuchEntity(ref cause) => cause,
-            DeleteAccountAliasError::ServiceFailure(ref cause) => cause,
+            DeleteAccountAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccountAliasError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccountAliasError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountAliasError {}
 /// Errors returned by DeleteAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountPasswordPolicyError {
@@ -12766,18 +12686,14 @@ impl DeleteAccountPasswordPolicyError {
 }
 impl fmt::Display for DeleteAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAccountPasswordPolicyError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -12836,19 +12752,15 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupError::DeleteConflict(ref cause) => cause,
-            DeleteGroupError::LimitExceeded(ref cause) => cause,
-            DeleteGroupError::NoSuchEntity(ref cause) => cause,
-            DeleteGroupError::ServiceFailure(ref cause) => cause,
+            DeleteGroupError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupError {}
 /// Errors returned by DeleteGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupPolicyError {
@@ -12900,18 +12812,14 @@ impl DeleteGroupPolicyError {
 }
 impl fmt::Display for DeleteGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGroupPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteGroupPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGroupPolicyError {}
 /// Errors returned by DeleteInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceProfileError {
@@ -12970,19 +12878,15 @@ impl DeleteInstanceProfileError {
 }
 impl fmt::Display for DeleteInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteInstanceProfileError::DeleteConflict(ref cause) => cause,
-            DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
-            DeleteInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            DeleteInstanceProfileError::ServiceFailure(ref cause) => cause,
+            DeleteInstanceProfileError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteInstanceProfileError {}
 /// Errors returned by DeleteLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoginProfileError {
@@ -13043,19 +12947,17 @@ impl DeleteLoginProfileError {
 }
 impl fmt::Display for DeleteLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            DeleteLoginProfileError::LimitExceeded(ref cause) => cause,
-            DeleteLoginProfileError::NoSuchEntity(ref cause) => cause,
-            DeleteLoginProfileError::ServiceFailure(ref cause) => cause,
+            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoginProfileError {}
 /// Errors returned by DeleteOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteOpenIDConnectProviderError {
@@ -13109,18 +13011,14 @@ impl DeleteOpenIDConnectProviderError {
 }
 impl fmt::Display for DeleteOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteOpenIDConnectProviderError {}
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
@@ -13186,20 +13084,16 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::DeleteConflict(ref cause) => cause,
-            DeletePolicyError::InvalidInput(ref cause) => cause,
-            DeletePolicyError::LimitExceeded(ref cause) => cause,
-            DeletePolicyError::NoSuchEntity(ref cause) => cause,
-            DeletePolicyError::ServiceFailure(ref cause) => cause,
+            DeletePolicyError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyError {}
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
@@ -13265,20 +13159,16 @@ impl DeletePolicyVersionError {
 }
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyVersionError::DeleteConflict(ref cause) => cause,
-            DeletePolicyVersionError::InvalidInput(ref cause) => cause,
-            DeletePolicyVersionError::LimitExceeded(ref cause) => cause,
-            DeletePolicyVersionError::NoSuchEntity(ref cause) => cause,
-            DeletePolicyVersionError::ServiceFailure(ref cause) => cause,
+            DeletePolicyVersionError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeletePolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyVersionError {}
 /// Errors returned by DeleteRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoleError {
@@ -13351,21 +13241,17 @@ impl DeleteRoleError {
 }
 impl fmt::Display for DeleteRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRoleError::ConcurrentModification(ref cause) => cause,
-            DeleteRoleError::DeleteConflict(ref cause) => cause,
-            DeleteRoleError::LimitExceeded(ref cause) => cause,
-            DeleteRoleError::NoSuchEntity(ref cause) => cause,
-            DeleteRoleError::ServiceFailure(ref cause) => cause,
-            DeleteRoleError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRoleError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRoleError {}
 /// Errors returned by DeleteRolePermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePermissionsBoundaryError {
@@ -13423,18 +13309,16 @@ impl DeleteRolePermissionsBoundaryError {
 }
 impl fmt::Display for DeleteRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRolePermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteRolePermissionsBoundaryError {}
 /// Errors returned by DeleteRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePolicyError {
@@ -13493,19 +13377,15 @@ impl DeleteRolePolicyError {
 }
 impl fmt::Display for DeleteRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRolePolicyError::LimitExceeded(ref cause) => cause,
-            DeleteRolePolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteRolePolicyError::ServiceFailure(ref cause) => cause,
-            DeleteRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            DeleteRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRolePolicyError {}
 /// Errors returned by DeleteSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum DeleteSAMLProviderError {
@@ -13564,19 +13444,15 @@ impl DeleteSAMLProviderError {
 }
 impl fmt::Display for DeleteSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSAMLProviderError::InvalidInput(ref cause) => cause,
-            DeleteSAMLProviderError::LimitExceeded(ref cause) => cause,
-            DeleteSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            DeleteSAMLProviderError::ServiceFailure(ref cause) => cause,
+            DeleteSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSAMLProviderError {}
 /// Errors returned by DeleteSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSSHPublicKeyError {
@@ -13614,16 +13490,12 @@ impl DeleteSSHPublicKeyError {
 }
 impl fmt::Display for DeleteSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSSHPublicKeyError {}
 /// Errors returned by DeleteServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerCertificateError {
@@ -13682,19 +13554,15 @@ impl DeleteServerCertificateError {
 }
 impl fmt::Display for DeleteServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerCertificateError::DeleteConflict(ref cause) => cause,
-            DeleteServerCertificateError::LimitExceeded(ref cause) => cause,
-            DeleteServerCertificateError::NoSuchEntity(ref cause) => cause,
-            DeleteServerCertificateError::ServiceFailure(ref cause) => cause,
+            DeleteServerCertificateError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerCertificateError {}
 /// Errors returned by DeleteServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceLinkedRoleError {
@@ -13746,18 +13614,14 @@ impl DeleteServiceLinkedRoleError {
 }
 impl fmt::Display for DeleteServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceLinkedRoleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
-            DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
-            DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
+            DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceLinkedRoleError {}
 /// Errors returned by DeleteServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceSpecificCredentialError {
@@ -13799,16 +13663,12 @@ impl DeleteServiceSpecificCredentialError {
 }
 impl fmt::Display for DeleteServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServiceSpecificCredentialError {}
 /// Errors returned by DeleteSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteSigningCertificateError {
@@ -13860,18 +13720,14 @@ impl DeleteSigningCertificateError {
 }
 impl fmt::Display for DeleteSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSigningCertificateError::LimitExceeded(ref cause) => cause,
-            DeleteSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            DeleteSigningCertificateError::ServiceFailure(ref cause) => cause,
+            DeleteSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSigningCertificateError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -13937,20 +13793,16 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::ConcurrentModification(ref cause) => cause,
-            DeleteUserError::DeleteConflict(ref cause) => cause,
-            DeleteUserError::LimitExceeded(ref cause) => cause,
-            DeleteUserError::NoSuchEntity(ref cause) => cause,
-            DeleteUserError::ServiceFailure(ref cause) => cause,
+            DeleteUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DeleteUserPermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPermissionsBoundaryError {
@@ -13999,17 +13851,13 @@ impl DeleteUserPermissionsBoundaryError {
 }
 impl fmt::Display for DeleteUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPermissionsBoundaryError {}
 /// Errors returned by DeleteUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPolicyError {
@@ -14061,18 +13909,14 @@ impl DeleteUserPolicyError {
 }
 impl fmt::Display for DeleteUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserPolicyError::LimitExceeded(ref cause) => cause,
-            DeleteUserPolicyError::NoSuchEntity(ref cause) => cause,
-            DeleteUserPolicyError::ServiceFailure(ref cause) => cause,
+            DeleteUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserPolicyError {}
 /// Errors returned by DeleteVirtualMFADevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualMFADeviceError {
@@ -14131,19 +13975,15 @@ impl DeleteVirtualMFADeviceError {
 }
 impl fmt::Display for DeleteVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteVirtualMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => cause,
-            DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
-            DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => cause,
-            DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+            DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteVirtualMFADeviceError {}
 /// Errors returned by DetachGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachGroupPolicyError {
@@ -14202,19 +14042,15 @@ impl DetachGroupPolicyError {
 }
 impl fmt::Display for DetachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachGroupPolicyError::InvalidInput(ref cause) => cause,
-            DetachGroupPolicyError::LimitExceeded(ref cause) => cause,
-            DetachGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            DetachGroupPolicyError::ServiceFailure(ref cause) => cause,
+            DetachGroupPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachGroupPolicyError {}
 /// Errors returned by DetachRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachRolePolicyError {
@@ -14280,20 +14116,16 @@ impl DetachRolePolicyError {
 }
 impl fmt::Display for DetachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachRolePolicyError::InvalidInput(ref cause) => cause,
-            DetachRolePolicyError::LimitExceeded(ref cause) => cause,
-            DetachRolePolicyError::NoSuchEntity(ref cause) => cause,
-            DetachRolePolicyError::ServiceFailure(ref cause) => cause,
-            DetachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            DetachRolePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DetachRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachRolePolicyError {}
 /// Errors returned by DetachUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachUserPolicyError {
@@ -14352,19 +14184,15 @@ impl DetachUserPolicyError {
 }
 impl fmt::Display for DetachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DetachUserPolicyError::InvalidInput(ref cause) => cause,
-            DetachUserPolicyError::LimitExceeded(ref cause) => cause,
-            DetachUserPolicyError::NoSuchEntity(ref cause) => cause,
-            DetachUserPolicyError::ServiceFailure(ref cause) => cause,
+            DetachUserPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            DetachUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachUserPolicyError {}
 /// Errors returned by EnableMFADevice
 #[derive(Debug, PartialEq)]
 pub enum EnableMFADeviceError {
@@ -14439,21 +14267,19 @@ impl EnableMFADeviceError {
 }
 impl fmt::Display for EnableMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            EnableMFADeviceError::EntityAlreadyExists(ref cause) => cause,
-            EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
-            EnableMFADeviceError::LimitExceeded(ref cause) => cause,
-            EnableMFADeviceError::NoSuchEntity(ref cause) => cause,
-            EnableMFADeviceError::ServiceFailure(ref cause) => cause,
+            EnableMFADeviceError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            EnableMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableMFADeviceError {}
 /// Errors returned by GenerateCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateCredentialReportError {
@@ -14498,17 +14324,13 @@ impl GenerateCredentialReportError {
 }
 impl fmt::Display for GenerateCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateCredentialReportError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateCredentialReportError::LimitExceeded(ref cause) => cause,
-            GenerateCredentialReportError::ServiceFailure(ref cause) => cause,
+            GenerateCredentialReportError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GenerateCredentialReportError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GenerateCredentialReportError {}
 /// Errors returned by GenerateOrganizationsAccessReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateOrganizationsAccessReportError {
@@ -14550,18 +14372,14 @@ impl GenerateOrganizationsAccessReportError {
 }
 impl fmt::Display for GenerateOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateOrganizationsAccessReportError {
-    fn description(&self) -> &str {
         match *self {
             GenerateOrganizationsAccessReportError::ReportGenerationLimitExceeded(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for GenerateOrganizationsAccessReportError {}
 /// Errors returned by GenerateServiceLastAccessedDetails
 #[derive(Debug, PartialEq)]
 pub enum GenerateServiceLastAccessedDetailsError {
@@ -14612,17 +14430,17 @@ impl GenerateServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GenerateServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GenerateServiceLastAccessedDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
-            GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GenerateServiceLastAccessedDetailsError {}
 /// Errors returned by GetAccessKeyLastUsed
 #[derive(Debug, PartialEq)]
 pub enum GetAccessKeyLastUsedError {}
@@ -14652,14 +14470,10 @@ impl GetAccessKeyLastUsedError {
 }
 impl fmt::Display for GetAccessKeyLastUsedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccessKeyLastUsedError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetAccessKeyLastUsedError {}
 /// Errors returned by GetAccountAuthorizationDetails
 #[derive(Debug, PartialEq)]
 pub enum GetAccountAuthorizationDetailsError {
@@ -14701,16 +14515,14 @@ impl GetAccountAuthorizationDetailsError {
 }
 impl fmt::Display for GetAccountAuthorizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountAuthorizationDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => cause,
+            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetAccountAuthorizationDetailsError {}
 /// Errors returned by GetAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetAccountPasswordPolicyError {
@@ -14755,17 +14567,13 @@ impl GetAccountPasswordPolicyError {
 }
 impl fmt::Display for GetAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            GetAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountPasswordPolicyError {}
 /// Errors returned by GetAccountSummary
 #[derive(Debug, PartialEq)]
 pub enum GetAccountSummaryError {
@@ -14803,16 +14611,12 @@ impl GetAccountSummaryError {
 }
 impl fmt::Display for GetAccountSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetAccountSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            GetAccountSummaryError::ServiceFailure(ref cause) => cause,
+            GetAccountSummaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetAccountSummaryError {}
 /// Errors returned by GetContextKeysForCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForCustomPolicyError {
@@ -14852,16 +14656,12 @@ impl GetContextKeysForCustomPolicyError {
 }
 impl fmt::Display for GetContextKeysForCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContextKeysForCustomPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => cause,
+            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContextKeysForCustomPolicyError {}
 /// Errors returned by GetContextKeysForPrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContextKeysForPrincipalPolicyError {
@@ -14912,17 +14712,17 @@ impl GetContextKeysForPrincipalPolicyError {
 }
 impl fmt::Display for GetContextKeysForPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContextKeysForPrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => cause,
-            GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => cause,
+            GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetContextKeysForPrincipalPolicyError {}
 /// Errors returned by GetCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GetCredentialReportError {
@@ -14985,19 +14785,17 @@ impl GetCredentialReportError {
 }
 impl fmt::Display for GetCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCredentialReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetCredentialReportError::CredentialReportExpired(ref cause) => cause,
-            GetCredentialReportError::CredentialReportNotPresent(ref cause) => cause,
-            GetCredentialReportError::CredentialReportNotReady(ref cause) => cause,
-            GetCredentialReportError::ServiceFailure(ref cause) => cause,
+            GetCredentialReportError::CredentialReportExpired(ref cause) => write!(f, "{}", cause),
+            GetCredentialReportError::CredentialReportNotPresent(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCredentialReportError::CredentialReportNotReady(ref cause) => write!(f, "{}", cause),
+            GetCredentialReportError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCredentialReportError {}
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
@@ -15042,17 +14840,13 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupError::NoSuchEntity(ref cause) => cause,
-            GetGroupError::ServiceFailure(ref cause) => cause,
+            GetGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupError {}
 /// Errors returned by GetGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetGroupPolicyError {
@@ -15097,17 +14891,13 @@ impl GetGroupPolicyError {
 }
 impl fmt::Display for GetGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            GetGroupPolicyError::ServiceFailure(ref cause) => cause,
+            GetGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGroupPolicyError {}
 /// Errors returned by GetInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceProfileError {
@@ -15152,17 +14942,13 @@ impl GetInstanceProfileError {
 }
 impl fmt::Display for GetInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            GetInstanceProfileError::ServiceFailure(ref cause) => cause,
+            GetInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetInstanceProfileError {}
 /// Errors returned by GetLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum GetLoginProfileError {
@@ -15207,17 +14993,13 @@ impl GetLoginProfileError {
 }
 impl fmt::Display for GetLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            GetLoginProfileError::NoSuchEntity(ref cause) => cause,
-            GetLoginProfileError::ServiceFailure(ref cause) => cause,
+            GetLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLoginProfileError {}
 /// Errors returned by GetOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum GetOpenIDConnectProviderError {
@@ -15269,18 +15051,14 @@ impl GetOpenIDConnectProviderError {
 }
 impl fmt::Display for GetOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            GetOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            GetOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            GetOpenIDConnectProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetOpenIDConnectProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOpenIDConnectProviderError {}
 /// Errors returned by GetOrganizationsAccessReport
 #[derive(Debug, PartialEq)]
 pub enum GetOrganizationsAccessReportError {
@@ -15320,16 +15098,12 @@ impl GetOrganizationsAccessReportError {
 }
 impl fmt::Display for GetOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetOrganizationsAccessReportError {
-    fn description(&self) -> &str {
         match *self {
-            GetOrganizationsAccessReportError::NoSuchEntity(ref cause) => cause,
+            GetOrganizationsAccessReportError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetOrganizationsAccessReportError {}
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
@@ -15381,18 +15155,14 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyError::InvalidInput(ref cause) => cause,
-            GetPolicyError::NoSuchEntity(ref cause) => cause,
-            GetPolicyError::ServiceFailure(ref cause) => cause,
+            GetPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyError {}
 /// Errors returned by GetPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyVersionError {
@@ -15444,18 +15214,14 @@ impl GetPolicyVersionError {
 }
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            GetPolicyVersionError::InvalidInput(ref cause) => cause,
-            GetPolicyVersionError::NoSuchEntity(ref cause) => cause,
-            GetPolicyVersionError::ServiceFailure(ref cause) => cause,
+            GetPolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetPolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPolicyVersionError {}
 /// Errors returned by GetRole
 #[derive(Debug, PartialEq)]
 pub enum GetRoleError {
@@ -15500,17 +15266,13 @@ impl GetRoleError {
 }
 impl fmt::Display for GetRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRoleError {
-    fn description(&self) -> &str {
         match *self {
-            GetRoleError::NoSuchEntity(ref cause) => cause,
-            GetRoleError::ServiceFailure(ref cause) => cause,
+            GetRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRoleError {}
 /// Errors returned by GetRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRolePolicyError {
@@ -15555,17 +15317,13 @@ impl GetRolePolicyError {
 }
 impl fmt::Display for GetRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetRolePolicyError::NoSuchEntity(ref cause) => cause,
-            GetRolePolicyError::ServiceFailure(ref cause) => cause,
+            GetRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRolePolicyError {}
 /// Errors returned by GetSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum GetSAMLProviderError {
@@ -15617,18 +15375,14 @@ impl GetSAMLProviderError {
 }
 impl fmt::Display for GetSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            GetSAMLProviderError::InvalidInput(ref cause) => cause,
-            GetSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            GetSAMLProviderError::ServiceFailure(ref cause) => cause,
+            GetSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSAMLProviderError {}
 /// Errors returned by GetSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetSSHPublicKeyError {
@@ -15675,17 +15429,15 @@ impl GetSSHPublicKeyError {
 }
 impl fmt::Display for GetSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            GetSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+            GetSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetSSHPublicKeyError {}
 /// Errors returned by GetServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetServerCertificateError {
@@ -15730,17 +15482,13 @@ impl GetServerCertificateError {
 }
 impl fmt::Display for GetServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            GetServerCertificateError::NoSuchEntity(ref cause) => cause,
-            GetServerCertificateError::ServiceFailure(ref cause) => cause,
+            GetServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServerCertificateError {}
 /// Errors returned by GetServiceLastAccessedDetails
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLastAccessedDetailsError {
@@ -15787,17 +15535,13 @@ impl GetServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLastAccessedDetailsError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
-            GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetServiceLastAccessedDetailsError {}
 /// Errors returned by GetServiceLastAccessedDetailsWithEntities
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLastAccessedDetailsWithEntitiesError {
@@ -15848,17 +15592,17 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsWithEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => cause,
-            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetServiceLastAccessedDetailsWithEntitiesError {}
 /// Errors returned by GetServiceLinkedRoleDeletionStatus
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLinkedRoleDeletionStatusError {
@@ -15918,18 +15662,20 @@ impl GetServiceLinkedRoleDeletionStatusError {
 }
 impl fmt::Display for GetServiceLinkedRoleDeletionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetServiceLinkedRoleDeletionStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetServiceLinkedRoleDeletionStatusError {}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
@@ -15974,17 +15720,13 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserError::NoSuchEntity(ref cause) => cause,
-            GetUserError::ServiceFailure(ref cause) => cause,
+            GetUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserError {}
 /// Errors returned by GetUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetUserPolicyError {
@@ -16029,17 +15771,13 @@ impl GetUserPolicyError {
 }
 impl fmt::Display for GetUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            GetUserPolicyError::NoSuchEntity(ref cause) => cause,
-            GetUserPolicyError::ServiceFailure(ref cause) => cause,
+            GetUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            GetUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetUserPolicyError {}
 /// Errors returned by ListAccessKeys
 #[derive(Debug, PartialEq)]
 pub enum ListAccessKeysError {
@@ -16084,17 +15822,13 @@ impl ListAccessKeysError {
 }
 impl fmt::Display for ListAccessKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccessKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccessKeysError::NoSuchEntity(ref cause) => cause,
-            ListAccessKeysError::ServiceFailure(ref cause) => cause,
+            ListAccessKeysError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAccessKeysError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccessKeysError {}
 /// Errors returned by ListAccountAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAccountAliasesError {
@@ -16132,16 +15866,12 @@ impl ListAccountAliasesError {
 }
 impl fmt::Display for ListAccountAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAccountAliasesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAccountAliasesError::ServiceFailure(ref cause) => cause,
+            ListAccountAliasesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAccountAliasesError {}
 /// Errors returned by ListAttachedGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedGroupPoliciesError {
@@ -16193,18 +15923,14 @@ impl ListAttachedGroupPoliciesError {
 }
 impl fmt::Display for ListAttachedGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedGroupPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedGroupPoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedGroupPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedGroupPoliciesError {}
 /// Errors returned by ListAttachedRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedRolePoliciesError {
@@ -16256,18 +15982,14 @@ impl ListAttachedRolePoliciesError {
 }
 impl fmt::Display for ListAttachedRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedRolePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedRolePoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedRolePoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedRolePoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedRolePoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedRolePoliciesError {}
 /// Errors returned by ListAttachedUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedUserPoliciesError {
@@ -16319,18 +16041,14 @@ impl ListAttachedUserPoliciesError {
 }
 impl fmt::Display for ListAttachedUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAttachedUserPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListAttachedUserPoliciesError::InvalidInput(ref cause) => cause,
-            ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListAttachedUserPoliciesError::ServiceFailure(ref cause) => cause,
+            ListAttachedUserPoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListAttachedUserPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListAttachedUserPoliciesError {}
 /// Errors returned by ListEntitiesForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesForPolicyError {
@@ -16382,18 +16100,14 @@ impl ListEntitiesForPolicyError {
 }
 impl fmt::Display for ListEntitiesForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEntitiesForPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ListEntitiesForPolicyError::InvalidInput(ref cause) => cause,
-            ListEntitiesForPolicyError::NoSuchEntity(ref cause) => cause,
-            ListEntitiesForPolicyError::ServiceFailure(ref cause) => cause,
+            ListEntitiesForPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListEntitiesForPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListEntitiesForPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListEntitiesForPolicyError {}
 /// Errors returned by ListGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListGroupPoliciesError {
@@ -16438,17 +16152,13 @@ impl ListGroupPoliciesError {
 }
 impl fmt::Display for ListGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListGroupPoliciesError::ServiceFailure(ref cause) => cause,
+            ListGroupPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListGroupPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupPoliciesError {}
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
@@ -16486,16 +16196,12 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsError::ServiceFailure(ref cause) => cause,
+            ListGroupsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsError {}
 /// Errors returned by ListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsForUserError {
@@ -16540,17 +16246,13 @@ impl ListGroupsForUserError {
 }
 impl fmt::Display for ListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGroupsForUserError {
-    fn description(&self) -> &str {
         match *self {
-            ListGroupsForUserError::NoSuchEntity(ref cause) => cause,
-            ListGroupsForUserError::ServiceFailure(ref cause) => cause,
+            ListGroupsForUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListGroupsForUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGroupsForUserError {}
 /// Errors returned by ListInstanceProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesError {
@@ -16588,16 +16290,12 @@ impl ListInstanceProfilesError {
 }
 impl fmt::Display for ListInstanceProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceProfilesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceProfilesError::ServiceFailure(ref cause) => cause,
+            ListInstanceProfilesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceProfilesError {}
 /// Errors returned by ListInstanceProfilesForRole
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesForRoleError {
@@ -16644,17 +16342,13 @@ impl ListInstanceProfilesForRoleError {
 }
 impl fmt::Display for ListInstanceProfilesForRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceProfilesForRoleError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => cause,
-            ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => cause,
+            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceProfilesForRoleError {}
 /// Errors returned by ListMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListMFADevicesError {
@@ -16699,17 +16393,13 @@ impl ListMFADevicesError {
 }
 impl fmt::Display for ListMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMFADevicesError {
-    fn description(&self) -> &str {
         match *self {
-            ListMFADevicesError::NoSuchEntity(ref cause) => cause,
-            ListMFADevicesError::ServiceFailure(ref cause) => cause,
+            ListMFADevicesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListMFADevicesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListMFADevicesError {}
 /// Errors returned by ListOpenIDConnectProviders
 #[derive(Debug, PartialEq)]
 pub enum ListOpenIDConnectProvidersError {
@@ -16749,16 +16439,12 @@ impl ListOpenIDConnectProvidersError {
 }
 impl fmt::Display for ListOpenIDConnectProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListOpenIDConnectProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => cause,
+            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListOpenIDConnectProvidersError {}
 /// Errors returned by ListPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesError {
@@ -16796,16 +16482,12 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesError::ServiceFailure(ref cause) => cause,
+            ListPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPoliciesError {}
 /// Errors returned by ListPoliciesGrantingServiceAccess
 #[derive(Debug, PartialEq)]
 pub enum ListPoliciesGrantingServiceAccessError {
@@ -16856,17 +16538,17 @@ impl ListPoliciesGrantingServiceAccessError {
 }
 impl fmt::Display for ListPoliciesGrantingServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPoliciesGrantingServiceAccessError {
-    fn description(&self) -> &str {
         match *self {
-            ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => cause,
-            ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListPoliciesGrantingServiceAccessError {}
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
@@ -16918,18 +16600,14 @@ impl ListPolicyVersionsError {
 }
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListPolicyVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListPolicyVersionsError::InvalidInput(ref cause) => cause,
-            ListPolicyVersionsError::NoSuchEntity(ref cause) => cause,
-            ListPolicyVersionsError::ServiceFailure(ref cause) => cause,
+            ListPolicyVersionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListPolicyVersionsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListPolicyVersionsError {}
 /// Errors returned by ListRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListRolePoliciesError {
@@ -16974,17 +16652,13 @@ impl ListRolePoliciesError {
 }
 impl fmt::Display for ListRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRolePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRolePoliciesError::NoSuchEntity(ref cause) => cause,
-            ListRolePoliciesError::ServiceFailure(ref cause) => cause,
+            ListRolePoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListRolePoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRolePoliciesError {}
 /// Errors returned by ListRoleTags
 #[derive(Debug, PartialEq)]
 pub enum ListRoleTagsError {
@@ -17029,17 +16703,13 @@ impl ListRoleTagsError {
 }
 impl fmt::Display for ListRoleTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRoleTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListRoleTagsError::NoSuchEntity(ref cause) => cause,
-            ListRoleTagsError::ServiceFailure(ref cause) => cause,
+            ListRoleTagsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListRoleTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRoleTagsError {}
 /// Errors returned by ListRoles
 #[derive(Debug, PartialEq)]
 pub enum ListRolesError {
@@ -17077,16 +16747,12 @@ impl ListRolesError {
 }
 impl fmt::Display for ListRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListRolesError {
-    fn description(&self) -> &str {
         match *self {
-            ListRolesError::ServiceFailure(ref cause) => cause,
+            ListRolesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListRolesError {}
 /// Errors returned by ListSAMLProviders
 #[derive(Debug, PartialEq)]
 pub enum ListSAMLProvidersError {
@@ -17124,16 +16790,12 @@ impl ListSAMLProvidersError {
 }
 impl fmt::Display for ListSAMLProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSAMLProvidersError {
-    fn description(&self) -> &str {
         match *self {
-            ListSAMLProvidersError::ServiceFailure(ref cause) => cause,
+            ListSAMLProvidersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSAMLProvidersError {}
 /// Errors returned by ListSSHPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListSSHPublicKeysError {
@@ -17171,16 +16833,12 @@ impl ListSSHPublicKeysError {
 }
 impl fmt::Display for ListSSHPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSSHPublicKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListSSHPublicKeysError::NoSuchEntity(ref cause) => cause,
+            ListSSHPublicKeysError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSSHPublicKeysError {}
 /// Errors returned by ListServerCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListServerCertificatesError {
@@ -17218,16 +16876,12 @@ impl ListServerCertificatesError {
 }
 impl fmt::Display for ListServerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListServerCertificatesError::ServiceFailure(ref cause) => cause,
+            ListServerCertificatesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListServerCertificatesError {}
 /// Errors returned by ListServiceSpecificCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListServiceSpecificCredentialsError {
@@ -17276,17 +16930,15 @@ impl ListServiceSpecificCredentialsError {
 }
 impl fmt::Display for ListServiceSpecificCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListServiceSpecificCredentialsError {
-    fn description(&self) -> &str {
         match *self {
-            ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => cause,
-            ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => cause,
+            ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListServiceSpecificCredentialsError {}
 /// Errors returned by ListSigningCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListSigningCertificatesError {
@@ -17331,17 +16983,13 @@ impl ListSigningCertificatesError {
 }
 impl fmt::Display for ListSigningCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSigningCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            ListSigningCertificatesError::NoSuchEntity(ref cause) => cause,
-            ListSigningCertificatesError::ServiceFailure(ref cause) => cause,
+            ListSigningCertificatesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListSigningCertificatesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSigningCertificatesError {}
 /// Errors returned by ListUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoliciesError {
@@ -17386,17 +17034,13 @@ impl ListUserPoliciesError {
 }
 impl fmt::Display for ListUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserPoliciesError::NoSuchEntity(ref cause) => cause,
-            ListUserPoliciesError::ServiceFailure(ref cause) => cause,
+            ListUserPoliciesError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListUserPoliciesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserPoliciesError {}
 /// Errors returned by ListUserTags
 #[derive(Debug, PartialEq)]
 pub enum ListUserTagsError {
@@ -17441,17 +17085,13 @@ impl ListUserTagsError {
 }
 impl fmt::Display for ListUserTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListUserTagsError::NoSuchEntity(ref cause) => cause,
-            ListUserTagsError::ServiceFailure(ref cause) => cause,
+            ListUserTagsError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ListUserTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUserTagsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -17489,16 +17129,12 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::ServiceFailure(ref cause) => cause,
+            ListUsersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by ListVirtualMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualMFADevicesError {}
@@ -17528,14 +17164,10 @@ impl ListVirtualMFADevicesError {
 }
 impl fmt::Display for ListVirtualMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListVirtualMFADevicesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListVirtualMFADevicesError {}
 /// Errors returned by PutGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutGroupPolicyError {
@@ -17594,19 +17226,15 @@ impl PutGroupPolicyError {
 }
 impl fmt::Display for PutGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutGroupPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutGroupPolicyError::LimitExceeded(ref cause) => cause,
-            PutGroupPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutGroupPolicyError::NoSuchEntity(ref cause) => cause,
-            PutGroupPolicyError::ServiceFailure(ref cause) => cause,
+            PutGroupPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutGroupPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutGroupPolicyError {}
 /// Errors returned by PutRolePermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum PutRolePermissionsBoundaryError {
@@ -17678,20 +17306,20 @@ impl PutRolePermissionsBoundaryError {
 }
 impl fmt::Display for PutRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRolePermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            PutRolePermissionsBoundaryError::InvalidInput(ref cause) => cause,
-            PutRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
-            PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
+            PutRolePermissionsBoundaryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutRolePermissionsBoundaryError {}
 /// Errors returned by PutRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRolePolicyError {
@@ -17757,20 +17385,16 @@ impl PutRolePolicyError {
 }
 impl fmt::Display for PutRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutRolePolicyError::LimitExceeded(ref cause) => cause,
-            PutRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutRolePolicyError::NoSuchEntity(ref cause) => cause,
-            PutRolePolicyError::ServiceFailure(ref cause) => cause,
-            PutRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            PutRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRolePolicyError {}
 /// Errors returned by PutUserPermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum PutUserPermissionsBoundaryError {
@@ -17833,19 +17457,17 @@ impl PutUserPermissionsBoundaryError {
 }
 impl fmt::Display for PutUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutUserPermissionsBoundaryError {
-    fn description(&self) -> &str {
         match *self {
-            PutUserPermissionsBoundaryError::InvalidInput(ref cause) => cause,
-            PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
-            PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
-            PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
+            PutUserPermissionsBoundaryError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutUserPermissionsBoundaryError {}
 /// Errors returned by PutUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutUserPolicyError {
@@ -17904,19 +17526,15 @@ impl PutUserPolicyError {
 }
 impl fmt::Display for PutUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutUserPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutUserPolicyError::LimitExceeded(ref cause) => cause,
-            PutUserPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            PutUserPolicyError::NoSuchEntity(ref cause) => cause,
-            PutUserPolicyError::ServiceFailure(ref cause) => cause,
+            PutUserPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::MalformedPolicyDocument(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            PutUserPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutUserPolicyError {}
 /// Errors returned by RemoveClientIDFromOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum RemoveClientIDFromOpenIDConnectProviderError {
@@ -17976,18 +17594,20 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
 }
 impl fmt::Display for RemoveClientIDFromOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveClientIDFromOpenIDConnectProviderError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveClientIDFromOpenIDConnectProviderError {}
 /// Errors returned by RemoveRoleFromInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum RemoveRoleFromInstanceProfileError {
@@ -18052,19 +17672,17 @@ impl RemoveRoleFromInstanceProfileError {
 }
 impl fmt::Display for RemoveRoleFromInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveRoleFromInstanceProfileError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
+            RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveRoleFromInstanceProfileError {}
 /// Errors returned by RemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveUserFromGroupError {
@@ -18116,18 +17734,14 @@ impl RemoveUserFromGroupError {
 }
 impl fmt::Display for RemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveUserFromGroupError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveUserFromGroupError::LimitExceeded(ref cause) => cause,
-            RemoveUserFromGroupError::NoSuchEntity(ref cause) => cause,
-            RemoveUserFromGroupError::ServiceFailure(ref cause) => cause,
+            RemoveUserFromGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveUserFromGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            RemoveUserFromGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveUserFromGroupError {}
 /// Errors returned by ResetServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum ResetServiceSpecificCredentialError {
@@ -18167,16 +17781,12 @@ impl ResetServiceSpecificCredentialError {
 }
 impl fmt::Display for ResetServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResetServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResetServiceSpecificCredentialError {}
 /// Errors returned by ResyncMFADevice
 #[derive(Debug, PartialEq)]
 pub enum ResyncMFADeviceError {
@@ -18235,19 +17845,15 @@ impl ResyncMFADeviceError {
 }
 impl fmt::Display for ResyncMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResyncMFADeviceError {
-    fn description(&self) -> &str {
         match *self {
-            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
-            ResyncMFADeviceError::LimitExceeded(ref cause) => cause,
-            ResyncMFADeviceError::NoSuchEntity(ref cause) => cause,
-            ResyncMFADeviceError::ServiceFailure(ref cause) => cause,
+            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            ResyncMFADeviceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResyncMFADeviceError {}
 /// Errors returned by SetDefaultPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum SetDefaultPolicyVersionError {
@@ -18306,19 +17912,15 @@ impl SetDefaultPolicyVersionError {
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDefaultPolicyVersionError {
-    fn description(&self) -> &str {
         match *self {
-            SetDefaultPolicyVersionError::InvalidInput(ref cause) => cause,
-            SetDefaultPolicyVersionError::LimitExceeded(ref cause) => cause,
-            SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => cause,
-            SetDefaultPolicyVersionError::ServiceFailure(ref cause) => cause,
+            SetDefaultPolicyVersionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SetDefaultPolicyVersionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetDefaultPolicyVersionError {}
 /// Errors returned by SetSecurityTokenServicePreferences
 #[derive(Debug, PartialEq)]
 pub enum SetSecurityTokenServicePreferencesError {
@@ -18360,16 +17962,14 @@ impl SetSecurityTokenServicePreferencesError {
 }
 impl fmt::Display for SetSecurityTokenServicePreferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSecurityTokenServicePreferencesError {
-    fn description(&self) -> &str {
         match *self {
-            SetSecurityTokenServicePreferencesError::ServiceFailure(ref cause) => cause,
+            SetSecurityTokenServicePreferencesError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetSecurityTokenServicePreferencesError {}
 /// Errors returned by SimulateCustomPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulateCustomPolicyError {
@@ -18414,17 +18014,13 @@ impl SimulateCustomPolicyError {
 }
 impl fmt::Display for SimulateCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SimulateCustomPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SimulateCustomPolicyError::InvalidInput(ref cause) => cause,
-            SimulateCustomPolicyError::PolicyEvaluation(ref cause) => cause,
+            SimulateCustomPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SimulateCustomPolicyError::PolicyEvaluation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SimulateCustomPolicyError {}
 /// Errors returned by SimulatePrincipalPolicy
 #[derive(Debug, PartialEq)]
 pub enum SimulatePrincipalPolicyError {
@@ -18476,18 +18072,14 @@ impl SimulatePrincipalPolicyError {
 }
 impl fmt::Display for SimulatePrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SimulatePrincipalPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            SimulatePrincipalPolicyError::InvalidInput(ref cause) => cause,
-            SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => cause,
-            SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => cause,
+            SimulatePrincipalPolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SimulatePrincipalPolicyError {}
 /// Errors returned by TagRole
 #[derive(Debug, PartialEq)]
 pub enum TagRoleError {
@@ -18553,20 +18145,16 @@ impl TagRoleError {
 }
 impl fmt::Display for TagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagRoleError {
-    fn description(&self) -> &str {
         match *self {
-            TagRoleError::ConcurrentModification(ref cause) => cause,
-            TagRoleError::InvalidInput(ref cause) => cause,
-            TagRoleError::LimitExceeded(ref cause) => cause,
-            TagRoleError::NoSuchEntity(ref cause) => cause,
-            TagRoleError::ServiceFailure(ref cause) => cause,
+            TagRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagRoleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagRoleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            TagRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagRoleError {}
 /// Errors returned by TagUser
 #[derive(Debug, PartialEq)]
 pub enum TagUserError {
@@ -18632,20 +18220,16 @@ impl TagUserError {
 }
 impl fmt::Display for TagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagUserError {
-    fn description(&self) -> &str {
         match *self {
-            TagUserError::ConcurrentModification(ref cause) => cause,
-            TagUserError::InvalidInput(ref cause) => cause,
-            TagUserError::LimitExceeded(ref cause) => cause,
-            TagUserError::NoSuchEntity(ref cause) => cause,
-            TagUserError::ServiceFailure(ref cause) => cause,
+            TagUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            TagUserError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            TagUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagUserError {}
 /// Errors returned by UntagRole
 #[derive(Debug, PartialEq)]
 pub enum UntagRoleError {
@@ -18697,18 +18281,14 @@ impl UntagRoleError {
 }
 impl fmt::Display for UntagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagRoleError {
-    fn description(&self) -> &str {
         match *self {
-            UntagRoleError::ConcurrentModification(ref cause) => cause,
-            UntagRoleError::NoSuchEntity(ref cause) => cause,
-            UntagRoleError::ServiceFailure(ref cause) => cause,
+            UntagRoleError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UntagRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagRoleError {}
 /// Errors returned by UntagUser
 #[derive(Debug, PartialEq)]
 pub enum UntagUserError {
@@ -18760,18 +18340,14 @@ impl UntagUserError {
 }
 impl fmt::Display for UntagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagUserError {
-    fn description(&self) -> &str {
         match *self {
-            UntagUserError::ConcurrentModification(ref cause) => cause,
-            UntagUserError::NoSuchEntity(ref cause) => cause,
-            UntagUserError::ServiceFailure(ref cause) => cause,
+            UntagUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UntagUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UntagUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagUserError {}
 /// Errors returned by UpdateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccessKeyError {
@@ -18823,18 +18399,14 @@ impl UpdateAccessKeyError {
 }
 impl fmt::Display for UpdateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccessKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccessKeyError::LimitExceeded(ref cause) => cause,
-            UpdateAccessKeyError::NoSuchEntity(ref cause) => cause,
-            UpdateAccessKeyError::ServiceFailure(ref cause) => cause,
+            UpdateAccessKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAccessKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAccessKeyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccessKeyError {}
 /// Errors returned by UpdateAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountPasswordPolicyError {
@@ -18897,19 +18469,17 @@ impl UpdateAccountPasswordPolicyError {
 }
 impl fmt::Display for UpdateAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAccountPasswordPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAccountPasswordPolicyError {}
 /// Errors returned by UpdateAssumeRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssumeRolePolicyError {
@@ -18977,20 +18547,18 @@ impl UpdateAssumeRolePolicyError {
 }
 impl fmt::Display for UpdateAssumeRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAssumeRolePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => cause,
-            UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
-            UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => cause,
-            UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => cause,
-            UpdateAssumeRolePolicyError::UnmodifiableEntity(ref cause) => cause,
+            UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAssumeRolePolicyError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateAssumeRolePolicyError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -19049,19 +18617,15 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGroupError::EntityAlreadyExists(ref cause) => cause,
-            UpdateGroupError::LimitExceeded(ref cause) => cause,
-            UpdateGroupError::NoSuchEntity(ref cause) => cause,
-            UpdateGroupError::ServiceFailure(ref cause) => cause,
+            UpdateGroupError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateGroupError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGroupError {}
 /// Errors returned by UpdateLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateLoginProfileError {
@@ -19129,20 +18693,18 @@ impl UpdateLoginProfileError {
 }
 impl fmt::Display for UpdateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateLoginProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            UpdateLoginProfileError::LimitExceeded(ref cause) => cause,
-            UpdateLoginProfileError::NoSuchEntity(ref cause) => cause,
-            UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
-            UpdateLoginProfileError::ServiceFailure(ref cause) => cause,
+            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLoginProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => write!(f, "{}", cause),
+            UpdateLoginProfileError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateLoginProfileError {}
 /// Errors returned by UpdateOpenIDConnectProviderThumbprint
 #[derive(Debug, PartialEq)]
 pub enum UpdateOpenIDConnectProviderThumbprintError {
@@ -19202,18 +18764,20 @@ impl UpdateOpenIDConnectProviderThumbprintError {
 }
 impl fmt::Display for UpdateOpenIDConnectProviderThumbprintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateOpenIDConnectProviderThumbprintError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => cause,
+            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateOpenIDConnectProviderThumbprintError {}
 /// Errors returned by UpdateRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleError {
@@ -19265,18 +18829,14 @@ impl UpdateRoleError {
 }
 impl fmt::Display for UpdateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoleError::NoSuchEntity(ref cause) => cause,
-            UpdateRoleError::ServiceFailure(ref cause) => cause,
-            UpdateRoleError::UnmodifiableEntity(ref cause) => cause,
+            UpdateRoleError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateRoleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoleError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoleError {}
 /// Errors returned by UpdateRoleDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleDescriptionError {
@@ -19328,18 +18888,14 @@ impl UpdateRoleDescriptionError {
 }
 impl fmt::Display for UpdateRoleDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateRoleDescriptionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateRoleDescriptionError::NoSuchEntity(ref cause) => cause,
-            UpdateRoleDescriptionError::ServiceFailure(ref cause) => cause,
-            UpdateRoleDescriptionError::UnmodifiableEntity(ref cause) => cause,
+            UpdateRoleDescriptionError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateRoleDescriptionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateRoleDescriptionError::UnmodifiableEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateRoleDescriptionError {}
 /// Errors returned by UpdateSAMLProvider
 #[derive(Debug, PartialEq)]
 pub enum UpdateSAMLProviderError {
@@ -19398,19 +18954,15 @@ impl UpdateSAMLProviderError {
 }
 impl fmt::Display for UpdateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSAMLProviderError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSAMLProviderError::InvalidInput(ref cause) => cause,
-            UpdateSAMLProviderError::LimitExceeded(ref cause) => cause,
-            UpdateSAMLProviderError::NoSuchEntity(ref cause) => cause,
-            UpdateSAMLProviderError::ServiceFailure(ref cause) => cause,
+            UpdateSAMLProviderError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateSAMLProviderError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSAMLProviderError {}
 /// Errors returned by UpdateSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateSSHPublicKeyError {
@@ -19448,16 +19000,12 @@ impl UpdateSSHPublicKeyError {
 }
 impl fmt::Display for UpdateSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSSHPublicKeyError {}
 /// Errors returned by UpdateServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerCertificateError {
@@ -19516,19 +19064,15 @@ impl UpdateServerCertificateError {
 }
 impl fmt::Display for UpdateServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UpdateServerCertificateError::LimitExceeded(ref cause) => cause,
-            UpdateServerCertificateError::NoSuchEntity(ref cause) => cause,
-            UpdateServerCertificateError::ServiceFailure(ref cause) => cause,
+            UpdateServerCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServerCertificateError {}
 /// Errors returned by UpdateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSpecificCredentialError {
@@ -19570,16 +19114,12 @@ impl UpdateServiceSpecificCredentialError {
 }
 impl fmt::Display for UpdateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServiceSpecificCredentialError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServiceSpecificCredentialError {}
 /// Errors returned by UpdateSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateSigningCertificateError {
@@ -19631,18 +19171,14 @@ impl UpdateSigningCertificateError {
 }
 impl fmt::Display for UpdateSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateSigningCertificateError::LimitExceeded(ref cause) => cause,
-            UpdateSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            UpdateSigningCertificateError::ServiceFailure(ref cause) => cause,
+            UpdateSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateSigningCertificateError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -19715,21 +19251,17 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::ConcurrentModification(ref cause) => cause,
-            UpdateUserError::EntityAlreadyExists(ref cause) => cause,
-            UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => cause,
-            UpdateUserError::LimitExceeded(ref cause) => cause,
-            UpdateUserError::NoSuchEntity(ref cause) => cause,
-            UpdateUserError::ServiceFailure(ref cause) => cause,
+            UpdateUserError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Errors returned by UploadSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UploadSSHPublicKeyError {
@@ -19797,20 +19329,18 @@ impl UploadSSHPublicKeyError {
 }
 impl fmt::Display for UploadSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadSSHPublicKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => cause,
-            UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => cause,
-            UploadSSHPublicKeyError::LimitExceeded(ref cause) => cause,
-            UploadSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UploadSSHPublicKeyError {}
 /// Errors returned by UploadServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadServerCertificateError {
@@ -19878,20 +19408,16 @@ impl UploadServerCertificateError {
 }
 impl fmt::Display for UploadServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadServerCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UploadServerCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UploadServerCertificateError::KeyPairMismatch(ref cause) => cause,
-            UploadServerCertificateError::LimitExceeded(ref cause) => cause,
-            UploadServerCertificateError::MalformedCertificate(ref cause) => cause,
-            UploadServerCertificateError::ServiceFailure(ref cause) => cause,
+            UploadServerCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::KeyPairMismatch(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::MalformedCertificate(ref cause) => write!(f, "{}", cause),
+            UploadServerCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadServerCertificateError {}
 /// Errors returned by UploadSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UploadSigningCertificateError {
@@ -19977,22 +19503,22 @@ impl UploadSigningCertificateError {
 }
 impl fmt::Display for UploadSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UploadSigningCertificateError {
-    fn description(&self) -> &str {
         match *self {
-            UploadSigningCertificateError::DuplicateCertificate(ref cause) => cause,
-            UploadSigningCertificateError::EntityAlreadyExists(ref cause) => cause,
-            UploadSigningCertificateError::InvalidCertificate(ref cause) => cause,
-            UploadSigningCertificateError::LimitExceeded(ref cause) => cause,
-            UploadSigningCertificateError::MalformedCertificate(ref cause) => cause,
-            UploadSigningCertificateError::NoSuchEntity(ref cause) => cause,
-            UploadSigningCertificateError::ServiceFailure(ref cause) => cause,
+            UploadSigningCertificateError::DuplicateCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UploadSigningCertificateError::EntityAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::InvalidCertificate(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::MalformedCertificate(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UploadSigningCertificateError::NoSuchEntity(ref cause) => write!(f, "{}", cause),
+            UploadSigningCertificateError::ServiceFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UploadSigningCertificateError {}
 /// Trait representing the capabilities of the IAM API. IAM clients implement this trait.
 pub trait Iam {
     /// <p>Adds a new client ID (also known as audience) to the list of client IDs already registered for the specified IAM OpenID Connect (OIDC) provider resource.</p> <p>This operation is idempotent; it does not fail or return an error if you add an existing client ID to the provider.</p>

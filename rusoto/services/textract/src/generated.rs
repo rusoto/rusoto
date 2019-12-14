@@ -552,25 +552,23 @@ impl AnalyzeDocumentError {
 }
 impl fmt::Display for AnalyzeDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AnalyzeDocumentError {
-    fn description(&self) -> &str {
         match *self {
-            AnalyzeDocumentError::AccessDenied(ref cause) => cause,
-            AnalyzeDocumentError::BadDocument(ref cause) => cause,
-            AnalyzeDocumentError::DocumentTooLarge(ref cause) => cause,
-            AnalyzeDocumentError::HumanLoopQuotaExceeded(ref cause) => cause,
-            AnalyzeDocumentError::InternalServerError(ref cause) => cause,
-            AnalyzeDocumentError::InvalidParameter(ref cause) => cause,
-            AnalyzeDocumentError::InvalidS3Object(ref cause) => cause,
-            AnalyzeDocumentError::ProvisionedThroughputExceeded(ref cause) => cause,
-            AnalyzeDocumentError::Throttling(ref cause) => cause,
-            AnalyzeDocumentError::UnsupportedDocument(ref cause) => cause,
+            AnalyzeDocumentError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::BadDocument(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::DocumentTooLarge(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::HumanLoopQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AnalyzeDocumentError::Throttling(ref cause) => write!(f, "{}", cause),
+            AnalyzeDocumentError::UnsupportedDocument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AnalyzeDocumentError {}
 /// Errors returned by DetectDocumentText
 #[derive(Debug, PartialEq)]
 pub enum DetectDocumentTextError {
@@ -640,24 +638,22 @@ impl DetectDocumentTextError {
 }
 impl fmt::Display for DetectDocumentTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectDocumentTextError {
-    fn description(&self) -> &str {
         match *self {
-            DetectDocumentTextError::AccessDenied(ref cause) => cause,
-            DetectDocumentTextError::BadDocument(ref cause) => cause,
-            DetectDocumentTextError::DocumentTooLarge(ref cause) => cause,
-            DetectDocumentTextError::InternalServerError(ref cause) => cause,
-            DetectDocumentTextError::InvalidParameter(ref cause) => cause,
-            DetectDocumentTextError::InvalidS3Object(ref cause) => cause,
-            DetectDocumentTextError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectDocumentTextError::Throttling(ref cause) => cause,
-            DetectDocumentTextError::UnsupportedDocument(ref cause) => cause,
+            DetectDocumentTextError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::BadDocument(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::DocumentTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectDocumentTextError::Throttling(ref cause) => write!(f, "{}", cause),
+            DetectDocumentTextError::UnsupportedDocument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectDocumentTextError {}
 /// Errors returned by GetDocumentAnalysis
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentAnalysisError {
@@ -712,21 +708,19 @@ impl GetDocumentAnalysisError {
 }
 impl fmt::Display for GetDocumentAnalysisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentAnalysisError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentAnalysisError::AccessDenied(ref cause) => cause,
-            GetDocumentAnalysisError::InternalServerError(ref cause) => cause,
-            GetDocumentAnalysisError::InvalidJobId(ref cause) => cause,
-            GetDocumentAnalysisError::InvalidParameter(ref cause) => cause,
-            GetDocumentAnalysisError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetDocumentAnalysisError::Throttling(ref cause) => cause,
+            GetDocumentAnalysisError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDocumentAnalysisError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetDocumentAnalysisError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            GetDocumentAnalysisError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDocumentAnalysisError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDocumentAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentAnalysisError {}
 /// Errors returned by GetDocumentTextDetection
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentTextDetectionError {
@@ -785,21 +779,19 @@ impl GetDocumentTextDetectionError {
 }
 impl fmt::Display for GetDocumentTextDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDocumentTextDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            GetDocumentTextDetectionError::AccessDenied(ref cause) => cause,
-            GetDocumentTextDetectionError::InternalServerError(ref cause) => cause,
-            GetDocumentTextDetectionError::InvalidJobId(ref cause) => cause,
-            GetDocumentTextDetectionError::InvalidParameter(ref cause) => cause,
-            GetDocumentTextDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetDocumentTextDetectionError::Throttling(ref cause) => cause,
+            GetDocumentTextDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDocumentTextDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetDocumentTextDetectionError::InvalidJobId(ref cause) => write!(f, "{}", cause),
+            GetDocumentTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDocumentTextDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDocumentTextDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDocumentTextDetectionError {}
 /// Errors returned by StartDocumentAnalysis
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentAnalysisError {
@@ -887,26 +879,26 @@ impl StartDocumentAnalysisError {
 }
 impl fmt::Display for StartDocumentAnalysisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDocumentAnalysisError {
-    fn description(&self) -> &str {
         match *self {
-            StartDocumentAnalysisError::AccessDenied(ref cause) => cause,
-            StartDocumentAnalysisError::BadDocument(ref cause) => cause,
-            StartDocumentAnalysisError::DocumentTooLarge(ref cause) => cause,
-            StartDocumentAnalysisError::IdempotentParameterMismatch(ref cause) => cause,
-            StartDocumentAnalysisError::InternalServerError(ref cause) => cause,
-            StartDocumentAnalysisError::InvalidParameter(ref cause) => cause,
-            StartDocumentAnalysisError::InvalidS3Object(ref cause) => cause,
-            StartDocumentAnalysisError::LimitExceeded(ref cause) => cause,
-            StartDocumentAnalysisError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartDocumentAnalysisError::Throttling(ref cause) => cause,
-            StartDocumentAnalysisError::UnsupportedDocument(ref cause) => cause,
+            StartDocumentAnalysisError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::BadDocument(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::DocumentTooLarge(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentAnalysisError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentAnalysisError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::UnsupportedDocument(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartDocumentAnalysisError {}
 /// Errors returned by StartDocumentTextDetection
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentTextDetectionError {
@@ -1004,26 +996,30 @@ impl StartDocumentTextDetectionError {
 }
 impl fmt::Display for StartDocumentTextDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartDocumentTextDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            StartDocumentTextDetectionError::AccessDenied(ref cause) => cause,
-            StartDocumentTextDetectionError::BadDocument(ref cause) => cause,
-            StartDocumentTextDetectionError::DocumentTooLarge(ref cause) => cause,
-            StartDocumentTextDetectionError::IdempotentParameterMismatch(ref cause) => cause,
-            StartDocumentTextDetectionError::InternalServerError(ref cause) => cause,
-            StartDocumentTextDetectionError::InvalidParameter(ref cause) => cause,
-            StartDocumentTextDetectionError::InvalidS3Object(ref cause) => cause,
-            StartDocumentTextDetectionError::LimitExceeded(ref cause) => cause,
-            StartDocumentTextDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartDocumentTextDetectionError::Throttling(ref cause) => cause,
-            StartDocumentTextDetectionError::UnsupportedDocument(ref cause) => cause,
+            StartDocumentTextDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::BadDocument(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::DocumentTooLarge(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentTextDetectionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartDocumentTextDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartDocumentTextDetectionError::UnsupportedDocument(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for StartDocumentTextDetectionError {}
 /// Trait representing the capabilities of the Amazon Textract API. Amazon Textract clients implement this trait.
 pub trait Textract {
     /// <p>Analyzes an input document for relationships between detected items. </p> <p>The types of information returned are as follows: </p> <ul> <li> <p>Form data (key-value pairs). The related information is returned in two <a>Block</a> objects, each of type <code>KEY_VALUE_SET</code>: a KEY <code>Block</code> object and a VALUE <code>Block</code> object. For example, <i>Name: Ana Silva Carolina</i> contains a key and value. <i>Name:</i> is the key. <i>Ana Silva Carolina</i> is the value.</p> </li> <li> <p>Table and table cell data. A TABLE <code>Block</code> object contains information about a detected table. A CELL <code>Block</code> object is returned for each cell in a table.</p> </li> <li> <p>Lines and words of text. A LINE <code>Block</code> object contains one or more WORD <code>Block</code> objects. All lines and words that are detected in the document are returned (including text that doesn't have a relationship with the value of <code>FeatureTypes</code>). </p> </li> </ul> <p>Selection elements such as check boxes and option buttons (radio buttons) can be detected in form data and in tables. A SELECTION_ELEMENT <code>Block</code> object contains information about a selection element, including the selection status.</p> <p>You can choose which type of analysis to perform by specifying the <code>FeatureTypes</code> list. </p> <p>The output is returned in a list of <code>Block</code> objects.</p> <p> <code>AnalyzeDocument</code> is a synchronous operation. To analyze documents asynchronously, use <a>StartDocumentAnalysis</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/textract/latest/dg/how-it-works-analyzing.html">Document Text Analysis</a>.</p>

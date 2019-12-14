@@ -2533,17 +2533,13 @@ impl AddInstanceFleetError {
 }
 impl fmt::Display for AddInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddInstanceFleetError {
-    fn description(&self) -> &str {
         match *self {
-            AddInstanceFleetError::InternalServer(ref cause) => cause,
-            AddInstanceFleetError::InvalidRequest(ref cause) => cause,
+            AddInstanceFleetError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddInstanceFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddInstanceFleetError {}
 /// Errors returned by AddInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum AddInstanceGroupsError {
@@ -2569,16 +2565,12 @@ impl AddInstanceGroupsError {
 }
 impl fmt::Display for AddInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            AddInstanceGroupsError::InternalServerError(ref cause) => cause,
+            AddInstanceGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddInstanceGroupsError {}
 /// Errors returned by AddJobFlowSteps
 #[derive(Debug, PartialEq)]
 pub enum AddJobFlowStepsError {
@@ -2602,16 +2594,12 @@ impl AddJobFlowStepsError {
 }
 impl fmt::Display for AddJobFlowStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddJobFlowStepsError {
-    fn description(&self) -> &str {
         match *self {
-            AddJobFlowStepsError::InternalServerError(ref cause) => cause,
+            AddJobFlowStepsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddJobFlowStepsError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -2640,17 +2628,13 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::InternalServer(ref cause) => cause,
-            AddTagsError::InvalidRequest(ref cause) => cause,
+            AddTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            AddTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CancelSteps
 #[derive(Debug, PartialEq)]
 pub enum CancelStepsError {
@@ -2679,17 +2663,13 @@ impl CancelStepsError {
 }
 impl fmt::Display for CancelStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelStepsError {
-    fn description(&self) -> &str {
         match *self {
-            CancelStepsError::InternalServerError(ref cause) => cause,
-            CancelStepsError::InvalidRequest(ref cause) => cause,
+            CancelStepsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CancelStepsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelStepsError {}
 /// Errors returned by CreateSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateSecurityConfigurationError {
@@ -2724,17 +2704,13 @@ impl CreateSecurityConfigurationError {
 }
 impl fmt::Display for CreateSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateSecurityConfigurationError::InternalServer(ref cause) => cause,
-            CreateSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            CreateSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateSecurityConfigurationError {}
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
@@ -2769,17 +2745,13 @@ impl DeleteSecurityConfigurationError {
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteSecurityConfigurationError::InternalServer(ref cause) => cause,
-            DeleteSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            DeleteSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteSecurityConfigurationError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -2808,17 +2780,13 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeClusterError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeClusterError::InternalServer(ref cause) => cause,
-            DescribeClusterError::InvalidRequest(ref cause) => cause,
+            DescribeClusterError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeClusterError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeClusterError {}
 /// Errors returned by DescribeJobFlows
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobFlowsError {
@@ -2844,16 +2812,12 @@ impl DescribeJobFlowsError {
 }
 impl fmt::Display for DescribeJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobFlowsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobFlowsError::InternalServerError(ref cause) => cause,
+            DescribeJobFlowsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobFlowsError {}
 /// Errors returned by DescribeSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityConfigurationError {
@@ -2888,17 +2852,13 @@ impl DescribeSecurityConfigurationError {
 }
 impl fmt::Display for DescribeSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSecurityConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSecurityConfigurationError::InternalServer(ref cause) => cause,
-            DescribeSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+            DescribeSecurityConfigurationError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeSecurityConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSecurityConfigurationError {}
 /// Errors returned by DescribeStep
 #[derive(Debug, PartialEq)]
 pub enum DescribeStepError {
@@ -2927,17 +2887,13 @@ impl DescribeStepError {
 }
 impl fmt::Display for DescribeStepError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStepError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStepError::InternalServer(ref cause) => cause,
-            DescribeStepError::InvalidRequest(ref cause) => cause,
+            DescribeStepError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeStepError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStepError {}
 /// Errors returned by GetBlockPublicAccessConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBlockPublicAccessConfigurationError {
@@ -2972,17 +2928,17 @@ impl GetBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for GetBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetBlockPublicAccessConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            GetBlockPublicAccessConfigurationError::InternalServer(ref cause) => cause,
-            GetBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => cause,
+            GetBlockPublicAccessConfigurationError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for GetBlockPublicAccessConfigurationError {}
 /// Errors returned by ListBootstrapActions
 #[derive(Debug, PartialEq)]
 pub enum ListBootstrapActionsError {
@@ -3011,17 +2967,13 @@ impl ListBootstrapActionsError {
 }
 impl fmt::Display for ListBootstrapActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBootstrapActionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListBootstrapActionsError::InternalServer(ref cause) => cause,
-            ListBootstrapActionsError::InvalidRequest(ref cause) => cause,
+            ListBootstrapActionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListBootstrapActionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBootstrapActionsError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -3050,17 +3002,13 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListClustersError {
-    fn description(&self) -> &str {
         match *self {
-            ListClustersError::InternalServer(ref cause) => cause,
-            ListClustersError::InvalidRequest(ref cause) => cause,
+            ListClustersError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListClustersError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListClustersError {}
 /// Errors returned by ListInstanceFleets
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceFleetsError {
@@ -3089,17 +3037,13 @@ impl ListInstanceFleetsError {
 }
 impl fmt::Display for ListInstanceFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceFleetsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceFleetsError::InternalServer(ref cause) => cause,
-            ListInstanceFleetsError::InvalidRequest(ref cause) => cause,
+            ListInstanceFleetsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstanceFleetsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceFleetsError {}
 /// Errors returned by ListInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceGroupsError {
@@ -3128,17 +3072,13 @@ impl ListInstanceGroupsError {
 }
 impl fmt::Display for ListInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstanceGroupsError::InternalServer(ref cause) => cause,
-            ListInstanceGroupsError::InvalidRequest(ref cause) => cause,
+            ListInstanceGroupsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstanceGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstanceGroupsError {}
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
@@ -3167,17 +3107,13 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            ListInstancesError::InternalServer(ref cause) => cause,
-            ListInstancesError::InvalidRequest(ref cause) => cause,
+            ListInstancesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListInstancesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListInstancesError {}
 /// Errors returned by ListSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityConfigurationsError {
@@ -3212,17 +3148,13 @@ impl ListSecurityConfigurationsError {
 }
 impl fmt::Display for ListSecurityConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSecurityConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListSecurityConfigurationsError::InternalServer(ref cause) => cause,
-            ListSecurityConfigurationsError::InvalidRequest(ref cause) => cause,
+            ListSecurityConfigurationsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListSecurityConfigurationsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListSecurityConfigurationsError {}
 /// Errors returned by ListSteps
 #[derive(Debug, PartialEq)]
 pub enum ListStepsError {
@@ -3251,17 +3183,13 @@ impl ListStepsError {
 }
 impl fmt::Display for ListStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStepsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStepsError::InternalServer(ref cause) => cause,
-            ListStepsError::InvalidRequest(ref cause) => cause,
+            ListStepsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListStepsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStepsError {}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -3290,17 +3218,13 @@ impl ModifyClusterError {
 }
 impl fmt::Display for ModifyClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyClusterError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyClusterError::InternalServerError(ref cause) => cause,
-            ModifyClusterError::InvalidRequest(ref cause) => cause,
+            ModifyClusterError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyClusterError {}
 /// Errors returned by ModifyInstanceFleet
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceFleetError {
@@ -3329,17 +3253,13 @@ impl ModifyInstanceFleetError {
 }
 impl fmt::Display for ModifyInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyInstanceFleetError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyInstanceFleetError::InternalServer(ref cause) => cause,
-            ModifyInstanceFleetError::InvalidRequest(ref cause) => cause,
+            ModifyInstanceFleetError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ModifyInstanceFleetError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyInstanceFleetError {}
 /// Errors returned by ModifyInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceGroupsError {
@@ -3365,16 +3285,12 @@ impl ModifyInstanceGroupsError {
 }
 impl fmt::Display for ModifyInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyInstanceGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyInstanceGroupsError::InternalServerError(ref cause) => cause,
+            ModifyInstanceGroupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyInstanceGroupsError {}
 /// Errors returned by PutAutoScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutAutoScalingPolicyError {}
@@ -3392,14 +3308,10 @@ impl PutAutoScalingPolicyError {
 }
 impl fmt::Display for PutAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutAutoScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for PutAutoScalingPolicyError {}
 /// Errors returned by PutBlockPublicAccessConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutBlockPublicAccessConfigurationError {
@@ -3434,17 +3346,17 @@ impl PutBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for PutBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutBlockPublicAccessConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutBlockPublicAccessConfigurationError::InternalServer(ref cause) => cause,
-            PutBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => cause,
+            PutBlockPublicAccessConfigurationError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutBlockPublicAccessConfigurationError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutBlockPublicAccessConfigurationError {}
 /// Errors returned by RemoveAutoScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum RemoveAutoScalingPolicyError {}
@@ -3462,14 +3374,10 @@ impl RemoveAutoScalingPolicyError {
 }
 impl fmt::Display for RemoveAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveAutoScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RemoveAutoScalingPolicyError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -3498,17 +3406,13 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::InternalServer(ref cause) => cause,
-            RemoveTagsError::InvalidRequest(ref cause) => cause,
+            RemoveTagsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by RunJobFlow
 #[derive(Debug, PartialEq)]
 pub enum RunJobFlowError {
@@ -3532,16 +3436,12 @@ impl RunJobFlowError {
 }
 impl fmt::Display for RunJobFlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RunJobFlowError {
-    fn description(&self) -> &str {
         match *self {
-            RunJobFlowError::InternalServerError(ref cause) => cause,
+            RunJobFlowError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RunJobFlowError {}
 /// Errors returned by SetTerminationProtection
 #[derive(Debug, PartialEq)]
 pub enum SetTerminationProtectionError {
@@ -3567,16 +3467,12 @@ impl SetTerminationProtectionError {
 }
 impl fmt::Display for SetTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetTerminationProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            SetTerminationProtectionError::InternalServerError(ref cause) => cause,
+            SetTerminationProtectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetTerminationProtectionError {}
 /// Errors returned by SetVisibleToAllUsers
 #[derive(Debug, PartialEq)]
 pub enum SetVisibleToAllUsersError {
@@ -3602,16 +3498,12 @@ impl SetVisibleToAllUsersError {
 }
 impl fmt::Display for SetVisibleToAllUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetVisibleToAllUsersError {
-    fn description(&self) -> &str {
         match *self {
-            SetVisibleToAllUsersError::InternalServerError(ref cause) => cause,
+            SetVisibleToAllUsersError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetVisibleToAllUsersError {}
 /// Errors returned by TerminateJobFlows
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobFlowsError {
@@ -3637,16 +3529,12 @@ impl TerminateJobFlowsError {
 }
 impl fmt::Display for TerminateJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateJobFlowsError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateJobFlowsError::InternalServerError(ref cause) => cause,
+            TerminateJobFlowsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateJobFlowsError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
 pub trait Emr {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>

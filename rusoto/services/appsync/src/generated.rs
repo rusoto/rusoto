@@ -1632,20 +1632,16 @@ impl CreateApiCacheError {
 }
 impl fmt::Display for CreateApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApiCacheError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApiCacheError::BadRequest(ref cause) => cause,
-            CreateApiCacheError::ConcurrentModification(ref cause) => cause,
-            CreateApiCacheError::InternalFailure(ref cause) => cause,
-            CreateApiCacheError::NotFound(ref cause) => cause,
-            CreateApiCacheError::Unauthorized(ref cause) => cause,
+            CreateApiCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateApiCacheError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateApiCacheError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateApiCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateApiCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApiCacheError {}
 /// Errors returned by CreateApiKey
 #[derive(Debug, PartialEq)]
 pub enum CreateApiKeyError {
@@ -1701,22 +1697,18 @@ impl CreateApiKeyError {
 }
 impl fmt::Display for CreateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            CreateApiKeyError::ApiKeyLimitExceeded(ref cause) => cause,
-            CreateApiKeyError::ApiKeyValidityOutOfBounds(ref cause) => cause,
-            CreateApiKeyError::BadRequest(ref cause) => cause,
-            CreateApiKeyError::InternalFailure(ref cause) => cause,
-            CreateApiKeyError::LimitExceeded(ref cause) => cause,
-            CreateApiKeyError::NotFound(ref cause) => cause,
-            CreateApiKeyError::Unauthorized(ref cause) => cause,
+            CreateApiKeyError::ApiKeyLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::ApiKeyValidityOutOfBounds(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateApiKeyError {}
 /// Errors returned by CreateDataSource
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceError {
@@ -1762,20 +1754,16 @@ impl CreateDataSourceError {
 }
 impl fmt::Display for CreateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDataSourceError::BadRequest(ref cause) => cause,
-            CreateDataSourceError::ConcurrentModification(ref cause) => cause,
-            CreateDataSourceError::InternalFailure(ref cause) => cause,
-            CreateDataSourceError::NotFound(ref cause) => cause,
-            CreateDataSourceError::Unauthorized(ref cause) => cause,
+            CreateDataSourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDataSourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDataSourceError {}
 /// Errors returned by CreateFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionError {
@@ -1816,19 +1804,15 @@ impl CreateFunctionError {
 }
 impl fmt::Display for CreateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFunctionError::ConcurrentModification(ref cause) => cause,
-            CreateFunctionError::InternalFailure(ref cause) => cause,
-            CreateFunctionError::NotFound(ref cause) => cause,
-            CreateFunctionError::Unauthorized(ref cause) => cause,
+            CreateFunctionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFunctionError {}
 /// Errors returned by CreateGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum CreateGraphqlApiError {
@@ -1879,21 +1863,17 @@ impl CreateGraphqlApiError {
 }
 impl fmt::Display for CreateGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateGraphqlApiError {
-    fn description(&self) -> &str {
         match *self {
-            CreateGraphqlApiError::ApiLimitExceeded(ref cause) => cause,
-            CreateGraphqlApiError::BadRequest(ref cause) => cause,
-            CreateGraphqlApiError::ConcurrentModification(ref cause) => cause,
-            CreateGraphqlApiError::InternalFailure(ref cause) => cause,
-            CreateGraphqlApiError::LimitExceeded(ref cause) => cause,
-            CreateGraphqlApiError::Unauthorized(ref cause) => cause,
+            CreateGraphqlApiError::ApiLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGraphqlApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateGraphqlApiError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateGraphqlApiError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateGraphqlApiError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGraphqlApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateGraphqlApiError {}
 /// Errors returned by CreateResolver
 #[derive(Debug, PartialEq)]
 pub enum CreateResolverError {
@@ -1934,19 +1914,15 @@ impl CreateResolverError {
 }
 impl fmt::Display for CreateResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateResolverError {
-    fn description(&self) -> &str {
         match *self {
-            CreateResolverError::ConcurrentModification(ref cause) => cause,
-            CreateResolverError::InternalFailure(ref cause) => cause,
-            CreateResolverError::NotFound(ref cause) => cause,
-            CreateResolverError::Unauthorized(ref cause) => cause,
+            CreateResolverError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateResolverError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateResolverError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateResolverError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateResolverError {}
 /// Errors returned by CreateType
 #[derive(Debug, PartialEq)]
 pub enum CreateTypeError {
@@ -1990,20 +1966,16 @@ impl CreateTypeError {
 }
 impl fmt::Display for CreateTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTypeError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTypeError::BadRequest(ref cause) => cause,
-            CreateTypeError::ConcurrentModification(ref cause) => cause,
-            CreateTypeError::InternalFailure(ref cause) => cause,
-            CreateTypeError::NotFound(ref cause) => cause,
-            CreateTypeError::Unauthorized(ref cause) => cause,
+            CreateTypeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTypeError {}
 /// Errors returned by DeleteApiCache
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiCacheError {
@@ -2049,20 +2021,16 @@ impl DeleteApiCacheError {
 }
 impl fmt::Display for DeleteApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApiCacheError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApiCacheError::BadRequest(ref cause) => cause,
-            DeleteApiCacheError::ConcurrentModification(ref cause) => cause,
-            DeleteApiCacheError::InternalFailure(ref cause) => cause,
-            DeleteApiCacheError::NotFound(ref cause) => cause,
-            DeleteApiCacheError::Unauthorized(ref cause) => cause,
+            DeleteApiCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteApiCacheError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteApiCacheError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteApiCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApiCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApiCacheError {}
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
@@ -2101,19 +2069,15 @@ impl DeleteApiKeyError {
 }
 impl fmt::Display for DeleteApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteApiKeyError::BadRequest(ref cause) => cause,
-            DeleteApiKeyError::InternalFailure(ref cause) => cause,
-            DeleteApiKeyError::NotFound(ref cause) => cause,
-            DeleteApiKeyError::Unauthorized(ref cause) => cause,
+            DeleteApiKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteApiKeyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteApiKeyError {}
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
@@ -2159,20 +2123,16 @@ impl DeleteDataSourceError {
 }
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDataSourceError::BadRequest(ref cause) => cause,
-            DeleteDataSourceError::ConcurrentModification(ref cause) => cause,
-            DeleteDataSourceError::InternalFailure(ref cause) => cause,
-            DeleteDataSourceError::NotFound(ref cause) => cause,
-            DeleteDataSourceError::Unauthorized(ref cause) => cause,
+            DeleteDataSourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDataSourceError {}
 /// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionError {
@@ -2213,19 +2173,15 @@ impl DeleteFunctionError {
 }
 impl fmt::Display for DeleteFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFunctionError::ConcurrentModification(ref cause) => cause,
-            DeleteFunctionError::InternalFailure(ref cause) => cause,
-            DeleteFunctionError::NotFound(ref cause) => cause,
-            DeleteFunctionError::Unauthorized(ref cause) => cause,
+            DeleteFunctionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFunctionError {}
 /// Errors returned by DeleteGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteGraphqlApiError {
@@ -2276,21 +2232,17 @@ impl DeleteGraphqlApiError {
 }
 impl fmt::Display for DeleteGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteGraphqlApiError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteGraphqlApiError::AccessDenied(ref cause) => cause,
-            DeleteGraphqlApiError::BadRequest(ref cause) => cause,
-            DeleteGraphqlApiError::ConcurrentModification(ref cause) => cause,
-            DeleteGraphqlApiError::InternalFailure(ref cause) => cause,
-            DeleteGraphqlApiError::NotFound(ref cause) => cause,
-            DeleteGraphqlApiError::Unauthorized(ref cause) => cause,
+            DeleteGraphqlApiError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteGraphqlApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteGraphqlApiError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteGraphqlApiError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteGraphqlApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGraphqlApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteGraphqlApiError {}
 /// Errors returned by DeleteResolver
 #[derive(Debug, PartialEq)]
 pub enum DeleteResolverError {
@@ -2331,19 +2283,15 @@ impl DeleteResolverError {
 }
 impl fmt::Display for DeleteResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteResolverError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteResolverError::ConcurrentModification(ref cause) => cause,
-            DeleteResolverError::InternalFailure(ref cause) => cause,
-            DeleteResolverError::NotFound(ref cause) => cause,
-            DeleteResolverError::Unauthorized(ref cause) => cause,
+            DeleteResolverError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteResolverError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteResolverError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResolverError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteResolverError {}
 /// Errors returned by DeleteType
 #[derive(Debug, PartialEq)]
 pub enum DeleteTypeError {
@@ -2387,20 +2335,16 @@ impl DeleteTypeError {
 }
 impl fmt::Display for DeleteTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTypeError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTypeError::BadRequest(ref cause) => cause,
-            DeleteTypeError::ConcurrentModification(ref cause) => cause,
-            DeleteTypeError::InternalFailure(ref cause) => cause,
-            DeleteTypeError::NotFound(ref cause) => cause,
-            DeleteTypeError::Unauthorized(ref cause) => cause,
+            DeleteTypeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTypeError {}
 /// Errors returned by FlushApiCache
 #[derive(Debug, PartialEq)]
 pub enum FlushApiCacheError {
@@ -2446,20 +2390,16 @@ impl FlushApiCacheError {
 }
 impl fmt::Display for FlushApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for FlushApiCacheError {
-    fn description(&self) -> &str {
         match *self {
-            FlushApiCacheError::BadRequest(ref cause) => cause,
-            FlushApiCacheError::ConcurrentModification(ref cause) => cause,
-            FlushApiCacheError::InternalFailure(ref cause) => cause,
-            FlushApiCacheError::NotFound(ref cause) => cause,
-            FlushApiCacheError::Unauthorized(ref cause) => cause,
+            FlushApiCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            FlushApiCacheError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            FlushApiCacheError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            FlushApiCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            FlushApiCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for FlushApiCacheError {}
 /// Errors returned by GetApiCache
 #[derive(Debug, PartialEq)]
 pub enum GetApiCacheError {
@@ -2503,20 +2443,16 @@ impl GetApiCacheError {
 }
 impl fmt::Display for GetApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetApiCacheError {
-    fn description(&self) -> &str {
         match *self {
-            GetApiCacheError::BadRequest(ref cause) => cause,
-            GetApiCacheError::ConcurrentModification(ref cause) => cause,
-            GetApiCacheError::InternalFailure(ref cause) => cause,
-            GetApiCacheError::NotFound(ref cause) => cause,
-            GetApiCacheError::Unauthorized(ref cause) => cause,
+            GetApiCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetApiCacheError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            GetApiCacheError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetApiCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetApiCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetApiCacheError {}
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
@@ -2562,20 +2498,16 @@ impl GetDataSourceError {
 }
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            GetDataSourceError::BadRequest(ref cause) => cause,
-            GetDataSourceError::ConcurrentModification(ref cause) => cause,
-            GetDataSourceError::InternalFailure(ref cause) => cause,
-            GetDataSourceError::NotFound(ref cause) => cause,
-            GetDataSourceError::Unauthorized(ref cause) => cause,
+            GetDataSourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDataSourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetDataSourceError {}
 /// Errors returned by GetFunction
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionError {
@@ -2609,18 +2541,14 @@ impl GetFunctionError {
 }
 impl fmt::Display for GetFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFunctionError::ConcurrentModification(ref cause) => cause,
-            GetFunctionError::NotFound(ref cause) => cause,
-            GetFunctionError::Unauthorized(ref cause) => cause,
+            GetFunctionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            GetFunctionError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetFunctionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFunctionError {}
 /// Errors returned by GetGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum GetGraphqlApiError {
@@ -2664,20 +2592,16 @@ impl GetGraphqlApiError {
 }
 impl fmt::Display for GetGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetGraphqlApiError {
-    fn description(&self) -> &str {
         match *self {
-            GetGraphqlApiError::AccessDenied(ref cause) => cause,
-            GetGraphqlApiError::BadRequest(ref cause) => cause,
-            GetGraphqlApiError::InternalFailure(ref cause) => cause,
-            GetGraphqlApiError::NotFound(ref cause) => cause,
-            GetGraphqlApiError::Unauthorized(ref cause) => cause,
+            GetGraphqlApiError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetGraphqlApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetGraphqlApiError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetGraphqlApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetGraphqlApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetGraphqlApiError {}
 /// Errors returned by GetIntrospectionSchema
 #[derive(Debug, PartialEq)]
 pub enum GetIntrospectionSchemaError {
@@ -2720,19 +2644,15 @@ impl GetIntrospectionSchemaError {
 }
 impl fmt::Display for GetIntrospectionSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetIntrospectionSchemaError {
-    fn description(&self) -> &str {
         match *self {
-            GetIntrospectionSchemaError::GraphQLSchema(ref cause) => cause,
-            GetIntrospectionSchemaError::InternalFailure(ref cause) => cause,
-            GetIntrospectionSchemaError::NotFound(ref cause) => cause,
-            GetIntrospectionSchemaError::Unauthorized(ref cause) => cause,
+            GetIntrospectionSchemaError::GraphQLSchema(ref cause) => write!(f, "{}", cause),
+            GetIntrospectionSchemaError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetIntrospectionSchemaError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetIntrospectionSchemaError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetIntrospectionSchemaError {}
 /// Errors returned by GetResolver
 #[derive(Debug, PartialEq)]
 pub enum GetResolverError {
@@ -2766,18 +2686,14 @@ impl GetResolverError {
 }
 impl fmt::Display for GetResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetResolverError {
-    fn description(&self) -> &str {
         match *self {
-            GetResolverError::ConcurrentModification(ref cause) => cause,
-            GetResolverError::NotFound(ref cause) => cause,
-            GetResolverError::Unauthorized(ref cause) => cause,
+            GetResolverError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            GetResolverError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetResolverError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetResolverError {}
 /// Errors returned by GetSchemaCreationStatus
 #[derive(Debug, PartialEq)]
 pub enum GetSchemaCreationStatusError {
@@ -2820,19 +2736,15 @@ impl GetSchemaCreationStatusError {
 }
 impl fmt::Display for GetSchemaCreationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSchemaCreationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            GetSchemaCreationStatusError::BadRequest(ref cause) => cause,
-            GetSchemaCreationStatusError::InternalFailure(ref cause) => cause,
-            GetSchemaCreationStatusError::NotFound(ref cause) => cause,
-            GetSchemaCreationStatusError::Unauthorized(ref cause) => cause,
+            GetSchemaCreationStatusError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSchemaCreationStatusError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetSchemaCreationStatusError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSchemaCreationStatusError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetSchemaCreationStatusError {}
 /// Errors returned by GetType
 #[derive(Debug, PartialEq)]
 pub enum GetTypeError {
@@ -2876,20 +2788,16 @@ impl GetTypeError {
 }
 impl fmt::Display for GetTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTypeError {
-    fn description(&self) -> &str {
         match *self {
-            GetTypeError::BadRequest(ref cause) => cause,
-            GetTypeError::ConcurrentModification(ref cause) => cause,
-            GetTypeError::InternalFailure(ref cause) => cause,
-            GetTypeError::NotFound(ref cause) => cause,
-            GetTypeError::Unauthorized(ref cause) => cause,
+            GetTypeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            GetTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            GetTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetTypeError {}
 /// Errors returned by ListApiKeys
 #[derive(Debug, PartialEq)]
 pub enum ListApiKeysError {
@@ -2928,19 +2836,15 @@ impl ListApiKeysError {
 }
 impl fmt::Display for ListApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListApiKeysError {
-    fn description(&self) -> &str {
         match *self {
-            ListApiKeysError::BadRequest(ref cause) => cause,
-            ListApiKeysError::InternalFailure(ref cause) => cause,
-            ListApiKeysError::NotFound(ref cause) => cause,
-            ListApiKeysError::Unauthorized(ref cause) => cause,
+            ListApiKeysError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListApiKeysError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListApiKeysError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListApiKeysError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListApiKeysError {}
 /// Errors returned by ListDataSources
 #[derive(Debug, PartialEq)]
 pub enum ListDataSourcesError {
@@ -2979,19 +2883,15 @@ impl ListDataSourcesError {
 }
 impl fmt::Display for ListDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDataSourcesError {
-    fn description(&self) -> &str {
         match *self {
-            ListDataSourcesError::BadRequest(ref cause) => cause,
-            ListDataSourcesError::InternalFailure(ref cause) => cause,
-            ListDataSourcesError::NotFound(ref cause) => cause,
-            ListDataSourcesError::Unauthorized(ref cause) => cause,
+            ListDataSourcesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListDataSourcesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDataSourcesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListDataSourcesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListDataSourcesError {}
 /// Errors returned by ListFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListFunctionsError {
@@ -3030,19 +2930,15 @@ impl ListFunctionsError {
 }
 impl fmt::Display for ListFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFunctionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListFunctionsError::BadRequest(ref cause) => cause,
-            ListFunctionsError::InternalFailure(ref cause) => cause,
-            ListFunctionsError::NotFound(ref cause) => cause,
-            ListFunctionsError::Unauthorized(ref cause) => cause,
+            ListFunctionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListFunctionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListFunctionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListFunctionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFunctionsError {}
 /// Errors returned by ListGraphqlApis
 #[derive(Debug, PartialEq)]
 pub enum ListGraphqlApisError {
@@ -3076,18 +2972,14 @@ impl ListGraphqlApisError {
 }
 impl fmt::Display for ListGraphqlApisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListGraphqlApisError {
-    fn description(&self) -> &str {
         match *self {
-            ListGraphqlApisError::BadRequest(ref cause) => cause,
-            ListGraphqlApisError::InternalFailure(ref cause) => cause,
-            ListGraphqlApisError::Unauthorized(ref cause) => cause,
+            ListGraphqlApisError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListGraphqlApisError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListGraphqlApisError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListGraphqlApisError {}
 /// Errors returned by ListResolvers
 #[derive(Debug, PartialEq)]
 pub enum ListResolversError {
@@ -3126,19 +3018,15 @@ impl ListResolversError {
 }
 impl fmt::Display for ListResolversError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResolversError {
-    fn description(&self) -> &str {
         match *self {
-            ListResolversError::BadRequest(ref cause) => cause,
-            ListResolversError::InternalFailure(ref cause) => cause,
-            ListResolversError::NotFound(ref cause) => cause,
-            ListResolversError::Unauthorized(ref cause) => cause,
+            ListResolversError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListResolversError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListResolversError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListResolversError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResolversError {}
 /// Errors returned by ListResolversByFunction
 #[derive(Debug, PartialEq)]
 pub enum ListResolversByFunctionError {
@@ -3181,19 +3069,15 @@ impl ListResolversByFunctionError {
 }
 impl fmt::Display for ListResolversByFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListResolversByFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            ListResolversByFunctionError::BadRequest(ref cause) => cause,
-            ListResolversByFunctionError::InternalFailure(ref cause) => cause,
-            ListResolversByFunctionError::NotFound(ref cause) => cause,
-            ListResolversByFunctionError::Unauthorized(ref cause) => cause,
+            ListResolversByFunctionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListResolversByFunctionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListResolversByFunctionError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListResolversByFunctionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListResolversByFunctionError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3242,21 +3126,17 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::AccessDenied(ref cause) => cause,
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalFailure(ref cause) => cause,
-            ListTagsForResourceError::LimitExceeded(ref cause) => cause,
-            ListTagsForResourceError::NotFound(ref cause) => cause,
-            ListTagsForResourceError::Unauthorized(ref cause) => cause,
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListTypes
 #[derive(Debug, PartialEq)]
 pub enum ListTypesError {
@@ -3300,20 +3180,16 @@ impl ListTypesError {
 }
 impl fmt::Display for ListTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTypesError {
-    fn description(&self) -> &str {
         match *self {
-            ListTypesError::BadRequest(ref cause) => cause,
-            ListTypesError::ConcurrentModification(ref cause) => cause,
-            ListTypesError::InternalFailure(ref cause) => cause,
-            ListTypesError::NotFound(ref cause) => cause,
-            ListTypesError::Unauthorized(ref cause) => cause,
+            ListTypesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTypesError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            ListTypesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTypesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTypesError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTypesError {}
 /// Errors returned by StartSchemaCreation
 #[derive(Debug, PartialEq)]
 pub enum StartSchemaCreationError {
@@ -3359,20 +3235,16 @@ impl StartSchemaCreationError {
 }
 impl fmt::Display for StartSchemaCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartSchemaCreationError {
-    fn description(&self) -> &str {
         match *self {
-            StartSchemaCreationError::BadRequest(ref cause) => cause,
-            StartSchemaCreationError::ConcurrentModification(ref cause) => cause,
-            StartSchemaCreationError::InternalFailure(ref cause) => cause,
-            StartSchemaCreationError::NotFound(ref cause) => cause,
-            StartSchemaCreationError::Unauthorized(ref cause) => cause,
+            StartSchemaCreationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            StartSchemaCreationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            StartSchemaCreationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            StartSchemaCreationError::NotFound(ref cause) => write!(f, "{}", cause),
+            StartSchemaCreationError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartSchemaCreationError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3421,21 +3293,17 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::AccessDenied(ref cause) => cause,
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalFailure(ref cause) => cause,
-            TagResourceError::LimitExceeded(ref cause) => cause,
-            TagResourceError::NotFound(ref cause) => cause,
-            TagResourceError::Unauthorized(ref cause) => cause,
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -3484,21 +3352,17 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::AccessDenied(ref cause) => cause,
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalFailure(ref cause) => cause,
-            UntagResourceError::LimitExceeded(ref cause) => cause,
-            UntagResourceError::NotFound(ref cause) => cause,
-            UntagResourceError::Unauthorized(ref cause) => cause,
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateApiCache
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiCacheError {
@@ -3544,20 +3408,16 @@ impl UpdateApiCacheError {
 }
 impl fmt::Display for UpdateApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApiCacheError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApiCacheError::BadRequest(ref cause) => cause,
-            UpdateApiCacheError::ConcurrentModification(ref cause) => cause,
-            UpdateApiCacheError::InternalFailure(ref cause) => cause,
-            UpdateApiCacheError::NotFound(ref cause) => cause,
-            UpdateApiCacheError::Unauthorized(ref cause) => cause,
+            UpdateApiCacheError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateApiCacheError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateApiCacheError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateApiCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApiCacheError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApiCacheError {}
 /// Errors returned by UpdateApiKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiKeyError {
@@ -3608,21 +3468,17 @@ impl UpdateApiKeyError {
 }
 impl fmt::Display for UpdateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateApiKeyError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateApiKeyError::ApiKeyValidityOutOfBounds(ref cause) => cause,
-            UpdateApiKeyError::BadRequest(ref cause) => cause,
-            UpdateApiKeyError::InternalFailure(ref cause) => cause,
-            UpdateApiKeyError::LimitExceeded(ref cause) => cause,
-            UpdateApiKeyError::NotFound(ref cause) => cause,
-            UpdateApiKeyError::Unauthorized(ref cause) => cause,
+            UpdateApiKeyError::ApiKeyValidityOutOfBounds(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateApiKeyError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateApiKeyError {}
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
@@ -3668,20 +3524,16 @@ impl UpdateDataSourceError {
 }
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDataSourceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDataSourceError::BadRequest(ref cause) => cause,
-            UpdateDataSourceError::ConcurrentModification(ref cause) => cause,
-            UpdateDataSourceError::InternalFailure(ref cause) => cause,
-            UpdateDataSourceError::NotFound(ref cause) => cause,
-            UpdateDataSourceError::Unauthorized(ref cause) => cause,
+            UpdateDataSourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDataSourceError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDataSourceError {}
 /// Errors returned by UpdateFunction
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionError {
@@ -3722,19 +3574,15 @@ impl UpdateFunctionError {
 }
 impl fmt::Display for UpdateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFunctionError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFunctionError::ConcurrentModification(ref cause) => cause,
-            UpdateFunctionError::InternalFailure(ref cause) => cause,
-            UpdateFunctionError::NotFound(ref cause) => cause,
-            UpdateFunctionError::Unauthorized(ref cause) => cause,
+            UpdateFunctionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFunctionError {}
 /// Errors returned by UpdateGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateGraphqlApiError {
@@ -3785,21 +3633,17 @@ impl UpdateGraphqlApiError {
 }
 impl fmt::Display for UpdateGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateGraphqlApiError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateGraphqlApiError::AccessDenied(ref cause) => cause,
-            UpdateGraphqlApiError::BadRequest(ref cause) => cause,
-            UpdateGraphqlApiError::ConcurrentModification(ref cause) => cause,
-            UpdateGraphqlApiError::InternalFailure(ref cause) => cause,
-            UpdateGraphqlApiError::NotFound(ref cause) => cause,
-            UpdateGraphqlApiError::Unauthorized(ref cause) => cause,
+            UpdateGraphqlApiError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateGraphqlApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGraphqlApiError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateGraphqlApiError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateGraphqlApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGraphqlApiError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateGraphqlApiError {}
 /// Errors returned by UpdateResolver
 #[derive(Debug, PartialEq)]
 pub enum UpdateResolverError {
@@ -3840,19 +3684,15 @@ impl UpdateResolverError {
 }
 impl fmt::Display for UpdateResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateResolverError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateResolverError::ConcurrentModification(ref cause) => cause,
-            UpdateResolverError::InternalFailure(ref cause) => cause,
-            UpdateResolverError::NotFound(ref cause) => cause,
-            UpdateResolverError::Unauthorized(ref cause) => cause,
+            UpdateResolverError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateResolverError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateResolverError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateResolverError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateResolverError {}
 /// Errors returned by UpdateType
 #[derive(Debug, PartialEq)]
 pub enum UpdateTypeError {
@@ -3896,20 +3736,16 @@ impl UpdateTypeError {
 }
 impl fmt::Display for UpdateTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTypeError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTypeError::BadRequest(ref cause) => cause,
-            UpdateTypeError::ConcurrentModification(ref cause) => cause,
-            UpdateTypeError::InternalFailure(ref cause) => cause,
-            UpdateTypeError::NotFound(ref cause) => cause,
-            UpdateTypeError::Unauthorized(ref cause) => cause,
+            UpdateTypeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateTypeError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateTypeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTypeError {}
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
 pub trait AppSync {
     /// <p>Creates a cache for the GraphQL API.</p>

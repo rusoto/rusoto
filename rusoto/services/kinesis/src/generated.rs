@@ -1078,19 +1078,15 @@ impl AddTagsToStreamError {
 }
 impl fmt::Display for AddTagsToStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsToStreamError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsToStreamError::InvalidArgument(ref cause) => cause,
-            AddTagsToStreamError::LimitExceeded(ref cause) => cause,
-            AddTagsToStreamError::ResourceInUse(ref cause) => cause,
-            AddTagsToStreamError::ResourceNotFound(ref cause) => cause,
+            AddTagsToStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            AddTagsToStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AddTagsToStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AddTagsToStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsToStreamError {}
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamError {
@@ -1124,18 +1120,14 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamError::InvalidArgument(ref cause) => cause,
-            CreateStreamError::LimitExceeded(ref cause) => cause,
-            CreateStreamError::ResourceInUse(ref cause) => cause,
+            CreateStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamError {}
 /// Errors returned by DecreaseStreamRetentionPeriod
 #[derive(Debug, PartialEq)]
 pub enum DecreaseStreamRetentionPeriodError {
@@ -1184,19 +1176,19 @@ impl DecreaseStreamRetentionPeriodError {
 }
 impl fmt::Display for DecreaseStreamRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DecreaseStreamRetentionPeriodError {
-    fn description(&self) -> &str {
         match *self {
-            DecreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,
-            DecreaseStreamRetentionPeriodError::LimitExceeded(ref cause) => cause,
-            DecreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,
-            DecreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,
+            DecreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DecreaseStreamRetentionPeriodError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DecreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DecreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DecreaseStreamRetentionPeriodError {}
 /// Errors returned by DeleteStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamError {
@@ -1230,18 +1222,14 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamError::LimitExceeded(ref cause) => cause,
-            DeleteStreamError::ResourceInUse(ref cause) => cause,
-            DeleteStreamError::ResourceNotFound(ref cause) => cause,
+            DeleteStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamError {}
 /// Errors returned by DeregisterStreamConsumer
 #[derive(Debug, PartialEq)]
 pub enum DeregisterStreamConsumerError {
@@ -1281,18 +1269,14 @@ impl DeregisterStreamConsumerError {
 }
 impl fmt::Display for DeregisterStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterStreamConsumerError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterStreamConsumerError::InvalidArgument(ref cause) => cause,
-            DeregisterStreamConsumerError::LimitExceeded(ref cause) => cause,
-            DeregisterStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            DeregisterStreamConsumerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeregisterStreamConsumerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeregisterStreamConsumerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterStreamConsumerError {}
 /// Errors returned by DescribeLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeLimitsError {
@@ -1316,16 +1300,12 @@ impl DescribeLimitsError {
 }
 impl fmt::Display for DescribeLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLimitsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLimitsError::LimitExceeded(ref cause) => cause,
+            DescribeLimitsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLimitsError {}
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {
@@ -1354,17 +1334,13 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamError::LimitExceeded(ref cause) => cause,
-            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamError {}
 /// Errors returned by DescribeStreamConsumer
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamConsumerError {
@@ -1404,18 +1380,14 @@ impl DescribeStreamConsumerError {
 }
 impl fmt::Display for DescribeStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamConsumerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamConsumerError::InvalidArgument(ref cause) => cause,
-            DescribeStreamConsumerError::LimitExceeded(ref cause) => cause,
-            DescribeStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamConsumerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeStreamConsumerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamConsumerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamConsumerError {}
 /// Errors returned by DescribeStreamSummary
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamSummaryError {
@@ -1446,17 +1418,13 @@ impl DescribeStreamSummaryError {
 }
 impl fmt::Display for DescribeStreamSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamSummaryError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamSummaryError::LimitExceeded(ref cause) => cause,
-            DescribeStreamSummaryError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamSummaryError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DescribeStreamSummaryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamSummaryError {}
 /// Errors returned by DisableEnhancedMonitoring
 #[derive(Debug, PartialEq)]
 pub enum DisableEnhancedMonitoringError {
@@ -1503,19 +1471,15 @@ impl DisableEnhancedMonitoringError {
 }
 impl fmt::Display for DisableEnhancedMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableEnhancedMonitoringError {
-    fn description(&self) -> &str {
         match *self {
-            DisableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,
-            DisableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,
-            DisableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,
-            DisableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,
+            DisableEnhancedMonitoringError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DisableEnhancedMonitoringError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DisableEnhancedMonitoringError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DisableEnhancedMonitoringError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisableEnhancedMonitoringError {}
 /// Errors returned by EnableEnhancedMonitoring
 #[derive(Debug, PartialEq)]
 pub enum EnableEnhancedMonitoringError {
@@ -1562,19 +1526,15 @@ impl EnableEnhancedMonitoringError {
 }
 impl fmt::Display for EnableEnhancedMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableEnhancedMonitoringError {
-    fn description(&self) -> &str {
         match *self {
-            EnableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,
-            EnableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,
-            EnableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,
-            EnableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,
+            EnableEnhancedMonitoringError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            EnableEnhancedMonitoringError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            EnableEnhancedMonitoringError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            EnableEnhancedMonitoringError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnableEnhancedMonitoringError {}
 /// Errors returned by GetRecords
 #[derive(Debug, PartialEq)]
 pub enum GetRecordsError {
@@ -1645,25 +1605,21 @@ impl GetRecordsError {
 }
 impl fmt::Display for GetRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            GetRecordsError::ExpiredIterator(ref cause) => cause,
-            GetRecordsError::InvalidArgument(ref cause) => cause,
-            GetRecordsError::KMSAccessDenied(ref cause) => cause,
-            GetRecordsError::KMSDisabled(ref cause) => cause,
-            GetRecordsError::KMSInvalidState(ref cause) => cause,
-            GetRecordsError::KMSNotFound(ref cause) => cause,
-            GetRecordsError::KMSOptInRequired(ref cause) => cause,
-            GetRecordsError::KMSThrottling(ref cause) => cause,
-            GetRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetRecordsError::ResourceNotFound(ref cause) => cause,
+            GetRecordsError::ExpiredIterator(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            GetRecordsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetRecordsError {}
 /// Errors returned by GetShardIterator
 #[derive(Debug, PartialEq)]
 pub enum GetShardIteratorError {
@@ -1699,18 +1655,16 @@ impl GetShardIteratorError {
 }
 impl fmt::Display for GetShardIteratorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetShardIteratorError {
-    fn description(&self) -> &str {
         match *self {
-            GetShardIteratorError::InvalidArgument(ref cause) => cause,
-            GetShardIteratorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetShardIteratorError::ResourceNotFound(ref cause) => cause,
+            GetShardIteratorError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetShardIteratorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetShardIteratorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetShardIteratorError {}
 /// Errors returned by IncreaseStreamRetentionPeriod
 #[derive(Debug, PartialEq)]
 pub enum IncreaseStreamRetentionPeriodError {
@@ -1759,19 +1713,19 @@ impl IncreaseStreamRetentionPeriodError {
 }
 impl fmt::Display for IncreaseStreamRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IncreaseStreamRetentionPeriodError {
-    fn description(&self) -> &str {
         match *self {
-            IncreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,
-            IncreaseStreamRetentionPeriodError::LimitExceeded(ref cause) => cause,
-            IncreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,
-            IncreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,
+            IncreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            IncreaseStreamRetentionPeriodError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            IncreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            IncreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for IncreaseStreamRetentionPeriodError {}
 /// Errors returned by ListShards
 #[derive(Debug, PartialEq)]
 pub enum ListShardsError {
@@ -1815,20 +1769,16 @@ impl ListShardsError {
 }
 impl fmt::Display for ListShardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListShardsError {
-    fn description(&self) -> &str {
         match *self {
-            ListShardsError::ExpiredNextToken(ref cause) => cause,
-            ListShardsError::InvalidArgument(ref cause) => cause,
-            ListShardsError::LimitExceeded(ref cause) => cause,
-            ListShardsError::ResourceInUse(ref cause) => cause,
-            ListShardsError::ResourceNotFound(ref cause) => cause,
+            ListShardsError::ExpiredNextToken(ref cause) => write!(f, "{}", cause),
+            ListShardsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListShardsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListShardsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            ListShardsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListShardsError {}
 /// Errors returned by ListStreamConsumers
 #[derive(Debug, PartialEq)]
 pub enum ListStreamConsumersError {
@@ -1876,20 +1826,16 @@ impl ListStreamConsumersError {
 }
 impl fmt::Display for ListStreamConsumersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamConsumersError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamConsumersError::ExpiredNextToken(ref cause) => cause,
-            ListStreamConsumersError::InvalidArgument(ref cause) => cause,
-            ListStreamConsumersError::LimitExceeded(ref cause) => cause,
-            ListStreamConsumersError::ResourceInUse(ref cause) => cause,
-            ListStreamConsumersError::ResourceNotFound(ref cause) => cause,
+            ListStreamConsumersError::ExpiredNextToken(ref cause) => write!(f, "{}", cause),
+            ListStreamConsumersError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListStreamConsumersError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListStreamConsumersError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            ListStreamConsumersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamConsumersError {}
 /// Errors returned by ListStreams
 #[derive(Debug, PartialEq)]
 pub enum ListStreamsError {
@@ -1913,16 +1859,12 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamsError::LimitExceeded(ref cause) => cause,
+            ListStreamsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamsError {}
 /// Errors returned by ListTagsForStream
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForStreamError {
@@ -1956,18 +1898,14 @@ impl ListTagsForStreamError {
 }
 impl fmt::Display for ListTagsForStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForStreamError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForStreamError::InvalidArgument(ref cause) => cause,
-            ListTagsForStreamError::LimitExceeded(ref cause) => cause,
-            ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
+            ListTagsForStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForStreamError {}
 /// Errors returned by MergeShards
 #[derive(Debug, PartialEq)]
 pub enum MergeShardsError {
@@ -2006,19 +1944,15 @@ impl MergeShardsError {
 }
 impl fmt::Display for MergeShardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for MergeShardsError {
-    fn description(&self) -> &str {
         match *self {
-            MergeShardsError::InvalidArgument(ref cause) => cause,
-            MergeShardsError::LimitExceeded(ref cause) => cause,
-            MergeShardsError::ResourceInUse(ref cause) => cause,
-            MergeShardsError::ResourceNotFound(ref cause) => cause,
+            MergeShardsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            MergeShardsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            MergeShardsError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            MergeShardsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for MergeShardsError {}
 /// Errors returned by PutRecord
 #[derive(Debug, PartialEq)]
 pub enum PutRecordError {
@@ -2084,24 +2018,20 @@ impl PutRecordError {
 }
 impl fmt::Display for PutRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRecordError {
-    fn description(&self) -> &str {
         match *self {
-            PutRecordError::InvalidArgument(ref cause) => cause,
-            PutRecordError::KMSAccessDenied(ref cause) => cause,
-            PutRecordError::KMSDisabled(ref cause) => cause,
-            PutRecordError::KMSInvalidState(ref cause) => cause,
-            PutRecordError::KMSNotFound(ref cause) => cause,
-            PutRecordError::KMSOptInRequired(ref cause) => cause,
-            PutRecordError::KMSThrottling(ref cause) => cause,
-            PutRecordError::ProvisionedThroughputExceeded(ref cause) => cause,
-            PutRecordError::ResourceNotFound(ref cause) => cause,
+            PutRecordError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            PutRecordError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            PutRecordError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            PutRecordError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRecordError {}
 /// Errors returned by PutRecords
 #[derive(Debug, PartialEq)]
 pub enum PutRecordsError {
@@ -2167,24 +2097,20 @@ impl PutRecordsError {
 }
 impl fmt::Display for PutRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutRecordsError {
-    fn description(&self) -> &str {
         match *self {
-            PutRecordsError::InvalidArgument(ref cause) => cause,
-            PutRecordsError::KMSAccessDenied(ref cause) => cause,
-            PutRecordsError::KMSDisabled(ref cause) => cause,
-            PutRecordsError::KMSInvalidState(ref cause) => cause,
-            PutRecordsError::KMSNotFound(ref cause) => cause,
-            PutRecordsError::KMSOptInRequired(ref cause) => cause,
-            PutRecordsError::KMSThrottling(ref cause) => cause,
-            PutRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            PutRecordsError::ResourceNotFound(ref cause) => cause,
+            PutRecordsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            PutRecordsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutRecordsError {}
 /// Errors returned by RegisterStreamConsumer
 #[derive(Debug, PartialEq)]
 pub enum RegisterStreamConsumerError {
@@ -2231,19 +2157,15 @@ impl RegisterStreamConsumerError {
 }
 impl fmt::Display for RegisterStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterStreamConsumerError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterStreamConsumerError::InvalidArgument(ref cause) => cause,
-            RegisterStreamConsumerError::LimitExceeded(ref cause) => cause,
-            RegisterStreamConsumerError::ResourceInUse(ref cause) => cause,
-            RegisterStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            RegisterStreamConsumerError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            RegisterStreamConsumerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RegisterStreamConsumerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            RegisterStreamConsumerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterStreamConsumerError {}
 /// Errors returned by RemoveTagsFromStream
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromStreamError {
@@ -2286,19 +2208,15 @@ impl RemoveTagsFromStreamError {
 }
 impl fmt::Display for RemoveTagsFromStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsFromStreamError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsFromStreamError::InvalidArgument(ref cause) => cause,
-            RemoveTagsFromStreamError::LimitExceeded(ref cause) => cause,
-            RemoveTagsFromStreamError::ResourceInUse(ref cause) => cause,
-            RemoveTagsFromStreamError::ResourceNotFound(ref cause) => cause,
+            RemoveTagsFromStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromStreamError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsFromStreamError {}
 /// Errors returned by SplitShard
 #[derive(Debug, PartialEq)]
 pub enum SplitShardError {
@@ -2337,19 +2255,15 @@ impl SplitShardError {
 }
 impl fmt::Display for SplitShardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SplitShardError {
-    fn description(&self) -> &str {
         match *self {
-            SplitShardError::InvalidArgument(ref cause) => cause,
-            SplitShardError::LimitExceeded(ref cause) => cause,
-            SplitShardError::ResourceInUse(ref cause) => cause,
-            SplitShardError::ResourceNotFound(ref cause) => cause,
+            SplitShardError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            SplitShardError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SplitShardError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            SplitShardError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SplitShardError {}
 /// Errors returned by StartStreamEncryption
 #[derive(Debug, PartialEq)]
 pub enum StartStreamEncryptionError {
@@ -2428,25 +2342,21 @@ impl StartStreamEncryptionError {
 }
 impl fmt::Display for StartStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartStreamEncryptionError {
-    fn description(&self) -> &str {
         match *self {
-            StartStreamEncryptionError::InvalidArgument(ref cause) => cause,
-            StartStreamEncryptionError::KMSAccessDenied(ref cause) => cause,
-            StartStreamEncryptionError::KMSDisabled(ref cause) => cause,
-            StartStreamEncryptionError::KMSInvalidState(ref cause) => cause,
-            StartStreamEncryptionError::KMSNotFound(ref cause) => cause,
-            StartStreamEncryptionError::KMSOptInRequired(ref cause) => cause,
-            StartStreamEncryptionError::KMSThrottling(ref cause) => cause,
-            StartStreamEncryptionError::LimitExceeded(ref cause) => cause,
-            StartStreamEncryptionError::ResourceInUse(ref cause) => cause,
-            StartStreamEncryptionError::ResourceNotFound(ref cause) => cause,
+            StartStreamEncryptionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSAccessDenied(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSDisabled(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSInvalidState(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSNotFound(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSOptInRequired(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::KMSThrottling(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartStreamEncryptionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartStreamEncryptionError {}
 /// Errors returned by StopStreamEncryption
 #[derive(Debug, PartialEq)]
 pub enum StopStreamEncryptionError {
@@ -2489,19 +2399,15 @@ impl StopStreamEncryptionError {
 }
 impl fmt::Display for StopStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopStreamEncryptionError {
-    fn description(&self) -> &str {
         match *self {
-            StopStreamEncryptionError::InvalidArgument(ref cause) => cause,
-            StopStreamEncryptionError::LimitExceeded(ref cause) => cause,
-            StopStreamEncryptionError::ResourceInUse(ref cause) => cause,
-            StopStreamEncryptionError::ResourceNotFound(ref cause) => cause,
+            StopStreamEncryptionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            StopStreamEncryptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopStreamEncryptionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopStreamEncryptionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopStreamEncryptionError {}
 /// Errors returned by SubscribeToShard
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToShardError {
@@ -2540,19 +2446,15 @@ impl SubscribeToShardError {
 }
 impl fmt::Display for SubscribeToShardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubscribeToShardError {
-    fn description(&self) -> &str {
         match *self {
-            SubscribeToShardError::InvalidArgument(ref cause) => cause,
-            SubscribeToShardError::LimitExceeded(ref cause) => cause,
-            SubscribeToShardError::ResourceInUse(ref cause) => cause,
-            SubscribeToShardError::ResourceNotFound(ref cause) => cause,
+            SubscribeToShardError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            SubscribeToShardError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            SubscribeToShardError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            SubscribeToShardError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubscribeToShardError {}
 /// Errors returned by UpdateShardCount
 #[derive(Debug, PartialEq)]
 pub enum UpdateShardCountError {
@@ -2591,19 +2493,15 @@ impl UpdateShardCountError {
 }
 impl fmt::Display for UpdateShardCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateShardCountError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateShardCountError::InvalidArgument(ref cause) => cause,
-            UpdateShardCountError::LimitExceeded(ref cause) => cause,
-            UpdateShardCountError::ResourceInUse(ref cause) => cause,
-            UpdateShardCountError::ResourceNotFound(ref cause) => cause,
+            UpdateShardCountError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateShardCountError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateShardCountError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateShardCountError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateShardCountError {}
 /// Trait representing the capabilities of the Kinesis API. Kinesis clients implement this trait.
 pub trait Kinesis {
     /// <p>Adds or updates tags for the specified Kinesis data stream. Each time you invoke this operation, you can specify up to 10 tags. If you want to add more than 10 tags to your stream, you can invoke this operation multiple times. In total, each stream can have up to 50 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>

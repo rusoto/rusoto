@@ -2373,23 +2373,19 @@ impl CompareFacesError {
 }
 impl fmt::Display for CompareFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompareFacesError {
-    fn description(&self) -> &str {
         match *self {
-            CompareFacesError::AccessDenied(ref cause) => cause,
-            CompareFacesError::ImageTooLarge(ref cause) => cause,
-            CompareFacesError::InternalServerError(ref cause) => cause,
-            CompareFacesError::InvalidImageFormat(ref cause) => cause,
-            CompareFacesError::InvalidParameter(ref cause) => cause,
-            CompareFacesError::InvalidS3Object(ref cause) => cause,
-            CompareFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            CompareFacesError::Throttling(ref cause) => cause,
+            CompareFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            CompareFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CompareFacesError {}
 /// Errors returned by CreateCollection
 #[derive(Debug, PartialEq)]
 pub enum CreateCollectionError {
@@ -2444,21 +2440,19 @@ impl CreateCollectionError {
 }
 impl fmt::Display for CreateCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCollectionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCollectionError::AccessDenied(ref cause) => cause,
-            CreateCollectionError::InternalServerError(ref cause) => cause,
-            CreateCollectionError::InvalidParameter(ref cause) => cause,
-            CreateCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            CreateCollectionError::ResourceAlreadyExists(ref cause) => cause,
-            CreateCollectionError::Throttling(ref cause) => cause,
+            CreateCollectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCollectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateCollectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateCollectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCollectionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateCollectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCollectionError {}
 /// Errors returned by CreateProject
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectError {
@@ -2514,22 +2508,18 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectError::AccessDenied(ref cause) => cause,
-            CreateProjectError::InternalServerError(ref cause) => cause,
-            CreateProjectError::InvalidParameter(ref cause) => cause,
-            CreateProjectError::LimitExceeded(ref cause) => cause,
-            CreateProjectError::ProvisionedThroughputExceeded(ref cause) => cause,
-            CreateProjectError::ResourceInUse(ref cause) => cause,
-            CreateProjectError::Throttling(ref cause) => cause,
+            CreateProjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateProjectError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectError {}
 /// Errors returned by CreateProjectVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateProjectVersionError {
@@ -2596,23 +2586,21 @@ impl CreateProjectVersionError {
 }
 impl fmt::Display for CreateProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProjectVersionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProjectVersionError::AccessDenied(ref cause) => cause,
-            CreateProjectVersionError::InternalServerError(ref cause) => cause,
-            CreateProjectVersionError::InvalidParameter(ref cause) => cause,
-            CreateProjectVersionError::LimitExceeded(ref cause) => cause,
-            CreateProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            CreateProjectVersionError::ResourceInUse(ref cause) => cause,
-            CreateProjectVersionError::ResourceNotFound(ref cause) => cause,
-            CreateProjectVersionError::Throttling(ref cause) => cause,
+            CreateProjectVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateProjectVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProjectVersionError {}
 /// Errors returned by CreateStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamProcessorError {
@@ -2672,22 +2660,20 @@ impl CreateStreamProcessorError {
 }
 impl fmt::Display for CreateStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStreamProcessorError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStreamProcessorError::AccessDenied(ref cause) => cause,
-            CreateStreamProcessorError::InternalServerError(ref cause) => cause,
-            CreateStreamProcessorError::InvalidParameter(ref cause) => cause,
-            CreateStreamProcessorError::LimitExceeded(ref cause) => cause,
-            CreateStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            CreateStreamProcessorError::ResourceInUse(ref cause) => cause,
-            CreateStreamProcessorError::Throttling(ref cause) => cause,
+            CreateStreamProcessorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStreamProcessorError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStreamProcessorError {}
 /// Errors returned by DeleteCollection
 #[derive(Debug, PartialEq)]
 pub enum DeleteCollectionError {
@@ -2740,21 +2726,19 @@ impl DeleteCollectionError {
 }
 impl fmt::Display for DeleteCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCollectionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteCollectionError::AccessDenied(ref cause) => cause,
-            DeleteCollectionError::InternalServerError(ref cause) => cause,
-            DeleteCollectionError::InvalidParameter(ref cause) => cause,
-            DeleteCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DeleteCollectionError::ResourceNotFound(ref cause) => cause,
-            DeleteCollectionError::Throttling(ref cause) => cause,
+            DeleteCollectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteCollectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteCollectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteCollectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteCollectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCollectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteCollectionError {}
 /// Errors returned by DeleteFaces
 #[derive(Debug, PartialEq)]
 pub enum DeleteFacesError {
@@ -2805,21 +2789,17 @@ impl DeleteFacesError {
 }
 impl fmt::Display for DeleteFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFacesError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFacesError::AccessDenied(ref cause) => cause,
-            DeleteFacesError::InternalServerError(ref cause) => cause,
-            DeleteFacesError::InvalidParameter(ref cause) => cause,
-            DeleteFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DeleteFacesError::ResourceNotFound(ref cause) => cause,
-            DeleteFacesError::Throttling(ref cause) => cause,
+            DeleteFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteFacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFacesError {}
 /// Errors returned by DeleteStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamProcessorError {
@@ -2881,22 +2861,20 @@ impl DeleteStreamProcessorError {
 }
 impl fmt::Display for DeleteStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStreamProcessorError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStreamProcessorError::AccessDenied(ref cause) => cause,
-            DeleteStreamProcessorError::InternalServerError(ref cause) => cause,
-            DeleteStreamProcessorError::InvalidParameter(ref cause) => cause,
-            DeleteStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DeleteStreamProcessorError::ResourceInUse(ref cause) => cause,
-            DeleteStreamProcessorError::ResourceNotFound(ref cause) => cause,
-            DeleteStreamProcessorError::Throttling(ref cause) => cause,
+            DeleteStreamProcessorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteStreamProcessorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteStreamProcessorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteStreamProcessorError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteStreamProcessorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStreamProcessorError {}
 /// Errors returned by DescribeCollection
 #[derive(Debug, PartialEq)]
 pub enum DescribeCollectionError {
@@ -2949,21 +2927,19 @@ impl DescribeCollectionError {
 }
 impl fmt::Display for DescribeCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCollectionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCollectionError::AccessDenied(ref cause) => cause,
-            DescribeCollectionError::InternalServerError(ref cause) => cause,
-            DescribeCollectionError::InvalidParameter(ref cause) => cause,
-            DescribeCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DescribeCollectionError::ResourceNotFound(ref cause) => cause,
-            DescribeCollectionError::Throttling(ref cause) => cause,
+            DescribeCollectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeCollectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeCollectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeCollectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeCollectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeCollectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCollectionError {}
 /// Errors returned by DescribeProjectVersions
 #[derive(Debug, PartialEq)]
 pub enum DescribeProjectVersionsError {
@@ -3029,22 +3005,22 @@ impl DescribeProjectVersionsError {
 }
 impl fmt::Display for DescribeProjectVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProjectVersionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProjectVersionsError::AccessDenied(ref cause) => cause,
-            DescribeProjectVersionsError::InternalServerError(ref cause) => cause,
-            DescribeProjectVersionsError::InvalidPaginationToken(ref cause) => cause,
-            DescribeProjectVersionsError::InvalidParameter(ref cause) => cause,
-            DescribeProjectVersionsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DescribeProjectVersionsError::ResourceNotFound(ref cause) => cause,
-            DescribeProjectVersionsError::Throttling(ref cause) => cause,
+            DescribeProjectVersionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeProjectVersionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeProjectVersionsError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProjectVersionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeProjectVersionsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProjectVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeProjectVersionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProjectVersionsError {}
 /// Errors returned by DescribeProjects
 #[derive(Debug, PartialEq)]
 pub enum DescribeProjectsError {
@@ -3099,21 +3075,19 @@ impl DescribeProjectsError {
 }
 impl fmt::Display for DescribeProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProjectsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProjectsError::AccessDenied(ref cause) => cause,
-            DescribeProjectsError::InternalServerError(ref cause) => cause,
-            DescribeProjectsError::InvalidPaginationToken(ref cause) => cause,
-            DescribeProjectsError::InvalidParameter(ref cause) => cause,
-            DescribeProjectsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DescribeProjectsError::Throttling(ref cause) => cause,
+            DescribeProjectsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeProjectsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeProjectsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            DescribeProjectsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeProjectsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeProjectsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProjectsError {}
 /// Errors returned by DescribeStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamProcessorError {
@@ -3172,21 +3146,19 @@ impl DescribeStreamProcessorError {
 }
 impl fmt::Display for DescribeStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStreamProcessorError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStreamProcessorError::AccessDenied(ref cause) => cause,
-            DescribeStreamProcessorError::InternalServerError(ref cause) => cause,
-            DescribeStreamProcessorError::InvalidParameter(ref cause) => cause,
-            DescribeStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DescribeStreamProcessorError::ResourceNotFound(ref cause) => cause,
-            DescribeStreamProcessorError::Throttling(ref cause) => cause,
+            DescribeStreamProcessorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeStreamProcessorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeStreamProcessorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeStreamProcessorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStreamProcessorError {}
 /// Errors returned by DetectCustomLabels
 #[derive(Debug, PartialEq)]
 pub enum DetectCustomLabelsError {
@@ -3266,26 +3238,24 @@ impl DetectCustomLabelsError {
 }
 impl fmt::Display for DetectCustomLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectCustomLabelsError {
-    fn description(&self) -> &str {
         match *self {
-            DetectCustomLabelsError::AccessDenied(ref cause) => cause,
-            DetectCustomLabelsError::ImageTooLarge(ref cause) => cause,
-            DetectCustomLabelsError::InternalServerError(ref cause) => cause,
-            DetectCustomLabelsError::InvalidImageFormat(ref cause) => cause,
-            DetectCustomLabelsError::InvalidParameter(ref cause) => cause,
-            DetectCustomLabelsError::InvalidS3Object(ref cause) => cause,
-            DetectCustomLabelsError::LimitExceeded(ref cause) => cause,
-            DetectCustomLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectCustomLabelsError::ResourceNotFound(ref cause) => cause,
-            DetectCustomLabelsError::ResourceNotReady(ref cause) => cause,
-            DetectCustomLabelsError::Throttling(ref cause) => cause,
+            DetectCustomLabelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectCustomLabelsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
+            DetectCustomLabelsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectCustomLabelsError {}
 /// Errors returned by DetectFaces
 #[derive(Debug, PartialEq)]
 pub enum DetectFacesError {
@@ -3346,23 +3316,19 @@ impl DetectFacesError {
 }
 impl fmt::Display for DetectFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectFacesError {
-    fn description(&self) -> &str {
         match *self {
-            DetectFacesError::AccessDenied(ref cause) => cause,
-            DetectFacesError::ImageTooLarge(ref cause) => cause,
-            DetectFacesError::InternalServerError(ref cause) => cause,
-            DetectFacesError::InvalidImageFormat(ref cause) => cause,
-            DetectFacesError::InvalidParameter(ref cause) => cause,
-            DetectFacesError::InvalidS3Object(ref cause) => cause,
-            DetectFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectFacesError::Throttling(ref cause) => cause,
+            DetectFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DetectFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectFacesError {}
 /// Errors returned by DetectLabels
 #[derive(Debug, PartialEq)]
 pub enum DetectLabelsError {
@@ -3423,23 +3389,19 @@ impl DetectLabelsError {
 }
 impl fmt::Display for DetectLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectLabelsError {
-    fn description(&self) -> &str {
         match *self {
-            DetectLabelsError::AccessDenied(ref cause) => cause,
-            DetectLabelsError::ImageTooLarge(ref cause) => cause,
-            DetectLabelsError::InternalServerError(ref cause) => cause,
-            DetectLabelsError::InvalidImageFormat(ref cause) => cause,
-            DetectLabelsError::InvalidParameter(ref cause) => cause,
-            DetectLabelsError::InvalidS3Object(ref cause) => cause,
-            DetectLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectLabelsError::Throttling(ref cause) => cause,
+            DetectLabelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DetectLabelsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectLabelsError {}
 /// Errors returned by DetectModerationLabels
 #[derive(Debug, PartialEq)]
 pub enum DetectModerationLabelsError {
@@ -3517,24 +3479,24 @@ impl DetectModerationLabelsError {
 }
 impl fmt::Display for DetectModerationLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectModerationLabelsError {
-    fn description(&self) -> &str {
         match *self {
-            DetectModerationLabelsError::AccessDenied(ref cause) => cause,
-            DetectModerationLabelsError::HumanLoopQuotaExceeded(ref cause) => cause,
-            DetectModerationLabelsError::ImageTooLarge(ref cause) => cause,
-            DetectModerationLabelsError::InternalServerError(ref cause) => cause,
-            DetectModerationLabelsError::InvalidImageFormat(ref cause) => cause,
-            DetectModerationLabelsError::InvalidParameter(ref cause) => cause,
-            DetectModerationLabelsError::InvalidS3Object(ref cause) => cause,
-            DetectModerationLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectModerationLabelsError::Throttling(ref cause) => cause,
+            DetectModerationLabelsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::HumanLoopQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectModerationLabelsError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectModerationLabelsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectModerationLabelsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectModerationLabelsError {}
 /// Errors returned by DetectText
 #[derive(Debug, PartialEq)]
 pub enum DetectTextError {
@@ -3595,23 +3557,19 @@ impl DetectTextError {
 }
 impl fmt::Display for DetectTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetectTextError {
-    fn description(&self) -> &str {
         match *self {
-            DetectTextError::AccessDenied(ref cause) => cause,
-            DetectTextError::ImageTooLarge(ref cause) => cause,
-            DetectTextError::InternalServerError(ref cause) => cause,
-            DetectTextError::InvalidImageFormat(ref cause) => cause,
-            DetectTextError::InvalidParameter(ref cause) => cause,
-            DetectTextError::InvalidS3Object(ref cause) => cause,
-            DetectTextError::ProvisionedThroughputExceeded(ref cause) => cause,
-            DetectTextError::Throttling(ref cause) => cause,
+            DetectTextError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectTextError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectTextError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DetectTextError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectTextError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectTextError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectTextError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DetectTextError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetectTextError {}
 /// Errors returned by GetCelebrityInfo
 #[derive(Debug, PartialEq)]
 pub enum GetCelebrityInfoError {
@@ -3664,21 +3622,19 @@ impl GetCelebrityInfoError {
 }
 impl fmt::Display for GetCelebrityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCelebrityInfoError {
-    fn description(&self) -> &str {
         match *self {
-            GetCelebrityInfoError::AccessDenied(ref cause) => cause,
-            GetCelebrityInfoError::InternalServerError(ref cause) => cause,
-            GetCelebrityInfoError::InvalidParameter(ref cause) => cause,
-            GetCelebrityInfoError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetCelebrityInfoError::ResourceNotFound(ref cause) => cause,
-            GetCelebrityInfoError::Throttling(ref cause) => cause,
+            GetCelebrityInfoError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCelebrityInfoError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetCelebrityInfoError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCelebrityInfoError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCelebrityInfoError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCelebrityInfoError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCelebrityInfoError {}
 /// Errors returned by GetCelebrityRecognition
 #[derive(Debug, PartialEq)]
 pub enum GetCelebrityRecognitionError {
@@ -3744,22 +3700,22 @@ impl GetCelebrityRecognitionError {
 }
 impl fmt::Display for GetCelebrityRecognitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCelebrityRecognitionError {
-    fn description(&self) -> &str {
         match *self {
-            GetCelebrityRecognitionError::AccessDenied(ref cause) => cause,
-            GetCelebrityRecognitionError::InternalServerError(ref cause) => cause,
-            GetCelebrityRecognitionError::InvalidPaginationToken(ref cause) => cause,
-            GetCelebrityRecognitionError::InvalidParameter(ref cause) => cause,
-            GetCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetCelebrityRecognitionError::ResourceNotFound(ref cause) => cause,
-            GetCelebrityRecognitionError::Throttling(ref cause) => cause,
+            GetCelebrityRecognitionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCelebrityRecognitionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetCelebrityRecognitionError::InvalidPaginationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCelebrityRecognitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCelebrityRecognitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetCelebrityRecognitionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetCelebrityRecognitionError {}
 /// Errors returned by GetContentModeration
 #[derive(Debug, PartialEq)]
 pub enum GetContentModerationError {
@@ -3823,22 +3779,20 @@ impl GetContentModerationError {
 }
 impl fmt::Display for GetContentModerationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetContentModerationError {
-    fn description(&self) -> &str {
         match *self {
-            GetContentModerationError::AccessDenied(ref cause) => cause,
-            GetContentModerationError::InternalServerError(ref cause) => cause,
-            GetContentModerationError::InvalidPaginationToken(ref cause) => cause,
-            GetContentModerationError::InvalidParameter(ref cause) => cause,
-            GetContentModerationError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetContentModerationError::ResourceNotFound(ref cause) => cause,
-            GetContentModerationError::Throttling(ref cause) => cause,
+            GetContentModerationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetContentModerationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetContentModerationError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetContentModerationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetContentModerationError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetContentModerationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetContentModerationError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetContentModerationError {}
 /// Errors returned by GetFaceDetection
 #[derive(Debug, PartialEq)]
 pub enum GetFaceDetectionError {
@@ -3898,22 +3852,20 @@ impl GetFaceDetectionError {
 }
 impl fmt::Display for GetFaceDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFaceDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            GetFaceDetectionError::AccessDenied(ref cause) => cause,
-            GetFaceDetectionError::InternalServerError(ref cause) => cause,
-            GetFaceDetectionError::InvalidPaginationToken(ref cause) => cause,
-            GetFaceDetectionError::InvalidParameter(ref cause) => cause,
-            GetFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetFaceDetectionError::ResourceNotFound(ref cause) => cause,
-            GetFaceDetectionError::Throttling(ref cause) => cause,
+            GetFaceDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFaceDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetFaceDetectionError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetFaceDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFaceDetectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFaceDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFaceDetectionError {}
 /// Errors returned by GetFaceSearch
 #[derive(Debug, PartialEq)]
 pub enum GetFaceSearchError {
@@ -3971,22 +3923,18 @@ impl GetFaceSearchError {
 }
 impl fmt::Display for GetFaceSearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetFaceSearchError {
-    fn description(&self) -> &str {
         match *self {
-            GetFaceSearchError::AccessDenied(ref cause) => cause,
-            GetFaceSearchError::InternalServerError(ref cause) => cause,
-            GetFaceSearchError::InvalidPaginationToken(ref cause) => cause,
-            GetFaceSearchError::InvalidParameter(ref cause) => cause,
-            GetFaceSearchError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetFaceSearchError::ResourceNotFound(ref cause) => cause,
-            GetFaceSearchError::Throttling(ref cause) => cause,
+            GetFaceSearchError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFaceSearchError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetFaceSearchError {}
 /// Errors returned by GetLabelDetection
 #[derive(Debug, PartialEq)]
 pub enum GetLabelDetectionError {
@@ -4046,22 +3994,20 @@ impl GetLabelDetectionError {
 }
 impl fmt::Display for GetLabelDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetLabelDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            GetLabelDetectionError::AccessDenied(ref cause) => cause,
-            GetLabelDetectionError::InternalServerError(ref cause) => cause,
-            GetLabelDetectionError::InvalidPaginationToken(ref cause) => cause,
-            GetLabelDetectionError::InvalidParameter(ref cause) => cause,
-            GetLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetLabelDetectionError::ResourceNotFound(ref cause) => cause,
-            GetLabelDetectionError::Throttling(ref cause) => cause,
+            GetLabelDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetLabelDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetLabelDetectionError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetLabelDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLabelDetectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetLabelDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetLabelDetectionError {}
 /// Errors returned by GetPersonTracking
 #[derive(Debug, PartialEq)]
 pub enum GetPersonTrackingError {
@@ -4121,22 +4067,20 @@ impl GetPersonTrackingError {
 }
 impl fmt::Display for GetPersonTrackingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPersonTrackingError {
-    fn description(&self) -> &str {
         match *self {
-            GetPersonTrackingError::AccessDenied(ref cause) => cause,
-            GetPersonTrackingError::InternalServerError(ref cause) => cause,
-            GetPersonTrackingError::InvalidPaginationToken(ref cause) => cause,
-            GetPersonTrackingError::InvalidParameter(ref cause) => cause,
-            GetPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => cause,
-            GetPersonTrackingError::ResourceNotFound(ref cause) => cause,
-            GetPersonTrackingError::Throttling(ref cause) => cause,
+            GetPersonTrackingError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPersonTrackingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetPersonTrackingError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetPersonTrackingError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetPersonTrackingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPersonTrackingError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetPersonTrackingError {}
 /// Errors returned by IndexFaces
 #[derive(Debug, PartialEq)]
 pub enum IndexFacesError {
@@ -4202,24 +4146,20 @@ impl IndexFacesError {
 }
 impl fmt::Display for IndexFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for IndexFacesError {
-    fn description(&self) -> &str {
         match *self {
-            IndexFacesError::AccessDenied(ref cause) => cause,
-            IndexFacesError::ImageTooLarge(ref cause) => cause,
-            IndexFacesError::InternalServerError(ref cause) => cause,
-            IndexFacesError::InvalidImageFormat(ref cause) => cause,
-            IndexFacesError::InvalidParameter(ref cause) => cause,
-            IndexFacesError::InvalidS3Object(ref cause) => cause,
-            IndexFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            IndexFacesError::ResourceNotFound(ref cause) => cause,
-            IndexFacesError::Throttling(ref cause) => cause,
+            IndexFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for IndexFacesError {}
 /// Errors returned by ListCollections
 #[derive(Debug, PartialEq)]
 pub enum ListCollectionsError {
@@ -4277,22 +4217,20 @@ impl ListCollectionsError {
 }
 impl fmt::Display for ListCollectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCollectionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListCollectionsError::AccessDenied(ref cause) => cause,
-            ListCollectionsError::InternalServerError(ref cause) => cause,
-            ListCollectionsError::InvalidPaginationToken(ref cause) => cause,
-            ListCollectionsError::InvalidParameter(ref cause) => cause,
-            ListCollectionsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            ListCollectionsError::ResourceNotFound(ref cause) => cause,
-            ListCollectionsError::Throttling(ref cause) => cause,
+            ListCollectionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListCollectionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListCollectionsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListCollectionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListCollectionsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListCollectionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListCollectionsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCollectionsError {}
 /// Errors returned by ListFaces
 #[derive(Debug, PartialEq)]
 pub enum ListFacesError {
@@ -4348,22 +4286,18 @@ impl ListFacesError {
 }
 impl fmt::Display for ListFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFacesError {
-    fn description(&self) -> &str {
         match *self {
-            ListFacesError::AccessDenied(ref cause) => cause,
-            ListFacesError::InternalServerError(ref cause) => cause,
-            ListFacesError::InvalidPaginationToken(ref cause) => cause,
-            ListFacesError::InvalidParameter(ref cause) => cause,
-            ListFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            ListFacesError::ResourceNotFound(ref cause) => cause,
-            ListFacesError::Throttling(ref cause) => cause,
+            ListFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListFacesError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            ListFacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListFacesError {}
 /// Errors returned by ListStreamProcessors
 #[derive(Debug, PartialEq)]
 pub enum ListStreamProcessorsError {
@@ -4420,21 +4354,19 @@ impl ListStreamProcessorsError {
 }
 impl fmt::Display for ListStreamProcessorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStreamProcessorsError {
-    fn description(&self) -> &str {
         match *self {
-            ListStreamProcessorsError::AccessDenied(ref cause) => cause,
-            ListStreamProcessorsError::InternalServerError(ref cause) => cause,
-            ListStreamProcessorsError::InvalidPaginationToken(ref cause) => cause,
-            ListStreamProcessorsError::InvalidParameter(ref cause) => cause,
-            ListStreamProcessorsError::ProvisionedThroughputExceeded(ref cause) => cause,
-            ListStreamProcessorsError::Throttling(ref cause) => cause,
+            ListStreamProcessorsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListStreamProcessorsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListStreamProcessorsError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListStreamProcessorsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListStreamProcessorsError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListStreamProcessorsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStreamProcessorsError {}
 /// Errors returned by RecognizeCelebrities
 #[derive(Debug, PartialEq)]
 pub enum RecognizeCelebritiesError {
@@ -4503,23 +4435,21 @@ impl RecognizeCelebritiesError {
 }
 impl fmt::Display for RecognizeCelebritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RecognizeCelebritiesError {
-    fn description(&self) -> &str {
         match *self {
-            RecognizeCelebritiesError::AccessDenied(ref cause) => cause,
-            RecognizeCelebritiesError::ImageTooLarge(ref cause) => cause,
-            RecognizeCelebritiesError::InternalServerError(ref cause) => cause,
-            RecognizeCelebritiesError::InvalidImageFormat(ref cause) => cause,
-            RecognizeCelebritiesError::InvalidParameter(ref cause) => cause,
-            RecognizeCelebritiesError::InvalidS3Object(ref cause) => cause,
-            RecognizeCelebritiesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            RecognizeCelebritiesError::Throttling(ref cause) => cause,
+            RecognizeCelebritiesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            RecognizeCelebritiesError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RecognizeCelebritiesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RecognizeCelebritiesError {}
 /// Errors returned by SearchFaces
 #[derive(Debug, PartialEq)]
 pub enum SearchFacesError {
@@ -4570,21 +4500,17 @@ impl SearchFacesError {
 }
 impl fmt::Display for SearchFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchFacesError {
-    fn description(&self) -> &str {
         match *self {
-            SearchFacesError::AccessDenied(ref cause) => cause,
-            SearchFacesError::InternalServerError(ref cause) => cause,
-            SearchFacesError::InvalidParameter(ref cause) => cause,
-            SearchFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
-            SearchFacesError::ResourceNotFound(ref cause) => cause,
-            SearchFacesError::Throttling(ref cause) => cause,
+            SearchFacesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SearchFacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SearchFacesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SearchFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            SearchFacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchFacesError {}
 /// Errors returned by SearchFacesByImage
 #[derive(Debug, PartialEq)]
 pub enum SearchFacesByImageError {
@@ -4654,24 +4580,22 @@ impl SearchFacesByImageError {
 }
 impl fmt::Display for SearchFacesByImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchFacesByImageError {
-    fn description(&self) -> &str {
         match *self {
-            SearchFacesByImageError::AccessDenied(ref cause) => cause,
-            SearchFacesByImageError::ImageTooLarge(ref cause) => cause,
-            SearchFacesByImageError::InternalServerError(ref cause) => cause,
-            SearchFacesByImageError::InvalidImageFormat(ref cause) => cause,
-            SearchFacesByImageError::InvalidParameter(ref cause) => cause,
-            SearchFacesByImageError::InvalidS3Object(ref cause) => cause,
-            SearchFacesByImageError::ProvisionedThroughputExceeded(ref cause) => cause,
-            SearchFacesByImageError::ResourceNotFound(ref cause) => cause,
-            SearchFacesByImageError::Throttling(ref cause) => cause,
+            SearchFacesByImageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SearchFacesByImageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchFacesByImageError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SearchFacesByImageError {}
 /// Errors returned by StartCelebrityRecognition
 #[derive(Debug, PartialEq)]
 pub enum StartCelebrityRecognitionError {
@@ -4753,24 +4677,26 @@ impl StartCelebrityRecognitionError {
 }
 impl fmt::Display for StartCelebrityRecognitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartCelebrityRecognitionError {
-    fn description(&self) -> &str {
         match *self {
-            StartCelebrityRecognitionError::AccessDenied(ref cause) => cause,
-            StartCelebrityRecognitionError::IdempotentParameterMismatch(ref cause) => cause,
-            StartCelebrityRecognitionError::InternalServerError(ref cause) => cause,
-            StartCelebrityRecognitionError::InvalidParameter(ref cause) => cause,
-            StartCelebrityRecognitionError::InvalidS3Object(ref cause) => cause,
-            StartCelebrityRecognitionError::LimitExceeded(ref cause) => cause,
-            StartCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartCelebrityRecognitionError::Throttling(ref cause) => cause,
-            StartCelebrityRecognitionError::VideoTooLarge(ref cause) => cause,
+            StartCelebrityRecognitionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartCelebrityRecognitionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartCelebrityRecognitionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartCelebrityRecognitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartCelebrityRecognitionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartCelebrityRecognitionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartCelebrityRecognitionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartCelebrityRecognitionError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartCelebrityRecognitionError {}
 /// Errors returned by StartContentModeration
 #[derive(Debug, PartialEq)]
 pub enum StartContentModerationError {
@@ -4848,24 +4774,24 @@ impl StartContentModerationError {
 }
 impl fmt::Display for StartContentModerationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartContentModerationError {
-    fn description(&self) -> &str {
         match *self {
-            StartContentModerationError::AccessDenied(ref cause) => cause,
-            StartContentModerationError::IdempotentParameterMismatch(ref cause) => cause,
-            StartContentModerationError::InternalServerError(ref cause) => cause,
-            StartContentModerationError::InvalidParameter(ref cause) => cause,
-            StartContentModerationError::InvalidS3Object(ref cause) => cause,
-            StartContentModerationError::LimitExceeded(ref cause) => cause,
-            StartContentModerationError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartContentModerationError::Throttling(ref cause) => cause,
-            StartContentModerationError::VideoTooLarge(ref cause) => cause,
+            StartContentModerationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartContentModerationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartContentModerationError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartContentModerationError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartContentModerationError {}
 /// Errors returned by StartFaceDetection
 #[derive(Debug, PartialEq)]
 pub enum StartFaceDetectionError {
@@ -4935,24 +4861,24 @@ impl StartFaceDetectionError {
 }
 impl fmt::Display for StartFaceDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartFaceDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            StartFaceDetectionError::AccessDenied(ref cause) => cause,
-            StartFaceDetectionError::IdempotentParameterMismatch(ref cause) => cause,
-            StartFaceDetectionError::InternalServerError(ref cause) => cause,
-            StartFaceDetectionError::InvalidParameter(ref cause) => cause,
-            StartFaceDetectionError::InvalidS3Object(ref cause) => cause,
-            StartFaceDetectionError::LimitExceeded(ref cause) => cause,
-            StartFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartFaceDetectionError::Throttling(ref cause) => cause,
-            StartFaceDetectionError::VideoTooLarge(ref cause) => cause,
+            StartFaceDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartFaceDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartFaceDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartFaceDetectionError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartFaceDetectionError {}
 /// Errors returned by StartFaceSearch
 #[derive(Debug, PartialEq)]
 pub enum StartFaceSearchError {
@@ -5025,25 +4951,23 @@ impl StartFaceSearchError {
 }
 impl fmt::Display for StartFaceSearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartFaceSearchError {
-    fn description(&self) -> &str {
         match *self {
-            StartFaceSearchError::AccessDenied(ref cause) => cause,
-            StartFaceSearchError::IdempotentParameterMismatch(ref cause) => cause,
-            StartFaceSearchError::InternalServerError(ref cause) => cause,
-            StartFaceSearchError::InvalidParameter(ref cause) => cause,
-            StartFaceSearchError::InvalidS3Object(ref cause) => cause,
-            StartFaceSearchError::LimitExceeded(ref cause) => cause,
-            StartFaceSearchError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartFaceSearchError::ResourceNotFound(ref cause) => cause,
-            StartFaceSearchError::Throttling(ref cause) => cause,
-            StartFaceSearchError::VideoTooLarge(ref cause) => cause,
+            StartFaceSearchError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::IdempotentParameterMismatch(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartFaceSearchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartFaceSearchError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartFaceSearchError {}
 /// Errors returned by StartLabelDetection
 #[derive(Debug, PartialEq)]
 pub enum StartLabelDetectionError {
@@ -5115,24 +5039,24 @@ impl StartLabelDetectionError {
 }
 impl fmt::Display for StartLabelDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartLabelDetectionError {
-    fn description(&self) -> &str {
         match *self {
-            StartLabelDetectionError::AccessDenied(ref cause) => cause,
-            StartLabelDetectionError::IdempotentParameterMismatch(ref cause) => cause,
-            StartLabelDetectionError::InternalServerError(ref cause) => cause,
-            StartLabelDetectionError::InvalidParameter(ref cause) => cause,
-            StartLabelDetectionError::InvalidS3Object(ref cause) => cause,
-            StartLabelDetectionError::LimitExceeded(ref cause) => cause,
-            StartLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartLabelDetectionError::Throttling(ref cause) => cause,
-            StartLabelDetectionError::VideoTooLarge(ref cause) => cause,
+            StartLabelDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLabelDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartLabelDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartLabelDetectionError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartLabelDetectionError {}
 /// Errors returned by StartPersonTracking
 #[derive(Debug, PartialEq)]
 pub enum StartPersonTrackingError {
@@ -5204,24 +5128,24 @@ impl StartPersonTrackingError {
 }
 impl fmt::Display for StartPersonTrackingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartPersonTrackingError {
-    fn description(&self) -> &str {
         match *self {
-            StartPersonTrackingError::AccessDenied(ref cause) => cause,
-            StartPersonTrackingError::IdempotentParameterMismatch(ref cause) => cause,
-            StartPersonTrackingError::InternalServerError(ref cause) => cause,
-            StartPersonTrackingError::InvalidParameter(ref cause) => cause,
-            StartPersonTrackingError::InvalidS3Object(ref cause) => cause,
-            StartPersonTrackingError::LimitExceeded(ref cause) => cause,
-            StartPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartPersonTrackingError::Throttling(ref cause) => cause,
-            StartPersonTrackingError::VideoTooLarge(ref cause) => cause,
+            StartPersonTrackingError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartPersonTrackingError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartPersonTrackingError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartPersonTrackingError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartPersonTrackingError {}
 /// Errors returned by StartProjectVersion
 #[derive(Debug, PartialEq)]
 pub enum StartProjectVersionError {
@@ -5288,23 +5212,21 @@ impl StartProjectVersionError {
 }
 impl fmt::Display for StartProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartProjectVersionError {
-    fn description(&self) -> &str {
         match *self {
-            StartProjectVersionError::AccessDenied(ref cause) => cause,
-            StartProjectVersionError::InternalServerError(ref cause) => cause,
-            StartProjectVersionError::InvalidParameter(ref cause) => cause,
-            StartProjectVersionError::LimitExceeded(ref cause) => cause,
-            StartProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartProjectVersionError::ResourceInUse(ref cause) => cause,
-            StartProjectVersionError::ResourceNotFound(ref cause) => cause,
-            StartProjectVersionError::Throttling(ref cause) => cause,
+            StartProjectVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartProjectVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartProjectVersionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartProjectVersionError {}
 /// Errors returned by StartStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum StartStreamProcessorError {
@@ -5366,22 +5288,20 @@ impl StartStreamProcessorError {
 }
 impl fmt::Display for StartStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartStreamProcessorError {
-    fn description(&self) -> &str {
         match *self {
-            StartStreamProcessorError::AccessDenied(ref cause) => cause,
-            StartStreamProcessorError::InternalServerError(ref cause) => cause,
-            StartStreamProcessorError::InvalidParameter(ref cause) => cause,
-            StartStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StartStreamProcessorError::ResourceInUse(ref cause) => cause,
-            StartStreamProcessorError::ResourceNotFound(ref cause) => cause,
-            StartStreamProcessorError::Throttling(ref cause) => cause,
+            StartStreamProcessorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartStreamProcessorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartStreamProcessorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartStreamProcessorError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StartStreamProcessorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartStreamProcessorError {}
 /// Errors returned by StopProjectVersion
 #[derive(Debug, PartialEq)]
 pub enum StopProjectVersionError {
@@ -5439,22 +5359,20 @@ impl StopProjectVersionError {
 }
 impl fmt::Display for StopProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopProjectVersionError {
-    fn description(&self) -> &str {
         match *self {
-            StopProjectVersionError::AccessDenied(ref cause) => cause,
-            StopProjectVersionError::InternalServerError(ref cause) => cause,
-            StopProjectVersionError::InvalidParameter(ref cause) => cause,
-            StopProjectVersionError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StopProjectVersionError::ResourceInUse(ref cause) => cause,
-            StopProjectVersionError::ResourceNotFound(ref cause) => cause,
-            StopProjectVersionError::Throttling(ref cause) => cause,
+            StopProjectVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopProjectVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopProjectVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopProjectVersionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopProjectVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopProjectVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopProjectVersionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopProjectVersionError {}
 /// Errors returned by StopStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum StopStreamProcessorError {
@@ -5516,22 +5434,20 @@ impl StopStreamProcessorError {
 }
 impl fmt::Display for StopStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopStreamProcessorError {
-    fn description(&self) -> &str {
         match *self {
-            StopStreamProcessorError::AccessDenied(ref cause) => cause,
-            StopStreamProcessorError::InternalServerError(ref cause) => cause,
-            StopStreamProcessorError::InvalidParameter(ref cause) => cause,
-            StopStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
-            StopStreamProcessorError::ResourceInUse(ref cause) => cause,
-            StopStreamProcessorError::ResourceNotFound(ref cause) => cause,
-            StopStreamProcessorError::Throttling(ref cause) => cause,
+            StopStreamProcessorError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StopStreamProcessorError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StopStreamProcessorError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StopStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StopStreamProcessorError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopStreamProcessorError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StopStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopStreamProcessorError {}
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 pub trait Rekognition {
     /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>

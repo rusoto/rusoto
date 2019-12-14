@@ -7040,17 +7040,13 @@ impl AttachInstancesError {
 }
 impl fmt::Display for AttachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            AttachInstancesError::ResourceContentionFault(ref cause) => cause,
-            AttachInstancesError::ServiceLinkedRoleFailure(ref cause) => cause,
+            AttachInstancesError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            AttachInstancesError::ServiceLinkedRoleFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachInstancesError {}
 /// Errors returned by AttachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerTargetGroupsError {
@@ -7101,17 +7097,17 @@ impl AttachLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for AttachLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancerTargetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
-            AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(ref cause) => cause,
+            AttachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for AttachLoadBalancerTargetGroupsError {}
 /// Errors returned by AttachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancersError {
@@ -7158,17 +7154,13 @@ impl AttachLoadBalancersError {
 }
 impl fmt::Display for AttachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AttachLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            AttachLoadBalancersError::ResourceContentionFault(ref cause) => cause,
-            AttachLoadBalancersError::ServiceLinkedRoleFailure(ref cause) => cause,
+            AttachLoadBalancersError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            AttachLoadBalancersError::ServiceLinkedRoleFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AttachLoadBalancersError {}
 /// Errors returned by BatchDeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteScheduledActionError {
@@ -7210,16 +7202,14 @@ impl BatchDeleteScheduledActionError {
 }
 impl fmt::Display for BatchDeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchDeleteScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchDeleteScheduledActionError::ResourceContentionFault(ref cause) => cause,
+            BatchDeleteScheduledActionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchDeleteScheduledActionError {}
 /// Errors returned by BatchPutScheduledUpdateGroupAction
 #[derive(Debug, PartialEq)]
 pub enum BatchPutScheduledUpdateGroupActionError {
@@ -7279,18 +7269,20 @@ impl BatchPutScheduledUpdateGroupActionError {
 }
 impl fmt::Display for BatchPutScheduledUpdateGroupActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchPutScheduledUpdateGroupActionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchPutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => cause,
-            BatchPutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => cause,
-            BatchPutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => cause,
+            BatchPutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchPutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for BatchPutScheduledUpdateGroupActionError {}
 /// Errors returned by CompleteLifecycleAction
 #[derive(Debug, PartialEq)]
 pub enum CompleteLifecycleActionError {
@@ -7330,16 +7322,14 @@ impl CompleteLifecycleActionError {
 }
 impl fmt::Display for CompleteLifecycleActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteLifecycleActionError {
-    fn description(&self) -> &str {
         match *self {
-            CompleteLifecycleActionError::ResourceContentionFault(ref cause) => cause,
+            CompleteLifecycleActionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CompleteLifecycleActionError {}
 /// Errors returned by CreateAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateAutoScalingGroupError {
@@ -7402,19 +7392,19 @@ impl CreateAutoScalingGroupError {
 }
 impl fmt::Display for CreateAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAutoScalingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAutoScalingGroupError::AlreadyExistsFault(ref cause) => cause,
-            CreateAutoScalingGroupError::LimitExceededFault(ref cause) => cause,
-            CreateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
-            CreateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => cause,
+            CreateAutoScalingGroupError::AlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateAutoScalingGroupError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateAutoScalingGroupError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateAutoScalingGroupError {}
 /// Errors returned by CreateLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateLaunchConfigurationError {
@@ -7472,18 +7462,16 @@ impl CreateLaunchConfigurationError {
 }
 impl fmt::Display for CreateLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLaunchConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLaunchConfigurationError::AlreadyExistsFault(ref cause) => cause,
-            CreateLaunchConfigurationError::LimitExceededFault(ref cause) => cause,
-            CreateLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,
+            CreateLaunchConfigurationError::AlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateLaunchConfigurationError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateLaunchConfigurationError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateLaunchConfigurationError {}
 /// Errors returned by CreateOrUpdateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateOrUpdateTagsError {
@@ -7542,19 +7530,15 @@ impl CreateOrUpdateTagsError {
 }
 impl fmt::Display for CreateOrUpdateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateOrUpdateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateOrUpdateTagsError::AlreadyExistsFault(ref cause) => cause,
-            CreateOrUpdateTagsError::LimitExceededFault(ref cause) => cause,
-            CreateOrUpdateTagsError::ResourceContentionFault(ref cause) => cause,
-            CreateOrUpdateTagsError::ResourceInUseFault(ref cause) => cause,
+            CreateOrUpdateTagsError::AlreadyExistsFault(ref cause) => write!(f, "{}", cause),
+            CreateOrUpdateTagsError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateOrUpdateTagsError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            CreateOrUpdateTagsError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateOrUpdateTagsError {}
 /// Errors returned by DeleteAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteAutoScalingGroupError {
@@ -7610,18 +7594,18 @@ impl DeleteAutoScalingGroupError {
 }
 impl fmt::Display for DeleteAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAutoScalingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
-            DeleteAutoScalingGroupError::ResourceInUseFault(ref cause) => cause,
-            DeleteAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
+            DeleteAutoScalingGroupError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAutoScalingGroupError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
+            DeleteAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteAutoScalingGroupError {}
 /// Errors returned by DeleteLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteLaunchConfigurationError {
@@ -7670,17 +7654,15 @@ impl DeleteLaunchConfigurationError {
 }
 impl fmt::Display for DeleteLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLaunchConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,
-            DeleteLaunchConfigurationError::ResourceInUseFault(ref cause) => cause,
+            DeleteLaunchConfigurationError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLaunchConfigurationError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLaunchConfigurationError {}
 /// Errors returned by DeleteLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum DeleteLifecycleHookError {
@@ -7718,16 +7700,12 @@ impl DeleteLifecycleHookError {
 }
 impl fmt::Display for DeleteLifecycleHookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLifecycleHookError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLifecycleHookError::ResourceContentionFault(ref cause) => cause,
+            DeleteLifecycleHookError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLifecycleHookError {}
 /// Errors returned by DeleteNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationConfigurationError {
@@ -7769,16 +7747,14 @@ impl DeleteNotificationConfigurationError {
 }
 impl fmt::Display for DeleteNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotificationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,
+            DeleteNotificationConfigurationError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteNotificationConfigurationError {}
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
@@ -7823,17 +7799,13 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeletePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::ResourceContentionFault(ref cause) => cause,
-            DeletePolicyError::ServiceLinkedRoleFailure(ref cause) => cause,
+            DeletePolicyError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::ServiceLinkedRoleFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeletePolicyError {}
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
@@ -7873,16 +7845,14 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteScheduledActionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteScheduledActionError::ResourceContentionFault(ref cause) => cause,
+            DeleteScheduledActionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DeleteScheduledActionError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -7927,17 +7897,13 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::ResourceContentionFault(ref cause) => cause,
-            DeleteTagsError::ResourceInUseFault(ref cause) => cause,
+            DeleteTagsError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {
@@ -7977,16 +7943,14 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAccountLimitsError::ResourceContentionFault(ref cause) => cause,
+            DescribeAccountLimitsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeAdjustmentTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAdjustmentTypesError {
@@ -8026,16 +7990,14 @@ impl DescribeAdjustmentTypesError {
 }
 impl fmt::Display for DescribeAdjustmentTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAdjustmentTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAdjustmentTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeAdjustmentTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAdjustmentTypesError {}
 /// Errors returned by DescribeAutoScalingGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingGroupsError {
@@ -8082,17 +8044,15 @@ impl DescribeAutoScalingGroupsError {
 }
 impl fmt::Display for DescribeAutoScalingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutoScalingGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutoScalingGroupsError::InvalidNextToken(ref cause) => cause,
-            DescribeAutoScalingGroupsError::ResourceContentionFault(ref cause) => cause,
+            DescribeAutoScalingGroupsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeAutoScalingGroupsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAutoScalingGroupsError {}
 /// Errors returned by DescribeAutoScalingInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingInstancesError {
@@ -8143,17 +8103,17 @@ impl DescribeAutoScalingInstancesError {
 }
 impl fmt::Display for DescribeAutoScalingInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutoScalingInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutoScalingInstancesError::InvalidNextToken(ref cause) => cause,
-            DescribeAutoScalingInstancesError::ResourceContentionFault(ref cause) => cause,
+            DescribeAutoScalingInstancesError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAutoScalingInstancesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAutoScalingInstancesError {}
 /// Errors returned by DescribeAutoScalingNotificationTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingNotificationTypesError {
@@ -8195,16 +8155,14 @@ impl DescribeAutoScalingNotificationTypesError {
 }
 impl fmt::Display for DescribeAutoScalingNotificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutoScalingNotificationTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutoScalingNotificationTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeAutoScalingNotificationTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeAutoScalingNotificationTypesError {}
 /// Errors returned by DescribeLaunchConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeLaunchConfigurationsError {
@@ -8255,17 +8213,17 @@ impl DescribeLaunchConfigurationsError {
 }
 impl fmt::Display for DescribeLaunchConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLaunchConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLaunchConfigurationsError::InvalidNextToken(ref cause) => cause,
-            DescribeLaunchConfigurationsError::ResourceContentionFault(ref cause) => cause,
+            DescribeLaunchConfigurationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeLaunchConfigurationsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLaunchConfigurationsError {}
 /// Errors returned by DescribeLifecycleHookTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHookTypesError {
@@ -8307,16 +8265,14 @@ impl DescribeLifecycleHookTypesError {
 }
 impl fmt::Display for DescribeLifecycleHookTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLifecycleHookTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLifecycleHookTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeLifecycleHookTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLifecycleHookTypesError {}
 /// Errors returned by DescribeLifecycleHooks
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHooksError {
@@ -8356,16 +8312,14 @@ impl DescribeLifecycleHooksError {
 }
 impl fmt::Display for DescribeLifecycleHooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLifecycleHooksError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLifecycleHooksError::ResourceContentionFault(ref cause) => cause,
+            DescribeLifecycleHooksError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLifecycleHooksError {}
 /// Errors returned by DescribeLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerTargetGroupsError {
@@ -8407,16 +8361,14 @@ impl DescribeLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for DescribeLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerTargetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+            DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerTargetGroupsError {}
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
@@ -8456,16 +8408,14 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+            DescribeLoadBalancersError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancersError {}
 /// Errors returned by DescribeMetricCollectionTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeMetricCollectionTypesError {
@@ -8507,16 +8457,14 @@ impl DescribeMetricCollectionTypesError {
 }
 impl fmt::Display for DescribeMetricCollectionTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMetricCollectionTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMetricCollectionTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeMetricCollectionTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeMetricCollectionTypesError {}
 /// Errors returned by DescribeNotificationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationConfigurationsError {
@@ -8567,17 +8515,17 @@ impl DescribeNotificationConfigurationsError {
 }
 impl fmt::Display for DescribeNotificationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotificationConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNotificationConfigurationsError::InvalidNextToken(ref cause) => cause,
-            DescribeNotificationConfigurationsError::ResourceContentionFault(ref cause) => cause,
+            DescribeNotificationConfigurationsError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeNotificationConfigurationsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeNotificationConfigurationsError {}
 /// Errors returned by DescribePolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribePoliciesError {
@@ -8629,18 +8577,14 @@ impl DescribePoliciesError {
 }
 impl fmt::Display for DescribePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribePoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribePoliciesError::InvalidNextToken(ref cause) => cause,
-            DescribePoliciesError::ResourceContentionFault(ref cause) => cause,
-            DescribePoliciesError::ServiceLinkedRoleFailure(ref cause) => cause,
+            DescribePoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribePoliciesError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            DescribePoliciesError::ServiceLinkedRoleFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribePoliciesError {}
 /// Errors returned by DescribeScalingActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingActivitiesError {
@@ -8687,17 +8631,15 @@ impl DescribeScalingActivitiesError {
 }
 impl fmt::Display for DescribeScalingActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingActivitiesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,
-            DescribeScalingActivitiesError::ResourceContentionFault(ref cause) => cause,
+            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeScalingActivitiesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeScalingActivitiesError {}
 /// Errors returned by DescribeScalingProcessTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingProcessTypesError {
@@ -8739,16 +8681,14 @@ impl DescribeScalingProcessTypesError {
 }
 impl fmt::Display for DescribeScalingProcessTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScalingProcessTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScalingProcessTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeScalingProcessTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeScalingProcessTypesError {}
 /// Errors returned by DescribeScheduledActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduledActionsError {
@@ -8795,17 +8735,15 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeScheduledActionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,
-            DescribeScheduledActionsError::ResourceContentionFault(ref cause) => cause,
+            DescribeScheduledActionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeScheduledActionsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeScheduledActionsError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -8850,17 +8788,13 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::InvalidNextToken(ref cause) => cause,
-            DescribeTagsError::ResourceContentionFault(ref cause) => cause,
+            DescribeTagsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DescribeTerminationPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTerminationPolicyTypesError {
@@ -8902,16 +8836,14 @@ impl DescribeTerminationPolicyTypesError {
 }
 impl fmt::Display for DescribeTerminationPolicyTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTerminationPolicyTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTerminationPolicyTypesError::ResourceContentionFault(ref cause) => cause,
+            DescribeTerminationPolicyTypesError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTerminationPolicyTypesError {}
 /// Errors returned by DetachInstances
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesError {
@@ -8949,16 +8881,12 @@ impl DetachInstancesError {
 }
 impl fmt::Display for DetachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachInstancesError {
-    fn description(&self) -> &str {
         match *self {
-            DetachInstancesError::ResourceContentionFault(ref cause) => cause,
+            DetachInstancesError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachInstancesError {}
 /// Errors returned by DetachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerTargetGroupsError {
@@ -9000,16 +8928,14 @@ impl DetachLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for DetachLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachLoadBalancerTargetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DetachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+            DetachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DetachLoadBalancerTargetGroupsError {}
 /// Errors returned by DetachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancersError {
@@ -9047,16 +8973,12 @@ impl DetachLoadBalancersError {
 }
 impl fmt::Display for DetachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DetachLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DetachLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+            DetachLoadBalancersError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DetachLoadBalancersError {}
 /// Errors returned by DisableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum DisableMetricsCollectionError {
@@ -9096,16 +9018,14 @@ impl DisableMetricsCollectionError {
 }
 impl fmt::Display for DisableMetricsCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableMetricsCollectionError {
-    fn description(&self) -> &str {
         match *self {
-            DisableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,
+            DisableMetricsCollectionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DisableMetricsCollectionError {}
 /// Errors returned by EnableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum EnableMetricsCollectionError {
@@ -9145,16 +9065,14 @@ impl EnableMetricsCollectionError {
 }
 impl fmt::Display for EnableMetricsCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableMetricsCollectionError {
-    fn description(&self) -> &str {
         match *self {
-            EnableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,
+            EnableMetricsCollectionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for EnableMetricsCollectionError {}
 /// Errors returned by EnterStandby
 #[derive(Debug, PartialEq)]
 pub enum EnterStandbyError {
@@ -9192,16 +9110,12 @@ impl EnterStandbyError {
 }
 impl fmt::Display for EnterStandbyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnterStandbyError {
-    fn description(&self) -> &str {
         match *self {
-            EnterStandbyError::ResourceContentionFault(ref cause) => cause,
+            EnterStandbyError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for EnterStandbyError {}
 /// Errors returned by ExecutePolicy
 #[derive(Debug, PartialEq)]
 pub enum ExecutePolicyError {
@@ -9248,17 +9162,13 @@ impl ExecutePolicyError {
 }
 impl fmt::Display for ExecutePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExecutePolicyError {
-    fn description(&self) -> &str {
         match *self {
-            ExecutePolicyError::ResourceContentionFault(ref cause) => cause,
-            ExecutePolicyError::ScalingActivityInProgressFault(ref cause) => cause,
+            ExecutePolicyError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            ExecutePolicyError::ScalingActivityInProgressFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExecutePolicyError {}
 /// Errors returned by ExitStandby
 #[derive(Debug, PartialEq)]
 pub enum ExitStandbyError {
@@ -9296,16 +9206,12 @@ impl ExitStandbyError {
 }
 impl fmt::Display for ExitStandbyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExitStandbyError {
-    fn description(&self) -> &str {
         match *self {
-            ExitStandbyError::ResourceContentionFault(ref cause) => cause,
+            ExitStandbyError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExitStandbyError {}
 /// Errors returned by PutLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleHookError {
@@ -9350,17 +9256,13 @@ impl PutLifecycleHookError {
 }
 impl fmt::Display for PutLifecycleHookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutLifecycleHookError {
-    fn description(&self) -> &str {
         match *self {
-            PutLifecycleHookError::LimitExceededFault(ref cause) => cause,
-            PutLifecycleHookError::ResourceContentionFault(ref cause) => cause,
+            PutLifecycleHookError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            PutLifecycleHookError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutLifecycleHookError {}
 /// Errors returned by PutNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutNotificationConfigurationError {
@@ -9420,18 +9322,20 @@ impl PutNotificationConfigurationError {
 }
 impl fmt::Display for PutNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutNotificationConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            PutNotificationConfigurationError::LimitExceededFault(ref cause) => cause,
-            PutNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,
-            PutNotificationConfigurationError::ServiceLinkedRoleFailure(ref cause) => cause,
+            PutNotificationConfigurationError::LimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutNotificationConfigurationError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutNotificationConfigurationError::ServiceLinkedRoleFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutNotificationConfigurationError {}
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
@@ -9483,18 +9387,14 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScalingPolicyError {
-    fn description(&self) -> &str {
         match *self {
-            PutScalingPolicyError::LimitExceededFault(ref cause) => cause,
-            PutScalingPolicyError::ResourceContentionFault(ref cause) => cause,
-            PutScalingPolicyError::ServiceLinkedRoleFailure(ref cause) => cause,
+            PutScalingPolicyError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            PutScalingPolicyError::ServiceLinkedRoleFailure(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for PutScalingPolicyError {}
 /// Errors returned by PutScheduledUpdateGroupAction
 #[derive(Debug, PartialEq)]
 pub enum PutScheduledUpdateGroupActionError {
@@ -9554,18 +9454,20 @@ impl PutScheduledUpdateGroupActionError {
 }
 impl fmt::Display for PutScheduledUpdateGroupActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutScheduledUpdateGroupActionError {
-    fn description(&self) -> &str {
         match *self {
-            PutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => cause,
-            PutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => cause,
-            PutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => cause,
+            PutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for PutScheduledUpdateGroupActionError {}
 /// Errors returned by RecordLifecycleActionHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum RecordLifecycleActionHeartbeatError {
@@ -9607,16 +9509,14 @@ impl RecordLifecycleActionHeartbeatError {
 }
 impl fmt::Display for RecordLifecycleActionHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RecordLifecycleActionHeartbeatError {
-    fn description(&self) -> &str {
         match *self {
-            RecordLifecycleActionHeartbeatError::ResourceContentionFault(ref cause) => cause,
+            RecordLifecycleActionHeartbeatError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RecordLifecycleActionHeartbeatError {}
 /// Errors returned by ResumeProcesses
 #[derive(Debug, PartialEq)]
 pub enum ResumeProcessesError {
@@ -9661,17 +9561,13 @@ impl ResumeProcessesError {
 }
 impl fmt::Display for ResumeProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ResumeProcessesError {
-    fn description(&self) -> &str {
         match *self {
-            ResumeProcessesError::ResourceContentionFault(ref cause) => cause,
-            ResumeProcessesError::ResourceInUseFault(ref cause) => cause,
+            ResumeProcessesError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            ResumeProcessesError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ResumeProcessesError {}
 /// Errors returned by SetDesiredCapacity
 #[derive(Debug, PartialEq)]
 pub enum SetDesiredCapacityError {
@@ -9718,17 +9614,15 @@ impl SetDesiredCapacityError {
 }
 impl fmt::Display for SetDesiredCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetDesiredCapacityError {
-    fn description(&self) -> &str {
         match *self {
-            SetDesiredCapacityError::ResourceContentionFault(ref cause) => cause,
-            SetDesiredCapacityError::ScalingActivityInProgressFault(ref cause) => cause,
+            SetDesiredCapacityError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            SetDesiredCapacityError::ScalingActivityInProgressFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetDesiredCapacityError {}
 /// Errors returned by SetInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceHealthError {
@@ -9766,16 +9660,12 @@ impl SetInstanceHealthError {
 }
 impl fmt::Display for SetInstanceHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetInstanceHealthError {
-    fn description(&self) -> &str {
         match *self {
-            SetInstanceHealthError::ResourceContentionFault(ref cause) => cause,
+            SetInstanceHealthError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetInstanceHealthError {}
 /// Errors returned by SetInstanceProtection
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceProtectionError {
@@ -9822,17 +9712,15 @@ impl SetInstanceProtectionError {
 }
 impl fmt::Display for SetInstanceProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetInstanceProtectionError {
-    fn description(&self) -> &str {
         match *self {
-            SetInstanceProtectionError::LimitExceededFault(ref cause) => cause,
-            SetInstanceProtectionError::ResourceContentionFault(ref cause) => cause,
+            SetInstanceProtectionError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            SetInstanceProtectionError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for SetInstanceProtectionError {}
 /// Errors returned by SuspendProcesses
 #[derive(Debug, PartialEq)]
 pub enum SuspendProcessesError {
@@ -9877,17 +9765,13 @@ impl SuspendProcessesError {
 }
 impl fmt::Display for SuspendProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SuspendProcessesError {
-    fn description(&self) -> &str {
         match *self {
-            SuspendProcessesError::ResourceContentionFault(ref cause) => cause,
-            SuspendProcessesError::ResourceInUseFault(ref cause) => cause,
+            SuspendProcessesError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            SuspendProcessesError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SuspendProcessesError {}
 /// Errors returned by TerminateInstanceInAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum TerminateInstanceInAutoScalingGroupError {
@@ -9936,19 +9820,17 @@ impl TerminateInstanceInAutoScalingGroupError {
 }
 impl fmt::Display for TerminateInstanceInAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateInstanceInAutoScalingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+            TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => {
-                cause
+                write!(f, "{}", cause)
             }
         }
     }
 }
+impl Error for TerminateInstanceInAutoScalingGroupError {}
 /// Errors returned by UpdateAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateAutoScalingGroupError {
@@ -10006,18 +9888,20 @@ impl UpdateAutoScalingGroupError {
 }
 impl fmt::Display for UpdateAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateAutoScalingGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
-            UpdateAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
-            UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => cause,
+            UpdateAutoScalingGroupError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateAutoScalingGroupError {}
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 pub trait Autoscaling {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>

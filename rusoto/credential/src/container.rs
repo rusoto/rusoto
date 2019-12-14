@@ -1,6 +1,5 @@
 //! The Credentials provider to read from a task's IAM Role.
 
-use std::error::Error;
 use std::time::Duration;
 
 use futures::future::{err, FutureResult};

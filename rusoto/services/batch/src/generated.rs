@@ -1340,17 +1340,13 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelJobError {
-    fn description(&self) -> &str {
         match *self {
-            CancelJobError::Client(ref cause) => cause,
-            CancelJobError::Server(ref cause) => cause,
+            CancelJobError::Client(ref cause) => write!(f, "{}", cause),
+            CancelJobError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CancelJobError {}
 /// Errors returned by CreateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateComputeEnvironmentError {
@@ -1379,17 +1375,13 @@ impl CreateComputeEnvironmentError {
 }
 impl fmt::Display for CreateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateComputeEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateComputeEnvironmentError::Client(ref cause) => cause,
-            CreateComputeEnvironmentError::Server(ref cause) => cause,
+            CreateComputeEnvironmentError::Client(ref cause) => write!(f, "{}", cause),
+            CreateComputeEnvironmentError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateComputeEnvironmentError {}
 /// Errors returned by CreateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateJobQueueError {
@@ -1418,17 +1410,13 @@ impl CreateJobQueueError {
 }
 impl fmt::Display for CreateJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateJobQueueError {
-    fn description(&self) -> &str {
         match *self {
-            CreateJobQueueError::Client(ref cause) => cause,
-            CreateJobQueueError::Server(ref cause) => cause,
+            CreateJobQueueError::Client(ref cause) => write!(f, "{}", cause),
+            CreateJobQueueError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateJobQueueError {}
 /// Errors returned by DeleteComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum DeleteComputeEnvironmentError {
@@ -1457,17 +1445,13 @@ impl DeleteComputeEnvironmentError {
 }
 impl fmt::Display for DeleteComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteComputeEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteComputeEnvironmentError::Client(ref cause) => cause,
-            DeleteComputeEnvironmentError::Server(ref cause) => cause,
+            DeleteComputeEnvironmentError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteComputeEnvironmentError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteComputeEnvironmentError {}
 /// Errors returned by DeleteJobQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobQueueError {
@@ -1496,17 +1480,13 @@ impl DeleteJobQueueError {
 }
 impl fmt::Display for DeleteJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteJobQueueError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteJobQueueError::Client(ref cause) => cause,
-            DeleteJobQueueError::Server(ref cause) => cause,
+            DeleteJobQueueError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteJobQueueError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteJobQueueError {}
 /// Errors returned by DeregisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeregisterJobDefinitionError {
@@ -1535,17 +1515,13 @@ impl DeregisterJobDefinitionError {
 }
 impl fmt::Display for DeregisterJobDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterJobDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterJobDefinitionError::Client(ref cause) => cause,
-            DeregisterJobDefinitionError::Server(ref cause) => cause,
+            DeregisterJobDefinitionError::Client(ref cause) => write!(f, "{}", cause),
+            DeregisterJobDefinitionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterJobDefinitionError {}
 /// Errors returned by DescribeComputeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum DescribeComputeEnvironmentsError {
@@ -1576,17 +1552,13 @@ impl DescribeComputeEnvironmentsError {
 }
 impl fmt::Display for DescribeComputeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeComputeEnvironmentsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeComputeEnvironmentsError::Client(ref cause) => cause,
-            DescribeComputeEnvironmentsError::Server(ref cause) => cause,
+            DescribeComputeEnvironmentsError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeComputeEnvironmentsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeComputeEnvironmentsError {}
 /// Errors returned by DescribeJobDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobDefinitionsError {
@@ -1615,17 +1587,13 @@ impl DescribeJobDefinitionsError {
 }
 impl fmt::Display for DescribeJobDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobDefinitionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobDefinitionsError::Client(ref cause) => cause,
-            DescribeJobDefinitionsError::Server(ref cause) => cause,
+            DescribeJobDefinitionsError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeJobDefinitionsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobDefinitionsError {}
 /// Errors returned by DescribeJobQueues
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobQueuesError {
@@ -1654,17 +1622,13 @@ impl DescribeJobQueuesError {
 }
 impl fmt::Display for DescribeJobQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobQueuesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobQueuesError::Client(ref cause) => cause,
-            DescribeJobQueuesError::Server(ref cause) => cause,
+            DescribeJobQueuesError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeJobQueuesError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobQueuesError {}
 /// Errors returned by DescribeJobs
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobsError {
@@ -1693,17 +1657,13 @@ impl DescribeJobsError {
 }
 impl fmt::Display for DescribeJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeJobsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeJobsError::Client(ref cause) => cause,
-            DescribeJobsError::Server(ref cause) => cause,
+            DescribeJobsError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeJobsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeJobsError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -1728,17 +1688,13 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListJobsError {
-    fn description(&self) -> &str {
         match *self {
-            ListJobsError::Client(ref cause) => cause,
-            ListJobsError::Server(ref cause) => cause,
+            ListJobsError::Client(ref cause) => write!(f, "{}", cause),
+            ListJobsError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListJobsError {}
 /// Errors returned by RegisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum RegisterJobDefinitionError {
@@ -1767,17 +1723,13 @@ impl RegisterJobDefinitionError {
 }
 impl fmt::Display for RegisterJobDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterJobDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterJobDefinitionError::Client(ref cause) => cause,
-            RegisterJobDefinitionError::Server(ref cause) => cause,
+            RegisterJobDefinitionError::Client(ref cause) => write!(f, "{}", cause),
+            RegisterJobDefinitionError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterJobDefinitionError {}
 /// Errors returned by SubmitJob
 #[derive(Debug, PartialEq)]
 pub enum SubmitJobError {
@@ -1802,17 +1754,13 @@ impl SubmitJobError {
 }
 impl fmt::Display for SubmitJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SubmitJobError {
-    fn description(&self) -> &str {
         match *self {
-            SubmitJobError::Client(ref cause) => cause,
-            SubmitJobError::Server(ref cause) => cause,
+            SubmitJobError::Client(ref cause) => write!(f, "{}", cause),
+            SubmitJobError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SubmitJobError {}
 /// Errors returned by TerminateJob
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobError {
@@ -1841,17 +1789,13 @@ impl TerminateJobError {
 }
 impl fmt::Display for TerminateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TerminateJobError {
-    fn description(&self) -> &str {
         match *self {
-            TerminateJobError::Client(ref cause) => cause,
-            TerminateJobError::Server(ref cause) => cause,
+            TerminateJobError::Client(ref cause) => write!(f, "{}", cause),
+            TerminateJobError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TerminateJobError {}
 /// Errors returned by UpdateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateComputeEnvironmentError {
@@ -1880,17 +1824,13 @@ impl UpdateComputeEnvironmentError {
 }
 impl fmt::Display for UpdateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateComputeEnvironmentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateComputeEnvironmentError::Client(ref cause) => cause,
-            UpdateComputeEnvironmentError::Server(ref cause) => cause,
+            UpdateComputeEnvironmentError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateComputeEnvironmentError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateComputeEnvironmentError {}
 /// Errors returned by UpdateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobQueueError {
@@ -1919,17 +1859,13 @@ impl UpdateJobQueueError {
 }
 impl fmt::Display for UpdateJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateJobQueueError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateJobQueueError::Client(ref cause) => cause,
-            UpdateJobQueueError::Server(ref cause) => cause,
+            UpdateJobQueueError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateJobQueueError::Server(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateJobQueueError {}
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
 pub trait Batch {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>

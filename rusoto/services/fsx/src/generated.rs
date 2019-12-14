@@ -843,22 +843,18 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::BackupInProgress(ref cause) => cause,
-            CreateBackupError::BadRequest(ref cause) => cause,
-            CreateBackupError::FileSystemNotFound(ref cause) => cause,
-            CreateBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateBackupError::InternalServerError(ref cause) => cause,
-            CreateBackupError::ServiceLimitExceeded(ref cause) => cause,
-            CreateBackupError::UnsupportedOperation(ref cause) => cause,
+            CreateBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemError {
@@ -934,24 +930,22 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemError::BadRequest(ref cause) => cause,
-            CreateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemError::InternalServerError(ref cause) => cause,
-            CreateFileSystemError::InvalidExportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidImportPath(ref cause) => cause,
-            CreateFileSystemError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemError::ActiveDirectoryError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidExportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidImportPath(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidNetworkSettings(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFileSystemError {}
 /// Errors returned by CreateFileSystemFromBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateFileSystemFromBackupError {
@@ -1028,23 +1022,31 @@ impl CreateFileSystemFromBackupError {
 }
 impl fmt::Display for CreateFileSystemFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFileSystemFromBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => cause,
-            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => cause,
-            CreateFileSystemFromBackupError::BadRequest(ref cause) => cause,
-            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InternalServerError(ref cause) => cause,
-            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => cause,
-            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => cause,
-            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => cause,
+            CreateFileSystemFromBackupError::ActiveDirectoryError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemFromBackupError::IncompatibleParameterError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::InvalidNetworkSettings(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFileSystemFromBackupError::ServiceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateFileSystemFromBackupError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -1095,21 +1097,17 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::BackupInProgress(ref cause) => cause,
-            DeleteBackupError::BackupNotFound(ref cause) => cause,
-            DeleteBackupError::BackupRestoring(ref cause) => cause,
-            DeleteBackupError::BadRequest(ref cause) => cause,
-            DeleteBackupError::IncompatibleParameterError(ref cause) => cause,
-            DeleteBackupError::InternalServerError(ref cause) => cause,
+            DeleteBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BackupRestoring(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteFileSystem
 #[derive(Debug, PartialEq)]
 pub enum DeleteFileSystemError {
@@ -1159,20 +1157,16 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFileSystemError::BadRequest(ref cause) => cause,
-            DeleteFileSystemError::FileSystemNotFound(ref cause) => cause,
-            DeleteFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            DeleteFileSystemError::InternalServerError(ref cause) => cause,
-            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => cause,
+            DeleteFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteFileSystemError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFileSystemError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -1211,19 +1205,15 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::BackupNotFound(ref cause) => cause,
-            DescribeBackupsError::BadRequest(ref cause) => cause,
-            DescribeBackupsError::FileSystemNotFound(ref cause) => cause,
-            DescribeBackupsError::InternalServerError(ref cause) => cause,
+            DescribeBackupsError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeFileSystems
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemsError {
@@ -1261,18 +1251,14 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFileSystemsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFileSystemsError::BadRequest(ref cause) => cause,
-            DescribeFileSystemsError::FileSystemNotFound(ref cause) => cause,
-            DescribeFileSystemsError::InternalServerError(ref cause) => cause,
+            DescribeFileSystemsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFileSystemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFileSystemsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1324,20 +1310,18 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::InternalServerError(ref cause) => cause,
-            ListTagsForResourceError::NotServiceResourceError(ref cause) => cause,
-            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceDoesNotSupportTagging(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1381,20 +1365,16 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::InternalServerError(ref cause) => cause,
-            TagResourceError::NotServiceResourceError(ref cause) => cause,
-            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1442,20 +1422,16 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::InternalServerError(ref cause) => cause,
-            UntagResourceError::NotServiceResourceError(ref cause) => cause,
-            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotServiceResourceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceDoesNotSupportTagging(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateFileSystem
 #[derive(Debug, PartialEq)]
 pub enum UpdateFileSystemError {
@@ -1512,21 +1488,19 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateFileSystemError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateFileSystemError::BadRequest(ref cause) => cause,
-            UpdateFileSystemError::FileSystemNotFound(ref cause) => cause,
-            UpdateFileSystemError::IncompatibleParameterError(ref cause) => cause,
-            UpdateFileSystemError::InternalServerError(ref cause) => cause,
-            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
-            UpdateFileSystemError::UnsupportedOperation(ref cause) => cause,
+            UpdateFileSystemError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateFileSystemError {}
 /// Trait representing the capabilities of the Amazon FSx API. Amazon FSx clients implement this trait.
 pub trait Fsx {
     /// <p><p>Creates a backup of an existing Amazon FSx for Windows File Server file system. Creating regular backups for your file system is a best practice that complements the replication that Amazon FSx for Windows File Server performs for your file system. It also enables you to restore from user modification of data.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don&#39;t match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn&#39;t exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateFileSystem</code> operation returns while the backup&#39;s lifecycle state is still <code>CREATING</code>. You can check the file system creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p> <note> <p/> </note></p>

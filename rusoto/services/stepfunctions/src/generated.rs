@@ -1226,18 +1226,14 @@ impl CreateActivityError {
 }
 impl fmt::Display for CreateActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateActivityError {
-    fn description(&self) -> &str {
         match *self {
-            CreateActivityError::ActivityLimitExceeded(ref cause) => cause,
-            CreateActivityError::InvalidName(ref cause) => cause,
-            CreateActivityError::TooManyTags(ref cause) => cause,
+            CreateActivityError::ActivityLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateActivityError::InvalidName(ref cause) => write!(f, "{}", cause),
+            CreateActivityError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateActivityError {}
 /// Errors returned by CreateStateMachine
 #[derive(Debug, PartialEq)]
 pub enum CreateStateMachineError {
@@ -1313,24 +1309,24 @@ impl CreateStateMachineError {
 }
 impl fmt::Display for CreateStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateStateMachineError {
-    fn description(&self) -> &str {
         match *self {
-            CreateStateMachineError::InvalidArn(ref cause) => cause,
-            CreateStateMachineError::InvalidDefinition(ref cause) => cause,
-            CreateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
-            CreateStateMachineError::InvalidName(ref cause) => cause,
-            CreateStateMachineError::StateMachineAlreadyExists(ref cause) => cause,
-            CreateStateMachineError::StateMachineDeleting(ref cause) => cause,
-            CreateStateMachineError::StateMachineLimitExceeded(ref cause) => cause,
-            CreateStateMachineError::StateMachineTypeNotSupported(ref cause) => cause,
-            CreateStateMachineError::TooManyTags(ref cause) => cause,
+            CreateStateMachineError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::InvalidDefinition(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::InvalidLoggingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStateMachineError::InvalidName(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::StateMachineAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::StateMachineDeleting(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::StateMachineLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateStateMachineError::StateMachineTypeNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateStateMachineError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateStateMachineError {}
 /// Errors returned by DeleteActivity
 #[derive(Debug, PartialEq)]
 pub enum DeleteActivityError {
@@ -1354,16 +1350,12 @@ impl DeleteActivityError {
 }
 impl fmt::Display for DeleteActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteActivityError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteActivityError::InvalidArn(ref cause) => cause,
+            DeleteActivityError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteActivityError {}
 /// Errors returned by DeleteStateMachine
 #[derive(Debug, PartialEq)]
 pub enum DeleteStateMachineError {
@@ -1387,16 +1379,12 @@ impl DeleteStateMachineError {
 }
 impl fmt::Display for DeleteStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteStateMachineError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteStateMachineError::InvalidArn(ref cause) => cause,
+            DeleteStateMachineError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteStateMachineError {}
 /// Errors returned by DescribeActivity
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivityError {
@@ -1427,17 +1415,13 @@ impl DescribeActivityError {
 }
 impl fmt::Display for DescribeActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeActivityError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeActivityError::ActivityDoesNotExist(ref cause) => cause,
-            DescribeActivityError::InvalidArn(ref cause) => cause,
+            DescribeActivityError::ActivityDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeActivityError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeActivityError {}
 /// Errors returned by DescribeExecution
 #[derive(Debug, PartialEq)]
 pub enum DescribeExecutionError {
@@ -1468,17 +1452,13 @@ impl DescribeExecutionError {
 }
 impl fmt::Display for DescribeExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExecutionError::ExecutionDoesNotExist(ref cause) => cause,
-            DescribeExecutionError::InvalidArn(ref cause) => cause,
+            DescribeExecutionError::ExecutionDoesNotExist(ref cause) => write!(f, "{}", cause),
+            DescribeExecutionError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExecutionError {}
 /// Errors returned by DescribeStateMachine
 #[derive(Debug, PartialEq)]
 pub enum DescribeStateMachineError {
@@ -1509,17 +1489,15 @@ impl DescribeStateMachineError {
 }
 impl fmt::Display for DescribeStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStateMachineError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStateMachineError::InvalidArn(ref cause) => cause,
-            DescribeStateMachineError::StateMachineDoesNotExist(ref cause) => cause,
+            DescribeStateMachineError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            DescribeStateMachineError::StateMachineDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeStateMachineError {}
 /// Errors returned by DescribeStateMachineForExecution
 #[derive(Debug, PartialEq)]
 pub enum DescribeStateMachineForExecutionError {
@@ -1554,17 +1532,15 @@ impl DescribeStateMachineForExecutionError {
 }
 impl fmt::Display for DescribeStateMachineForExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeStateMachineForExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeStateMachineForExecutionError::ExecutionDoesNotExist(ref cause) => cause,
-            DescribeStateMachineForExecutionError::InvalidArn(ref cause) => cause,
+            DescribeStateMachineForExecutionError::ExecutionDoesNotExist(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeStateMachineForExecutionError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeStateMachineForExecutionError {}
 /// Errors returned by GetActivityTask
 #[derive(Debug, PartialEq)]
 pub enum GetActivityTaskError {
@@ -1602,18 +1578,14 @@ impl GetActivityTaskError {
 }
 impl fmt::Display for GetActivityTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetActivityTaskError {
-    fn description(&self) -> &str {
         match *self {
-            GetActivityTaskError::ActivityDoesNotExist(ref cause) => cause,
-            GetActivityTaskError::ActivityWorkerLimitExceeded(ref cause) => cause,
-            GetActivityTaskError::InvalidArn(ref cause) => cause,
+            GetActivityTaskError::ActivityDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetActivityTaskError::ActivityWorkerLimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetActivityTaskError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetActivityTaskError {}
 /// Errors returned by GetExecutionHistory
 #[derive(Debug, PartialEq)]
 pub enum GetExecutionHistoryError {
@@ -1649,18 +1621,14 @@ impl GetExecutionHistoryError {
 }
 impl fmt::Display for GetExecutionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetExecutionHistoryError {
-    fn description(&self) -> &str {
         match *self {
-            GetExecutionHistoryError::ExecutionDoesNotExist(ref cause) => cause,
-            GetExecutionHistoryError::InvalidArn(ref cause) => cause,
-            GetExecutionHistoryError::InvalidToken(ref cause) => cause,
+            GetExecutionHistoryError::ExecutionDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetExecutionHistoryError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            GetExecutionHistoryError::InvalidToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetExecutionHistoryError {}
 /// Errors returned by ListActivities
 #[derive(Debug, PartialEq)]
 pub enum ListActivitiesError {
@@ -1684,16 +1652,12 @@ impl ListActivitiesError {
 }
 impl fmt::Display for ListActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListActivitiesError {
-    fn description(&self) -> &str {
         match *self {
-            ListActivitiesError::InvalidToken(ref cause) => cause,
+            ListActivitiesError::InvalidToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListActivitiesError {}
 /// Errors returned by ListExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListExecutionsError {
@@ -1736,19 +1700,15 @@ impl ListExecutionsError {
 }
 impl fmt::Display for ListExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListExecutionsError::InvalidArn(ref cause) => cause,
-            ListExecutionsError::InvalidToken(ref cause) => cause,
-            ListExecutionsError::StateMachineDoesNotExist(ref cause) => cause,
-            ListExecutionsError::StateMachineTypeNotSupported(ref cause) => cause,
+            ListExecutionsError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListExecutionsError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            ListExecutionsError::StateMachineDoesNotExist(ref cause) => write!(f, "{}", cause),
+            ListExecutionsError::StateMachineTypeNotSupported(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListExecutionsError {}
 /// Errors returned by ListStateMachines
 #[derive(Debug, PartialEq)]
 pub enum ListStateMachinesError {
@@ -1772,16 +1732,12 @@ impl ListStateMachinesError {
 }
 impl fmt::Display for ListStateMachinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListStateMachinesError {
-    fn description(&self) -> &str {
         match *self {
-            ListStateMachinesError::InvalidToken(ref cause) => cause,
+            ListStateMachinesError::InvalidToken(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListStateMachinesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1812,17 +1768,13 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InvalidArn(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by SendTaskFailure
 #[derive(Debug, PartialEq)]
 pub enum SendTaskFailureError {
@@ -1856,18 +1808,14 @@ impl SendTaskFailureError {
 }
 impl fmt::Display for SendTaskFailureError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTaskFailureError {
-    fn description(&self) -> &str {
         match *self {
-            SendTaskFailureError::InvalidToken(ref cause) => cause,
-            SendTaskFailureError::TaskDoesNotExist(ref cause) => cause,
-            SendTaskFailureError::TaskTimedOut(ref cause) => cause,
+            SendTaskFailureError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            SendTaskFailureError::TaskDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SendTaskFailureError::TaskTimedOut(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTaskFailureError {}
 /// Errors returned by SendTaskHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum SendTaskHeartbeatError {
@@ -1901,18 +1849,14 @@ impl SendTaskHeartbeatError {
 }
 impl fmt::Display for SendTaskHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTaskHeartbeatError {
-    fn description(&self) -> &str {
         match *self {
-            SendTaskHeartbeatError::InvalidToken(ref cause) => cause,
-            SendTaskHeartbeatError::TaskDoesNotExist(ref cause) => cause,
-            SendTaskHeartbeatError::TaskTimedOut(ref cause) => cause,
+            SendTaskHeartbeatError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            SendTaskHeartbeatError::TaskDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SendTaskHeartbeatError::TaskTimedOut(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTaskHeartbeatError {}
 /// Errors returned by SendTaskSuccess
 #[derive(Debug, PartialEq)]
 pub enum SendTaskSuccessError {
@@ -1951,19 +1895,15 @@ impl SendTaskSuccessError {
 }
 impl fmt::Display for SendTaskSuccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SendTaskSuccessError {
-    fn description(&self) -> &str {
         match *self {
-            SendTaskSuccessError::InvalidOutput(ref cause) => cause,
-            SendTaskSuccessError::InvalidToken(ref cause) => cause,
-            SendTaskSuccessError::TaskDoesNotExist(ref cause) => cause,
-            SendTaskSuccessError::TaskTimedOut(ref cause) => cause,
+            SendTaskSuccessError::InvalidOutput(ref cause) => write!(f, "{}", cause),
+            SendTaskSuccessError::InvalidToken(ref cause) => write!(f, "{}", cause),
+            SendTaskSuccessError::TaskDoesNotExist(ref cause) => write!(f, "{}", cause),
+            SendTaskSuccessError::TaskTimedOut(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SendTaskSuccessError {}
 /// Errors returned by StartExecution
 #[derive(Debug, PartialEq)]
 pub enum StartExecutionError {
@@ -2025,22 +1965,18 @@ impl StartExecutionError {
 }
 impl fmt::Display for StartExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartExecutionError::ExecutionAlreadyExists(ref cause) => cause,
-            StartExecutionError::ExecutionLimitExceeded(ref cause) => cause,
-            StartExecutionError::InvalidArn(ref cause) => cause,
-            StartExecutionError::InvalidExecutionInput(ref cause) => cause,
-            StartExecutionError::InvalidName(ref cause) => cause,
-            StartExecutionError::StateMachineDeleting(ref cause) => cause,
-            StartExecutionError::StateMachineDoesNotExist(ref cause) => cause,
+            StartExecutionError::ExecutionAlreadyExists(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::ExecutionLimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::InvalidExecutionInput(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::InvalidName(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::StateMachineDeleting(ref cause) => write!(f, "{}", cause),
+            StartExecutionError::StateMachineDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartExecutionError {}
 /// Errors returned by StopExecution
 #[derive(Debug, PartialEq)]
 pub enum StopExecutionError {
@@ -2069,17 +2005,13 @@ impl StopExecutionError {
 }
 impl fmt::Display for StopExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StopExecutionError::ExecutionDoesNotExist(ref cause) => cause,
-            StopExecutionError::InvalidArn(ref cause) => cause,
+            StopExecutionError::ExecutionDoesNotExist(ref cause) => write!(f, "{}", cause),
+            StopExecutionError::InvalidArn(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopExecutionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2111,18 +2043,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InvalidArn(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2151,17 +2079,13 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InvalidArn(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateStateMachine
 #[derive(Debug, PartialEq)]
 pub enum UpdateStateMachineError {
@@ -2220,21 +2144,19 @@ impl UpdateStateMachineError {
 }
 impl fmt::Display for UpdateStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateStateMachineError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateStateMachineError::InvalidArn(ref cause) => cause,
-            UpdateStateMachineError::InvalidDefinition(ref cause) => cause,
-            UpdateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
-            UpdateStateMachineError::MissingRequiredParameter(ref cause) => cause,
-            UpdateStateMachineError::StateMachineDeleting(ref cause) => cause,
-            UpdateStateMachineError::StateMachineDoesNotExist(ref cause) => cause,
+            UpdateStateMachineError::InvalidArn(ref cause) => write!(f, "{}", cause),
+            UpdateStateMachineError::InvalidDefinition(ref cause) => write!(f, "{}", cause),
+            UpdateStateMachineError::InvalidLoggingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateStateMachineError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            UpdateStateMachineError::StateMachineDeleting(ref cause) => write!(f, "{}", cause),
+            UpdateStateMachineError::StateMachineDoesNotExist(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateStateMachineError {}
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>

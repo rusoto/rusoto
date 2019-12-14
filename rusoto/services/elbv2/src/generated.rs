@@ -6314,18 +6314,14 @@ impl AddListenerCertificatesError {
 }
 impl fmt::Display for AddListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            AddListenerCertificatesError::CertificateNotFound(ref cause) => cause,
-            AddListenerCertificatesError::ListenerNotFound(ref cause) => cause,
-            AddListenerCertificatesError::TooManyCertificates(ref cause) => cause,
+            AddListenerCertificatesError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            AddListenerCertificatesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            AddListenerCertificatesError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddListenerCertificatesError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -6384,19 +6380,15 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {
-            AddTagsError::DuplicateTagKeys(ref cause) => cause,
-            AddTagsError::LoadBalancerNotFound(ref cause) => cause,
-            AddTagsError::TargetGroupNotFound(ref cause) => cause,
-            AddTagsError::TooManyTags(ref cause) => cause,
+            AddTagsError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            AddTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            AddTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by CreateListener
 #[derive(Debug, PartialEq)]
 pub enum CreateListenerError {
@@ -6543,31 +6535,31 @@ impl CreateListenerError {
 }
 impl fmt::Display for CreateListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateListenerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateListenerError::CertificateNotFound(ref cause) => cause,
-            CreateListenerError::DuplicateListener(ref cause) => cause,
-            CreateListenerError::IncompatibleProtocols(ref cause) => cause,
-            CreateListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateListenerError::InvalidLoadBalancerAction(ref cause) => cause,
-            CreateListenerError::LoadBalancerNotFound(ref cause) => cause,
-            CreateListenerError::SSLPolicyNotFound(ref cause) => cause,
-            CreateListenerError::TargetGroupAssociationLimit(ref cause) => cause,
-            CreateListenerError::TargetGroupNotFound(ref cause) => cause,
-            CreateListenerError::TooManyActions(ref cause) => cause,
-            CreateListenerError::TooManyCertificates(ref cause) => cause,
-            CreateListenerError::TooManyListeners(ref cause) => cause,
-            CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            CreateListenerError::TooManyTargets(ref cause) => cause,
-            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            CreateListenerError::UnsupportedProtocol(ref cause) => cause,
+            CreateListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyListeners(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateListenerError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateListenerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateListenerError {}
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
@@ -6695,28 +6687,28 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLoadBalancerError::AllocationIdNotFound(ref cause) => cause,
-            CreateLoadBalancerError::AvailabilityZoneNotSupported(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateLoadBalancerName(ref cause) => cause,
-            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
-            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
-            CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
-            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            CreateLoadBalancerError::ResourceInUse(ref cause) => cause,
-            CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
-            CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => cause,
-            CreateLoadBalancerError::TooManyTags(ref cause) => cause,
+            CreateLoadBalancerError::AllocationIdNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::AvailabilityZoneNotSupported(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::DuplicateLoadBalancerName(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::DuplicateTagKeys(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLoadBalancerError::InvalidScheme(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => write!(f, "{}", cause),
+            CreateLoadBalancerError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLoadBalancerError {}
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
@@ -6847,29 +6839,27 @@ impl CreateRuleError {
 }
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateRuleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateRuleError::IncompatibleProtocols(ref cause) => cause,
-            CreateRuleError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateRuleError::InvalidLoadBalancerAction(ref cause) => cause,
-            CreateRuleError::ListenerNotFound(ref cause) => cause,
-            CreateRuleError::PriorityInUse(ref cause) => cause,
-            CreateRuleError::TargetGroupAssociationLimit(ref cause) => cause,
-            CreateRuleError::TargetGroupNotFound(ref cause) => cause,
-            CreateRuleError::TooManyActions(ref cause) => cause,
-            CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            CreateRuleError::TooManyRules(ref cause) => cause,
-            CreateRuleError::TooManyTargetGroups(ref cause) => cause,
-            CreateRuleError::TooManyTargets(ref cause) => cause,
-            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            CreateRuleError::UnsupportedProtocol(ref cause) => cause,
+            CreateRuleError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::PriorityInUse(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyRules(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRuleError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateRuleError {}
 /// Errors returned by CreateTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateTargetGroupError {
@@ -6923,18 +6913,16 @@ impl CreateTargetGroupError {
 }
 impl fmt::Display for CreateTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => cause,
-            CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
-            CreateTargetGroupError::TooManyTargetGroups(ref cause) => cause,
+            CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => write!(f, "{}", cause),
+            CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateTargetGroupError::TooManyTargetGroups(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTargetGroupError {}
 /// Errors returned by DeleteListener
 #[derive(Debug, PartialEq)]
 pub enum DeleteListenerError {
@@ -6972,16 +6960,12 @@ impl DeleteListenerError {
 }
 impl fmt::Display for DeleteListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteListenerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteListenerError::ListenerNotFound(ref cause) => cause,
+            DeleteListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteListenerError {}
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum DeleteLoadBalancerError {
@@ -7033,18 +7017,14 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteLoadBalancerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => cause,
-            DeleteLoadBalancerError::OperationNotPermitted(ref cause) => cause,
-            DeleteLoadBalancerError::ResourceInUse(ref cause) => cause,
+            DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteLoadBalancerError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteLoadBalancerError {}
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
@@ -7089,17 +7069,13 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteRuleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteRuleError::OperationNotPermitted(ref cause) => cause,
-            DeleteRuleError::RuleNotFound(ref cause) => cause,
+            DeleteRuleError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            DeleteRuleError::RuleNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteRuleError {}
 /// Errors returned by DeleteTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteTargetGroupError {
@@ -7137,16 +7113,12 @@ impl DeleteTargetGroupError {
 }
 impl fmt::Display for DeleteTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTargetGroupError::ResourceInUse(ref cause) => cause,
+            DeleteTargetGroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTargetGroupError {}
 /// Errors returned by DeregisterTargets
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetsError {
@@ -7191,17 +7163,13 @@ impl DeregisterTargetsError {
 }
 impl fmt::Display for DeregisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            DeregisterTargetsError::InvalidTarget(ref cause) => cause,
-            DeregisterTargetsError::TargetGroupNotFound(ref cause) => cause,
+            DeregisterTargetsError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            DeregisterTargetsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeregisterTargetsError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {}
@@ -7231,14 +7199,10 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountLimitsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountLimitsError {}
 /// Errors returned by DescribeListenerCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeListenerCertificatesError {
@@ -7280,16 +7244,14 @@ impl DescribeListenerCertificatesError {
 }
 impl fmt::Display for DescribeListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeListenerCertificatesError::ListenerNotFound(ref cause) => cause,
+            DescribeListenerCertificatesError::ListenerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeListenerCertificatesError {}
 /// Errors returned by DescribeListeners
 #[derive(Debug, PartialEq)]
 pub enum DescribeListenersError {
@@ -7341,18 +7303,14 @@ impl DescribeListenersError {
 }
 impl fmt::Display for DescribeListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeListenersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeListenersError::ListenerNotFound(ref cause) => cause,
-            DescribeListenersError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeListenersError::UnsupportedProtocol(ref cause) => cause,
+            DescribeListenersError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeListenersError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeListenersError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeListenersError {}
 /// Errors returned by DescribeLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerAttributesError {
@@ -7394,16 +7352,14 @@ impl DescribeLoadBalancerAttributesError {
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeLoadBalancerAttributesError {}
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
@@ -7441,16 +7397,12 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLoadBalancersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLoadBalancersError::LoadBalancerNotFound(ref cause) => cause,
+            DescribeLoadBalancersError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLoadBalancersError {}
 /// Errors returned by DescribeRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeRulesError {
@@ -7502,18 +7454,14 @@ impl DescribeRulesError {
 }
 impl fmt::Display for DescribeRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeRulesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeRulesError::ListenerNotFound(ref cause) => cause,
-            DescribeRulesError::RuleNotFound(ref cause) => cause,
-            DescribeRulesError::UnsupportedProtocol(ref cause) => cause,
+            DescribeRulesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRulesError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRulesError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeRulesError {}
 /// Errors returned by DescribeSSLPolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeSSLPoliciesError {
@@ -7551,16 +7499,12 @@ impl DescribeSSLPoliciesError {
 }
 impl fmt::Display for DescribeSSLPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSSLPoliciesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeSSLPoliciesError::SSLPolicyNotFound(ref cause) => cause,
+            DescribeSSLPoliciesError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeSSLPoliciesError {}
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
@@ -7619,19 +7563,15 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::ListenerNotFound(ref cause) => cause,
-            DescribeTagsError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeTagsError::RuleNotFound(ref cause) => cause,
-            DescribeTagsError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTagsError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTagsError {}
 /// Errors returned by DescribeTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupAttributesError {
@@ -7673,16 +7613,14 @@ impl DescribeTargetGroupAttributesError {
 }
 impl fmt::Display for DescribeTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetGroupAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetGroupAttributesError::TargetGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeTargetGroupAttributesError {}
 /// Errors returned by DescribeTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetGroupsError {
@@ -7727,17 +7665,13 @@ impl DescribeTargetGroupsError {
 }
 impl fmt::Display for DescribeTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetGroupsError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeTargetGroupsError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetGroupsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeTargetGroupsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTargetGroupsError {}
 /// Errors returned by DescribeTargetHealth
 #[derive(Debug, PartialEq)]
 pub enum DescribeTargetHealthError {
@@ -7789,18 +7723,14 @@ impl DescribeTargetHealthError {
 }
 impl fmt::Display for DescribeTargetHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTargetHealthError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTargetHealthError::HealthUnavailable(ref cause) => cause,
-            DescribeTargetHealthError::InvalidTarget(ref cause) => cause,
-            DescribeTargetHealthError::TargetGroupNotFound(ref cause) => cause,
+            DescribeTargetHealthError::HealthUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeTargetHealthError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            DescribeTargetHealthError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTargetHealthError {}
 /// Errors returned by ModifyListener
 #[derive(Debug, PartialEq)]
 pub enum ModifyListenerError {
@@ -7947,31 +7877,31 @@ impl ModifyListenerError {
 }
 impl fmt::Display for ModifyListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyListenerError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyListenerError::CertificateNotFound(ref cause) => cause,
-            ModifyListenerError::DuplicateListener(ref cause) => cause,
-            ModifyListenerError::IncompatibleProtocols(ref cause) => cause,
-            ModifyListenerError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyListenerError::InvalidLoadBalancerAction(ref cause) => cause,
-            ModifyListenerError::ListenerNotFound(ref cause) => cause,
-            ModifyListenerError::SSLPolicyNotFound(ref cause) => cause,
-            ModifyListenerError::TargetGroupAssociationLimit(ref cause) => cause,
-            ModifyListenerError::TargetGroupNotFound(ref cause) => cause,
-            ModifyListenerError::TooManyActions(ref cause) => cause,
-            ModifyListenerError::TooManyCertificates(ref cause) => cause,
-            ModifyListenerError::TooManyListeners(ref cause) => cause,
-            ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            ModifyListenerError::TooManyTargets(ref cause) => cause,
-            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            ModifyListenerError::UnsupportedProtocol(ref cause) => cause,
+            ModifyListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::SSLPolicyNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyListeners(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyListenerError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyListenerError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyListenerError {}
 /// Errors returned by ModifyLoadBalancerAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyLoadBalancerAttributesError {
@@ -8022,17 +7952,17 @@ impl ModifyLoadBalancerAttributesError {
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyLoadBalancerAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyLoadBalancerAttributesError {}
 /// Errors returned by ModifyRule
 #[derive(Debug, PartialEq)]
 pub enum ModifyRuleError {
@@ -8142,26 +8072,24 @@ impl ModifyRuleError {
 }
 impl fmt::Display for ModifyRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyRuleError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyRuleError::IncompatibleProtocols(ref cause) => cause,
-            ModifyRuleError::InvalidLoadBalancerAction(ref cause) => cause,
-            ModifyRuleError::OperationNotPermitted(ref cause) => cause,
-            ModifyRuleError::RuleNotFound(ref cause) => cause,
-            ModifyRuleError::TargetGroupAssociationLimit(ref cause) => cause,
-            ModifyRuleError::TargetGroupNotFound(ref cause) => cause,
-            ModifyRuleError::TooManyActions(ref cause) => cause,
-            ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            ModifyRuleError::TooManyTargets(ref cause) => cause,
-            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
-            ModifyRuleError::UnsupportedProtocol(ref cause) => cause,
+            ModifyRuleError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::InvalidLoadBalancerAction(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TargetGroupAssociationLimit(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyActions(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyTargets(ref cause) => write!(f, "{}", cause),
+            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyRuleError::UnsupportedProtocol(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyRuleError {}
 /// Errors returned by ModifyTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupError {
@@ -8208,17 +8136,15 @@ impl ModifyTargetGroupError {
 }
 impl fmt::Display for ModifyTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyTargetGroupError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyTargetGroupError::TargetGroupNotFound(ref cause) => cause,
+            ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyTargetGroupError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ModifyTargetGroupError {}
 /// Errors returned by ModifyTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupAttributesError {
@@ -8269,17 +8195,17 @@ impl ModifyTargetGroupAttributesError {
 }
 impl fmt::Display for ModifyTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyTargetGroupAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => cause,
-            ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
+            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ModifyTargetGroupAttributesError {}
 /// Errors returned by RegisterTargets
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetsError {
@@ -8340,19 +8266,17 @@ impl RegisterTargetsError {
 }
 impl fmt::Display for RegisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterTargetsError {
-    fn description(&self) -> &str {
         match *self {
-            RegisterTargetsError::InvalidTarget(ref cause) => cause,
-            RegisterTargetsError::TargetGroupNotFound(ref cause) => cause,
-            RegisterTargetsError::TooManyRegistrationsForTargetId(ref cause) => cause,
-            RegisterTargetsError::TooManyTargets(ref cause) => cause,
+            RegisterTargetsError::InvalidTarget(ref cause) => write!(f, "{}", cause),
+            RegisterTargetsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            RegisterTargetsError::TooManyRegistrationsForTargetId(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterTargetsError::TooManyTargets(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RegisterTargetsError {}
 /// Errors returned by RemoveListenerCertificates
 #[derive(Debug, PartialEq)]
 pub enum RemoveListenerCertificatesError {
@@ -8401,17 +8325,15 @@ impl RemoveListenerCertificatesError {
 }
 impl fmt::Display for RemoveListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveListenerCertificatesError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveListenerCertificatesError::ListenerNotFound(ref cause) => cause,
-            RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => cause,
+            RemoveListenerCertificatesError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for RemoveListenerCertificatesError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -8477,20 +8399,16 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RemoveTagsError {
-    fn description(&self) -> &str {
         match *self {
-            RemoveTagsError::ListenerNotFound(ref cause) => cause,
-            RemoveTagsError::LoadBalancerNotFound(ref cause) => cause,
-            RemoveTagsError::RuleNotFound(ref cause) => cause,
-            RemoveTagsError::TargetGroupNotFound(ref cause) => cause,
-            RemoveTagsError::TooManyTags(ref cause) => cause,
+            RemoveTagsError::ListenerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::RuleNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::TargetGroupNotFound(ref cause) => write!(f, "{}", cause),
+            RemoveTagsError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RemoveTagsError {}
 /// Errors returned by SetIpAddressType
 #[derive(Debug, PartialEq)]
 pub enum SetIpAddressTypeError {
@@ -8544,18 +8462,14 @@ impl SetIpAddressTypeError {
 }
 impl fmt::Display for SetIpAddressTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetIpAddressTypeError {
-    fn description(&self) -> &str {
         match *self {
-            SetIpAddressTypeError::InvalidConfigurationRequest(ref cause) => cause,
-            SetIpAddressTypeError::InvalidSubnet(ref cause) => cause,
-            SetIpAddressTypeError::LoadBalancerNotFound(ref cause) => cause,
+            SetIpAddressTypeError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            SetIpAddressTypeError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            SetIpAddressTypeError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetIpAddressTypeError {}
 /// Errors returned by SetRulePriorities
 #[derive(Debug, PartialEq)]
 pub enum SetRulePrioritiesError {
@@ -8607,18 +8521,14 @@ impl SetRulePrioritiesError {
 }
 impl fmt::Display for SetRulePrioritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetRulePrioritiesError {
-    fn description(&self) -> &str {
         match *self {
-            SetRulePrioritiesError::OperationNotPermitted(ref cause) => cause,
-            SetRulePrioritiesError::PriorityInUse(ref cause) => cause,
-            SetRulePrioritiesError::RuleNotFound(ref cause) => cause,
+            SetRulePrioritiesError::OperationNotPermitted(ref cause) => write!(f, "{}", cause),
+            SetRulePrioritiesError::PriorityInUse(ref cause) => write!(f, "{}", cause),
+            SetRulePrioritiesError::RuleNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetRulePrioritiesError {}
 /// Errors returned by SetSecurityGroups
 #[derive(Debug, PartialEq)]
 pub enum SetSecurityGroupsError {
@@ -8672,18 +8582,16 @@ impl SetSecurityGroupsError {
 }
 impl fmt::Display for SetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSecurityGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            SetSecurityGroupsError::InvalidConfigurationRequest(ref cause) => cause,
-            SetSecurityGroupsError::InvalidSecurityGroup(ref cause) => cause,
-            SetSecurityGroupsError::LoadBalancerNotFound(ref cause) => cause,
+            SetSecurityGroupsError::InvalidConfigurationRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SetSecurityGroupsError::InvalidSecurityGroup(ref cause) => write!(f, "{}", cause),
+            SetSecurityGroupsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSecurityGroupsError {}
 /// Errors returned by SetSubnets
 #[derive(Debug, PartialEq)]
 pub enum SetSubnetsError {
@@ -8756,21 +8664,17 @@ impl SetSubnetsError {
 }
 impl fmt::Display for SetSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SetSubnetsError {
-    fn description(&self) -> &str {
         match *self {
-            SetSubnetsError::AllocationIdNotFound(ref cause) => cause,
-            SetSubnetsError::AvailabilityZoneNotSupported(ref cause) => cause,
-            SetSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
-            SetSubnetsError::InvalidSubnet(ref cause) => cause,
-            SetSubnetsError::LoadBalancerNotFound(ref cause) => cause,
-            SetSubnetsError::SubnetNotFound(ref cause) => cause,
+            SetSubnetsError::AllocationIdNotFound(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::AvailabilityZoneNotSupported(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::InvalidConfigurationRequest(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::LoadBalancerNotFound(ref cause) => write!(f, "{}", cause),
+            SetSubnetsError::SubnetNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for SetSubnetsError {}
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>To get the certificate list for a listener, use <a>DescribeListenerCertificates</a>. To remove certificates from the certificate list for a listener, use <a>RemoveListenerCertificates</a>. To replace the default certificate for a listener, use <a>ModifyListener</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>

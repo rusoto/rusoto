@@ -8443,14 +8443,10 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AddTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for AddTagsError {}
 /// Errors returned by AssociateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum AssociateTrialComponentError {
@@ -8483,17 +8479,15 @@ impl AssociateTrialComponentError {
 }
 impl fmt::Display for AssociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
-            AssociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            AssociateTrialComponentError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateTrialComponentError {}
 /// Errors returned by CreateAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum CreateAlgorithmError {}
@@ -8511,14 +8505,10 @@ impl CreateAlgorithmError {
 }
 impl fmt::Display for CreateAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateAlgorithmError {}
 /// Errors returned by CreateApp
 #[derive(Debug, PartialEq)]
 pub enum CreateAppError {
@@ -8547,17 +8537,13 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAppError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAppError::ResourceInUse(ref cause) => cause,
-            CreateAppError::ResourceLimitExceeded(ref cause) => cause,
+            CreateAppError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateAppError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAppError {}
 /// Errors returned by CreateAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum CreateAutoMLJobError {
@@ -8588,17 +8574,13 @@ impl CreateAutoMLJobError {
 }
 impl fmt::Display for CreateAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateAutoMLJobError::ResourceInUse(ref cause) => cause,
-            CreateAutoMLJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateAutoMLJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateAutoMLJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateAutoMLJobError {}
 /// Errors returned by CreateCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateCodeRepositoryError {}
@@ -8616,14 +8598,10 @@ impl CreateCodeRepositoryError {
 }
 impl fmt::Display for CreateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateCodeRepositoryError {}
 /// Errors returned by CreateCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum CreateCompilationJobError {
@@ -8654,17 +8632,13 @@ impl CreateCompilationJobError {
 }
 impl fmt::Display for CreateCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateCompilationJobError::ResourceInUse(ref cause) => cause,
-            CreateCompilationJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateCompilationJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateCompilationJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateCompilationJobError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -8693,17 +8667,13 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            CreateDomainError::ResourceInUse(ref cause) => cause,
-            CreateDomainError::ResourceLimitExceeded(ref cause) => cause,
+            CreateDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateDomainError {}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
@@ -8729,16 +8699,12 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointError {}
 /// Errors returned by CreateEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointConfigError {
@@ -8764,16 +8730,12 @@ impl CreateEndpointConfigError {
 }
 impl fmt::Display for CreateEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateEndpointConfigError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEndpointConfigError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateEndpointConfigError {}
 /// Errors returned by CreateExperiment
 #[derive(Debug, PartialEq)]
 pub enum CreateExperimentError {
@@ -8799,16 +8761,12 @@ impl CreateExperimentError {
 }
 impl fmt::Display for CreateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateExperimentError::ResourceLimitExceeded(ref cause) => cause,
+            CreateExperimentError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateExperimentError {}
 /// Errors returned by CreateFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateFlowDefinitionError {
@@ -8839,17 +8797,13 @@ impl CreateFlowDefinitionError {
 }
 impl fmt::Display for CreateFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            CreateFlowDefinitionError::ResourceInUse(ref cause) => cause,
-            CreateFlowDefinitionError::ResourceLimitExceeded(ref cause) => cause,
+            CreateFlowDefinitionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateFlowDefinitionError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateFlowDefinitionError {}
 /// Errors returned by CreateHumanTaskUi
 #[derive(Debug, PartialEq)]
 pub enum CreateHumanTaskUiError {
@@ -8880,17 +8834,13 @@ impl CreateHumanTaskUiError {
 }
 impl fmt::Display for CreateHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHumanTaskUiError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHumanTaskUiError::ResourceInUse(ref cause) => cause,
-            CreateHumanTaskUiError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHumanTaskUiError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateHumanTaskUiError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateHumanTaskUiError {}
 /// Errors returned by CreateHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum CreateHyperParameterTuningJobError {
@@ -8925,17 +8875,15 @@ impl CreateHyperParameterTuningJobError {
 }
 impl fmt::Display for CreateHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateHyperParameterTuningJobError::ResourceInUse(ref cause) => cause,
-            CreateHyperParameterTuningJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateHyperParameterTuningJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateHyperParameterTuningJobError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateHyperParameterTuningJobError {}
 /// Errors returned by CreateLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateLabelingJobError {
@@ -8966,17 +8914,13 @@ impl CreateLabelingJobError {
 }
 impl fmt::Display for CreateLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateLabelingJobError::ResourceInUse(ref cause) => cause,
-            CreateLabelingJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateLabelingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateLabelingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateLabelingJobError {}
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
@@ -9000,16 +8944,12 @@ impl CreateModelError {
 }
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateModelError {
-    fn description(&self) -> &str {
         match *self {
-            CreateModelError::ResourceLimitExceeded(ref cause) => cause,
+            CreateModelError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateModelError {}
 /// Errors returned by CreateModelPackage
 #[derive(Debug, PartialEq)]
 pub enum CreateModelPackageError {}
@@ -9027,14 +8967,10 @@ impl CreateModelPackageError {
 }
 impl fmt::Display for CreateModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreateModelPackageError {}
 /// Errors returned by CreateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum CreateMonitoringScheduleError {
@@ -9067,17 +9003,15 @@ impl CreateMonitoringScheduleError {
 }
 impl fmt::Display for CreateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            CreateMonitoringScheduleError::ResourceInUse(ref cause) => cause,
-            CreateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
+            CreateMonitoringScheduleError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateMonitoringScheduleError {}
 /// Errors returned by CreateNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateNotebookInstanceError {
@@ -9103,16 +9037,12 @@ impl CreateNotebookInstanceError {
 }
 impl fmt::Display for CreateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            CreateNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNotebookInstanceError {}
 /// Errors returned by CreateNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateNotebookInstanceLifecycleConfigError {
@@ -9140,16 +9070,14 @@ impl CreateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for CreateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => cause,
+            CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for CreateNotebookInstanceLifecycleConfigError {}
 /// Errors returned by CreatePresignedDomainUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedDomainUrlError {}
@@ -9167,14 +9095,10 @@ impl CreatePresignedDomainUrlError {
 }
 impl fmt::Display for CreatePresignedDomainUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresignedDomainUrlError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreatePresignedDomainUrlError {}
 /// Errors returned by CreatePresignedNotebookInstanceUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedNotebookInstanceUrlError {}
@@ -9194,14 +9118,10 @@ impl CreatePresignedNotebookInstanceUrlError {
 }
 impl fmt::Display for CreatePresignedNotebookInstanceUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreatePresignedNotebookInstanceUrlError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for CreatePresignedNotebookInstanceUrlError {}
 /// Errors returned by CreateProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateProcessingJobError {
@@ -9239,18 +9159,14 @@ impl CreateProcessingJobError {
 }
 impl fmt::Display for CreateProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateProcessingJobError::ResourceInUse(ref cause) => cause,
-            CreateProcessingJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateProcessingJobError::ResourceNotFound(ref cause) => cause,
+            CreateProcessingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateProcessingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateProcessingJobError {}
 /// Errors returned by CreateTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTrainingJobError {
@@ -9286,18 +9202,14 @@ impl CreateTrainingJobError {
 }
 impl fmt::Display for CreateTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrainingJobError::ResourceInUse(ref cause) => cause,
-            CreateTrainingJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTrainingJobError::ResourceNotFound(ref cause) => cause,
+            CreateTrainingJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateTrainingJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrainingJobError {}
 /// Errors returned by CreateTransformJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTransformJobError {
@@ -9333,18 +9245,14 @@ impl CreateTransformJobError {
 }
 impl fmt::Display for CreateTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTransformJobError::ResourceInUse(ref cause) => cause,
-            CreateTransformJobError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTransformJobError::ResourceNotFound(ref cause) => cause,
+            CreateTransformJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateTransformJobError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTransformJobError {}
 /// Errors returned by CreateTrial
 #[derive(Debug, PartialEq)]
 pub enum CreateTrialError {
@@ -9373,17 +9281,13 @@ impl CreateTrialError {
 }
 impl fmt::Display for CreateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrialError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrialError::ResourceLimitExceeded(ref cause) => cause,
-            CreateTrialError::ResourceNotFound(ref cause) => cause,
+            CreateTrialError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrialError {}
 /// Errors returned by CreateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum CreateTrialComponentError {
@@ -9409,16 +9313,12 @@ impl CreateTrialComponentError {
 }
 impl fmt::Display for CreateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
+            CreateTrialComponentError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTrialComponentError {}
 /// Errors returned by CreateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateUserProfileError {
@@ -9449,17 +9349,13 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserProfileError::ResourceInUse(ref cause) => cause,
-            CreateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
+            CreateUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateUserProfileError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserProfileError {}
 /// Errors returned by CreateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkteamError {
@@ -9490,17 +9386,13 @@ impl CreateWorkteamError {
 }
 impl fmt::Display for CreateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkteamError::ResourceInUse(ref cause) => cause,
-            CreateWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            CreateWorkteamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkteamError {}
 /// Errors returned by DeleteAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DeleteAlgorithmError {}
@@ -9518,14 +9410,10 @@ impl DeleteAlgorithmError {
 }
 impl fmt::Display for DeleteAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteAlgorithmError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
@@ -9554,17 +9442,13 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteAppError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteAppError::ResourceInUse(ref cause) => cause,
-            DeleteAppError::ResourceNotFound(ref cause) => cause,
+            DeleteAppError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteAppError {}
 /// Errors returned by DeleteCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteCodeRepositoryError {}
@@ -9582,14 +9466,10 @@ impl DeleteCodeRepositoryError {
 }
 impl fmt::Display for DeleteCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteCodeRepositoryError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -9618,17 +9498,13 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteDomainError::ResourceInUse(ref cause) => cause,
-            DeleteDomainError::ResourceNotFound(ref cause) => cause,
+            DeleteDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteDomainError {}
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {}
@@ -9646,14 +9522,10 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteEndpointError {}
 /// Errors returned by DeleteEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointConfigError {}
@@ -9671,14 +9543,10 @@ impl DeleteEndpointConfigError {
 }
 impl fmt::Display for DeleteEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteEndpointConfigError {}
 /// Errors returned by DeleteExperiment
 #[derive(Debug, PartialEq)]
 pub enum DeleteExperimentError {
@@ -9702,16 +9570,12 @@ impl DeleteExperimentError {
 }
 impl fmt::Display for DeleteExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteExperimentError::ResourceNotFound(ref cause) => cause,
+            DeleteExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteExperimentError {}
 /// Errors returned by DeleteFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteFlowDefinitionError {
@@ -9737,16 +9601,12 @@ impl DeleteFlowDefinitionError {
 }
 impl fmt::Display for DeleteFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+            DeleteFlowDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteFlowDefinitionError {}
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {}
@@ -9764,14 +9624,10 @@ impl DeleteModelError {
 }
 impl fmt::Display for DeleteModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteModelError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteModelError {}
 /// Errors returned by DeleteModelPackage
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelPackageError {}
@@ -9789,14 +9645,10 @@ impl DeleteModelPackageError {
 }
 impl fmt::Display for DeleteModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteModelPackageError {}
 /// Errors returned by DeleteMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteMonitoringScheduleError {
@@ -9822,16 +9674,12 @@ impl DeleteMonitoringScheduleError {
 }
 impl fmt::Display for DeleteMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            DeleteMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteMonitoringScheduleError {}
 /// Errors returned by DeleteNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotebookInstanceError {}
@@ -9849,14 +9697,10 @@ impl DeleteNotebookInstanceError {
 }
 impl fmt::Display for DeleteNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteNotebookInstanceError {}
 /// Errors returned by DeleteNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotebookInstanceLifecycleConfigError {}
@@ -9876,14 +9720,10 @@ impl DeleteNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DeleteNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteNotebookInstanceLifecycleConfigError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {}
@@ -9901,14 +9741,10 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DeleteTrial
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrialError {
@@ -9932,16 +9768,12 @@ impl DeleteTrialError {
 }
 impl fmt::Display for DeleteTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrialError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrialError::ResourceNotFound(ref cause) => cause,
+            DeleteTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrialError {}
 /// Errors returned by DeleteTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrialComponentError {
@@ -9967,16 +9799,12 @@ impl DeleteTrialComponentError {
 }
 impl fmt::Display for DeleteTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DeleteTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTrialComponentError {}
 /// Errors returned by DeleteUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserProfileError {
@@ -10005,17 +9833,13 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserProfileError::ResourceInUse(ref cause) => cause,
-            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,
+            DeleteUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserProfileError {}
 /// Errors returned by DeleteWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkteamError {
@@ -10041,16 +9865,12 @@ impl DeleteWorkteamError {
 }
 impl fmt::Display for DeleteWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            DeleteWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkteamError {}
 /// Errors returned by DescribeAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlgorithmError {}
@@ -10068,14 +9888,10 @@ impl DescribeAlgorithmError {
 }
 impl fmt::Display for DescribeAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAlgorithmError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAlgorithmError {}
 /// Errors returned by DescribeApp
 #[derive(Debug, PartialEq)]
 pub enum DescribeAppError {
@@ -10099,16 +9915,12 @@ impl DescribeAppError {
 }
 impl fmt::Display for DescribeAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAppError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAppError::ResourceNotFound(ref cause) => cause,
+            DescribeAppError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAppError {}
 /// Errors returned by DescribeAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoMLJobError {
@@ -10132,16 +9944,12 @@ impl DescribeAutoMLJobError {
 }
 impl fmt::Display for DescribeAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            DescribeAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeAutoMLJobError {}
 /// Errors returned by DescribeCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DescribeCodeRepositoryError {}
@@ -10159,14 +9967,10 @@ impl DescribeCodeRepositoryError {
 }
 impl fmt::Display for DescribeCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeCodeRepositoryError {}
 /// Errors returned by DescribeCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeCompilationJobError {
@@ -10192,16 +9996,12 @@ impl DescribeCompilationJobError {
 }
 impl fmt::Display for DescribeCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeCompilationJobError::ResourceNotFound(ref cause) => cause,
+            DescribeCompilationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeCompilationJobError {}
 /// Errors returned by DescribeDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainError {
@@ -10225,16 +10025,12 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeDomainError::ResourceNotFound(ref cause) => cause,
+            DescribeDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeDomainError {}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {}
@@ -10252,14 +10048,10 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointError {}
 /// Errors returned by DescribeEndpointConfig
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointConfigError {}
@@ -10277,14 +10069,10 @@ impl DescribeEndpointConfigError {
 }
 impl fmt::Display for DescribeEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEndpointConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeEndpointConfigError {}
 /// Errors returned by DescribeExperiment
 #[derive(Debug, PartialEq)]
 pub enum DescribeExperimentError {
@@ -10308,16 +10096,12 @@ impl DescribeExperimentError {
 }
 impl fmt::Display for DescribeExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeExperimentError::ResourceNotFound(ref cause) => cause,
+            DescribeExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeExperimentError {}
 /// Errors returned by DescribeFlowDefinition
 #[derive(Debug, PartialEq)]
 pub enum DescribeFlowDefinitionError {
@@ -10343,16 +10127,12 @@ impl DescribeFlowDefinitionError {
 }
 impl fmt::Display for DescribeFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeFlowDefinitionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+            DescribeFlowDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeFlowDefinitionError {}
 /// Errors returned by DescribeHumanTaskUi
 #[derive(Debug, PartialEq)]
 pub enum DescribeHumanTaskUiError {
@@ -10378,16 +10158,12 @@ impl DescribeHumanTaskUiError {
 }
 impl fmt::Display for DescribeHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHumanTaskUiError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHumanTaskUiError::ResourceNotFound(ref cause) => cause,
+            DescribeHumanTaskUiError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeHumanTaskUiError {}
 /// Errors returned by DescribeHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeHyperParameterTuningJobError {
@@ -10415,16 +10191,14 @@ impl DescribeHyperParameterTuningJobError {
 }
 impl fmt::Display for DescribeHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            DescribeHyperParameterTuningJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeHyperParameterTuningJobError {}
 /// Errors returned by DescribeLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeLabelingJobError {
@@ -10450,16 +10224,12 @@ impl DescribeLabelingJobError {
 }
 impl fmt::Display for DescribeLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeLabelingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeLabelingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeLabelingJobError {}
 /// Errors returned by DescribeModel
 #[derive(Debug, PartialEq)]
 pub enum DescribeModelError {}
@@ -10477,14 +10247,10 @@ impl DescribeModelError {
 }
 impl fmt::Display for DescribeModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeModelError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeModelError {}
 /// Errors returned by DescribeModelPackage
 #[derive(Debug, PartialEq)]
 pub enum DescribeModelPackageError {}
@@ -10502,14 +10268,10 @@ impl DescribeModelPackageError {
 }
 impl fmt::Display for DescribeModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeModelPackageError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeModelPackageError {}
 /// Errors returned by DescribeMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum DescribeMonitoringScheduleError {
@@ -10537,16 +10299,12 @@ impl DescribeMonitoringScheduleError {
 }
 impl fmt::Display for DescribeMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            DescribeMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeMonitoringScheduleError {}
 /// Errors returned by DescribeNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotebookInstanceError {}
@@ -10564,14 +10322,10 @@ impl DescribeNotebookInstanceError {
 }
 impl fmt::Display for DescribeNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeNotebookInstanceError {}
 /// Errors returned by DescribeNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotebookInstanceLifecycleConfigError {}
@@ -10591,14 +10345,10 @@ impl DescribeNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DescribeNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeNotebookInstanceLifecycleConfigError {}
 /// Errors returned by DescribeProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeProcessingJobError {
@@ -10624,16 +10374,12 @@ impl DescribeProcessingJobError {
 }
 impl fmt::Display for DescribeProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeProcessingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeProcessingJobError {}
 /// Errors returned by DescribeSubscribedWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribedWorkteamError {}
@@ -10653,14 +10399,10 @@ impl DescribeSubscribedWorkteamError {
 }
 impl fmt::Display for DescribeSubscribedWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeSubscribedWorkteamError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeSubscribedWorkteamError {}
 /// Errors returned by DescribeTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrainingJobError {
@@ -10686,16 +10428,12 @@ impl DescribeTrainingJobError {
 }
 impl fmt::Display for DescribeTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrainingJobError::ResourceNotFound(ref cause) => cause,
+            DescribeTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrainingJobError {}
 /// Errors returned by DescribeTransformJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeTransformJobError {
@@ -10721,16 +10459,12 @@ impl DescribeTransformJobError {
 }
 impl fmt::Display for DescribeTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTransformJobError::ResourceNotFound(ref cause) => cause,
+            DescribeTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTransformJobError {}
 /// Errors returned by DescribeTrial
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrialError {
@@ -10754,16 +10488,12 @@ impl DescribeTrialError {
 }
 impl fmt::Display for DescribeTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrialError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrialError::ResourceNotFound(ref cause) => cause,
+            DescribeTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrialError {}
 /// Errors returned by DescribeTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrialComponentError {
@@ -10789,16 +10519,12 @@ impl DescribeTrialComponentError {
 }
 impl fmt::Display for DescribeTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DescribeTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeTrialComponentError {}
 /// Errors returned by DescribeUserProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserProfileError {
@@ -10824,16 +10550,12 @@ impl DescribeUserProfileError {
 }
 impl fmt::Display for DescribeUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserProfileError::ResourceNotFound(ref cause) => cause,
+            DescribeUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserProfileError {}
 /// Errors returned by DescribeWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkteamError {}
@@ -10851,14 +10573,10 @@ impl DescribeWorkteamError {
 }
 impl fmt::Display for DescribeWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeWorkteamError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeWorkteamError {}
 /// Errors returned by DisassociateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTrialComponentError {
@@ -10886,16 +10604,12 @@ impl DisassociateTrialComponentError {
 }
 impl fmt::Display for DisassociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            DisassociateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateTrialComponentError {}
 /// Errors returned by GetSearchSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetSearchSuggestionsError {}
@@ -10913,14 +10627,10 @@ impl GetSearchSuggestionsError {
 }
 impl fmt::Display for GetSearchSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetSearchSuggestionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for GetSearchSuggestionsError {}
 /// Errors returned by ListAlgorithms
 #[derive(Debug, PartialEq)]
 pub enum ListAlgorithmsError {}
@@ -10938,14 +10648,10 @@ impl ListAlgorithmsError {
 }
 impl fmt::Display for ListAlgorithmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAlgorithmsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAlgorithmsError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {}
@@ -10963,14 +10669,10 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAppsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAppsError {}
 /// Errors returned by ListAutoMLJobs
 #[derive(Debug, PartialEq)]
 pub enum ListAutoMLJobsError {}
@@ -10988,14 +10690,10 @@ impl ListAutoMLJobsError {
 }
 impl fmt::Display for ListAutoMLJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAutoMLJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListAutoMLJobsError {}
 /// Errors returned by ListCandidatesForAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum ListCandidatesForAutoMLJobError {
@@ -11023,16 +10721,12 @@ impl ListCandidatesForAutoMLJobError {
 }
 impl fmt::Display for ListCandidatesForAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCandidatesForAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            ListCandidatesForAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            ListCandidatesForAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListCandidatesForAutoMLJobError {}
 /// Errors returned by ListCodeRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListCodeRepositoriesError {}
@@ -11050,14 +10744,10 @@ impl ListCodeRepositoriesError {
 }
 impl fmt::Display for ListCodeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCodeRepositoriesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCodeRepositoriesError {}
 /// Errors returned by ListCompilationJobs
 #[derive(Debug, PartialEq)]
 pub enum ListCompilationJobsError {}
@@ -11075,14 +10765,10 @@ impl ListCompilationJobsError {
 }
 impl fmt::Display for ListCompilationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCompilationJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListCompilationJobsError {}
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {}
@@ -11100,14 +10786,10 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListDomainsError {}
 /// Errors returned by ListEndpointConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointConfigsError {}
@@ -11125,14 +10807,10 @@ impl ListEndpointConfigsError {
 }
 impl fmt::Display for ListEndpointConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointConfigsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListEndpointConfigsError {}
 /// Errors returned by ListEndpoints
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointsError {}
@@ -11150,14 +10828,10 @@ impl ListEndpointsError {
 }
 impl fmt::Display for ListEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListEndpointsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListEndpointsError {}
 /// Errors returned by ListExperiments
 #[derive(Debug, PartialEq)]
 pub enum ListExperimentsError {}
@@ -11175,14 +10849,10 @@ impl ListExperimentsError {
 }
 impl fmt::Display for ListExperimentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListExperimentsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListExperimentsError {}
 /// Errors returned by ListFlowDefinitions
 #[derive(Debug, PartialEq)]
 pub enum ListFlowDefinitionsError {}
@@ -11200,14 +10870,10 @@ impl ListFlowDefinitionsError {
 }
 impl fmt::Display for ListFlowDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListFlowDefinitionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListFlowDefinitionsError {}
 /// Errors returned by ListHumanTaskUis
 #[derive(Debug, PartialEq)]
 pub enum ListHumanTaskUisError {}
@@ -11225,14 +10891,10 @@ impl ListHumanTaskUisError {
 }
 impl fmt::Display for ListHumanTaskUisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHumanTaskUisError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListHumanTaskUisError {}
 /// Errors returned by ListHyperParameterTuningJobs
 #[derive(Debug, PartialEq)]
 pub enum ListHyperParameterTuningJobsError {}
@@ -11252,14 +10914,10 @@ impl ListHyperParameterTuningJobsError {
 }
 impl fmt::Display for ListHyperParameterTuningJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListHyperParameterTuningJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListHyperParameterTuningJobsError {}
 /// Errors returned by ListLabelingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListLabelingJobsError {}
@@ -11277,14 +10935,10 @@ impl ListLabelingJobsError {
 }
 impl fmt::Display for ListLabelingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLabelingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListLabelingJobsError {}
 /// Errors returned by ListLabelingJobsForWorkteam
 #[derive(Debug, PartialEq)]
 pub enum ListLabelingJobsForWorkteamError {
@@ -11312,16 +10966,12 @@ impl ListLabelingJobsForWorkteamError {
 }
 impl fmt::Display for ListLabelingJobsForWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListLabelingJobsForWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            ListLabelingJobsForWorkteamError::ResourceNotFound(ref cause) => cause,
+            ListLabelingJobsForWorkteamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListLabelingJobsForWorkteamError {}
 /// Errors returned by ListModelPackages
 #[derive(Debug, PartialEq)]
 pub enum ListModelPackagesError {}
@@ -11339,14 +10989,10 @@ impl ListModelPackagesError {
 }
 impl fmt::Display for ListModelPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListModelPackagesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListModelPackagesError {}
 /// Errors returned by ListModels
 #[derive(Debug, PartialEq)]
 pub enum ListModelsError {}
@@ -11364,14 +11010,10 @@ impl ListModelsError {
 }
 impl fmt::Display for ListModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListModelsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListModelsError {}
 /// Errors returned by ListMonitoringExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListMonitoringExecutionsError {}
@@ -11389,14 +11031,10 @@ impl ListMonitoringExecutionsError {
 }
 impl fmt::Display for ListMonitoringExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMonitoringExecutionsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListMonitoringExecutionsError {}
 /// Errors returned by ListMonitoringSchedules
 #[derive(Debug, PartialEq)]
 pub enum ListMonitoringSchedulesError {}
@@ -11414,14 +11052,10 @@ impl ListMonitoringSchedulesError {
 }
 impl fmt::Display for ListMonitoringSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMonitoringSchedulesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListMonitoringSchedulesError {}
 /// Errors returned by ListNotebookInstanceLifecycleConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListNotebookInstanceLifecycleConfigsError {}
@@ -11441,14 +11075,10 @@ impl ListNotebookInstanceLifecycleConfigsError {
 }
 impl fmt::Display for ListNotebookInstanceLifecycleConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNotebookInstanceLifecycleConfigsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListNotebookInstanceLifecycleConfigsError {}
 /// Errors returned by ListNotebookInstances
 #[derive(Debug, PartialEq)]
 pub enum ListNotebookInstancesError {}
@@ -11466,14 +11096,10 @@ impl ListNotebookInstancesError {
 }
 impl fmt::Display for ListNotebookInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNotebookInstancesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListNotebookInstancesError {}
 /// Errors returned by ListProcessingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListProcessingJobsError {}
@@ -11491,14 +11117,10 @@ impl ListProcessingJobsError {
 }
 impl fmt::Display for ListProcessingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProcessingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListProcessingJobsError {}
 /// Errors returned by ListSubscribedWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListSubscribedWorkteamsError {}
@@ -11516,14 +11138,10 @@ impl ListSubscribedWorkteamsError {
 }
 impl fmt::Display for ListSubscribedWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListSubscribedWorkteamsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListSubscribedWorkteamsError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {}
@@ -11541,14 +11159,10 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by ListTrainingJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTrainingJobsError {}
@@ -11566,14 +11180,10 @@ impl ListTrainingJobsError {
 }
 impl fmt::Display for ListTrainingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrainingJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrainingJobsError {}
 /// Errors returned by ListTrainingJobsForHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum ListTrainingJobsForHyperParameterTuningJobError {
@@ -11601,16 +11211,14 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
 }
 impl fmt::Display for ListTrainingJobsForHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrainingJobsForHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for ListTrainingJobsForHyperParameterTuningJobError {}
 /// Errors returned by ListTransformJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTransformJobsError {}
@@ -11628,14 +11236,10 @@ impl ListTransformJobsError {
 }
 impl fmt::Display for ListTransformJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTransformJobsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTransformJobsError {}
 /// Errors returned by ListTrialComponents
 #[derive(Debug, PartialEq)]
 pub enum ListTrialComponentsError {}
@@ -11653,14 +11257,10 @@ impl ListTrialComponentsError {
 }
 impl fmt::Display for ListTrialComponentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrialComponentsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrialComponentsError {}
 /// Errors returned by ListTrials
 #[derive(Debug, PartialEq)]
 pub enum ListTrialsError {}
@@ -11678,14 +11278,10 @@ impl ListTrialsError {
 }
 impl fmt::Display for ListTrialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTrialsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListTrialsError {}
 /// Errors returned by ListUserProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListUserProfilesError {}
@@ -11703,14 +11299,10 @@ impl ListUserProfilesError {
 }
 impl fmt::Display for ListUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUserProfilesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListUserProfilesError {}
 /// Errors returned by ListWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListWorkteamsError {}
@@ -11728,14 +11320,10 @@ impl ListWorkteamsError {
 }
 impl fmt::Display for ListWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkteamsError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for ListWorkteamsError {}
 /// Errors returned by RenderUiTemplate
 #[derive(Debug, PartialEq)]
 pub enum RenderUiTemplateError {}
@@ -11753,14 +11341,10 @@ impl RenderUiTemplateError {
 }
 impl fmt::Display for RenderUiTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RenderUiTemplateError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for RenderUiTemplateError {}
 /// Errors returned by Search
 #[derive(Debug, PartialEq)]
 pub enum SearchError {}
@@ -11778,14 +11362,10 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for SearchError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for SearchError {}
 /// Errors returned by StartMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum StartMonitoringScheduleError {
@@ -11811,16 +11391,12 @@ impl StartMonitoringScheduleError {
 }
 impl fmt::Display for StartMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StartMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            StartMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMonitoringScheduleError {}
 /// Errors returned by StartNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StartNotebookInstanceError {
@@ -11846,16 +11422,12 @@ impl StartNotebookInstanceError {
 }
 impl fmt::Display for StartNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            StartNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartNotebookInstanceError {}
 /// Errors returned by StopAutoMLJob
 #[derive(Debug, PartialEq)]
 pub enum StopAutoMLJobError {
@@ -11879,16 +11451,12 @@ impl StopAutoMLJobError {
 }
 impl fmt::Display for StopAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopAutoMLJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopAutoMLJobError::ResourceNotFound(ref cause) => cause,
+            StopAutoMLJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopAutoMLJobError {}
 /// Errors returned by StopCompilationJob
 #[derive(Debug, PartialEq)]
 pub enum StopCompilationJobError {
@@ -11912,16 +11480,12 @@ impl StopCompilationJobError {
 }
 impl fmt::Display for StopCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopCompilationJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopCompilationJobError::ResourceNotFound(ref cause) => cause,
+            StopCompilationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopCompilationJobError {}
 /// Errors returned by StopHyperParameterTuningJob
 #[derive(Debug, PartialEq)]
 pub enum StopHyperParameterTuningJobError {
@@ -11949,16 +11513,12 @@ impl StopHyperParameterTuningJobError {
 }
 impl fmt::Display for StopHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopHyperParameterTuningJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopHyperParameterTuningJobError::ResourceNotFound(ref cause) => cause,
+            StopHyperParameterTuningJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopHyperParameterTuningJobError {}
 /// Errors returned by StopLabelingJob
 #[derive(Debug, PartialEq)]
 pub enum StopLabelingJobError {
@@ -11982,16 +11542,12 @@ impl StopLabelingJobError {
 }
 impl fmt::Display for StopLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopLabelingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopLabelingJobError::ResourceNotFound(ref cause) => cause,
+            StopLabelingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopLabelingJobError {}
 /// Errors returned by StopMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum StopMonitoringScheduleError {
@@ -12017,16 +11573,12 @@ impl StopMonitoringScheduleError {
 }
 impl fmt::Display for StopMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            StopMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            StopMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopMonitoringScheduleError {}
 /// Errors returned by StopNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StopNotebookInstanceError {}
@@ -12044,14 +11596,10 @@ impl StopNotebookInstanceError {
 }
 impl fmt::Display for StopNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for StopNotebookInstanceError {}
 /// Errors returned by StopProcessingJob
 #[derive(Debug, PartialEq)]
 pub enum StopProcessingJobError {
@@ -12075,16 +11623,12 @@ impl StopProcessingJobError {
 }
 impl fmt::Display for StopProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopProcessingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopProcessingJobError::ResourceNotFound(ref cause) => cause,
+            StopProcessingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopProcessingJobError {}
 /// Errors returned by StopTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum StopTrainingJobError {
@@ -12108,16 +11652,12 @@ impl StopTrainingJobError {
 }
 impl fmt::Display for StopTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTrainingJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopTrainingJobError::ResourceNotFound(ref cause) => cause,
+            StopTrainingJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTrainingJobError {}
 /// Errors returned by StopTransformJob
 #[derive(Debug, PartialEq)]
 pub enum StopTransformJobError {
@@ -12141,16 +11681,12 @@ impl StopTransformJobError {
 }
 impl fmt::Display for StopTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopTransformJobError {
-    fn description(&self) -> &str {
         match *self {
-            StopTransformJobError::ResourceNotFound(ref cause) => cause,
+            StopTransformJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopTransformJobError {}
 /// Errors returned by UpdateCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum UpdateCodeRepositoryError {}
@@ -12168,14 +11704,10 @@ impl UpdateCodeRepositoryError {
 }
 impl fmt::Display for UpdateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateCodeRepositoryError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for UpdateCodeRepositoryError {}
 /// Errors returned by UpdateDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainError {
@@ -12209,18 +11741,14 @@ impl UpdateDomainError {
 }
 impl fmt::Display for UpdateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateDomainError::ResourceInUse(ref cause) => cause,
-            UpdateDomainError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateDomainError::ResourceNotFound(ref cause) => cause,
+            UpdateDomainError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateDomainError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateDomainError {}
 /// Errors returned by UpdateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointError {
@@ -12246,16 +11774,12 @@ impl UpdateEndpointError {
 }
 impl fmt::Display for UpdateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEndpointError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateEndpointError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateEndpointError {}
 /// Errors returned by UpdateEndpointWeightsAndCapacities
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointWeightsAndCapacitiesError {
@@ -12283,16 +11807,14 @@ impl UpdateEndpointWeightsAndCapacitiesError {
 }
 impl fmt::Display for UpdateEndpointWeightsAndCapacitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateEndpointWeightsAndCapacitiesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateEndpointWeightsAndCapacitiesError {}
 /// Errors returned by UpdateExperiment
 #[derive(Debug, PartialEq)]
 pub enum UpdateExperimentError {
@@ -12321,17 +11843,13 @@ impl UpdateExperimentError {
 }
 impl fmt::Display for UpdateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateExperimentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateExperimentError::Conflict(ref cause) => cause,
-            UpdateExperimentError::ResourceNotFound(ref cause) => cause,
+            UpdateExperimentError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateExperimentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateExperimentError {}
 /// Errors returned by UpdateMonitoringSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringScheduleError {
@@ -12364,17 +11882,15 @@ impl UpdateMonitoringScheduleError {
 }
 impl fmt::Display for UpdateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMonitoringScheduleError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+            UpdateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMonitoringScheduleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateMonitoringScheduleError {}
 /// Errors returned by UpdateNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotebookInstanceError {
@@ -12400,16 +11916,12 @@ impl UpdateNotebookInstanceError {
 }
 impl fmt::Display for UpdateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotebookInstanceError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateNotebookInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateNotebookInstanceError {}
 /// Errors returned by UpdateNotebookInstanceLifecycleConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotebookInstanceLifecycleConfigError {
@@ -12437,16 +11949,14 @@ impl UpdateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for UpdateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateNotebookInstanceLifecycleConfigError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateNotebookInstanceLifecycleConfigError {}
 /// Errors returned by UpdateTrial
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrialError {
@@ -12475,17 +11985,13 @@ impl UpdateTrialError {
 }
 impl fmt::Display for UpdateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrialError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrialError::Conflict(ref cause) => cause,
-            UpdateTrialError::ResourceNotFound(ref cause) => cause,
+            UpdateTrialError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateTrialError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTrialError {}
 /// Errors returned by UpdateTrialComponent
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrialComponentError {
@@ -12516,17 +12022,13 @@ impl UpdateTrialComponentError {
 }
 impl fmt::Display for UpdateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTrialComponentError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateTrialComponentError::Conflict(ref cause) => cause,
-            UpdateTrialComponentError::ResourceNotFound(ref cause) => cause,
+            UpdateTrialComponentError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateTrialComponentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateTrialComponentError {}
 /// Errors returned by UpdateUserProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserProfileError {
@@ -12562,18 +12064,14 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserProfileError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserProfileError::ResourceInUse(ref cause) => cause,
-            UpdateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
-            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,
+            UpdateUserProfileError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateUserProfileError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateUserProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserProfileError {}
 /// Errors returned by UpdateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkteamError {
@@ -12599,16 +12097,12 @@ impl UpdateWorkteamError {
 }
 impl fmt::Display for UpdateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWorkteamError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWorkteamError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateWorkteamError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWorkteamError {}
 /// Trait representing the capabilities of the SageMaker API. SageMaker clients implement this trait.
 pub trait SageMaker {
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>

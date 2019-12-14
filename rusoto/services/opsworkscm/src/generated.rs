@@ -723,17 +723,13 @@ impl AssociateNodeError {
 }
 impl fmt::Display for AssociateNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for AssociateNodeError {
-    fn description(&self) -> &str {
         match *self {
-            AssociateNodeError::InvalidState(ref cause) => cause,
-            AssociateNodeError::ResourceNotFound(ref cause) => cause,
+            AssociateNodeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            AssociateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for AssociateNodeError {}
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
@@ -767,18 +763,14 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBackupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBackupError::InvalidState(ref cause) => cause,
-            CreateBackupError::LimitExceeded(ref cause) => cause,
-            CreateBackupError::ResourceNotFound(ref cause) => cause,
+            CreateBackupError::InvalidState(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateBackupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBackupError {}
 /// Errors returned by CreateServer
 #[derive(Debug, PartialEq)]
 pub enum CreateServerError {
@@ -812,18 +804,14 @@ impl CreateServerError {
 }
 impl fmt::Display for CreateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateServerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateServerError::LimitExceeded(ref cause) => cause,
-            CreateServerError::ResourceAlreadyExists(ref cause) => cause,
-            CreateServerError::ResourceNotFound(ref cause) => cause,
+            CreateServerError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateServerError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
@@ -852,17 +840,13 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBackupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBackupError::InvalidState(ref cause) => cause,
-            DeleteBackupError::ResourceNotFound(ref cause) => cause,
+            DeleteBackupError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteBackupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBackupError {}
 /// Errors returned by DeleteServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerError {
@@ -891,17 +875,13 @@ impl DeleteServerError {
 }
 impl fmt::Display for DeleteServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteServerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteServerError::InvalidState(ref cause) => cause,
-            DeleteServerError::ResourceNotFound(ref cause) => cause,
+            DeleteServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeleteServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteServerError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -919,14 +899,10 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAccountAttributesError {
-    fn description(&self) -> &str {
         match *self {}
     }
 }
+impl Error for DescribeAccountAttributesError {}
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
@@ -955,17 +931,13 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBackupsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBackupsError::InvalidNextToken(ref cause) => cause,
-            DescribeBackupsError::ResourceNotFound(ref cause) => cause,
+            DescribeBackupsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeBackupsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBackupsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {
@@ -994,17 +966,13 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeEventsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeEventsError::InvalidNextToken(ref cause) => cause,
-            DescribeEventsError::ResourceNotFound(ref cause) => cause,
+            DescribeEventsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeEventsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeEventsError {}
 /// Errors returned by DescribeNodeAssociationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeNodeAssociationStatusError {
@@ -1032,16 +1000,14 @@ impl DescribeNodeAssociationStatusError {
 }
 impl fmt::Display for DescribeNodeAssociationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeNodeAssociationStatusError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeNodeAssociationStatusError::ResourceNotFound(ref cause) => cause,
+            DescribeNodeAssociationStatusError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeNodeAssociationStatusError {}
 /// Errors returned by DescribeServers
 #[derive(Debug, PartialEq)]
 pub enum DescribeServersError {
@@ -1070,17 +1036,13 @@ impl DescribeServersError {
 }
 impl fmt::Display for DescribeServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServersError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeServersError::InvalidNextToken(ref cause) => cause,
-            DescribeServersError::ResourceNotFound(ref cause) => cause,
+            DescribeServersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeServersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeServersError {}
 /// Errors returned by DisassociateNode
 #[derive(Debug, PartialEq)]
 pub enum DisassociateNodeError {
@@ -1109,17 +1071,13 @@ impl DisassociateNodeError {
 }
 impl fmt::Display for DisassociateNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisassociateNodeError {
-    fn description(&self) -> &str {
         match *self {
-            DisassociateNodeError::InvalidState(ref cause) => cause,
-            DisassociateNodeError::ResourceNotFound(ref cause) => cause,
+            DisassociateNodeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DisassociateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DisassociateNodeError {}
 /// Errors returned by ExportServerEngineAttribute
 #[derive(Debug, PartialEq)]
 pub enum ExportServerEngineAttributeError {
@@ -1154,17 +1112,13 @@ impl ExportServerEngineAttributeError {
 }
 impl fmt::Display for ExportServerEngineAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ExportServerEngineAttributeError {
-    fn description(&self) -> &str {
         match *self {
-            ExportServerEngineAttributeError::InvalidState(ref cause) => cause,
-            ExportServerEngineAttributeError::ResourceNotFound(ref cause) => cause,
+            ExportServerEngineAttributeError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ExportServerEngineAttributeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ExportServerEngineAttributeError {}
 /// Errors returned by RestoreServer
 #[derive(Debug, PartialEq)]
 pub enum RestoreServerError {
@@ -1193,17 +1147,13 @@ impl RestoreServerError {
 }
 impl fmt::Display for RestoreServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RestoreServerError {
-    fn description(&self) -> &str {
         match *self {
-            RestoreServerError::InvalidState(ref cause) => cause,
-            RestoreServerError::ResourceNotFound(ref cause) => cause,
+            RestoreServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            RestoreServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RestoreServerError {}
 /// Errors returned by StartMaintenance
 #[derive(Debug, PartialEq)]
 pub enum StartMaintenanceError {
@@ -1232,17 +1182,13 @@ impl StartMaintenanceError {
 }
 impl fmt::Display for StartMaintenanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMaintenanceError {
-    fn description(&self) -> &str {
         match *self {
-            StartMaintenanceError::InvalidState(ref cause) => cause,
-            StartMaintenanceError::ResourceNotFound(ref cause) => cause,
+            StartMaintenanceError::InvalidState(ref cause) => write!(f, "{}", cause),
+            StartMaintenanceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartMaintenanceError {}
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
@@ -1271,17 +1217,13 @@ impl UpdateServerError {
 }
 impl fmt::Display for UpdateServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerError::InvalidState(ref cause) => cause,
-            UpdateServerError::ResourceNotFound(ref cause) => cause,
+            UpdateServerError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateServerError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateServerError {}
 /// Errors returned by UpdateServerEngineAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerEngineAttributesError {
@@ -1316,17 +1258,15 @@ impl UpdateServerEngineAttributesError {
 }
 impl fmt::Display for UpdateServerEngineAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateServerEngineAttributesError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateServerEngineAttributesError::InvalidState(ref cause) => cause,
-            UpdateServerEngineAttributesError::ResourceNotFound(ref cause) => cause,
+            UpdateServerEngineAttributesError::InvalidState(ref cause) => write!(f, "{}", cause),
+            UpdateServerEngineAttributesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for UpdateServerEngineAttributesError {}
 /// Trait representing the capabilities of the OpsWorksCM API. OpsWorksCM clients implement this trait.
 pub trait OpsWorksCM {
     /// <p> Associates a new node with the server. For more information about how to disassociate a node, see <a>DisassociateNode</a>.</p> <p> On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>CHEF_ORGANIZATION</i>,Value=default" "Name=<i>CHEF_NODE_PUBLIC_KEY</i>,Value=<i>public-key-pem</i>"</code> </p> <p> On a Puppet server, this command is an alternative to the <code>puppet cert sign</code> command that signs a Puppet node CSR. </p> <p> Example (Chef): <code>aws opsworks-cm associate-node --server-name <i>MyServer</i> --node-name <i>MyManagedNode</i> --engine-attributes "Name=<i>PUPPET_NODE_CSR</i>,Value=<i>csr-pem</i>"</code> </p> <p> A node can can only be associated with servers that are in a <code>HEALTHY</code> state. Otherwise, an <code>InvalidStateException</code> is thrown. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. The AssociateNode API call can be integrated into Auto Scaling configurations, AWS Cloudformation templates, or the user data of a server's instance. </p>

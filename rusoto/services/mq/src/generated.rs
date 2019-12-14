@@ -1204,20 +1204,16 @@ impl CreateBrokerError {
 }
 impl fmt::Display for CreateBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateBrokerError {
-    fn description(&self) -> &str {
         match *self {
-            CreateBrokerError::BadRequest(ref cause) => cause,
-            CreateBrokerError::Conflict(ref cause) => cause,
-            CreateBrokerError::Forbidden(ref cause) => cause,
-            CreateBrokerError::InternalServerError(ref cause) => cause,
-            CreateBrokerError::Unauthorized(ref cause) => cause,
+            CreateBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateBrokerError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateBrokerError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateBrokerError {}
 /// Errors returned by CreateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationError {
@@ -1258,19 +1254,15 @@ impl CreateConfigurationError {
 }
 impl fmt::Display for CreateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            CreateConfigurationError::BadRequest(ref cause) => cause,
-            CreateConfigurationError::Conflict(ref cause) => cause,
-            CreateConfigurationError::Forbidden(ref cause) => cause,
-            CreateConfigurationError::InternalServerError(ref cause) => cause,
+            CreateConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateConfigurationError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -1309,19 +1301,15 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTagsError {
-    fn description(&self) -> &str {
         match *self {
-            CreateTagsError::BadRequest(ref cause) => cause,
-            CreateTagsError::Forbidden(ref cause) => cause,
-            CreateTagsError::InternalServerError(ref cause) => cause,
-            CreateTagsError::NotFound(ref cause) => cause,
+            CreateTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateTagsError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -1365,20 +1353,16 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateUserError {
-    fn description(&self) -> &str {
         match *self {
-            CreateUserError::BadRequest(ref cause) => cause,
-            CreateUserError::Conflict(ref cause) => cause,
-            CreateUserError::Forbidden(ref cause) => cause,
-            CreateUserError::InternalServerError(ref cause) => cause,
-            CreateUserError::NotFound(ref cause) => cause,
+            CreateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateUserError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateUserError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateUserError {}
 /// Errors returned by DeleteBroker
 #[derive(Debug, PartialEq)]
 pub enum DeleteBrokerError {
@@ -1417,19 +1401,15 @@ impl DeleteBrokerError {
 }
 impl fmt::Display for DeleteBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteBrokerError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteBrokerError::BadRequest(ref cause) => cause,
-            DeleteBrokerError::Forbidden(ref cause) => cause,
-            DeleteBrokerError::InternalServerError(ref cause) => cause,
-            DeleteBrokerError::NotFound(ref cause) => cause,
+            DeleteBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteBrokerError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteBrokerError {}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -1468,19 +1448,15 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTagsError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteTagsError::BadRequest(ref cause) => cause,
-            DeleteTagsError::Forbidden(ref cause) => cause,
-            DeleteTagsError::InternalServerError(ref cause) => cause,
-            DeleteTagsError::NotFound(ref cause) => cause,
+            DeleteTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteTagsError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -1519,19 +1495,15 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteUserError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteUserError::BadRequest(ref cause) => cause,
-            DeleteUserError::Forbidden(ref cause) => cause,
-            DeleteUserError::InternalServerError(ref cause) => cause,
-            DeleteUserError::NotFound(ref cause) => cause,
+            DeleteUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteUserError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteUserError {}
 /// Errors returned by DescribeBroker
 #[derive(Debug, PartialEq)]
 pub enum DescribeBrokerError {
@@ -1570,19 +1542,15 @@ impl DescribeBrokerError {
 }
 impl fmt::Display for DescribeBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBrokerError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBrokerError::BadRequest(ref cause) => cause,
-            DescribeBrokerError::Forbidden(ref cause) => cause,
-            DescribeBrokerError::InternalServerError(ref cause) => cause,
-            DescribeBrokerError::NotFound(ref cause) => cause,
+            DescribeBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeBrokerError {}
 /// Errors returned by DescribeBrokerEngineTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeBrokerEngineTypesError {
@@ -1620,18 +1588,16 @@ impl DescribeBrokerEngineTypesError {
 }
 impl fmt::Display for DescribeBrokerEngineTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBrokerEngineTypesError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBrokerEngineTypesError::BadRequest(ref cause) => cause,
-            DescribeBrokerEngineTypesError::Forbidden(ref cause) => cause,
-            DescribeBrokerEngineTypesError::InternalServerError(ref cause) => cause,
+            DescribeBrokerEngineTypesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerEngineTypesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerEngineTypesError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeBrokerEngineTypesError {}
 /// Errors returned by DescribeBrokerInstanceOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeBrokerInstanceOptionsError {
@@ -1673,18 +1639,16 @@ impl DescribeBrokerInstanceOptionsError {
 }
 impl fmt::Display for DescribeBrokerInstanceOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeBrokerInstanceOptionsError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeBrokerInstanceOptionsError::BadRequest(ref cause) => cause,
-            DescribeBrokerInstanceOptionsError::Forbidden(ref cause) => cause,
-            DescribeBrokerInstanceOptionsError::InternalServerError(ref cause) => cause,
+            DescribeBrokerInstanceOptionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerInstanceOptionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeBrokerInstanceOptionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
+impl Error for DescribeBrokerInstanceOptionsError {}
 /// Errors returned by DescribeConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationError {
@@ -1725,19 +1689,15 @@ impl DescribeConfigurationError {
 }
 impl fmt::Display for DescribeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationError::BadRequest(ref cause) => cause,
-            DescribeConfigurationError::Forbidden(ref cause) => cause,
-            DescribeConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeConfigurationError::NotFound(ref cause) => cause,
+            DescribeConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationError {}
 /// Errors returned by DescribeConfigurationRevision
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationRevisionError {
@@ -1786,19 +1746,17 @@ impl DescribeConfigurationRevisionError {
 }
 impl fmt::Display for DescribeConfigurationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeConfigurationRevisionError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeConfigurationRevisionError::BadRequest(ref cause) => cause,
-            DescribeConfigurationRevisionError::Forbidden(ref cause) => cause,
-            DescribeConfigurationRevisionError::InternalServerError(ref cause) => cause,
-            DescribeConfigurationRevisionError::NotFound(ref cause) => cause,
+            DescribeConfigurationRevisionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationRevisionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeConfigurationRevisionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeConfigurationRevisionError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeConfigurationRevisionError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -1837,19 +1795,15 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeUserError {
-    fn description(&self) -> &str {
         match *self {
-            DescribeUserError::BadRequest(ref cause) => cause,
-            DescribeUserError::Forbidden(ref cause) => cause,
-            DescribeUserError::InternalServerError(ref cause) => cause,
-            DescribeUserError::NotFound(ref cause) => cause,
+            DescribeUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeUserError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DescribeUserError {}
 /// Errors returned by ListBrokers
 #[derive(Debug, PartialEq)]
 pub enum ListBrokersError {
@@ -1883,18 +1837,14 @@ impl ListBrokersError {
 }
 impl fmt::Display for ListBrokersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListBrokersError {
-    fn description(&self) -> &str {
         match *self {
-            ListBrokersError::BadRequest(ref cause) => cause,
-            ListBrokersError::Forbidden(ref cause) => cause,
-            ListBrokersError::InternalServerError(ref cause) => cause,
+            ListBrokersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListBrokersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListBrokersError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListBrokersError {}
 /// Errors returned by ListConfigurationRevisions
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationRevisionsError {
@@ -1941,19 +1891,17 @@ impl ListConfigurationRevisionsError {
 }
 impl fmt::Display for ListConfigurationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationRevisionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationRevisionsError::BadRequest(ref cause) => cause,
-            ListConfigurationRevisionsError::Forbidden(ref cause) => cause,
-            ListConfigurationRevisionsError::InternalServerError(ref cause) => cause,
-            ListConfigurationRevisionsError::NotFound(ref cause) => cause,
+            ListConfigurationRevisionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListConfigurationRevisionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListConfigurationRevisionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListConfigurationRevisionsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationRevisionsError {}
 /// Errors returned by ListConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationsError {
@@ -1989,18 +1937,14 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListConfigurationsError {
-    fn description(&self) -> &str {
         match *self {
-            ListConfigurationsError::BadRequest(ref cause) => cause,
-            ListConfigurationsError::Forbidden(ref cause) => cause,
-            ListConfigurationsError::InternalServerError(ref cause) => cause,
+            ListConfigurationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListConfigurationsError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListConfigurationsError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -2039,19 +1983,15 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsError::BadRequest(ref cause) => cause,
-            ListTagsError::Forbidden(ref cause) => cause,
-            ListTagsError::InternalServerError(ref cause) => cause,
-            ListTagsError::NotFound(ref cause) => cause,
+            ListTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListTagsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -2090,19 +2030,15 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListUsersError {
-    fn description(&self) -> &str {
         match *self {
-            ListUsersError::BadRequest(ref cause) => cause,
-            ListUsersError::Forbidden(ref cause) => cause,
-            ListUsersError::InternalServerError(ref cause) => cause,
-            ListUsersError::NotFound(ref cause) => cause,
+            ListUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListUsersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListUsersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListUsersError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListUsersError {}
 /// Errors returned by RebootBroker
 #[derive(Debug, PartialEq)]
 pub enum RebootBrokerError {
@@ -2141,19 +2077,15 @@ impl RebootBrokerError {
 }
 impl fmt::Display for RebootBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RebootBrokerError {
-    fn description(&self) -> &str {
         match *self {
-            RebootBrokerError::BadRequest(ref cause) => cause,
-            RebootBrokerError::Forbidden(ref cause) => cause,
-            RebootBrokerError::InternalServerError(ref cause) => cause,
-            RebootBrokerError::NotFound(ref cause) => cause,
+            RebootBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for RebootBrokerError {}
 /// Errors returned by UpdateBroker
 #[derive(Debug, PartialEq)]
 pub enum UpdateBrokerError {
@@ -2197,20 +2129,16 @@ impl UpdateBrokerError {
 }
 impl fmt::Display for UpdateBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateBrokerError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateBrokerError::BadRequest(ref cause) => cause,
-            UpdateBrokerError::Conflict(ref cause) => cause,
-            UpdateBrokerError::Forbidden(ref cause) => cause,
-            UpdateBrokerError::InternalServerError(ref cause) => cause,
-            UpdateBrokerError::NotFound(ref cause) => cause,
+            UpdateBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateBrokerError {}
 /// Errors returned by UpdateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationError {
@@ -2256,20 +2184,16 @@ impl UpdateConfigurationError {
 }
 impl fmt::Display for UpdateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateConfigurationError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateConfigurationError::BadRequest(ref cause) => cause,
-            UpdateConfigurationError::Conflict(ref cause) => cause,
-            UpdateConfigurationError::Forbidden(ref cause) => cause,
-            UpdateConfigurationError::InternalServerError(ref cause) => cause,
-            UpdateConfigurationError::NotFound(ref cause) => cause,
+            UpdateConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateConfigurationError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -2313,20 +2237,16 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateUserError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateUserError::BadRequest(ref cause) => cause,
-            UpdateUserError::Conflict(ref cause) => cause,
-            UpdateUserError::Forbidden(ref cause) => cause,
-            UpdateUserError::InternalServerError(ref cause) => cause,
-            UpdateUserError::NotFound(ref cause) => cause,
+            UpdateUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateUserError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the AmazonMQ API. AmazonMQ clients implement this trait.
 pub trait MQ {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>

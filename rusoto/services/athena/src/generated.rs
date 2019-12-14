@@ -873,17 +873,13 @@ impl BatchGetNamedQueryError {
 }
 impl fmt::Display for BatchGetNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetNamedQueryError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetNamedQueryError::InternalServer(ref cause) => cause,
-            BatchGetNamedQueryError::InvalidRequest(ref cause) => cause,
+            BatchGetNamedQueryError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchGetNamedQueryError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetNamedQueryError {}
 /// Errors returned by BatchGetQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum BatchGetQueryExecutionError {
@@ -916,17 +912,13 @@ impl BatchGetQueryExecutionError {
 }
 impl fmt::Display for BatchGetQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for BatchGetQueryExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            BatchGetQueryExecutionError::InternalServer(ref cause) => cause,
-            BatchGetQueryExecutionError::InvalidRequest(ref cause) => cause,
+            BatchGetQueryExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchGetQueryExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for BatchGetQueryExecutionError {}
 /// Errors returned by CreateNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum CreateNamedQueryError {
@@ -955,17 +947,13 @@ impl CreateNamedQueryError {
 }
 impl fmt::Display for CreateNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateNamedQueryError {
-    fn description(&self) -> &str {
         match *self {
-            CreateNamedQueryError::InternalServer(ref cause) => cause,
-            CreateNamedQueryError::InvalidRequest(ref cause) => cause,
+            CreateNamedQueryError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateNamedQueryError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateNamedQueryError {}
 /// Errors returned by CreateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkGroupError {
@@ -994,17 +982,13 @@ impl CreateWorkGroupError {
 }
 impl fmt::Display for CreateWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateWorkGroupError {
-    fn description(&self) -> &str {
         match *self {
-            CreateWorkGroupError::InternalServer(ref cause) => cause,
-            CreateWorkGroupError::InvalidRequest(ref cause) => cause,
+            CreateWorkGroupError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateWorkGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for CreateWorkGroupError {}
 /// Errors returned by DeleteNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamedQueryError {
@@ -1033,17 +1017,13 @@ impl DeleteNamedQueryError {
 }
 impl fmt::Display for DeleteNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteNamedQueryError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteNamedQueryError::InternalServer(ref cause) => cause,
-            DeleteNamedQueryError::InvalidRequest(ref cause) => cause,
+            DeleteNamedQueryError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteNamedQueryError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteNamedQueryError {}
 /// Errors returned by DeleteWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkGroupError {
@@ -1072,17 +1052,13 @@ impl DeleteWorkGroupError {
 }
 impl fmt::Display for DeleteWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteWorkGroupError {
-    fn description(&self) -> &str {
         match *self {
-            DeleteWorkGroupError::InternalServer(ref cause) => cause,
-            DeleteWorkGroupError::InvalidRequest(ref cause) => cause,
+            DeleteWorkGroupError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteWorkGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for DeleteWorkGroupError {}
 /// Errors returned by GetNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum GetNamedQueryError {
@@ -1111,17 +1087,13 @@ impl GetNamedQueryError {
 }
 impl fmt::Display for GetNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetNamedQueryError {
-    fn description(&self) -> &str {
         match *self {
-            GetNamedQueryError::InternalServer(ref cause) => cause,
-            GetNamedQueryError::InvalidRequest(ref cause) => cause,
+            GetNamedQueryError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetNamedQueryError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetNamedQueryError {}
 /// Errors returned by GetQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum GetQueryExecutionError {
@@ -1150,17 +1122,13 @@ impl GetQueryExecutionError {
 }
 impl fmt::Display for GetQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueryExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueryExecutionError::InternalServer(ref cause) => cause,
-            GetQueryExecutionError::InvalidRequest(ref cause) => cause,
+            GetQueryExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetQueryExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueryExecutionError {}
 /// Errors returned by GetQueryResults
 #[derive(Debug, PartialEq)]
 pub enum GetQueryResultsError {
@@ -1189,17 +1157,13 @@ impl GetQueryResultsError {
 }
 impl fmt::Display for GetQueryResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetQueryResultsError {
-    fn description(&self) -> &str {
         match *self {
-            GetQueryResultsError::InternalServer(ref cause) => cause,
-            GetQueryResultsError::InvalidRequest(ref cause) => cause,
+            GetQueryResultsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetQueryResultsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetQueryResultsError {}
 /// Errors returned by GetWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum GetWorkGroupError {
@@ -1228,17 +1192,13 @@ impl GetWorkGroupError {
 }
 impl fmt::Display for GetWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetWorkGroupError {
-    fn description(&self) -> &str {
         match *self {
-            GetWorkGroupError::InternalServer(ref cause) => cause,
-            GetWorkGroupError::InvalidRequest(ref cause) => cause,
+            GetWorkGroupError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetWorkGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for GetWorkGroupError {}
 /// Errors returned by ListNamedQueries
 #[derive(Debug, PartialEq)]
 pub enum ListNamedQueriesError {
@@ -1267,17 +1227,13 @@ impl ListNamedQueriesError {
 }
 impl fmt::Display for ListNamedQueriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListNamedQueriesError {
-    fn description(&self) -> &str {
         match *self {
-            ListNamedQueriesError::InternalServer(ref cause) => cause,
-            ListNamedQueriesError::InvalidRequest(ref cause) => cause,
+            ListNamedQueriesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListNamedQueriesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListNamedQueriesError {}
 /// Errors returned by ListQueryExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListQueryExecutionsError {
@@ -1306,17 +1262,13 @@ impl ListQueryExecutionsError {
 }
 impl fmt::Display for ListQueryExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListQueryExecutionsError {
-    fn description(&self) -> &str {
         match *self {
-            ListQueryExecutionsError::InternalServer(ref cause) => cause,
-            ListQueryExecutionsError::InvalidRequest(ref cause) => cause,
+            ListQueryExecutionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListQueryExecutionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListQueryExecutionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1352,18 +1304,14 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTagsForResourceError {
-    fn description(&self) -> &str {
         match *self {
-            ListTagsForResourceError::InternalServer(ref cause) => cause,
-            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWorkGroups
 #[derive(Debug, PartialEq)]
 pub enum ListWorkGroupsError {
@@ -1392,17 +1340,13 @@ impl ListWorkGroupsError {
 }
 impl fmt::Display for ListWorkGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListWorkGroupsError {
-    fn description(&self) -> &str {
         match *self {
-            ListWorkGroupsError::InternalServer(ref cause) => cause,
-            ListWorkGroupsError::InvalidRequest(ref cause) => cause,
+            ListWorkGroupsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListWorkGroupsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for ListWorkGroupsError {}
 /// Errors returned by StartQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum StartQueryExecutionError {
@@ -1436,18 +1380,14 @@ impl StartQueryExecutionError {
 }
 impl fmt::Display for StartQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartQueryExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StartQueryExecutionError::InternalServer(ref cause) => cause,
-            StartQueryExecutionError::InvalidRequest(ref cause) => cause,
-            StartQueryExecutionError::TooManyRequests(ref cause) => cause,
+            StartQueryExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartQueryExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartQueryExecutionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StartQueryExecutionError {}
 /// Errors returned by StopQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum StopQueryExecutionError {
@@ -1476,17 +1416,13 @@ impl StopQueryExecutionError {
 }
 impl fmt::Display for StopQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StopQueryExecutionError {
-    fn description(&self) -> &str {
         match *self {
-            StopQueryExecutionError::InternalServer(ref cause) => cause,
-            StopQueryExecutionError::InvalidRequest(ref cause) => cause,
+            StopQueryExecutionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopQueryExecutionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for StopQueryExecutionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1520,18 +1456,14 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for TagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            TagResourceError::InternalServer(ref cause) => cause,
-            TagResourceError::InvalidRequest(ref cause) => cause,
-            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -1565,18 +1497,14 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UntagResourceError {
-    fn description(&self) -> &str {
         match *self {
-            UntagResourceError::InternalServer(ref cause) => cause,
-            UntagResourceError::InvalidRequest(ref cause) => cause,
-            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkGroupError {
@@ -1605,17 +1533,13 @@ impl UpdateWorkGroupError {
 }
 impl fmt::Display for UpdateWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateWorkGroupError {
-    fn description(&self) -> &str {
         match *self {
-            UpdateWorkGroupError::InternalServer(ref cause) => cause,
-            UpdateWorkGroupError::InvalidRequest(ref cause) => cause,
+            UpdateWorkGroupError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateWorkGroupError::InvalidRequest(ref cause) => write!(f, "{}", cause),
         }
     }
 }
+impl Error for UpdateWorkGroupError {}
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
 pub trait Athena {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
