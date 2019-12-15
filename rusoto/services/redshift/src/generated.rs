@@ -17392,7 +17392,7 @@ impl Error for RotateEncryptionKeyError {
     }
 }
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
-pub trait Redshift {
+pub trait Redshift: region::GetRegion {
     /// <p>Exchanges a DC1 Reserved Node for a DC2 Reserved Node with no changes to the configuration (term, payment type, or number of nodes) and no additional costs. </p>
     fn accept_reserved_node_exchange(
         &self,
@@ -17948,6 +17948,12 @@ impl fmt::Debug for RedshiftClient {
         f.debug_struct("RedshiftClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for RedshiftClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

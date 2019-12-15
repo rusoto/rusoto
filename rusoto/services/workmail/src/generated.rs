@@ -3199,7 +3199,7 @@ impl Error for UpdateResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon WorkMail API. Amazon WorkMail clients implement this trait.
-pub trait Workmail {
+pub trait Workmail: region::GetRegion {
     /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
     fn associate_delegate_to_resource(
         &self,
@@ -3440,6 +3440,12 @@ impl fmt::Debug for WorkmailClient {
         f.debug_struct("WorkmailClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for WorkmailClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

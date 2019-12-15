@@ -313,7 +313,7 @@ impl Error for SendCommandError {
     }
 }
 /// Trait representing the capabilities of the QLDB Session API. QLDB Session clients implement this trait.
-pub trait QldbSession {
+pub trait QldbSession: region::GetRegion {
     /// <p>Sends a command to an Amazon QLDB ledger.</p>
     fn send_command(
         &self,
@@ -362,6 +362,12 @@ impl fmt::Debug for QldbSessionClient {
         f.debug_struct("QldbSessionClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for QldbSessionClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

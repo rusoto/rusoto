@@ -2065,7 +2065,7 @@ impl Error for ViewBillingError {
     }
 }
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
-pub trait Route53Domains {
+pub trait Route53Domains: region::GetRegion {
     /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
     fn check_domain_availability(
         &self,
@@ -2252,6 +2252,12 @@ impl fmt::Debug for Route53DomainsClient {
         f.debug_struct("Route53DomainsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Route53DomainsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

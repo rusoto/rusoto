@@ -1220,7 +1220,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
-pub trait MediaStore {
+pub trait MediaStore: region::GetRegion {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
     fn create_container(
         &self,
@@ -1371,6 +1371,12 @@ impl fmt::Debug for MediaStoreClient {
         f.debug_struct("MediaStoreClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MediaStoreClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -2329,7 +2329,7 @@ impl Error for UpdatePipelineStatusError {
     }
 }
 /// Trait representing the capabilities of the Amazon Elastic Transcoder API. Amazon Elastic Transcoder clients implement this trait.
-pub trait Ets {
+pub trait Ets: region::GetRegion {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
     fn cancel_job(
         &self,
@@ -2468,6 +2468,12 @@ impl fmt::Debug for EtsClient {
         f.debug_struct("EtsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for EtsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

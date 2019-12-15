@@ -1214,7 +1214,7 @@ impl Error for UpdateProjectError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT 1-Click Projects API. AWS IoT 1-Click Projects clients implement this trait.
-pub trait Iot1ClickProjects {
+pub trait Iot1ClickProjects: region::GetRegion {
     /// <p>Associates a physical device with a placement.</p>
     fn associate_device_with_placement(
         &self,
@@ -1353,6 +1353,12 @@ impl fmt::Debug for Iot1ClickProjectsClient {
         f.debug_struct("Iot1ClickProjectsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Iot1ClickProjectsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

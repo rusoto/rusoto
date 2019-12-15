@@ -2729,7 +2729,7 @@ impl Error for UpdateIdentityProviderConfigurationError {
     }
 }
 /// Trait representing the capabilities of the WorkLink API. WorkLink clients implement this trait.
-pub trait Worklink {
+pub trait Worklink: region::GetRegion {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
     fn associate_domain(
         &self,
@@ -2988,6 +2988,12 @@ impl fmt::Debug for WorklinkClient {
         f.debug_struct("WorklinkClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for WorklinkClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

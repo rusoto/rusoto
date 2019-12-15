@@ -452,7 +452,7 @@ impl Error for ResolveCustomerError {
     }
 }
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
-pub trait MarketplaceMetering {
+pub trait MarketplaceMetering: region::GetRegion {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
     fn batch_meter_usage(
         &self,
@@ -519,6 +519,12 @@ impl fmt::Debug for MarketplaceMeteringClient {
         f.debug_struct("MarketplaceMeteringClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MarketplaceMeteringClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

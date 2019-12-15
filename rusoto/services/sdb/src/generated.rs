@@ -1582,7 +1582,7 @@ impl Error for SelectError {
     }
 }
 /// Trait representing the capabilities of the Amazon SimpleDB API. Amazon SimpleDB clients implement this trait.
-pub trait SimpleDb {
+pub trait SimpleDb: region::GetRegion {
     /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>
     fn batch_delete_attributes(
         &self,
@@ -1673,6 +1673,12 @@ impl fmt::Debug for SimpleDbClient {
         f.debug_struct("SimpleDbClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for SimpleDbClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

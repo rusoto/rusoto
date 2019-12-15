@@ -534,7 +534,7 @@ impl Error for TranslateTextError {
     }
 }
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
-pub trait Translate {
+pub trait Translate: region::GetRegion {
     /// <p>A synchronous action that deletes a custom terminology.</p>
     fn delete_terminology(
         &self,
@@ -607,6 +607,12 @@ impl fmt::Debug for TranslateClient {
         f.debug_struct("TranslateClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for TranslateClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

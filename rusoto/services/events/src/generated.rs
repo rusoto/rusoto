@@ -2561,7 +2561,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
-pub trait EventBridge {
+pub trait EventBridge: region::GetRegion {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
     fn activate_event_source(
         &self,
@@ -2775,6 +2775,12 @@ impl fmt::Debug for EventBridgeClient {
         f.debug_struct("EventBridgeClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for EventBridgeClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

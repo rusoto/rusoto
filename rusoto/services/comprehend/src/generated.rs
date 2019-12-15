@@ -5482,7 +5482,7 @@ impl Error for UpdateEndpointError {
     }
 }
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
-pub trait Comprehend {
+pub trait Comprehend: region::GetRegion {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn batch_detect_dominant_language(
         &self,
@@ -5843,6 +5843,12 @@ impl fmt::Debug for ComprehendClient {
         f.debug_struct("ComprehendClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ComprehendClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

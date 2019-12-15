@@ -12055,7 +12055,7 @@ impl Error for UpdateRelationalDatabaseParametersError {
     }
 }
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
-pub trait Lightsail {
+pub trait Lightsail: region::GetRegion {
     /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
         &self,
@@ -12718,6 +12718,12 @@ impl fmt::Debug for LightsailClient {
         f.debug_struct("LightsailClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for LightsailClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

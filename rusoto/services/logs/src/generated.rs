@@ -3218,7 +3218,7 @@ impl Error for UntagLogGroupError {
     }
 }
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
-pub trait CloudWatchLogs {
+pub trait CloudWatchLogs: region::GetRegion {
     /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
     fn associate_kms_key(
         &self,
@@ -3489,6 +3489,12 @@ impl fmt::Debug for CloudWatchLogsClient {
         f.debug_struct("CloudWatchLogsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudWatchLogsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

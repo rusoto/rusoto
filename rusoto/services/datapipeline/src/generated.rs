@@ -1678,7 +1678,7 @@ impl Error for ValidatePipelineDefinitionError {
     }
 }
 /// Trait representing the capabilities of the AWS Data Pipeline API. AWS Data Pipeline clients implement this trait.
-pub trait DataPipeline {
+pub trait DataPipeline: region::GetRegion {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
     fn activate_pipeline(
         &self,
@@ -1826,6 +1826,12 @@ impl fmt::Debug for DataPipelineClient {
         f.debug_struct("DataPipelineClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DataPipelineClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

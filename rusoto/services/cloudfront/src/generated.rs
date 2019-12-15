@@ -11797,7 +11797,7 @@ impl Error for UpdateStreamingDistributionError {
     }
 }
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
-pub trait CloudFront {
+pub trait CloudFront: region::GetRegion {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     fn create_cloud_front_origin_access_identity(
         &self,
@@ -12122,6 +12122,12 @@ impl fmt::Debug for CloudFrontClient {
         f.debug_struct("CloudFrontClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudFrontClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

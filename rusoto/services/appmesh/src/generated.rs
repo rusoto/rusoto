@@ -3735,7 +3735,7 @@ impl Error for UpdateVirtualServiceError {
     }
 }
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
-pub trait AppMesh {
+pub trait AppMesh: region::GetRegion {
     /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
     /// the services that reside within it.</p>
     ///
@@ -4010,6 +4010,12 @@ impl fmt::Debug for AppMeshClient {
         f.debug_struct("AppMeshClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AppMeshClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

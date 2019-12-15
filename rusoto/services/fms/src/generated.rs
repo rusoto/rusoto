@@ -1159,7 +1159,7 @@ impl Error for PutPolicyError {
     }
 }
 /// Trait representing the capabilities of the FMS API. FMS clients implement this trait.
-pub trait Fms {
+pub trait Fms: region::GetRegion {
     /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with the master account of your AWS organization or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall Manager administrator account. </p>
     fn associate_admin_account(
         &self,
@@ -1273,6 +1273,12 @@ impl fmt::Debug for FmsClient {
         f.debug_struct("FmsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for FmsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

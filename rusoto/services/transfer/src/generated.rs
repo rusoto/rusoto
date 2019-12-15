@@ -1645,7 +1645,7 @@ impl Error for UpdateUserError {
     }
 }
 /// Trait representing the capabilities of the AWS Transfer API. AWS Transfer clients implement this trait.
-pub trait Transfer {
+pub trait Transfer: region::GetRegion {
     /// <p>Instantiates an autoscaling virtual server based on Secure File Transfer Protocol (SFTP) in AWS. When you make updates to your server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
     fn create_server(
         &self,
@@ -1778,6 +1778,12 @@ impl fmt::Debug for TransferClient {
         f.debug_struct("TransferClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for TransferClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

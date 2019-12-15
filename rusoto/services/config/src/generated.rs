@@ -7409,7 +7409,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
-pub trait ConfigService {
+pub trait ConfigService: region::GetRegion {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
     fn batch_get_aggregate_resource_config(
         &self,
@@ -7970,6 +7970,12 @@ impl fmt::Debug for ConfigServiceClient {
         f.debug_struct("ConfigServiceClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ConfigServiceClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

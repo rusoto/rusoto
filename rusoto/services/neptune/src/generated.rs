@@ -12395,7 +12395,7 @@ impl Error for RestoreDBClusterToPointInTimeError {
     }
 }
 /// Trait representing the capabilities of the Amazon Neptune API. Amazon Neptune clients implement this trait.
-pub trait Neptune {
+pub trait Neptune: region::GetRegion {
     /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster.</p>
     fn add_role_to_db_cluster(
         &self,
@@ -12792,6 +12792,12 @@ impl fmt::Debug for NeptuneClient {
         f.debug_struct("NeptuneClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for NeptuneClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -1065,7 +1065,7 @@ impl Error for UpdateLedgerError {
     }
 }
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
-pub trait Qldb {
+pub trait Qldb: region::GetRegion {
     /// <p>Creates a new ledger in your AWS account.</p>
     fn create_ledger(
         &self,
@@ -1192,6 +1192,12 @@ impl fmt::Debug for QldbClient {
         f.debug_struct("QldbClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for QldbClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

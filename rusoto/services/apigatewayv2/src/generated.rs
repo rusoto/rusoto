@@ -6386,7 +6386,7 @@ impl Error for UpdateStageError {
     }
 }
 /// Trait representing the capabilities of the AmazonApiGatewayV2 API. AmazonApiGatewayV2 clients implement this trait.
-pub trait ApiGatewayV2 {
+pub trait ApiGatewayV2: region::GetRegion {
     /// <p>Creates an Api resource.</p>
     fn create_api(
         &self,
@@ -6774,6 +6774,12 @@ impl fmt::Debug for ApiGatewayV2Client {
         f.debug_struct("ApiGatewayV2Client")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ApiGatewayV2Client {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

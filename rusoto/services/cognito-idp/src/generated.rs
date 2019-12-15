@@ -12106,7 +12106,7 @@ impl Error for VerifyUserAttributeError {
     }
 }
 /// Trait representing the capabilities of the Amazon Cognito Identity Provider API. Amazon Cognito Identity Provider clients implement this trait.
-pub trait CognitoIdentityProvider {
+pub trait CognitoIdentityProvider: region::GetRegion {
     /// <p>Adds additional user attributes to the user pool schema.</p>
     fn add_custom_attributes(
         &self,
@@ -12734,6 +12734,12 @@ impl fmt::Debug for CognitoIdentityProviderClient {
         f.debug_struct("CognitoIdentityProviderClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CognitoIdentityProviderClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

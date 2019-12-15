@@ -4548,7 +4548,7 @@ impl Error for VerifyError {
     }
 }
 /// Trait representing the capabilities of the KMS API. KMS clients implement this trait.
-pub trait Kms {
+pub trait Kms: region::GetRegion {
     /// <p>Cancels the deletion of a customer master key (CMK). When this operation succeeds, the key state of the CMK is <code>Disabled</code>. To enable the CMK, use <a>EnableKey</a>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK that you use for this operation must be in a compatible key state. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn cancel_key_deletion(
         &self,
@@ -4825,6 +4825,12 @@ impl fmt::Debug for KmsClient {
         f.debug_struct("KmsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for KmsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -6058,7 +6058,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
-pub trait CloudWatch {
+pub trait CloudWatch: region::GetRegion {
     /// <p>Deletes the specified alarms. You can delete up to 50 alarms in one operation. In the event of an error, no alarms are deleted.</p>
     fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError>;
 
@@ -6264,6 +6264,12 @@ impl fmt::Debug for CloudWatchClient {
         f.debug_struct("CloudWatchClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudWatchClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

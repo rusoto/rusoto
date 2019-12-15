@@ -6447,7 +6447,7 @@ impl Error for UpdateVPCEConfigurationError {
     }
 }
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
-pub trait DeviceFarm {
+pub trait DeviceFarm: region::GetRegion {
     /// <p>Creates a device pool.</p>
     fn create_device_pool(
         &self,
@@ -6855,6 +6855,12 @@ impl fmt::Debug for DeviceFarmClient {
         f.debug_struct("DeviceFarmClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DeviceFarmClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

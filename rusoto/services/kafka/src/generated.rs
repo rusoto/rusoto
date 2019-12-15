@@ -2382,7 +2382,7 @@ impl Error for UpdateClusterConfigurationError {
     }
 }
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
-pub trait Kafka {
+pub trait Kafka: region::GetRegion {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
     fn create_cluster(
@@ -2552,6 +2552,12 @@ impl fmt::Debug for KafkaClient {
         f.debug_struct("KafkaClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for KafkaClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

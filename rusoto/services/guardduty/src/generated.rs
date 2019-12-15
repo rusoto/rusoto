@@ -3924,7 +3924,7 @@ impl Error for UpdateThreatIntelSetError {
     }
 }
 /// Trait representing the capabilities of the Amazon GuardDuty API. Amazon GuardDuty clients implement this trait.
-pub trait GuardDuty {
+pub trait GuardDuty: region::GetRegion {
     /// <p>Accepts the invitation to be monitored by a master GuardDuty account.</p>
     fn accept_invitation(
         &self,
@@ -4263,6 +4263,12 @@ impl fmt::Debug for GuardDutyClient {
         f.debug_struct("GuardDutyClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for GuardDutyClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

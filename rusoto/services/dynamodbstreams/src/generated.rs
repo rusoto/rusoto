@@ -559,7 +559,7 @@ impl Error for ListStreamsError {
     }
 }
 /// Trait representing the capabilities of the Amazon DynamoDB Streams API. Amazon DynamoDB Streams clients implement this trait.
-pub trait DynamoDbStreams {
+pub trait DynamoDbStreams: region::GetRegion {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
     fn describe_stream(
         &self,
@@ -626,6 +626,12 @@ impl fmt::Debug for DynamoDbStreamsClient {
         f.debug_struct("DynamoDbStreamsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DynamoDbStreamsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

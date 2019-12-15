@@ -1715,7 +1715,7 @@ impl Error for UpdateJobError {
     }
 }
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
-pub trait Snowball {
+pub trait Snowball: region::GetRegion {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
     fn cancel_cluster(
         &self,
@@ -1857,6 +1857,12 @@ impl fmt::Debug for SnowballClient {
         f.debug_struct("SnowballClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for SnowballClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

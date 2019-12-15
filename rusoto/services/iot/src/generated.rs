@@ -20930,7 +20930,7 @@ impl Error for ValidateSecurityProfileBehaviorsError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
-pub trait Iot {
+pub trait Iot: region::GetRegion {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
@@ -22170,6 +22170,12 @@ impl fmt::Debug for IotClient {
         f.debug_struct("IotClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for IotClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

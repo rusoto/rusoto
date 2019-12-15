@@ -897,7 +897,7 @@ impl Error for UpdateVocabularyError {
     }
 }
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
-pub trait Transcribe {
+pub trait Transcribe: region::GetRegion {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
     fn create_vocabulary(
         &self,
@@ -994,6 +994,12 @@ impl fmt::Debug for TranscribeClient {
         f.debug_struct("TranscribeClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for TranscribeClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

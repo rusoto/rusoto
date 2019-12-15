@@ -883,7 +883,7 @@ impl Error for RollbackTransactionError {
     }
 }
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
-pub trait RdsData {
+pub trait RdsData: region::GetRegion {
     /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>
     fn batch_execute_statement(
         &self,
@@ -962,6 +962,12 @@ impl fmt::Debug for RdsDataClient {
         f.debug_struct("RdsDataClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for RdsDataClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

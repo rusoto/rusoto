@@ -2236,7 +2236,7 @@ impl Error for UpdateStateMachineError {
     }
 }
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
-pub trait StepFunctions {
+pub trait StepFunctions: region::GetRegion {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     fn create_activity(
         &self,
@@ -2411,6 +2411,12 @@ impl fmt::Debug for StepFunctionsClient {
         f.debug_struct("StepFunctionsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for StepFunctionsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -4634,7 +4634,7 @@ impl Error for UpdateUserError {
     }
 }
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
-pub trait Workdocs {
+pub trait Workdocs: region::GetRegion {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
     fn abort_document_version_upload(
         &self,
@@ -4914,6 +4914,12 @@ impl fmt::Debug for WorkdocsClient {
         f.debug_struct("WorkdocsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for WorkdocsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

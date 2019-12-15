@@ -2328,7 +2328,7 @@ impl Error for UpdateUserError {
     }
 }
 /// Trait representing the capabilities of the AmazonMQ API. AmazonMQ clients implement this trait.
-pub trait MQ {
+pub trait MQ: region::GetRegion {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>
     fn create_broker(
         &self,
@@ -2494,6 +2494,12 @@ impl fmt::Debug for MQClient {
         f.debug_struct("MQClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MQClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

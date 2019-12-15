@@ -2322,7 +2322,7 @@ impl Error for UpdateSamplingRuleError {
     }
 }
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
-pub trait XRay {
+pub trait XRay: region::GetRegion {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
     fn batch_get_traces(
         &self,
@@ -2478,6 +2478,12 @@ impl fmt::Debug for XRayClient {
         f.debug_struct("XRayClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for XRayClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

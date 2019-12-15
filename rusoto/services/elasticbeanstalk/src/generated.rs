@@ -9638,7 +9638,7 @@ impl Error for ValidateConfigurationSettingsError {
     }
 }
 /// Trait representing the capabilities of the Elastic Beanstalk API. Elastic Beanstalk clients implement this trait.
-pub trait ElasticBeanstalk {
+pub trait ElasticBeanstalk: region::GetRegion {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
@@ -9948,6 +9948,12 @@ impl fmt::Debug for ElasticBeanstalkClient {
         f.debug_struct("ElasticBeanstalkClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ElasticBeanstalkClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

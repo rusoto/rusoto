@@ -8721,7 +8721,7 @@ impl Error for UpdateReservationError {
     }
 }
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
-pub trait MediaLive {
+pub trait MediaLive: region::GetRegion {
     /// <p>Update a channel schedule</p>
     fn batch_update_schedule(
         &self,
@@ -9016,6 +9016,12 @@ impl fmt::Debug for MediaLiveClient {
         f.debug_struct("MediaLiveClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MediaLiveClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

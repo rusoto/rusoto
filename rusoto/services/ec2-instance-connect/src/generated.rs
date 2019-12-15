@@ -112,7 +112,7 @@ impl Error for SendSSHPublicKeyError {
     }
 }
 /// Trait representing the capabilities of the EC2 Instance Connect API. EC2 Instance Connect clients implement this trait.
-pub trait Ec2InstanceConnect {
+pub trait Ec2InstanceConnect: region::GetRegion {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
     fn send_ssh_public_key(
         &self,
@@ -161,6 +161,12 @@ impl fmt::Debug for Ec2InstanceConnectClient {
         f.debug_struct("Ec2InstanceConnectClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Ec2InstanceConnectClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -2910,7 +2910,7 @@ impl Error for UpdateWebhookError {
     }
 }
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
-pub trait CodeBuild {
+pub trait CodeBuild: region::GetRegion {
     /// <p>Deletes one or more builds.</p>
     fn batch_delete_builds(
         &self,
@@ -3122,6 +3122,12 @@ impl fmt::Debug for CodeBuildClient {
         f.debug_struct("CodeBuildClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CodeBuildClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

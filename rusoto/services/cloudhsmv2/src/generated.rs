@@ -1288,7 +1288,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
-pub trait CloudHsmv2 {
+pub trait CloudHsmv2: region::GetRegion {
     /// <p>Copy an AWS CloudHSM cluster backup to a different region.</p>
     fn copy_backup_to_region(
         &self,
@@ -1406,6 +1406,12 @@ impl fmt::Debug for CloudHsmv2Client {
         f.debug_struct("CloudHsmv2Client")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudHsmv2Client {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

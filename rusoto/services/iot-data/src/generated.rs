@@ -392,7 +392,7 @@ impl Error for UpdateThingShadowError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT Data Plane API. AWS IoT Data Plane clients implement this trait.
-pub trait IotData {
+pub trait IotData: region::GetRegion {
     /// <p>Deletes the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
     fn delete_thing_shadow(
         &self,
@@ -456,6 +456,12 @@ impl fmt::Debug for IotDataClient {
         f.debug_struct("IotDataClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for IotDataClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

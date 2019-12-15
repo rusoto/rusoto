@@ -4841,7 +4841,7 @@ impl Error for UntagResourceError {
     }
 }
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
-pub trait Sns {
+pub trait Sns: region::GetRegion {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
     fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError>;
 
@@ -5067,6 +5067,12 @@ impl fmt::Debug for SnsClient {
         f.debug_struct("SnsClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for SnsClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

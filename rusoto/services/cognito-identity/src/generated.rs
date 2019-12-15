@@ -2059,7 +2059,7 @@ impl Error for UpdateIdentityPoolError {
     }
 }
 /// Trait representing the capabilities of the Amazon Cognito Identity API. Amazon Cognito Identity clients implement this trait.
-pub trait CognitoIdentity {
+pub trait CognitoIdentity: region::GetRegion {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
@@ -2225,6 +2225,12 @@ impl fmt::Debug for CognitoIdentityClient {
         f.debug_struct("CognitoIdentityClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CognitoIdentityClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

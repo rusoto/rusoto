@@ -1515,7 +1515,7 @@ impl Error for UpdateUserProfileError {
     }
 }
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
-pub trait CodeStar {
+pub trait CodeStar: region::GetRegion {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     fn associate_team_member(
         &self,
@@ -1666,6 +1666,12 @@ impl fmt::Debug for CodeStarClient {
         f.debug_struct("CodeStarClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CodeStarClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -5009,7 +5009,7 @@ impl Error for TestConnectionError {
     }
 }
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
-pub trait DatabaseMigrationService {
+pub trait DatabaseMigrationService: region::GetRegion {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
@@ -5348,6 +5348,12 @@ impl fmt::Debug for DatabaseMigrationServiceClient {
         f.debug_struct("DatabaseMigrationServiceClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for DatabaseMigrationServiceClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

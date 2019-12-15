@@ -11493,7 +11493,7 @@ impl Error for UpdateTrafficPolicyInstanceError {
     }
 }
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
-pub trait Route53 {
+pub trait Route53: region::GetRegion {
     /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     fn associate_vpc_with_hosted_zone(
         &self,
@@ -11885,6 +11885,12 @@ impl fmt::Debug for Route53Client {
         f.debug_struct("Route53Client")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Route53Client {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

@@ -6498,7 +6498,7 @@ impl Error for UpdateSubscriptionDefinitionError {
     }
 }
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
-pub trait GreenGrass {
+pub trait GreenGrass: region::GetRegion {
     /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
@@ -7085,6 +7085,12 @@ impl fmt::Debug for GreenGrassClient {
         f.debug_struct("GreenGrassClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for GreenGrassClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

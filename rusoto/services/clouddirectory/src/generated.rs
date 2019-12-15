@@ -8292,7 +8292,7 @@ impl Error for UpgradePublishedSchemaError {
     }
 }
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
-pub trait CloudDirectory {
+pub trait CloudDirectory: region::GetRegion {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
     fn add_facet_to_object(
         &self,
@@ -8728,6 +8728,12 @@ impl fmt::Debug for CloudDirectoryClient {
         f.debug_struct("CloudDirectoryClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CloudDirectoryClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

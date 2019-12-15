@@ -962,7 +962,7 @@ impl Error for SynthesizeSpeechError {
     }
 }
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
-pub trait Polly {
+pub trait Polly: region::GetRegion {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
@@ -1059,6 +1059,12 @@ impl fmt::Debug for PollyClient {
         f.debug_struct("PollyClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for PollyClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

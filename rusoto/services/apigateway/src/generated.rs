@@ -9998,7 +9998,7 @@ impl Error for UpdateVpcLinkError {
     }
 }
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
-pub trait ApiGateway {
+pub trait ApiGateway: region::GetRegion {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     fn create_api_key(&self, input: CreateApiKeyRequest)
         -> RusotoFuture<ApiKey, CreateApiKeyError>;
@@ -10639,6 +10639,12 @@ impl fmt::Debug for ApiGatewayClient {
         f.debug_struct("ApiGatewayClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ApiGatewayClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

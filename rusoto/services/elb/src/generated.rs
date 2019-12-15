@@ -5962,7 +5962,7 @@ impl Error for SetLoadBalancerPoliciesOfListenerError {
     }
 }
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
-pub trait Elb {
+pub trait Elb: region::GetRegion {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
 
@@ -6182,6 +6182,12 @@ impl fmt::Debug for ElbClient {
         f.debug_struct("ElbClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ElbClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

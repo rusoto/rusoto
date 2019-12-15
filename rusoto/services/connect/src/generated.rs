@@ -3032,7 +3032,7 @@ impl Error for UpdateUserSecurityProfilesError {
     }
 }
 /// Trait representing the capabilities of the Amazon Connect API. Amazon Connect clients implement this trait.
-pub trait Connect {
+pub trait Connect: region::GetRegion {
     /// <p>Creates a user account for the specified Amazon Connect instance.</p>
     fn create_user(
         &self,
@@ -3240,6 +3240,12 @@ impl fmt::Debug for ConnectClient {
         f.debug_struct("ConnectClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for ConnectClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

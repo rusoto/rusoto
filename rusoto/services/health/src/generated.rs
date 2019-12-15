@@ -679,7 +679,7 @@ impl Error for DescribeEventsError {
     }
 }
 /// Trait representing the capabilities of the AWSHealth API. AWSHealth clients implement this trait.
-pub trait AWSHealth {
+pub trait AWSHealth: region::GetRegion {
     /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
     fn describe_affected_entities(
         &self,
@@ -758,6 +758,12 @@ impl fmt::Debug for AWSHealthClient {
         f.debug_struct("AWSHealthClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for AWSHealthClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

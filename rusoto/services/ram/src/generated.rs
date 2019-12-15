@@ -2904,7 +2904,7 @@ impl Error for UpdateResourceShareError {
     }
 }
 /// Trait representing the capabilities of the RAM API. RAM clients implement this trait.
-pub trait Ram {
+pub trait Ram: region::GetRegion {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
     fn accept_resource_share_invitation(
         &self,
@@ -3090,6 +3090,12 @@ impl fmt::Debug for RamClient {
         f.debug_struct("RamClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for RamClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

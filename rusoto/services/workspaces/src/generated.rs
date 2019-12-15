@@ -3392,7 +3392,7 @@ impl Error for UpdateRulesOfIpGroupError {
     }
 }
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
-pub trait Workspaces {
+pub trait Workspaces: region::GetRegion {
     /// <p>Associates the specified IP access control group with the specified directory.</p>
     fn associate_ip_groups(
         &self,
@@ -3675,6 +3675,12 @@ impl fmt::Debug for WorkspacesClient {
         f.debug_struct("WorkspacesClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for WorkspacesClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

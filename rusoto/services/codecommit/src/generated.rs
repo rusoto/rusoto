@@ -13416,7 +13416,7 @@ impl Error for UpdateRepositoryNameError {
     }
 }
 /// Trait representing the capabilities of the CodeCommit API. CodeCommit clients implement this trait.
-pub trait CodeCommit {
+pub trait CodeCommit: region::GetRegion {
     /// <p>Creates an association between an approval rule template and a specified repository. Then, the next time a pull request is created in the repository where the destination reference (if specified) matches the destination reference (branch) for the pull request, an approval rule that matches the template conditions is automatically created for that pull request. If no destination references are specified in the template, an approval rule that matches the template contents is created for all pull requests in that repository.</p>
     fn associate_approval_rule_template_with_repository(
         &self,
@@ -13900,6 +13900,12 @@ impl fmt::Debug for CodeCommitClient {
         f.debug_struct("CodeCommitClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CodeCommitClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

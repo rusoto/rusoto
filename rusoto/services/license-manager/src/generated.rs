@@ -1920,7 +1920,7 @@ impl Error for UpdateServiceSettingsError {
     }
 }
 /// Trait representing the capabilities of the AWS License Manager API. AWS License Manager clients implement this trait.
-pub trait LicenseManager {
+pub trait LicenseManager: region::GetRegion {
     /// <p>Creates a license configuration.</p> <p>A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (licensing by instance, socket, CPU, or vCPU), allowed tenancy (shared tenancy, Dedicated Instance, Dedicated Host, or all of these), host affinity (how long a VM must be associated with a host), and the number of licenses purchased and used.</p>
     fn create_license_configuration(
         &self,
@@ -2070,6 +2070,12 @@ impl fmt::Debug for LicenseManagerClient {
         f.debug_struct("LicenseManagerClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for LicenseManagerClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

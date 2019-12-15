@@ -278,7 +278,7 @@ impl Error for PutReportDefinitionError {
     }
 }
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
-pub trait CostAndUsageReport {
+pub trait CostAndUsageReport: region::GetRegion {
     /// <p>Deletes the specified report.</p>
     fn delete_report_definition(
         &self,
@@ -345,6 +345,12 @@ impl fmt::Debug for CostAndUsageReportClient {
         f.debug_struct("CostAndUsageReportClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for CostAndUsageReportClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

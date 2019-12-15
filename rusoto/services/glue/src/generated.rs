@@ -12570,7 +12570,7 @@ impl Error for UpdateWorkflowError {
     }
 }
 /// Trait representing the capabilities of the AWS Glue API. AWS Glue clients implement this trait.
-pub trait Glue {
+pub trait Glue: region::GetRegion {
     /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(
         &self,
@@ -13335,6 +13335,12 @@ impl fmt::Debug for GlueClient {
         f.debug_struct("GlueClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for GlueClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

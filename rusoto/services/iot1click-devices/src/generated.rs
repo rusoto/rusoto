@@ -999,7 +999,7 @@ impl Error for UpdateDeviceStateError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT 1-Click Devices Service API. AWS IoT 1-Click Devices Service clients implement this trait.
-pub trait Iot1ClickDevices {
+pub trait Iot1ClickDevices: region::GetRegion {
     /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
     /// received a claim code with the device(s).</p>
     fn claim_devices_by_claim_code(
@@ -1131,6 +1131,12 @@ impl fmt::Debug for Iot1ClickDevicesClient {
         f.debug_struct("Iot1ClickDevicesClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for Iot1ClickDevicesClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

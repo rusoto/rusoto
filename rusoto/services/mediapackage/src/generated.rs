@@ -2406,7 +2406,7 @@ impl Error for UpdateOriginEndpointError {
     }
 }
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
-pub trait MediaPackage {
+pub trait MediaPackage: region::GetRegion {
     /// <p>Creates a new Channel.</p>
     fn create_channel(
         &self,
@@ -2548,6 +2548,12 @@ impl fmt::Debug for MediaPackageClient {
         f.debug_struct("MediaPackageClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MediaPackageClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 

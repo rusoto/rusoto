@@ -911,7 +911,7 @@ impl Error for UpdateProjectError {
     }
 }
 /// Trait representing the capabilities of the AWS Mobile API. AWS Mobile clients implement this trait.
-pub trait Mobile {
+pub trait Mobile: region::GetRegion {
     /// <p> Creates an AWS Mobile Hub project. </p>
     fn create_project(
         &self,
@@ -1008,6 +1008,12 @@ impl fmt::Debug for MobileClient {
         f.debug_struct("MobileClient")
             .field("region", &self.region)
             .finish()
+    }
+}
+
+impl region::GetRegion for MobileClient {
+    fn region(&self) -> &region::Region {
+        &self.region
     }
 }
 
