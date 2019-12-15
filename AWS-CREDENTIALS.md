@@ -79,9 +79,6 @@ let auto_refreshing_provider = rusoto_credential::AutoRefreshingProvider::new(pr
 
 #### Local integration testing of IAM credentials
 
-Edit the relevant `address`/IP locations in [credential/src/container.rs](credential/src/container.rs) and [credential/src/instance_metadata.rs](credential/src/instance_metadata.rs).
-For local testing, you can use [moe](https://github.com/matthewkmayer/moe) and set the string to this:
-
-```rust,ignore
-let address: String = "http://localhost:8080/latest/meta-data/iam/security-credentials".to_owned();
-```
+Local testing of IAM credentials can be done using [credential_service_mock](rusoto/credential_service_mock) which runs as a local [Warp](https://crates.io/crates/warp) server.
+ 
+Before running the mock server, change the values of the `AWS_CREDENTIALS_PROVIDER_IP` constants in [credential/src/container.rs](rusoto/credential/src/container.rs) and [credential/src/instance_metadata.rs](rusoto/credential/src/instance_metadata.rs) to either `localhost:8080` or `127.0.0.1:8080`
