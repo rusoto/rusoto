@@ -63,7 +63,7 @@ pub mod proto;
 pub mod serialization;
 
 pub use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
-pub use crate::error::{RusotoError, RusotoResult};
+pub use crate::error::{AwsError, RusotoError, RusotoResult};
 pub use crate::future::RusotoFuture;
 pub use crate::region::Region;
 pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};

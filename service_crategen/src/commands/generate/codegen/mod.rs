@@ -133,6 +133,7 @@ where
         // =================================================================
         #![allow(warnings)]
 
+        use std::convert::TryFrom;
         use std::error::Error;
         use std::fmt;
         use futures::future;
@@ -140,7 +141,7 @@ where
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
-        use rusoto_core::{{Client, RusotoFuture, RusotoError}};
+        use rusoto_core::{{AwsError, Client, RusotoFuture, RusotoError}};
     "
     )?;
 

@@ -230,7 +230,7 @@ impl XmlErrorTypes {
             }
         }
 
-        type_matchers.push("_ => {}".to_string());
+        type_matchers.push("_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }".to_string());
         type_matchers.join(",")
     }
 }
@@ -284,7 +284,7 @@ impl JsonErrorTypes {
         }
         type_matchers
             .push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
-        type_matchers.push("_ => {}".to_string());
+        type_matchers.push("_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }".to_string());
         type_matchers.join(",\n")
     }
 }
