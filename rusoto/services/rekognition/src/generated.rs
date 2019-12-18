@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -2365,7 +2366,11 @@ impl CompareFacesError {
                     return RusotoError::Service(CompareFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2432,7 +2437,11 @@ impl CreateCollectionError {
                     return RusotoError::Service(CreateCollectionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2500,7 +2509,11 @@ impl CreateProjectError {
                     return RusotoError::Service(CreateProjectError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2578,7 +2591,11 @@ impl CreateProjectVersionError {
                     return RusotoError::Service(CreateProjectVersionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2652,7 +2669,11 @@ impl CreateStreamProcessorError {
                     return RusotoError::Service(CreateStreamProcessorError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2718,7 +2739,11 @@ impl DeleteCollectionError {
                     return RusotoError::Service(DeleteCollectionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2781,7 +2806,11 @@ impl DeleteFacesError {
                     return RusotoError::Service(DeleteFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2853,7 +2882,11 @@ impl DeleteStreamProcessorError {
                     return RusotoError::Service(DeleteStreamProcessorError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2919,7 +2952,11 @@ impl DescribeCollectionError {
                     return RusotoError::Service(DescribeCollectionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2997,7 +3034,11 @@ impl DescribeProjectVersionsError {
                     return RusotoError::Service(DescribeProjectVersionsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3067,7 +3108,11 @@ impl DescribeProjectsError {
                     return RusotoError::Service(DescribeProjectsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3138,7 +3183,11 @@ impl DescribeStreamProcessorError {
                     return RusotoError::Service(DescribeStreamProcessorError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3230,7 +3279,11 @@ impl DetectCustomLabelsError {
                     return RusotoError::Service(DetectCustomLabelsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3308,7 +3361,11 @@ impl DetectFacesError {
                     return RusotoError::Service(DetectFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3381,7 +3438,11 @@ impl DetectLabelsError {
                     return RusotoError::Service(DetectLabelsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3471,7 +3532,11 @@ impl DetectModerationLabelsError {
                     return RusotoError::Service(DetectModerationLabelsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3549,7 +3614,11 @@ impl DetectTextError {
                     return RusotoError::Service(DetectTextError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3614,7 +3683,11 @@ impl GetCelebrityInfoError {
                     return RusotoError::Service(GetCelebrityInfoError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3692,7 +3765,11 @@ impl GetCelebrityRecognitionError {
                     return RusotoError::Service(GetCelebrityRecognitionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3771,7 +3848,11 @@ impl GetContentModerationError {
                     return RusotoError::Service(GetContentModerationError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3844,7 +3925,11 @@ impl GetFaceDetectionError {
                     return RusotoError::Service(GetFaceDetectionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3915,7 +4000,11 @@ impl GetFaceSearchError {
                     return RusotoError::Service(GetFaceSearchError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3986,7 +4075,11 @@ impl GetLabelDetectionError {
                     return RusotoError::Service(GetLabelDetectionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4059,7 +4152,11 @@ impl GetPersonTrackingError {
                     return RusotoError::Service(GetPersonTrackingError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4138,7 +4235,11 @@ impl IndexFacesError {
                     return RusotoError::Service(IndexFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4209,7 +4310,11 @@ impl ListCollectionsError {
                     return RusotoError::Service(ListCollectionsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4278,7 +4383,11 @@ impl ListFacesError {
                     return RusotoError::Service(ListFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4346,7 +4455,11 @@ impl ListStreamProcessorsError {
                     return RusotoError::Service(ListStreamProcessorsError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4427,7 +4540,11 @@ impl RecognizeCelebritiesError {
                     return RusotoError::Service(RecognizeCelebritiesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4492,7 +4609,11 @@ impl SearchFacesError {
                     return RusotoError::Service(SearchFacesError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4572,7 +4693,11 @@ impl SearchFacesByImageError {
                     return RusotoError::Service(SearchFacesByImageError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4669,7 +4794,11 @@ impl StartCelebrityRecognitionError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4766,7 +4895,11 @@ impl StartContentModerationError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4853,7 +4986,11 @@ impl StartFaceDetectionError {
                     return RusotoError::Service(StartFaceDetectionError::VideoTooLarge(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4943,7 +5080,11 @@ impl StartFaceSearchError {
                     return RusotoError::Service(StartFaceSearchError::VideoTooLarge(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5031,7 +5172,11 @@ impl StartLabelDetectionError {
                     return RusotoError::Service(StartLabelDetectionError::VideoTooLarge(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5120,7 +5265,11 @@ impl StartPersonTrackingError {
                     return RusotoError::Service(StartPersonTrackingError::VideoTooLarge(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5204,7 +5353,11 @@ impl StartProjectVersionError {
                     return RusotoError::Service(StartProjectVersionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5280,7 +5433,11 @@ impl StartStreamProcessorError {
                     return RusotoError::Service(StartStreamProcessorError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5351,7 +5508,11 @@ impl StopProjectVersionError {
                     return RusotoError::Service(StopProjectVersionError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5426,7 +5587,11 @@ impl StopStreamProcessorError {
                     return RusotoError::Service(StopStreamProcessorError::Throttling(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);

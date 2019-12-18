@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -1201,7 +1202,11 @@ impl CreateClusterError {
                     return RusotoError::Service(CreateClusterError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1277,7 +1282,11 @@ impl CreateConfigurationError {
                     return RusotoError::Service(CreateConfigurationError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1331,7 +1340,11 @@ impl DeleteClusterError {
                     return RusotoError::Service(DeleteClusterError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1388,7 +1401,11 @@ impl DescribeClusterError {
                     return RusotoError::Service(DescribeClusterError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1450,7 +1467,11 @@ impl DescribeClusterOperationError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1518,7 +1539,11 @@ impl DescribeConfigurationError {
                     return RusotoError::Service(DescribeConfigurationError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1597,7 +1622,11 @@ impl DescribeConfigurationRevisionError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1662,7 +1691,11 @@ impl GetBootstrapBrokersError {
                     return RusotoError::Service(GetBootstrapBrokersError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1716,7 +1749,11 @@ impl ListClusterOperationsError {
                     return RusotoError::Service(ListClusterOperationsError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1767,7 +1804,11 @@ impl ListClustersError {
                     return RusotoError::Service(ListClustersError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1842,7 +1883,11 @@ impl ListConfigurationRevisionsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1909,7 +1954,11 @@ impl ListConfigurationsError {
                     return RusotoError::Service(ListConfigurationsError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1961,7 +2010,11 @@ impl ListNodesError {
                     return RusotoError::Service(ListNodesError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2008,7 +2061,11 @@ impl ListTagsForResourceError {
                     return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2052,7 +2109,11 @@ impl TagResourceError {
                     return RusotoError::Service(TagResourceError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2096,7 +2157,11 @@ impl UntagResourceError {
                     return RusotoError::Service(UntagResourceError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2156,7 +2221,11 @@ impl UpdateBrokerCountError {
                     return RusotoError::Service(UpdateBrokerCountError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2218,7 +2287,11 @@ impl UpdateBrokerStorageError {
                     return RusotoError::Service(UpdateBrokerStorageError::Unauthorized(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2294,7 +2367,11 @@ impl UpdateClusterConfigurationError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);

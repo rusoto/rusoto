@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -2274,7 +2275,11 @@ impl AddPermissionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2347,7 +2352,11 @@ impl CheckIfPhoneNumberIsOptedOutError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2436,7 +2445,11 @@ impl ConfirmSubscriptionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2504,7 +2517,11 @@ impl CreatePlatformApplicationError {
                             CreatePlatformApplicationError::InvalidParameter(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2570,7 +2587,11 @@ impl CreatePlatformEndpointError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2672,7 +2693,11 @@ impl CreateTopicError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2737,7 +2762,11 @@ impl DeleteEndpointError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2798,7 +2827,11 @@ impl DeletePlatformApplicationError {
                             DeletePlatformApplicationError::InvalidParameter(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2885,7 +2918,11 @@ impl DeleteTopicError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2955,7 +2992,11 @@ impl GetEndpointAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3030,7 +3071,11 @@ impl GetPlatformApplicationAttributesError {
                             GetPlatformApplicationAttributesError::NotFound(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3103,7 +3148,11 @@ impl GetSMSAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3172,7 +3221,11 @@ impl GetSubscriptionAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3246,7 +3299,11 @@ impl GetTopicAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3322,7 +3379,11 @@ impl ListEndpointsByPlatformApplicationError {
                             ListEndpointsByPlatformApplicationError::NotFound(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3395,7 +3456,11 @@ impl ListPhoneNumbersOptedOutError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3455,7 +3520,11 @@ impl ListPlatformApplicationsError {
                             ListPlatformApplicationsError::InvalidParameter(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3514,7 +3583,11 @@ impl ListSubscriptionsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3580,7 +3653,11 @@ impl ListSubscriptionsByTopicError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3654,7 +3731,11 @@ impl ListTagsForResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3715,7 +3796,11 @@ impl ListTopicsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3781,7 +3866,11 @@ impl OptInPhoneNumberError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3916,7 +4005,11 @@ impl PublishError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -3993,7 +4086,11 @@ impl RemovePermissionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4060,7 +4157,11 @@ impl SetEndpointAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4135,7 +4236,11 @@ impl SetPlatformApplicationAttributesError {
                             SetPlatformApplicationAttributesError::NotFound(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4208,7 +4313,11 @@ impl SetSMSAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4286,7 +4395,11 @@ impl SetSubscriptionAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4363,7 +4476,11 @@ impl SetTopicAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4450,7 +4567,11 @@ impl SubscribeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4541,7 +4662,11 @@ impl TagResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4618,7 +4743,11 @@ impl UnsubscribeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -4707,7 +4836,11 @@ impl UntagResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

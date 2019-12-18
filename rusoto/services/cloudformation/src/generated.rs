@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -8910,7 +8911,11 @@ impl CancelUpdateStackError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8953,7 +8958,11 @@ impl ContinueUpdateRollbackError {
                             ContinueUpdateRollbackError::TokenAlreadyExists(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9010,7 +9019,11 @@ impl CreateChangeSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9076,7 +9089,11 @@ impl CreateStackError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9159,7 +9176,11 @@ impl CreateStackInstancesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9223,7 +9244,11 @@ impl CreateStackSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9268,7 +9293,11 @@ impl DeleteChangeSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9311,7 +9340,11 @@ impl DeleteStackError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9384,7 +9417,11 @@ impl DeleteStackInstancesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9440,7 +9477,11 @@ impl DeleteStackSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9491,7 +9532,11 @@ impl DeregisterTypeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9527,7 +9572,11 @@ impl DescribeAccountLimitsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9568,7 +9617,11 @@ impl DescribeChangeSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9605,7 +9658,11 @@ impl DescribeStackDriftDetectionStatusError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9638,7 +9695,11 @@ impl DescribeStackEventsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9686,7 +9747,11 @@ impl DescribeStackInstanceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9722,7 +9787,11 @@ impl DescribeStackResourceError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9757,7 +9826,11 @@ impl DescribeStackResourceDriftsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9790,7 +9863,11 @@ impl DescribeStackResourcesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9831,7 +9908,11 @@ impl DescribeStackSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9881,7 +9962,11 @@ impl DescribeStackSetOperationError {
                             DescribeStackSetOperationError::StackSetNotFound(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9917,7 +10002,11 @@ impl DescribeStacksError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9965,7 +10054,11 @@ impl DescribeTypeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10009,7 +10102,11 @@ impl DescribeTypeRegistrationError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10044,7 +10141,11 @@ impl DetectStackDriftError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10077,7 +10178,11 @@ impl DetectStackResourceDriftError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10132,7 +10237,11 @@ impl DetectStackSetDriftError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10169,7 +10278,11 @@ impl EstimateTemplateCostError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10231,7 +10344,11 @@ impl ExecuteChangeSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10269,7 +10386,11 @@ impl GetStackPolicyError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10310,7 +10431,11 @@ impl GetTemplateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10353,7 +10478,11 @@ impl GetTemplateSummaryError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10388,7 +10517,11 @@ impl ListChangeSetsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10421,7 +10554,11 @@ impl ListExportsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10454,7 +10591,11 @@ impl ListImportsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10495,7 +10636,11 @@ impl ListStackInstancesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10530,7 +10675,11 @@ impl ListStackResourcesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10584,7 +10733,11 @@ impl ListStackSetOperationResultsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10632,7 +10785,11 @@ impl ListStackSetOperationsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10667,7 +10824,11 @@ impl ListStackSetsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10700,7 +10861,11 @@ impl ListStacksError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10741,7 +10906,11 @@ impl ListTypeRegistrationsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10784,7 +10953,11 @@ impl ListTypeVersionsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10827,7 +11000,11 @@ impl ListTypesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10881,7 +11058,11 @@ impl RecordHandlerProgressError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10927,7 +11108,11 @@ impl RegisterTypeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10962,7 +11147,11 @@ impl SetStackPolicyError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11010,7 +11199,11 @@ impl SetTypeDefaultVersionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11046,7 +11239,11 @@ impl SignalResourceError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11101,7 +11298,11 @@ impl StopStackSetOperationError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11153,7 +11354,11 @@ impl UpdateStackError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11234,7 +11439,11 @@ impl UpdateStackInstancesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11319,7 +11528,11 @@ impl UpdateStackSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11361,7 +11574,11 @@ impl UpdateTerminationProtectionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11394,7 +11611,11 @@ impl ValidateTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

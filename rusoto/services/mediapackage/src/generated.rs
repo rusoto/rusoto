@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -1355,7 +1356,11 @@ impl CreateChannelError {
                     return RusotoError::Service(CreateChannelError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1418,7 +1423,11 @@ impl CreateHarvestJobError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1485,7 +1494,11 @@ impl CreateOriginEndpointError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1544,7 +1557,11 @@ impl DeleteChannelError {
                     return RusotoError::Service(DeleteChannelError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1611,7 +1628,11 @@ impl DeleteOriginEndpointError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1670,7 +1691,11 @@ impl DescribeChannelError {
                     return RusotoError::Service(DescribeChannelError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1735,7 +1760,11 @@ impl DescribeHarvestJobError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1802,7 +1831,11 @@ impl DescribeOriginEndpointError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1861,7 +1894,11 @@ impl ListChannelsError {
                     return RusotoError::Service(ListChannelsError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1920,7 +1957,11 @@ impl ListHarvestJobsError {
                     return RusotoError::Service(ListHarvestJobsError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1985,7 +2026,11 @@ impl ListOriginEndpointsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2013,7 +2058,11 @@ impl ListTagsForResourceError {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2073,7 +2122,11 @@ impl RotateChannelCredentialsError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2146,7 +2199,11 @@ impl RotateIngestEndpointCredentialsError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2182,7 +2239,11 @@ impl TagResourceError {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2203,7 +2264,11 @@ impl UntagResourceError {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2255,7 +2320,11 @@ impl UpdateChannelError {
                     return RusotoError::Service(UpdateChannelError::UnprocessableEntity(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -2322,7 +2391,11 @@ impl UpdateOriginEndpointError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);

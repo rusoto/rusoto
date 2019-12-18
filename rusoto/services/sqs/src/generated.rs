@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -2044,7 +2045,11 @@ impl AddPermissionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2096,7 +2101,11 @@ impl ChangeMessageVisibilityError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2173,7 +2182,11 @@ impl ChangeMessageVisibilityBatchError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2234,7 +2247,11 @@ impl CreateQueueError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2285,7 +2302,11 @@ impl DeleteMessageError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2352,7 +2373,11 @@ impl DeleteMessageBatchError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2392,7 +2417,11 @@ impl DeleteQueueError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2433,7 +2462,11 @@ impl GetQueueAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2476,7 +2509,11 @@ impl GetQueueUrlError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2523,7 +2560,11 @@ impl ListDeadLetterSourceQueuesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2558,7 +2599,11 @@ impl ListQueueTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2591,7 +2636,11 @@ impl ListQueuesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2639,7 +2688,11 @@ impl PurgeQueueError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2683,7 +2736,11 @@ impl ReceiveMessageError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2718,7 +2775,11 @@ impl RemovePermissionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2766,7 +2827,11 @@ impl SendMessageError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2847,7 +2912,11 @@ impl SendMessageBatchError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2897,7 +2966,11 @@ impl SetQueueAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2932,7 +3005,11 @@ impl TagQueueError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -2965,7 +3042,11 @@ impl UntagQueueError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

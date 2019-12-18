@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -10984,7 +10985,11 @@ impl AddClientIDToOpenIDConnectProviderError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11068,7 +11073,11 @@ impl AddRoleToInstanceProfileError {
                             AddRoleToInstanceProfileError::UnmodifiableEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11129,7 +11138,11 @@ impl AddUserToGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11202,7 +11215,11 @@ impl AttachGroupPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11284,7 +11301,11 @@ impl AttachRolePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11360,7 +11381,11 @@ impl AttachUserPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11444,7 +11469,11 @@ impl ChangePasswordError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11506,7 +11535,11 @@ impl CreateAccessKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11565,7 +11598,11 @@ impl CreateAccountAliasError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11631,7 +11668,11 @@ impl CreateGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11691,7 +11732,11 @@ impl CreateInstanceProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11764,7 +11809,11 @@ impl CreateLoginProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11836,7 +11885,11 @@ impl CreateOpenIDConnectProviderError {
                             CreateOpenIDConnectProviderError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11912,7 +11965,11 @@ impl CreatePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11987,7 +12044,11 @@ impl CreatePolicyVersionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12069,7 +12130,11 @@ impl CreateRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12138,7 +12203,11 @@ impl CreateSAMLProviderError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12205,7 +12274,11 @@ impl CreateServiceLinkedRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12273,7 +12346,11 @@ impl CreateServiceSpecificCredentialError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12357,7 +12434,11 @@ impl CreateUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12419,7 +12500,11 @@ impl CreateVirtualMFADeviceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12487,7 +12572,11 @@ impl DeactivateMFADeviceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12549,7 +12638,11 @@ impl DeleteAccessKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12608,7 +12701,11 @@ impl DeleteAccountAliasError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12669,7 +12766,11 @@ impl DeleteAccountPasswordPolicyError {
                             DeleteAccountPasswordPolicyError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12735,7 +12836,11 @@ impl DeleteGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12795,7 +12900,11 @@ impl DeleteGroupPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12861,7 +12970,11 @@ impl DeleteInstanceProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12930,7 +13043,11 @@ impl DeleteLoginProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12994,7 +13111,11 @@ impl DeleteOpenIDConnectProviderError {
                             DeleteOpenIDConnectProviderError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13067,7 +13188,11 @@ impl DeletePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13142,7 +13267,11 @@ impl DeletePolicyVersionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13224,7 +13353,11 @@ impl DeleteRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13292,7 +13425,11 @@ impl DeleteRolePermissionsBoundaryError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13360,7 +13497,11 @@ impl DeleteRolePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13427,7 +13568,11 @@ impl DeleteSAMLProviderError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13473,7 +13618,11 @@ impl DeleteSSHPublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13537,7 +13686,11 @@ impl DeleteServerCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13597,7 +13750,11 @@ impl DeleteServiceLinkedRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13646,7 +13803,11 @@ impl DeleteServiceSpecificCredentialError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13703,7 +13864,11 @@ impl DeleteSigningCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13776,7 +13941,11 @@ impl DeleteUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13834,7 +14003,11 @@ impl DeleteUserPermissionsBoundaryError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13892,7 +14065,11 @@ impl DeleteUserPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13958,7 +14135,11 @@ impl DeleteVirtualMFADeviceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14025,7 +14206,11 @@ impl DetachGroupPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14099,7 +14284,11 @@ impl DetachRolePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14167,7 +14356,11 @@ impl DetachUserPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14250,7 +14443,11 @@ impl EnableMFADeviceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14307,7 +14504,11 @@ impl GenerateCredentialReportError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14355,7 +14556,11 @@ impl GenerateOrganizationsAccessReportError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14413,7 +14618,11 @@ impl GenerateServiceLastAccessedDetailsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14453,7 +14662,11 @@ impl GetAccessKeyLastUsedError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14498,7 +14711,11 @@ impl GetAccountAuthorizationDetailsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14550,7 +14767,11 @@ impl GetAccountPasswordPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14594,7 +14815,11 @@ impl GetAccountSummaryError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14639,7 +14864,11 @@ impl GetContextKeysForCustomPolicyError {
                             GetContextKeysForCustomPolicyError::InvalidInput(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14695,7 +14924,11 @@ impl GetContextKeysForPrincipalPolicyError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14768,7 +15001,11 @@ impl GetCredentialReportError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14823,7 +15060,11 @@ impl GetGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14874,7 +15115,11 @@ impl GetGroupPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14925,7 +15170,11 @@ impl GetInstanceProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14976,7 +15225,11 @@ impl GetLoginProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15034,7 +15287,11 @@ impl GetOpenIDConnectProviderError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15081,7 +15338,11 @@ impl GetOrganizationsAccessReportError {
                             GetOrganizationsAccessReportError::NoSuchEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15138,7 +15399,11 @@ impl GetPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15197,7 +15462,11 @@ impl GetPolicyVersionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15249,7 +15518,11 @@ impl GetRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15300,7 +15573,11 @@ impl GetRolePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15358,7 +15635,11 @@ impl GetSAMLProviderError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15412,7 +15693,11 @@ impl GetSSHPublicKeyError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15465,7 +15750,11 @@ impl GetServerCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15518,7 +15807,11 @@ impl GetServiceLastAccessedDetailsError {
                             GetServiceLastAccessedDetailsError::NoSuchEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15575,7 +15868,11 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15645,7 +15942,11 @@ impl GetServiceLinkedRoleDeletionStatusError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15703,7 +16004,11 @@ impl GetUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15754,7 +16059,11 @@ impl GetUserPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15805,7 +16114,11 @@ impl ListAccessKeysError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15849,7 +16162,11 @@ impl ListAccountAliasesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15906,7 +16223,11 @@ impl ListAttachedGroupPoliciesError {
                             ListAttachedGroupPoliciesError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15965,7 +16286,11 @@ impl ListAttachedRolePoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16024,7 +16349,11 @@ impl ListAttachedUserPoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16083,7 +16412,11 @@ impl ListEntitiesForPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16135,7 +16468,11 @@ impl ListGroupPoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16179,7 +16516,11 @@ impl ListGroupsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16229,7 +16570,11 @@ impl ListGroupsForUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16273,7 +16618,11 @@ impl ListInstanceProfilesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16325,7 +16674,11 @@ impl ListInstanceProfilesForRoleError {
                             ListInstanceProfilesForRoleError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16376,7 +16729,11 @@ impl ListMFADevicesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16422,7 +16779,11 @@ impl ListOpenIDConnectProvidersError {
                             ListOpenIDConnectProvidersError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16465,7 +16826,11 @@ impl ListPoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16521,7 +16886,11 @@ impl ListPoliciesGrantingServiceAccessError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16583,7 +16952,11 @@ impl ListPolicyVersionsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16635,7 +17008,11 @@ impl ListRolePoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16686,7 +17063,11 @@ impl ListRoleTagsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16730,7 +17111,11 @@ impl ListRolesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16773,7 +17158,11 @@ impl ListSAMLProvidersError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16816,7 +17205,11 @@ impl ListSSHPublicKeysError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16859,7 +17252,11 @@ impl ListServerCertificatesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16913,7 +17310,11 @@ impl ListServiceSpecificCredentialsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16966,7 +17367,11 @@ impl ListSigningCertificatesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17017,7 +17422,11 @@ impl ListUserPoliciesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17068,7 +17477,11 @@ impl ListUserTagsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17112,7 +17525,11 @@ impl ListUsersError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17147,7 +17564,11 @@ impl ListVirtualMFADevicesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17209,7 +17630,11 @@ impl PutGroupPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17289,7 +17714,11 @@ impl PutRolePermissionsBoundaryError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17368,7 +17797,11 @@ impl PutRolePolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17440,7 +17873,11 @@ impl PutUserPermissionsBoundaryError {
                             PutUserPermissionsBoundaryError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17509,7 +17946,11 @@ impl PutUserPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17577,7 +18018,11 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17655,7 +18100,11 @@ impl RemoveRoleFromInstanceProfileError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17717,7 +18166,11 @@ impl RemoveUserFromGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17764,7 +18217,11 @@ impl ResetServiceSpecificCredentialError {
                             ResetServiceSpecificCredentialError::NoSuchEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17828,7 +18285,11 @@ impl ResyncMFADeviceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17895,7 +18356,11 @@ impl SetDefaultPolicyVersionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17945,7 +18410,11 @@ impl SetSecurityTokenServicePreferencesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17997,7 +18466,11 @@ impl SimulateCustomPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18055,7 +18528,11 @@ impl SimulatePrincipalPolicyError {
                             SimulatePrincipalPolicyError::PolicyEvaluation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18128,7 +18605,11 @@ impl TagRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18203,7 +18684,11 @@ impl TagUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18264,7 +18749,11 @@ impl UntagRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18323,7 +18812,11 @@ impl UntagUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18382,7 +18875,11 @@ impl UpdateAccessKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18452,7 +18949,11 @@ impl UpdateAccountPasswordPolicyError {
                             UpdateAccountPasswordPolicyError::ServiceFailure(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18530,7 +19031,11 @@ impl UpdateAssumeRolePolicyError {
                             UpdateAssumeRolePolicyError::UnmodifiableEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18600,7 +19105,11 @@ impl UpdateGroupError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18676,7 +19185,11 @@ impl UpdateLoginProfileError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18747,7 +19260,11 @@ impl UpdateOpenIDConnectProviderThumbprintError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18812,7 +19329,11 @@ impl UpdateRoleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18871,7 +19392,11 @@ impl UpdateRoleDescriptionError {
                             UpdateRoleDescriptionError::UnmodifiableEntity(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18937,7 +19462,11 @@ impl UpdateSAMLProviderError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -18983,7 +19512,11 @@ impl UpdateSSHPublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19047,7 +19580,11 @@ impl UpdateServerCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19097,7 +19634,11 @@ impl UpdateServiceSpecificCredentialError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19154,7 +19695,11 @@ impl UpdateSigningCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19234,7 +19779,11 @@ impl UpdateUserError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19312,7 +19861,11 @@ impl UploadSSHPublicKeyError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19391,7 +19944,11 @@ impl UploadServerCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -19486,7 +20043,11 @@ impl UploadSigningCertificateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

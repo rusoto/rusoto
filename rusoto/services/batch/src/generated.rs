@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -1332,7 +1333,11 @@ impl CancelJobError {
                 "ClientException" => return RusotoError::Service(CancelJobError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(CancelJobError::Server(err.msg)),
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1367,7 +1372,11 @@ impl CreateComputeEnvironmentError {
                     return RusotoError::Service(CreateComputeEnvironmentError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1402,7 +1411,11 @@ impl CreateJobQueueError {
                     return RusotoError::Service(CreateJobQueueError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1437,7 +1450,11 @@ impl DeleteComputeEnvironmentError {
                     return RusotoError::Service(DeleteComputeEnvironmentError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1472,7 +1489,11 @@ impl DeleteJobQueueError {
                     return RusotoError::Service(DeleteJobQueueError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1507,7 +1528,11 @@ impl DeregisterJobDefinitionError {
                     return RusotoError::Service(DeregisterJobDefinitionError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1544,7 +1569,11 @@ impl DescribeComputeEnvironmentsError {
                     return RusotoError::Service(DescribeComputeEnvironmentsError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1579,7 +1608,11 @@ impl DescribeJobDefinitionsError {
                     return RusotoError::Service(DescribeJobDefinitionsError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1614,7 +1647,11 @@ impl DescribeJobQueuesError {
                     return RusotoError::Service(DescribeJobQueuesError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1649,7 +1686,11 @@ impl DescribeJobsError {
                     return RusotoError::Service(DescribeJobsError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1680,7 +1721,11 @@ impl ListJobsError {
                 "ClientException" => return RusotoError::Service(ListJobsError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(ListJobsError::Server(err.msg)),
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1715,7 +1760,11 @@ impl RegisterJobDefinitionError {
                     return RusotoError::Service(RegisterJobDefinitionError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1746,7 +1795,11 @@ impl SubmitJobError {
                 "ClientException" => return RusotoError::Service(SubmitJobError::Client(err.msg)),
                 "ServerException" => return RusotoError::Service(SubmitJobError::Server(err.msg)),
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1781,7 +1834,11 @@ impl TerminateJobError {
                     return RusotoError::Service(TerminateJobError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1816,7 +1873,11 @@ impl UpdateComputeEnvironmentError {
                     return RusotoError::Service(UpdateComputeEnvironmentError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -1851,7 +1912,11 @@ impl UpdateJobQueueError {
                     return RusotoError::Service(UpdateJobQueueError::Server(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);

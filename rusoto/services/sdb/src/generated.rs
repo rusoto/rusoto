@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -873,7 +874,11 @@ impl BatchDeleteAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -980,7 +985,11 @@ impl BatchPutAttributesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1053,7 +1062,11 @@ impl CreateDomainError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1119,7 +1132,11 @@ impl DeleteAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1165,7 +1182,11 @@ impl DeleteDomainError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1215,7 +1236,11 @@ impl DomainMetadataError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1273,7 +1298,11 @@ impl GetAttributesError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1325,7 +1354,11 @@ impl ListDomainsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1413,7 +1446,11 @@ impl PutAttributesError {
                             PutAttributesError::NumberItemAttributesExceeded(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -1518,7 +1555,11 @@ impl SelectError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

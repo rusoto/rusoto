@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -3404,7 +3405,7 @@ impl AssociateApprovalRuleTemplateWithRepositoryError {
 "RepositoryDoesNotExistException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::RepositoryDoesNotExist(err.msg)),
 "RepositoryNameRequiredException" => return RusotoError::Service(AssociateApprovalRuleTemplateWithRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -3471,7 +3472,7 @@ impl BatchAssociateApprovalRuleTemplateWithRepositoriesError {
 "MaximumRepositoryNamesExceededException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::MaximumRepositoryNamesExceeded(err.msg)),
 "RepositoryNamesRequiredException" => return RusotoError::Service(BatchAssociateApprovalRuleTemplateWithRepositoriesError::RepositoryNamesRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -3655,7 +3656,11 @@ impl BatchDescribeMergeConflictsError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3769,7 +3774,7 @@ impl BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
 "MaximumRepositoryNamesExceededException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::MaximumRepositoryNamesExceeded(err.msg)),
 "RepositoryNamesRequiredException" => return RusotoError::Service(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::RepositoryNamesRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -3872,7 +3877,11 @@ impl BatchGetCommitsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -3963,7 +3972,11 @@ impl BatchGetRepositoriesError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4061,7 +4074,11 @@ impl CreateApprovalRuleTemplateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4181,7 +4198,11 @@ impl CreateBranchError {
                     return RusotoError::Service(CreateBranchError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4436,7 +4457,11 @@ impl CreateCommitError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4668,7 +4693,11 @@ impl CreatePullRequestError {
                     return RusotoError::Service(CreatePullRequestError::TitleRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4835,7 +4864,11 @@ impl CreatePullRequestApprovalRuleError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -4995,7 +5028,11 @@ impl CreateRepositoryError {
                     return RusotoError::Service(CreateRepositoryError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5298,7 +5335,11 @@ impl CreateUnreferencedMergeCommitError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5442,7 +5483,11 @@ impl DeleteApprovalRuleTemplateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5537,7 +5582,11 @@ impl DeleteBranchError {
                     return RusotoError::Service(DeleteBranchError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5597,7 +5646,11 @@ impl DeleteCommentContentError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5740,7 +5793,11 @@ impl DeleteFileError {
                     return RusotoError::Service(DeleteFileError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5875,7 +5932,11 @@ impl DeletePullRequestApprovalRuleError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -5983,7 +6044,11 @@ impl DeleteRepositoryError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6172,7 +6237,11 @@ impl DescribeMergeConflictsError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6331,7 +6400,11 @@ impl DescribePullRequestEventsError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6422,7 +6495,7 @@ impl DisassociateApprovalRuleTemplateFromRepositoryError {
 "RepositoryDoesNotExistException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryDoesNotExist(err.msg)),
 "RepositoryNameRequiredException" => return RusotoError::Service(DisassociateApprovalRuleTemplateFromRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -6537,7 +6610,11 @@ impl EvaluatePullRequestApprovalRulesError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6614,7 +6691,11 @@ impl GetApprovalRuleTemplateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6708,7 +6789,11 @@ impl GetBlobError {
                     return RusotoError::Service(GetBlobError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6800,7 +6885,11 @@ impl GetBranchError {
                     return RusotoError::Service(GetBranchError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6854,7 +6943,11 @@ impl GetCommentError {
                     return RusotoError::Service(GetCommentError::InvalidCommentId(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -6974,7 +7067,11 @@ impl GetCommentsForComparedCommitError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7155,7 +7252,11 @@ impl GetCommentsForPullRequestError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7278,7 +7379,11 @@ impl GetCommitError {
                     return RusotoError::Service(GetCommitError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7410,7 +7515,11 @@ impl GetDifferencesError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7523,7 +7632,11 @@ impl GetFileError {
                     return RusotoError::Service(GetFileError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7627,7 +7740,11 @@ impl GetFolderError {
                     return RusotoError::Service(GetFolderError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7748,7 +7865,11 @@ impl GetMergeCommitError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -7938,7 +8059,11 @@ impl GetMergeConflictsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8101,7 +8226,11 @@ impl GetMergeOptionsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8202,7 +8331,11 @@ impl GetPullRequestError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8307,7 +8440,11 @@ impl GetPullRequestApprovalStatesError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8432,7 +8569,11 @@ impl GetPullRequestOverrideStateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8535,7 +8676,11 @@ impl GetRepositoryError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8624,7 +8769,11 @@ impl GetRepositoryTriggersError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8675,7 +8824,11 @@ impl ListApprovalRuleTemplatesError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8734,7 +8887,7 @@ impl ListAssociatedApprovalRuleTemplatesForRepositoryError {
 "RepositoryDoesNotExistException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryDoesNotExist(err.msg)),
 "RepositoryNameRequiredException" => return RusotoError::Service(ListAssociatedApprovalRuleTemplatesForRepositoryError::RepositoryNameRequired(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -8820,7 +8973,11 @@ impl ListBranchesError {
                     return RusotoError::Service(ListBranchesError::RepositoryNameRequired(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8937,7 +9094,11 @@ impl ListPullRequestsError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -8992,7 +9153,11 @@ impl ListRepositoriesError {
                     return RusotoError::Service(ListRepositoriesError::InvalidSortBy(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -9100,7 +9265,11 @@ impl ListRepositoriesForApprovalRuleTemplateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -9181,7 +9350,11 @@ impl ListTagsForResourceError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -9343,7 +9516,11 @@ impl MergeBranchesByFastForwardError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -9684,7 +9861,11 @@ impl MergeBranchesBySquashError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -10053,7 +10234,11 @@ impl MergeBranchesByThreeWayError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -10306,7 +10491,11 @@ impl MergePullRequestByFastForwardError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -10658,7 +10847,11 @@ impl MergePullRequestBySquashError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -11055,7 +11248,11 @@ impl MergePullRequestByThreeWayError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -11291,7 +11488,11 @@ impl OverridePullRequestApprovalRulesError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -11524,7 +11725,11 @@ impl PostCommentForComparedCommitError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -11803,7 +12008,11 @@ impl PostCommentForPullRequestError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -11947,7 +12156,11 @@ impl PostCommentReplyError {
                     return RusotoError::Service(PostCommentReplyError::InvalidCommentId(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12144,7 +12357,11 @@ impl PutFileError {
                     return RusotoError::Service(PutFileError::SameFileContent(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12348,7 +12565,11 @@ impl PutRepositoryTriggersError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12469,7 +12690,11 @@ impl TagResourceError {
                     return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12654,7 +12879,11 @@ impl TestRepositoryTriggersError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12781,7 +13010,11 @@ impl UntagResourceError {
                     return RusotoError::Service(UntagResourceError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12867,7 +13100,11 @@ impl UpdateApprovalRuleTemplateContentError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -12922,7 +13159,7 @@ impl UpdateApprovalRuleTemplateDescriptionError {
 "InvalidApprovalRuleTemplateDescriptionException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateDescription(err.msg)),
 "InvalidApprovalRuleTemplateNameException" => return RusotoError::Service(UpdateApprovalRuleTemplateDescriptionError::InvalidApprovalRuleTemplateName(err.msg)),
 "ValidationException" => return RusotoError::Validation(err.msg),
-_ => {}
+_ => if let Ok(common_err) = AwsError::try_from(err) { return RusotoError::Common(common_err) }
                             }
         }
         return RusotoError::Unknown(res);
@@ -12995,7 +13232,11 @@ impl UpdateApprovalRuleTemplateNameError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13071,7 +13312,11 @@ impl UpdateCommentError {
                     return RusotoError::Service(UpdateCommentError::InvalidCommentId(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13180,7 +13425,11 @@ impl UpdateDefaultBranchError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13350,7 +13599,11 @@ impl UpdatePullRequestApprovalRuleContentError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13541,7 +13794,11 @@ impl UpdatePullRequestApprovalStateError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13649,7 +13906,11 @@ impl UpdatePullRequestDescriptionError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13764,7 +14025,11 @@ impl UpdatePullRequestStatusError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13858,7 +14123,11 @@ impl UpdatePullRequestTitleError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -13956,7 +14225,11 @@ impl UpdateRepositoryDescriptionError {
                     )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);
@@ -14034,7 +14307,11 @@ impl UpdateRepositoryNameError {
                     ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
+                _ => {
+                    if let Ok(common_err) = AwsError::try_from(err) {
+                        return RusotoError::Common(common_err);
+                    }
+                }
             }
         }
         return RusotoError::Unknown(res);

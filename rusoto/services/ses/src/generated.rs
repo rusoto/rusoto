@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -6950,7 +6951,11 @@ impl CloneReceiptRuleSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7013,7 +7018,11 @@ impl CreateConfigurationSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7105,7 +7114,11 @@ impl CreateConfigurationSetEventDestinationError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7183,7 +7196,11 @@ impl CreateConfigurationSetTrackingOptionsError {
                             parsed_error.message,
                         ),
                     ),
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7237,7 +7254,7 @@ impl CreateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -7290,7 +7307,11 @@ impl CreateReceiptFilterError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7376,7 +7397,11 @@ impl CreateReceiptRuleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7432,7 +7457,11 @@ impl CreateReceiptRuleSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7490,7 +7519,11 @@ impl CreateTemplateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7537,7 +7570,11 @@ impl DeleteConfigurationSetError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7591,7 +7628,11 @@ impl DeleteConfigurationSetEventDestinationError {
                             parsed_error.message,
                         ),
                     ),
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7650,7 +7691,11 @@ impl DeleteConfigurationSetTrackingOptionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7692,7 +7737,11 @@ impl DeleteCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7725,7 +7774,11 @@ impl DeleteIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7758,7 +7811,11 @@ impl DeleteIdentityPolicyError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7791,7 +7848,11 @@ impl DeleteReceiptFilterError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7832,7 +7893,11 @@ impl DeleteReceiptRuleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7875,7 +7940,11 @@ impl DeleteReceiptRuleSetError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7910,7 +7979,11 @@ impl DeleteTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7945,7 +8018,11 @@ impl DeleteVerifiedEmailAddressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -7980,7 +8057,11 @@ impl DescribeActiveReceiptRuleSetError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8023,7 +8104,11 @@ impl DescribeConfigurationSetError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8075,7 +8160,11 @@ impl DescribeReceiptRuleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8119,7 +8208,11 @@ impl DescribeReceiptRuleSetError {
                             DescribeReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8154,7 +8247,11 @@ impl GetAccountSendingEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8192,7 +8289,7 @@ impl GetCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8227,7 +8324,11 @@ impl GetIdentityDkimAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8262,7 +8363,11 @@ impl GetIdentityMailFromDomainAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8297,7 +8402,11 @@ impl GetIdentityNotificationAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8330,7 +8439,11 @@ impl GetIdentityPoliciesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8365,7 +8478,11 @@ impl GetIdentityVerificationAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8398,7 +8515,11 @@ impl GetSendQuotaError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8431,7 +8552,11 @@ impl GetSendStatisticsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8472,7 +8597,11 @@ impl GetTemplateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8507,7 +8636,11 @@ impl ListConfigurationSetsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8542,7 +8675,11 @@ impl ListCustomVerificationEmailTemplatesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8575,7 +8712,11 @@ impl ListIdentitiesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8608,7 +8749,11 @@ impl ListIdentityPoliciesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8641,7 +8786,11 @@ impl ListReceiptFiltersError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8674,7 +8823,11 @@ impl ListReceiptRuleSetsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8707,7 +8860,11 @@ impl ListTemplatesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8742,7 +8899,11 @@ impl ListVerifiedEmailAddressesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8796,7 +8957,11 @@ impl PutConfigurationSetDeliveryOptionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8844,7 +9009,11 @@ impl PutIdentityPolicyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8894,7 +9063,11 @@ impl ReorderReceiptRuleSetError {
                             ReorderReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -8938,7 +9111,11 @@ impl SendBounceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9022,7 +9199,11 @@ impl SendBulkTemplatedEmailError {
                             SendBulkTemplatedEmailError::TemplateDoesNotExist(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9081,7 +9262,7 @@ impl SendCustomVerificationEmailError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9164,7 +9345,11 @@ impl SendEmailError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9239,7 +9424,11 @@ impl SendRawEmailError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9327,7 +9516,11 @@ impl SendTemplatedEmailError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9379,7 +9572,11 @@ impl SetActiveReceiptRuleSetError {
                             SetActiveReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9414,7 +9611,11 @@ impl SetIdentityDkimEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9449,7 +9650,11 @@ impl SetIdentityFeedbackForwardingEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9484,7 +9689,11 @@ impl SetIdentityHeadersInNotificationsEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9517,7 +9726,11 @@ impl SetIdentityMailFromDomainError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9552,7 +9765,11 @@ impl SetIdentityNotificationTopicError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9600,7 +9817,11 @@ impl SetReceiptRulePositionError {
                             SetReceiptRulePositionError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9662,7 +9883,11 @@ impl TestRenderTemplateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9701,7 +9926,11 @@ impl UpdateAccountSendingEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9776,7 +10005,11 @@ impl UpdateConfigurationSetEventDestinationError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9830,7 +10063,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9879,7 +10112,11 @@ impl UpdateConfigurationSetSendingEnabledError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9944,7 +10181,11 @@ impl UpdateConfigurationSetTrackingOptionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9996,7 +10237,7 @@ impl UpdateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -10076,7 +10317,11 @@ impl UpdateReceiptRuleError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10131,7 +10376,11 @@ impl UpdateTemplateError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10167,7 +10416,11 @@ impl VerifyDomainDkimError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10200,7 +10453,11 @@ impl VerifyDomainIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10233,7 +10490,11 @@ impl VerifyEmailAddressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10266,7 +10527,11 @@ impl VerifyEmailIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

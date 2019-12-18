@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -11010,7 +11011,11 @@ impl AcceptReservedNodeExchangeError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11076,7 +11081,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"AuthorizationQuotaExceeded" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {}
+                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"AuthorizationQuotaExceeded" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11175,7 +11180,11 @@ impl AuthorizeSnapshotAccessError {
                             AuthorizeSnapshotAccessError::LimitExceededFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11237,7 +11246,11 @@ impl BatchDeleteClusterSnapshotsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11281,7 +11294,7 @@ impl BatchModifyClusterSnapshotsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(parsed_error.message)),"InvalidRetentionPeriodFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(parsed_error.message)),_ => {}
+                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(parsed_error.message)),"InvalidRetentionPeriodFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11350,7 +11363,11 @@ impl CancelResizeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11434,7 +11451,11 @@ impl CopyClusterSnapshotError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11656,7 +11677,11 @@ impl CreateClusterError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11763,7 +11788,11 @@ impl CreateClusterParameterGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11844,7 +11873,11 @@ impl CreateClusterSecurityGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11946,7 +11979,11 @@ impl CreateClusterSnapshotError {
                             CreateClusterSnapshotError::TagLimitExceededFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12064,7 +12101,11 @@ impl CreateClusterSubnetGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12214,7 +12255,11 @@ impl CreateEventSubscriptionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12312,7 +12357,11 @@ impl CreateHsmClientCertificateError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12391,7 +12440,11 @@ impl CreateHsmConfigurationError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12484,7 +12537,11 @@ impl CreateScheduledActionError {
                             CreateScheduledActionError::UnauthorizedOperation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12583,7 +12640,11 @@ impl CreateSnapshotCopyGrantError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12675,7 +12736,11 @@ impl CreateSnapshotScheduleError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12742,7 +12807,11 @@ impl CreateTagsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12819,7 +12888,11 @@ impl DeleteClusterError {
                             DeleteClusterError::InvalidRetentionPeriodFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12881,7 +12954,11 @@ impl DeleteClusterParameterGroupError {
                             parsed_error.message,
                         ),
                     ),
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -12942,7 +13019,11 @@ impl DeleteClusterSecurityGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13001,7 +13082,11 @@ impl DeleteClusterSnapshotError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13069,7 +13154,11 @@ impl DeleteClusterSubnetGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13131,7 +13220,11 @@ impl DeleteEventSubscriptionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13192,7 +13285,11 @@ impl DeleteHsmClientCertificateError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13251,7 +13348,11 @@ impl DeleteHsmConfigurationError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13308,7 +13409,11 @@ impl DeleteScheduledActionError {
                             DeleteScheduledActionError::UnauthorizedOperation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13365,7 +13470,11 @@ impl DeleteSnapshotCopyGrantError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13424,7 +13533,11 @@ impl DeleteSnapshotScheduleError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13479,7 +13592,11 @@ impl DeleteTagsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13515,7 +13632,11 @@ impl DescribeAccountAttributesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13569,7 +13690,11 @@ impl DescribeClusterDbRevisionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13630,7 +13755,11 @@ impl DescribeClusterParameterGroupsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13680,7 +13809,11 @@ impl DescribeClusterParametersError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13738,7 +13871,11 @@ impl DescribeClusterSecurityGroupsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13804,7 +13941,11 @@ impl DescribeClusterSnapshotsError {
                             DescribeClusterSnapshotsError::InvalidTagFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13864,7 +14005,11 @@ impl DescribeClusterSubnetGroupsError {
                             DescribeClusterSubnetGroupsError::InvalidTagFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13919,7 +14064,11 @@ impl DescribeClusterTracksError {
                             DescribeClusterTracksError::UnauthorizedOperation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -13957,7 +14106,11 @@ impl DescribeClusterVersionsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14005,7 +14158,11 @@ impl DescribeClustersError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14043,7 +14200,11 @@ impl DescribeDefaultClusterParametersError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14076,7 +14237,11 @@ impl DescribeEventCategoriesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14128,7 +14293,11 @@ impl DescribeEventSubscriptionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14166,7 +14335,11 @@ impl DescribeEventsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14220,7 +14393,11 @@ impl DescribeHsmClientCertificatesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14277,7 +14454,11 @@ impl DescribeHsmConfigurationsError {
                             DescribeHsmConfigurationsError::InvalidTagFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14323,7 +14504,11 @@ impl DescribeLoggingStatusError {
                             DescribeLoggingStatusError::ClusterNotFoundFault(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14397,7 +14582,11 @@ impl DescribeNodeConfigurationOptionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14445,7 +14634,11 @@ impl DescribeOrderableClusterOptionsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14508,7 +14701,11 @@ impl DescribeReservedNodeOfferingsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14570,7 +14767,11 @@ impl DescribeReservedNodesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14625,7 +14826,11 @@ impl DescribeResizeError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14680,7 +14885,11 @@ impl DescribeScheduledActionsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14739,7 +14948,11 @@ impl DescribeSnapshotCopyGrantsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14777,7 +14990,11 @@ impl DescribeSnapshotSchedulesError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14810,7 +15027,11 @@ impl DescribeStorageError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14864,7 +15085,11 @@ impl DescribeTableRestoreStatusError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14919,7 +15144,11 @@ impl DescribeTagsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -14963,7 +15192,11 @@ impl DisableLoggingError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15031,7 +15264,11 @@ impl DisableSnapshotCopyError {
                             DisableSnapshotCopyError::UnauthorizedOperation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15109,7 +15346,11 @@ impl EnableLoggingError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15242,7 +15483,11 @@ impl EnableSnapshotCopyError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15316,7 +15561,11 @@ impl GetClusterCredentialsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15409,7 +15658,11 @@ impl GetReservedNodeExchangeOfferingsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15611,7 +15864,11 @@ impl ModifyClusterError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15708,7 +15965,11 @@ impl ModifyClusterDbRevisionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15766,7 +16027,11 @@ impl ModifyClusterIamRolesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15814,7 +16079,11 @@ impl ModifyClusterMaintenanceError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15870,7 +16139,11 @@ impl ModifyClusterParameterGroupError {
                             parsed_error.message,
                         ),
                     ),
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15938,7 +16211,11 @@ impl ModifyClusterSnapshotError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -15990,7 +16267,7 @@ impl ModifyClusterSnapshotScheduleError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(parsed_error.message)),"SnapshotScheduleNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(parsed_error.message)),"SnapshotScheduleNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -16084,7 +16361,11 @@ impl ModifyClusterSubnetGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16212,7 +16493,11 @@ impl ModifyEventSubscriptionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16311,7 +16596,11 @@ impl ModifyScheduledActionError {
                             ModifyScheduledActionError::UnauthorizedOperation(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16404,7 +16693,11 @@ impl ModifySnapshotCopyRetentionPeriodError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16479,7 +16772,11 @@ impl ModifySnapshotScheduleError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16559,7 +16856,11 @@ impl PurchaseReservedNodeOfferingError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16620,7 +16921,11 @@ impl RebootClusterError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16677,7 +16982,11 @@ impl ResetClusterParameterGroupError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -16787,7 +17096,11 @@ impl ResizeClusterError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17058,7 +17371,11 @@ impl RestoreFromClusterSnapshotError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17180,7 +17497,7 @@ impl RestoreTableFromClusterSnapshotError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(parsed_error.message)),"ClusterSnapshotNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(parsed_error.message)),"InvalidClusterSnapshotState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(parsed_error.message)),"InvalidClusterState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(parsed_error.message)),"InvalidTableRestoreArgument" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(parsed_error.message)),"UnsupportedOperation" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(parsed_error.message)),"ClusterSnapshotNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(parsed_error.message)),"InvalidClusterSnapshotState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(parsed_error.message)),"InvalidClusterState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(parsed_error.message)),"InvalidTableRestoreArgument" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(parsed_error.message)),"UnsupportedOperation" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -17244,7 +17561,7 @@ impl RevokeClusterSecurityGroupIngressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => {}
+                                    "AuthorizationNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -17315,7 +17632,11 @@ impl RevokeSnapshotAccessError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -17384,7 +17705,11 @@ impl RotateEncryptionKeyError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }

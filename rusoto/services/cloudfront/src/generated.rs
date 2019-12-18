@@ -16,7 +16,8 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
+use rusoto_core::{AwsError, Client, RusotoError, RusotoFuture};
+use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt;
 
@@ -8385,7 +8386,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(parsed_error.message)),_ => {}
+                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8513,7 +8514,7 @@ impl CreateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8684,7 +8685,7 @@ impl CreateDistributionWithTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8782,7 +8783,7 @@ impl CreateFieldLevelEncryptionConfigError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "FieldLevelEncryptionConfigAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionConfigs" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
+                                    "FieldLevelEncryptionConfigAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::FieldLevelEncryptionConfigAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionConfigs" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionConfigs(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8843,7 +8844,7 @@ impl CreateFieldLevelEncryptionProfileError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),"TooManyFieldLevelEncryptionProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(parsed_error.message)),_ => {}
+                                    "FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),"TooManyFieldLevelEncryptionProfiles" => return RusotoError::Service(CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -8937,7 +8938,11 @@ impl CreateInvalidationError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9002,7 +9007,11 @@ impl CreatePublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9142,7 +9151,11 @@ impl CreateStreamingDistributionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9233,7 +9246,7 @@ impl CreateStreamingDistributionWithTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(parsed_error.message)),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(parsed_error.message)),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(parsed_error.message)),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(parsed_error.message)),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9319,7 +9332,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9404,7 +9417,11 @@ impl DeleteDistributionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9491,7 +9508,11 @@ impl DeleteFieldLevelEncryptionConfigError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9584,7 +9605,11 @@ impl DeleteFieldLevelEncryptionProfileError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9669,7 +9694,11 @@ impl DeletePublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9754,7 +9783,11 @@ impl DeleteStreamingDistributionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9808,7 +9841,7 @@ impl GetCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9855,7 +9888,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -9910,7 +9943,11 @@ impl GetDistributionError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -9961,7 +9998,11 @@ impl GetDistributionConfigError {
                             GetDistributionConfigError::NoSuchDistribution(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10014,7 +10055,11 @@ impl GetFieldLevelEncryptionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10071,7 +10116,11 @@ impl GetFieldLevelEncryptionConfigError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10128,7 +10177,11 @@ impl GetFieldLevelEncryptionProfileError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10173,7 +10226,7 @@ impl GetFieldLevelEncryptionProfileConfigError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::AccessDenied(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::AccessDenied(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(GetFieldLevelEncryptionProfileConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -10235,7 +10288,11 @@ impl GetInvalidationError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10287,7 +10344,11 @@ impl GetPublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10338,7 +10399,11 @@ impl GetPublicKeyConfigError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10391,7 +10456,11 @@ impl GetStreamingDistributionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10448,7 +10517,11 @@ impl GetStreamingDistributionConfigError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10498,7 +10571,11 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10543,7 +10620,11 @@ impl ListDistributionsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10595,7 +10676,11 @@ impl ListDistributionsByWebACLIdError {
                             ListDistributionsByWebACLIdError::InvalidWebACLId(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10643,7 +10728,11 @@ impl ListFieldLevelEncryptionConfigsError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10692,7 +10781,11 @@ impl ListFieldLevelEncryptionProfilesError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10751,7 +10844,11 @@ impl ListInvalidationsError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10796,7 +10893,11 @@ impl ListPublicKeysError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10841,7 +10942,11 @@ impl ListStreamingDistributionsError {
                             ListStreamingDistributionsError::InvalidArgument(parsed_error.message),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10905,7 +11010,11 @@ impl ListTagsForResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -10972,7 +11081,11 @@ impl TagResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11039,7 +11152,11 @@ impl UntagResourceError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11096,7 +11213,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11243,7 +11360,7 @@ impl UpdateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11346,7 +11463,7 @@ impl UpdateFieldLevelEncryptionConfigError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::PreconditionFailed(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::PreconditionFailed(parsed_error.message)),"QueryArgProfileEmpty" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::QueryArgProfileEmpty(parsed_error.message)),"TooManyFieldLevelEncryptionContentTypeProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionContentTypeProfiles(parsed_error.message)),"TooManyFieldLevelEncryptionQueryArgProfiles" => return RusotoError::Service(UpdateFieldLevelEncryptionConfigError::TooManyFieldLevelEncryptionQueryArgProfiles(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11418,7 +11535,7 @@ impl UpdateFieldLevelEncryptionProfileError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message)),"FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::PreconditionFailed(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::AccessDenied(parsed_error.message)),"FieldLevelEncryptionProfileAlreadyExists" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileAlreadyExists(parsed_error.message)),"FieldLevelEncryptionProfileSizeExceeded" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::FieldLevelEncryptionProfileSizeExceeded(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchFieldLevelEncryptionProfile" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchFieldLevelEncryptionProfile(parsed_error.message)),"NoSuchPublicKey" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::NoSuchPublicKey(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::PreconditionFailed(parsed_error.message)),"TooManyFieldLevelEncryptionEncryptionEntities" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionEncryptionEntities(parsed_error.message)),"TooManyFieldLevelEncryptionFieldPatterns" => return RusotoError::Service(UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns(parsed_error.message)),_ => if let Ok(common_err) = AwsError::try_from(parsed_error) { return RusotoError::Common(common_err) }
                                 }
             }
         }
@@ -11516,7 +11633,11 @@ impl UpdatePublicKeyError {
                             parsed_error.message,
                         ))
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
@@ -11671,7 +11792,11 @@ impl UpdateStreamingDistributionError {
                             ),
                         )
                     }
-                    _ => {}
+                    _ => {
+                        if let Ok(common_err) = AwsError::try_from(parsed_error) {
+                            return RusotoError::Common(common_err);
+                        }
+                    }
                 }
             }
         }
