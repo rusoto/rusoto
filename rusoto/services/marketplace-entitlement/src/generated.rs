@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Entitlement {
     /// <p>The customer identifier is a handle to each unique customer in an application. Customer identifiers are obtained through the ResolveCustomer operation in AWS Marketplace Metering Service.</p>
     #[serde(rename = "CustomerIdentifier")]
@@ -51,7 +52,7 @@ pub struct Entitlement {
 
 /// <p>The EntitlementValue represents the amount of capacity that the customer is entitled to for the product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EntitlementValue {
     /// <p>The BooleanValue field will be populated with a boolean value when the entitlement is a boolean type. Otherwise, the field will not be set.</p>
     #[serde(rename = "BooleanValue")]
@@ -93,7 +94,7 @@ pub struct GetEntitlementsRequest {
 
 /// <p>The GetEntitlementsRequest contains results from the GetEntitlements operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetEntitlementsResult {
     /// <p>The set of entitlements found through the GetEntitlements operation. If the result contains an empty set of entitlements, NextToken might still be present and should be used.</p>
     #[serde(rename = "Entitlements")]
@@ -153,12 +154,13 @@ impl Error for GetEntitlementsError {
     }
 }
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
+#[async_trait]
 pub trait MarketplaceEntitlement {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError>;
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
 #[derive(Clone)]
@@ -172,7 +174,10 @@ impl MarketplaceEntitlementClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MarketplaceEntitlementClient {
-        Self::new_with_client(Client::shared(), region)
+        MarketplaceEntitlementClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -182,35 +187,22 @@ impl MarketplaceEntitlementClient {
     ) -> MarketplaceEntitlementClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        MarketplaceEntitlementClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> MarketplaceEntitlementClient {
-        MarketplaceEntitlementClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for MarketplaceEntitlementClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("MarketplaceEntitlementClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl MarketplaceEntitlement for MarketplaceEntitlementClient {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
-    fn get_entitlements(
+    async fn get_entitlements(
         &self,
         input: GetEntitlementsRequest,
-    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
+    ) -> Result<GetEntitlementsResult, RusotoError<GetEntitlementsError>> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -218,20 +210,18 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEntitlementsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetEntitlementsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetEntitlementsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEntitlementsError::from_response(response))
+        }
     }
 }

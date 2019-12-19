@@ -9,29 +9,30 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateDRTLogBucketRequest {
-    /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
+    /// <p>The Amazon S3 bucket that contains your flow logs.</p>
     #[serde(rename = "LogBucket")]
     pub log_bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -42,12 +43,12 @@ pub struct AssociateDRTRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDRTRoleResponse {}
 
 /// <p>The details of a DDoS attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttackDetail {
     /// <p>List of counters that describe the attack for the specified time period.</p>
     #[serde(rename = "AttackCounters")]
@@ -85,13 +86,13 @@ pub struct AttackDetail {
 
 /// <p>Details of the described attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttackProperty {
-    /// <p>The type of distributed denial of service (DDoS) event that was observed. <code>NETWORK</code> indicates layer 3 and layer 4 events and <code>APPLICATION</code> indicates layer 7 events.</p>
+    /// <p>The type of DDoS event that was observed. <code>NETWORK</code> indicates layer 3 and layer 4 events and <code>APPLICATION</code> indicates layer 7 events.</p>
     #[serde(rename = "AttackLayer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_layer: Option<String>,
-    /// <p>Defines the DDoS attack property information that is provided. The <code>WORDPRESS_PINGBACK_REFLECTOR</code> and <code>WORDPRESS_PINGBACK_SOURCE</code> values are valid only for WordPress reflective pingback DDoS attacks.</p>
+    /// <p>Defines the DDoS attack property information that is provided.</p>
     #[serde(rename = "AttackPropertyIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_property_identifier: Option<String>,
@@ -111,7 +112,7 @@ pub struct AttackProperty {
 
 /// <p>Summarizes all DDoS attacks for a specified time period.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttackSummary {
     /// <p>The unique identifier (ID) of the attack.</p>
     #[serde(rename = "AttackId")]
@@ -137,16 +138,16 @@ pub struct AttackSummary {
 
 /// <p>Describes the attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttackVectorDescription {
-    /// <p><p>The attack type. Valid values:</p> <ul> <li> <p>UDP<em>TRAFFIC</p> </li> <li> <p>UDP</em>FRAGMENT</p> </li> <li> <p>GENERIC<em>UDP</em>REFLECTION</p> </li> <li> <p>DNS<em>REFLECTION</p> </li> <li> <p>NTP</em>REFLECTION</p> </li> <li> <p>CHARGEN<em>REFLECTION</p> </li> <li> <p>SSDP</em>REFLECTION</p> </li> <li> <p>PORT<em>MAPPER</p> </li> <li> <p>RIP</em>REFLECTION</p> </li> <li> <p>SNMP<em>REFLECTION</p> </li> <li> <p>MSSQL</em>REFLECTION</p> </li> <li> <p>NET<em>BIOS</em>REFLECTION</p> </li> <li> <p>SYN<em>FLOOD</p> </li> <li> <p>ACK</em>FLOOD</p> </li> <li> <p>REQUEST<em>FLOOD</p> </li> <li> <p>HTTP</em>REFLECTION</p> </li> <li> <p>UDS<em>REFLECTION</p> </li> <li> <p>MEMCACHED</em>REFLECTION</p> </li> </ul></p>
+    /// <p><p>The attack type. Valid values:</p> <ul> <li> <p>UDP<em>TRAFFIC</p> </li> <li> <p>UDP</em>FRAGMENT</p> </li> <li> <p>GENERIC<em>UDP</em>REFLECTION</p> </li> <li> <p>DNS<em>REFLECTION</p> </li> <li> <p>NTP</em>REFLECTION</p> </li> <li> <p>CHARGEN<em>REFLECTION</p> </li> <li> <p>SSDP</em>REFLECTION</p> </li> <li> <p>PORT<em>MAPPER</p> </li> <li> <p>RIP</em>REFLECTION</p> </li> <li> <p>SNMP<em>REFLECTION</p> </li> <li> <p>MSSQL</em>REFLECTION</p> </li> <li> <p>NET<em>BIOS</em>REFLECTION</p> </li> <li> <p>SYN<em>FLOOD</p> </li> <li> <p>ACK</em>FLOOD</p> </li> <li> <p>REQUEST_FLOOD</p> </li> </ul></p>
     #[serde(rename = "VectorType")]
     pub vector_type: String,
 }
 
 /// <p>A contributor to the attack and their contribution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Contributor {
     /// <p>The name of the contributor. This is dependent on the <code>AttackPropertyIdentifier</code>. For example, if the <code>AttackPropertyIdentifier</code> is <code>SOURCE_COUNTRY</code>, the <code>Name</code> could be <code>United States</code>.</p>
     #[serde(rename = "Name")]
@@ -169,7 +170,7 @@ pub struct CreateProtectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProtectionResponse {
     /// <p>The unique identifier (ID) for the <a>Protection</a> object that is created.</p>
     #[serde(rename = "ProtectionId")]
@@ -181,7 +182,7 @@ pub struct CreateProtectionResponse {
 pub struct CreateSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -192,14 +193,14 @@ pub struct DeleteProtectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProtectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -210,7 +211,7 @@ pub struct DescribeAttackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAttackResponse {
     /// <p>The attack that is described.</p>
     #[serde(rename = "Attack")]
@@ -222,7 +223,7 @@ pub struct DescribeAttackResponse {
 pub struct DescribeDRTAccessRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDRTAccessResponse {
     /// <p>The list of Amazon S3 buckets accessed by the DRT.</p>
     #[serde(rename = "LogBucketList")]
@@ -238,7 +239,7 @@ pub struct DescribeDRTAccessResponse {
 pub struct DescribeEmergencyContactSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEmergencyContactSettingsResponse {
     /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
     #[serde(rename = "EmergencyContactList")]
@@ -259,7 +260,7 @@ pub struct DescribeProtectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProtectionResponse {
     /// <p>The <a>Protection</a> object that is described.</p>
     #[serde(rename = "Protection")]
@@ -271,7 +272,7 @@ pub struct DescribeProtectionResponse {
 pub struct DescribeSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSubscriptionResponse {
     /// <p>The AWS Shield Advanced subscription details for an account.</p>
     #[serde(rename = "Subscription")]
@@ -281,20 +282,20 @@ pub struct DescribeSubscriptionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateDRTLogBucketRequest {
-    /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
+    /// <p>The Amazon S3 bucket that contains your flow logs.</p>
     #[serde(rename = "LogBucket")]
     pub log_bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateDRTLogBucketResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateDRTRoleRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateDRTRoleResponse {}
 
 /// <p>Contact information that the DRT can use to contact you during a suspected attack.</p>
@@ -309,7 +310,7 @@ pub struct EmergencyContact {
 pub struct GetSubscriptionStateRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSubscriptionStateResponse {
     /// <p>The status of the subscription.</p>
     #[serde(rename = "SubscriptionState")]
@@ -318,7 +319,7 @@ pub struct GetSubscriptionStateResponse {
 
 /// <p>Specifies how many protections of a given type you can create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Limit {
     /// <p>The maximum number of protections that can be created for the specified <code>Type</code>.</p>
     #[serde(rename = "Max")]
@@ -355,7 +356,7 @@ pub struct ListAttacksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAttacksResponse {
     /// <p>The attack information for the specified time range.</p>
     #[serde(rename = "AttackSummaries")]
@@ -380,7 +381,7 @@ pub struct ListProtectionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProtectionsResponse {
     /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p> <p>AWS WAF might return the list of <a>Protection</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "NextToken")]
@@ -394,7 +395,7 @@ pub struct ListProtectionsResponse {
 
 /// <p>The mitigation applied to a DDoS attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Mitigation {
     /// <p>The name of the mitigation taken for this attack.</p>
     #[serde(rename = "MitigationName")]
@@ -404,7 +405,7 @@ pub struct Mitigation {
 
 /// <p>An object that represents a resource that is under DDoS protection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Protection {
     /// <p>The unique identifier (ID) of the protection.</p>
     #[serde(rename = "Id")]
@@ -422,7 +423,7 @@ pub struct Protection {
 
 /// <p>The attack information for the specified SubResource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SubResourceSummary {
     /// <p>The list of attack types and associated counters.</p>
     #[serde(rename = "AttackVectors")]
@@ -444,7 +445,7 @@ pub struct SubResourceSummary {
 
 /// <p>Information about the AWS Shield Advanced subscription for an account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Subscription {
     /// <p>If <code>ENABLED</code>, the subscription will be automatically renewed at the end of the existing subscription period.</p> <p>When you initally create a subscription, <code>AutoRenew</code> is set to <code>ENABLED</code>. You can change this by submitting an <code>UpdateSubscription</code> request. If the <code>UpdateSubscription</code> request does not included a value for <code>AutoRenew</code>, the existing value for <code>AutoRenew</code> remains unchanged.</p>
     #[serde(rename = "AutoRenew")]
@@ -470,7 +471,7 @@ pub struct Subscription {
 
 /// <p>A summary of information about the attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SummarizedAttackVector {
     /// <p>The list of counters that describe the details of the attack.</p>
     #[serde(rename = "VectorCounters")]
@@ -483,7 +484,7 @@ pub struct SummarizedAttackVector {
 
 /// <p>The counter that describes a DDoS attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SummarizedCounter {
     /// <p>The average value of the counter for a specified time period.</p>
     #[serde(rename = "Average")]
@@ -533,7 +534,7 @@ pub struct UpdateEmergencyContactSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEmergencyContactSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -545,7 +546,7 @@ pub struct UpdateSubscriptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSubscriptionResponse {}
 
 /// Errors returned by AssociateDRTLogBucket
@@ -1491,107 +1492,114 @@ impl Error for UpdateSubscriptionError {
     }
 }
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
+#[async_trait]
 pub trait Shield {
-    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
-    fn associate_drt_log_bucket(
+    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your flow logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    async fn associate_drt_log_bucket(
         &self,
         input: AssociateDRTLogBucketRequest,
-    ) -> RusotoFuture<AssociateDRTLogBucketResponse, AssociateDRTLogBucketError>;
+    ) -> Result<AssociateDRTLogBucketResponse, RusotoError<AssociateDRTLogBucketError>>;
 
     /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
-    fn associate_drt_role(
+    async fn associate_drt_role(
         &self,
         input: AssociateDRTRoleRequest,
-    ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError>;
+    ) -> Result<AssociateDRTRoleResponse, RusotoError<AssociateDRTRoleError>>;
 
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
-    fn create_protection(
+    async fn create_protection(
         &self,
         input: CreateProtectionRequest,
-    ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError>;
+    ) -> Result<CreateProtectionResponse, RusotoError<CreateProtectionError>>;
 
-    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>To use the services of the DRT, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
-    fn create_subscription(
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
+    async fn create_subscription(
         &self,
-    ) -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError>;
+    ) -> Result<CreateSubscriptionResponse, RusotoError<CreateSubscriptionError>>;
 
     /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
-    fn delete_protection(
+    async fn delete_protection(
         &self,
         input: DeleteProtectionRequest,
-    ) -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError>;
+    ) -> Result<DeleteProtectionResponse, RusotoError<DeleteProtectionError>>;
 
     /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
-    fn delete_subscription(
+    async fn delete_subscription(
         &self,
-    ) -> RusotoFuture<DeleteSubscriptionResponse, DeleteSubscriptionError>;
+    ) -> Result<DeleteSubscriptionResponse, RusotoError<DeleteSubscriptionError>>;
 
     /// <p>Describes the details of a DDoS attack. </p>
-    fn describe_attack(
+    async fn describe_attack(
         &self,
         input: DescribeAttackRequest,
-    ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError>;
+    ) -> Result<DescribeAttackResponse, RusotoError<DescribeAttackError>>;
 
     /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
-    fn describe_drt_access(
+    async fn describe_drt_access(
         &self,
-    ) -> RusotoFuture<DescribeDRTAccessResponse, DescribeDRTAccessError>;
+    ) -> Result<DescribeDRTAccessResponse, RusotoError<DescribeDRTAccessError>>;
 
     /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
-    fn describe_emergency_contact_settings(
+    async fn describe_emergency_contact_settings(
         &self,
-    ) -> RusotoFuture<DescribeEmergencyContactSettingsResponse, DescribeEmergencyContactSettingsError>;
+    ) -> Result<
+        DescribeEmergencyContactSettingsResponse,
+        RusotoError<DescribeEmergencyContactSettingsError>,
+    >;
 
     /// <p>Lists the details of a <a>Protection</a> object.</p>
-    fn describe_protection(
+    async fn describe_protection(
         &self,
         input: DescribeProtectionRequest,
-    ) -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError>;
+    ) -> Result<DescribeProtectionResponse, RusotoError<DescribeProtectionError>>;
 
     /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
-    fn describe_subscription(
+    async fn describe_subscription(
         &self,
-    ) -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError>;
+    ) -> Result<DescribeSubscriptionResponse, RusotoError<DescribeSubscriptionError>>;
 
-    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
-    fn disassociate_drt_log_bucket(
+    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your flow logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    async fn disassociate_drt_log_bucket(
         &self,
         input: DisassociateDRTLogBucketRequest,
-    ) -> RusotoFuture<DisassociateDRTLogBucketResponse, DisassociateDRTLogBucketError>;
+    ) -> Result<DisassociateDRTLogBucketResponse, RusotoError<DisassociateDRTLogBucketError>>;
 
     /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
-    fn disassociate_drt_role(
+    async fn disassociate_drt_role(
         &self,
-    ) -> RusotoFuture<DisassociateDRTRoleResponse, DisassociateDRTRoleError>;
+    ) -> Result<DisassociateDRTRoleResponse, RusotoError<DisassociateDRTRoleError>>;
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
-    fn get_subscription_state(
+    async fn get_subscription_state(
         &self,
-    ) -> RusotoFuture<GetSubscriptionStateResponse, GetSubscriptionStateError>;
+    ) -> Result<GetSubscriptionStateResponse, RusotoError<GetSubscriptionStateError>>;
 
     /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
-    fn list_attacks(
+    async fn list_attacks(
         &self,
         input: ListAttacksRequest,
-    ) -> RusotoFuture<ListAttacksResponse, ListAttacksError>;
+    ) -> Result<ListAttacksResponse, RusotoError<ListAttacksError>>;
 
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
-    fn list_protections(
+    async fn list_protections(
         &self,
         input: ListProtectionsRequest,
-    ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError>;
+    ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>>;
 
     /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
-    fn update_emergency_contact_settings(
+    async fn update_emergency_contact_settings(
         &self,
         input: UpdateEmergencyContactSettingsRequest,
-    ) -> RusotoFuture<UpdateEmergencyContactSettingsResponse, UpdateEmergencyContactSettingsError>;
+    ) -> Result<
+        UpdateEmergencyContactSettingsResponse,
+        RusotoError<UpdateEmergencyContactSettingsError>,
+    >;
 
     /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>
-    fn update_subscription(
+    async fn update_subscription(
         &self,
         input: UpdateSubscriptionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError>;
+    ) -> Result<UpdateSubscriptionResponse, RusotoError<UpdateSubscriptionError>>;
 }
 /// A client for the AWS Shield API.
 #[derive(Clone)]
@@ -1605,7 +1613,10 @@ impl ShieldClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ShieldClient {
-        Self::new_with_client(Client::shared(), region)
+        ShieldClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1615,35 +1626,22 @@ impl ShieldClient {
     ) -> ShieldClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ShieldClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> ShieldClient {
-        ShieldClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for ShieldClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ShieldClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Shield for ShieldClient {
-    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
-    fn associate_drt_log_bucket(
+    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your flow logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    async fn associate_drt_log_bucket(
         &self,
         input: AssociateDRTLogBucketRequest,
-    ) -> RusotoFuture<AssociateDRTLogBucketResponse, AssociateDRTLogBucketError> {
+    ) -> Result<AssociateDRTLogBucketResponse, RusotoError<AssociateDRTLogBucketError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1651,27 +1649,27 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDRTLogBucketResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AssociateDRTLogBucketError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDRTLogBucketResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDRTLogBucketError::from_response(response))
+        }
     }
 
     /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
-    fn associate_drt_role(
+    async fn associate_drt_role(
         &self,
         input: AssociateDRTRoleRequest,
-    ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError> {
+    ) -> Result<AssociateDRTRoleResponse, RusotoError<AssociateDRTRoleError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1679,28 +1677,27 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDRTRoleResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AssociateDRTRoleError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDRTRoleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDRTRoleError::from_response(response))
+        }
     }
 
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
-    fn create_protection(
+    async fn create_protection(
         &self,
         input: CreateProtectionRequest,
-    ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError> {
+    ) -> Result<CreateProtectionResponse, RusotoError<CreateProtectionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1708,55 +1705,53 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProtectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateProtectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProtectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProtectionError::from_response(response))
+        }
     }
 
-    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>To use the services of the DRT, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
-    fn create_subscription(
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
+    async fn create_subscription(
         &self,
-    ) -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError> {
+    ) -> Result<CreateSubscriptionResponse, RusotoError<CreateSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.CreateSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSubscriptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
-    fn delete_protection(
+    async fn delete_protection(
         &self,
         input: DeleteProtectionRequest,
-    ) -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError> {
+    ) -> Result<DeleteProtectionResponse, RusotoError<DeleteProtectionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1764,55 +1759,53 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProtectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteProtectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProtectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProtectionError::from_response(response))
+        }
     }
 
     /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
-    fn delete_subscription(
+    async fn delete_subscription(
         &self,
-    ) -> RusotoFuture<DeleteSubscriptionResponse, DeleteSubscriptionError> {
+    ) -> Result<DeleteSubscriptionResponse, RusotoError<DeleteSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DeleteSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSubscriptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Describes the details of a DDoS attack. </p>
-    fn describe_attack(
+    async fn describe_attack(
         &self,
         input: DescribeAttackRequest,
-    ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError> {
+    ) -> Result<DescribeAttackResponse, RusotoError<DescribeAttackError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1820,55 +1813,54 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAttackResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeAttackError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAttackResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAttackError::from_response(response))
+        }
     }
 
     /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
-    fn describe_drt_access(
+    async fn describe_drt_access(
         &self,
-    ) -> RusotoFuture<DescribeDRTAccessResponse, DescribeDRTAccessError> {
+    ) -> Result<DescribeDRTAccessResponse, RusotoError<DescribeDRTAccessError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeDRTAccess");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDRTAccessResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeDRTAccessError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDRTAccessResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDRTAccessError::from_response(response))
+        }
     }
 
     /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
-    fn describe_emergency_contact_settings(
+    async fn describe_emergency_contact_settings(
         &self,
-    ) -> RusotoFuture<DescribeEmergencyContactSettingsResponse, DescribeEmergencyContactSettingsError>
-    {
+    ) -> Result<
+        DescribeEmergencyContactSettingsResponse,
+        RusotoError<DescribeEmergencyContactSettingsError>,
+    > {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1878,27 +1870,29 @@ impl Shield for ShieldClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEmergencyContactSettingsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEmergencyContactSettingsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEmergencyContactSettingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEmergencyContactSettingsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists the details of a <a>Protection</a> object.</p>
-    fn describe_protection(
+    async fn describe_protection(
         &self,
         input: DescribeProtectionRequest,
-    ) -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError> {
+    ) -> Result<DescribeProtectionResponse, RusotoError<DescribeProtectionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1906,54 +1900,53 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProtectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeProtectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProtectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProtectionError::from_response(response))
+        }
     }
 
     /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
-    fn describe_subscription(
+    async fn describe_subscription(
         &self,
-    ) -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError> {
+    ) -> Result<DescribeSubscriptionResponse, RusotoError<DescribeSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeSubscriptionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSubscriptionError::from_response(response))
+        }
     }
 
-    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
-    fn disassociate_drt_log_bucket(
+    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your flow logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    async fn disassociate_drt_log_bucket(
         &self,
         input: DisassociateDRTLogBucketRequest,
-    ) -> RusotoFuture<DisassociateDRTLogBucketResponse, DisassociateDRTLogBucketError> {
+    ) -> Result<DisassociateDRTLogBucketResponse, RusotoError<DisassociateDRTLogBucketError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1964,77 +1957,79 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDRTLogBucketResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateDRTLogBucketError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDRTLogBucketResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDRTLogBucketError::from_response(response))
+        }
     }
 
     /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
-    fn disassociate_drt_role(
+    async fn disassociate_drt_role(
         &self,
-    ) -> RusotoFuture<DisassociateDRTRoleResponse, DisassociateDRTRoleError> {
+    ) -> Result<DisassociateDRTRoleResponse, RusotoError<DisassociateDRTRoleError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DisassociateDRTRole");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDRTRoleResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DisassociateDRTRoleError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDRTRoleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDRTRoleError::from_response(response))
+        }
     }
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
-    fn get_subscription_state(
+    async fn get_subscription_state(
         &self,
-    ) -> RusotoFuture<GetSubscriptionStateResponse, GetSubscriptionStateError> {
+    ) -> Result<GetSubscriptionStateResponse, RusotoError<GetSubscriptionStateError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.GetSubscriptionState");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSubscriptionStateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetSubscriptionStateError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSubscriptionStateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSubscriptionStateError::from_response(response))
+        }
     }
 
     /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
-    fn list_attacks(
+    async fn list_attacks(
         &self,
         input: ListAttacksRequest,
-    ) -> RusotoFuture<ListAttacksResponse, ListAttacksError> {
+    ) -> Result<ListAttacksResponse, RusotoError<ListAttacksError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2042,28 +2037,26 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAttacksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAttacksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListAttacksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAttacksError::from_response(response))
+        }
     }
 
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
-    fn list_protections(
+    async fn list_protections(
         &self,
         input: ListProtectionsRequest,
-    ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError> {
+    ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2071,29 +2064,29 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProtectionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListProtectionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListProtectionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProtectionsError::from_response(response))
+        }
     }
 
     /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
-    fn update_emergency_contact_settings(
+    async fn update_emergency_contact_settings(
         &self,
         input: UpdateEmergencyContactSettingsRequest,
-    ) -> RusotoFuture<UpdateEmergencyContactSettingsResponse, UpdateEmergencyContactSettingsError>
-    {
+    ) -> Result<
+        UpdateEmergencyContactSettingsResponse,
+        RusotoError<UpdateEmergencyContactSettingsError>,
+    > {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2104,25 +2097,27 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEmergencyContactSettingsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEmergencyContactSettingsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateEmergencyContactSettingsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEmergencyContactSettingsError::from_response(response))
+        }
     }
 
     /// <p>Updates the details of an existing subscription. Only enter values for parameters you want to change. Empty parameters are not updated.</p>
-    fn update_subscription(
+    async fn update_subscription(
         &self,
         input: UpdateSubscriptionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError> {
+    ) -> Result<UpdateSubscriptionResponse, RusotoError<UpdateSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2130,20 +2125,19 @@ impl Shield for ShieldClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateSubscriptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSubscriptionError::from_response(response))
+        }
     }
 }

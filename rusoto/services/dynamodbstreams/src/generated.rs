@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttributeValue {
     /// <p>A Binary data type.</p>
     #[serde(rename = "B")]
@@ -97,7 +98,7 @@ pub struct DescribeStreamInput {
 
 /// <p>Represents the output of a <code>DescribeStream</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStreamOutput {
     /// <p>A complete description of the stream, including its creation date and time, the DynamoDB table associated with the stream, the shard IDs within the stream, and the beginning and ending sequence numbers of stream records within the shards.</p>
     #[serde(rename = "StreamDescription")]
@@ -119,7 +120,7 @@ pub struct GetRecordsInput {
 
 /// <p>Represents the output of a <code>GetRecords</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRecordsOutput {
     /// <p>The next position in the shard from which to start sequentially reading stream records. If set to <code>null</code>, the shard has been closed and the requested iterator will not return any more data.</p>
     #[serde(rename = "NextShardIterator")]
@@ -151,7 +152,7 @@ pub struct GetShardIteratorInput {
 
 /// <p>Represents the output of a <code>GetShardIterator</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetShardIteratorOutput {
     /// <p>The position in the shard from which to start reading stream records sequentially. A shard iterator specifies this position using the sequence number of a stream record in a shard.</p>
     #[serde(rename = "ShardIterator")]
@@ -161,7 +162,7 @@ pub struct GetShardIteratorOutput {
 
 /// <p>Contains details about the type of identity that made the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Identity {
     /// <p>A unique identifier for the entity that made the call. For Time To Live, the principalId is "dynamodb.amazonaws.com".</p>
     #[serde(rename = "PrincipalId")]
@@ -175,7 +176,7 @@ pub struct Identity {
 
 /// <p><p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key (partition key) would be represented by one <code>KeySchemaElement</code>. A composite primary key (partition key and sort key) would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KeySchemaElement {
     /// <p>The name of a key attribute.</p>
     #[serde(rename = "AttributeName")]
@@ -204,7 +205,7 @@ pub struct ListStreamsInput {
 
 /// <p>Represents the output of a <code>ListStreams</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListStreamsOutput {
     /// <p>The stream ARN of the item where the operation stopped, inclusive of the previous result set. Use this value to start a new operation, excluding this value in the new request.</p> <p>If <code>LastEvaluatedStreamArn</code> is empty, then the "last page" of results has been processed and there is no more data to be retrieved.</p> <p>If <code>LastEvaluatedStreamArn</code> is not empty, it does not necessarily mean that there is more data in the result set. The only way to know when you have reached the end of the result set is when <code>LastEvaluatedStreamArn</code> is empty.</p>
     #[serde(rename = "LastEvaluatedStreamArn")]
@@ -218,7 +219,7 @@ pub struct ListStreamsOutput {
 
 /// <p>A description of a unique event within a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Record {
     /// <p>The region in which the <code>GetRecords</code> request was received.</p>
     #[serde(rename = "awsRegion")]
@@ -252,7 +253,7 @@ pub struct Record {
 
 /// <p>The beginning and ending sequence numbers for the stream records contained within a shard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SequenceNumberRange {
     /// <p>The last sequence number.</p>
     #[serde(rename = "EndingSequenceNumber")]
@@ -266,7 +267,7 @@ pub struct SequenceNumberRange {
 
 /// <p>A uniquely identified group of stream records within a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Shard {
     /// <p>The shard ID of the current shard's parent.</p>
     #[serde(rename = "ParentShardId")]
@@ -284,7 +285,7 @@ pub struct Shard {
 
 /// <p>Represents all of the data describing a particular stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Stream {
     /// <p>The Amazon Resource Name (ARN) for the stream.</p>
     #[serde(rename = "StreamArn")]
@@ -302,7 +303,7 @@ pub struct Stream {
 
 /// <p>Represents all of the data describing a particular stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamDescription {
     /// <p>The date and time when the request to create this stream was issued.</p>
     #[serde(rename = "CreationRequestDateTime")]
@@ -344,7 +345,7 @@ pub struct StreamDescription {
 
 /// <p>A description of a single data modification that was performed on an item in a DynamoDB table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamRecord {
     /// <p>The approximate date and time when the stream record was created, in <a href="http://www.epochconverter.com/">UNIX epoch time</a> format.</p>
     #[serde(rename = "ApproximateCreationDateTime")]
@@ -559,30 +560,31 @@ impl Error for ListStreamsError {
     }
 }
 /// Trait representing the capabilities of the Amazon DynamoDB Streams API. Amazon DynamoDB Streams clients implement this trait.
+#[async_trait]
 pub trait DynamoDbStreams {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError>;
+    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>;
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
-    fn get_records(
+    async fn get_records(
         &self,
         input: GetRecordsInput,
-    ) -> RusotoFuture<GetRecordsOutput, GetRecordsError>;
+    ) -> Result<GetRecordsOutput, RusotoError<GetRecordsError>>;
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
-    fn get_shard_iterator(
+    async fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
-    ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError>;
+    ) -> Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>>;
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
+    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
 }
 /// A client for the Amazon DynamoDB Streams API.
 #[derive(Clone)]
@@ -596,7 +598,10 @@ impl DynamoDbStreamsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DynamoDbStreamsClient {
-        Self::new_with_client(Client::shared(), region)
+        DynamoDbStreamsClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -606,35 +611,22 @@ impl DynamoDbStreamsClient {
     ) -> DynamoDbStreamsClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DynamoDbStreamsClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> DynamoDbStreamsClient {
-        DynamoDbStreamsClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for DynamoDbStreamsClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DynamoDbStreamsClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl DynamoDbStreams for DynamoDbStreamsClient {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
+    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -642,28 +634,26 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStreamOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStreamError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStreamOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStreamError::from_response(response))
+        }
     }
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
-    fn get_records(
+    async fn get_records(
         &self,
         input: GetRecordsInput,
-    ) -> RusotoFuture<GetRecordsOutput, GetRecordsError> {
+    ) -> Result<GetRecordsOutput, RusotoError<GetRecordsError>> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -671,28 +661,26 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRecordsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetRecordsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetRecordsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRecordsError::from_response(response))
+        }
     }
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
-    fn get_shard_iterator(
+    async fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
-    ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError> {
+    ) -> Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -700,28 +688,26 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetShardIteratorOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetShardIteratorError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetShardIteratorOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetShardIteratorError::from_response(response))
+        }
     }
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
+    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -729,20 +715,18 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListStreamsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStreamsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListStreamsError::from_response(response))
+        }
     }
 }

@@ -9,20 +9,21 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Details of abort criteria to abort the job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,10 +89,6 @@ pub struct Action {
     #[serde(rename = "firehose")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub firehose: Option<FirehoseAction>,
-    /// <p>Send data to an HTTPS endpoint.</p>
-    #[serde(rename = "http")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub http: Option<HttpAction>,
     /// <p>Sends message data to an AWS IoT Analytics channel.</p>
     #[serde(rename = "iotAnalytics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -100,10 +97,6 @@ pub struct Action {
     #[serde(rename = "iotEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_events: Option<IotEventsAction>,
-    /// <p>Sends data from the MQTT message that triggered the rule to AWS IoT SiteWise asset properties.</p>
-    #[serde(rename = "iotSiteWise")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub iot_site_wise: Option<IotSiteWiseAction>,
     /// <p>Write data to an Amazon Kinesis stream.</p>
     #[serde(rename = "kinesis")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -140,7 +133,7 @@ pub struct Action {
 
 /// <p>Information about an active Device Defender security profile behavior violation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActiveViolation {
     /// <p>The behavior which is being violated.</p>
     #[serde(rename = "behavior")]
@@ -193,7 +186,7 @@ pub struct AddThingToBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddThingToBillingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -221,20 +214,8 @@ pub struct AddThingToThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddThingToThingGroupResponse {}
-
-/// <p>Parameters used when defining a mitigation action that move a set of things to a thing group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AddThingsToThingGroupParams {
-    /// <p>Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic things groups.</p>
-    #[serde(rename = "overrideDynamicGroups")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub override_dynamic_groups: Option<bool>,
-    /// <p>The list of groups to which you want to add the things that triggered the mitigation action. You can add a thing to a maximum of 10 groups, but you cannot add a thing to more than one group in the same hierarchy.</p>
-    #[serde(rename = "thingGroupNames")]
-    pub thing_group_names: Vec<String>,
-}
 
 /// <p>A structure containing the alert target ARN and the role ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -249,60 +230,12 @@ pub struct AlertTarget {
 
 /// <p>Contains information that allowed the authorization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Allowed {
     /// <p>A list of policies that allowed the authentication.</p>
     #[serde(rename = "policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<Policy>>,
-}
-
-/// <p>An asset property timestamp entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AssetPropertyTimestamp {
-    /// <p>Optional. A string that contains the nanosecond time offset. Accepts substitution templates.</p>
-    #[serde(rename = "offsetInNanos")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub offset_in_nanos: Option<String>,
-    /// <p>A string that contains the time in seconds since epoch. Accepts substitution templates.</p>
-    #[serde(rename = "timeInSeconds")]
-    pub time_in_seconds: String,
-}
-
-/// <p>An asset property value entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AssetPropertyValue {
-    /// <p>Optional. A string that describes the quality of the value. Accepts substitution templates. Must be <code>GOOD</code>, <code>BAD</code>, or <code>UNCERTAIN</code>.</p>
-    #[serde(rename = "quality")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality: Option<String>,
-    /// <p>The asset property value timestamp.</p>
-    #[serde(rename = "timestamp")]
-    pub timestamp: AssetPropertyTimestamp,
-    /// <p>The value of the asset property.</p>
-    #[serde(rename = "value")]
-    pub value: AssetPropertyVariant,
-}
-
-/// <p>Contains an asset property value (of a single type).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AssetPropertyVariant {
-    /// <p>Optional. A string that contains the boolean value (<code>true</code> or <code>false</code>) of the value entry. Accepts substitution templates.</p>
-    #[serde(rename = "booleanValue")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub boolean_value: Option<String>,
-    /// <p>Optional. A string that contains the double value of the value entry. Accepts substitution templates.</p>
-    #[serde(rename = "doubleValue")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub double_value: Option<String>,
-    /// <p>Optional. A string that contains the integer value of the value entry. Accepts substitution templates.</p>
-    #[serde(rename = "integerValue")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integer_value: Option<String>,
-    /// <p>Optional. The string value of the value entry. Accepts substitution templates.</p>
-    #[serde(rename = "stringValue")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub string_value: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -320,7 +253,7 @@ pub struct AssociateTargetsWithJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateTargetsWithJobResponse {
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
@@ -368,13 +301,13 @@ pub struct AttachSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttachSecurityProfileResponse {}
 
 /// <p>The input for the AttachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachThingPrincipalRequest {
-    /// <p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>
+    /// <p>The principal, such as a certificate or other credential.</p>
     #[serde(rename = "principal")]
     pub principal: String,
     /// <p>The name of the thing.</p>
@@ -384,7 +317,7 @@ pub struct AttachThingPrincipalRequest {
 
 /// <p>The output from the AttachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttachThingPrincipalResponse {}
 
 /// <p>The attribute payload.</p>
@@ -394,7 +327,7 @@ pub struct AttributePayload {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code> or <code>UpdateThingGroup</code>.</p> </note></p>
+    /// <p><p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note></p>
     #[serde(rename = "merge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
@@ -411,25 +344,25 @@ pub struct AuditCheckConfiguration {
 
 /// <p>Information about the audit check.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuditCheckDetails {
-    /// <p>True if the check is complete and found all resources compliant.</p>
+    /// <p>True if the check completed and found all resources compliant.</p>
     #[serde(rename = "checkCompliant")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_compliant: Option<bool>,
-    /// <p>The completion status of this check. One of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION", "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".</p>
+    /// <p>The completion status of this check, one of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION", "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".</p>
     #[serde(rename = "checkRunStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_run_status: Option<String>,
-    /// <p>The code of any error encountered when this check is performed during this audit. One of "INSUFFICIENT_PERMISSIONS" or "AUDIT_CHECK_DISABLED".</p>
+    /// <p>The code of any error encountered when performing this check during this audit. One of "INSUFFICIENT_PERMISSIONS", or "AUDIT_CHECK_DISABLED".</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The message associated with any error encountered when this check is performed during this audit.</p>
+    /// <p>The message associated with any error encountered when performing this check during this audit.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p>The number of resources that were found noncompliant during the check.</p>
+    /// <p>The number of resources that the check found non-compliant.</p>
     #[serde(rename = "nonCompliantResourcesCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resources_count: Option<i64>,
@@ -441,29 +374,25 @@ pub struct AuditCheckDetails {
 
 /// <p>The findings (results) of the audit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuditFinding {
     /// <p>The audit check that generated this result.</p>
     #[serde(rename = "checkName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub check_name: Option<String>,
-    /// <p>A unique identifier for this set of audit findings. This identifier is used to apply mitigation tasks to one or more sets of findings.</p>
-    #[serde(rename = "findingId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_id: Option<String>,
     /// <p>The time the result (finding) was discovered.</p>
     #[serde(rename = "findingTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_time: Option<f64>,
-    /// <p>The resource that was found to be noncompliant with the audit check.</p>
+    /// <p>The resource that was found to be non-compliant with the audit check.</p>
     #[serde(rename = "nonCompliantResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resource: Option<NonCompliantResource>,
-    /// <p>The reason the resource was noncompliant.</p>
+    /// <p>The reason the resource was non-compliant.</p>
     #[serde(rename = "reasonForNonCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_for_non_compliance: Option<String>,
-    /// <p>A code that indicates the reason that the resource was noncompliant.</p>
+    /// <p>A code which indicates the reason that the resource was non-compliant.</p>
     #[serde(rename = "reasonForNonComplianceCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_for_non_compliance_code: Option<String>,
@@ -475,7 +404,7 @@ pub struct AuditFinding {
     #[serde(rename = "severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<String>,
-    /// <p>The ID of the audit that generated this result (finding).</p>
+    /// <p>The ID of the audit that generated this result (finding)</p>
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
@@ -483,83 +412,6 @@ pub struct AuditFinding {
     #[serde(rename = "taskStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_start_time: Option<f64>,
-}
-
-/// <p>Returned by ListAuditMitigationActionsTask, this object contains information that describes a mitigation action that has been started.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct AuditMitigationActionExecutionMetadata {
-    /// <p>The unique identifier for the mitigation action being applied by the task.</p>
-    #[serde(rename = "actionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_id: Option<String>,
-    /// <p>The friendly name of the mitigation action being applied by the task.</p>
-    #[serde(rename = "actionName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_name: Option<String>,
-    /// <p>The date and time when the task was completed or canceled. Blank if the task is still running.</p>
-    #[serde(rename = "endTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<f64>,
-    /// <p>If an error occurred, the code that indicates which type of error occurred.</p>
-    #[serde(rename = "errorCode")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
-    /// <p>The unique identifier for the findings to which the task and associated mitigation action are applied.</p>
-    #[serde(rename = "findingId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_id: Option<String>,
-    /// <p>If an error occurred, a message that describes the error.</p>
-    #[serde(rename = "message")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
-    /// <p>The date and time when the task was started.</p>
-    #[serde(rename = "startTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<f64>,
-    /// <p>The current status of the task being executed.</p>
-    #[serde(rename = "status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// <p>The unique identifier for the task that applies the mitigation action.</p>
-    #[serde(rename = "taskId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_id: Option<String>,
-}
-
-/// <p>Information about an audit mitigation actions task that is returned by <code>ListAuditMitigationActionsTasks</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct AuditMitigationActionsTaskMetadata {
-    /// <p>The time at which the audit mitigation actions task was started.</p>
-    #[serde(rename = "startTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<f64>,
-    /// <p>The unique identifier for the task.</p>
-    #[serde(rename = "taskId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_id: Option<String>,
-    /// <p>The current state of the audit mitigation actions task.</p>
-    #[serde(rename = "taskStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_status: Option<String>,
-}
-
-/// <p>Used in MitigationActionParams, this information identifies the target findings to which the mitigation actions are applied. Only one entry appears.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AuditMitigationActionsTaskTarget {
-    /// <p>Specifies a filter in the form of an audit check and set of reason codes that identify the findings from the audit to which the audit mitigation actions task apply.</p>
-    #[serde(rename = "auditCheckToReasonCodeFilter")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub audit_check_to_reason_code_filter: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>If the task will apply a mitigation action to findings from a specific audit, this value uniquely identifies the audit.</p>
-    #[serde(rename = "auditTaskId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub audit_task_id: Option<String>,
-    /// <p>If the task will apply a mitigation action to one or more listed findings, this value uniquely identifies those findings.</p>
-    #[serde(rename = "findingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
 }
 
 /// <p>Information about the targets to which audit notifications are sent.</p>
@@ -581,17 +433,17 @@ pub struct AuditNotificationTarget {
 
 /// <p>The audits that were performed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuditTaskMetadata {
     /// <p>The ID of this audit.</p>
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
-    /// <p>The status of this audit. One of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
+    /// <p>The status of this audit: one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
     #[serde(rename = "taskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_status: Option<String>,
-    /// <p>The type of this audit. One of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
+    /// <p>The type of this audit: one of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".</p>
     #[serde(rename = "taskType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
@@ -612,7 +464,7 @@ pub struct AuthInfo {
 
 /// <p>The authorizer result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthResult {
     /// <p>The policies and statements that allowed the specified action.</p>
     #[serde(rename = "allowed")]
@@ -636,22 +488,9 @@ pub struct AuthResult {
     pub missing_context_values: Option<Vec<String>>,
 }
 
-/// <p>An object that specifies the authorization service for a domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AuthorizerConfig {
-    /// <p>A Boolean that specifies whether the domain configuration's authorization service can be overridden.</p>
-    #[serde(rename = "allowAuthorizerOverride")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allow_authorizer_override: Option<bool>,
-    /// <p>The name of the authorization service for a domain configuration.</p>
-    #[serde(rename = "defaultAuthorizerName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_authorizer_name: Option<String>,
-}
-
 /// <p>The authorizer description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthorizerDescription {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -673,10 +512,6 @@ pub struct AuthorizerDescription {
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// <p>Specifies whether AWS IoT validates the token signature in an authorization request.</p>
-    #[serde(rename = "signingDisabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_disabled: Option<bool>,
     /// <p>The status of the authorizer.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -693,7 +528,7 @@ pub struct AuthorizerDescription {
 
 /// <p>The authorizer summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthorizerSummary {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -761,7 +596,7 @@ pub struct BehaviorCriteria {
 
 /// <p>Additional information about the billing group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BillingGroupMetadata {
     /// <p>The date the billing group was created.</p>
     #[serde(rename = "creationDate")]
@@ -780,7 +615,7 @@ pub struct BillingGroupProperties {
 
 /// <p>A CA certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CACertificate {
     /// <p>The ARN of the CA certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -802,7 +637,7 @@ pub struct CACertificate {
 
 /// <p>Describes a CA certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CACertificateDescription {
     /// <p>Whether the CA certificate configured for auto registration of device certificates. Valid values are "ENABLE" and "DISABLE"</p>
     #[serde(rename = "autoRegistrationStatus")]
@@ -851,17 +686,6 @@ pub struct CACertificateDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CancelAuditMitigationActionsTaskRequest {
-    /// <p>The unique identifier for the task that you want to cancel. </p>
-    #[serde(rename = "taskId")]
-    pub task_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CancelAuditMitigationActionsTaskResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelAuditTaskRequest {
     /// <p>The ID of the audit you want to cancel. You can only cancel an audit that is "IN_PROGRESS".</p>
     #[serde(rename = "taskId")]
@@ -869,7 +693,7 @@ pub struct CancelAuditTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelAuditTaskResponse {}
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
@@ -922,7 +746,7 @@ pub struct CancelJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelJobResponse {
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
@@ -940,7 +764,7 @@ pub struct CancelJobResponse {
 
 /// <p>Information about a certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Certificate {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -962,7 +786,7 @@ pub struct Certificate {
 
 /// <p>Describes a certificate.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CertificateDescription {
     /// <p>The certificate ID of the CA certificate used to sign this certificate.</p>
     #[serde(rename = "caCertificateId")]
@@ -1020,7 +844,7 @@ pub struct CertificateDescription {
 
 /// <p>When the certificate is valid.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CertificateValidity {
     /// <p>The certificate is not valid after this date.</p>
     #[serde(rename = "notAfter")]
@@ -1036,7 +860,7 @@ pub struct CertificateValidity {
 pub struct ClearDefaultAuthorizerRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ClearDefaultAuthorizerResponse {}
 
 /// <p>Describes an action that updates a CloudWatch alarm.</p>
@@ -1134,17 +958,6 @@ pub struct Configuration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ConfirmTopicRuleDestinationRequest {
-    /// <p>The token used to confirm ownership or access to the topic rule confirmation URL.</p>
-    #[serde(rename = "confirmationToken")]
-    pub confirmation_token: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ConfirmTopicRuleDestinationResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -1152,26 +965,20 @@ pub struct CreateAuthorizerRequest {
     /// <p>The authorizer name.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
-    /// <p>Specifies whether AWS IoT validates the token signature in an authorization request.</p>
-    #[serde(rename = "signingDisabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_disabled: Option<bool>,
     /// <p>The status of the create authorizer request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// <p>The name of the token key used to extract the token from the HTTP headers.</p>
     #[serde(rename = "tokenKeyName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token_key_name: Option<String>,
+    pub token_key_name: String,
     /// <p>The public keys used to verify the digital signature returned by your custom authentication service.</p>
     #[serde(rename = "tokenSigningPublicKeys")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
+    pub token_signing_public_keys: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -1199,7 +1006,7 @@ pub struct CreateBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBillingGroupResponse {
     /// <p>The ARN of the billing group.</p>
     #[serde(rename = "billingGroupArn")]
@@ -1229,7 +1036,7 @@ pub struct CreateCertificateFromCsrRequest {
 
 /// <p>The output from the CreateCertificateFromCsr operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCertificateFromCsrResponse {
     /// <p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>
     #[serde(rename = "certificateArn")]
@@ -1243,46 +1050,6 @@ pub struct CreateCertificateFromCsrResponse {
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDomainConfigurationRequest {
-    /// <p>An object that specifies the authorization service for a domain.</p>
-    #[serde(rename = "authorizerConfig")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_config: Option<AuthorizerConfig>,
-    /// <p>The name of the domain configuration. This value must be unique to a region.</p>
-    #[serde(rename = "domainConfigurationName")]
-    pub domain_configuration_name: String,
-    /// <p>The name of the domain.</p>
-    #[serde(rename = "domainName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_name: Option<String>,
-    /// <p>The ARNs of the certificates that AWS IoT passes to the device during the TLS handshake. Currently you can specify only one certificate ARN. This value is not required for AWS-managed domains.</p>
-    #[serde(rename = "serverCertificateArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_certificate_arns: Option<Vec<String>>,
-    /// <p>The type of service delivered by the endpoint.</p>
-    #[serde(rename = "serviceType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_type: Option<String>,
-    /// <p>The certificate used to validate the server certificate and prove domain name ownership. This certificate must be signed by a public certificate authority. This value is not required for AWS-managed domains.</p>
-    #[serde(rename = "validationCertificateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_certificate_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateDomainConfigurationResponse {
-    /// <p>The ARN of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_arn: Option<String>,
-    /// <p>The name of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1312,7 +1079,7 @@ pub struct CreateDynamicThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDynamicThingGroupResponse {
     /// <p>The dynamic thing group index name.</p>
     #[serde(rename = "indexName")]
@@ -1387,7 +1154,7 @@ pub struct CreateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>The job description.</p>
     #[serde(rename = "description")]
@@ -1414,7 +1181,7 @@ pub struct CreateKeysAndCertificateRequest {
 
 /// <p>The output of the CreateKeysAndCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateKeysAndCertificateResponse {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -1432,36 +1199,6 @@ pub struct CreateKeysAndCertificateResponse {
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<KeyPair>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateMitigationActionRequest {
-    /// <p>A friendly name for the action. Choose a friendly name that accurately describes the action (for example, <code>EnableLoggingAction</code>).</p>
-    #[serde(rename = "actionName")]
-    pub action_name: String,
-    /// <p>Defines the type of action and the parameters for that action.</p>
-    #[serde(rename = "actionParams")]
-    pub action_params: MitigationActionParams,
-    /// <p>The ARN of the IAM role that is used to apply the mitigation action.</p>
-    #[serde(rename = "roleArn")]
-    pub role_arn: String,
-    /// <p>Metadata that can be used to manage the mitigation action.</p>
-    #[serde(rename = "tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<Vec<Tag>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateMitigationActionResponse {
-    /// <p>The ARN for the new mitigation action.</p>
-    #[serde(rename = "actionArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_arn: Option<String>,
-    /// <p>A unique identifier for the new mitigation action.</p>
-    #[serde(rename = "actionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1501,7 +1238,7 @@ pub struct CreateOTAUpdateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateOTAUpdateResponse {
     /// <p>The AWS IoT job ARN associated with the OTA update.</p>
     #[serde(rename = "awsIotJobArn")]
@@ -1538,7 +1275,7 @@ pub struct CreatePolicyRequest {
 
 /// <p>The output from the CreatePolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePolicyResponse {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -1575,7 +1312,7 @@ pub struct CreatePolicyVersionRequest {
 
 /// <p>The output of the CreatePolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePolicyVersionResponse {
     /// <p>Specifies whether the policy version is the default.</p>
     #[serde(rename = "isDefaultVersion")]
@@ -1596,111 +1333,6 @@ pub struct CreatePolicyVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateProvisioningClaimRequest {
-    /// <p>The name of the provisioning template to use.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateProvisioningClaimResponse {
-    /// <p>The ID of the certificate.</p>
-    #[serde(rename = "certificateId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_id: Option<String>,
-    /// <p>The provisioning claim certificate.</p>
-    #[serde(rename = "certificatePem")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_pem: Option<String>,
-    /// <p>The provisioning claim expiration time.</p>
-    #[serde(rename = "expiration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub expiration: Option<f64>,
-    /// <p>The provisioning claim key pair.</p>
-    #[serde(rename = "keyPair")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_pair: Option<KeyPair>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateProvisioningTemplateRequest {
-    /// <p>The description of the fleet provisioning template.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>True to enable the fleet provisioning template, otherwise false.</p>
-    #[serde(rename = "enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>The role ARN for the role associated with the fleet provisioning template. This IoT role grants permission to provision a device.</p>
-    #[serde(rename = "provisioningRoleArn")]
-    pub provisioning_role_arn: String,
-    /// <p><p>Metadata which can be used to manage the fleet provisioning template.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
-    #[serde(rename = "tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<Vec<Tag>>,
-    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
-    #[serde(rename = "templateBody")]
-    pub template_body: String,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateProvisioningTemplateResponse {
-    /// <p>The default version of the fleet provisioning template.</p>
-    #[serde(rename = "defaultVersionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_version_id: Option<i64>,
-    /// <p>The ARN that identifies the provisioning template.</p>
-    #[serde(rename = "templateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_arn: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_name: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateProvisioningTemplateVersionRequest {
-    /// <p>Sets a fleet provision template version as the default version.</p>
-    #[serde(rename = "setAsDefault")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub set_as_default: Option<bool>,
-    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
-    #[serde(rename = "templateBody")]
-    pub template_body: String,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateProvisioningTemplateVersionResponse {
-    /// <p>True if the fleet provisioning template version is the default version, otherwise false.</p>
-    #[serde(rename = "isDefaultVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub is_default_version: Option<bool>,
-    /// <p>The ARN that identifies the provisioning template.</p>
-    #[serde(rename = "templateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_arn: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_name: Option<String>,
-    /// <p>The version of the fleet provisioning template.</p>
-    #[serde(rename = "versionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub version_id: Option<i64>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRoleAliasRequest {
     /// <p>How long (in seconds) the credentials will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -1715,7 +1347,7 @@ pub struct CreateRoleAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateRoleAliasResponse {
     /// <p>The role alias.</p>
     #[serde(rename = "roleAlias")]
@@ -1733,27 +1365,27 @@ pub struct CreateScheduledAuditRequest {
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     pub frequency: String,
     /// <p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>
     #[serde(rename = "scheduledAuditName")]
     pub scheduled_audit_name: String,
-    /// <p>Metadata that can be used to manage the scheduled audit.</p>
+    /// <p>Metadata which can be used to manage the scheduled audit.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     pub target_check_names: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateScheduledAuditResponse {
     /// <p>The ARN of the scheduled audit.</p>
     #[serde(rename = "scheduledAuditArn")]
@@ -1763,7 +1395,7 @@ pub struct CreateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -1782,14 +1414,14 @@ pub struct CreateSecurityProfileRequest {
     /// <p>The name you are giving to the security profile.</p>
     #[serde(rename = "securityProfileName")]
     pub security_profile_name: String,
-    /// <p>Metadata that can be used to manage the security profile.</p>
+    /// <p>Metadata which can be used to manage the security profile.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSecurityProfileResponse {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "securityProfileArn")]
@@ -1823,7 +1455,7 @@ pub struct CreateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateStreamResponse {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -1863,7 +1495,7 @@ pub struct CreateThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateThingGroupResponse {
     /// <p>The thing group ARN.</p>
     #[serde(rename = "thingGroupArn")]
@@ -1901,7 +1533,7 @@ pub struct CreateThingRequest {
 
 /// <p>The output of the CreateThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateThingResponse {
     /// <p>The ARN of the new thing.</p>
     #[serde(rename = "thingArn")]
@@ -1935,7 +1567,7 @@ pub struct CreateThingTypeRequest {
 
 /// <p>The output of the CreateThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateThingTypeResponse {
     /// <p>The Amazon Resource Name (ARN) of the thing type.</p>
     #[serde(rename = "thingTypeArn")]
@@ -1949,22 +1581,6 @@ pub struct CreateThingTypeResponse {
     #[serde(rename = "thingTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateTopicRuleDestinationRequest {
-    /// <p>The topic rule destination configuration.</p>
-    #[serde(rename = "destinationConfiguration")]
-    pub destination_configuration: TopicRuleDestinationConfiguration,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CreateTopicRuleDestinationResponse {
-    /// <p>The topic rule destination.</p>
-    #[serde(rename = "topicRuleDestination")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub topic_rule_destination: Option<TopicRuleDestination>,
 }
 
 /// <p>The input for the CreateTopicRule operation.</p>
@@ -2012,7 +1628,7 @@ pub struct DeleteAccountAuditConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAccountAuditConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2023,7 +1639,7 @@ pub struct DeleteAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAuthorizerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2038,7 +1654,7 @@ pub struct DeleteBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBillingGroupResponse {}
 
 /// <p>Input for the DeleteCACertificate operation.</p>
@@ -2051,7 +1667,7 @@ pub struct DeleteCACertificateRequest {
 
 /// <p>The output for the DeleteCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteCACertificateResponse {}
 
 /// <p>The input for the DeleteCertificate operation.</p>
@@ -2060,22 +1676,11 @@ pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    /// <p>Forces the deletion of a certificate if it is inactive and is not attached to an IoT thing.</p>
+    /// <p>Forces a certificate request to be deleted.</p>
     #[serde(rename = "forceDelete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete: Option<bool>,
 }
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteDomainConfigurationRequest {
-    /// <p>The name of the domain configuration to be deleted.</p>
-    #[serde(rename = "domainConfigurationName")]
-    pub domain_configuration_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteDomainConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDynamicThingGroupRequest {
@@ -2089,7 +1694,7 @@ pub struct DeleteDynamicThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDynamicThingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2121,17 +1726,6 @@ pub struct DeleteJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteMitigationActionRequest {
-    /// <p>The name of the mitigation action that you want to delete.</p>
-    #[serde(rename = "actionName")]
-    pub action_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteMitigationActionResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOTAUpdateRequest {
     /// <p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>
     #[serde(rename = "deleteStream")]
@@ -2147,7 +1741,7 @@ pub struct DeleteOTAUpdateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteOTAUpdateResponse {}
 
 /// <p>The input for the DeletePolicy operation.</p>
@@ -2169,38 +1763,13 @@ pub struct DeletePolicyVersionRequest {
     pub policy_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteProvisioningTemplateRequest {
-    /// <p>The name of the fleet provision template to delete.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteProvisioningTemplateResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteProvisioningTemplateVersionRequest {
-    /// <p>The name of the fleet provisioning template version to delete.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-    /// <p>The fleet provisioning template version ID to delete.</p>
-    #[serde(rename = "versionId")]
-    pub version_id: i64,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteProvisioningTemplateVersionResponse {}
-
 /// <p>The input for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRegistrationCodeRequest {}
 
 /// <p>The output for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRegistrationCodeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2211,7 +1780,7 @@ pub struct DeleteRoleAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRoleAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2222,12 +1791,12 @@ pub struct DeleteScheduledAuditRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteScheduledAuditResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSecurityProfileRequest {
-    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
@@ -2237,7 +1806,7 @@ pub struct DeleteSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSecurityProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2248,7 +1817,7 @@ pub struct DeleteStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteStreamResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2263,7 +1832,7 @@ pub struct DeleteThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteThingGroupResponse {}
 
 /// <p>The input for the DeleteThing operation.</p>
@@ -2280,7 +1849,7 @@ pub struct DeleteThingRequest {
 
 /// <p>The output of the DeleteThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteThingResponse {}
 
 /// <p>The input for the DeleteThingType operation.</p>
@@ -2293,19 +1862,8 @@ pub struct DeleteThingTypeRequest {
 
 /// <p>The output for the DeleteThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteThingTypeResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteTopicRuleDestinationRequest {
-    /// <p>The ARN of the topic rule destination to delete.</p>
-    #[serde(rename = "arn")]
-    pub arn: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteTopicRuleDestinationResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2327,7 +1885,7 @@ pub struct DeleteV2LoggingLevelRequest {
 
 /// <p>Contains information that denied the authorization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Denied {
     /// <p>Information that explicitly denies the authorization. </p>
     #[serde(rename = "explicitDeny")]
@@ -2353,14 +1911,14 @@ pub struct DeprecateThingTypeRequest {
 
 /// <p>The output for the DeprecateThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeprecateThingTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAccountAuditConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAccountAuditConfigurationResponse {
     /// <p>Which audit checks are enabled and disabled for this account.</p>
     #[serde(rename = "auditCheckConfigurations")]
@@ -2372,65 +1930,10 @@ pub struct DescribeAccountAuditConfigurationResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_notification_target_configurations:
         Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
-    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates, and other items as required when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required.</p>
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeAuditFindingRequest {
-    /// <p>A unique identifier for a single audit finding. You can use this identifier to apply mitigation actions to the finding.</p>
-    #[serde(rename = "findingId")]
-    pub finding_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeAuditFindingResponse {
-    #[serde(rename = "finding")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding: Option<AuditFinding>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeAuditMitigationActionsTaskRequest {
-    /// <p>The unique identifier for the audit mitigation task.</p>
-    #[serde(rename = "taskId")]
-    pub task_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeAuditMitigationActionsTaskResponse {
-    /// <p>Specifies the mitigation actions and their parameters that are applied as part of this task.</p>
-    #[serde(rename = "actionsDefinition")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions_definition: Option<Vec<MitigationAction>>,
-    /// <p>Specifies the mitigation actions that should be applied to specific audit checks.</p>
-    #[serde(rename = "auditCheckToActionsMapping")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub audit_check_to_actions_mapping: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The date and time when the task was completed or canceled.</p>
-    #[serde(rename = "endTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<f64>,
-    /// <p>The date and time when the task was started.</p>
-    #[serde(rename = "startTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<f64>,
-    /// <p>Identifies the findings to which the mitigation actions are applied. This can be by audit checks, by audit task, or a set of findings.</p>
-    #[serde(rename = "target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<AuditMitigationActionsTaskTarget>,
-    /// <p>Aggregate counts of the results when the mitigation tasks were applied to the findings for this audit mitigation actions task.</p>
-    #[serde(rename = "taskStatistics")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_statistics: Option<::std::collections::HashMap<String, TaskStatisticsForAuditCheck>>,
-    /// <p>The current status of the task.</p>
-    #[serde(rename = "taskStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_status: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2441,7 +1944,7 @@ pub struct DescribeAuditTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAuditTaskResponse {
     /// <p>Detailed information about each check performed during this audit.</p>
     #[serde(rename = "auditDetails")]
@@ -2477,7 +1980,7 @@ pub struct DescribeAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAuthorizerResponse {
     /// <p>The authorizer description.</p>
     #[serde(rename = "authorizerDescription")]
@@ -2493,7 +1996,7 @@ pub struct DescribeBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBillingGroupResponse {
     /// <p>The ARN of the billing group.</p>
     #[serde(rename = "billingGroupArn")]
@@ -2531,7 +2034,7 @@ pub struct DescribeCACertificateRequest {
 
 /// <p>The output from the DescribeCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCACertificateResponse {
     /// <p>The CA certificate description.</p>
     #[serde(rename = "certificateDescription")]
@@ -2553,7 +2056,7 @@ pub struct DescribeCertificateRequest {
 
 /// <p>The output of the DescribeCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCertificateResponse {
     /// <p>The description of the certificate.</p>
     #[serde(rename = "certificateDescription")]
@@ -2565,56 +2068,12 @@ pub struct DescribeCertificateResponse {
 pub struct DescribeDefaultAuthorizerRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDefaultAuthorizerResponse {
     /// <p>The default authorizer's description.</p>
     #[serde(rename = "authorizerDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_description: Option<AuthorizerDescription>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeDomainConfigurationRequest {
-    /// <p>The name of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationName")]
-    pub domain_configuration_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeDomainConfigurationResponse {
-    /// <p>An object that specifies the authorization service for a domain.</p>
-    #[serde(rename = "authorizerConfig")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_config: Option<AuthorizerConfig>,
-    /// <p>The ARN of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_arn: Option<String>,
-    /// <p>The name of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_name: Option<String>,
-    /// <p>A Boolean value that specifies the current state of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_status: Option<String>,
-    /// <p>The name of the domain.</p>
-    #[serde(rename = "domainName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_name: Option<String>,
-    /// <p>The type of the domain.</p>
-    #[serde(rename = "domainType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_type: Option<String>,
-    /// <p>A list containing summary information about the server certificate included in the domain configuration.</p>
-    #[serde(rename = "serverCertificates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_certificates: Option<Vec<ServerCertificateSummary>>,
-    /// <p>The type of service delivered by the endpoint.</p>
-    #[serde(rename = "serviceType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_type: Option<String>,
 }
 
 /// <p>The input for the DescribeEndpoint operation.</p>
@@ -2628,7 +2087,7 @@ pub struct DescribeEndpointRequest {
 
 /// <p>The output from the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointResponse {
     /// <p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>
     #[serde(rename = "endpointAddress")]
@@ -2640,7 +2099,7 @@ pub struct DescribeEndpointResponse {
 pub struct DescribeEventConfigurationsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventConfigurationsResponse {
     /// <p>The creation date of the event configuration.</p>
     #[serde(rename = "creationDate")]
@@ -2664,7 +2123,7 @@ pub struct DescribeIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeIndexResponse {
     /// <p>The index name.</p>
     #[serde(rename = "indexName")]
@@ -2695,7 +2154,7 @@ pub struct DescribeJobExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
     /// <p>Information about the job execution.</p>
     #[serde(rename = "execution")]
@@ -2711,7 +2170,7 @@ pub struct DescribeJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobResponse {
     /// <p>An S3 link to the job document.</p>
     #[serde(rename = "documentSource")]
@@ -2724,129 +2183,6 @@ pub struct DescribeJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeMitigationActionRequest {
-    /// <p>The friendly name that uniquely identifies the mitigation action.</p>
-    #[serde(rename = "actionName")]
-    pub action_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeMitigationActionResponse {
-    /// <p>The ARN that identifies this migration action.</p>
-    #[serde(rename = "actionArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_arn: Option<String>,
-    /// <p>A unique identifier for this action.</p>
-    #[serde(rename = "actionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_id: Option<String>,
-    /// <p>The friendly name that uniquely identifies the mitigation action.</p>
-    #[serde(rename = "actionName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_name: Option<String>,
-    /// <p>Parameters that control how the mitigation action is applied, specific to the type of mitigation action.</p>
-    #[serde(rename = "actionParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_params: Option<MitigationActionParams>,
-    /// <p>The type of mitigation action.</p>
-    #[serde(rename = "actionType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_type: Option<String>,
-    /// <p>The date and time when the mitigation action was added to your AWS account.</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-    /// <p>The date and time when the mitigation action was last changed.</p>
-    #[serde(rename = "lastModifiedDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_modified_date: Option<f64>,
-    /// <p>The ARN of the IAM role used to apply this action.</p>
-    #[serde(rename = "roleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeProvisioningTemplateRequest {
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeProvisioningTemplateResponse {
-    /// <p>The date when the fleet provisioning template was created.</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-    /// <p>The default fleet template version ID.</p>
-    #[serde(rename = "defaultVersionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_version_id: Option<i64>,
-    /// <p>The description of the fleet provisioning template.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>True if the fleet provisioning template is enabled, otherwise false.</p>
-    #[serde(rename = "enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>The date when the fleet provisioning template was last modified.</p>
-    #[serde(rename = "lastModifiedDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_modified_date: Option<f64>,
-    /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
-    #[serde(rename = "provisioningRoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provisioning_role_arn: Option<String>,
-    /// <p>The ARN of the fleet provisioning template.</p>
-    #[serde(rename = "templateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_arn: Option<String>,
-    /// <p>The JSON formatted contents of the fleet provisioning template.</p>
-    #[serde(rename = "templateBody")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_body: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_name: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeProvisioningTemplateVersionRequest {
-    /// <p>The template name.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-    /// <p>The fleet provisioning template version ID.</p>
-    #[serde(rename = "versionId")]
-    pub version_id: i64,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeProvisioningTemplateVersionResponse {
-    /// <p>The date when the fleet provisioning template version was created.</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-    /// <p>True if the fleet provisioning template version is the default version.</p>
-    #[serde(rename = "isDefaultVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub is_default_version: Option<bool>,
-    /// <p>The JSON formatted contents of the fleet provisioning template version.</p>
-    #[serde(rename = "templateBody")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_body: Option<String>,
-    /// <p>The fleet provisioning template version ID.</p>
-    #[serde(rename = "versionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub version_id: Option<i64>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRoleAliasRequest {
     /// <p>The role alias to describe.</p>
     #[serde(rename = "roleAlias")]
@@ -2854,7 +2190,7 @@ pub struct DescribeRoleAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRoleAliasResponse {
     /// <p>The role alias description.</p>
     #[serde(rename = "roleAliasDescription")]
@@ -2870,17 +2206,17 @@ pub struct DescribeScheduledAuditRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScheduledAuditResponse {
     /// <p>The day of the month on which the scheduled audit takes place. Will be "1" through "31" or "LAST". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. One of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -2892,7 +2228,7 @@ pub struct DescribeScheduledAuditResponse {
     #[serde(rename = "scheduledAuditName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_audit_name: Option<String>,
-    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. (Note that checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_check_names: Option<Vec<String>>,
@@ -2906,9 +2242,9 @@ pub struct DescribeSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -2954,7 +2290,7 @@ pub struct DescribeStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStreamResponse {
     /// <p>Information about the stream.</p>
     #[serde(rename = "streamInfo")]
@@ -2970,7 +2306,7 @@ pub struct DescribeThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeThingGroupResponse {
     /// <p>The dynamic thing group index name.</p>
     #[serde(rename = "indexName")]
@@ -3022,7 +2358,7 @@ pub struct DescribeThingRegistrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeThingRegistrationTaskResponse {
     /// <p>The task creation date.</p>
     #[serde(rename = "creationDate")]
@@ -3084,7 +2420,7 @@ pub struct DescribeThingRequest {
 
 /// <p>The output from the DescribeThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeThingResponse {
     /// <p>The thing attributes.</p>
     #[serde(rename = "attributes")]
@@ -3130,7 +2466,7 @@ pub struct DescribeThingTypeRequest {
 
 /// <p>The output for the DescribeThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeThingTypeResponse {
     /// <p>The thing type ARN.</p>
     #[serde(rename = "thingTypeArn")]
@@ -3195,7 +2531,7 @@ pub struct DetachSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DetachSecurityProfileResponse {}
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
@@ -3211,7 +2547,7 @@ pub struct DetachThingPrincipalRequest {
 
 /// <p>The output from the DetachThingPrincipal operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DetachThingPrincipalResponse {}
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
@@ -3220,24 +2556,6 @@ pub struct DisableTopicRuleRequest {
     /// <p>The name of the rule to disable.</p>
     #[serde(rename = "ruleName")]
     pub rule_name: String,
-}
-
-/// <p><p>The summary of a domain configuration. A domain configuration specifies custom IoT-specific information about a domain. A domain configuration can be associated with an AWS-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com), a customer managed domain, or a default endpoint.</p> <ul> <li> <p>Data</p> </li> <li> <p>Jobs</p> </li> <li> <p>CredentialProvider</p> </li> </ul> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DomainConfigurationSummary {
-    /// <p>The ARN of the domain configuration.</p>
-    #[serde(rename = "domainConfigurationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_arn: Option<String>,
-    /// <p>The name of the domain configuration. This value must be unique to a region.</p>
-    #[serde(rename = "domainConfigurationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_name: Option<String>,
-    /// <p>The type of service delivered by the endpoint.</p>
-    #[serde(rename = "serviceType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_type: Option<String>,
 }
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
@@ -3294,7 +2612,7 @@ pub struct DynamoDBv2Action {
 
 /// <p>The policy that has the effect on the authorization results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EffectivePolicy {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -3330,17 +2648,6 @@ pub struct ElasticsearchAction {
     pub type_: String,
 }
 
-/// <p>Parameters used when defining a mitigation action that enable AWS IoT logging.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct EnableIoTLoggingParams {
-    /// <p>Specifies the types of information to be logged.</p>
-    #[serde(rename = "logLevel")]
-    pub log_level: String,
-    /// <p>The ARN of the IAM role used for logging.</p>
-    #[serde(rename = "roleArnForLogging")]
-    pub role_arn_for_logging: String,
-}
-
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableTopicRuleRequest {
@@ -3351,7 +2658,7 @@ pub struct EnableTopicRuleRequest {
 
 /// <p>Error information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ErrorInfo {
     /// <p>The error code.</p>
     #[serde(rename = "code")]
@@ -3365,7 +2672,7 @@ pub struct ErrorInfo {
 
 /// <p>Information that explicitly denies authorization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExplicitDeny {
     /// <p>The policies that denied the authorization.</p>
     #[serde(rename = "policies")]
@@ -3385,19 +2692,6 @@ pub struct ExponentialRolloutRate {
     /// <p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
     #[serde(rename = "rateIncreaseCriteria")]
     pub rate_increase_criteria: RateIncreaseCriteria,
-}
-
-/// <p>Describes the name and data type at a field.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Field {
-    /// <p>The name of the field.</p>
-    #[serde(rename = "name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>The datatype of the field.</p>
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
 }
 
 /// <p>The location of the OTA update.</p>
@@ -3429,34 +2723,6 @@ pub struct FirehoseAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCardinalityRequest {
-    /// <p>The field to aggregate.</p>
-    #[serde(rename = "aggregationField")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub aggregation_field: Option<String>,
-    /// <p>The name of the index to search.</p>
-    #[serde(rename = "indexName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_name: Option<String>,
-    /// <p>The search query.</p>
-    #[serde(rename = "queryString")]
-    pub query_string: String,
-    /// <p>The query version.</p>
-    #[serde(rename = "queryVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_version: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct GetCardinalityResponse {
-    /// <p>The approximate count of unique values that match the query.</p>
-    #[serde(rename = "cardinality")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub cardinality: Option<i64>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetEffectivePoliciesRequest {
     /// <p>The Cognito identity pool ID.</p>
     #[serde(rename = "cognitoIdentityPoolId")]
@@ -3473,7 +2739,7 @@ pub struct GetEffectivePoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetEffectivePoliciesResponse {
     /// <p>The effective policies.</p>
     #[serde(rename = "effectivePolicies")]
@@ -3485,7 +2751,7 @@ pub struct GetEffectivePoliciesResponse {
 pub struct GetIndexingConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetIndexingConfigurationResponse {
     /// <p>The index configuration.</p>
     #[serde(rename = "thingGroupIndexingConfiguration")]
@@ -3505,7 +2771,7 @@ pub struct GetJobDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobDocumentResponse {
     /// <p>The job document content.</p>
     #[serde(rename = "document")]
@@ -3519,7 +2785,7 @@ pub struct GetLoggingOptionsRequest {}
 
 /// <p>The output from the GetLoggingOptions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetLoggingOptionsResponse {
     /// <p>The logging level.</p>
     #[serde(rename = "logLevel")]
@@ -3539,44 +2805,12 @@ pub struct GetOTAUpdateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetOTAUpdateResponse {
     /// <p>The OTA update info.</p>
     #[serde(rename = "otaUpdateInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ota_update_info: Option<OTAUpdateInfo>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPercentilesRequest {
-    /// <p>The field to aggregate.</p>
-    #[serde(rename = "aggregationField")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub aggregation_field: Option<String>,
-    /// <p>The name of the index to search.</p>
-    #[serde(rename = "indexName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_name: Option<String>,
-    /// <p>The percentile groups returned.</p>
-    #[serde(rename = "percents")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub percents: Option<Vec<f64>>,
-    /// <p>The query string.</p>
-    #[serde(rename = "queryString")]
-    pub query_string: String,
-    /// <p>The query version.</p>
-    #[serde(rename = "queryVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_version: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct GetPercentilesResponse {
-    /// <p>The percentile values of the aggregated fields.</p>
-    #[serde(rename = "percentiles")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub percentiles: Option<Vec<PercentPair>>,
 }
 
 /// <p>The input for the GetPolicy operation.</p>
@@ -3589,7 +2823,7 @@ pub struct GetPolicyRequest {
 
 /// <p>The output from the GetPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>The date the policy was created.</p>
     #[serde(rename = "creationDate")]
@@ -3634,9 +2868,9 @@ pub struct GetPolicyVersionRequest {
 
 /// <p>The output from the GetPolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPolicyVersionResponse {
-    /// <p>The date the policy was created.</p>
+    /// <p>The date the policy version was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -3648,7 +2882,7 @@ pub struct GetPolicyVersionResponse {
     #[serde(rename = "isDefaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    /// <p>The date the policy was last modified.</p>
+    /// <p>The date the policy version was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
@@ -3676,7 +2910,7 @@ pub struct GetRegistrationCodeRequest {}
 
 /// <p>The output from the GetRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRegistrationCodeResponse {
     /// <p>The CA certificate registration code.</p>
     #[serde(rename = "registrationCode")]
@@ -3686,7 +2920,7 @@ pub struct GetRegistrationCodeResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetStatisticsRequest {
-    /// <p>The aggregation field name.</p>
+    /// <p>The aggregation field name. Currently not supported.</p>
     #[serde(rename = "aggregationField")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregation_field: Option<String>,
@@ -3704,28 +2938,12 @@ pub struct GetStatisticsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetStatisticsResponse {
     /// <p>The statistics returned by the Fleet Indexing service based on the query and aggregation field.</p>
     #[serde(rename = "statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<Statistics>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetTopicRuleDestinationRequest {
-    /// <p>The ARN of the topic rule destination.</p>
-    #[serde(rename = "arn")]
-    pub arn: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct GetTopicRuleDestinationResponse {
-    /// <p>The topic rule destination.</p>
-    #[serde(rename = "topicRuleDestination")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub topic_rule_destination: Option<TopicRuleDestination>,
 }
 
 /// <p>The input for the GetTopicRule operation.</p>
@@ -3738,7 +2956,7 @@ pub struct GetTopicRuleRequest {
 
 /// <p>The output from the GetTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTopicRuleResponse {
     /// <p>The rule.</p>
     #[serde(rename = "rule")]
@@ -3754,7 +2972,7 @@ pub struct GetTopicRuleResponse {
 pub struct GetV2LoggingOptionsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetV2LoggingOptionsResponse {
     /// <p>The default log level.</p>
     #[serde(rename = "defaultLogLevel")]
@@ -3772,7 +2990,7 @@ pub struct GetV2LoggingOptionsResponse {
 
 /// <p>The name and ARN of a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GroupNameAndArn {
     /// <p>The group ARN.</p>
     #[serde(rename = "groupArn")]
@@ -3784,90 +3002,9 @@ pub struct GroupNameAndArn {
     pub group_name: Option<String>,
 }
 
-/// <p>Send data to an HTTPS endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HttpAction {
-    /// <p>The authentication method to use when sending data to an HTTPS endpoint.</p>
-    #[serde(rename = "auth")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth: Option<HttpAuthorization>,
-    /// <p>The URL to which AWS IoT sends a confirmation message. The value of the confirmation URL must be a prefix of the endpoint URL. If you do not specify a confirmation URL AWS IoT uses the endpoint URL as the confirmation URL. If you use substitution templates in the confirmationUrl, you must create and enable topic rule destinations that match each possible value of the substituion template before traffic is allowed to your endpoint URL.</p>
-    #[serde(rename = "confirmationUrl")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub confirmation_url: Option<String>,
-    /// <p>The HTTP headers to send with the message data.</p>
-    #[serde(rename = "headers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub headers: Option<Vec<HttpActionHeader>>,
-    /// <p>The endpoint URL. If substitution templates are used in the URL, you must also specify a <code>confirmationUrl</code>. If this is a new destination, a new <code>TopicRuleDestination</code> is created if possible.</p>
-    #[serde(rename = "url")]
-    pub url: String,
-}
-
-/// <p>The HTTP action header.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HttpActionHeader {
-    /// <p>The HTTP header key.</p>
-    #[serde(rename = "key")]
-    pub key: String,
-    /// <p>The HTTP header value. Substitution templates are supported.</p>
-    #[serde(rename = "value")]
-    pub value: String,
-}
-
-/// <p>The authorization method used to send messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HttpAuthorization {
-    /// <p>Use Sig V4 authorization. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>.</p>
-    #[serde(rename = "sigv4")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sigv_4: Option<SigV4Authorization>,
-}
-
-/// <p>Specifies the HTTP context to use for the test authorizer request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct HttpContext {
-    /// <p>The header keys and values in an HTTP authorization request.</p>
-    #[serde(rename = "headers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub headers: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The query string keys and values in an HTTP authorization request.</p>
-    #[serde(rename = "queryString")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_string: Option<String>,
-}
-
-/// <p>HTTP URL destination configuration used by the topic rule's HTTP action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct HttpUrlDestinationConfiguration {
-    /// <p>The URL AWS IoT uses to confirm ownership of or access to the topic rule destination URL.</p>
-    #[serde(rename = "confirmationUrl")]
-    pub confirmation_url: String,
-}
-
-/// <p>HTTP URL destination properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct HttpUrlDestinationProperties {
-    /// <p>The URL used to confirm the HTTP topic rule destination URL.</p>
-    #[serde(rename = "confirmationUrl")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub confirmation_url: Option<String>,
-}
-
-/// <p>Information about an HTTP URL destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct HttpUrlDestinationSummary {
-    /// <p>The URL used to confirm ownership of or access to the HTTP topic rule destination URL.</p>
-    #[serde(rename = "confirmationUrl")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub confirmation_url: Option<String>,
-}
-
 /// <p>Information that implicitly denies authorization. When policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImplicitDeny {
     /// <p>Policies that don't contain a matching allow or deny statement for the specified action on the specified resource. </p>
     #[serde(rename = "policies")]
@@ -3875,7 +3012,7 @@ pub struct ImplicitDeny {
     pub policies: Option<Vec<Policy>>,
 }
 
-/// <p>Sends message data to an AWS IoT Analytics channel.</p>
+/// <p>Sends messge data to an AWS IoT Analytics channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IotAnalyticsAction {
     /// <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
@@ -3907,20 +3044,9 @@ pub struct IotEventsAction {
     pub role_arn: String,
 }
 
-/// <p>Describes an action to send data from an MQTT message that triggered the rule to AWS IoT SiteWise asset properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct IotSiteWiseAction {
-    /// <p>A list of asset property value entries.</p>
-    #[serde(rename = "putAssetPropertyValueEntries")]
-    pub put_asset_property_value_entries: Vec<PutAssetPropertyValueEntry>,
-    /// <p>The ARN of the role that grants AWS IoT permission to send an asset property value to AWS IoTSiteWise. (<code>"Action": "iotsitewise:BatchPutAssetPropertyValue"</code>). The trust policy can restrict access to specific asset hierarchy paths.</p>
-    #[serde(rename = "roleArn")]
-    pub role_arn: String,
-}
-
 /// <p>The <code>Job</code> object contains details about a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Job {
     /// <p>Configuration for criteria to abort the job.</p>
     #[serde(rename = "abortConfig")]
@@ -3994,7 +3120,7 @@ pub struct Job {
 
 /// <p>The job execution object represents the execution of a job on a particular device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobExecution {
     /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The actual job execution timeout can occur up to 60 seconds later than the estimated duration. This value will not be included if the job execution has reached a terminal status.</p>
     #[serde(rename = "approximateSecondsBeforeTimedOut")]
@@ -4044,7 +3170,7 @@ pub struct JobExecution {
 
 /// <p>Details of the job execution status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobExecutionStatusDetails {
     /// <p>The job execution status.</p>
     #[serde(rename = "detailsMap")]
@@ -4054,7 +3180,7 @@ pub struct JobExecutionStatusDetails {
 
 /// <p>The job execution summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobExecutionSummary {
     /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used later in commands which return or update job execution information.</p>
     #[serde(rename = "executionNumber")]
@@ -4080,7 +3206,7 @@ pub struct JobExecutionSummary {
 
 /// <p>Contains a summary of information about job executions for a specific job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobExecutionSummaryForJob {
     /// <p>Contains a subset of information about a job execution.</p>
     #[serde(rename = "jobExecutionSummary")]
@@ -4094,7 +3220,7 @@ pub struct JobExecutionSummaryForJob {
 
 /// <p>The job execution summary for a thing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobExecutionSummaryForThing {
     /// <p>Contains a subset of information about a job execution.</p>
     #[serde(rename = "jobExecutionSummary")]
@@ -4121,7 +3247,7 @@ pub struct JobExecutionsRolloutConfig {
 
 /// <p>The job process details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobProcessDetails {
     /// <p>The number of things that cancelled the job.</p>
     #[serde(rename = "numberOfCanceledThings")]
@@ -4163,7 +3289,7 @@ pub struct JobProcessDetails {
 
 /// <p>The job summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobSummary {
     /// <p>The time, in seconds since the epoch, when the job completed.</p>
     #[serde(rename = "completedAt")]
@@ -4201,7 +3327,7 @@ pub struct JobSummary {
 
 /// <p>Describes a key pair.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KeyPair {
     /// <p>The private key.</p>
     #[serde(rename = "PrivateKey")]
@@ -4257,7 +3383,7 @@ pub struct ListActiveViolationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListActiveViolationsResponse {
     /// <p>The list of active violations.</p>
     #[serde(rename = "activeViolations")]
@@ -4283,13 +3409,13 @@ pub struct ListAttachedPoliciesRequest {
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
-    /// <p>The group or principal for which the policies will be listed.</p>
+    /// <p>The group for which the policies will be listed.</p>
     #[serde(rename = "target")]
     pub target: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAttachedPoliciesResponse {
     /// <p>The token to retrieve the next set of results, or ``null`` if there are no more results.</p>
     #[serde(rename = "nextMarker")]
@@ -4319,7 +3445,7 @@ pub struct ListAuditFindingsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Information identifying the noncompliant resource.</p>
+    /// <p>Information identifying the non-compliant resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
@@ -4334,7 +3460,7 @@ pub struct ListAuditFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAuditFindingsResponse {
     /// <p>The findings (results) of the audit.</p>
     #[serde(rename = "findings")]
@@ -4344,84 +3470,6 @@ pub struct ListAuditFindingsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListAuditMitigationActionsExecutionsRequest {
-    /// <p>Specify this filter to limit results to those with a specific status.</p>
-    #[serde(rename = "actionStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_status: Option<String>,
-    /// <p>Specify this filter to limit results to those that were applied to a specific audit finding.</p>
-    #[serde(rename = "findingId")]
-    pub finding_id: String,
-    /// <p>The maximum number of results to return at one time. The default is 25.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>The token for the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>Specify this filter to limit results to actions for a specific audit mitigation actions task.</p>
-    #[serde(rename = "taskId")]
-    pub task_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListAuditMitigationActionsExecutionsResponse {
-    /// <p>A set of task execution results based on the input parameters. Details include the mitigation action applied, start time, and task status.</p>
-    #[serde(rename = "actionsExecutions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions_executions: Option<Vec<AuditMitigationActionExecutionMetadata>>,
-    /// <p>The token for the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListAuditMitigationActionsTasksRequest {
-    /// <p>Specify this filter to limit results to tasks that were applied to results for a specific audit.</p>
-    #[serde(rename = "auditTaskId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub audit_task_id: Option<String>,
-    /// <p>Specify this filter to limit results to tasks that were completed or canceled on or before a specific date and time.</p>
-    #[serde(rename = "endTime")]
-    pub end_time: f64,
-    /// <p>Specify this filter to limit results to tasks that were applied to a specific audit finding.</p>
-    #[serde(rename = "findingId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_id: Option<String>,
-    /// <p>The maximum number of results to return at one time. The default is 25.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>The token for the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>Specify this filter to limit results to tasks that began on or after a specific date and time.</p>
-    #[serde(rename = "startTime")]
-    pub start_time: f64,
-    /// <p>Specify this filter to limit results to tasks that are in a specific state.</p>
-    #[serde(rename = "taskStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_status: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListAuditMitigationActionsTasksResponse {
-    /// <p>The token for the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The collection of audit mitigation tasks that matched the filter criteria.</p>
-    #[serde(rename = "tasks")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tasks: Option<Vec<AuditMitigationActionsTaskMetadata>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4437,10 +3485,10 @@ pub struct ListAuditTasksRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The beginning of the time period. Audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
+    /// <p>The beginning of the time period. Note that audit information is retained for a limited time (180 days). Requesting a start time prior to what is retained results in an "InvalidRequestException".</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED", or "CANCELED".</p>
+    /// <p>A filter to limit the output to audits with the specified completion status: can be one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".</p>
     #[serde(rename = "taskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_status: Option<String>,
@@ -4451,7 +3499,7 @@ pub struct ListAuditTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAuditTasksResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -4484,7 +3532,7 @@ pub struct ListAuthorizersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAuthorizersResponse {
     /// <p>The authorizers.</p>
     #[serde(rename = "authorizers")]
@@ -4513,7 +3561,7 @@ pub struct ListBillingGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListBillingGroupsResponse {
     /// <p>The list of billing groups.</p>
     #[serde(rename = "billingGroups")]
@@ -4544,7 +3592,7 @@ pub struct ListCACertificatesRequest {
 
 /// <p>The output from the ListCACertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCACertificatesResponse {
     /// <p>The CA certificates registered in your AWS account.</p>
     #[serde(rename = "certificates")]
@@ -4578,7 +3626,7 @@ pub struct ListCertificatesByCARequest {
 
 /// <p>The output of the ListCertificatesByCA operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCertificatesByCAResponse {
     /// <p>The device certificates signed by the specified CA certificate.</p>
     #[serde(rename = "certificates")]
@@ -4609,7 +3657,7 @@ pub struct ListCertificatesRequest {
 
 /// <p>The output of the ListCertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCertificatesResponse {
     /// <p>The descriptions of the certificates.</p>
     #[serde(rename = "certificates")]
@@ -4622,54 +3670,25 @@ pub struct ListCertificatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDomainConfigurationsRequest {
-    /// <p>The marker for the next set of results.</p>
-    #[serde(rename = "marker")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub marker: Option<String>,
-    /// <p>The result page size.</p>
-    #[serde(rename = "pageSize")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub page_size: Option<i64>,
-    /// <p>The type of service delivered by the endpoint.</p>
-    #[serde(rename = "serviceType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_type: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListDomainConfigurationsResponse {
-    /// <p>A list of objects that contain summary information about the user's domain configurations.</p>
-    #[serde(rename = "domainConfigurations")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configurations: Option<Vec<DomainConfigurationSummary>>,
-    /// <p>The marker for the next set of results.</p>
-    #[serde(rename = "nextMarker")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_marker: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListIndicesResponse {
     /// <p>The index names.</p>
     #[serde(rename = "indexNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_names: Option<Vec<String>>,
-    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4695,7 +3714,7 @@ pub struct ListJobExecutionsForJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobExecutionsForJobResponse {
     /// <p>A list of job execution summaries.</p>
     #[serde(rename = "executionSummaries")]
@@ -4727,7 +3746,7 @@ pub struct ListJobExecutionsForThingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobExecutionsForThingResponse {
     /// <p>A list of job execution summaries.</p>
     #[serde(rename = "executionSummaries")]
@@ -4768,42 +3787,13 @@ pub struct ListJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>A list of jobs.</p>
     #[serde(rename = "jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<JobSummary>>,
     /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListMitigationActionsRequest {
-    /// <p>Specify a value to limit the result to mitigation actions with a specific action type.</p>
-    #[serde(rename = "actionType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_type: Option<String>,
-    /// <p>The maximum number of results to return at one time. The default is 25.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>The token for the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListMitigationActionsResponse {
-    /// <p>A set of actions that matched the specified filter criteria.</p>
-    #[serde(rename = "actionIdentifiers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_identifiers: Option<Vec<MitigationActionIdentifier>>,
-    /// <p>The token for the next set of results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -4826,7 +3816,7 @@ pub struct ListOTAUpdatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOTAUpdatesResponse {
     /// <p>A token to use to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -4857,7 +3847,7 @@ pub struct ListOutgoingCertificatesRequest {
 
 /// <p>The output from the ListOutgoingCertificates operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOutgoingCertificatesResponse {
     /// <p>The marker for the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -4888,7 +3878,7 @@ pub struct ListPoliciesRequest {
 
 /// <p>The output from the ListPolicies operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -4922,7 +3912,7 @@ pub struct ListPolicyPrincipalsRequest {
 
 /// <p>The output from the ListPolicyPrincipals operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPolicyPrincipalsResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -4944,7 +3934,7 @@ pub struct ListPolicyVersionsRequest {
 
 /// <p>The output from the ListPolicyVersions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPolicyVersionsResponse {
     /// <p>The policy versions.</p>
     #[serde(rename = "policyVersions")]
@@ -4974,7 +3964,7 @@ pub struct ListPrincipalPoliciesRequest {
 
 /// <p>The output from the ListPrincipalPolicies operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPrincipalPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -5004,7 +3994,7 @@ pub struct ListPrincipalThingsRequest {
 
 /// <p>The output from the ListPrincipalThings operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPrincipalThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5014,59 +4004,6 @@ pub struct ListPrincipalThingsResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<String>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListProvisioningTemplateVersionsRequest {
-    /// <p>The maximum number of results to return at one time.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>A token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListProvisioningTemplateVersionsResponse {
-    /// <p>A token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The list of fleet provisioning template versions.</p>
-    #[serde(rename = "versions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub versions: Option<Vec<ProvisioningTemplateVersionSummary>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListProvisioningTemplatesRequest {
-    /// <p>The maximum number of results to return at one time.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>A token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListProvisioningTemplatesResponse {
-    /// <p>A token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>A list of fleet provisioning templates</p>
-    #[serde(rename = "templates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub templates: Option<Vec<ProvisioningTemplateSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5086,7 +4023,7 @@ pub struct ListRoleAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRoleAliasesResponse {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -5111,7 +4048,7 @@ pub struct ListScheduledAuditsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListScheduledAuditsResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5133,7 +4070,7 @@ pub struct ListSecurityProfilesForTargetRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>If true, return child groups too.</p>
+    /// <p>If true, return child groups as well.</p>
     #[serde(rename = "recursive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
@@ -5143,7 +4080,7 @@ pub struct ListSecurityProfilesForTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSecurityProfilesForTargetResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5168,7 +4105,7 @@ pub struct ListSecurityProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5197,7 +4134,7 @@ pub struct ListStreamsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListStreamsResponse {
     /// <p>A token used to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -5221,7 +4158,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5249,7 +4186,7 @@ pub struct ListTargetsForPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTargetsForPolicyResponse {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -5277,7 +4214,7 @@ pub struct ListTargetsForSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTargetsForSecurityProfileResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5305,7 +4242,7 @@ pub struct ListThingGroupsForThingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingGroupsForThingResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5342,7 +4279,7 @@ pub struct ListThingGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingGroupsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5364,7 +4301,7 @@ pub struct ListThingPrincipalsRequest {
 
 /// <p>The output from the ListThingPrincipals operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingPrincipalsResponse {
     /// <p>The principals associated with the thing.</p>
     #[serde(rename = "principals")]
@@ -5391,7 +4328,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingRegistrationTaskReportsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5424,7 +4361,7 @@ pub struct ListThingRegistrationTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingRegistrationTasksResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5455,7 +4392,7 @@ pub struct ListThingTypesRequest {
 
 /// <p>The output for the ListThingTypes operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingTypesResponse {
     /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5483,7 +4420,7 @@ pub struct ListThingsInBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingsInBillingGroupResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5515,7 +4452,7 @@ pub struct ListThingsInThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingsInThingGroupResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5554,7 +4491,7 @@ pub struct ListThingsRequest {
 
 /// <p>The output from the ListThings operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -5564,31 +4501,6 @@ pub struct ListThingsResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<ThingAttribute>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTopicRuleDestinationsRequest {
-    /// <p>The maximum number of results to return at one time.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListTopicRuleDestinationsResponse {
-    /// <p>Information about a topic rule destination.</p>
-    #[serde(rename = "destinationSummaries")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_summaries: Option<Vec<TopicRuleDestinationSummary>>,
-    /// <p>The token to retrieve the next set of results.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
 }
 
 /// <p>The input for the ListTopicRules operation.</p>
@@ -5614,7 +4526,7 @@ pub struct ListTopicRulesRequest {
 
 /// <p>The output from the ListTopicRules operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTopicRulesResponse {
     /// <p>A token used to retrieve the next value.</p>
     #[serde(rename = "nextToken")]
@@ -5643,7 +4555,7 @@ pub struct ListV2LoggingLevelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListV2LoggingLevelsResponse {
     /// <p>The logging configuration for a target.</p>
     #[serde(rename = "logTargetConfigurations")]
@@ -5682,13 +4594,13 @@ pub struct ListViolationEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListViolationEventsResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The security profile violation alerts issued for this account during the given time period, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>
+    /// <p>The security profile violation alerts issued for this account during the given time frame, potentially filtered by security profile, behavior violated, or thing (device) violating.</p>
     #[serde(rename = "violationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub violation_events: Option<Vec<ViolationEvent>>,
@@ -5708,7 +4620,7 @@ pub struct LogTarget {
 
 /// <p>The target configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LogTargetConfiguration {
     /// <p>The logging level.</p>
     #[serde(rename = "logLevel")]
@@ -5749,110 +4661,19 @@ pub struct MetricValue {
     pub ports: Option<Vec<i64>>,
 }
 
-/// <p>Describes which changes should be applied as part of a mitigation action.</p>
+/// <p>Information about the resource that was non-compliant with the audit check.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct MitigationAction {
-    /// <p>The set of parameters for this mitigation action. The parameters vary, depending on the kind of action you apply.</p>
-    #[serde(rename = "actionParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_params: Option<MitigationActionParams>,
-    /// <p>A unique identifier for the mitigation action.</p>
-    #[serde(rename = "id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
-    /// <p>A user-friendly name for the mitigation action.</p>
-    #[serde(rename = "name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>The IAM role ARN used to apply this mitigation action.</p>
-    #[serde(rename = "roleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
-}
-
-/// <p>Information that identifies a mitigation action. This information is returned by ListMitigationActions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct MitigationActionIdentifier {
-    /// <p>The IAM role ARN used to apply this mitigation action.</p>
-    #[serde(rename = "actionArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_arn: Option<String>,
-    /// <p>The friendly name of the mitigation action.</p>
-    #[serde(rename = "actionName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_name: Option<String>,
-    /// <p>The date when this mitigation action was created.</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-}
-
-/// <p>The set of parameters for this mitigation action. You can specify only one type of parameter (in other words, you can apply only one action for each defined mitigation action).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct MitigationActionParams {
-    /// <p>Parameters to define a mitigation action that moves devices associated with a certificate to one or more specified thing groups, typically for quarantine.</p>
-    #[serde(rename = "addThingsToThingGroupParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub add_things_to_thing_group_params: Option<AddThingsToThingGroupParams>,
-    /// <p>Parameters to define a mitigation action that enables AWS IoT logging at a specified level of detail.</p>
-    #[serde(rename = "enableIoTLoggingParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enable_io_t_logging_params: Option<EnableIoTLoggingParams>,
-    /// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
-    #[serde(rename = "publishFindingToSnsParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub publish_finding_to_sns_params: Option<PublishFindingToSnsParams>,
-    /// <p>Parameters to define a mitigation action that adds a blank policy to restrict permissions.</p>
-    #[serde(rename = "replaceDefaultPolicyVersionParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub replace_default_policy_version_params: Option<ReplaceDefaultPolicyVersionParams>,
-    /// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
-    #[serde(rename = "updateCACertificateParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_ca_certificate_params: Option<UpdateCACertificateParams>,
-    /// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
-    #[serde(rename = "updateDeviceCertificateParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_device_certificate_params: Option<UpdateDeviceCertificateParams>,
-}
-
-/// <p>Specifies the MQTT context to use for the test authorizer request</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct MqttContext {
-    /// <p>The value of the <code>clientId</code> key in an MQTT authorization request.</p>
-    #[serde(rename = "clientId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_id: Option<String>,
-    /// <p>The value of the <code>password</code> key in an MQTT authorization request.</p>
-    #[serde(rename = "password")]
-    #[serde(
-        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
-    )]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub password: Option<bytes::Bytes>,
-    /// <p>The value of the <code>username</code> key in an MQTT authorization request.</p>
-    #[serde(rename = "username")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub username: Option<String>,
-}
-
-/// <p>Information about the resource that was noncompliant with the audit check.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NonCompliantResource {
-    /// <p>Other information about the noncompliant resource.</p>
+    /// <p>Additional information about the non-compliant resource.</p>
     #[serde(rename = "additionalInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Information that identifies the noncompliant resource.</p>
+    /// <p>Information identifying the non-compliant resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
-    /// <p>The type of the noncompliant resource.</p>
+    /// <p>The type of the non-compliant resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -5885,7 +4706,7 @@ pub struct OTAUpdateFile {
 
 /// <p>Information about an OTA update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OTAUpdateInfo {
     /// <p>A collection of name/value pairs</p>
     #[serde(rename = "additionalParameters")]
@@ -5947,7 +4768,7 @@ pub struct OTAUpdateInfo {
 
 /// <p>An OTA update summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OTAUpdateSummary {
     /// <p>The date when the OTA update was created.</p>
     #[serde(rename = "creationDate")]
@@ -5965,7 +4786,7 @@ pub struct OTAUpdateSummary {
 
 /// <p>A certificate that has been transferred but not yet accepted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OutgoingCertificate {
     /// <p>The certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -5993,23 +4814,9 @@ pub struct OutgoingCertificate {
     pub transferred_to: Option<String>,
 }
 
-/// <p>Describes the percentile and percentile value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct PercentPair {
-    /// <p>The percentile.</p>
-    #[serde(rename = "percent")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub percent: Option<f64>,
-    /// <p>The value of the percentile.</p>
-    #[serde(rename = "value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<f64>,
-}
-
 /// <p>Describes an AWS IoT policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Policy {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -6023,7 +4830,7 @@ pub struct Policy {
 
 /// <p>Describes a policy version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PolicyVersion {
     /// <p>The date and time the policy was created.</p>
     #[serde(rename = "createDate")]
@@ -6065,90 +4872,10 @@ pub struct PresignedUrlConfig {
     pub role_arn: Option<String>,
 }
 
-/// <p>A summary of information about a fleet provisioning template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ProvisioningTemplateSummary {
-    /// <p>The date when the fleet provisioning template summary was created.</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-    /// <p>The description of the fleet provisioning template.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>True if the fleet provision template is enabled, otherwise false.</p>
-    #[serde(rename = "enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>The date when the fleet provisioning template summary was last modified.</p>
-    #[serde(rename = "lastModifiedDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_modified_date: Option<f64>,
-    /// <p>The ARN of the fleet provisioning template.</p>
-    #[serde(rename = "templateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_arn: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_name: Option<String>,
-}
-
-/// <p>A summary of information about a fleet provision template version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ProvisioningTemplateVersionSummary {
-    /// <p>The date when the fleet provisioning template version was created</p>
-    #[serde(rename = "creationDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_date: Option<f64>,
-    /// <p>True if the fleet provisioning template version is the default version, otherwise false.</p>
-    #[serde(rename = "isDefaultVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub is_default_version: Option<bool>,
-    /// <p>The ID of the fleet privisioning template version.</p>
-    #[serde(rename = "versionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub version_id: Option<i64>,
-}
-
-/// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct PublishFindingToSnsParams {
-    /// <p>The ARN of the topic to which you want to publish the findings.</p>
-    #[serde(rename = "topicArn")]
-    pub topic_arn: String,
-}
-
-/// <p>An asset property value entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct PutAssetPropertyValueEntry {
-    /// <p>The ID of the AWS IoT SiteWise asset. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
-    #[serde(rename = "assetId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_id: Option<String>,
-    /// <p>Optional. A unique identifier for this entry that you can define to better track which message caused an error in case of failure. Accepts substitution templates. Defaults to a new UUID.</p>
-    #[serde(rename = "entryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub entry_id: Option<String>,
-    /// <p>The name of the property alias associated with your asset property. You must specify either a <code>propertyAlias</code> or both an <code>aliasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
-    #[serde(rename = "propertyAlias")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_alias: Option<String>,
-    /// <p>The ID of the asset's property. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
-    #[serde(rename = "propertyId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub property_id: Option<String>,
-    /// <p>A list of property values to insert that each contain timestamp, quality, and value (TQV) information.</p>
-    #[serde(rename = "propertyValues")]
-    pub property_values: Vec<AssetPropertyValue>,
-}
-
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutItemInput {
-    /// <p>The table where the message data will be written.</p>
+    /// <p>The table where the message data will be written</p>
     #[serde(rename = "tableName")]
     pub table_name: String,
 }
@@ -6191,7 +4918,7 @@ pub struct RegisterCACertificateRequest {
 
 /// <p>The output from the RegisterCACertificateResponse operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterCACertificateResponse {
     /// <p>The CA certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -6221,7 +4948,7 @@ pub struct RegisterCertificateRequest {
 
 /// <p>The output from the RegisterCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterCertificateResponse {
     /// <p>The certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -6245,7 +4972,7 @@ pub struct RegisterThingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterThingResponse {
     /// <p>.</p>
     #[serde(rename = "certificatePem")]
@@ -6284,13 +5011,13 @@ pub struct RejectCertificateTransferRequest {
 
 /// <p>Information about a related resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RelatedResource {
-    /// <p>Other information about the resource.</p>
+    /// <p>Additional information about the resource.</p>
     #[serde(rename = "additionalInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Information that identifies the resource.</p>
+    /// <p>Information identifying the resource.</p>
     #[serde(rename = "resourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<ResourceIdentifier>,
@@ -6321,7 +5048,7 @@ pub struct RemoveThingFromBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveThingFromBillingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6345,16 +5072,8 @@ pub struct RemoveThingFromThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveThingFromThingGroupResponse {}
-
-/// <p>Parameters to define a mitigation action that adds a blank policy to restrict permissions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ReplaceDefaultPolicyVersionParams {
-    /// <p>The name of the template to be applied. The only supported value is <code>BLANK_POLICY</code>.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6370,10 +5089,6 @@ pub struct ReplaceTopicRuleRequest {
 /// <p>Describes an action to republish to another topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepublishAction {
-    /// <p>The Quality of Service (QoS) level to use when republishing messages. The default value is 0.</p>
-    #[serde(rename = "qos")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub qos: Option<i64>,
     /// <p>The ARN of the IAM role that grants access.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
@@ -6382,7 +5097,7 @@ pub struct RepublishAction {
     pub topic: String,
 }
 
-/// <p>Information that identifies the noncompliant resource.</p>
+/// <p>Information identifying the non-compliant resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceIdentifier {
     /// <p>The account with which the resource is associated.</p>
@@ -6397,7 +5112,7 @@ pub struct ResourceIdentifier {
     #[serde(rename = "clientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
-    /// <p>The ID of the Amazon Cognito identity pool.</p>
+    /// <p>The ID of the Cognito Identity Pool.</p>
     #[serde(rename = "cognitoIdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_identity_pool_id: Option<String>,
@@ -6405,23 +5120,15 @@ pub struct ResourceIdentifier {
     #[serde(rename = "deviceCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_certificate_id: Option<String>,
-    /// <p>The ARN of the IAM role that has overly permissive actions.</p>
-    #[serde(rename = "iamRoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub iam_role_arn: Option<String>,
     /// <p>The version of the policy associated with the resource.</p>
     #[serde(rename = "policyVersionIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_version_identifier: Option<PolicyVersionIdentifier>,
-    /// <p>The ARN of the role alias that has overly permissive actions.</p>
-    #[serde(rename = "roleAliasArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_alias_arn: Option<String>,
 }
 
 /// <p>Role alias description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RoleAliasDescription {
     /// <p>The UNIX timestamp of when the role alias was created.</p>
     #[serde(rename = "creationDate")]
@@ -6514,7 +5221,7 @@ pub struct SalesforceAction {
 
 /// <p>Information about the scheduled audit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScheduledAuditMetadata {
     /// <p>The day of the month on which the scheduled audit is run (if the <code>frequency</code> is "MONTHLY"). If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
     #[serde(rename = "dayOfMonth")]
@@ -6524,7 +5231,7 @@ pub struct ScheduledAuditMetadata {
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit occurs.</p>
+    /// <p>How often the scheduled audit takes place.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
@@ -6548,7 +5255,7 @@ pub struct SearchIndexRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6562,9 +5269,9 @@ pub struct SearchIndexRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchIndexResponse {
-    /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -6580,7 +5287,7 @@ pub struct SearchIndexResponse {
 
 /// <p>Identifying information for a Device Defender security profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityProfileIdentifier {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "arn")]
@@ -6592,7 +5299,7 @@ pub struct SecurityProfileIdentifier {
 
 /// <p>A target to which an alert is sent when a security profile behavior is violated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityProfileTarget {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "arn")]
@@ -6601,7 +5308,7 @@ pub struct SecurityProfileTarget {
 
 /// <p>Information about a security profile and the target associated with it.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityProfileTargetMapping {
     /// <p>Information that identifies the security profile.</p>
     #[serde(rename = "securityProfileIdentifier")]
@@ -6613,24 +5320,6 @@ pub struct SecurityProfileTargetMapping {
     pub target: Option<SecurityProfileTarget>,
 }
 
-/// <p>An object that contains information about a server certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ServerCertificateSummary {
-    /// <p>The ARN of the server certificate.</p>
-    #[serde(rename = "serverCertificateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_certificate_arn: Option<String>,
-    /// <p>The status of the server certificate.</p>
-    #[serde(rename = "serverCertificateStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_certificate_status: Option<String>,
-    /// <p>Details that explain the status of the server certificate.</p>
-    #[serde(rename = "serverCertificateStatusDetail")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_certificate_status_detail: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetDefaultAuthorizerRequest {
     /// <p>The authorizer name.</p>
@@ -6639,7 +5328,7 @@ pub struct SetDefaultAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetDefaultAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -6696,20 +5385,6 @@ pub struct SetV2LoggingOptionsRequest {
     pub role_arn: Option<String>,
 }
 
-/// <p>Use Sig V4 authorization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SigV4Authorization {
-    /// <p>The ARN of the signing role.</p>
-    #[serde(rename = "roleArn")]
-    pub role_arn: String,
-    /// <p>The service name to use while signing with Sig V4.</p>
-    #[serde(rename = "serviceName")]
-    pub service_name: String,
-    /// <p>The signing region.</p>
-    #[serde(rename = "signingRegion")]
-    pub signing_region: String,
-}
-
 /// <p>Describes the code-signing profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SigningProfileParameter {
@@ -6758,39 +5433,14 @@ pub struct SqsAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartAuditMitigationActionsTaskRequest {
-    /// <p>For an audit check, specifies which mitigation actions to apply. Those actions must be defined in your AWS account.</p>
-    #[serde(rename = "auditCheckToActionsMapping")]
-    pub audit_check_to_actions_mapping: ::std::collections::HashMap<String, Vec<String>>,
-    /// <p>Each audit mitigation task must have a unique client request token. If you try to start a new task with the same token as a task that already exists, an exception occurs. If you omit this value, a unique client request token is generated automatically.</p>
-    #[serde(rename = "clientRequestToken")]
-    pub client_request_token: String,
-    /// <p>Specifies the audit findings to which the mitigation actions are applied. You can apply them to a type of audit check, to all findings from an audit, or to a speecific set of findings.</p>
-    #[serde(rename = "target")]
-    pub target: AuditMitigationActionsTaskTarget,
-    /// <p>A unique identifier for the task. You can use this identifier to check the status of the task or to cancel it.</p>
-    #[serde(rename = "taskId")]
-    pub task_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct StartAuditMitigationActionsTaskResponse {
-    /// <p>The unique identifier for the audit mitigation task. This matches the <code>taskId</code> that you specified in the request.</p>
-    #[serde(rename = "taskId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_id: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartOnDemandAuditTaskRequest {
-    /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
+    /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
     #[serde(rename = "targetCheckNames")]
     pub target_check_names: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartOnDemandAuditTaskResponse {
     /// <p>The ID of the on-demand audit you started.</p>
     #[serde(rename = "taskId")]
@@ -6832,7 +5482,7 @@ pub struct StartThingRegistrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartThingRegistrationTaskResponse {
     /// <p>The bulk thing provisioning task ID.</p>
     #[serde(rename = "taskId")]
@@ -6851,40 +5501,12 @@ pub struct StatisticalThreshold {
 
 /// <p>A map of key-value pairs for all supported statistics. Currently, only count is supported.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Statistics {
-    /// <p>The average of the aggregated field values.</p>
-    #[serde(rename = "average")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub average: Option<f64>,
     /// <p>The count of things that match the query.</p>
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// <p>The maximum aggregated field value.</p>
-    #[serde(rename = "maximum")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum: Option<f64>,
-    /// <p>The minimum aggregated field value.</p>
-    #[serde(rename = "minimum")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub minimum: Option<f64>,
-    /// <p>The standard deviation of the aggregated field values.</p>
-    #[serde(rename = "stdDeviation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub std_deviation: Option<f64>,
-    /// <p>The sum of the aggregated field values.</p>
-    #[serde(rename = "sum")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sum: Option<f64>,
-    /// <p>The sum of the squares of the aggregated field values.</p>
-    #[serde(rename = "sumOfSquares")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sum_of_squares: Option<f64>,
-    /// <p>The variance of the aggregated field values.</p>
-    #[serde(rename = "variance")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub variance: Option<f64>,
 }
 
 /// <p>Starts execution of a Step Functions state machine.</p>
@@ -6910,7 +5532,7 @@ pub struct StopThingRegistrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopThingRegistrationTaskResponse {}
 
 /// <p>Describes a group of files that can be streamed.</p>
@@ -6941,7 +5563,7 @@ pub struct StreamFile {
 
 /// <p>Information about a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamInfo {
     /// <p>The date when the stream was created.</p>
     #[serde(rename = "createdAt")]
@@ -6979,7 +5601,7 @@ pub struct StreamInfo {
 
 /// <p>A summary of a stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamSummary {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -7023,12 +5645,12 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Statistics for the checks performed during the audit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TaskStatistics {
     /// <p>The number of checks that did not run because the audit was canceled.</p>
     #[serde(rename = "canceledChecks")]
@@ -7038,7 +5660,7 @@ pub struct TaskStatistics {
     #[serde(rename = "compliantChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_checks: Option<i64>,
-    /// <p>The number of checks.</p>
+    /// <p>The number of checks </p>
     #[serde(rename = "failedChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_checks: Option<i64>,
@@ -7046,7 +5668,7 @@ pub struct TaskStatistics {
     #[serde(rename = "inProgressChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub in_progress_checks: Option<i64>,
-    /// <p>The number of checks that found noncompliant resources.</p>
+    /// <p>The number of checks that found non-compliant resources.</p>
     #[serde(rename = "nonCompliantChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_checks: Option<i64>,
@@ -7058,32 +5680,6 @@ pub struct TaskStatistics {
     #[serde(rename = "waitingForDataCollectionChecks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub waiting_for_data_collection_checks: Option<i64>,
-}
-
-/// <p>Provides summary counts of how many tasks for findings are in a particular state. This information is included in the response from DescribeAuditMitigationActionsTask.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct TaskStatisticsForAuditCheck {
-    /// <p>The number of findings to which the mitigation action task was canceled when applied.</p>
-    #[serde(rename = "canceledFindingsCount")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub canceled_findings_count: Option<i64>,
-    /// <p>The number of findings for which at least one of the actions failed when applied.</p>
-    #[serde(rename = "failedFindingsCount")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub failed_findings_count: Option<i64>,
-    /// <p>The number of findings skipped because of filter conditions provided in the parameters to the command.</p>
-    #[serde(rename = "skippedFindingsCount")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub skipped_findings_count: Option<i64>,
-    /// <p>The number of findings for which all mitigation actions succeeded when applied.</p>
-    #[serde(rename = "succeededFindingsCount")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub succeeded_findings_count: Option<i64>,
-    /// <p>The total number of findings to which a task is being applied.</p>
-    #[serde(rename = "totalFindingsCount")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub total_findings_count: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7114,7 +5710,7 @@ pub struct TestAuthorizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TestAuthorizationResponse {
     /// <p>The authentication results.</p>
     #[serde(rename = "authResults")]
@@ -7127,30 +5723,16 @@ pub struct TestInvokeAuthorizerRequest {
     /// <p>The custom authorizer name.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
-    /// <p>Specifies a test HTTP authorization request.</p>
-    #[serde(rename = "httpContext")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_context: Option<HttpContext>,
-    /// <p>Specifies a test MQTT authorization request.&gt;</p>
-    #[serde(rename = "mqttContext")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub mqtt_context: Option<MqttContext>,
-    /// <p>Specifies a test TLS authorization request.</p>
-    #[serde(rename = "tlsContext")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tls_context: Option<TlsContext>,
     /// <p>The token returned by your custom authentication service.</p>
     #[serde(rename = "token")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token: Option<String>,
+    pub token: String,
     /// <p>The signature made with the token and your custom authentication service's private key.</p>
     #[serde(rename = "tokenSignature")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub token_signature: Option<String>,
+    pub token_signature: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TestInvokeAuthorizerResponse {
     /// <p>The number of seconds after which the connection is terminated.</p>
     #[serde(rename = "disconnectAfterInSeconds")]
@@ -7176,7 +5758,7 @@ pub struct TestInvokeAuthorizerResponse {
 
 /// <p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingAttribute {
     /// <p>A list of thing attributes which are name-value pairs.</p>
     #[serde(rename = "attributes")]
@@ -7202,7 +5784,7 @@ pub struct ThingAttribute {
 
 /// <p>The connectivity status of the thing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingConnectivity {
     /// <p>True if the thing is connected to the AWS IoT service; false if it is not connected.</p>
     #[serde(rename = "connected")]
@@ -7216,7 +5798,7 @@ pub struct ThingConnectivity {
 
 /// <p>The thing search index document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingDocument {
     /// <p>The attributes.</p>
     #[serde(rename = "attributes")]
@@ -7250,7 +5832,7 @@ pub struct ThingDocument {
 
 /// <p>The thing group search index document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingGroupDocument {
     /// <p>The thing group attributes.</p>
     #[serde(rename = "attributes")]
@@ -7277,14 +5859,6 @@ pub struct ThingGroupDocument {
 /// <p>Thing group indexing configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingGroupIndexingConfiguration {
-    /// <p>A list of thing group fields to index. This list cannot contain any managed fields. Use the GetIndexingConfiguration API to get a list of managed fields.</p> <p>Contains custom field names and their data type.</p>
-    #[serde(rename = "customFields")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub custom_fields: Option<Vec<Field>>,
-    /// <p>Contains fields that are indexed and whose types are already known by the Fleet Indexing service.</p>
-    #[serde(rename = "managedFields")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub managed_fields: Option<Vec<Field>>,
     /// <p>Thing group indexing mode.</p>
     #[serde(rename = "thingGroupIndexingMode")]
     pub thing_group_indexing_mode: String,
@@ -7292,7 +5866,7 @@ pub struct ThingGroupIndexingConfiguration {
 
 /// <p>Thing group metadata.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingGroupMetadata {
     /// <p>The UNIX timestamp of when the thing group was created.</p>
     #[serde(rename = "creationDate")]
@@ -7324,14 +5898,6 @@ pub struct ThingGroupProperties {
 /// <p>The thing indexing configuration. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html">Managing Thing Indexing</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingIndexingConfiguration {
-    /// <p>Contains custom field names and their data type.</p>
-    #[serde(rename = "customFields")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub custom_fields: Option<Vec<Field>>,
-    /// <p>Contains fields that are indexed and whose types are already known by the Fleet Indexing service.</p>
-    #[serde(rename = "managedFields")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub managed_fields: Option<Vec<Field>>,
     /// <p><p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index contains connectivity status. To enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul></p>
     #[serde(rename = "thingConnectivityIndexingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7343,7 +5909,7 @@ pub struct ThingIndexingConfiguration {
 
 /// <p>The definition of the thing type, including thing type name and description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingTypeDefinition {
     /// <p>The thing type ARN.</p>
     #[serde(rename = "thingTypeArn")]
@@ -7365,7 +5931,7 @@ pub struct ThingTypeDefinition {
 
 /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ThingTypeMetadata {
     /// <p>The date and time when the thing type was created.</p>
     #[serde(rename = "creationDate")]
@@ -7403,18 +5969,9 @@ pub struct TimeoutConfig {
     pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
-/// <p>Specifies the TLS context to use for the test authorizer request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TlsContext {
-    /// <p>The value of the <code>serverName</code> key in a TLS authorization request.</p>
-    #[serde(rename = "serverName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_name: Option<String>,
-}
-
 /// <p>Describes a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TopicRule {
     /// <p>The actions associated with the rule.</p>
     #[serde(rename = "actions")]
@@ -7450,62 +6007,9 @@ pub struct TopicRule {
     pub sql: Option<String>,
 }
 
-/// <p>A topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct TopicRuleDestination {
-    /// <p>The topic rule destination URL.</p>
-    #[serde(rename = "arn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub arn: Option<String>,
-    /// <p>Properties of the HTTP URL.</p>
-    #[serde(rename = "httpUrlProperties")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_url_properties: Option<HttpUrlDestinationProperties>,
-    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
-    #[serde(rename = "status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// <p>Additional details or reason why the topic rule destination is in the current status.</p>
-    #[serde(rename = "statusReason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_reason: Option<String>,
-}
-
-/// <p>Configuration of the topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TopicRuleDestinationConfiguration {
-    /// <p>Configuration of the HTTP URL.</p>
-    #[serde(rename = "httpUrlConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_url_configuration: Option<HttpUrlDestinationConfiguration>,
-}
-
-/// <p>Information about the topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct TopicRuleDestinationSummary {
-    /// <p>The topic rule destination ARN.</p>
-    #[serde(rename = "arn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub arn: Option<String>,
-    /// <p>Information about the HTTP URL.</p>
-    #[serde(rename = "httpUrlSummary")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub http_url_summary: Option<HttpUrlDestinationSummary>,
-    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
-    #[serde(rename = "status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-    /// <p>The reason the topic rule destination is in the current status.</p>
-    #[serde(rename = "statusReason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_reason: Option<String>,
-}
-
 /// <p>Describes a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TopicRuleListItem {
     /// <p>The date and time the rule was created.</p>
     #[serde(rename = "createdAt")]
@@ -7573,7 +6077,7 @@ pub struct TransferCertificateRequest {
 
 /// <p>The output from the TransferCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TransferCertificateResponse {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "transferredCertificateArn")]
@@ -7583,7 +6087,7 @@ pub struct TransferCertificateResponse {
 
 /// <p>Data used to transfer a certificate to an AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TransferData {
     /// <p>The date the transfer was accepted.</p>
     #[serde(rename = "acceptDate")]
@@ -7618,12 +6122,12 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAccountAuditConfigurationRequest {
-    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
+    /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are currently enabled.</p> <p>Note that some data collection may begin immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code> this parameter is required and must specify at least one enabled check.</p>
     #[serde(rename = "auditCheckConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_check_configurations:
@@ -7633,14 +6137,14 @@ pub struct UpdateAccountAuditConfigurationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_notification_target_configurations:
         Option<::std::collections::HashMap<String, AuditNotificationTarget>>,
-    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as required when performing an audit.</p>
+    /// <p>The ARN of the role that grants permission to AWS IoT to access information about your devices, policies, certificates and other items as necessary when performing an audit.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAccountAuditConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7667,7 +6171,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -7694,20 +6198,12 @@ pub struct UpdateBillingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBillingGroupResponse {
     /// <p>The latest version of the billing group.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
-}
-
-/// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct UpdateCACertificateParams {
-    /// <p>The action that you want to apply to the CA cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
-    #[serde(rename = "action")]
-    pub action: String,
 }
 
 /// <p>The input to the UpdateCACertificate operation.</p>
@@ -7728,7 +6224,7 @@ pub struct UpdateCACertificateRequest {
     #[serde(rename = "registrationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_config: Option<RegistrationConfig>,
-    /// <p>If true, removes auto registration.</p>
+    /// <p>If true, remove auto registration.</p>
     #[serde(rename = "removeAutoRegistration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_auto_registration: Option<bool>,
@@ -7743,46 +6239,6 @@ pub struct UpdateCertificateRequest {
     /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
     #[serde(rename = "newStatus")]
     pub new_status: String,
-}
-
-/// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct UpdateDeviceCertificateParams {
-    /// <p>The action that you want to apply to the device cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
-    #[serde(rename = "action")]
-    pub action: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateDomainConfigurationRequest {
-    /// <p>An object that specifies the authorization service for a domain.</p>
-    #[serde(rename = "authorizerConfig")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_config: Option<AuthorizerConfig>,
-    /// <p>The name of the domain configuration to be updated.</p>
-    #[serde(rename = "domainConfigurationName")]
-    pub domain_configuration_name: String,
-    /// <p>The status to which the domain configuration should be updated.</p>
-    #[serde(rename = "domainConfigurationStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_status: Option<String>,
-    /// <p>Removes the authorization configuration from a domain.</p>
-    #[serde(rename = "removeAuthorizerConfig")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub remove_authorizer_config: Option<bool>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct UpdateDomainConfigurationResponse {
-    /// <p>The ARN of the domain configuration that was updated.</p>
-    #[serde(rename = "domainConfigurationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_arn: Option<String>,
-    /// <p>The name of the domain configuration that was updated.</p>
-    #[serde(rename = "domainConfigurationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_configuration_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7812,7 +6268,7 @@ pub struct UpdateDynamicThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDynamicThingGroupResponse {
     /// <p>The dynamic thing group version.</p>
     #[serde(rename = "version")]
@@ -7829,7 +6285,7 @@ pub struct UpdateEventConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEventConfigurationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7845,7 +6301,7 @@ pub struct UpdateIndexingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIndexingConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -7876,61 +6332,6 @@ pub struct UpdateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateMitigationActionRequest {
-    /// <p>The friendly name for the mitigation action. You can't change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and re-create the mitigation action with the new name.</p>
-    #[serde(rename = "actionName")]
-    pub action_name: String,
-    /// <p>Defines the type of action and the parameters for that action.</p>
-    #[serde(rename = "actionParams")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_params: Option<MitigationActionParams>,
-    /// <p>The ARN of the IAM role that is used to apply the mitigation action.</p>
-    #[serde(rename = "roleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct UpdateMitigationActionResponse {
-    /// <p>The ARN for the new mitigation action.</p>
-    #[serde(rename = "actionArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_arn: Option<String>,
-    /// <p>A unique identifier for the mitigation action.</p>
-    #[serde(rename = "actionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_id: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateProvisioningTemplateRequest {
-    /// <p>The ID of the default provisioning template version.</p>
-    #[serde(rename = "defaultVersionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_version_id: Option<i64>,
-    /// <p>The description of the fleet provisioning template.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>True to enable the fleet provisioning template, otherwise false.</p>
-    #[serde(rename = "enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
-    #[serde(rename = "provisioningRoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provisioning_role_arn: Option<String>,
-    /// <p>The name of the fleet provisioning template.</p>
-    #[serde(rename = "templateName")]
-    pub template_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct UpdateProvisioningTemplateResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoleAliasRequest {
     /// <p>The number of seconds the credential will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -7946,7 +6347,7 @@ pub struct UpdateRoleAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRoleAliasResponse {
     /// <p>The role alias.</p>
     #[serde(rename = "roleAlias")]
@@ -7964,25 +6365,25 @@ pub struct UpdateScheduledAuditRequest {
     #[serde(rename = "dayOfMonth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_month: Option<String>,
-    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI", or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
+    /// <p>The day of the week on which the scheduled audit takes place. Can be one of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".</p>
     #[serde(rename = "dayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub day_of_week: Option<String>,
-    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY", or "MONTHLY". The start time of each audit is determined by the system.</p>
+    /// <p>How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY", "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined by the system.</p>
     #[serde(rename = "frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
     /// <p>The name of the scheduled audit. (Max. 128 chars)</p>
     #[serde(rename = "scheduledAuditName")]
     pub scheduled_audit_name: String,
-    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or use <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
+    /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_check_names: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateScheduledAuditResponse {
     /// <p>The ARN of the scheduled audit.</p>
     #[serde(rename = "scheduledAuditArn")]
@@ -7992,7 +6393,7 @@ pub struct UpdateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -8004,19 +6405,19 @@ pub struct UpdateSecurityProfileRequest {
     #[serde(rename = "behaviors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub behaviors: Option<Vec<Behavior>>,
-    /// <p>If true, delete all <code>additionalMetricsToRetain</code> defined for this security profile. If any <code>additionalMetricsToRetain</code> are defined in the current invocation, an exception occurs.</p>
+    /// <p>If true, delete all <code>additionalMetricsToRetain</code> defined for this security profile. If any <code>additionalMetricsToRetain</code> are defined in the current invocation an exception occurs.</p>
     #[serde(rename = "deleteAdditionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_additional_metrics_to_retain: Option<bool>,
-    /// <p>If true, delete all <code>alertTargets</code> defined for this security profile. If any <code>alertTargets</code> are defined in the current invocation, an exception occurs.</p>
+    /// <p>If true, delete all <code>alertTargets</code> defined for this security profile. If any <code>alertTargets</code> are defined in the current invocation an exception occurs.</p>
     #[serde(rename = "deleteAlertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_alert_targets: Option<bool>,
-    /// <p>If true, delete all <code>behaviors</code> defined for this security profile. If any <code>behaviors</code> are defined in the current invocation, an exception occurs.</p>
+    /// <p>If true, delete all <code>behaviors</code> defined for this security profile. If any <code>behaviors</code> are defined in the current invocation an exception occurs.</p>
     #[serde(rename = "deleteBehaviors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_behaviors: Option<bool>,
-    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
+    /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
@@ -8030,9 +6431,9 @@ pub struct UpdateSecurityProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
     #[serde(rename = "additionalMetricsToRetain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_metrics_to_retain: Option<Vec<String>>,
@@ -8090,7 +6491,7 @@ pub struct UpdateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateStreamResponse {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -8125,7 +6526,7 @@ pub struct UpdateThingGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateThingGroupResponse {
     /// <p>The version of the updated thing group.</p>
     #[serde(rename = "version")]
@@ -8154,7 +6555,7 @@ pub struct UpdateThingGroupsForThingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateThingGroupsForThingResponse {}
 
 /// <p>The input for the UpdateThing operation.</p>
@@ -8183,22 +6584,8 @@ pub struct UpdateThingRequest {
 
 /// <p>The output from the UpdateThing operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateThingResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateTopicRuleDestinationRequest {
-    /// <p>The ARN of the topic rule destination.</p>
-    #[serde(rename = "arn")]
-    pub arn: String,
-    /// <p><p>The status of the topic rule destination. Valid values are:</p> <dl> <dt>IN<em>PROGRESS</dt> <dd> <p>A topic rule destination was created but has not been confirmed. You can set <code>status</code> to <code>IN</em>PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> <dt>ENABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is allowed. You can set <code>status</code> to <code>DISABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>DISABLED</dt> <dd> <p>Confirmation was completed, and traffic to this destination is not allowed. You can set <code>status</code> to <code>ENABLED</code> by calling <code>UpdateTopicRuleDestination</code>.</p> </dd> <dt>ERROR</dt> <dd> <p>Confirmation could not be completed, for example if the confirmation timed out. You can call <code>GetTopicRuleDestination</code> for details about the error. You can set <code>status</code> to <code>IN_PROGRESS</code> by calling <code>UpdateTopicRuleDestination</code>. Calling <code>UpdateTopicRuleDestination</code> causes a new confirmation challenge to be sent to your confirmation endpoint.</p> </dd> </dl></p>
-    #[serde(rename = "status")]
-    pub status: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct UpdateTopicRuleDestinationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ValidateSecurityProfileBehaviorsRequest {
@@ -8208,7 +6595,7 @@ pub struct ValidateSecurityProfileBehaviorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ValidateSecurityProfileBehaviorsResponse {
     /// <p>True if the behaviors were valid.</p>
     #[serde(rename = "valid")]
@@ -8222,7 +6609,7 @@ pub struct ValidateSecurityProfileBehaviorsResponse {
 
 /// <p>Information about an error found in a behavior specification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ValidationError {
     /// <p>The description of an error found in the behaviors.</p>
     #[serde(rename = "errorMessage")]
@@ -8232,7 +6619,7 @@ pub struct ValidationError {
 
 /// <p>Information about a Device Defender security profile behavior violation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ViolationEvent {
     /// <p>The behavior which was violated.</p>
     #[serde(rename = "behavior")]
@@ -8810,67 +7197,6 @@ impl Error for AttachThingPrincipalError {
         }
     }
 }
-/// Errors returned by CancelAuditMitigationActionsTask
-#[derive(Debug, PartialEq)]
-pub enum CancelAuditMitigationActionsTaskError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl CancelAuditMitigationActionsTaskError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<CancelAuditMitigationActionsTaskError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        CancelAuditMitigationActionsTaskError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        CancelAuditMitigationActionsTaskError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        CancelAuditMitigationActionsTaskError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(CancelAuditMitigationActionsTaskError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CancelAuditMitigationActionsTaskError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CancelAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
-        match *self {
-            CancelAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
-            CancelAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by CancelAuditTask
 #[derive(Debug, PartialEq)]
 pub enum CancelAuditTaskError {
@@ -9194,75 +7520,6 @@ impl Error for ClearDefaultAuthorizerError {
         }
     }
 }
-/// Errors returned by ConfirmTopicRuleDestination
-#[derive(Debug, PartialEq)]
-pub enum ConfirmTopicRuleDestinationError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl ConfirmTopicRuleDestinationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<ConfirmTopicRuleDestinationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        ConfirmTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalException" => {
-                    return RusotoError::Service(ConfirmTopicRuleDestinationError::Internal(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ConfirmTopicRuleDestinationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        ConfirmTopicRuleDestinationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(ConfirmTopicRuleDestinationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ConfirmTopicRuleDestinationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ConfirmTopicRuleDestinationError {
-    fn description(&self) -> &str {
-        match *self {
-            ConfirmTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => cause,
-            ConfirmTopicRuleDestinationError::Internal(ref cause) => cause,
-            ConfirmTopicRuleDestinationError::InvalidRequest(ref cause) => cause,
-            ConfirmTopicRuleDestinationError::ServiceUnavailable(ref cause) => cause,
-            ConfirmTopicRuleDestinationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
@@ -9449,97 +7706,6 @@ impl Error for CreateCertificateFromCsrError {
             CreateCertificateFromCsrError::ServiceUnavailable(ref cause) => cause,
             CreateCertificateFromCsrError::Throttling(ref cause) => cause,
             CreateCertificateFromCsrError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by CreateDomainConfiguration
-#[derive(Debug, PartialEq)]
-pub enum CreateDomainConfigurationError {
-    /// <p>The certificate is invalid.</p>
-    CertificateValidation(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>A limit has been exceeded.</p>
-    LimitExceeded(String),
-    /// <p>The resource already exists.</p>
-    ResourceAlreadyExists(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl CreateDomainConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainConfigurationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "CertificateValidationException" => {
-                    return RusotoError::Service(
-                        CreateDomainConfigurationError::CertificateValidation(err.msg),
-                    )
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(CreateDomainConfigurationError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(CreateDomainConfigurationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "LimitExceededException" => {
-                    return RusotoError::Service(CreateDomainConfigurationError::LimitExceeded(
-                        err.msg,
-                    ))
-                }
-                "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        CreateDomainConfigurationError::ResourceAlreadyExists(err.msg),
-                    )
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        CreateDomainConfigurationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(CreateDomainConfigurationError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(CreateDomainConfigurationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateDomainConfigurationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateDomainConfigurationError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateDomainConfigurationError::CertificateValidation(ref cause) => cause,
-            CreateDomainConfigurationError::InternalFailure(ref cause) => cause,
-            CreateDomainConfigurationError::InvalidRequest(ref cause) => cause,
-            CreateDomainConfigurationError::LimitExceeded(ref cause) => cause,
-            CreateDomainConfigurationError::ResourceAlreadyExists(ref cause) => cause,
-            CreateDomainConfigurationError::ServiceUnavailable(ref cause) => cause,
-            CreateDomainConfigurationError::Throttling(ref cause) => cause,
-            CreateDomainConfigurationError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -9749,71 +7915,6 @@ impl Error for CreateKeysAndCertificateError {
             CreateKeysAndCertificateError::ServiceUnavailable(ref cause) => cause,
             CreateKeysAndCertificateError::Throttling(ref cause) => cause,
             CreateKeysAndCertificateError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by CreateMitigationAction
-#[derive(Debug, PartialEq)]
-pub enum CreateMitigationActionError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>A limit has been exceeded.</p>
-    LimitExceeded(String),
-    /// <p>The resource already exists.</p>
-    ResourceAlreadyExists(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl CreateMitigationActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMitigationActionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(CreateMitigationActionError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(CreateMitigationActionError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "LimitExceededException" => {
-                    return RusotoError::Service(CreateMitigationActionError::LimitExceeded(
-                        err.msg,
-                    ))
-                }
-                "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        CreateMitigationActionError::ResourceAlreadyExists(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(CreateMitigationActionError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateMitigationActionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateMitigationActionError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateMitigationActionError::InternalFailure(ref cause) => cause,
-            CreateMitigationActionError::InvalidRequest(ref cause) => cause,
-            CreateMitigationActionError::LimitExceeded(ref cause) => cause,
-            CreateMitigationActionError::ResourceAlreadyExists(ref cause) => cause,
-            CreateMitigationActionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -10044,241 +8145,6 @@ impl Error for CreatePolicyVersionError {
         }
     }
 }
-/// Errors returned by CreateProvisioningClaim
-#[derive(Debug, PartialEq)]
-pub enum CreateProvisioningClaimError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl CreateProvisioningClaimError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProvisioningClaimError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::ServiceUnavailable(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::Throttling(err.msg))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(CreateProvisioningClaimError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateProvisioningClaimError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProvisioningClaimError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateProvisioningClaimError::InternalFailure(ref cause) => cause,
-            CreateProvisioningClaimError::InvalidRequest(ref cause) => cause,
-            CreateProvisioningClaimError::ResourceNotFound(ref cause) => cause,
-            CreateProvisioningClaimError::ServiceUnavailable(ref cause) => cause,
-            CreateProvisioningClaimError::Throttling(ref cause) => cause,
-            CreateProvisioningClaimError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by CreateProvisioningTemplate
-#[derive(Debug, PartialEq)]
-pub enum CreateProvisioningTemplateError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>A limit has been exceeded.</p>
-    LimitExceeded(String),
-    /// <p>The resource already exists.</p>
-    ResourceAlreadyExists(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl CreateProvisioningTemplateError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<CreateProvisioningTemplateError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(CreateProvisioningTemplateError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(CreateProvisioningTemplateError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "LimitExceededException" => {
-                    return RusotoError::Service(CreateProvisioningTemplateError::LimitExceeded(
-                        err.msg,
-                    ))
-                }
-                "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateError::ResourceAlreadyExists(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(CreateProvisioningTemplateError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(CreateProvisioningTemplateError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateProvisioningTemplateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProvisioningTemplateError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateProvisioningTemplateError::InternalFailure(ref cause) => cause,
-            CreateProvisioningTemplateError::InvalidRequest(ref cause) => cause,
-            CreateProvisioningTemplateError::LimitExceeded(ref cause) => cause,
-            CreateProvisioningTemplateError::ResourceAlreadyExists(ref cause) => cause,
-            CreateProvisioningTemplateError::Throttling(ref cause) => cause,
-            CreateProvisioningTemplateError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by CreateProvisioningTemplateVersion
-#[derive(Debug, PartialEq)]
-pub enum CreateProvisioningTemplateVersionError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-    /// <p>The number of policy versions exceeds the limit.</p>
-    VersionsLimitExceeded(String),
-}
-
-impl CreateProvisioningTemplateVersionError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<CreateProvisioningTemplateVersionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::Throttling(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::Unauthorized(err.msg),
-                    )
-                }
-                "VersionsLimitExceededException" => {
-                    return RusotoError::Service(
-                        CreateProvisioningTemplateVersionError::VersionsLimitExceeded(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateProvisioningTemplateVersionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateProvisioningTemplateVersionError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateProvisioningTemplateVersionError::ConflictingResourceUpdate(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::InternalFailure(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::InvalidRequest(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::ResourceNotFound(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::Throttling(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::Unauthorized(ref cause) => cause,
-            CreateProvisioningTemplateVersionError::VersionsLimitExceeded(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by CreateRoleAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleAliasError {
@@ -10359,8 +8225,6 @@ pub enum CreateScheduledAuditError {
     InvalidRequest(String),
     /// <p>A limit has been exceeded.</p>
     LimitExceeded(String),
-    /// <p>The resource already exists.</p>
-    ResourceAlreadyExists(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
 }
@@ -10379,11 +8243,6 @@ impl CreateScheduledAuditError {
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateScheduledAuditError::LimitExceeded(err.msg))
-                }
-                "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(CreateScheduledAuditError::ResourceAlreadyExists(
-                        err.msg,
-                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateScheduledAuditError::Throttling(err.msg))
@@ -10406,7 +8265,6 @@ impl Error for CreateScheduledAuditError {
             CreateScheduledAuditError::InternalFailure(ref cause) => cause,
             CreateScheduledAuditError::InvalidRequest(ref cause) => cause,
             CreateScheduledAuditError::LimitExceeded(ref cause) => cause,
-            CreateScheduledAuditError::ResourceAlreadyExists(ref cause) => cause,
             CreateScheduledAuditError::Throttling(ref cause) => cause,
         }
     }
@@ -10797,73 +8655,6 @@ impl Error for CreateTopicRuleError {
         }
     }
 }
-/// Errors returned by CreateTopicRuleDestination
-#[derive(Debug, PartialEq)]
-pub enum CreateTopicRuleDestinationError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The resource already exists.</p>
-    ResourceAlreadyExists(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-}
-
-impl CreateTopicRuleDestinationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<CreateTopicRuleDestinationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        CreateTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalException" => {
-                    return RusotoError::Service(CreateTopicRuleDestinationError::Internal(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(CreateTopicRuleDestinationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        CreateTopicRuleDestinationError::ResourceAlreadyExists(err.msg),
-                    )
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        CreateTopicRuleDestinationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for CreateTopicRuleDestinationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CreateTopicRuleDestinationError {
-    fn description(&self) -> &str {
-        match *self {
-            CreateTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => cause,
-            CreateTopicRuleDestinationError::Internal(ref cause) => cause,
-            CreateTopicRuleDestinationError::InvalidRequest(ref cause) => cause,
-            CreateTopicRuleDestinationError::ResourceAlreadyExists(ref cause) => cause,
-            CreateTopicRuleDestinationError::ServiceUnavailable(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DeleteAccountAuditConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAuditConfigurationError {
@@ -11197,81 +8988,6 @@ impl Error for DeleteCertificateError {
         }
     }
 }
-/// Errors returned by DeleteDomainConfiguration
-#[derive(Debug, PartialEq)]
-pub enum DeleteDomainConfigurationError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DeleteDomainConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainConfigurationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(DeleteDomainConfigurationError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteDomainConfigurationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteDomainConfigurationError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        DeleteDomainConfigurationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DeleteDomainConfigurationError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(DeleteDomainConfigurationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteDomainConfigurationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteDomainConfigurationError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteDomainConfigurationError::InternalFailure(ref cause) => cause,
-            DeleteDomainConfigurationError::InvalidRequest(ref cause) => cause,
-            DeleteDomainConfigurationError::ResourceNotFound(ref cause) => cause,
-            DeleteDomainConfigurationError::ServiceUnavailable(ref cause) => cause,
-            DeleteDomainConfigurationError::Throttling(ref cause) => cause,
-            DeleteDomainConfigurationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DeleteDynamicThingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDynamicThingGroupError {
@@ -11450,55 +9166,6 @@ impl Error for DeleteJobExecutionError {
             DeleteJobExecutionError::ResourceNotFound(ref cause) => cause,
             DeleteJobExecutionError::ServiceUnavailable(ref cause) => cause,
             DeleteJobExecutionError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DeleteMitigationAction
-#[derive(Debug, PartialEq)]
-pub enum DeleteMitigationActionError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl DeleteMitigationActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMitigationActionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(DeleteMitigationActionError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteMitigationActionError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DeleteMitigationActionError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteMitigationActionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteMitigationActionError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteMitigationActionError::InternalFailure(ref cause) => cause,
-            DeleteMitigationActionError::InvalidRequest(ref cause) => cause,
-            DeleteMitigationActionError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -11710,160 +9377,6 @@ impl Error for DeletePolicyVersionError {
             DeletePolicyVersionError::ServiceUnavailable(ref cause) => cause,
             DeletePolicyVersionError::Throttling(ref cause) => cause,
             DeletePolicyVersionError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DeleteProvisioningTemplate
-#[derive(Debug, PartialEq)]
-pub enum DeleteProvisioningTemplateError {
-    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
-    DeleteConflict(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DeleteProvisioningTemplateError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DeleteProvisioningTemplateError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "DeleteConflictException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::DeleteConflict(
-                        err.msg,
-                    ))
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(DeleteProvisioningTemplateError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteProvisioningTemplateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProvisioningTemplateError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteProvisioningTemplateError::DeleteConflict(ref cause) => cause,
-            DeleteProvisioningTemplateError::InternalFailure(ref cause) => cause,
-            DeleteProvisioningTemplateError::InvalidRequest(ref cause) => cause,
-            DeleteProvisioningTemplateError::ResourceNotFound(ref cause) => cause,
-            DeleteProvisioningTemplateError::Throttling(ref cause) => cause,
-            DeleteProvisioningTemplateError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DeleteProvisioningTemplateVersion
-#[derive(Debug, PartialEq)]
-pub enum DeleteProvisioningTemplateVersionError {
-    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
-    DeleteConflict(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DeleteProvisioningTemplateVersionError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DeleteProvisioningTemplateVersionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "DeleteConflictException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::DeleteConflict(err.msg),
-                    )
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::Throttling(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(
-                        DeleteProvisioningTemplateVersionError::Unauthorized(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteProvisioningTemplateVersionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteProvisioningTemplateVersionError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteProvisioningTemplateVersionError::DeleteConflict(ref cause) => cause,
-            DeleteProvisioningTemplateVersionError::InternalFailure(ref cause) => cause,
-            DeleteProvisioningTemplateVersionError::InvalidRequest(ref cause) => cause,
-            DeleteProvisioningTemplateVersionError::ResourceNotFound(ref cause) => cause,
-            DeleteProvisioningTemplateVersionError::Throttling(ref cause) => cause,
-            DeleteProvisioningTemplateVersionError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -12422,73 +9935,6 @@ impl Error for DeleteTopicRuleError {
         }
     }
 }
-/// Errors returned by DeleteTopicRuleDestination
-#[derive(Debug, PartialEq)]
-pub enum DeleteTopicRuleDestinationError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DeleteTopicRuleDestinationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DeleteTopicRuleDestinationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        DeleteTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalException" => {
-                    return RusotoError::Service(DeleteTopicRuleDestinationError::Internal(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DeleteTopicRuleDestinationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        DeleteTopicRuleDestinationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(DeleteTopicRuleDestinationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteTopicRuleDestinationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteTopicRuleDestinationError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => cause,
-            DeleteTopicRuleDestinationError::Internal(ref cause) => cause,
-            DeleteTopicRuleDestinationError::InvalidRequest(ref cause) => cause,
-            DeleteTopicRuleDestinationError::ServiceUnavailable(ref cause) => cause,
-            DeleteTopicRuleDestinationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DeleteV2LoggingLevel
 #[derive(Debug, PartialEq)]
 pub enum DeleteV2LoggingLevelError {
@@ -12643,122 +10089,6 @@ impl Error for DescribeAccountAuditConfigurationError {
         match *self {
             DescribeAccountAuditConfigurationError::InternalFailure(ref cause) => cause,
             DescribeAccountAuditConfigurationError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeAuditFinding
-#[derive(Debug, PartialEq)]
-pub enum DescribeAuditFindingError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl DescribeAuditFindingError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAuditFindingError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(DescribeAuditFindingError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeAuditFindingError::InvalidRequest(err.msg))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeAuditFindingError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DescribeAuditFindingError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeAuditFindingError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditFindingError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeAuditFindingError::InternalFailure(ref cause) => cause,
-            DescribeAuditFindingError::InvalidRequest(ref cause) => cause,
-            DescribeAuditFindingError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditFindingError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeAuditMitigationActionsTask
-#[derive(Debug, PartialEq)]
-pub enum DescribeAuditMitigationActionsTaskError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl DescribeAuditMitigationActionsTaskError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeAuditMitigationActionsTaskError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        DescribeAuditMitigationActionsTaskError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        DescribeAuditMitigationActionsTaskError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeAuditMitigationActionsTaskError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(
-                        DescribeAuditMitigationActionsTaskError::Throttling(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeAuditMitigationActionsTaskError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::ResourceNotFound(ref cause) => cause,
-            DescribeAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -13146,75 +10476,6 @@ impl Error for DescribeDefaultAuthorizerError {
         }
     }
 }
-/// Errors returned by DescribeDomainConfiguration
-#[derive(Debug, PartialEq)]
-pub enum DescribeDomainConfigurationError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DescribeDomainConfigurationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeDomainConfigurationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(DescribeDomainConfigurationError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeDomainConfigurationError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        DescribeDomainConfigurationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DescribeDomainConfigurationError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(DescribeDomainConfigurationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeDomainConfigurationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeDomainConfigurationError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeDomainConfigurationError::InternalFailure(ref cause) => cause,
-            DescribeDomainConfigurationError::ResourceNotFound(ref cause) => cause,
-            DescribeDomainConfigurationError::ServiceUnavailable(ref cause) => cause,
-            DescribeDomainConfigurationError::Throttling(ref cause) => cause,
-            DescribeDomainConfigurationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {
@@ -13477,201 +10738,6 @@ impl Error for DescribeJobExecutionError {
             DescribeJobExecutionError::ResourceNotFound(ref cause) => cause,
             DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
             DescribeJobExecutionError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeMitigationAction
-#[derive(Debug, PartialEq)]
-pub enum DescribeMitigationActionError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl DescribeMitigationActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMitigationActionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(DescribeMitigationActionError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeMitigationActionError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeMitigationActionError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DescribeMitigationActionError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeMitigationActionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeMitigationActionError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeMitigationActionError::InternalFailure(ref cause) => cause,
-            DescribeMitigationActionError::InvalidRequest(ref cause) => cause,
-            DescribeMitigationActionError::ResourceNotFound(ref cause) => cause,
-            DescribeMitigationActionError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeProvisioningTemplate
-#[derive(Debug, PartialEq)]
-pub enum DescribeProvisioningTemplateError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DescribeProvisioningTemplateError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeProvisioningTemplateError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeProvisioningTemplateError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(DescribeProvisioningTemplateError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(DescribeProvisioningTemplateError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeProvisioningTemplateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProvisioningTemplateError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeProvisioningTemplateError::InternalFailure(ref cause) => cause,
-            DescribeProvisioningTemplateError::InvalidRequest(ref cause) => cause,
-            DescribeProvisioningTemplateError::ResourceNotFound(ref cause) => cause,
-            DescribeProvisioningTemplateError::Throttling(ref cause) => cause,
-            DescribeProvisioningTemplateError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeProvisioningTemplateVersion
-#[derive(Debug, PartialEq)]
-pub enum DescribeProvisioningTemplateVersionError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl DescribeProvisioningTemplateVersionError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeProvisioningTemplateVersionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateVersionError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateVersionError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateVersionError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateVersionError::Throttling(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(
-                        DescribeProvisioningTemplateVersionError::Unauthorized(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeProvisioningTemplateVersionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeProvisioningTemplateVersionError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeProvisioningTemplateVersionError::InternalFailure(ref cause) => cause,
-            DescribeProvisioningTemplateVersionError::InvalidRequest(ref cause) => cause,
-            DescribeProvisioningTemplateVersionError::ResourceNotFound(ref cause) => cause,
-            DescribeProvisioningTemplateVersionError::Throttling(ref cause) => cause,
-            DescribeProvisioningTemplateVersionError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -14543,87 +11609,6 @@ impl Error for EnableTopicRuleError {
         }
     }
 }
-/// Errors returned by GetCardinality
-#[derive(Debug, PartialEq)]
-pub enum GetCardinalityError {
-    /// <p>The index is not ready.</p>
-    IndexNotReady(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The aggregation is invalid.</p>
-    InvalidAggregation(String),
-    /// <p>The query is invalid.</p>
-    InvalidQuery(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl GetCardinalityError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCardinalityError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "IndexNotReadyException" => {
-                    return RusotoError::Service(GetCardinalityError::IndexNotReady(err.msg))
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(GetCardinalityError::InternalFailure(err.msg))
-                }
-                "InvalidAggregationException" => {
-                    return RusotoError::Service(GetCardinalityError::InvalidAggregation(err.msg))
-                }
-                "InvalidQueryException" => {
-                    return RusotoError::Service(GetCardinalityError::InvalidQuery(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(GetCardinalityError::InvalidRequest(err.msg))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetCardinalityError::ResourceNotFound(err.msg))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(GetCardinalityError::ServiceUnavailable(err.msg))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(GetCardinalityError::Throttling(err.msg))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(GetCardinalityError::Unauthorized(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for GetCardinalityError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetCardinalityError {
-    fn description(&self) -> &str {
-        match *self {
-            GetCardinalityError::IndexNotReady(ref cause) => cause,
-            GetCardinalityError::InternalFailure(ref cause) => cause,
-            GetCardinalityError::InvalidAggregation(ref cause) => cause,
-            GetCardinalityError::InvalidQuery(ref cause) => cause,
-            GetCardinalityError::InvalidRequest(ref cause) => cause,
-            GetCardinalityError::ResourceNotFound(ref cause) => cause,
-            GetCardinalityError::ServiceUnavailable(ref cause) => cause,
-            GetCardinalityError::Throttling(ref cause) => cause,
-            GetCardinalityError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by GetEffectivePolicies
 #[derive(Debug, PartialEq)]
 pub enum GetEffectivePoliciesError {
@@ -14922,87 +11907,6 @@ impl Error for GetOTAUpdateError {
             GetOTAUpdateError::ServiceUnavailable(ref cause) => cause,
             GetOTAUpdateError::Throttling(ref cause) => cause,
             GetOTAUpdateError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by GetPercentiles
-#[derive(Debug, PartialEq)]
-pub enum GetPercentilesError {
-    /// <p>The index is not ready.</p>
-    IndexNotReady(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The aggregation is invalid.</p>
-    InvalidAggregation(String),
-    /// <p>The query is invalid.</p>
-    InvalidQuery(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl GetPercentilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPercentilesError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "IndexNotReadyException" => {
-                    return RusotoError::Service(GetPercentilesError::IndexNotReady(err.msg))
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(GetPercentilesError::InternalFailure(err.msg))
-                }
-                "InvalidAggregationException" => {
-                    return RusotoError::Service(GetPercentilesError::InvalidAggregation(err.msg))
-                }
-                "InvalidQueryException" => {
-                    return RusotoError::Service(GetPercentilesError::InvalidQuery(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(GetPercentilesError::InvalidRequest(err.msg))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetPercentilesError::ResourceNotFound(err.msg))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(GetPercentilesError::ServiceUnavailable(err.msg))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(GetPercentilesError::Throttling(err.msg))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(GetPercentilesError::Unauthorized(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for GetPercentilesError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetPercentilesError {
-    fn description(&self) -> &str {
-        match *self {
-            GetPercentilesError::IndexNotReady(ref cause) => cause,
-            GetPercentilesError::InternalFailure(ref cause) => cause,
-            GetPercentilesError::InvalidAggregation(ref cause) => cause,
-            GetPercentilesError::InvalidQuery(ref cause) => cause,
-            GetPercentilesError::InvalidRequest(ref cause) => cause,
-            GetPercentilesError::ResourceNotFound(ref cause) => cause,
-            GetPercentilesError::ServiceUnavailable(ref cause) => cause,
-            GetPercentilesError::Throttling(ref cause) => cause,
-            GetPercentilesError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -15323,63 +12227,6 @@ impl Error for GetTopicRuleError {
         }
     }
 }
-/// Errors returned by GetTopicRuleDestination
-#[derive(Debug, PartialEq)]
-pub enum GetTopicRuleDestinationError {
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl GetTopicRuleDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTopicRuleDestinationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalException" => {
-                    return RusotoError::Service(GetTopicRuleDestinationError::Internal(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(GetTopicRuleDestinationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(GetTopicRuleDestinationError::ServiceUnavailable(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(GetTopicRuleDestinationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for GetTopicRuleDestinationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetTopicRuleDestinationError {
-    fn description(&self) -> &str {
-        match *self {
-            GetTopicRuleDestinationError::Internal(ref cause) => cause,
-            GetTopicRuleDestinationError::InvalidRequest(ref cause) => cause,
-            GetTopicRuleDestinationError::ServiceUnavailable(ref cause) => cause,
-            GetTopicRuleDestinationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by GetV2LoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum GetV2LoggingOptionsError {
@@ -15599,112 +12446,6 @@ impl Error for ListAuditFindingsError {
             ListAuditFindingsError::InternalFailure(ref cause) => cause,
             ListAuditFindingsError::InvalidRequest(ref cause) => cause,
             ListAuditFindingsError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListAuditMitigationActionsExecutions
-#[derive(Debug, PartialEq)]
-pub enum ListAuditMitigationActionsExecutionsError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl ListAuditMitigationActionsExecutionsError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<ListAuditMitigationActionsExecutionsError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        ListAuditMitigationActionsExecutionsError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        ListAuditMitigationActionsExecutionsError::InvalidRequest(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(
-                        ListAuditMitigationActionsExecutionsError::Throttling(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListAuditMitigationActionsExecutionsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditMitigationActionsExecutionsError {
-    fn description(&self) -> &str {
-        match *self {
-            ListAuditMitigationActionsExecutionsError::InternalFailure(ref cause) => cause,
-            ListAuditMitigationActionsExecutionsError::InvalidRequest(ref cause) => cause,
-            ListAuditMitigationActionsExecutionsError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListAuditMitigationActionsTasks
-#[derive(Debug, PartialEq)]
-pub enum ListAuditMitigationActionsTasksError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl ListAuditMitigationActionsTasksError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<ListAuditMitigationActionsTasksError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        ListAuditMitigationActionsTasksError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        ListAuditMitigationActionsTasksError::InvalidRequest(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(ListAuditMitigationActionsTasksError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListAuditMitigationActionsTasksError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListAuditMitigationActionsTasksError {
-    fn description(&self) -> &str {
-        match *self {
-            ListAuditMitigationActionsTasksError::InternalFailure(ref cause) => cause,
-            ListAuditMitigationActionsTasksError::InvalidRequest(ref cause) => cause,
-            ListAuditMitigationActionsTasksError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -16038,71 +12779,6 @@ impl Error for ListCertificatesByCAError {
         }
     }
 }
-/// Errors returned by ListDomainConfigurations
-#[derive(Debug, PartialEq)]
-pub enum ListDomainConfigurationsError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl ListDomainConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainConfigurationsError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(ListDomainConfigurationsError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListDomainConfigurationsError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(ListDomainConfigurationsError::ServiceUnavailable(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(ListDomainConfigurationsError::Throttling(err.msg))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(ListDomainConfigurationsError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListDomainConfigurationsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListDomainConfigurationsError {
-    fn description(&self) -> &str {
-        match *self {
-            ListDomainConfigurationsError::InternalFailure(ref cause) => cause,
-            ListDomainConfigurationsError::InvalidRequest(ref cause) => cause,
-            ListDomainConfigurationsError::ServiceUnavailable(ref cause) => cause,
-            ListDomainConfigurationsError::Throttling(ref cause) => cause,
-            ListDomainConfigurationsError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by ListIndices
 #[derive(Debug, PartialEq)]
 pub enum ListIndicesError {
@@ -16324,55 +13000,6 @@ impl Error for ListJobsError {
             ListJobsError::ResourceNotFound(ref cause) => cause,
             ListJobsError::ServiceUnavailable(ref cause) => cause,
             ListJobsError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListMitigationActions
-#[derive(Debug, PartialEq)]
-pub enum ListMitigationActionsError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl ListMitigationActionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMitigationActionsError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(ListMitigationActionsError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListMitigationActionsError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(ListMitigationActionsError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListMitigationActionsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListMitigationActionsError {
-    fn description(&self) -> &str {
-        match *self {
-            ListMitigationActionsError::InternalFailure(ref cause) => cause,
-            ListMitigationActionsError::InvalidRequest(ref cause) => cause,
-            ListMitigationActionsError::Throttling(ref cause) => cause,
         }
     }
 }
@@ -16824,134 +13451,6 @@ impl Error for ListPrincipalThingsError {
             ListPrincipalThingsError::ServiceUnavailable(ref cause) => cause,
             ListPrincipalThingsError::Throttling(ref cause) => cause,
             ListPrincipalThingsError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListProvisioningTemplateVersions
-#[derive(Debug, PartialEq)]
-pub enum ListProvisioningTemplateVersionsError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl ListProvisioningTemplateVersionsError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<ListProvisioningTemplateVersionsError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        ListProvisioningTemplateVersionsError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        ListProvisioningTemplateVersionsError::InvalidRequest(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        ListProvisioningTemplateVersionsError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(ListProvisioningTemplateVersionsError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(
-                        ListProvisioningTemplateVersionsError::Unauthorized(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListProvisioningTemplateVersionsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProvisioningTemplateVersionsError {
-    fn description(&self) -> &str {
-        match *self {
-            ListProvisioningTemplateVersionsError::InternalFailure(ref cause) => cause,
-            ListProvisioningTemplateVersionsError::InvalidRequest(ref cause) => cause,
-            ListProvisioningTemplateVersionsError::ResourceNotFound(ref cause) => cause,
-            ListProvisioningTemplateVersionsError::Throttling(ref cause) => cause,
-            ListProvisioningTemplateVersionsError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListProvisioningTemplates
-#[derive(Debug, PartialEq)]
-pub enum ListProvisioningTemplatesError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl ListProvisioningTemplatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisioningTemplatesError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(ListProvisioningTemplatesError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListProvisioningTemplatesError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(ListProvisioningTemplatesError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(ListProvisioningTemplatesError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListProvisioningTemplatesError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListProvisioningTemplatesError {
-    fn description(&self) -> &str {
-        match *self {
-            ListProvisioningTemplatesError::InternalFailure(ref cause) => cause,
-            ListProvisioningTemplatesError::InvalidRequest(ref cause) => cause,
-            ListProvisioningTemplatesError::Throttling(ref cause) => cause,
-            ListProvisioningTemplatesError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -17915,63 +14414,6 @@ impl Error for ListThingsInThingGroupError {
             ListThingsInThingGroupError::InternalFailure(ref cause) => cause,
             ListThingsInThingGroupError::InvalidRequest(ref cause) => cause,
             ListThingsInThingGroupError::ResourceNotFound(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListTopicRuleDestinations
-#[derive(Debug, PartialEq)]
-pub enum ListTopicRuleDestinationsError {
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl ListTopicRuleDestinationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicRuleDestinationsError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalException" => {
-                    return RusotoError::Service(ListTopicRuleDestinationsError::Internal(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListTopicRuleDestinationsError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        ListTopicRuleDestinationsError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(ListTopicRuleDestinationsError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListTopicRuleDestinationsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListTopicRuleDestinationsError {
-    fn description(&self) -> &str {
-        match *self {
-            ListTopicRuleDestinationsError::Internal(ref cause) => cause,
-            ListTopicRuleDestinationsError::InvalidRequest(ref cause) => cause,
-            ListTopicRuleDestinationsError::ServiceUnavailable(ref cause) => cause,
-            ListTopicRuleDestinationsError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -19015,75 +15457,6 @@ impl Error for SetV2LoggingOptionsError {
         }
     }
 }
-/// Errors returned by StartAuditMitigationActionsTask
-#[derive(Debug, PartialEq)]
-pub enum StartAuditMitigationActionsTaskError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>A limit has been exceeded.</p>
-    LimitExceeded(String),
-    /// <p>This exception occurs if you attempt to start a task with the same task-id as an existing task but with a different clientRequestToken.</p>
-    TaskAlreadyExists(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl StartAuditMitigationActionsTaskError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<StartAuditMitigationActionsTaskError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(
-                        StartAuditMitigationActionsTaskError::InternalFailure(err.msg),
-                    )
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(
-                        StartAuditMitigationActionsTaskError::InvalidRequest(err.msg),
-                    )
-                }
-                "LimitExceededException" => {
-                    return RusotoError::Service(
-                        StartAuditMitigationActionsTaskError::LimitExceeded(err.msg),
-                    )
-                }
-                "TaskAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        StartAuditMitigationActionsTaskError::TaskAlreadyExists(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(StartAuditMitigationActionsTaskError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for StartAuditMitigationActionsTaskError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAuditMitigationActionsTaskError {
-    fn description(&self) -> &str {
-        match *self {
-            StartAuditMitigationActionsTaskError::InternalFailure(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::InvalidRequest(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::LimitExceeded(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::TaskAlreadyExists(ref cause) => cause,
-            StartAuditMitigationActionsTaskError::Throttling(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by StartOnDemandAuditTask
 #[derive(Debug, PartialEq)]
 pub enum StartOnDemandAuditTaskError {
@@ -19925,89 +16298,6 @@ impl Error for UpdateCertificateError {
         }
     }
 }
-/// Errors returned by UpdateDomainConfiguration
-#[derive(Debug, PartialEq)]
-pub enum UpdateDomainConfigurationError {
-    /// <p>The certificate is invalid.</p>
-    CertificateValidation(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl UpdateDomainConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainConfigurationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "CertificateValidationException" => {
-                    return RusotoError::Service(
-                        UpdateDomainConfigurationError::CertificateValidation(err.msg),
-                    )
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(UpdateDomainConfigurationError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateDomainConfigurationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateDomainConfigurationError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        UpdateDomainConfigurationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(UpdateDomainConfigurationError::Throttling(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(UpdateDomainConfigurationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for UpdateDomainConfigurationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateDomainConfigurationError {
-    fn description(&self) -> &str {
-        match *self {
-            UpdateDomainConfigurationError::CertificateValidation(ref cause) => cause,
-            UpdateDomainConfigurationError::InternalFailure(ref cause) => cause,
-            UpdateDomainConfigurationError::InvalidRequest(ref cause) => cause,
-            UpdateDomainConfigurationError::ResourceNotFound(ref cause) => cause,
-            UpdateDomainConfigurationError::ServiceUnavailable(ref cause) => cause,
-            UpdateDomainConfigurationError::Throttling(ref cause) => cause,
-            UpdateDomainConfigurationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by UpdateDynamicThingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateDynamicThingGroupError {
@@ -20249,132 +16539,6 @@ impl Error for UpdateJobError {
             UpdateJobError::ResourceNotFound(ref cause) => cause,
             UpdateJobError::ServiceUnavailable(ref cause) => cause,
             UpdateJobError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by UpdateMitigationAction
-#[derive(Debug, PartialEq)]
-pub enum UpdateMitigationActionError {
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>The rate exceeds the limit.</p>
-    Throttling(String),
-}
-
-impl UpdateMitigationActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMitigationActionError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "InternalFailureException" => {
-                    return RusotoError::Service(UpdateMitigationActionError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateMitigationActionError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateMitigationActionError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "ThrottlingException" => {
-                    return RusotoError::Service(UpdateMitigationActionError::Throttling(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for UpdateMitigationActionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateMitigationActionError {
-    fn description(&self) -> &str {
-        match *self {
-            UpdateMitigationActionError::InternalFailure(ref cause) => cause,
-            UpdateMitigationActionError::InvalidRequest(ref cause) => cause,
-            UpdateMitigationActionError::ResourceNotFound(ref cause) => cause,
-            UpdateMitigationActionError::Throttling(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by UpdateProvisioningTemplate
-#[derive(Debug, PartialEq)]
-pub enum UpdateProvisioningTemplateError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl UpdateProvisioningTemplateError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<UpdateProvisioningTemplateError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        UpdateProvisioningTemplateError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalFailureException" => {
-                    return RusotoError::Service(UpdateProvisioningTemplateError::InternalFailure(
-                        err.msg,
-                    ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateProvisioningTemplateError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateProvisioningTemplateError::ResourceNotFound(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(UpdateProvisioningTemplateError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for UpdateProvisioningTemplateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateProvisioningTemplateError {
-    fn description(&self) -> &str {
-        match *self {
-            UpdateProvisioningTemplateError::ConflictingResourceUpdate(ref cause) => cause,
-            UpdateProvisioningTemplateError::InternalFailure(ref cause) => cause,
-            UpdateProvisioningTemplateError::InvalidRequest(ref cause) => cause,
-            UpdateProvisioningTemplateError::ResourceNotFound(ref cause) => cause,
-            UpdateProvisioningTemplateError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -20809,73 +16973,6 @@ impl Error for UpdateThingGroupsForThingError {
         }
     }
 }
-/// Errors returned by UpdateTopicRuleDestination
-#[derive(Debug, PartialEq)]
-pub enum UpdateTopicRuleDestinationError {
-    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
-    ConflictingResourceUpdate(String),
-    /// <p>An unexpected error has occurred.</p>
-    Internal(String),
-    /// <p>The request is not valid.</p>
-    InvalidRequest(String),
-    /// <p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    /// <p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
-}
-
-impl UpdateTopicRuleDestinationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<UpdateTopicRuleDestinationError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "ConflictingResourceUpdateException" => {
-                    return RusotoError::Service(
-                        UpdateTopicRuleDestinationError::ConflictingResourceUpdate(err.msg),
-                    )
-                }
-                "InternalException" => {
-                    return RusotoError::Service(UpdateTopicRuleDestinationError::Internal(err.msg))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(UpdateTopicRuleDestinationError::InvalidRequest(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(
-                        UpdateTopicRuleDestinationError::ServiceUnavailable(err.msg),
-                    )
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(UpdateTopicRuleDestinationError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for UpdateTopicRuleDestinationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for UpdateTopicRuleDestinationError {
-    fn description(&self) -> &str {
-        match *self {
-            UpdateTopicRuleDestinationError::ConflictingResourceUpdate(ref cause) => cause,
-            UpdateTopicRuleDestinationError::Internal(ref cause) => cause,
-            UpdateTopicRuleDestinationError::InvalidRequest(ref cause) => cause,
-            UpdateTopicRuleDestinationError::ServiceUnavailable(ref cause) => cause,
-            UpdateTopicRuleDestinationError::Unauthorized(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by ValidateSecurityProfileBehaviors
 #[derive(Debug, PartialEq)]
 pub enum ValidateSecurityProfileBehaviorsError {
@@ -20930,1203 +17027,1018 @@ impl Error for ValidateSecurityProfileBehaviorsError {
     }
 }
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
+#[async_trait]
 pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
-    fn accept_certificate_transfer(
+    async fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> RusotoFuture<(), AcceptCertificateTransferError>;
+    ) -> Result<(), RusotoError<AcceptCertificateTransferError>>;
 
     /// <p>Adds a thing to a billing group.</p>
-    fn add_thing_to_billing_group(
+    async fn add_thing_to_billing_group(
         &self,
         input: AddThingToBillingGroupRequest,
-    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError>;
+    ) -> Result<AddThingToBillingGroupResponse, RusotoError<AddThingToBillingGroupError>>;
 
     /// <p>Adds a thing to a thing group.</p>
-    fn add_thing_to_thing_group(
+    async fn add_thing_to_thing_group(
         &self,
         input: AddThingToThingGroupRequest,
-    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError>;
+    ) -> Result<AddThingToThingGroupResponse, RusotoError<AddThingToThingGroupError>>;
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
-    fn associate_targets_with_job(
+    async fn associate_targets_with_job(
         &self,
         input: AssociateTargetsWithJobRequest,
-    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
+    ) -> Result<AssociateTargetsWithJobResponse, RusotoError<AssociateTargetsWithJobError>>;
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError>;
+    async fn attach_policy(
+        &self,
+        input: AttachPolicyRequest,
+    ) -> Result<(), RusotoError<AttachPolicyError>>;
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
-    fn attach_principal_policy(
+    async fn attach_principal_policy(
         &self,
         input: AttachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
+    ) -> Result<(), RusotoError<AttachPrincipalPolicyError>>;
 
-    /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
-    fn attach_security_profile(
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    async fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
-    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError>;
+    ) -> Result<AttachSecurityProfileResponse, RusotoError<AttachSecurityProfileError>>;
 
     /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn attach_thing_principal(
+    async fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
-    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
-
-    /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
-    fn cancel_audit_mitigation_actions_task(
-        &self,
-        input: CancelAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<CancelAuditMitigationActionsTaskResponse, CancelAuditMitigationActionsTaskError>;
+    ) -> Result<AttachThingPrincipalResponse, RusotoError<AttachThingPrincipalError>>;
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    fn cancel_audit_task(
+    async fn cancel_audit_task(
         &self,
         input: CancelAuditTaskRequest,
-    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError>;
+    ) -> Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>>;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
-    fn cancel_certificate_transfer(
+    async fn cancel_certificate_transfer(
         &self,
         input: CancelCertificateTransferRequest,
-    ) -> RusotoFuture<(), CancelCertificateTransferError>;
+    ) -> Result<(), RusotoError<CancelCertificateTransferError>>;
 
     /// <p>Cancels a job.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
 
     /// <p>Cancels the execution of a job for a given thing.</p>
-    fn cancel_job_execution(
+    async fn cancel_job_execution(
         &self,
         input: CancelJobExecutionRequest,
-    ) -> RusotoFuture<(), CancelJobExecutionError>;
+    ) -> Result<(), RusotoError<CancelJobExecutionError>>;
 
     /// <p>Clears the default authorizer.</p>
-    fn clear_default_authorizer(
+    async fn clear_default_authorizer(
         &self,
-    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
-
-    /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
-    fn confirm_topic_rule_destination(
-        &self,
-        input: ConfirmTopicRuleDestinationRequest,
-    ) -> RusotoFuture<ConfirmTopicRuleDestinationResponse, ConfirmTopicRuleDestinationError>;
+    ) -> Result<ClearDefaultAuthorizerResponse, RusotoError<ClearDefaultAuthorizerError>>;
 
     /// <p>Creates an authorizer.</p>
-    fn create_authorizer(
+    async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
+    ) -> Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>>;
 
     /// <p>Creates a billing group.</p>
-    fn create_billing_group(
+    async fn create_billing_group(
         &self,
         input: CreateBillingGroupRequest,
-    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError>;
+    ) -> Result<CreateBillingGroupResponse, RusotoError<CreateBillingGroupError>>;
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
-    fn create_certificate_from_csr(
+    async fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
-    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
-
-    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn create_domain_configuration(
-        &self,
-        input: CreateDomainConfigurationRequest,
-    ) -> RusotoFuture<CreateDomainConfigurationResponse, CreateDomainConfigurationError>;
+    ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>>;
 
     /// <p>Creates a dynamic thing group.</p>
-    fn create_dynamic_thing_group(
+    async fn create_dynamic_thing_group(
         &self,
         input: CreateDynamicThingGroupRequest,
-    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError>;
+    ) -> Result<CreateDynamicThingGroupResponse, RusotoError<CreateDynamicThingGroupError>>;
 
     /// <p>Creates a job.</p>
-    fn create_job(
+    async fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
+    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
 
-    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
-    fn create_keys_and_certificate(
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    async fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
-    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
-
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
-    fn create_mitigation_action(
-        &self,
-        input: CreateMitigationActionRequest,
-    ) -> RusotoFuture<CreateMitigationActionResponse, CreateMitigationActionError>;
+    ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>>;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    fn create_ota_update(
+    async fn create_ota_update(
         &self,
         input: CreateOTAUpdateRequest,
-    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError>;
+    ) -> Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>>;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    fn create_policy(
+    async fn create_policy(
         &self,
         input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError>;
+    ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>>;
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
-    fn create_policy_version(
+    async fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
-
-    /// <p>Creates a provisioning claim.</p>
-    fn create_provisioning_claim(
-        &self,
-        input: CreateProvisioningClaimRequest,
-    ) -> RusotoFuture<CreateProvisioningClaimResponse, CreateProvisioningClaimError>;
-
-    /// <p>Creates a fleet provisioning template.</p>
-    fn create_provisioning_template(
-        &self,
-        input: CreateProvisioningTemplateRequest,
-    ) -> RusotoFuture<CreateProvisioningTemplateResponse, CreateProvisioningTemplateError>;
-
-    /// <p>Creates a new version of a fleet provisioning template.</p>
-    fn create_provisioning_template_version(
-        &self,
-        input: CreateProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        CreateProvisioningTemplateVersionResponse,
-        CreateProvisioningTemplateVersionError,
-    >;
+    ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>>;
 
     /// <p>Creates a role alias.</p>
-    fn create_role_alias(
+    async fn create_role_alias(
         &self,
         input: CreateRoleAliasRequest,
-    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError>;
+    ) -> Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>>;
 
     /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
-    fn create_scheduled_audit(
+    async fn create_scheduled_audit(
         &self,
         input: CreateScheduledAuditRequest,
-    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError>;
+    ) -> Result<CreateScheduledAuditResponse, RusotoError<CreateScheduledAuditError>>;
 
     /// <p>Creates a Device Defender security profile.</p>
-    fn create_security_profile(
+    async fn create_security_profile(
         &self,
         input: CreateSecurityProfileRequest,
-    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError>;
+    ) -> Result<CreateSecurityProfileResponse, RusotoError<CreateSecurityProfileError>>;
 
-    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
-    fn create_stream(
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    async fn create_stream(
         &self,
         input: CreateStreamRequest,
-    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
+    ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>>;
 
     /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing(
+    async fn create_thing(
         &self,
         input: CreateThingRequest,
-    ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
+    ) -> Result<CreateThingResponse, RusotoError<CreateThingError>>;
 
     /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing_group(
+    async fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
-    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError>;
+    ) -> Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>>;
 
     /// <p>Creates a new thing type.</p>
-    fn create_thing_type(
+    async fn create_thing_type(
         &self,
         input: CreateThingTypeRequest,
-    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError>;
+    ) -> Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>>;
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn create_topic_rule(
+    async fn create_topic_rule(
         &self,
         input: CreateTopicRuleRequest,
-    ) -> RusotoFuture<(), CreateTopicRuleError>;
-
-    /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
-    fn create_topic_rule_destination(
-        &self,
-        input: CreateTopicRuleDestinationRequest,
-    ) -> RusotoFuture<CreateTopicRuleDestinationResponse, CreateTopicRuleDestinationError>;
+    ) -> Result<(), RusotoError<CreateTopicRuleError>>;
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
-    fn delete_account_audit_configuration(
+    async fn delete_account_audit_configuration(
         &self,
         input: DeleteAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>;
+    ) -> Result<
+        DeleteAccountAuditConfigurationResponse,
+        RusotoError<DeleteAccountAuditConfigurationError>,
+    >;
 
     /// <p>Deletes an authorizer.</p>
-    fn delete_authorizer(
+    async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError>;
+    ) -> Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>>;
 
     /// <p>Deletes the billing group.</p>
-    fn delete_billing_group(
+    async fn delete_billing_group(
         &self,
         input: DeleteBillingGroupRequest,
-    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError>;
+    ) -> Result<DeleteBillingGroupResponse, RusotoError<DeleteBillingGroupError>>;
 
     /// <p>Deletes a registered CA certificate.</p>
-    fn delete_ca_certificate(
+    async fn delete_ca_certificate(
         &self,
         input: DeleteCACertificateRequest,
-    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError>;
+    ) -> Result<DeleteCACertificateResponse, RusotoError<DeleteCACertificateError>>;
 
-    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
-    fn delete_certificate(
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
-    ) -> RusotoFuture<(), DeleteCertificateError>;
-
-    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn delete_domain_configuration(
-        &self,
-        input: DeleteDomainConfigurationRequest,
-    ) -> RusotoFuture<DeleteDomainConfigurationResponse, DeleteDomainConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteCertificateError>>;
 
     /// <p>Deletes a dynamic thing group.</p>
-    fn delete_dynamic_thing_group(
+    async fn delete_dynamic_thing_group(
         &self,
         input: DeleteDynamicThingGroupRequest,
-    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError>;
+    ) -> Result<DeleteDynamicThingGroupResponse, RusotoError<DeleteDynamicThingGroupError>>;
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError>;
+    async fn delete_job(&self, input: DeleteJobRequest) -> Result<(), RusotoError<DeleteJobError>>;
 
     /// <p>Deletes a job execution.</p>
-    fn delete_job_execution(
+    async fn delete_job_execution(
         &self,
         input: DeleteJobExecutionRequest,
-    ) -> RusotoFuture<(), DeleteJobExecutionError>;
-
-    /// <p>Deletes a defined mitigation action from your AWS account.</p>
-    fn delete_mitigation_action(
-        &self,
-        input: DeleteMitigationActionRequest,
-    ) -> RusotoFuture<DeleteMitigationActionResponse, DeleteMitigationActionError>;
+    ) -> Result<(), RusotoError<DeleteJobExecutionError>>;
 
     /// <p>Delete an OTA update.</p>
-    fn delete_ota_update(
+    async fn delete_ota_update(
         &self,
         input: DeleteOTAUpdateRequest,
-    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
+    ) -> Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>>;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
+    async fn delete_policy(
+        &self,
+        input: DeletePolicyRequest,
+    ) -> Result<(), RusotoError<DeletePolicyError>>;
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
-    fn delete_policy_version(
+    async fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError>;
-
-    /// <p>Deletes a fleet provisioning template.</p>
-    fn delete_provisioning_template(
-        &self,
-        input: DeleteProvisioningTemplateRequest,
-    ) -> RusotoFuture<DeleteProvisioningTemplateResponse, DeleteProvisioningTemplateError>;
-
-    /// <p>Deletes a fleet provisioning template version.</p>
-    fn delete_provisioning_template_version(
-        &self,
-        input: DeleteProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        DeleteProvisioningTemplateVersionResponse,
-        DeleteProvisioningTemplateVersionError,
-    >;
+    ) -> Result<(), RusotoError<DeletePolicyVersionError>>;
 
     /// <p>Deletes a CA certificate registration code.</p>
-    fn delete_registration_code(
+    async fn delete_registration_code(
         &self,
-    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
+    ) -> Result<DeleteRegistrationCodeResponse, RusotoError<DeleteRegistrationCodeError>>;
 
     /// <p>Deletes a role alias</p>
-    fn delete_role_alias(
+    async fn delete_role_alias(
         &self,
         input: DeleteRoleAliasRequest,
-    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError>;
+    ) -> Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>>;
 
     /// <p>Deletes a scheduled audit.</p>
-    fn delete_scheduled_audit(
+    async fn delete_scheduled_audit(
         &self,
         input: DeleteScheduledAuditRequest,
-    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError>;
+    ) -> Result<DeleteScheduledAuditResponse, RusotoError<DeleteScheduledAuditError>>;
 
     /// <p>Deletes a Device Defender security profile.</p>
-    fn delete_security_profile(
+    async fn delete_security_profile(
         &self,
         input: DeleteSecurityProfileRequest,
-    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError>;
+    ) -> Result<DeleteSecurityProfileResponse, RusotoError<DeleteSecurityProfileError>>;
 
     /// <p>Deletes a stream.</p>
-    fn delete_stream(
+    async fn delete_stream(
         &self,
         input: DeleteStreamRequest,
-    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError>;
+    ) -> Result<DeleteStreamResponse, RusotoError<DeleteStreamError>>;
 
     /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    fn delete_thing(
+    async fn delete_thing(
         &self,
         input: DeleteThingRequest,
-    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError>;
+    ) -> Result<DeleteThingResponse, RusotoError<DeleteThingError>>;
 
     /// <p>Deletes a thing group.</p>
-    fn delete_thing_group(
+    async fn delete_thing_group(
         &self,
         input: DeleteThingGroupRequest,
-    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError>;
+    ) -> Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>>;
 
     /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    fn delete_thing_type(
+    async fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
-    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError>;
+    ) -> Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>>;
 
     /// <p>Deletes the rule.</p>
-    fn delete_topic_rule(
+    async fn delete_topic_rule(
         &self,
         input: DeleteTopicRuleRequest,
-    ) -> RusotoFuture<(), DeleteTopicRuleError>;
-
-    /// <p>Deletes a topic rule destination.</p>
-    fn delete_topic_rule_destination(
-        &self,
-        input: DeleteTopicRuleDestinationRequest,
-    ) -> RusotoFuture<DeleteTopicRuleDestinationResponse, DeleteTopicRuleDestinationError>;
+    ) -> Result<(), RusotoError<DeleteTopicRuleError>>;
 
     /// <p>Deletes a logging level.</p>
-    fn delete_v2_logging_level(
+    async fn delete_v2_logging_level(
         &self,
         input: DeleteV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), DeleteV2LoggingLevelError>;
+    ) -> Result<(), RusotoError<DeleteV2LoggingLevelError>>;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
-    fn deprecate_thing_type(
+    async fn deprecate_thing_type(
         &self,
         input: DeprecateThingTypeRequest,
-    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+    ) -> Result<DeprecateThingTypeResponse, RusotoError<DeprecateThingTypeError>>;
 
     /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn describe_account_audit_configuration(
+    async fn describe_account_audit_configuration(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAccountAuditConfigurationResponse,
-        DescribeAccountAuditConfigurationError,
-    >;
-
-    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
-    fn describe_audit_finding(
-        &self,
-        input: DescribeAuditFindingRequest,
-    ) -> RusotoFuture<DescribeAuditFindingResponse, DescribeAuditFindingError>;
-
-    /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
-    fn describe_audit_mitigation_actions_task(
-        &self,
-        input: DescribeAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<
-        DescribeAuditMitigationActionsTaskResponse,
-        DescribeAuditMitigationActionsTaskError,
+        RusotoError<DescribeAccountAuditConfigurationError>,
     >;
 
     /// <p>Gets information about a Device Defender audit.</p>
-    fn describe_audit_task(
+    async fn describe_audit_task(
         &self,
         input: DescribeAuditTaskRequest,
-    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError>;
+    ) -> Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>>;
 
     /// <p>Describes an authorizer.</p>
-    fn describe_authorizer(
+    async fn describe_authorizer(
         &self,
         input: DescribeAuthorizerRequest,
-    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError>;
+    ) -> Result<DescribeAuthorizerResponse, RusotoError<DescribeAuthorizerError>>;
 
     /// <p>Returns information about a billing group.</p>
-    fn describe_billing_group(
+    async fn describe_billing_group(
         &self,
         input: DescribeBillingGroupRequest,
-    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError>;
+    ) -> Result<DescribeBillingGroupResponse, RusotoError<DescribeBillingGroupError>>;
 
     /// <p>Describes a registered CA certificate.</p>
-    fn describe_ca_certificate(
+    async fn describe_ca_certificate(
         &self,
         input: DescribeCACertificateRequest,
-    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError>;
+    ) -> Result<DescribeCACertificateResponse, RusotoError<DescribeCACertificateError>>;
 
     /// <p>Gets information about the specified certificate.</p>
-    fn describe_certificate(
+    async fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError>;
+    ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>>;
 
     /// <p>Describes the default authorizer.</p>
-    fn describe_default_authorizer(
+    async fn describe_default_authorizer(
         &self,
-    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
-
-    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn describe_domain_configuration(
-        &self,
-        input: DescribeDomainConfigurationRequest,
-    ) -> RusotoFuture<DescribeDomainConfigurationResponse, DescribeDomainConfigurationError>;
+    ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>;
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(
+    async fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError>;
+    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>;
 
     /// <p>Describes event configurations.</p>
-    fn describe_event_configurations(
+    async fn describe_event_configurations(
         &self,
-    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError>;
+    ) -> Result<DescribeEventConfigurationsResponse, RusotoError<DescribeEventConfigurationsError>>;
 
     /// <p>Describes a search index.</p>
-    fn describe_index(
+    async fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError>;
+    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>;
 
     /// <p>Describes a job.</p>
-    fn describe_job(
+    async fn describe_job(
         &self,
         input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError>;
+    ) -> Result<DescribeJobResponse, RusotoError<DescribeJobError>>;
 
     /// <p>Describes a job execution.</p>
-    fn describe_job_execution(
+    async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
-
-    /// <p>Gets information about a mitigation action.</p>
-    fn describe_mitigation_action(
-        &self,
-        input: DescribeMitigationActionRequest,
-    ) -> RusotoFuture<DescribeMitigationActionResponse, DescribeMitigationActionError>;
-
-    /// <p>Returns information about a fleet provisioning template.</p>
-    fn describe_provisioning_template(
-        &self,
-        input: DescribeProvisioningTemplateRequest,
-    ) -> RusotoFuture<DescribeProvisioningTemplateResponse, DescribeProvisioningTemplateError>;
-
-    /// <p>Returns information about a fleet provisioning template version.</p>
-    fn describe_provisioning_template_version(
-        &self,
-        input: DescribeProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        DescribeProvisioningTemplateVersionResponse,
-        DescribeProvisioningTemplateVersionError,
-    >;
+    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>>;
 
     /// <p>Describes a role alias.</p>
-    fn describe_role_alias(
+    async fn describe_role_alias(
         &self,
         input: DescribeRoleAliasRequest,
-    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError>;
+    ) -> Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>>;
 
     /// <p>Gets information about a scheduled audit.</p>
-    fn describe_scheduled_audit(
+    async fn describe_scheduled_audit(
         &self,
         input: DescribeScheduledAuditRequest,
-    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError>;
+    ) -> Result<DescribeScheduledAuditResponse, RusotoError<DescribeScheduledAuditError>>;
 
     /// <p>Gets information about a Device Defender security profile.</p>
-    fn describe_security_profile(
+    async fn describe_security_profile(
         &self,
         input: DescribeSecurityProfileRequest,
-    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError>;
+    ) -> Result<DescribeSecurityProfileResponse, RusotoError<DescribeSecurityProfileError>>;
 
     /// <p>Gets information about a stream.</p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamRequest,
-    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError>;
+    ) -> Result<DescribeStreamResponse, RusotoError<DescribeStreamError>>;
 
     /// <p>Gets information about the specified thing.</p>
-    fn describe_thing(
+    async fn describe_thing(
         &self,
         input: DescribeThingRequest,
-    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError>;
+    ) -> Result<DescribeThingResponse, RusotoError<DescribeThingError>>;
 
     /// <p>Describe a thing group.</p>
-    fn describe_thing_group(
+    async fn describe_thing_group(
         &self,
         input: DescribeThingGroupRequest,
-    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError>;
+    ) -> Result<DescribeThingGroupResponse, RusotoError<DescribeThingGroupError>>;
 
     /// <p>Describes a bulk thing provisioning task.</p>
-    fn describe_thing_registration_task(
+    async fn describe_thing_registration_task(
         &self,
         input: DescribeThingRegistrationTaskRequest,
-    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
-
-    /// <p>Gets information about the specified thing type.</p>
-    fn describe_thing_type(
-        &self,
-        input: DescribeThingTypeRequest,
-    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError>;
-
-    /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError>;
-
-    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
-    fn detach_principal_policy(
-        &self,
-        input: DetachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), DetachPrincipalPolicyError>;
-
-    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
-    fn detach_security_profile(
-        &self,
-        input: DetachSecurityProfileRequest,
-    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError>;
-
-    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
-    fn detach_thing_principal(
-        &self,
-        input: DetachThingPrincipalRequest,
-    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError>;
-
-    /// <p>Disables the rule.</p>
-    fn disable_topic_rule(
-        &self,
-        input: DisableTopicRuleRequest,
-    ) -> RusotoFuture<(), DisableTopicRuleError>;
-
-    /// <p>Enables the rule.</p>
-    fn enable_topic_rule(
-        &self,
-        input: EnableTopicRuleRequest,
-    ) -> RusotoFuture<(), EnableTopicRuleError>;
-
-    /// <p>Returns the approximate count of unique values that match the query.</p>
-    fn get_cardinality(
-        &self,
-        input: GetCardinalityRequest,
-    ) -> RusotoFuture<GetCardinalityResponse, GetCardinalityError>;
-
-    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
-    fn get_effective_policies(
-        &self,
-        input: GetEffectivePoliciesRequest,
-    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
-
-    /// <p>Gets the indexing configuration.</p>
-    fn get_indexing_configuration(
-        &self,
-    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
-
-    /// <p>Gets a job document.</p>
-    fn get_job_document(
-        &self,
-        input: GetJobDocumentRequest,
-    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError>;
-
-    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    fn get_logging_options(
-        &self,
-    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError>;
-
-    /// <p>Gets an OTA update.</p>
-    fn get_ota_update(
-        &self,
-        input: GetOTAUpdateRequest,
-    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError>;
-
-    /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
-    fn get_percentiles(
-        &self,
-        input: GetPercentilesRequest,
-    ) -> RusotoFuture<GetPercentilesResponse, GetPercentilesError>;
-
-    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
-
-    /// <p>Gets information about the specified policy version.</p>
-    fn get_policy_version(
-        &self,
-        input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError>;
-
-    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    fn get_registration_code(
-        &self,
-    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError>;
-
-    /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
-    fn get_statistics(
-        &self,
-        input: GetStatisticsRequest,
-    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError>;
-
-    /// <p>Gets information about the rule.</p>
-    fn get_topic_rule(
-        &self,
-        input: GetTopicRuleRequest,
-    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError>;
-
-    /// <p>Gets information about a topic rule destination.</p>
-    fn get_topic_rule_destination(
-        &self,
-        input: GetTopicRuleDestinationRequest,
-    ) -> RusotoFuture<GetTopicRuleDestinationResponse, GetTopicRuleDestinationError>;
-
-    /// <p>Gets the fine grained logging options.</p>
-    fn get_v2_logging_options(
-        &self,
-    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
-
-    /// <p>Lists the active violations for a given Device Defender security profile.</p>
-    fn list_active_violations(
-        &self,
-        input: ListActiveViolationsRequest,
-    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError>;
-
-    /// <p>Lists the policies attached to the specified thing group.</p>
-    fn list_attached_policies(
-        &self,
-        input: ListAttachedPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
-
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
-    fn list_audit_findings(
-        &self,
-        input: ListAuditFindingsRequest,
-    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError>;
-
-    /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
-    fn list_audit_mitigation_actions_executions(
-        &self,
-        input: ListAuditMitigationActionsExecutionsRequest,
-    ) -> RusotoFuture<
-        ListAuditMitigationActionsExecutionsResponse,
-        ListAuditMitigationActionsExecutionsError,
+    ) -> Result<
+        DescribeThingRegistrationTaskResponse,
+        RusotoError<DescribeThingRegistrationTaskError>,
     >;
 
-    /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
-    fn list_audit_mitigation_actions_tasks(
+    /// <p>Gets information about the specified thing type.</p>
+    async fn describe_thing_type(
         &self,
-        input: ListAuditMitigationActionsTasksRequest,
-    ) -> RusotoFuture<ListAuditMitigationActionsTasksResponse, ListAuditMitigationActionsTasksError>;
+        input: DescribeThingTypeRequest,
+    ) -> Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>>;
+
+    /// <p>Detaches a policy from the specified target.</p>
+    async fn detach_policy(
+        &self,
+        input: DetachPolicyRequest,
+    ) -> Result<(), RusotoError<DetachPolicyError>>;
+
+    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
+    async fn detach_principal_policy(
+        &self,
+        input: DetachPrincipalPolicyRequest,
+    ) -> Result<(), RusotoError<DetachPrincipalPolicyError>>;
+
+    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
+    async fn detach_security_profile(
+        &self,
+        input: DetachSecurityProfileRequest,
+    ) -> Result<DetachSecurityProfileResponse, RusotoError<DetachSecurityProfileError>>;
+
+    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
+    async fn detach_thing_principal(
+        &self,
+        input: DetachThingPrincipalRequest,
+    ) -> Result<DetachThingPrincipalResponse, RusotoError<DetachThingPrincipalError>>;
+
+    /// <p>Disables the rule.</p>
+    async fn disable_topic_rule(
+        &self,
+        input: DisableTopicRuleRequest,
+    ) -> Result<(), RusotoError<DisableTopicRuleError>>;
+
+    /// <p>Enables the rule.</p>
+    async fn enable_topic_rule(
+        &self,
+        input: EnableTopicRuleRequest,
+    ) -> Result<(), RusotoError<EnableTopicRuleError>>;
+
+    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
+    async fn get_effective_policies(
+        &self,
+        input: GetEffectivePoliciesRequest,
+    ) -> Result<GetEffectivePoliciesResponse, RusotoError<GetEffectivePoliciesError>>;
+
+    /// <p>Gets the search configuration.</p>
+    async fn get_indexing_configuration(
+        &self,
+    ) -> Result<GetIndexingConfigurationResponse, RusotoError<GetIndexingConfigurationError>>;
+
+    /// <p>Gets a job document.</p>
+    async fn get_job_document(
+        &self,
+        input: GetJobDocumentRequest,
+    ) -> Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>>;
+
+    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
+    async fn get_logging_options(
+        &self,
+    ) -> Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>>;
+
+    /// <p>Gets an OTA update.</p>
+    async fn get_ota_update(
+        &self,
+        input: GetOTAUpdateRequest,
+    ) -> Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>>;
+
+    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
+    async fn get_policy(
+        &self,
+        input: GetPolicyRequest,
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>>;
+
+    /// <p>Gets information about the specified policy version.</p>
+    async fn get_policy_version(
+        &self,
+        input: GetPolicyVersionRequest,
+    ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>>;
+
+    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
+    async fn get_registration_code(
+        &self,
+    ) -> Result<GetRegistrationCodeResponse, RusotoError<GetRegistrationCodeError>>;
+
+    /// <p>Gets statistics about things that match the specified query.</p>
+    async fn get_statistics(
+        &self,
+        input: GetStatisticsRequest,
+    ) -> Result<GetStatisticsResponse, RusotoError<GetStatisticsError>>;
+
+    /// <p>Gets information about the rule.</p>
+    async fn get_topic_rule(
+        &self,
+        input: GetTopicRuleRequest,
+    ) -> Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>>;
+
+    /// <p>Gets the fine grained logging options.</p>
+    async fn get_v2_logging_options(
+        &self,
+    ) -> Result<GetV2LoggingOptionsResponse, RusotoError<GetV2LoggingOptionsError>>;
+
+    /// <p>Lists the active violations for a given Device Defender security profile.</p>
+    async fn list_active_violations(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>>;
+
+    /// <p>Lists the policies attached to the specified thing group.</p>
+    async fn list_attached_policies(
+        &self,
+        input: ListAttachedPoliciesRequest,
+    ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>>;
+
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    async fn list_audit_findings(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>>;
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    fn list_audit_tasks(
+    async fn list_audit_tasks(
         &self,
         input: ListAuditTasksRequest,
-    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError>;
+    ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>>;
 
     /// <p>Lists the authorizers registered in your account.</p>
-    fn list_authorizers(
+    async fn list_authorizers(
         &self,
         input: ListAuthorizersRequest,
-    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError>;
+    ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>>;
 
     /// <p>Lists the billing groups you have created.</p>
-    fn list_billing_groups(
+    async fn list_billing_groups(
         &self,
         input: ListBillingGroupsRequest,
-    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError>;
+    ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>>;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_ca_certificates(
+    async fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
-    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError>;
+    ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>>;
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_certificates(
+    async fn list_certificates(
         &self,
         input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError>;
+    ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>;
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
-    fn list_certificates_by_ca(
+    async fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
-    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError>;
-
-    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn list_domain_configurations(
-        &self,
-        input: ListDomainConfigurationsRequest,
-    ) -> RusotoFuture<ListDomainConfigurationsResponse, ListDomainConfigurationsError>;
+    ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>>;
 
     /// <p>Lists the search indices.</p>
-    fn list_indices(
+    async fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError>;
+    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
 
     /// <p>Lists the job executions for a job.</p>
-    fn list_job_executions_for_job(
+    async fn list_job_executions_for_job(
         &self,
         input: ListJobExecutionsForJobRequest,
-    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
+    ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>>;
 
     /// <p>Lists the job executions for the specified thing.</p>
-    fn list_job_executions_for_thing(
+    async fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
-    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
+    ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>;
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
-
-    /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
-    fn list_mitigation_actions(
+    async fn list_jobs(
         &self,
-        input: ListMitigationActionsRequest,
-    ) -> RusotoFuture<ListMitigationActionsResponse, ListMitigationActionsError>;
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
     /// <p>Lists OTA updates.</p>
-    fn list_ota_updates(
+    async fn list_ota_updates(
         &self,
         input: ListOTAUpdatesRequest,
-    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError>;
+    ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>>;
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
-    fn list_outgoing_certificates(
+    async fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
-    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
+    ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>>;
 
     /// <p>Lists your policies.</p>
-    fn list_policies(
+    async fn list_policies(
         &self,
         input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
+    ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
-    fn list_policy_principals(
+    async fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
-    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
+    ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>>;
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
-    fn list_policy_versions(
+    async fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+    ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>>;
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
-    fn list_principal_policies(
+    async fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
-    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
+    ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>>;
 
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
-    fn list_principal_things(
+    async fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
-    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError>;
-
-    /// <p>A list of fleet provisioning template versions.</p>
-    fn list_provisioning_template_versions(
-        &self,
-        input: ListProvisioningTemplateVersionsRequest,
-    ) -> RusotoFuture<ListProvisioningTemplateVersionsResponse, ListProvisioningTemplateVersionsError>;
-
-    /// <p>Lists the fleet provisioning templates in your AWS account.</p>
-    fn list_provisioning_templates(
-        &self,
-        input: ListProvisioningTemplatesRequest,
-    ) -> RusotoFuture<ListProvisioningTemplatesResponse, ListProvisioningTemplatesError>;
+    ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>>;
 
     /// <p>Lists the role aliases registered in your account.</p>
-    fn list_role_aliases(
+    async fn list_role_aliases(
         &self,
         input: ListRoleAliasesRequest,
-    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError>;
+    ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>>;
 
     /// <p>Lists all of your scheduled audits.</p>
-    fn list_scheduled_audits(
+    async fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
-    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError>;
+    ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>>;
 
     /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
-    fn list_security_profiles(
+    async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError>;
+    ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>>;
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
-    fn list_security_profiles_for_target(
+    async fn list_security_profiles_for_target(
         &self,
         input: ListSecurityProfilesForTargetRequest,
-    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>;
+    ) -> Result<
+        ListSecurityProfilesForTargetResponse,
+        RusotoError<ListSecurityProfilesForTargetError>,
+    >;
 
     /// <p>Lists all of the streams in your AWS account.</p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsRequest,
-    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError>;
+    ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>>;
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>List targets for the specified policy.</p>
-    fn list_targets_for_policy(
+    async fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
-    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
+    ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>>;
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
-    fn list_targets_for_security_profile(
+    async fn list_targets_for_security_profile(
         &self,
         input: ListTargetsForSecurityProfileRequest,
-    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>;
+    ) -> Result<
+        ListTargetsForSecurityProfileResponse,
+        RusotoError<ListTargetsForSecurityProfileError>,
+    >;
 
     /// <p>List the thing groups in your account.</p>
-    fn list_thing_groups(
+    async fn list_thing_groups(
         &self,
         input: ListThingGroupsRequest,
-    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError>;
+    ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>>;
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
-    fn list_thing_groups_for_thing(
+    async fn list_thing_groups_for_thing(
         &self,
         input: ListThingGroupsForThingRequest,
-    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
+    ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>>;
 
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn list_thing_principals(
+    async fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
-    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError>;
+    ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>>;
 
     /// <p>Information about the thing registration tasks.</p>
-    fn list_thing_registration_task_reports(
+    async fn list_thing_registration_task_reports(
         &self,
         input: ListThingRegistrationTaskReportsRequest,
-    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
+    ) -> Result<
+        ListThingRegistrationTaskReportsResponse,
+        RusotoError<ListThingRegistrationTaskReportsError>,
+    >;
 
     /// <p>List bulk thing provisioning tasks.</p>
-    fn list_thing_registration_tasks(
+    async fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
-    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
+    ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>;
 
     /// <p>Lists the existing thing types.</p>
-    fn list_thing_types(
+    async fn list_thing_types(
         &self,
         input: ListThingTypesRequest,
-    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError>;
+    ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>;
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    fn list_things(
+    async fn list_things(
         &self,
         input: ListThingsRequest,
-    ) -> RusotoFuture<ListThingsResponse, ListThingsError>;
+    ) -> Result<ListThingsResponse, RusotoError<ListThingsError>>;
 
     /// <p>Lists the things you have added to the given billing group.</p>
-    fn list_things_in_billing_group(
+    async fn list_things_in_billing_group(
         &self,
         input: ListThingsInBillingGroupRequest,
-    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError>;
+    ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>>;
 
     /// <p>Lists the things in the specified group.</p>
-    fn list_things_in_thing_group(
+    async fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
-    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
-
-    /// <p>Lists all the topic rule destinations in your AWS account.</p>
-    fn list_topic_rule_destinations(
-        &self,
-        input: ListTopicRuleDestinationsRequest,
-    ) -> RusotoFuture<ListTopicRuleDestinationsResponse, ListTopicRuleDestinationsError>;
+    ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>>;
 
     /// <p>Lists the rules for the specific topic.</p>
-    fn list_topic_rules(
+    async fn list_topic_rules(
         &self,
         input: ListTopicRulesRequest,
-    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError>;
+    ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>>;
 
     /// <p>Lists logging levels.</p>
-    fn list_v2_logging_levels(
+    async fn list_v2_logging_levels(
         &self,
         input: ListV2LoggingLevelsRequest,
-    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
+    ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>>;
 
-    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
-    fn list_violation_events(
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    async fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
-    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError>;
+    ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>>;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
-    fn register_ca_certificate(
+    async fn register_ca_certificate(
         &self,
         input: RegisterCACertificateRequest,
-    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError>;
+    ) -> Result<RegisterCACertificateResponse, RusotoError<RegisterCACertificateError>>;
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
-    fn register_certificate(
+    async fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError>;
+    ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>>;
 
-    /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
-    fn register_thing(
+    /// <p>Provisions a thing.</p>
+    async fn register_thing(
         &self,
         input: RegisterThingRequest,
-    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError>;
+    ) -> Result<RegisterThingResponse, RusotoError<RegisterThingError>>;
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
-    fn reject_certificate_transfer(
+    async fn reject_certificate_transfer(
         &self,
         input: RejectCertificateTransferRequest,
-    ) -> RusotoFuture<(), RejectCertificateTransferError>;
+    ) -> Result<(), RusotoError<RejectCertificateTransferError>>;
 
     /// <p>Removes the given thing from the billing group.</p>
-    fn remove_thing_from_billing_group(
+    async fn remove_thing_from_billing_group(
         &self,
         input: RemoveThingFromBillingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError>;
+    ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>;
 
     /// <p>Remove the specified thing from the specified group.</p>
-    fn remove_thing_from_thing_group(
+    async fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
+    ) -> Result<RemoveThingFromThingGroupResponse, RusotoError<RemoveThingFromThingGroupError>>;
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn replace_topic_rule(
+    async fn replace_topic_rule(
         &self,
         input: ReplaceTopicRuleRequest,
-    ) -> RusotoFuture<(), ReplaceTopicRuleError>;
+    ) -> Result<(), RusotoError<ReplaceTopicRuleError>>;
 
     /// <p>The query search index.</p>
-    fn search_index(
+    async fn search_index(
         &self,
         input: SearchIndexRequest,
-    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError>;
+    ) -> Result<SearchIndexResponse, RusotoError<SearchIndexError>>;
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
-    fn set_default_authorizer(
+    async fn set_default_authorizer(
         &self,
         input: SetDefaultAuthorizerRequest,
-    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
+    ) -> Result<SetDefaultAuthorizerResponse, RusotoError<SetDefaultAuthorizerError>>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
-    fn set_default_policy_version(
+    async fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
+    ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>>;
 
     /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
-    fn set_logging_options(
+    async fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetLoggingOptionsError>;
+    ) -> Result<(), RusotoError<SetLoggingOptionsError>>;
 
     /// <p>Sets the logging level.</p>
-    fn set_v2_logging_level(
+    async fn set_v2_logging_level(
         &self,
         input: SetV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), SetV2LoggingLevelError>;
+    ) -> Result<(), RusotoError<SetV2LoggingLevelError>>;
 
     /// <p>Sets the logging options for the V2 logging service.</p>
-    fn set_v2_logging_options(
+    async fn set_v2_logging_options(
         &self,
         input: SetV2LoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
-
-    /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
-    fn start_audit_mitigation_actions_task(
-        &self,
-        input: StartAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<StartAuditMitigationActionsTaskResponse, StartAuditMitigationActionsTaskError>;
+    ) -> Result<(), RusotoError<SetV2LoggingOptionsError>>;
 
     /// <p>Starts an on-demand Device Defender audit.</p>
-    fn start_on_demand_audit_task(
+    async fn start_on_demand_audit_task(
         &self,
         input: StartOnDemandAuditTaskRequest,
-    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError>;
+    ) -> Result<StartOnDemandAuditTaskResponse, RusotoError<StartOnDemandAuditTaskError>>;
 
     /// <p>Creates a bulk thing provisioning task.</p>
-    fn start_thing_registration_task(
+    async fn start_thing_registration_task(
         &self,
         input: StartThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
+    ) -> Result<StartThingRegistrationTaskResponse, RusotoError<StartThingRegistrationTaskError>>;
 
     /// <p>Cancels a bulk thing provisioning task.</p>
-    fn stop_thing_registration_task(
+    async fn stop_thing_registration_task(
         &self,
         input: StopThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
+    ) -> Result<StopThingRegistrationTaskResponse, RusotoError<StopThingRegistrationTaskError>>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_authorization(
+    async fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
-    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError>;
+    ) -> Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>>;
 
     /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_invoke_authorizer(
+    async fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>>;
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
-    fn transfer_certificate(
+    async fn transfer_certificate(
         &self,
         input: TransferCertificateRequest,
-    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
+    ) -> Result<TransferCertificateResponse, RusotoError<TransferCertificateError>>;
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn update_account_audit_configuration(
+    async fn update_account_audit_configuration(
         &self,
         input: UpdateAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>;
+    ) -> Result<
+        UpdateAccountAuditConfigurationResponse,
+        RusotoError<UpdateAccountAuditConfigurationError>,
+    >;
 
     /// <p>Updates an authorizer.</p>
-    fn update_authorizer(
+    async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
+    ) -> Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>>;
 
     /// <p>Updates information about the billing group.</p>
-    fn update_billing_group(
+    async fn update_billing_group(
         &self,
         input: UpdateBillingGroupRequest,
-    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError>;
+    ) -> Result<UpdateBillingGroupResponse, RusotoError<UpdateBillingGroupError>>;
 
     /// <p>Updates a registered CA certificate.</p>
-    fn update_ca_certificate(
+    async fn update_ca_certificate(
         &self,
         input: UpdateCACertificateRequest,
-    ) -> RusotoFuture<(), UpdateCACertificateError>;
+    ) -> Result<(), RusotoError<UpdateCACertificateError>>;
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
-    fn update_certificate(
+    async fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
-    ) -> RusotoFuture<(), UpdateCertificateError>;
-
-    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn update_domain_configuration(
-        &self,
-        input: UpdateDomainConfigurationRequest,
-    ) -> RusotoFuture<UpdateDomainConfigurationResponse, UpdateDomainConfigurationError>;
+    ) -> Result<(), RusotoError<UpdateCertificateError>>;
 
     /// <p>Updates a dynamic thing group.</p>
-    fn update_dynamic_thing_group(
+    async fn update_dynamic_thing_group(
         &self,
         input: UpdateDynamicThingGroupRequest,
-    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError>;
+    ) -> Result<UpdateDynamicThingGroupResponse, RusotoError<UpdateDynamicThingGroupError>>;
 
     /// <p>Updates the event configurations.</p>
-    fn update_event_configurations(
+    async fn update_event_configurations(
         &self,
         input: UpdateEventConfigurationsRequest,
-    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
+    ) -> Result<UpdateEventConfigurationsResponse, RusotoError<UpdateEventConfigurationsError>>;
 
     /// <p>Updates the search configuration.</p>
-    fn update_indexing_configuration(
+    async fn update_indexing_configuration(
         &self,
         input: UpdateIndexingConfigurationRequest,
-    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
+    ) -> Result<UpdateIndexingConfigurationResponse, RusotoError<UpdateIndexingConfigurationError>>;
 
     /// <p>Updates supported fields of the specified job.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError>;
-
-    /// <p>Updates the definition for the specified mitigation action.</p>
-    fn update_mitigation_action(
-        &self,
-        input: UpdateMitigationActionRequest,
-    ) -> RusotoFuture<UpdateMitigationActionResponse, UpdateMitigationActionError>;
-
-    /// <p>Updates a fleet provisioning template.</p>
-    fn update_provisioning_template(
-        &self,
-        input: UpdateProvisioningTemplateRequest,
-    ) -> RusotoFuture<UpdateProvisioningTemplateResponse, UpdateProvisioningTemplateError>;
+    async fn update_job(&self, input: UpdateJobRequest) -> Result<(), RusotoError<UpdateJobError>>;
 
     /// <p>Updates a role alias.</p>
-    fn update_role_alias(
+    async fn update_role_alias(
         &self,
         input: UpdateRoleAliasRequest,
-    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
+    ) -> Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>>;
 
-    /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
-    fn update_scheduled_audit(
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    async fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
-    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError>;
+    ) -> Result<UpdateScheduledAuditResponse, RusotoError<UpdateScheduledAuditError>>;
 
     /// <p>Updates a Device Defender security profile.</p>
-    fn update_security_profile(
+    async fn update_security_profile(
         &self,
         input: UpdateSecurityProfileRequest,
-    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError>;
+    ) -> Result<UpdateSecurityProfileResponse, RusotoError<UpdateSecurityProfileError>>;
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    fn update_stream(
+    async fn update_stream(
         &self,
         input: UpdateStreamRequest,
-    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError>;
+    ) -> Result<UpdateStreamResponse, RusotoError<UpdateStreamError>>;
 
     /// <p>Updates the data for a thing.</p>
-    fn update_thing(
+    async fn update_thing(
         &self,
         input: UpdateThingRequest,
-    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError>;
+    ) -> Result<UpdateThingResponse, RusotoError<UpdateThingError>>;
 
     /// <p>Update a thing group.</p>
-    fn update_thing_group(
+    async fn update_thing_group(
         &self,
         input: UpdateThingGroupRequest,
-    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError>;
+    ) -> Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>>;
 
     /// <p>Updates the groups to which the thing belongs.</p>
-    fn update_thing_groups_for_thing(
+    async fn update_thing_groups_for_thing(
         &self,
         input: UpdateThingGroupsForThingRequest,
-    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
-
-    /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
-    fn update_topic_rule_destination(
-        &self,
-        input: UpdateTopicRuleDestinationRequest,
-    ) -> RusotoFuture<UpdateTopicRuleDestinationResponse, UpdateTopicRuleDestinationError>;
+    ) -> Result<UpdateThingGroupsForThingResponse, RusotoError<UpdateThingGroupsForThingError>>;
 
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
-    fn validate_security_profile_behaviors(
+    async fn validate_security_profile_behaviors(
         &self,
         input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>;
+    ) -> Result<
+        ValidateSecurityProfileBehaviorsResponse,
+        RusotoError<ValidateSecurityProfileBehaviorsError>,
+    >;
 }
 /// A client for the AWS IoT API.
 #[derive(Clone)]
@@ -22140,7 +18052,10 @@ impl IotClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> IotClient {
-        Self::new_with_client(Client::shared(), region)
+        IotClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -22150,35 +18065,22 @@ impl IotClient {
     ) -> IotClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        IotClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> IotClient {
-        IotClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for IotClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("IotClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Iot for IotClient {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
-    fn accept_certificate_transfer(
+    async fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> RusotoFuture<(), AcceptCertificateTransferError> {
+    ) -> Result<(), RusotoError<AcceptCertificateTransferError>> {
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -22195,26 +18097,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptCertificateTransferError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptCertificateTransferError::from_response(response))
+        }
     }
 
     /// <p>Adds a thing to a billing group.</p>
-    fn add_thing_to_billing_group(
+    async fn add_thing_to_billing_group(
         &self,
         input: AddThingToBillingGroupRequest,
-    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError> {
+    ) -> Result<AddThingToBillingGroupResponse, RusotoError<AddThingToBillingGroupError>> {
         let request_uri = "/billing-groups/addThingToBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22224,29 +18127,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddThingToBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddThingToBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AddThingToBillingGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddThingToBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Adds a thing to a thing group.</p>
-    fn add_thing_to_thing_group(
+    async fn add_thing_to_thing_group(
         &self,
         input: AddThingToThingGroupRequest,
-    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError> {
+    ) -> Result<AddThingToThingGroupResponse, RusotoError<AddThingToThingGroupError>> {
         let request_uri = "/thing-groups/addThingToThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22256,29 +18158,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddThingToThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddThingToThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AddThingToThingGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddThingToThingGroupError::from_response(response))
+        }
     }
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
-    fn associate_targets_with_job(
+    async fn associate_targets_with_job(
         &self,
         input: AssociateTargetsWithJobRequest,
-    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
+    ) -> Result<AssociateTargetsWithJobResponse, RusotoError<AssociateTargetsWithJobError>> {
         let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22288,24 +18189,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateTargetsWithJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateTargetsWithJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateTargetsWithJobError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateTargetsWithJobError::from_response(response))
+        }
     }
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
+    async fn attach_policy(
+        &self,
+        input: AttachPolicyRequest,
+    ) -> Result<(), RusotoError<AttachPolicyError>> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -22318,29 +18223,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AttachPolicyError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachPolicyError::from_response(response))
+        }
     }
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
-    fn attach_principal_policy(
+    async fn attach_principal_policy(
         &self,
         input: AttachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), AttachPrincipalPolicyError> {
+    ) -> Result<(), RusotoError<AttachPrincipalPolicyError>> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -22353,28 +18256,27 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AttachPrincipalPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachPrincipalPolicyError::from_response(response))
+        }
     }
 
-    /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
-    fn attach_security_profile(
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    async fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
-    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError> {
+    ) -> Result<AttachSecurityProfileResponse, RusotoError<AttachSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -22392,29 +18294,28 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AttachSecurityProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn attach_thing_principal(
+    async fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
-    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+    ) -> Result<AttachThingPrincipalResponse, RusotoError<AttachThingPrincipalError>> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -22427,63 +18328,28 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachThingPrincipalResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AttachThingPrincipalResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AttachThingPrincipalError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
-    fn cancel_audit_mitigation_actions_task(
-        &self,
-        input: CancelAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<CancelAuditMitigationActionsTaskResponse, CancelAuditMitigationActionsTaskError>
-    {
-        let request_uri = format!(
-            "/audit/mitigationactions/tasks/{task_id}/cancel",
-            task_id = input.task_id
-        );
-
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelAuditMitigationActionsTaskResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelAuditMitigationActionsTaskError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachThingPrincipalError::from_response(response))
+        }
     }
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    fn cancel_audit_task(
+    async fn cancel_audit_task(
         &self,
         input: CancelAuditTaskRequest,
-    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError> {
+    ) -> Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>> {
         let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = input.task_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22491,30 +18357,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelAuditTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelAuditTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelAuditTaskError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelAuditTaskError::from_response(response))
+        }
     }
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
-    fn cancel_certificate_transfer(
+    async fn cancel_certificate_transfer(
         &self,
         input: CancelCertificateTransferRequest,
-    ) -> RusotoFuture<(), CancelCertificateTransferError> {
+    ) -> Result<(), RusotoError<CancelCertificateTransferError>> {
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -22525,26 +18389,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelCertificateTransferError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelCertificateTransferError::from_response(response))
+        }
     }
 
     /// <p>Cancels a job.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
         let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22560,30 +18425,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelJobError::from_response(response))
+        }
     }
 
     /// <p>Cancels the execution of a job for a given thing.</p>
-    fn cancel_job_execution(
+    async fn cancel_job_execution(
         &self,
         input: CancelJobExecutionRequest,
-    ) -> RusotoFuture<(), CancelJobExecutionError> {
+    ) -> Result<(), RusotoError<CancelJobExecutionError>> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/cancel",
             job_id = input.job_id,
@@ -22603,28 +18466,26 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelJobExecutionError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelJobExecutionError::from_response(response))
+        }
     }
 
     /// <p>Clears the default authorizer.</p>
-    fn clear_default_authorizer(
+    async fn clear_default_authorizer(
         &self,
-    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
+    ) -> Result<ClearDefaultAuthorizerResponse, RusotoError<ClearDefaultAuthorizerError>> {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -22632,60 +18493,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ClearDefaultAuthorizerError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
-    fn confirm_topic_rule_destination(
-        &self,
-        input: ConfirmTopicRuleDestinationRequest,
-    ) -> RusotoFuture<ConfirmTopicRuleDestinationResponse, ConfirmTopicRuleDestinationError> {
-        let request_uri = format!(
-            "/confirmdestination/{confirmation_token}",
-            confirmation_token = input.confirmation_token
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConfirmTopicRuleDestinationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmTopicRuleDestinationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ClearDefaultAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Creates an authorizer.</p>
-    fn create_authorizer(
+    async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
+    ) -> Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -22698,30 +18527,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAuthorizerError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Creates a billing group.</p>
-    fn create_billing_group(
+    async fn create_billing_group(
         &self,
         input: CreateBillingGroupRequest,
-    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError> {
+    ) -> Result<CreateBillingGroupResponse, RusotoError<CreateBillingGroupError>> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -22734,30 +18561,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateBillingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
-    fn create_certificate_from_csr(
+    async fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
-    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+    ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22773,60 +18598,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCertificateFromCsrResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCertificateFromCsrResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateFromCsrError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn create_domain_configuration(
-        &self,
-        input: CreateDomainConfigurationRequest,
-    ) -> RusotoFuture<CreateDomainConfigurationResponse, CreateDomainConfigurationError> {
-        let request_uri = format!(
-            "/domainConfigurations/{domain_configuration_name}",
-            domain_configuration_name = input.domain_configuration_name
-        );
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDomainConfigurationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDomainConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCertificateFromCsrError::from_response(response))
+        }
     }
 
     /// <p>Creates a dynamic thing group.</p>
-    fn create_dynamic_thing_group(
+    async fn create_dynamic_thing_group(
         &self,
         input: CreateDynamicThingGroupRequest,
-    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError> {
+    ) -> Result<CreateDynamicThingGroupResponse, RusotoError<CreateDynamicThingGroupError>> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -22839,27 +18632,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDynamicThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDynamicThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDynamicThingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDynamicThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a job.</p>
-    fn create_job(
+    async fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
+    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22869,30 +18663,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateJobError::from_response(response))
+        }
     }
 
-    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
-    fn create_keys_and_certificate(
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    async fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
-    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+    ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>> {
         let request_uri = "/keys-and-certificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22906,62 +18698,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateKeysAndCertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateKeysAndCertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateKeysAndCertificateError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
-    fn create_mitigation_action(
-        &self,
-        input: CreateMitigationActionRequest,
-    ) -> RusotoFuture<CreateMitigationActionResponse, CreateMitigationActionError> {
-        let request_uri = format!(
-            "/mitigationactions/actions/{action_name}",
-            action_name = input.action_name
-        );
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateMitigationActionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateMitigationActionError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateKeysAndCertificateError::from_response(response))
+        }
     }
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    fn create_ota_update(
+    async fn create_ota_update(
         &self,
         input: CreateOTAUpdateRequest,
-    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError> {
+    ) -> Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -22974,30 +18732,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateOTAUpdateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateOTAUpdateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateOTAUpdateError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateOTAUpdateError::from_response(response))
+        }
     }
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    fn create_policy(
+    async fn create_policy(
         &self,
         input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
+    ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23007,30 +18763,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePolicyResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePolicyResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePolicyError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePolicyError::from_response(response))
+        }
     }
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
-    fn create_policy_version(
+    async fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+    ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -23049,134 +18803,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePolicyVersionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePolicyVersionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreatePolicyVersionError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Creates a provisioning claim.</p>
-    fn create_provisioning_claim(
-        &self,
-        input: CreateProvisioningClaimRequest,
-    ) -> RusotoFuture<CreateProvisioningClaimResponse, CreateProvisioningClaimError> {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}/provisioning-claim",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProvisioningClaimResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisioningClaimError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Creates a fleet provisioning template.</p>
-    fn create_provisioning_template(
-        &self,
-        input: CreateProvisioningTemplateRequest,
-    ) -> RusotoFuture<CreateProvisioningTemplateResponse, CreateProvisioningTemplateError> {
-        let request_uri = "/provisioning-templates";
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProvisioningTemplateResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisioningTemplateError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Creates a new version of a fleet provisioning template.</p>
-    fn create_provisioning_template_version(
-        &self,
-        input: CreateProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        CreateProvisioningTemplateVersionResponse,
-        CreateProvisioningTemplateVersionError,
-    > {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}/versions",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.set_as_default {
-            params.put("setAsDefault", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePolicyVersionError::from_response(response))
         }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProvisioningTemplateVersionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisioningTemplateVersionError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
     }
 
     /// <p>Creates a role alias.</p>
-    fn create_role_alias(
+    async fn create_role_alias(
         &self,
         input: CreateRoleAliasRequest,
-    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError> {
+    ) -> Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23186,30 +18834,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRoleAliasResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRoleAliasResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateRoleAliasError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRoleAliasError::from_response(response))
+        }
     }
 
     /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
-    fn create_scheduled_audit(
+    async fn create_scheduled_audit(
         &self,
         input: CreateScheduledAuditRequest,
-    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError> {
+    ) -> Result<CreateScheduledAuditResponse, RusotoError<CreateScheduledAuditError>> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -23222,29 +18868,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateScheduledAuditResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateScheduledAuditResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateScheduledAuditError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateScheduledAuditError::from_response(response))
+        }
     }
 
     /// <p>Creates a Device Defender security profile.</p>
-    fn create_security_profile(
+    async fn create_security_profile(
         &self,
         input: CreateSecurityProfileRequest,
-    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError> {
+    ) -> Result<CreateSecurityProfileResponse, RusotoError<CreateSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -23257,29 +18902,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateSecurityProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSecurityProfileError::from_response(response))
+        }
     }
 
-    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
-    fn create_stream(
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    async fn create_stream(
         &self,
         input: CreateStreamRequest,
-    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError> {
+    ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23289,30 +18933,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStreamResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateStreamResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateStreamError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateStreamError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing(
+    async fn create_thing(
         &self,
         input: CreateThingRequest,
-    ) -> RusotoFuture<CreateThingResponse, CreateThingError> {
+    ) -> Result<CreateThingResponse, RusotoError<CreateThingError>> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23322,30 +18964,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateThingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateThingError::from_response(response))
+        }
     }
 
     /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing_group(
+    async fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
-    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError> {
+    ) -> Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -23358,30 +18998,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateThingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a new thing type.</p>
-    fn create_thing_type(
+    async fn create_thing_type(
         &self,
         input: CreateThingTypeRequest,
-    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError> {
+    ) -> Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -23394,30 +19032,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateThingTypeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateThingTypeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateThingTypeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateThingTypeError::from_response(response))
+        }
     }
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn create_topic_rule(
+    async fn create_topic_rule(
         &self,
         input: CreateTopicRuleRequest,
-    ) -> RusotoFuture<(), CreateTopicRuleError> {
+    ) -> Result<(), RusotoError<CreateTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23431,60 +19067,30 @@ impl Iot for IotClient {
             request.add_header("x-amz-tagging", &tags.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTopicRuleError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
-    fn create_topic_rule_destination(
-        &self,
-        input: CreateTopicRuleDestinationRequest,
-    ) -> RusotoFuture<CreateTopicRuleDestinationResponse, CreateTopicRuleDestinationError> {
-        let request_uri = "/destinations";
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTopicRuleDestinationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTopicRuleDestinationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
-    fn delete_account_audit_configuration(
+    async fn delete_account_audit_configuration(
         &self,
         input: DeleteAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>
-    {
+    ) -> Result<
+        DeleteAccountAuditConfigurationResponse,
+        RusotoError<DeleteAccountAuditConfigurationError>,
+    > {
         let request_uri = "/audit/configuration";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23498,29 +19104,30 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAccountAuditConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAccountAuditConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAccountAuditConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccountAuditConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Deletes an authorizer.</p>
-    fn delete_authorizer(
+    async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError> {
+    ) -> Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -23531,30 +19138,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAuthorizerError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Deletes the billing group.</p>
-    fn delete_billing_group(
+    async fn delete_billing_group(
         &self,
         input: DeleteBillingGroupRequest,
-    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError> {
+    ) -> Result<DeleteBillingGroupResponse, RusotoError<DeleteBillingGroupError>> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -23571,30 +19176,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBillingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a registered CA certificate.</p>
-    fn delete_ca_certificate(
+    async fn delete_ca_certificate(
         &self,
         input: DeleteCACertificateRequest,
-    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError> {
+    ) -> Result<DeleteCACertificateResponse, RusotoError<DeleteCACertificateError>> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -23605,29 +19208,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteCACertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCACertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteCACertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCACertificateError::from_response(response))
+        }
     }
 
-    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
-    fn delete_certificate(
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
-    ) -> RusotoFuture<(), DeleteCertificateError> {
+    ) -> Result<(), RusotoError<DeleteCertificateError>> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -23644,60 +19246,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteCertificateError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn delete_domain_configuration(
-        &self,
-        input: DeleteDomainConfigurationRequest,
-    ) -> RusotoFuture<DeleteDomainConfigurationResponse, DeleteDomainConfigurationError> {
-        let request_uri = format!(
-            "/domainConfigurations/{domain_configuration_name}",
-            domain_configuration_name = input.domain_configuration_name
-        );
-
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDomainConfigurationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDomainConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCertificateError::from_response(response))
+        }
     }
 
     /// <p>Deletes a dynamic thing group.</p>
-    fn delete_dynamic_thing_group(
+    async fn delete_dynamic_thing_group(
         &self,
         input: DeleteDynamicThingGroupRequest,
-    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError> {
+    ) -> Result<DeleteDynamicThingGroupResponse, RusotoError<DeleteDynamicThingGroupError>> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -23714,24 +19283,25 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDynamicThingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDynamicThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError> {
+    async fn delete_job(&self, input: DeleteJobRequest) -> Result<(), RusotoError<DeleteJobError>> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23745,29 +19315,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteJobError::from_response(response))
+        }
     }
 
     /// <p>Deletes a job execution.</p>
-    fn delete_job_execution(
+    async fn delete_job_execution(
         &self,
         input: DeleteJobExecutionRequest,
-    ) -> RusotoFuture<(), DeleteJobExecutionError> {
+    ) -> Result<(), RusotoError<DeleteJobExecutionError>> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/executionNumber/{execution_number}",
             execution_number = input.execution_number,
@@ -23786,62 +19354,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteJobExecutionError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Deletes a defined mitigation action from your AWS account.</p>
-    fn delete_mitigation_action(
-        &self,
-        input: DeleteMitigationActionRequest,
-    ) -> RusotoFuture<DeleteMitigationActionResponse, DeleteMitigationActionError> {
-        let request_uri = format!(
-            "/mitigationactions/actions/{action_name}",
-            action_name = input.action_name
-        );
-
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteMitigationActionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteMitigationActionError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteJobExecutionError::from_response(response))
+        }
     }
 
     /// <p>Delete an OTA update.</p>
-    fn delete_ota_update(
+    async fn delete_ota_update(
         &self,
         input: DeleteOTAUpdateRequest,
-    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
+    ) -> Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -23861,27 +19394,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteOTAUpdateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteOTAUpdateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteOTAUpdateError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteOTAUpdateError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
+    async fn delete_policy(
+        &self,
+        input: DeletePolicyRequest,
+    ) -> Result<(), RusotoError<DeletePolicyError>> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23889,29 +19423,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePolicyError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
-    fn delete_policy_version(
+    async fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError> {
+    ) -> Result<(), RusotoError<DeletePolicyVersionError>> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -23923,95 +19455,26 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeletePolicyVersionError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Deletes a fleet provisioning template.</p>
-    fn delete_provisioning_template(
-        &self,
-        input: DeleteProvisioningTemplateRequest,
-    ) -> RusotoFuture<DeleteProvisioningTemplateResponse, DeleteProvisioningTemplateError> {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProvisioningTemplateResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisioningTemplateError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Deletes a fleet provisioning template version.</p>
-    fn delete_provisioning_template_version(
-        &self,
-        input: DeleteProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        DeleteProvisioningTemplateVersionResponse,
-        DeleteProvisioningTemplateVersionError,
-    > {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}/versions/{version_id}",
-            template_name = input.template_name,
-            version_id = input.version_id
-        );
-
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProvisioningTemplateVersionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisioningTemplateVersionError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePolicyVersionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a CA certificate registration code.</p>
-    fn delete_registration_code(
+    async fn delete_registration_code(
         &self,
-    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+    ) -> Result<DeleteRegistrationCodeResponse, RusotoError<DeleteRegistrationCodeError>> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24019,29 +19482,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRegistrationCodeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRegistrationCodeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteRegistrationCodeError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRegistrationCodeError::from_response(response))
+        }
     }
 
     /// <p>Deletes a role alias</p>
-    fn delete_role_alias(
+    async fn delete_role_alias(
         &self,
         input: DeleteRoleAliasRequest,
-    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError> {
+    ) -> Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24049,30 +19511,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRoleAliasResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRoleAliasResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteRoleAliasError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRoleAliasError::from_response(response))
+        }
     }
 
     /// <p>Deletes a scheduled audit.</p>
-    fn delete_scheduled_audit(
+    async fn delete_scheduled_audit(
         &self,
         input: DeleteScheduledAuditRequest,
-    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError> {
+    ) -> Result<DeleteScheduledAuditResponse, RusotoError<DeleteScheduledAuditError>> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -24083,29 +19543,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteScheduledAuditResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteScheduledAuditResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteScheduledAuditError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteScheduledAuditError::from_response(response))
+        }
     }
 
     /// <p>Deletes a Device Defender security profile.</p>
-    fn delete_security_profile(
+    async fn delete_security_profile(
         &self,
         input: DeleteSecurityProfileRequest,
-    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError> {
+    ) -> Result<DeleteSecurityProfileResponse, RusotoError<DeleteSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -24122,29 +19581,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteSecurityProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p>Deletes a stream.</p>
-    fn delete_stream(
+    async fn delete_stream(
         &self,
         input: DeleteStreamRequest,
-    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError> {
+    ) -> Result<DeleteStreamResponse, RusotoError<DeleteStreamError>> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24152,30 +19610,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteStreamResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteStreamResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteStreamError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteStreamError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    fn delete_thing(
+    async fn delete_thing(
         &self,
         input: DeleteThingRequest,
-    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError> {
+    ) -> Result<DeleteThingResponse, RusotoError<DeleteThingError>> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24189,30 +19645,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteThingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThingError::from_response(response))
+        }
     }
 
     /// <p>Deletes a thing group.</p>
-    fn delete_thing_group(
+    async fn delete_thing_group(
         &self,
         input: DeleteThingGroupRequest,
-    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError> {
+    ) -> Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -24229,30 +19683,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteThingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    fn delete_thing_type(
+    async fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
-    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError> {
+    ) -> Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -24263,30 +19715,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteThingTypeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteThingTypeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteThingTypeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThingTypeError::from_response(response))
+        }
     }
 
     /// <p>Deletes the rule.</p>
-    fn delete_topic_rule(
+    async fn delete_topic_rule(
         &self,
         input: DeleteTopicRuleRequest,
-    ) -> RusotoFuture<(), DeleteTopicRuleError> {
+    ) -> Result<(), RusotoError<DeleteTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24294,57 +19744,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTopicRuleError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Deletes a topic rule destination.</p>
-    fn delete_topic_rule_destination(
-        &self,
-        input: DeleteTopicRuleDestinationRequest,
-    ) -> RusotoFuture<DeleteTopicRuleDestinationResponse, DeleteTopicRuleDestinationError> {
-        let request_uri = format!("/destinations/{arn}", arn = input.arn);
-
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTopicRuleDestinationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTopicRuleDestinationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>Deletes a logging level.</p>
-    fn delete_v2_logging_level(
+    async fn delete_v2_logging_level(
         &self,
         input: DeleteV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), DeleteV2LoggingLevelError> {
+    ) -> Result<(), RusotoError<DeleteV2LoggingLevelError>> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24357,28 +19777,27 @@ impl Iot for IotClient {
         params.put("targetType", &input.target_type);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteV2LoggingLevelError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteV2LoggingLevelError::from_response(response))
+        }
     }
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
-    fn deprecate_thing_type(
+    async fn deprecate_thing_type(
         &self,
         input: DeprecateThingTypeRequest,
-    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+    ) -> Result<DeprecateThingTypeResponse, RusotoError<DeprecateThingTypeError>> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
             thing_type_name = input.thing_type_name
@@ -24391,31 +19810,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeprecateThingTypeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeprecateThingTypeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeprecateThingTypeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeprecateThingTypeError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn describe_account_audit_configuration(
+    async fn describe_account_audit_configuration(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAccountAuditConfigurationResponse,
-        DescribeAccountAuditConfigurationError,
+        RusotoError<DescribeAccountAuditConfigurationError>,
     > {
         let request_uri = "/audit/configuration";
 
@@ -24424,98 +19841,30 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAccountAuditConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountAuditConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountAuditConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
-    }
-
-    /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
-    fn describe_audit_finding(
-        &self,
-        input: DescribeAuditFindingRequest,
-    ) -> RusotoFuture<DescribeAuditFindingResponse, DescribeAuditFindingError> {
-        let request_uri = format!(
-            "/audit/findings/{finding_id}",
-            finding_id = input.finding_id
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAuditFindingResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAuditFindingError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
-    fn describe_audit_mitigation_actions_task(
-        &self,
-        input: DescribeAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<
-        DescribeAuditMitigationActionsTaskResponse,
-        DescribeAuditMitigationActionsTaskError,
-    > {
-        let request_uri = format!(
-            "/audit/mitigationactions/tasks/{task_id}",
-            task_id = input.task_id
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAuditMitigationActionsTaskResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAuditMitigationActionsTaskError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountAuditConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Gets information about a Device Defender audit.</p>
-    fn describe_audit_task(
+    async fn describe_audit_task(
         &self,
         input: DescribeAuditTaskRequest,
-    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError> {
+    ) -> Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>> {
         let request_uri = format!("/audit/tasks/{task_id}", task_id = input.task_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24523,30 +19872,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAuditTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAuditTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeAuditTaskError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAuditTaskError::from_response(response))
+        }
     }
 
     /// <p>Describes an authorizer.</p>
-    fn describe_authorizer(
+    async fn describe_authorizer(
         &self,
         input: DescribeAuthorizerRequest,
-    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError> {
+    ) -> Result<DescribeAuthorizerResponse, RusotoError<DescribeAuthorizerError>> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -24557,30 +19904,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeAuthorizerError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Returns information about a billing group.</p>
-    fn describe_billing_group(
+    async fn describe_billing_group(
         &self,
         input: DescribeBillingGroupRequest,
-    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError> {
+    ) -> Result<DescribeBillingGroupResponse, RusotoError<DescribeBillingGroupError>> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -24591,29 +19936,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeBillingGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Describes a registered CA certificate.</p>
-    fn describe_ca_certificate(
+    async fn describe_ca_certificate(
         &self,
         input: DescribeCACertificateRequest,
-    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError> {
+    ) -> Result<DescribeCACertificateResponse, RusotoError<DescribeCACertificateError>> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -24624,29 +19968,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCACertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCACertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCACertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCACertificateError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified certificate.</p>
-    fn describe_certificate(
+    async fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
+    ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -24657,28 +20000,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCertificateError::from_response(response))
+        }
     }
 
     /// <p>Describes the default authorizer.</p>
-    fn describe_default_authorizer(
+    async fn describe_default_authorizer(
         &self,
-    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
+    ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>
+    {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24686,58 +20029,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDefaultAuthorizerError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn describe_domain_configuration(
-        &self,
-        input: DescribeDomainConfigurationRequest,
-    ) -> RusotoFuture<DescribeDomainConfigurationResponse, DescribeDomainConfigurationError> {
-        let request_uri = format!(
-            "/domainConfigurations/{domain_configuration_name}",
-            domain_configuration_name = input.domain_configuration_name
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDomainConfigurationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDomainConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDefaultAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(
+    async fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
+    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
         let request_uri = "/endpoint";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24751,29 +20064,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEndpointError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointError::from_response(response))
+        }
     }
 
     /// <p>Describes event configurations.</p>
-    fn describe_event_configurations(
+    async fn describe_event_configurations(
         &self,
-    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
+    ) -> Result<DescribeEventConfigurationsResponse, RusotoError<DescribeEventConfigurationsError>>
+    {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24781,27 +20093,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventConfigurationsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventConfigurationsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventConfigurationsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Describes a search index.</p>
-    fn describe_index(
+    async fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError> {
+    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>> {
         let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24809,30 +20122,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeIndexResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeIndexResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeIndexError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIndexError::from_response(response))
+        }
     }
 
     /// <p>Describes a job.</p>
-    fn describe_job(
+    async fn describe_job(
         &self,
         input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError> {
+    ) -> Result<DescribeJobResponse, RusotoError<DescribeJobError>> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24840,30 +20151,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobError::from_response(response))
+        }
     }
 
     /// <p>Describes a job execution.</p>
-    fn describe_job_execution(
+    async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -24881,128 +20190,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobExecutionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobExecutionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeJobExecutionError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Gets information about a mitigation action.</p>
-    fn describe_mitigation_action(
-        &self,
-        input: DescribeMitigationActionRequest,
-    ) -> RusotoFuture<DescribeMitigationActionResponse, DescribeMitigationActionError> {
-        let request_uri = format!(
-            "/mitigationactions/actions/{action_name}",
-            action_name = input.action_name
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMitigationActionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMitigationActionError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Returns information about a fleet provisioning template.</p>
-    fn describe_provisioning_template(
-        &self,
-        input: DescribeProvisioningTemplateRequest,
-    ) -> RusotoFuture<DescribeProvisioningTemplateResponse, DescribeProvisioningTemplateError> {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisioningTemplateResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningTemplateError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Returns information about a fleet provisioning template version.</p>
-    fn describe_provisioning_template_version(
-        &self,
-        input: DescribeProvisioningTemplateVersionRequest,
-    ) -> RusotoFuture<
-        DescribeProvisioningTemplateVersionResponse,
-        DescribeProvisioningTemplateVersionError,
-    > {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}/versions/{version_id}",
-            template_name = input.template_name,
-            version_id = input.version_id
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisioningTemplateVersionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningTemplateVersionError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobExecutionError::from_response(response))
+        }
     }
 
     /// <p>Describes a role alias.</p>
-    fn describe_role_alias(
+    async fn describe_role_alias(
         &self,
         input: DescribeRoleAliasRequest,
-    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError> {
+    ) -> Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25010,30 +20219,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRoleAliasResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRoleAliasResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeRoleAliasError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRoleAliasError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a scheduled audit.</p>
-    fn describe_scheduled_audit(
+    async fn describe_scheduled_audit(
         &self,
         input: DescribeScheduledAuditRequest,
-    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError> {
+    ) -> Result<DescribeScheduledAuditResponse, RusotoError<DescribeScheduledAuditError>> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -25044,29 +20251,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeScheduledAuditResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScheduledAuditResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeScheduledAuditError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScheduledAuditError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a Device Defender security profile.</p>
-    fn describe_security_profile(
+    async fn describe_security_profile(
         &self,
         input: DescribeSecurityProfileRequest,
-    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError> {
+    ) -> Result<DescribeSecurityProfileResponse, RusotoError<DescribeSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -25077,27 +20283,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSecurityProfileError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p>Gets information about a stream.</p>
-    fn describe_stream(
+    async fn describe_stream(
         &self,
         input: DescribeStreamRequest,
-    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError> {
+    ) -> Result<DescribeStreamResponse, RusotoError<DescribeStreamError>> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25105,30 +20312,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStreamResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeStreamResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeStreamError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStreamError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified thing.</p>
-    fn describe_thing(
+    async fn describe_thing(
         &self,
         input: DescribeThingRequest,
-    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError> {
+    ) -> Result<DescribeThingResponse, RusotoError<DescribeThingError>> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25136,30 +20341,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeThingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThingError::from_response(response))
+        }
     }
 
     /// <p>Describe a thing group.</p>
-    fn describe_thing_group(
+    async fn describe_thing_group(
         &self,
         input: DescribeThingGroupRequest,
-    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError> {
+    ) -> Result<DescribeThingGroupResponse, RusotoError<DescribeThingGroupError>> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -25170,31 +20373,31 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeThingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Describes a bulk thing provisioning task.</p>
-    fn describe_thing_registration_task(
+    async fn describe_thing_registration_task(
         &self,
         input: DescribeThingRegistrationTaskRequest,
-    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>
-    {
+    ) -> Result<
+        DescribeThingRegistrationTaskResponse,
+        RusotoError<DescribeThingRegistrationTaskError>,
+    > {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}",
             task_id = input.task_id
@@ -25205,27 +20408,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeThingRegistrationTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThingRegistrationTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeThingRegistrationTaskError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThingRegistrationTaskError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified thing type.</p>
-    fn describe_thing_type(
+    async fn describe_thing_type(
         &self,
         input: DescribeThingTypeRequest,
-    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError> {
+    ) -> Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -25236,27 +20440,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeThingTypeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThingTypeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeThingTypeError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThingTypeError::from_response(response))
+        }
     }
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
+    async fn detach_policy(
+        &self,
+        input: DetachPolicyRequest,
+    ) -> Result<(), RusotoError<DetachPolicyError>> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -25269,29 +20474,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetachPolicyError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachPolicyError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
-    fn detach_principal_policy(
+    async fn detach_principal_policy(
         &self,
         input: DetachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), DetachPrincipalPolicyError> {
+    ) -> Result<(), RusotoError<DetachPrincipalPolicyError>> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -25304,28 +20507,27 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DetachPrincipalPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachPrincipalPolicyError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
-    fn detach_security_profile(
+    async fn detach_security_profile(
         &self,
         input: DetachSecurityProfileRequest,
-    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError> {
+    ) -> Result<DetachSecurityProfileResponse, RusotoError<DetachSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -25343,29 +20545,28 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetachSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DetachSecurityProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
-    fn detach_thing_principal(
+    async fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
-    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+    ) -> Result<DetachThingPrincipalResponse, RusotoError<DetachThingPrincipalError>> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -25378,29 +20579,28 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachThingPrincipalResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DetachThingPrincipalResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DetachThingPrincipalError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachThingPrincipalError::from_response(response))
+        }
     }
 
     /// <p>Disables the rule.</p>
-    fn disable_topic_rule(
+    async fn disable_topic_rule(
         &self,
         input: DisableTopicRuleRequest,
-    ) -> RusotoFuture<(), DisableTopicRuleError> {
+    ) -> Result<(), RusotoError<DisableTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25408,29 +20608,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableTopicRuleError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>Enables the rule.</p>
-    fn enable_topic_rule(
+    async fn enable_topic_rule(
         &self,
         input: EnableTopicRuleRequest,
-    ) -> RusotoFuture<(), EnableTopicRuleError> {
+    ) -> Result<(), RusotoError<EnableTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25438,62 +20636,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableTopicRuleError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Returns the approximate count of unique values that match the query.</p>
-    fn get_cardinality(
-        &self,
-        input: GetCardinalityRequest,
-    ) -> RusotoFuture<GetCardinalityResponse, GetCardinalityError> {
-        let request_uri = "/indices/cardinality";
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCardinalityResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetCardinalityError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
-    fn get_effective_policies(
+    async fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
-    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
+    ) -> Result<GetEffectivePoliciesResponse, RusotoError<GetEffectivePoliciesError>> {
         let request_uri = "/effective-policies";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25509,28 +20672,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetEffectivePoliciesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetEffectivePoliciesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetEffectivePoliciesError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetEffectivePoliciesError::from_response(response))
+        }
     }
 
-    /// <p>Gets the indexing configuration.</p>
-    fn get_indexing_configuration(
+    /// <p>Gets the search configuration.</p>
+    async fn get_indexing_configuration(
         &self,
-    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
+    ) -> Result<GetIndexingConfigurationResponse, RusotoError<GetIndexingConfigurationError>> {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25538,27 +20700,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetIndexingConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetIndexingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIndexingConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetIndexingConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Gets a job document.</p>
-    fn get_job_document(
+    async fn get_job_document(
         &self,
         input: GetJobDocumentRequest,
-    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError> {
+    ) -> Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>> {
         let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25566,29 +20729,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobDocumentResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetJobDocumentResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetJobDocumentError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetJobDocumentError::from_response(response))
+        }
     }
 
     /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    fn get_logging_options(
+    async fn get_logging_options(
         &self,
-    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError> {
+    ) -> Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>> {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25596,30 +20757,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLoggingOptionsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLoggingOptionsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetLoggingOptionsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLoggingOptionsError::from_response(response))
+        }
     }
 
     /// <p>Gets an OTA update.</p>
-    fn get_ota_update(
+    async fn get_ota_update(
         &self,
         input: GetOTAUpdateRequest,
-    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError> {
+    ) -> Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -25630,63 +20789,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetOTAUpdateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetOTAUpdateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetOTAUpdateError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
-    fn get_percentiles(
-        &self,
-        input: GetPercentilesRequest,
-    ) -> RusotoFuture<GetPercentilesResponse, GetPercentilesError> {
-        let request_uri = "/indices/percentiles";
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPercentilesResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPercentilesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetOTAUpdateError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(
+    async fn get_policy(
         &self,
         input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25694,30 +20818,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPolicyResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPolicyResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPolicyError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPolicyError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified policy version.</p>
-    fn get_policy_version(
+    async fn get_policy_version(
         &self,
         input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
+    ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -25729,29 +20851,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPolicyVersionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPolicyVersionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetPolicyVersionError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPolicyVersionError::from_response(response))
+        }
     }
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    fn get_registration_code(
+    async fn get_registration_code(
         &self,
-    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+    ) -> Result<GetRegistrationCodeResponse, RusotoError<GetRegistrationCodeError>> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25759,29 +20879,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRegistrationCodeResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRegistrationCodeResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetRegistrationCodeError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRegistrationCodeError::from_response(response))
+        }
     }
 
-    /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
-    fn get_statistics(
+    /// <p>Gets statistics about things that match the specified query.</p>
+    async fn get_statistics(
         &self,
         input: GetStatisticsRequest,
-    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError> {
+    ) -> Result<GetStatisticsResponse, RusotoError<GetStatisticsError>> {
         let request_uri = "/indices/statistics";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25791,30 +20910,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetStatisticsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetStatisticsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetStatisticsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetStatisticsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the rule.</p>
-    fn get_topic_rule(
+    async fn get_topic_rule(
         &self,
         input: GetTopicRuleRequest,
-    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError> {
+    ) -> Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25822,57 +20939,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTopicRuleResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTopicRuleResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetTopicRuleError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Gets information about a topic rule destination.</p>
-    fn get_topic_rule_destination(
-        &self,
-        input: GetTopicRuleDestinationRequest,
-    ) -> RusotoFuture<GetTopicRuleDestinationResponse, GetTopicRuleDestinationError> {
-        let request_uri = format!("/destinations/{arn}", arn = input.arn);
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTopicRuleDestinationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTopicRuleDestinationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>Gets the fine grained logging options.</p>
-    fn get_v2_logging_options(
+    async fn get_v2_logging_options(
         &self,
-    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
+    ) -> Result<GetV2LoggingOptionsResponse, RusotoError<GetV2LoggingOptionsError>> {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25880,29 +20967,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetV2LoggingOptionsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetV2LoggingOptionsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetV2LoggingOptionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetV2LoggingOptionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the active violations for a given Device Defender security profile.</p>
-    fn list_active_violations(
+    async fn list_active_violations(
         &self,
         input: ListActiveViolationsRequest,
-    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError> {
+    ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>> {
         let request_uri = "/active-violations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25925,29 +21011,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListActiveViolationsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListActiveViolationsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListActiveViolationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListActiveViolationsError::from_response(response))
+        }
     }
 
     /// <p>Lists the policies attached to the specified thing group.</p>
-    fn list_attached_policies(
+    async fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
+    ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>> {
         let request_uri = format!("/attached-policies/{target}", target = input.target);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25967,29 +21052,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAttachedPoliciesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAttachedPoliciesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListAttachedPoliciesError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAttachedPoliciesError::from_response(response))
+        }
     }
 
     /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
-    fn list_audit_findings(
+    async fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
-    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError> {
+    ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>> {
         let request_uri = "/audit/findings";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25999,129 +21083,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAuditFindingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAuditFindingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAuditFindingsError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
-    fn list_audit_mitigation_actions_executions(
-        &self,
-        input: ListAuditMitigationActionsExecutionsRequest,
-    ) -> RusotoFuture<
-        ListAuditMitigationActionsExecutionsResponse,
-        ListAuditMitigationActionsExecutionsError,
-    > {
-        let request_uri = "/audit/mitigationactions/executions";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.action_status {
-            params.put("actionStatus", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAuditFindingsError::from_response(response))
         }
-        params.put("findingId", &input.finding_id);
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        params.put("taskId", &input.task_id);
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAuditMitigationActionsExecutionsResponse, _>(
-                    )?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAuditMitigationActionsExecutionsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
-    }
-
-    /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
-    fn list_audit_mitigation_actions_tasks(
-        &self,
-        input: ListAuditMitigationActionsTasksRequest,
-    ) -> RusotoFuture<ListAuditMitigationActionsTasksResponse, ListAuditMitigationActionsTasksError>
-    {
-        let request_uri = "/audit/mitigationactions/tasks";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.audit_task_id {
-            params.put("auditTaskId", x);
-        }
-        params.put("endTime", &input.end_time);
-        if let Some(ref x) = input.finding_id {
-            params.put("findingId", x);
-        }
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        params.put("startTime", &input.start_time);
-        if let Some(ref x) = input.task_status {
-            params.put("taskStatus", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAuditMitigationActionsTasksResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAuditMitigationActionsTasksError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
     }
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    fn list_audit_tasks(
+    async fn list_audit_tasks(
         &self,
         input: ListAuditTasksRequest,
-    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError> {
+    ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>> {
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26146,30 +21129,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAuditTasksResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAuditTasksResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAuditTasksError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAuditTasksError::from_response(response))
+        }
     }
 
     /// <p>Lists the authorizers registered in your account.</p>
-    fn list_authorizers(
+    async fn list_authorizers(
         &self,
         input: ListAuthorizersRequest,
-    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError> {
+    ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>> {
         let request_uri = "/authorizers/";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26192,30 +21173,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAuthorizersResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAuthorizersResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListAuthorizersError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAuthorizersError::from_response(response))
+        }
     }
 
     /// <p>Lists the billing groups you have created.</p>
-    fn list_billing_groups(
+    async fn list_billing_groups(
         &self,
         input: ListBillingGroupsRequest,
-    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError> {
+    ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>> {
         let request_uri = "/billing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26235,30 +21214,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBillingGroupsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBillingGroupsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListBillingGroupsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBillingGroupsError::from_response(response))
+        }
     }
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_ca_certificates(
+    async fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
-    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError> {
+    ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>> {
         let request_uri = "/cacertificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26278,30 +21255,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCACertificatesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCACertificatesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListCACertificatesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCACertificatesError::from_response(response))
+        }
     }
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_certificates(
+    async fn list_certificates(
         &self,
         input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
+    ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26321,30 +21296,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCertificatesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCertificatesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListCertificatesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCertificatesError::from_response(response))
+        }
     }
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
-    fn list_certificates_by_ca(
+    async fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
-    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+    ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>> {
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
             ca_certificate_id = input.ca_certificate_id
@@ -26367,69 +21340,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCertificatesByCAResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCertificatesByCAResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListCertificatesByCAError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn list_domain_configurations(
-        &self,
-        input: ListDomainConfigurationsRequest,
-    ) -> RusotoFuture<ListDomainConfigurationsResponse, ListDomainConfigurationsError> {
-        let request_uri = "/domainConfigurations";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.marker {
-            params.put("marker", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCertificatesByCAError::from_response(response))
         }
-        if let Some(ref x) = input.page_size {
-            params.put("pageSize", x);
-        }
-        if let Some(ref x) = input.service_type {
-            params.put("serviceType", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDomainConfigurationsResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDomainConfigurationsError::from_response(response))
-                }))
-            }
-        })
     }
 
     /// <p>Lists the search indices.</p>
-    fn list_indices(
+    async fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError> {
+    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>> {
         let request_uri = "/indices";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26446,30 +21378,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListIndicesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIndicesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListIndicesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIndicesError::from_response(response))
+        }
     }
 
     /// <p>Lists the job executions for a job.</p>
-    fn list_job_executions_for_job(
+    async fn list_job_executions_for_job(
         &self,
         input: ListJobExecutionsForJobRequest,
-    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
+    ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>> {
         let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26489,27 +21419,29 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobExecutionsForJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobExecutionsForJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobExecutionsForJobError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobExecutionsForJobError::from_response(response))
+        }
     }
 
     /// <p>Lists the job executions for the specified thing.</p>
-    fn list_job_executions_for_thing(
+    async fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
-    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
+    ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>
+    {
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26529,24 +21461,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobExecutionsForThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobExecutionsForThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobExecutionsForThingError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobExecutionsForThingError::from_response(response))
+        }
     }
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+    async fn list_jobs(
+        &self,
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
         let request_uri = "/jobs";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26575,72 +21511,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListJobsError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
-    fn list_mitigation_actions(
-        &self,
-        input: ListMitigationActionsRequest,
-    ) -> RusotoFuture<ListMitigationActionsResponse, ListMitigationActionsError> {
-        let request_uri = "/mitigationactions/actions";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.action_type {
-            params.put("actionType", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobsError::from_response(response))
         }
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMitigationActionsResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListMitigationActionsError::from_response(response))
-                    }),
-                )
-            }
-        })
     }
 
     /// <p>Lists OTA updates.</p>
-    fn list_ota_updates(
+    async fn list_ota_updates(
         &self,
         input: ListOTAUpdatesRequest,
-    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError> {
+    ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>> {
         let request_uri = "/otaUpdates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26660,30 +21552,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListOTAUpdatesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOTAUpdatesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListOTAUpdatesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOTAUpdatesError::from_response(response))
+        }
     }
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
-    fn list_outgoing_certificates(
+    async fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
-    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+    ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>> {
         let request_uri = "/certificates-out-going";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26703,27 +21593,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListOutgoingCertificatesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOutgoingCertificatesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOutgoingCertificatesError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOutgoingCertificatesError::from_response(response))
+        }
     }
 
     /// <p>Lists your policies.</p>
-    fn list_policies(
+    async fn list_policies(
         &self,
         input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
+    ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>> {
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26743,30 +21634,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPoliciesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPoliciesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPoliciesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPoliciesError::from_response(response))
+        }
     }
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
-    fn list_policy_principals(
+    async fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
-    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+    ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>> {
         let request_uri = "/policy-principals";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26787,29 +21676,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPolicyPrincipalsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPolicyPrincipalsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPolicyPrincipalsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPolicyPrincipalsError::from_response(response))
+        }
     }
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
-    fn list_policy_versions(
+    async fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+    ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -26820,30 +21708,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPolicyVersionsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPolicyVersionsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPolicyVersionsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPolicyVersionsError::from_response(response))
+        }
     }
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
-    fn list_principal_policies(
+    async fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
-    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+    ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>> {
         let request_uri = "/principal-policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26864,29 +21750,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPrincipalPoliciesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPrincipalPoliciesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPrincipalPoliciesError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPrincipalPoliciesError::from_response(response))
+        }
     }
 
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
-    fn list_principal_things(
+    async fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
-    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+    ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>> {
         let request_uri = "/principals/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26904,109 +21789,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPrincipalThingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPrincipalThingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPrincipalThingsError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>A list of fleet provisioning template versions.</p>
-    fn list_provisioning_template_versions(
-        &self,
-        input: ListProvisioningTemplateVersionsRequest,
-    ) -> RusotoFuture<ListProvisioningTemplateVersionsResponse, ListProvisioningTemplateVersionsError>
-    {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}/versions",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPrincipalThingsError::from_response(response))
         }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisioningTemplateVersionsResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisioningTemplateVersionsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
-    }
-
-    /// <p>Lists the fleet provisioning templates in your AWS account.</p>
-    fn list_provisioning_templates(
-        &self,
-        input: ListProvisioningTemplatesRequest,
-    ) -> RusotoFuture<ListProvisioningTemplatesResponse, ListProvisioningTemplatesError> {
-        let request_uri = "/provisioning-templates";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
-        }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisioningTemplatesResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisioningTemplatesError::from_response(response))
-                }))
-            }
-        })
     }
 
     /// <p>Lists the role aliases registered in your account.</p>
-    fn list_role_aliases(
+    async fn list_role_aliases(
         &self,
         input: ListRoleAliasesRequest,
-    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError> {
+    ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>> {
         let request_uri = "/role-aliases";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27026,30 +21830,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRoleAliasesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRoleAliasesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListRoleAliasesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRoleAliasesError::from_response(response))
+        }
     }
 
     /// <p>Lists all of your scheduled audits.</p>
-    fn list_scheduled_audits(
+    async fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
-    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError> {
+    ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>> {
         let request_uri = "/audit/scheduledaudits";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27066,29 +21868,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListScheduledAuditsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListScheduledAuditsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListScheduledAuditsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListScheduledAuditsError::from_response(response))
+        }
     }
 
     /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
-    fn list_security_profiles(
+    async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+    ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>> {
         let request_uri = "/security-profiles";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27105,30 +21906,31 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSecurityProfilesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSecurityProfilesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListSecurityProfilesError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSecurityProfilesError::from_response(response))
+        }
     }
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
-    fn list_security_profiles_for_target(
+    async fn list_security_profiles_for_target(
         &self,
         input: ListSecurityProfilesForTargetRequest,
-    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>
-    {
+    ) -> Result<
+        ListSecurityProfilesForTargetResponse,
+        RusotoError<ListSecurityProfilesForTargetError>,
+    > {
         let request_uri = "/security-profiles-for-target";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27152,27 +21954,28 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSecurityProfilesForTargetResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSecurityProfilesForTargetResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSecurityProfilesForTargetError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSecurityProfilesForTargetError::from_response(response))
+        }
     }
 
     /// <p>Lists all of the streams in your AWS account.</p>
-    fn list_streams(
+    async fn list_streams(
         &self,
         input: ListStreamsRequest,
-    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError> {
+    ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>> {
         let request_uri = "/streams";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27192,30 +21995,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListStreamsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListStreamsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListStreamsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListStreamsError::from_response(response))
+        }
     }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27230,29 +22031,28 @@ impl Iot for IotClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>List targets for the specified policy.</p>
-    fn list_targets_for_policy(
+    async fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
-    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+    ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>> {
         let request_uri = format!(
             "/policy-targets/{policy_name}",
             policy_name = input.policy_name
@@ -27272,30 +22072,31 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTargetsForPolicyResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTargetsForPolicyResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTargetsForPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTargetsForPolicyError::from_response(response))
+        }
     }
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
-    fn list_targets_for_security_profile(
+    async fn list_targets_for_security_profile(
         &self,
         input: ListTargetsForSecurityProfileRequest,
-    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>
-    {
+    ) -> Result<
+        ListTargetsForSecurityProfileResponse,
+        RusotoError<ListTargetsForSecurityProfileError>,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -27315,27 +22116,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTargetsForSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTargetsForSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTargetsForSecurityProfileError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTargetsForSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p>List the thing groups in your account.</p>
-    fn list_thing_groups(
+    async fn list_thing_groups(
         &self,
         input: ListThingGroupsRequest,
-    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError> {
+    ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>> {
         let request_uri = "/thing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27361,30 +22163,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingGroupsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingGroupsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListThingGroupsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingGroupsError::from_response(response))
+        }
     }
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
-    fn list_thing_groups_for_thing(
+    async fn list_thing_groups_for_thing(
         &self,
         input: ListThingGroupsForThingRequest,
-    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
+    ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>> {
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
             thing_name = input.thing_name
@@ -27404,27 +22204,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingGroupsForThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingGroupsForThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListThingGroupsForThingError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingGroupsForThingError::from_response(response))
+        }
     }
 
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn list_thing_principals(
+    async fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
-    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+    ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -27435,30 +22236,31 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingPrincipalsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingPrincipalsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListThingPrincipalsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingPrincipalsError::from_response(response))
+        }
     }
 
     /// <p>Information about the thing registration tasks.</p>
-    fn list_thing_registration_task_reports(
+    async fn list_thing_registration_task_reports(
         &self,
         input: ListThingRegistrationTaskReportsRequest,
-    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
-    {
+    ) -> Result<
+        ListThingRegistrationTaskReportsResponse,
+        RusotoError<ListThingRegistrationTaskReportsError>,
+    > {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/reports",
             task_id = input.task_id
@@ -27479,29 +22281,31 @@ impl Iot for IotClient {
         params.put("reportType", &input.report_type);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingRegistrationTaskReportsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingRegistrationTaskReportsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListThingRegistrationTaskReportsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingRegistrationTaskReportsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>List bulk thing provisioning tasks.</p>
-    fn list_thing_registration_tasks(
+    async fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
-    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
+    ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>
+    {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27521,27 +22325,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingRegistrationTasksResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingRegistrationTasksResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListThingRegistrationTasksError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingRegistrationTasksError::from_response(response))
+        }
     }
 
     /// <p>Lists the existing thing types.</p>
-    fn list_thing_types(
+    async fn list_thing_types(
         &self,
         input: ListThingTypesRequest,
-    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError> {
+    ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>> {
         let request_uri = "/thing-types";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27561,30 +22366,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingTypesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingTypesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListThingTypesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingTypesError::from_response(response))
+        }
     }
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    fn list_things(
+    async fn list_things(
         &self,
         input: ListThingsRequest,
-    ) -> RusotoFuture<ListThingsResponse, ListThingsError> {
+    ) -> Result<ListThingsResponse, RusotoError<ListThingsError>> {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27610,30 +22413,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListThingsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingsError::from_response(response))
+        }
     }
 
     /// <p>Lists the things you have added to the given billing group.</p>
-    fn list_things_in_billing_group(
+    async fn list_things_in_billing_group(
         &self,
         input: ListThingsInBillingGroupRequest,
-    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError> {
+    ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}/things",
             billing_group_name = input.billing_group_name
@@ -27653,27 +22454,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingsInBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingsInBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListThingsInBillingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingsInBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Lists the things in the specified group.</p>
-    fn list_things_in_thing_group(
+    async fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
-    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
+    ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
             thing_group_name = input.thing_group_name
@@ -27696,66 +22498,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListThingsInThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThingsInThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListThingsInThingGroupError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Lists all the topic rule destinations in your AWS account.</p>
-    fn list_topic_rule_destinations(
-        &self,
-        input: ListTopicRuleDestinationsRequest,
-    ) -> RusotoFuture<ListTopicRuleDestinationsResponse, ListTopicRuleDestinationsError> {
-        let request_uri = "/destinations";
-
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-
-        let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
-            params.put("maxResults", x);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThingsInThingGroupError::from_response(response))
         }
-        if let Some(ref x) = input.next_token {
-            params.put("nextToken", x);
-        }
-        request.set_params(params);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTopicRuleDestinationsResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTopicRuleDestinationsError::from_response(response))
-                }))
-            }
-        })
     }
 
     /// <p>Lists the rules for the specific topic.</p>
-    fn list_topic_rules(
+    async fn list_topic_rules(
         &self,
         input: ListTopicRulesRequest,
-    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError> {
+    ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>> {
         let request_uri = "/rules";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27778,30 +22542,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTopicRulesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTopicRulesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTopicRulesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTopicRulesError::from_response(response))
+        }
     }
 
     /// <p>Lists logging levels.</p>
-    fn list_v2_logging_levels(
+    async fn list_v2_logging_levels(
         &self,
         input: ListV2LoggingLevelsRequest,
-    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
+    ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27821,29 +22583,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListV2LoggingLevelsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListV2LoggingLevelsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListV2LoggingLevelsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListV2LoggingLevelsError::from_response(response))
+        }
     }
 
-    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
-    fn list_violation_events(
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    async fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
-    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError> {
+    ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>> {
         let request_uri = "/violation-events";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27868,29 +22629,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListViolationEventsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListViolationEventsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListViolationEventsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListViolationEventsError::from_response(response))
+        }
     }
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
-    fn register_ca_certificate(
+    async fn register_ca_certificate(
         &self,
         input: RegisterCACertificateRequest,
-    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError> {
+    ) -> Result<RegisterCACertificateResponse, RusotoError<RegisterCACertificateError>> {
         let request_uri = "/cacertificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27909,29 +22669,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterCACertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterCACertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RegisterCACertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterCACertificateError::from_response(response))
+        }
     }
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
-    fn register_certificate(
+    async fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError> {
+    ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>> {
         let request_uri = "/certificate/register";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27941,29 +22700,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterCertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterCertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RegisterCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterCertificateError::from_response(response))
+        }
     }
 
-    /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
-    fn register_thing(
+    /// <p>Provisions a thing.</p>
+    async fn register_thing(
         &self,
         input: RegisterThingRequest,
-    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError> {
+    ) -> Result<RegisterThingResponse, RusotoError<RegisterThingError>> {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27973,30 +22731,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterThingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterThingError::from_response(response))
+        }
     }
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
-    fn reject_certificate_transfer(
+    async fn reject_certificate_transfer(
         &self,
         input: RejectCertificateTransferRequest,
-    ) -> RusotoFuture<(), RejectCertificateTransferError> {
+    ) -> Result<(), RusotoError<RejectCertificateTransferError>> {
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -28009,26 +22765,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RejectCertificateTransferError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectCertificateTransferError::from_response(response))
+        }
     }
 
     /// <p>Removes the given thing from the billing group.</p>
-    fn remove_thing_from_billing_group(
+    async fn remove_thing_from_billing_group(
         &self,
         input: RemoveThingFromBillingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError> {
+    ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>
+    {
         let request_uri = "/billing-groups/removeThingFromBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -28038,27 +22796,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveThingFromBillingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveThingFromBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Remove the specified thing from the specified group.</p>
-    fn remove_thing_from_thing_group(
+    async fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
+    ) -> Result<RemoveThingFromThingGroupResponse, RusotoError<RemoveThingFromThingGroupError>>
+    {
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -28068,27 +22828,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveThingFromThingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveThingFromThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn replace_topic_rule(
+    async fn replace_topic_rule(
         &self,
         input: ReplaceTopicRuleRequest,
-    ) -> RusotoFuture<(), ReplaceTopicRuleError> {
+    ) -> Result<(), RusotoError<ReplaceTopicRuleError>> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28098,29 +22859,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ReplaceTopicRuleError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ReplaceTopicRuleError::from_response(response))
+        }
     }
 
     /// <p>The query search index.</p>
-    fn search_index(
+    async fn search_index(
         &self,
         input: SearchIndexRequest,
-    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError> {
+    ) -> Result<SearchIndexResponse, RusotoError<SearchIndexError>> {
         let request_uri = "/indices/search";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28130,30 +22889,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchIndexResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchIndexResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchIndexError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchIndexError::from_response(response))
+        }
     }
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
-    fn set_default_authorizer(
+    async fn set_default_authorizer(
         &self,
         input: SetDefaultAuthorizerRequest,
-    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
+    ) -> Result<SetDefaultAuthorizerResponse, RusotoError<SetDefaultAuthorizerError>> {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28163,29 +22920,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetDefaultAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SetDefaultAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetDefaultAuthorizerError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetDefaultAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
-    fn set_default_policy_version(
+    async fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
+    ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -28197,26 +22953,27 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetDefaultPolicyVersionError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetDefaultPolicyVersionError::from_response(response))
+        }
     }
 
     /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
-    fn set_logging_options(
+    async fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetLoggingOptionsError> {
+    ) -> Result<(), RusotoError<SetLoggingOptionsError>> {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28226,29 +22983,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetLoggingOptionsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetLoggingOptionsError::from_response(response))
+        }
     }
 
     /// <p>Sets the logging level.</p>
-    fn set_v2_logging_level(
+    async fn set_v2_logging_level(
         &self,
         input: SetV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), SetV2LoggingLevelError> {
+    ) -> Result<(), RusotoError<SetV2LoggingLevelError>> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28258,29 +23013,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetV2LoggingLevelError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetV2LoggingLevelError::from_response(response))
+        }
     }
 
     /// <p>Sets the logging options for the V2 logging service.</p>
-    fn set_v2_logging_options(
+    async fn set_v2_logging_options(
         &self,
         input: SetV2LoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetV2LoggingOptionsError> {
+    ) -> Result<(), RusotoError<SetV2LoggingOptionsError>> {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28290,64 +23043,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetV2LoggingOptionsError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
-    fn start_audit_mitigation_actions_task(
-        &self,
-        input: StartAuditMitigationActionsTaskRequest,
-    ) -> RusotoFuture<StartAuditMitigationActionsTaskResponse, StartAuditMitigationActionsTaskError>
-    {
-        let request_uri = format!(
-            "/audit/mitigationactions/tasks/{task_id}",
-            task_id = input.task_id
-        );
-
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartAuditMitigationActionsTaskResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartAuditMitigationActionsTaskError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SetV2LoggingOptionsError::from_response(response))
+        }
     }
 
     /// <p>Starts an on-demand Device Defender audit.</p>
-    fn start_on_demand_audit_task(
+    async fn start_on_demand_audit_task(
         &self,
         input: StartOnDemandAuditTaskRequest,
-    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError> {
+    ) -> Result<StartOnDemandAuditTaskResponse, RusotoError<StartOnDemandAuditTaskError>> {
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28357,29 +23073,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartOnDemandAuditTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartOnDemandAuditTaskError::from_response(response))
+        }
     }
 
     /// <p>Creates a bulk thing provisioning task.</p>
-    fn start_thing_registration_task(
+    async fn start_thing_registration_task(
         &self,
         input: StartThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
+    ) -> Result<StartThingRegistrationTaskResponse, RusotoError<StartThingRegistrationTaskError>>
+    {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28389,27 +23105,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartThingRegistrationTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartThingRegistrationTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartThingRegistrationTaskError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartThingRegistrationTaskError::from_response(response))
+        }
     }
 
     /// <p>Cancels a bulk thing provisioning task.</p>
-    fn stop_thing_registration_task(
+    async fn stop_thing_registration_task(
         &self,
         input: StopThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
+    ) -> Result<StopThingRegistrationTaskResponse, RusotoError<StopThingRegistrationTaskError>>
+    {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -28420,27 +23138,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopThingRegistrationTaskResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopThingRegistrationTaskResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopThingRegistrationTaskError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StopThingRegistrationTaskError::from_response(response))
+        }
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28450,30 +23169,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_authorization(
+    async fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
-    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError> {
+    ) -> Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>> {
         let request_uri = "/test-authorization";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28489,30 +23206,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestAuthorizationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestAuthorizationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestAuthorizationError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TestAuthorizationError::from_response(response))
+        }
     }
 
     /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_invoke_authorizer(
+    async fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
             authorizer_name = input.authorizer_name
@@ -28525,29 +23240,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestInvokeAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(TestInvokeAuthorizerError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TestInvokeAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
-    fn transfer_certificate(
+    async fn transfer_certificate(
         &self,
         input: TransferCertificateRequest,
-    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError> {
+    ) -> Result<TransferCertificateResponse, RusotoError<TransferCertificateError>> {
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
             certificate_id = input.certificate_id
@@ -28564,29 +23278,28 @@ impl Iot for IotClient {
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TransferCertificateResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TransferCertificateResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(TransferCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TransferCertificateError::from_response(response))
+        }
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let request_uri = "/untag";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28596,31 +23309,31 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn update_account_audit_configuration(
+    async fn update_account_audit_configuration(
         &self,
         input: UpdateAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>
-    {
+    ) -> Result<
+        UpdateAccountAuditConfigurationResponse,
+        RusotoError<UpdateAccountAuditConfigurationError>,
+    > {
         let request_uri = "/audit/configuration";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28630,29 +23343,30 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAccountAuditConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAccountAuditConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAccountAuditConfigurationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAccountAuditConfigurationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates an authorizer.</p>
-    fn update_authorizer(
+    async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+    ) -> Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -28665,30 +23379,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAuthorizerResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAuthorizerResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateAuthorizerError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAuthorizerError::from_response(response))
+        }
     }
 
     /// <p>Updates information about the billing group.</p>
-    fn update_billing_group(
+    async fn update_billing_group(
         &self,
         input: UpdateBillingGroupRequest,
-    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError> {
+    ) -> Result<UpdateBillingGroupResponse, RusotoError<UpdateBillingGroupError>> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -28701,30 +23413,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBillingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBillingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateBillingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBillingGroupError::from_response(response))
+        }
     }
 
     /// <p>Updates a registered CA certificate.</p>
-    fn update_ca_certificate(
+    async fn update_ca_certificate(
         &self,
         input: UpdateCACertificateRequest,
-    ) -> RusotoFuture<(), UpdateCACertificateError> {
+    ) -> Result<(), RusotoError<UpdateCACertificateError>> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -28746,28 +23456,27 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateCACertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCACertificateError::from_response(response))
+        }
     }
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
-    fn update_certificate(
+    async fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
-    ) -> RusotoFuture<(), UpdateCertificateError> {
+    ) -> Result<(), RusotoError<UpdateCertificateError>> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -28782,62 +23491,27 @@ impl Iot for IotClient {
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateCertificateError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    fn update_domain_configuration(
-        &self,
-        input: UpdateDomainConfigurationRequest,
-    ) -> RusotoFuture<UpdateDomainConfigurationResponse, UpdateDomainConfigurationError> {
-        let request_uri = format!(
-            "/domainConfigurations/{domain_configuration_name}",
-            domain_configuration_name = input.domain_configuration_name
-        );
-
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDomainConfigurationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDomainConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateCertificateError::from_response(response))
+        }
     }
 
     /// <p>Updates a dynamic thing group.</p>
-    fn update_dynamic_thing_group(
+    async fn update_dynamic_thing_group(
         &self,
         input: UpdateDynamicThingGroupRequest,
-    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError> {
+    ) -> Result<UpdateDynamicThingGroupResponse, RusotoError<UpdateDynamicThingGroupError>> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -28850,27 +23524,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDynamicThingGroupError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDynamicThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Updates the event configurations.</p>
-    fn update_event_configurations(
+    async fn update_event_configurations(
         &self,
         input: UpdateEventConfigurationsRequest,
-    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
+    ) -> Result<UpdateEventConfigurationsResponse, RusotoError<UpdateEventConfigurationsError>>
+    {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28880,27 +23556,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEventConfigurationsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateEventConfigurationsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEventConfigurationsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEventConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Updates the search configuration.</p>
-    fn update_indexing_configuration(
+    async fn update_indexing_configuration(
         &self,
         input: UpdateIndexingConfigurationRequest,
-    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
+    ) -> Result<UpdateIndexingConfigurationResponse, RusotoError<UpdateIndexingConfigurationError>>
+    {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28910,24 +23588,25 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateIndexingConfigurationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateIndexingConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Updates supported fields of the specified job.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError> {
+    async fn update_job(&self, input: UpdateJobRequest) -> Result<(), RusotoError<UpdateJobError>> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28937,97 +23616,27 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateJobError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Updates the definition for the specified mitigation action.</p>
-    fn update_mitigation_action(
-        &self,
-        input: UpdateMitigationActionRequest,
-    ) -> RusotoFuture<UpdateMitigationActionResponse, UpdateMitigationActionError> {
-        let request_uri = format!(
-            "/mitigationactions/actions/{action_name}",
-            action_name = input.action_name
-        );
-
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateMitigationActionResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateMitigationActionError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Updates a fleet provisioning template.</p>
-    fn update_provisioning_template(
-        &self,
-        input: UpdateProvisioningTemplateRequest,
-    ) -> RusotoFuture<UpdateProvisioningTemplateResponse, UpdateProvisioningTemplateError> {
-        let request_uri = format!(
-            "/provisioning-templates/{template_name}",
-            template_name = input.template_name
-        );
-
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProvisioningTemplateResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisioningTemplateError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateJobError::from_response(response))
+        }
     }
 
     /// <p>Updates a role alias.</p>
-    fn update_role_alias(
+    async fn update_role_alias(
         &self,
         input: UpdateRoleAliasRequest,
-    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError> {
+    ) -> Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -29037,30 +23646,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRoleAliasResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateRoleAliasResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateRoleAliasError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoleAliasError::from_response(response))
+        }
     }
 
-    /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
-    fn update_scheduled_audit(
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    async fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
-    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError> {
+    ) -> Result<UpdateScheduledAuditResponse, RusotoError<UpdateScheduledAuditError>> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -29073,29 +23680,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateScheduledAuditResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateScheduledAuditResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateScheduledAuditError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateScheduledAuditError::from_response(response))
+        }
     }
 
     /// <p>Updates a Device Defender security profile.</p>
-    fn update_security_profile(
+    async fn update_security_profile(
         &self,
         input: UpdateSecurityProfileRequest,
-    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError> {
+    ) -> Result<UpdateSecurityProfileResponse, RusotoError<UpdateSecurityProfileError>> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -29114,29 +23720,28 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSecurityProfileResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSecurityProfileResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateSecurityProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSecurityProfileError::from_response(response))
+        }
     }
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    fn update_stream(
+    async fn update_stream(
         &self,
         input: UpdateStreamRequest,
-    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError> {
+    ) -> Result<UpdateStreamResponse, RusotoError<UpdateStreamError>> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -29146,30 +23751,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateStreamResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateStreamResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateStreamError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateStreamError::from_response(response))
+        }
     }
 
     /// <p>Updates the data for a thing.</p>
-    fn update_thing(
+    async fn update_thing(
         &self,
         input: UpdateThingRequest,
-    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError> {
+    ) -> Result<UpdateThingResponse, RusotoError<UpdateThingError>> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -29179,30 +23782,28 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateThingError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThingError::from_response(response))
+        }
     }
 
     /// <p>Update a thing group.</p>
-    fn update_thing_group(
+    async fn update_thing_group(
         &self,
         input: UpdateThingGroupRequest,
-    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError> {
+    ) -> Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -29215,30 +23816,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateThingGroupResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThingGroupResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateThingGroupError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThingGroupError::from_response(response))
+        }
     }
 
     /// <p>Updates the groups to which the thing belongs.</p>
-    fn update_thing_groups_for_thing(
+    async fn update_thing_groups_for_thing(
         &self,
         input: UpdateThingGroupsForThingRequest,
-    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
+    ) -> Result<UpdateThingGroupsForThingResponse, RusotoError<UpdateThingGroupsForThingError>>
+    {
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -29248,58 +23848,31 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateThingGroupsForThingError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
-    fn update_topic_rule_destination(
-        &self,
-        input: UpdateTopicRuleDestinationRequest,
-    ) -> RusotoFuture<UpdateTopicRuleDestinationResponse, UpdateTopicRuleDestinationError> {
-        let request_uri = "/destinations";
-
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateTopicRuleDestinationResponse, _>()?;
-
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTopicRuleDestinationError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThingGroupsForThingError::from_response(response))
+        }
     }
 
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
-    fn validate_security_profile_behaviors(
+    async fn validate_security_profile_behaviors(
         &self,
         input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>
-    {
+    ) -> Result<
+        ValidateSecurityProfileBehaviorsResponse,
+        RusotoError<ValidateSecurityProfileBehaviorsError>,
+    > {
         let request_uri = "/security-profile-behaviors/validate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -29309,21 +23882,22 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ValidateSecurityProfileBehaviorsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ValidateSecurityProfileBehaviorsError::from_response(
+                response,
+            ))
+        }
     }
 }

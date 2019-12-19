@@ -93,22 +93,6 @@ pub fn generate_services(
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
 
-        let mut extern_crates = service_dependencies.iter().map(|(k, _)| {
-            if k == "xml-rs" {
-                return "extern crate xml;".into();
-            }
-            let safe_name = k.replace("-", "_");
-            let use_macro = k == "serde_derive" || k == "lazy_static";
-            if use_macro {
-                return format!("#[macro_use]\nextern crate {};", safe_name);
-            }
-            format!("extern crate {};", safe_name)
-        }).collect::<Vec<String>>().join("\n");
-        // S3 needs the external test crate for benchmark tests
-        if service.full_name() == "Amazon Simple Storage Service" {
-            extern_crates.push_str("\n#[cfg(nightly)]\nextern crate test;");
-        }
-
         let mut cargo_manifest = BufWriter::new(
             OpenOptions::new()
             .write(true)
@@ -254,19 +238,17 @@ See [LICENSE][license] for details.
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
 {examples}
-{extern_crates}
 
 mod generated;
 mod custom;
 
-pub use crate::generated::*;
-pub use crate::custom::*;
+pub use generated::*;
+pub use custom::*;
             "#,
             service_docs = crate::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             examples = generate_examples(&crate_dir).unwrap_or_else(|| "".to_string()),
-            extern_crates = extern_crates
             ).expect("Couldn't write library file");
 
             let gen_file_path = src_dir.join("generated.rs");
@@ -304,7 +286,7 @@ pub use crate::custom::*;
             let gen_file_path = src_dir.join("generated.rs");
 
             let status = Command::new("rustfmt")
-                .args(&["--emit", "files"])
+                .args(&["--emit", "files", "--edition", "2018"])
                 .args(&["--config-path", "rustfmt.toml"])
                 .arg(gen_file_path)
                 .status()

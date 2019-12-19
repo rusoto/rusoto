@@ -9,31 +9,32 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code> object.</p> <p>This is the ARN pattern for a budget: </p> <p> <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Budget {
-    /// <p>The total amount of cost, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI or Savings Plans utilization or coverage budgets. RI and Savings Plans utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI or Savings Plans utilization or coverage budgets. You can't use <code>BudgetLimit</code> with <code>PlannedBudgetLimits</code> for <code>CreateBudget</code> and <code>UpdateBudget</code> actions. </p>
+    /// <p>The total amount of cost, usage, RI utilization, or RI coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization or coverage budgets. RI utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI utilization or coverage budgets. You can't use <code>BudgetLimit</code> with <code>PlannedBudgetLimits</code> for <code>CreateBudget</code> and <code>UpdateBudget</code> actions. </p>
     #[serde(rename = "BudgetLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budget_limit: Option<Spend>,
     /// <p>The name of a budget. The name must be unique within an account. The <code>:</code> and <code>&bsol;</code> characters aren't allowed in <code>BudgetName</code>.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>Whether this budget tracks costs, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage.</p>
+    /// <p>Whether this budget tracks costs, usage, RI utilization, or RI coverage.</p>
     #[serde(rename = "BudgetType")]
     pub budget_type: String,
     /// <p>The actual and forecasted cost or usage that the budget tracks.</p>
@@ -44,7 +45,7 @@ pub struct Budget {
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The types of costs that are included in this <code>COST</code> budget.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, <code>RI_COVERAGE</code>, <code>Savings_Plans_Utilization</code>, and <code>Savings_Plans_Coverage</code> budgets do not have <code>CostTypes</code>.</p>
+    /// <p>The types of costs that are included in this <code>COST</code> budget.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, and <code>RI_COVERAGE</code> budgets do not have <code>CostTypes</code>.</p>
     #[serde(rename = "CostTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_types: Option<CostTypes>,
@@ -60,14 +61,14 @@ pub struct Budget {
     #[serde(rename = "TimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_period: Option<TimePeriod>,
-    /// <p>The length of time until a budget resets the actual and forecasted spend. <code>DAILY</code> is available only for <code>RI_UTILIZATION</code>, <code>RI_COVERAGE</code>, <code>Savings_Plans_Utilization</code>, and <code>Savings_Plans_Coverage</code> budgets.</p>
+    /// <p>The length of time until a budget resets the actual and forecasted spend. <code>DAILY</code> is available only for <code>RI_UTILIZATION</code> and <code>RI_COVERAGE</code> budgets.</p>
     #[serde(rename = "TimeUnit")]
     pub time_unit: String,
 }
 
 /// <p>A history of the state of a budget at the end of the budget's specified time period.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BudgetPerformanceHistory {
     #[serde(rename = "BudgetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -94,7 +95,7 @@ pub struct BudgetPerformanceHistory {
 
 /// <p>The amount of cost or usage that you created the budget for, compared to your actual costs or usage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BudgetedAndActualAmounts {
     /// <p>Your actual costs or usage for a budget period.</p>
     #[serde(rename = "ActualAmount")]
@@ -188,7 +189,7 @@ pub struct CreateBudgetRequest {
 
 /// <p> Response of CreateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
@@ -210,7 +211,7 @@ pub struct CreateNotificationRequest {
 
 /// <p> Response of CreateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
@@ -232,7 +233,7 @@ pub struct CreateSubscriberRequest {
 
 /// <p> Response of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
@@ -248,7 +249,7 @@ pub struct DeleteBudgetRequest {
 
 /// <p> Response of DeleteBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
@@ -267,7 +268,7 @@ pub struct DeleteNotificationRequest {
 
 /// <p> Response of DeleteNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
@@ -289,7 +290,7 @@ pub struct DeleteSubscriberRequest {
 
 /// <p> Response of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSubscriberResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -311,7 +312,7 @@ pub struct DescribeBudgetPerformanceHistoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBudgetPerformanceHistoryResponse {
     /// <p>The history of how often the budget has gone into an <code>ALARM</code> state.</p> <p>For <code>DAILY</code> budgets, the history saves the state of the budget for the last 60 days. For <code>MONTHLY</code> budgets, the history saves the state of the budget for the current month plus the last 12 months. For <code>QUARTERLY</code> budgets, the history saves the state of the budget for the last four quarters.</p>
     #[serde(rename = "BudgetPerformanceHistory")]
@@ -335,7 +336,7 @@ pub struct DescribeBudgetRequest {
 
 /// <p> Response of DescribeBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBudgetResponse {
     /// <p>The description of the budget.</p>
     #[serde(rename = "Budget")]
@@ -361,7 +362,7 @@ pub struct DescribeBudgetsRequest {
 
 /// <p> Response of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBudgetsResponse {
     /// <p>A list of budgets.</p>
     #[serde(rename = "Budgets")]
@@ -394,7 +395,7 @@ pub struct DescribeNotificationsForBudgetRequest {
 
 /// <p> Response of GetNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotificationsForBudgetResponse {
     /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -430,7 +431,7 @@ pub struct DescribeSubscribersForNotificationRequest {
 
 /// <p> Response of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSubscribersForNotificationResponse {
     /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -489,7 +490,7 @@ pub struct Spend {
 /// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon SNS topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscriber {
-    /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p> <p>When you create a subscriber, the value of <code>Address</code> can't contain line breaks.</p>
+    /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p> <p>AWS validates the address for a <code>CreateSubscriber</code> request with the <code>.*</code> regex.</p>
     #[serde(rename = "Address")]
     pub address: String,
     /// <p>The type of notification that AWS sends to a subscriber.</p>
@@ -523,7 +524,7 @@ pub struct UpdateBudgetRequest {
 
 /// <p> Response of UpdateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
@@ -545,7 +546,7 @@ pub struct UpdateNotificationRequest {
 
 /// <p> Response of UpdateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
@@ -570,14 +571,12 @@ pub struct UpdateSubscriberRequest {
 
 /// <p> Response of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSubscriberResponse {}
 
 /// Errors returned by CreateBudget
 #[derive(Debug, PartialEq)]
 pub enum CreateBudgetError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -592,9 +591,6 @@ impl CreateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(CreateBudgetError::AccessDenied(err.msg))
-                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateBudgetError::CreationLimitExceeded(err.msg))
                 }
@@ -622,7 +618,6 @@ impl fmt::Display for CreateBudgetError {
 impl Error for CreateBudgetError {
     fn description(&self) -> &str {
         match *self {
-            CreateBudgetError::AccessDenied(ref cause) => cause,
             CreateBudgetError::CreationLimitExceeded(ref cause) => cause,
             CreateBudgetError::DuplicateRecord(ref cause) => cause,
             CreateBudgetError::InternalError(ref cause) => cause,
@@ -633,8 +628,6 @@ impl Error for CreateBudgetError {
 /// Errors returned by CreateNotification
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -651,9 +644,6 @@ impl CreateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(CreateNotificationError::AccessDenied(err.msg))
-                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateNotificationError::CreationLimitExceeded(
                         err.msg,
@@ -686,7 +676,6 @@ impl fmt::Display for CreateNotificationError {
 impl Error for CreateNotificationError {
     fn description(&self) -> &str {
         match *self {
-            CreateNotificationError::AccessDenied(ref cause) => cause,
             CreateNotificationError::CreationLimitExceeded(ref cause) => cause,
             CreateNotificationError::DuplicateRecord(ref cause) => cause,
             CreateNotificationError::InternalError(ref cause) => cause,
@@ -698,8 +687,6 @@ impl Error for CreateNotificationError {
 /// Errors returned by CreateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriberError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -716,9 +703,6 @@ impl CreateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(CreateSubscriberError::AccessDenied(err.msg))
-                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateSubscriberError::CreationLimitExceeded(
                         err.msg,
@@ -751,7 +735,6 @@ impl fmt::Display for CreateSubscriberError {
 impl Error for CreateSubscriberError {
     fn description(&self) -> &str {
         match *self {
-            CreateSubscriberError::AccessDenied(ref cause) => cause,
             CreateSubscriberError::CreationLimitExceeded(ref cause) => cause,
             CreateSubscriberError::DuplicateRecord(ref cause) => cause,
             CreateSubscriberError::InternalError(ref cause) => cause,
@@ -763,8 +746,6 @@ impl Error for CreateSubscriberError {
 /// Errors returned by DeleteBudget
 #[derive(Debug, PartialEq)]
 pub enum DeleteBudgetError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -777,9 +758,6 @@ impl DeleteBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteBudgetError::AccessDenied(err.msg))
-                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteBudgetError::InternalError(err.msg))
                 }
@@ -804,7 +782,6 @@ impl fmt::Display for DeleteBudgetError {
 impl Error for DeleteBudgetError {
     fn description(&self) -> &str {
         match *self {
-            DeleteBudgetError::AccessDenied(ref cause) => cause,
             DeleteBudgetError::InternalError(ref cause) => cause,
             DeleteBudgetError::InvalidParameter(ref cause) => cause,
             DeleteBudgetError::NotFound(ref cause) => cause,
@@ -814,8 +791,6 @@ impl Error for DeleteBudgetError {
 /// Errors returned by DeleteNotification
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -828,9 +803,6 @@ impl DeleteNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteNotificationError::AccessDenied(err.msg))
-                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteNotificationError::InternalError(err.msg))
                 }
@@ -855,7 +827,6 @@ impl fmt::Display for DeleteNotificationError {
 impl Error for DeleteNotificationError {
     fn description(&self) -> &str {
         match *self {
-            DeleteNotificationError::AccessDenied(ref cause) => cause,
             DeleteNotificationError::InternalError(ref cause) => cause,
             DeleteNotificationError::InvalidParameter(ref cause) => cause,
             DeleteNotificationError::NotFound(ref cause) => cause,
@@ -865,8 +836,6 @@ impl Error for DeleteNotificationError {
 /// Errors returned by DeleteSubscriber
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriberError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -879,9 +848,6 @@ impl DeleteSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DeleteSubscriberError::AccessDenied(err.msg))
-                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteSubscriberError::InternalError(err.msg))
                 }
@@ -906,7 +872,6 @@ impl fmt::Display for DeleteSubscriberError {
 impl Error for DeleteSubscriberError {
     fn description(&self) -> &str {
         match *self {
-            DeleteSubscriberError::AccessDenied(ref cause) => cause,
             DeleteSubscriberError::InternalError(ref cause) => cause,
             DeleteSubscriberError::InvalidParameter(ref cause) => cause,
             DeleteSubscriberError::NotFound(ref cause) => cause,
@@ -916,8 +881,6 @@ impl Error for DeleteSubscriberError {
 /// Errors returned by DescribeBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -930,9 +893,6 @@ impl DescribeBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeBudgetError::AccessDenied(err.msg))
-                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeBudgetError::InternalError(err.msg))
                 }
@@ -957,7 +917,6 @@ impl fmt::Display for DescribeBudgetError {
 impl Error for DescribeBudgetError {
     fn description(&self) -> &str {
         match *self {
-            DescribeBudgetError::AccessDenied(ref cause) => cause,
             DescribeBudgetError::InternalError(ref cause) => cause,
             DescribeBudgetError::InvalidParameter(ref cause) => cause,
             DescribeBudgetError::NotFound(ref cause) => cause,
@@ -967,8 +926,6 @@ impl Error for DescribeBudgetError {
 /// Errors returned by DescribeBudgetPerformanceHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetPerformanceHistoryError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -987,11 +944,6 @@ impl DescribeBudgetPerformanceHistoryError {
     ) -> RusotoError<DescribeBudgetPerformanceHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(
-                        DescribeBudgetPerformanceHistoryError::AccessDenied(err.msg),
-                    )
-                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeBudgetPerformanceHistoryError::ExpiredNextToken(err.msg),
@@ -1032,7 +984,6 @@ impl fmt::Display for DescribeBudgetPerformanceHistoryError {
 impl Error for DescribeBudgetPerformanceHistoryError {
     fn description(&self) -> &str {
         match *self {
-            DescribeBudgetPerformanceHistoryError::AccessDenied(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::ExpiredNextToken(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::InternalError(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => cause,
@@ -1044,8 +995,6 @@ impl Error for DescribeBudgetPerformanceHistoryError {
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1062,9 +1011,6 @@ impl DescribeBudgetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeBudgetsError::AccessDenied(err.msg))
-                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(DescribeBudgetsError::ExpiredNextToken(err.msg))
                 }
@@ -1095,7 +1041,6 @@ impl fmt::Display for DescribeBudgetsError {
 impl Error for DescribeBudgetsError {
     fn description(&self) -> &str {
         match *self {
-            DescribeBudgetsError::AccessDenied(ref cause) => cause,
             DescribeBudgetsError::ExpiredNextToken(ref cause) => cause,
             DescribeBudgetsError::InternalError(ref cause) => cause,
             DescribeBudgetsError::InvalidNextToken(ref cause) => cause,
@@ -1107,8 +1052,6 @@ impl Error for DescribeBudgetsError {
 /// Errors returned by DescribeNotificationsForBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationsForBudgetError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1127,11 +1070,6 @@ impl DescribeNotificationsForBudgetError {
     ) -> RusotoError<DescribeNotificationsForBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeNotificationsForBudgetError::AccessDenied(
-                        err.msg,
-                    ))
-                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeNotificationsForBudgetError::ExpiredNextToken(err.msg),
@@ -1172,7 +1110,6 @@ impl fmt::Display for DescribeNotificationsForBudgetError {
 impl Error for DescribeNotificationsForBudgetError {
     fn description(&self) -> &str {
         match *self {
-            DescribeNotificationsForBudgetError::AccessDenied(ref cause) => cause,
             DescribeNotificationsForBudgetError::ExpiredNextToken(ref cause) => cause,
             DescribeNotificationsForBudgetError::InternalError(ref cause) => cause,
             DescribeNotificationsForBudgetError::InvalidNextToken(ref cause) => cause,
@@ -1184,8 +1121,6 @@ impl Error for DescribeNotificationsForBudgetError {
 /// Errors returned by DescribeSubscribersForNotification
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribersForNotificationError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1204,11 +1139,6 @@ impl DescribeSubscribersForNotificationError {
     ) -> RusotoError<DescribeSubscribersForNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(
-                        DescribeSubscribersForNotificationError::AccessDenied(err.msg),
-                    )
-                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeSubscribersForNotificationError::ExpiredNextToken(err.msg),
@@ -1249,7 +1179,6 @@ impl fmt::Display for DescribeSubscribersForNotificationError {
 impl Error for DescribeSubscribersForNotificationError {
     fn description(&self) -> &str {
         match *self {
-            DescribeSubscribersForNotificationError::AccessDenied(ref cause) => cause,
             DescribeSubscribersForNotificationError::ExpiredNextToken(ref cause) => cause,
             DescribeSubscribersForNotificationError::InternalError(ref cause) => cause,
             DescribeSubscribersForNotificationError::InvalidNextToken(ref cause) => cause,
@@ -1261,8 +1190,6 @@ impl Error for DescribeSubscribersForNotificationError {
 /// Errors returned by UpdateBudget
 #[derive(Debug, PartialEq)]
 pub enum UpdateBudgetError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -1275,9 +1202,6 @@ impl UpdateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateBudgetError::AccessDenied(err.msg))
-                }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateBudgetError::InternalError(err.msg))
                 }
@@ -1302,7 +1226,6 @@ impl fmt::Display for UpdateBudgetError {
 impl Error for UpdateBudgetError {
     fn description(&self) -> &str {
         match *self {
-            UpdateBudgetError::AccessDenied(ref cause) => cause,
             UpdateBudgetError::InternalError(ref cause) => cause,
             UpdateBudgetError::InvalidParameter(ref cause) => cause,
             UpdateBudgetError::NotFound(ref cause) => cause,
@@ -1312,8 +1235,6 @@ impl Error for UpdateBudgetError {
 /// Errors returned by UpdateNotification
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1328,9 +1249,6 @@ impl UpdateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateNotificationError::AccessDenied(err.msg))
-                }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateNotificationError::DuplicateRecord(err.msg))
                 }
@@ -1358,7 +1276,6 @@ impl fmt::Display for UpdateNotificationError {
 impl Error for UpdateNotificationError {
     fn description(&self) -> &str {
         match *self {
-            UpdateNotificationError::AccessDenied(ref cause) => cause,
             UpdateNotificationError::DuplicateRecord(ref cause) => cause,
             UpdateNotificationError::InternalError(ref cause) => cause,
             UpdateNotificationError::InvalidParameter(ref cause) => cause,
@@ -1369,8 +1286,6 @@ impl Error for UpdateNotificationError {
 /// Errors returned by UpdateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriberError {
-    /// <p>You are not authorized to use this operation with the given parameters.</p>
-    AccessDenied(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1385,9 +1300,6 @@ impl UpdateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
-                "AccessDeniedException" => {
-                    return RusotoError::Service(UpdateSubscriberError::AccessDenied(err.msg))
-                }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateSubscriberError::DuplicateRecord(err.msg))
                 }
@@ -1415,7 +1327,6 @@ impl fmt::Display for UpdateSubscriberError {
 impl Error for UpdateSubscriberError {
     fn description(&self) -> &str {
         match *self {
-            UpdateSubscriberError::AccessDenied(ref cause) => cause,
             UpdateSubscriberError::DuplicateRecord(ref cause) => cause,
             UpdateSubscriberError::InternalError(ref cause) => cause,
             UpdateSubscriberError::InvalidParameter(ref cause) => cause,
@@ -1424,93 +1335,100 @@ impl Error for UpdateSubscriberError {
     }
 }
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
+#[async_trait]
 pub trait Budgets {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn create_budget(
+    async fn create_budget(
         &self,
         input: CreateBudgetRequest,
-    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError>;
+    ) -> Result<CreateBudgetResponse, RusotoError<CreateBudgetError>>;
 
     /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
-    fn create_notification(
+    async fn create_notification(
         &self,
         input: CreateNotificationRequest,
-    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError>;
+    ) -> Result<CreateNotificationResponse, RusotoError<CreateNotificationError>>;
 
     /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
-    fn create_subscriber(
+    async fn create_subscriber(
         &self,
         input: CreateSubscriberRequest,
-    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
+    ) -> Result<CreateSubscriberResponse, RusotoError<CreateSubscriberError>>;
 
     /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
-    fn delete_budget(
+    async fn delete_budget(
         &self,
         input: DeleteBudgetRequest,
-    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
+    ) -> Result<DeleteBudgetResponse, RusotoError<DeleteBudgetError>>;
 
     /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
-    fn delete_notification(
+    async fn delete_notification(
         &self,
         input: DeleteNotificationRequest,
-    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
+    ) -> Result<DeleteNotificationResponse, RusotoError<DeleteNotificationError>>;
 
     /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
-    fn delete_subscriber(
+    async fn delete_subscriber(
         &self,
         input: DeleteSubscriberRequest,
-    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError>;
+    ) -> Result<DeleteSubscriberResponse, RusotoError<DeleteSubscriberError>>;
 
     /// <p><p>Describes a budget.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudget.html#API_DescribeBudget_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budget(
+    async fn describe_budget(
         &self,
         input: DescribeBudgetRequest,
-    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
+    ) -> Result<DescribeBudgetResponse, RusotoError<DescribeBudgetError>>;
 
     /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
-    fn describe_budget_performance_history(
+    async fn describe_budget_performance_history(
         &self,
         input: DescribeBudgetPerformanceHistoryRequest,
-    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>;
+    ) -> Result<
+        DescribeBudgetPerformanceHistoryResponse,
+        RusotoError<DescribeBudgetPerformanceHistoryError>,
+    >;
 
     /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budgets(
+    async fn describe_budgets(
         &self,
         input: DescribeBudgetsRequest,
-    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
+    ) -> Result<DescribeBudgetsResponse, RusotoError<DescribeBudgetsError>>;
 
     /// <p>Lists the notifications that are associated with a budget.</p>
-    fn describe_notifications_for_budget(
+    async fn describe_notifications_for_budget(
         &self,
         input: DescribeNotificationsForBudgetRequest,
-    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
+    ) -> Result<
+        DescribeNotificationsForBudgetResponse,
+        RusotoError<DescribeNotificationsForBudgetError>,
+    >;
 
     /// <p>Lists the subscribers that are associated with a notification.</p>
-    fn describe_subscribers_for_notification(
+    async fn describe_subscribers_for_notification(
         &self,
         input: DescribeSubscribersForNotificationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeSubscribersForNotificationResponse,
-        DescribeSubscribersForNotificationError,
+        RusotoError<DescribeSubscribersForNotificationError>,
     >;
 
     /// <p><p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_UpdateBudget.html#API_UpdateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn update_budget(
+    async fn update_budget(
         &self,
         input: UpdateBudgetRequest,
-    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError>;
+    ) -> Result<UpdateBudgetResponse, RusotoError<UpdateBudgetError>>;
 
     /// <p>Updates a notification.</p>
-    fn update_notification(
+    async fn update_notification(
         &self,
         input: UpdateNotificationRequest,
-    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError>;
+    ) -> Result<UpdateNotificationResponse, RusotoError<UpdateNotificationError>>;
 
     /// <p>Updates a subscriber.</p>
-    fn update_subscriber(
+    async fn update_subscriber(
         &self,
         input: UpdateSubscriberRequest,
-    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError>;
+    ) -> Result<UpdateSubscriberResponse, RusotoError<UpdateSubscriberError>>;
 }
 /// A client for the AWSBudgets API.
 #[derive(Clone)]
@@ -1524,7 +1442,10 @@ impl BudgetsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> BudgetsClient {
-        Self::new_with_client(Client::shared(), region)
+        BudgetsClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1534,35 +1455,22 @@ impl BudgetsClient {
     ) -> BudgetsClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        BudgetsClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> BudgetsClient {
-        BudgetsClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for BudgetsClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("BudgetsClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Budgets for BudgetsClient {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn create_budget(
+    async fn create_budget(
         &self,
         input: CreateBudgetRequest,
-    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
+    ) -> Result<CreateBudgetResponse, RusotoError<CreateBudgetError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1570,28 +1478,26 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBudgetResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateBudgetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateBudgetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBudgetError::from_response(response))
+        }
     }
 
     /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
-    fn create_notification(
+    async fn create_notification(
         &self,
         input: CreateNotificationRequest,
-    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
+    ) -> Result<CreateNotificationResponse, RusotoError<CreateNotificationError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1599,28 +1505,27 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNotificationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateNotificationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateNotificationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateNotificationError::from_response(response))
+        }
     }
 
     /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
-    fn create_subscriber(
+    async fn create_subscriber(
         &self,
         input: CreateSubscriberRequest,
-    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
+    ) -> Result<CreateSubscriberResponse, RusotoError<CreateSubscriberError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1628,28 +1533,27 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSubscriberResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSubscriberError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSubscriberResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSubscriberError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
-    fn delete_budget(
+    async fn delete_budget(
         &self,
         input: DeleteBudgetRequest,
-    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
+    ) -> Result<DeleteBudgetResponse, RusotoError<DeleteBudgetError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1657,28 +1561,26 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBudgetResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteBudgetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteBudgetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBudgetError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
-    fn delete_notification(
+    async fn delete_notification(
         &self,
         input: DeleteNotificationRequest,
-    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
+    ) -> Result<DeleteNotificationResponse, RusotoError<DeleteNotificationError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1686,28 +1588,27 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteNotificationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteNotificationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteNotificationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteNotificationError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
-    fn delete_subscriber(
+    async fn delete_subscriber(
         &self,
         input: DeleteSubscriberRequest,
-    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
+    ) -> Result<DeleteSubscriberResponse, RusotoError<DeleteSubscriberError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1715,28 +1616,27 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSubscriberResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSubscriberError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSubscriberResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSubscriberError::from_response(response))
+        }
     }
 
     /// <p><p>Describes a budget.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudget.html#API_DescribeBudget_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budget(
+    async fn describe_budget(
         &self,
         input: DescribeBudgetRequest,
-    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
+    ) -> Result<DescribeBudgetResponse, RusotoError<DescribeBudgetError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1744,29 +1644,29 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBudgetResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeBudgetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeBudgetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBudgetError::from_response(response))
+        }
     }
 
     /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
-    fn describe_budget_performance_history(
+    async fn describe_budget_performance_history(
         &self,
         input: DescribeBudgetPerformanceHistoryRequest,
-    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>
-    {
+    ) -> Result<
+        DescribeBudgetPerformanceHistoryResponse,
+        RusotoError<DescribeBudgetPerformanceHistoryError>,
+    > {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1777,27 +1677,29 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBudgetPerformanceHistoryResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBudgetPerformanceHistoryError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBudgetPerformanceHistoryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBudgetPerformanceHistoryError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budgets(
+    async fn describe_budgets(
         &self,
         input: DescribeBudgetsRequest,
-    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
+    ) -> Result<DescribeBudgetsResponse, RusotoError<DescribeBudgetsError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1805,29 +1707,29 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBudgetsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeBudgetsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeBudgetsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBudgetsError::from_response(response))
+        }
     }
 
     /// <p>Lists the notifications that are associated with a budget.</p>
-    fn describe_notifications_for_budget(
+    async fn describe_notifications_for_budget(
         &self,
         input: DescribeNotificationsForBudgetRequest,
-    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
-    {
+    ) -> Result<
+        DescribeNotificationsForBudgetResponse,
+        RusotoError<DescribeNotificationsForBudgetError>,
+    > {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1838,27 +1740,29 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeNotificationsForBudgetResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeNotificationsForBudgetError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeNotificationsForBudgetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeNotificationsForBudgetError::from_response(response))
+        }
     }
 
     /// <p>Lists the subscribers that are associated with a notification.</p>
-    fn describe_subscribers_for_notification(
+    async fn describe_subscribers_for_notification(
         &self,
         input: DescribeSubscribersForNotificationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeSubscribersForNotificationResponse,
-        DescribeSubscribersForNotificationError,
+        RusotoError<DescribeSubscribersForNotificationError>,
     > {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
@@ -1870,27 +1774,29 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSubscribersForNotificationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSubscribersForNotificationError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSubscribersForNotificationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSubscribersForNotificationError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p><p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_UpdateBudget.html#API_UpdateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn update_budget(
+    async fn update_budget(
         &self,
         input: UpdateBudgetRequest,
-    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
+    ) -> Result<UpdateBudgetResponse, RusotoError<UpdateBudgetError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1898,28 +1804,26 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBudgetResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateBudgetError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateBudgetResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBudgetError::from_response(response))
+        }
     }
 
     /// <p>Updates a notification.</p>
-    fn update_notification(
+    async fn update_notification(
         &self,
         input: UpdateNotificationRequest,
-    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
+    ) -> Result<UpdateNotificationResponse, RusotoError<UpdateNotificationError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1927,28 +1831,27 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNotificationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateNotificationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateNotificationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateNotificationError::from_response(response))
+        }
     }
 
     /// <p>Updates a subscriber.</p>
-    fn update_subscriber(
+    async fn update_subscriber(
         &self,
         input: UpdateSubscriberRequest,
-    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
+    ) -> Result<UpdateSubscriberResponse, RusotoError<UpdateSubscriberError>> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1956,20 +1859,19 @@ impl Budgets for BudgetsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSubscriberResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateSubscriberError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSubscriberResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSubscriberError::from_response(response))
+        }
     }
 }

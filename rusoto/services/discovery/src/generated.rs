@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AgentConfigurationStatus {
     /// <p>The agent/connector ID.</p>
     #[serde(rename = "agentId")]
@@ -43,7 +44,7 @@ pub struct AgentConfigurationStatus {
 
 /// <p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AgentInfo {
     /// <p>The agent or connector ID.</p>
     #[serde(rename = "agentId")]
@@ -89,7 +90,7 @@ pub struct AgentInfo {
 
 /// <p>Network details about the host where the agent/connector resides.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AgentNetworkInfo {
     /// <p>The IP address for the host where the agent/connector resides.</p>
     #[serde(rename = "ipAddress")]
@@ -112,12 +113,12 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateConfigurationItemsToApplicationResponse {}
 
 /// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DiscoveryBatchDeleteImportDataError {
     /// <p>The type of error that occurred for a specific import task.</p>
     #[serde(rename = "errorCode")]
@@ -141,7 +142,7 @@ pub struct BatchDeleteImportDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeleteImportDataResponse {
     /// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
     #[serde(rename = "errors")]
@@ -151,7 +152,7 @@ pub struct BatchDeleteImportDataResponse {
 
 /// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigurationTag {
     /// <p>The configuration ID for the item to tag. You can specify a list of keys and values.</p>
     #[serde(rename = "configurationId")]
@@ -177,7 +178,7 @@ pub struct ConfigurationTag {
 
 /// <p>A list of continuous export descriptions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContinuousExportDescription {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
@@ -225,7 +226,7 @@ pub struct CreateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>Configuration ID of an application to be created.</p>
     #[serde(rename = "configurationId")]
@@ -244,12 +245,12 @@ pub struct CreateTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTagsResponse {}
 
 /// <p>Inventory data for installed discovery agents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CustomerAgentInfo {
     /// <p>Number of active discovery agents.</p>
     #[serde(rename = "activeAgents")]
@@ -276,7 +277,7 @@ pub struct CustomerAgentInfo {
 
 /// <p>Inventory data for installed discovery connectors.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CustomerConnectorInfo {
     /// <p>Number of active discovery connectors.</p>
     #[serde(rename = "activeConnectors")]
@@ -309,7 +310,7 @@ pub struct DeleteApplicationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -324,7 +325,7 @@ pub struct DeleteTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTagsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -348,7 +349,7 @@ pub struct DescribeAgentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAgentsResponse {
     /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>
     #[serde(rename = "agentsInfo")]
@@ -368,7 +369,7 @@ pub struct DescribeConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigurationsResponse {
     /// <p>A key in the response map. The value is an array of data.</p>
     #[serde(rename = "configurations")]
@@ -393,7 +394,7 @@ pub struct DescribeContinuousExportsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeContinuousExportsResponse {
     /// <p>A list of continuous export descriptions.</p>
     #[serde(rename = "descriptions")]
@@ -407,7 +408,7 @@ pub struct DescribeContinuousExportsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeExportConfigurationsRequest {
-    /// <p>A list of continuous export IDs to search for.</p>
+    /// <p>A list of continuous export ids to search for.</p>
     #[serde(rename = "exportIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
@@ -422,7 +423,7 @@ pub struct DescribeExportConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeExportConfigurationsResponse {
     /// <p><p/></p>
     #[serde(rename = "exportsInfo")]
@@ -455,7 +456,7 @@ pub struct DescribeExportTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeExportTasksResponse {
     /// <p>Contains one or more sets of export request details. When the status of a request is <code>SUCCEEDED</code>, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
     #[serde(rename = "exportsInfo")]
@@ -484,7 +485,7 @@ pub struct DescribeImportTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeImportTasksResponse {
     /// <p>The token to request the next page of results.</p>
     #[serde(rename = "nextToken")]
@@ -513,7 +514,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>The call returns a token. Use this token to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -536,11 +537,11 @@ pub struct DisassociateConfigurationItemsFromApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateConfigurationItemsFromApplicationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExportConfigurationsResponse {
     /// <p>A unique identifier that you can use to query the export status.</p>
     #[serde(rename = "exportId")]
@@ -564,7 +565,7 @@ pub struct ExportFilter {
 
 /// <p>Information regarding the export status of discovered data. The value is an array of objects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExportInfo {
     /// <p>A URL for an Amazon S3 bucket where you can review the exported data. The URL is displayed only if the export succeeded.</p>
     #[serde(rename = "configurationsDownloadUrl")]
@@ -614,7 +615,7 @@ pub struct Filter {
 pub struct GetDiscoverySummaryRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDiscoverySummaryResponse {
     /// <p>Details about discovered agents, including agent status and health.</p>
     #[serde(rename = "agentSummary")]
@@ -644,7 +645,7 @@ pub struct GetDiscoverySummaryResponse {
 
 /// <p>An array of information related to the import task request that includes status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportTask {
     /// <p>The total number of application records in the import file that failed to be imported.</p>
     #[serde(rename = "applicationImportFailure")]
@@ -737,7 +738,7 @@ pub struct ListConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListConfigurationsResponse {
     /// <p>Returns configuration details, including the configuration ID, attribute names, and attribute values.</p>
     #[serde(rename = "configurations")]
@@ -773,7 +774,7 @@ pub struct ListServerNeighborsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListServerNeighborsResponse {
     /// <p>Count of distinct servers that are one hop away from the given server.</p>
     #[serde(rename = "knownDependencyCount")]
@@ -790,7 +791,7 @@ pub struct ListServerNeighborsResponse {
 
 /// <p>Details about neighboring servers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NeighborConnectionDetail {
     /// <p>The number of open network connections with the neighboring server.</p>
     #[serde(rename = "connectionsCount")]
@@ -827,7 +828,7 @@ pub struct OrderByElement {
 pub struct StartContinuousExportRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartContinuousExportResponse {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
@@ -859,7 +860,7 @@ pub struct StartDataCollectionByAgentIdsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartDataCollectionByAgentIdsResponse {
     /// <p>Information about agents or the connector that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
     #[serde(rename = "agentsConfigurationStatus")]
@@ -888,7 +889,7 @@ pub struct StartExportTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartExportTaskResponse {
     /// <p>A unique identifier used to query the status of an export request.</p>
     #[serde(rename = "exportId")]
@@ -911,7 +912,7 @@ pub struct StartImportTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartImportTaskResponse {
     /// <p>An array of information related to the import task request including status information, times, IDs, the Amazon S3 Object URL for the import file, and more. </p>
     #[serde(rename = "task")]
@@ -927,7 +928,7 @@ pub struct StopContinuousExportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopContinuousExportResponse {
     /// <p>Timestamp that represents when this continuous export started collecting data.</p>
     #[serde(rename = "startTime")]
@@ -947,7 +948,7 @@ pub struct StopDataCollectionByAgentIdsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopDataCollectionByAgentIdsResponse {
     /// <p>Information about the agents or connector that were instructed to stop collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
     #[serde(rename = "agentsConfigurationStatus")]
@@ -993,7 +994,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateApplicationResponse {}
 
 /// Errors returned by AssociateConfigurationItemsToApplication
@@ -1001,8 +1002,6 @@ pub struct UpdateApplicationResponse {}
 pub enum AssociateConfigurationItemsToApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1020,11 +1019,6 @@ impl AssociateConfigurationItemsToApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         AssociateConfigurationItemsToApplicationError::AuthorizationError(err.msg),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -1060,7 +1054,6 @@ impl Error for AssociateConfigurationItemsToApplicationError {
     fn description(&self) -> &str {
         match *self {
             AssociateConfigurationItemsToApplicationError::AuthorizationError(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::HomeRegionNotSet(ref cause) => cause,
             AssociateConfigurationItemsToApplicationError::InvalidParameter(ref cause) => cause,
             AssociateConfigurationItemsToApplicationError::InvalidParameterValue(ref cause) => {
                 cause
@@ -1074,10 +1067,6 @@ impl Error for AssociateConfigurationItemsToApplicationError {
 pub enum BatchDeleteImportDataError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
-    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
@@ -1090,16 +1079,6 @@ impl BatchDeleteImportDataError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(BatchDeleteImportDataError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(BatchDeleteImportDataError::HomeRegionNotSet(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(BatchDeleteImportDataError::InvalidParameter(
                         err.msg,
                     ))
                 }
@@ -1129,8 +1108,6 @@ impl Error for BatchDeleteImportDataError {
     fn description(&self) -> &str {
         match *self {
             BatchDeleteImportDataError::AuthorizationError(ref cause) => cause,
-            BatchDeleteImportDataError::HomeRegionNotSet(ref cause) => cause,
-            BatchDeleteImportDataError::InvalidParameter(ref cause) => cause,
             BatchDeleteImportDataError::InvalidParameterValue(ref cause) => cause,
             BatchDeleteImportDataError::ServerInternalError(ref cause) => cause,
         }
@@ -1141,8 +1118,6 @@ impl Error for BatchDeleteImportDataError {
 pub enum CreateApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1159,9 +1134,6 @@ impl CreateApplicationError {
                     return RusotoError::Service(CreateApplicationError::AuthorizationError(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(CreateApplicationError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidParameter(err.msg))
@@ -1192,7 +1164,6 @@ impl Error for CreateApplicationError {
     fn description(&self) -> &str {
         match *self {
             CreateApplicationError::AuthorizationError(ref cause) => cause,
-            CreateApplicationError::HomeRegionNotSet(ref cause) => cause,
             CreateApplicationError::InvalidParameter(ref cause) => cause,
             CreateApplicationError::InvalidParameterValue(ref cause) => cause,
             CreateApplicationError::ServerInternalError(ref cause) => cause,
@@ -1204,8 +1175,6 @@ impl Error for CreateApplicationError {
 pub enum CreateTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1222,9 +1191,6 @@ impl CreateTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(CreateTagsError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(CreateTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateTagsError::InvalidParameter(err.msg))
@@ -1254,7 +1220,6 @@ impl Error for CreateTagsError {
     fn description(&self) -> &str {
         match *self {
             CreateTagsError::AuthorizationError(ref cause) => cause,
-            CreateTagsError::HomeRegionNotSet(ref cause) => cause,
             CreateTagsError::InvalidParameter(ref cause) => cause,
             CreateTagsError::InvalidParameterValue(ref cause) => cause,
             CreateTagsError::ResourceNotFound(ref cause) => cause,
@@ -1267,8 +1232,6 @@ impl Error for CreateTagsError {
 pub enum DeleteApplicationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1285,9 +1248,6 @@ impl DeleteApplicationsError {
                     return RusotoError::Service(DeleteApplicationsError::AuthorizationError(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DeleteApplicationsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteApplicationsError::InvalidParameter(err.msg))
@@ -1318,7 +1278,6 @@ impl Error for DeleteApplicationsError {
     fn description(&self) -> &str {
         match *self {
             DeleteApplicationsError::AuthorizationError(ref cause) => cause,
-            DeleteApplicationsError::HomeRegionNotSet(ref cause) => cause,
             DeleteApplicationsError::InvalidParameter(ref cause) => cause,
             DeleteApplicationsError::InvalidParameterValue(ref cause) => cause,
             DeleteApplicationsError::ServerInternalError(ref cause) => cause,
@@ -1330,8 +1289,6 @@ impl Error for DeleteApplicationsError {
 pub enum DeleteTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1348,9 +1305,6 @@ impl DeleteTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DeleteTagsError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DeleteTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteTagsError::InvalidParameter(err.msg))
@@ -1380,7 +1334,6 @@ impl Error for DeleteTagsError {
     fn description(&self) -> &str {
         match *self {
             DeleteTagsError::AuthorizationError(ref cause) => cause,
-            DeleteTagsError::HomeRegionNotSet(ref cause) => cause,
             DeleteTagsError::InvalidParameter(ref cause) => cause,
             DeleteTagsError::InvalidParameterValue(ref cause) => cause,
             DeleteTagsError::ResourceNotFound(ref cause) => cause,
@@ -1393,8 +1346,6 @@ impl Error for DeleteTagsError {
 pub enum DescribeAgentsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1409,9 +1360,6 @@ impl DescribeAgentsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeAgentsError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeAgentsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeAgentsError::InvalidParameter(err.msg))
@@ -1440,7 +1388,6 @@ impl Error for DescribeAgentsError {
     fn description(&self) -> &str {
         match *self {
             DescribeAgentsError::AuthorizationError(ref cause) => cause,
-            DescribeAgentsError::HomeRegionNotSet(ref cause) => cause,
             DescribeAgentsError::InvalidParameter(ref cause) => cause,
             DescribeAgentsError::InvalidParameterValue(ref cause) => cause,
             DescribeAgentsError::ServerInternalError(ref cause) => cause,
@@ -1452,8 +1399,6 @@ impl Error for DescribeAgentsError {
 pub enum DescribeConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1468,11 +1413,6 @@ impl DescribeConfigurationsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeConfigurationsError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeConfigurationsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1507,7 +1447,6 @@ impl Error for DescribeConfigurationsError {
     fn description(&self) -> &str {
         match *self {
             DescribeConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeConfigurationsError::HomeRegionNotSet(ref cause) => cause,
             DescribeConfigurationsError::InvalidParameter(ref cause) => cause,
             DescribeConfigurationsError::InvalidParameterValue(ref cause) => cause,
             DescribeConfigurationsError::ServerInternalError(ref cause) => cause,
@@ -1519,8 +1458,6 @@ impl Error for DescribeConfigurationsError {
 pub enum DescribeContinuousExportsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1541,11 +1478,6 @@ impl DescribeContinuousExportsError {
                     return RusotoError::Service(
                         DescribeContinuousExportsError::AuthorizationError(err.msg),
                     )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeContinuousExportsError::HomeRegionNotSet(
-                        err.msg,
-                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeContinuousExportsError::InvalidParameter(
@@ -1588,7 +1520,6 @@ impl Error for DescribeContinuousExportsError {
     fn description(&self) -> &str {
         match *self {
             DescribeContinuousExportsError::AuthorizationError(ref cause) => cause,
-            DescribeContinuousExportsError::HomeRegionNotSet(ref cause) => cause,
             DescribeContinuousExportsError::InvalidParameter(ref cause) => cause,
             DescribeContinuousExportsError::InvalidParameterValue(ref cause) => cause,
             DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
@@ -1602,8 +1533,6 @@ impl Error for DescribeContinuousExportsError {
 pub enum DescribeExportConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1623,11 +1552,6 @@ impl DescribeExportConfigurationsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         DescribeExportConfigurationsError::AuthorizationError(err.msg),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        DescribeExportConfigurationsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -1666,7 +1590,6 @@ impl Error for DescribeExportConfigurationsError {
     fn description(&self) -> &str {
         match *self {
             DescribeExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            DescribeExportConfigurationsError::HomeRegionNotSet(ref cause) => cause,
             DescribeExportConfigurationsError::InvalidParameter(ref cause) => cause,
             DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
             DescribeExportConfigurationsError::ResourceNotFound(ref cause) => cause,
@@ -1679,8 +1602,6 @@ impl Error for DescribeExportConfigurationsError {
 pub enum DescribeExportTasksError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1695,11 +1616,6 @@ impl DescribeExportTasksError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeExportTasksError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeExportTasksError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1734,7 +1650,6 @@ impl Error for DescribeExportTasksError {
     fn description(&self) -> &str {
         match *self {
             DescribeExportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeExportTasksError::HomeRegionNotSet(ref cause) => cause,
             DescribeExportTasksError::InvalidParameter(ref cause) => cause,
             DescribeExportTasksError::InvalidParameterValue(ref cause) => cause,
             DescribeExportTasksError::ServerInternalError(ref cause) => cause,
@@ -1746,10 +1661,6 @@ impl Error for DescribeExportTasksError {
 pub enum DescribeImportTasksError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
-    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
@@ -1762,16 +1673,6 @@ impl DescribeImportTasksError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeImportTasksError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeImportTasksError::HomeRegionNotSet(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeImportTasksError::InvalidParameter(
                         err.msg,
                     ))
                 }
@@ -1801,8 +1702,6 @@ impl Error for DescribeImportTasksError {
     fn description(&self) -> &str {
         match *self {
             DescribeImportTasksError::AuthorizationError(ref cause) => cause,
-            DescribeImportTasksError::HomeRegionNotSet(ref cause) => cause,
-            DescribeImportTasksError::InvalidParameter(ref cause) => cause,
             DescribeImportTasksError::InvalidParameterValue(ref cause) => cause,
             DescribeImportTasksError::ServerInternalError(ref cause) => cause,
         }
@@ -1813,8 +1712,6 @@ impl Error for DescribeImportTasksError {
 pub enum DescribeTagsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1831,9 +1728,6 @@ impl DescribeTagsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(DescribeTagsError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeTagsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTagsError::InvalidParameter(err.msg))
@@ -1863,7 +1757,6 @@ impl Error for DescribeTagsError {
     fn description(&self) -> &str {
         match *self {
             DescribeTagsError::AuthorizationError(ref cause) => cause,
-            DescribeTagsError::HomeRegionNotSet(ref cause) => cause,
             DescribeTagsError::InvalidParameter(ref cause) => cause,
             DescribeTagsError::InvalidParameterValue(ref cause) => cause,
             DescribeTagsError::ResourceNotFound(ref cause) => cause,
@@ -1876,8 +1769,6 @@ impl Error for DescribeTagsError {
 pub enum DisassociateConfigurationItemsFromApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1895,13 +1786,6 @@ impl DisassociateConfigurationItemsFromApplicationError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
-                            err.msg,
-                        ),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        DisassociateConfigurationItemsFromApplicationError::HomeRegionNotSet(
                             err.msg,
                         ),
                     )
@@ -1945,9 +1829,6 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
             DisassociateConfigurationItemsFromApplicationError::AuthorizationError(ref cause) => {
                 cause
             }
-            DisassociateConfigurationItemsFromApplicationError::HomeRegionNotSet(ref cause) => {
-                cause
-            }
             DisassociateConfigurationItemsFromApplicationError::InvalidParameter(ref cause) => {
                 cause
             }
@@ -1965,8 +1846,6 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
 pub enum ExportConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -1983,11 +1862,6 @@ impl ExportConfigurationsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ExportConfigurationsError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ExportConfigurationsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2027,7 +1901,6 @@ impl Error for ExportConfigurationsError {
     fn description(&self) -> &str {
         match *self {
             ExportConfigurationsError::AuthorizationError(ref cause) => cause,
-            ExportConfigurationsError::HomeRegionNotSet(ref cause) => cause,
             ExportConfigurationsError::InvalidParameter(ref cause) => cause,
             ExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
             ExportConfigurationsError::OperationNotPermitted(ref cause) => cause,
@@ -2040,8 +1913,6 @@ impl Error for ExportConfigurationsError {
 pub enum GetDiscoverySummaryError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2056,11 +1927,6 @@ impl GetDiscoverySummaryError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(GetDiscoverySummaryError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(GetDiscoverySummaryError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2095,7 +1961,6 @@ impl Error for GetDiscoverySummaryError {
     fn description(&self) -> &str {
         match *self {
             GetDiscoverySummaryError::AuthorizationError(ref cause) => cause,
-            GetDiscoverySummaryError::HomeRegionNotSet(ref cause) => cause,
             GetDiscoverySummaryError::InvalidParameter(ref cause) => cause,
             GetDiscoverySummaryError::InvalidParameterValue(ref cause) => cause,
             GetDiscoverySummaryError::ServerInternalError(ref cause) => cause,
@@ -2107,8 +1972,6 @@ impl Error for GetDiscoverySummaryError {
 pub enum ListConfigurationsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2127,9 +1990,6 @@ impl ListConfigurationsError {
                     return RusotoError::Service(ListConfigurationsError::AuthorizationError(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListConfigurationsError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListConfigurationsError::InvalidParameter(err.msg))
@@ -2163,7 +2023,6 @@ impl Error for ListConfigurationsError {
     fn description(&self) -> &str {
         match *self {
             ListConfigurationsError::AuthorizationError(ref cause) => cause,
-            ListConfigurationsError::HomeRegionNotSet(ref cause) => cause,
             ListConfigurationsError::InvalidParameter(ref cause) => cause,
             ListConfigurationsError::InvalidParameterValue(ref cause) => cause,
             ListConfigurationsError::ResourceNotFound(ref cause) => cause,
@@ -2176,8 +2035,6 @@ impl Error for ListConfigurationsError {
 pub enum ListServerNeighborsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2192,11 +2049,6 @@ impl ListServerNeighborsError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(ListServerNeighborsError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListServerNeighborsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2231,7 +2083,6 @@ impl Error for ListServerNeighborsError {
     fn description(&self) -> &str {
         match *self {
             ListServerNeighborsError::AuthorizationError(ref cause) => cause,
-            ListServerNeighborsError::HomeRegionNotSet(ref cause) => cause,
             ListServerNeighborsError::InvalidParameter(ref cause) => cause,
             ListServerNeighborsError::InvalidParameterValue(ref cause) => cause,
             ListServerNeighborsError::ServerInternalError(ref cause) => cause,
@@ -2245,8 +2096,6 @@ pub enum StartContinuousExportError {
     AuthorizationError(String),
     /// <p><p/></p>
     ConflictError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2270,11 +2119,6 @@ impl StartContinuousExportError {
                 }
                 "ConflictErrorException" => {
                     return RusotoError::Service(StartContinuousExportError::ConflictError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(StartContinuousExportError::HomeRegionNotSet(
-                        err.msg,
-                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartContinuousExportError::InvalidParameter(
@@ -2316,7 +2160,6 @@ impl Error for StartContinuousExportError {
         match *self {
             StartContinuousExportError::AuthorizationError(ref cause) => cause,
             StartContinuousExportError::ConflictError(ref cause) => cause,
-            StartContinuousExportError::HomeRegionNotSet(ref cause) => cause,
             StartContinuousExportError::InvalidParameter(ref cause) => cause,
             StartContinuousExportError::InvalidParameterValue(ref cause) => cause,
             StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
@@ -2330,8 +2173,6 @@ impl Error for StartContinuousExportError {
 pub enum StartDataCollectionByAgentIdsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2349,11 +2190,6 @@ impl StartDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         StartDataCollectionByAgentIdsError::AuthorizationError(err.msg),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        StartDataCollectionByAgentIdsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -2387,7 +2223,6 @@ impl Error for StartDataCollectionByAgentIdsError {
     fn description(&self) -> &str {
         match *self {
             StartDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => cause,
             StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
             StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
             StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
@@ -2399,8 +2234,6 @@ impl Error for StartDataCollectionByAgentIdsError {
 pub enum StartExportTaskError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2417,9 +2250,6 @@ impl StartExportTaskError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartExportTaskError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(StartExportTaskError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartExportTaskError::InvalidParameter(err.msg))
@@ -2453,7 +2283,6 @@ impl Error for StartExportTaskError {
     fn description(&self) -> &str {
         match *self {
             StartExportTaskError::AuthorizationError(ref cause) => cause,
-            StartExportTaskError::HomeRegionNotSet(ref cause) => cause,
             StartExportTaskError::InvalidParameter(ref cause) => cause,
             StartExportTaskError::InvalidParameterValue(ref cause) => cause,
             StartExportTaskError::OperationNotPermitted(ref cause) => cause,
@@ -2466,10 +2295,6 @@ impl Error for StartExportTaskError {
 pub enum StartImportTaskError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
-    InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
     /// <p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>
@@ -2484,12 +2309,6 @@ impl StartImportTaskError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StartImportTaskError::AuthorizationError(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(StartImportTaskError::HomeRegionNotSet(err.msg))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(StartImportTaskError::InvalidParameter(err.msg))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartImportTaskError::InvalidParameterValue(
@@ -2518,8 +2337,6 @@ impl Error for StartImportTaskError {
     fn description(&self) -> &str {
         match *self {
             StartImportTaskError::AuthorizationError(ref cause) => cause,
-            StartImportTaskError::HomeRegionNotSet(ref cause) => cause,
-            StartImportTaskError::InvalidParameter(ref cause) => cause,
             StartImportTaskError::InvalidParameterValue(ref cause) => cause,
             StartImportTaskError::ResourceInUse(ref cause) => cause,
             StartImportTaskError::ServerInternalError(ref cause) => cause,
@@ -2531,8 +2348,6 @@ impl Error for StartImportTaskError {
 pub enum StopContinuousExportError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2553,11 +2368,6 @@ impl StopContinuousExportError {
             match err.typ.as_str() {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(StopContinuousExportError::AuthorizationError(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(StopContinuousExportError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -2605,7 +2415,6 @@ impl Error for StopContinuousExportError {
     fn description(&self) -> &str {
         match *self {
             StopContinuousExportError::AuthorizationError(ref cause) => cause,
-            StopContinuousExportError::HomeRegionNotSet(ref cause) => cause,
             StopContinuousExportError::InvalidParameter(ref cause) => cause,
             StopContinuousExportError::InvalidParameterValue(ref cause) => cause,
             StopContinuousExportError::OperationNotPermitted(ref cause) => cause,
@@ -2620,8 +2429,6 @@ impl Error for StopContinuousExportError {
 pub enum StopDataCollectionByAgentIdsError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2639,11 +2446,6 @@ impl StopDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return RusotoError::Service(
                         StopDataCollectionByAgentIdsError::AuthorizationError(err.msg),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        StopDataCollectionByAgentIdsError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InvalidParameterException" => {
@@ -2677,7 +2479,6 @@ impl Error for StopDataCollectionByAgentIdsError {
     fn description(&self) -> &str {
         match *self {
             StopDataCollectionByAgentIdsError::AuthorizationError(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::HomeRegionNotSet(ref cause) => cause,
             StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
             StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
             StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
@@ -2689,8 +2490,6 @@ impl Error for StopDataCollectionByAgentIdsError {
 pub enum UpdateApplicationError {
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
     /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
     /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
@@ -2707,9 +2506,6 @@ impl UpdateApplicationError {
                     return RusotoError::Service(UpdateApplicationError::AuthorizationError(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(UpdateApplicationError::HomeRegionNotSet(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidParameter(err.msg))
@@ -2740,7 +2536,6 @@ impl Error for UpdateApplicationError {
     fn description(&self) -> &str {
         match *self {
             UpdateApplicationError::AuthorizationError(ref cause) => cause,
-            UpdateApplicationError::HomeRegionNotSet(ref cause) => cause,
             UpdateApplicationError::InvalidParameter(ref cause) => cause,
             UpdateApplicationError::InvalidParameterValue(ref cause) => cause,
             UpdateApplicationError::ServerInternalError(ref cause) => cause,
@@ -2748,159 +2543,163 @@ impl Error for UpdateApplicationError {
     }
 }
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
+#[async_trait]
 pub trait Discovery {
     /// <p>Associates one or more configuration items with an application.</p>
-    fn associate_configuration_items_to_application(
+    async fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
+        RusotoError<AssociateConfigurationItemsToApplicationError>,
     >;
 
     /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
-    fn batch_delete_import_data(
+    async fn batch_delete_import_data(
         &self,
         input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError>;
+    ) -> Result<BatchDeleteImportDataResponse, RusotoError<BatchDeleteImportDataError>>;
 
     /// <p>Creates an application with the given name and description.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError>;
+    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError>;
+    ) -> Result<CreateTagsResponse, RusotoError<CreateTagsError>>;
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
-    fn delete_applications(
+    async fn delete_applications(
         &self,
         input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError>;
+    ) -> Result<DeleteApplicationsResponse, RusotoError<DeleteApplicationsError>>;
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
+    ) -> Result<DeleteTagsResponse, RusotoError<DeleteTagsError>>;
 
     /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
+    async fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
+    ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>>;
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
-    fn describe_configurations(
+    async fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
+    ) -> Result<DescribeConfigurationsResponse, RusotoError<DescribeConfigurationsError>>;
 
     /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
-    fn describe_continuous_exports(
+    async fn describe_continuous_exports(
         &self,
         input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
+    ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>;
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
-    fn describe_export_configurations(
+    async fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
+    ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>;
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>>;
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
-    fn describe_import_tasks(
+    async fn describe_import_tasks(
         &self,
         input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError>;
+    ) -> Result<DescribeImportTasksResponse, RusotoError<DescribeImportTasksError>>;
 
     /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>>;
 
     /// <p>Disassociates one or more configuration items from an application.</p>
-    fn disassociate_configuration_items_from_application(
+    async fn disassociate_configuration_items_from_application(
         &self,
         input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
+        RusotoError<DisassociateConfigurationItemsFromApplicationError>,
     >;
 
     /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
+    async fn export_configurations(
         &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError>;
+    ) -> Result<ExportConfigurationsResponse, RusotoError<ExportConfigurationsError>>;
 
     /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
+    async fn get_discovery_summary(
         &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
+    ) -> Result<GetDiscoverySummaryResponse, RusotoError<GetDiscoverySummaryError>>;
 
     /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
-    fn list_server_neighbors(
+    async fn list_server_neighbors(
         &self,
         input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
+    ) -> Result<ListServerNeighborsResponse, RusotoError<ListServerNeighborsError>>;
 
     /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
+    async fn start_continuous_export(
         &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError>;
+    ) -> Result<StartContinuousExportResponse, RusotoError<StartContinuousExportError>>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
-    fn start_data_collection_by_agent_ids(
+    async fn start_data_collection_by_agent_ids(
         &self,
         input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
+    ) -> Result<
+        StartDataCollectionByAgentIdsResponse,
+        RusotoError<StartDataCollectionByAgentIdsError>,
+    >;
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
+    async fn start_export_task(
         &self,
         input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
+    ) -> Result<StartExportTaskResponse, RusotoError<StartExportTaskError>>;
 
     /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
+    async fn start_import_task(
         &self,
         input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError>;
+    ) -> Result<StartImportTaskResponse, RusotoError<StartImportTaskError>>;
 
     /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn stop_continuous_export(
+    async fn stop_continuous_export(
         &self,
         input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError>;
+    ) -> Result<StopContinuousExportResponse, RusotoError<StopContinuousExportError>>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
-    fn stop_data_collection_by_agent_ids(
+    async fn stop_data_collection_by_agent_ids(
         &self,
         input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
+    ) -> Result<StopDataCollectionByAgentIdsResponse, RusotoError<StopDataCollectionByAgentIdsError>>;
 
     /// <p>Updates metadata about an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
+    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>;
 }
 /// A client for the AWS Application Discovery Service API.
 #[derive(Clone)]
@@ -2914,7 +2713,10 @@ impl DiscoveryClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DiscoveryClient {
-        Self::new_with_client(Client::shared(), region)
+        DiscoveryClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -2924,37 +2726,24 @@ impl DiscoveryClient {
     ) -> DiscoveryClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DiscoveryClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> DiscoveryClient {
-        DiscoveryClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for DiscoveryClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DiscoveryClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Discovery for DiscoveryClient {
     /// <p>Associates one or more configuration items with an application.</p>
-    fn associate_configuration_items_to_application(
+    async fn associate_configuration_items_to_application(
         &self,
         input: AssociateConfigurationItemsToApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateConfigurationItemsToApplicationResponse,
-        AssociateConfigurationItemsToApplicationError,
+        RusotoError<AssociateConfigurationItemsToApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -2966,25 +2755,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateConfigurationItemsToApplicationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateConfigurationItemsToApplicationError::from_response(response))
+        }
     }
 
     /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
-    fn batch_delete_import_data(
+    async fn batch_delete_import_data(
         &self,
         input: BatchDeleteImportDataRequest,
-    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError> {
+    ) -> Result<BatchDeleteImportDataResponse, RusotoError<BatchDeleteImportDataError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2995,27 +2786,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDeleteImportDataResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchDeleteImportDataError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeleteImportDataResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeleteImportDataError::from_response(response))
+        }
     }
 
     /// <p>Creates an application with the given name and description.</p>
-    fn create_application(
+    async fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
+    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3026,28 +2817,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateApplicationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateApplicationError::from_response(response))
+        }
     }
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
-    fn create_tags(
+    async fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
+    ) -> Result<CreateTagsResponse, RusotoError<CreateTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3055,28 +2845,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagsError::from_response(response))
+        }
     }
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
-    fn delete_applications(
+    async fn delete_applications(
         &self,
         input: DeleteApplicationsRequest,
-    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
+    ) -> Result<DeleteApplicationsResponse, RusotoError<DeleteApplicationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3087,28 +2875,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteApplicationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteApplicationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteApplicationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteApplicationsError::from_response(response))
+        }
     }
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
-    fn delete_tags(
+    async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
+    ) -> Result<DeleteTagsResponse, RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3116,28 +2903,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagsError::from_response(response))
+        }
     }
 
     /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
-    fn describe_agents(
+    async fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
-    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
+    ) -> Result<DescribeAgentsResponse, RusotoError<DescribeAgentsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3148,28 +2933,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAgentsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeAgentsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAgentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAgentsError::from_response(response))
+        }
     }
 
     /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
-    fn describe_configurations(
+    async fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
-    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
+    ) -> Result<DescribeConfigurationsResponse, RusotoError<DescribeConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3180,27 +2963,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConfigurationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
-    fn describe_continuous_exports(
+    async fn describe_continuous_exports(
         &self,
         input: DescribeContinuousExportsRequest,
-    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
+    ) -> Result<DescribeContinuousExportsResponse, RusotoError<DescribeContinuousExportsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3211,25 +2995,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeContinuousExportsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeContinuousExportsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeContinuousExportsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeContinuousExportsError::from_response(response))
+        }
     }
 
     /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
-    fn describe_export_configurations(
+    async fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
-    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
+    ) -> Result<DescribeExportConfigurationsResponse, RusotoError<DescribeExportConfigurationsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3240,25 +3027,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExportConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeExportConfigurationsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExportConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExportConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
-    fn describe_export_tasks(
+    async fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
-    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
+    ) -> Result<DescribeExportTasksResponse, RusotoError<DescribeExportTasksError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3269,27 +3058,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeExportTasksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeExportTasksError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExportTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExportTasksError::from_response(response))
+        }
     }
 
     /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
-    fn describe_import_tasks(
+    async fn describe_import_tasks(
         &self,
         input: DescribeImportTasksRequest,
-    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError> {
+    ) -> Result<DescribeImportTasksResponse, RusotoError<DescribeImportTasksError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3300,27 +3089,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImportTasksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeImportTasksError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeImportTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImportTasksError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsRequest,
-    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
+    ) -> Result<DescribeTagsResponse, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3331,30 +3120,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagsError::from_response(response))
+        }
     }
 
     /// <p>Disassociates one or more configuration items from an application.</p>
-    fn disassociate_configuration_items_from_application(
+    async fn disassociate_configuration_items_from_application(
         &self,
         input: DisassociateConfigurationItemsFromApplicationRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateConfigurationItemsFromApplicationResponse,
-        DisassociateConfigurationItemsFromApplicationError,
+        RusotoError<DisassociateConfigurationItemsFromApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3366,23 +3153,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
+        }
     }
 
     /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
-    fn export_configurations(
+    async fn export_configurations(
         &self,
-    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError> {
+    ) -> Result<ExportConfigurationsResponse, RusotoError<ExportConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3392,26 +3182,26 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExportConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ExportConfigurationsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExportConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
-    fn get_discovery_summary(
+    async fn get_discovery_summary(
         &self,
-    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
+    ) -> Result<GetDiscoverySummaryResponse, RusotoError<GetDiscoverySummaryError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3421,27 +3211,27 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDiscoverySummaryResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetDiscoverySummaryError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDiscoverySummaryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDiscoverySummaryError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
-    fn list_configurations(
+    async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
-    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+    ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3452,28 +3242,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListConfigurationsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListConfigurationsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConfigurationsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConfigurationsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
-    fn list_server_neighbors(
+    async fn list_server_neighbors(
         &self,
         input: ListServerNeighborsRequest,
-    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
+    ) -> Result<ListServerNeighborsResponse, RusotoError<ListServerNeighborsError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3484,26 +3273,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListServerNeighborsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListServerNeighborsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListServerNeighborsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListServerNeighborsError::from_response(response))
+        }
     }
 
     /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn start_continuous_export(
+    async fn start_continuous_export(
         &self,
-    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
+    ) -> Result<StartContinuousExportResponse, RusotoError<StartContinuousExportError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3513,28 +3302,30 @@ impl Discovery for DiscoveryClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartContinuousExportResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartContinuousExportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartContinuousExportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartContinuousExportError::from_response(response))
+        }
     }
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
-    fn start_data_collection_by_agent_ids(
+    async fn start_data_collection_by_agent_ids(
         &self,
         input: StartDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
-    {
+    ) -> Result<
+        StartDataCollectionByAgentIdsResponse,
+        RusotoError<StartDataCollectionByAgentIdsError>,
+    > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3545,25 +3336,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartDataCollectionByAgentIdsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartDataCollectionByAgentIdsError::from_response(response))
+        }
     }
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
-    fn start_export_task(
+    async fn start_export_task(
         &self,
         input: StartExportTaskRequest,
-    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
+    ) -> Result<StartExportTaskResponse, RusotoError<StartExportTaskError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3574,28 +3367,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartExportTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartExportTaskError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartExportTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartExportTaskError::from_response(response))
+        }
     }
 
     /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
-    fn start_import_task(
+    async fn start_import_task(
         &self,
         input: StartImportTaskRequest,
-    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError> {
+    ) -> Result<StartImportTaskResponse, RusotoError<StartImportTaskError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3606,28 +3397,26 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartImportTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartImportTaskError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartImportTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartImportTaskError::from_response(response))
+        }
     }
 
     /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
-    fn stop_continuous_export(
+    async fn stop_continuous_export(
         &self,
         input: StopContinuousExportRequest,
-    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
+    ) -> Result<StopContinuousExportResponse, RusotoError<StopContinuousExportError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3638,27 +3427,28 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopContinuousExportResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopContinuousExportError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopContinuousExportResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopContinuousExportError::from_response(response))
+        }
     }
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
-    fn stop_data_collection_by_agent_ids(
+    async fn stop_data_collection_by_agent_ids(
         &self,
         input: StopDataCollectionByAgentIdsRequest,
-    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
+    ) -> Result<StopDataCollectionByAgentIdsResponse, RusotoError<StopDataCollectionByAgentIdsError>>
+    {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3669,25 +3459,27 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopDataCollectionByAgentIdsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopDataCollectionByAgentIdsError::from_response(response))
+        }
     }
 
     /// <p>Updates metadata about an application.</p>
-    fn update_application(
+    async fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
+    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3698,20 +3490,19 @@ impl Discovery for DiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateApplicationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateApplicationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateApplicationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateApplicationError::from_response(response))
+        }
     }
 }

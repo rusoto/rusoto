@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptSharedDirectoryRequest {
@@ -31,7 +32,7 @@ pub struct AcceptSharedDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AcceptSharedDirectoryResult {
     /// <p>The shared directory in the directory consumer account.</p>
     #[serde(rename = "SharedDirectory")]
@@ -54,7 +55,7 @@ pub struct AddIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddIpRoutesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -68,7 +69,7 @@ pub struct AddTagsToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceResult {}
 
 /// <p>Represents a named directory attribute.</p>
@@ -95,60 +96,12 @@ pub struct CancelSchemaExtensionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelSchemaExtensionResult {}
-
-/// <p>Information about the certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct Certificate {
-    /// <p>The identifier of the certificate.</p>
-    #[serde(rename = "CertificateId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_id: Option<String>,
-    /// <p>The common name for the certificate.</p>
-    #[serde(rename = "CommonName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub common_name: Option<String>,
-    /// <p>The date and time when the certificate will expire.</p>
-    #[serde(rename = "ExpiryDateTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub expiry_date_time: Option<f64>,
-    /// <p>The date and time that the certificate was registered.</p>
-    #[serde(rename = "RegisteredDateTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registered_date_time: Option<f64>,
-    /// <p>The state of the certificate.</p>
-    #[serde(rename = "State")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
-    /// <p>Describes a state change for the certificate.</p>
-    #[serde(rename = "StateReason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_reason: Option<String>,
-}
-
-/// <p>Contains general information about a certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct CertificateInfo {
-    /// <p>The identifier of the certificate.</p>
-    #[serde(rename = "CertificateId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_id: Option<String>,
-    /// <p>The common name for the certificate.</p>
-    #[serde(rename = "CommonName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub common_name: Option<String>,
-    /// <p>The state of the certificate.</p>
-    #[serde(rename = "State")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
-}
 
 /// <p>Contains information about a computer account in a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Computer {
     /// <p>An array of <a>Attribute</a> objects containing the LDAP attributes that belong to the computer account.</p>
     #[serde(rename = "ComputerAttributes")]
@@ -166,7 +119,7 @@ pub struct Computer {
 
 /// <p>Points to a remote domain with which you are setting up a trust relationship. Conditional forwarders are required in order to set up a trust relationship with another domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConditionalForwarder {
     /// <p>The IP addresses of the remote DNS server associated with RemoteDomainName. This is the IP address of the DNS server that your conditional forwarder points to.</p>
     #[serde(rename = "DnsIpAddrs")]
@@ -188,7 +141,7 @@ pub struct ConnectDirectoryRequest {
     /// <p>A <a>DirectoryConnectSettings</a> object that contains additional information for the operation.</p>
     #[serde(rename = "ConnectSettings")]
     pub connect_settings: DirectoryConnectSettings,
-    /// <p>A description for the directory.</p>
+    /// <p>A textual description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -213,7 +166,7 @@ pub struct ConnectDirectoryRequest {
 
 /// <p>Contains the results of the <a>ConnectDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConnectDirectoryResult {
     /// <p>The identifier of the new directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -234,7 +187,7 @@ pub struct CreateAliasRequest {
 
 /// <p>Contains the results of the <a>CreateAlias</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAliasResult {
     /// <p>The alias for the directory.</p>
     #[serde(rename = "Alias")]
@@ -270,7 +223,7 @@ pub struct CreateComputerRequest {
 
 /// <p>Contains the results for the <a>CreateComputer</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateComputerResult {
     /// <p>A <a>Computer</a> object that represents the computer account.</p>
     #[serde(rename = "Computer")]
@@ -294,23 +247,23 @@ pub struct CreateConditionalForwarderRequest {
 
 /// <p>The result of a CreateConditinalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>CreateDirectory</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectoryRequest {
-    /// <p>A description for the directory.</p>
+    /// <p>A textual description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>The fully qualified name for the directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p>
+    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>The NetBIOS name of the directory, such as <code>CORP</code>.</p>
+    /// <p>The short name of the directory, such as <code>CORP</code>.</p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub short_name: Option<String>,
@@ -329,7 +282,7 @@ pub struct CreateDirectoryRequest {
 
 /// <p>Contains the results of the <a>CreateDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectoryResult {
     /// <p>The identifier of the directory that was created.</p>
     #[serde(rename = "DirectoryId")]
@@ -339,7 +292,7 @@ pub struct CreateDirectoryResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLogSubscriptionRequest {
-    /// <p>Identifier of the directory to which you want to subscribe and receive real-time logs to your specified CloudWatch log group.</p>
+    /// <p>Identifier (ID) of the directory to which you want to subscribe and receive real-time logs to your specified CloudWatch log group.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
     /// <p>The name of the CloudWatch log group where the real-time domain controller logs are forwarded.</p>
@@ -348,27 +301,27 @@ pub struct CreateLogSubscriptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateLogSubscriptionResult {}
 
 /// <p>Creates an AWS Managed Microsoft AD directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMicrosoftADRequest {
-    /// <p>A description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>
+    /// <p>A textual description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>AWS Managed Microsoft AD is available in two editions: <code>Standard</code> and <code>Enterprise</code>. <code>Enterprise</code> is the default.</p>
+    /// <p>AWS Managed Microsoft AD is available in two editions: Standard and Enterprise. Enterprise is the default.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edition: Option<String>,
-    /// <p>The fully qualified domain name for the AWS Managed Microsoft AD directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
+    /// <p>The fully qualified domain name for the directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the default administrative user named <code>Admin</code>.</p> <p>If you need to change the password for the administrator account, you can use the <a>ResetUserPassword</a> API call.</p>
+    /// <p>The password for the default administrative user named <code>Admin</code>.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>The NetBIOS name for your domain, such as <code>CORP</code>. If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, <code>CORP</code> for the directory DNS <code>corp.example.com</code>. </p>
+    /// <p>The NetBIOS name for your domain. A short identifier for your domain, such as <code>CORP</code>. If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, <code>CORP</code> for the directory DNS <code>corp.example.com</code>. </p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub short_name: Option<String>,
@@ -383,7 +336,7 @@ pub struct CreateMicrosoftADRequest {
 
 /// <p>Result of a CreateMicrosoftAD request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateMicrosoftADResult {
     /// <p>The identifier of the directory that was created.</p>
     #[serde(rename = "DirectoryId")]
@@ -405,7 +358,7 @@ pub struct CreateSnapshotRequest {
 
 /// <p>Contains the results of the <a>CreateSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSnapshotResult {
     /// <p>The identifier of the snapshot that was created.</p>
     #[serde(rename = "SnapshotId")]
@@ -444,7 +397,7 @@ pub struct CreateTrustRequest {
 
 /// <p>The result of a CreateTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTrustResult {
     /// <p>A unique identifier for the trust relationship that was created.</p>
     #[serde(rename = "TrustId")]
@@ -465,7 +418,7 @@ pub struct DeleteConditionalForwarderRequest {
 
 /// <p>The result of a DeleteConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>DeleteDirectory</a> operation.</p>
@@ -478,7 +431,7 @@ pub struct DeleteDirectoryRequest {
 
 /// <p>Contains the results of the <a>DeleteDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectoryResult {
     /// <p>The directory identifier.</p>
     #[serde(rename = "DirectoryId")]
@@ -488,13 +441,13 @@ pub struct DeleteDirectoryResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLogSubscriptionRequest {
-    /// <p>Identifier of the directory whose log subscription you want to delete.</p>
+    /// <p>Identifier (ID) of the directory whose log subscription you want to delete.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteLogSubscriptionResult {}
 
 /// <p>Contains the inputs for the <a>DeleteSnapshot</a> operation.</p>
@@ -507,7 +460,7 @@ pub struct DeleteSnapshotRequest {
 
 /// <p>Contains the results of the <a>DeleteSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSnapshotResult {
     /// <p>The identifier of the directory snapshot that was deleted.</p>
     #[serde(rename = "SnapshotId")]
@@ -529,27 +482,13 @@ pub struct DeleteTrustRequest {
 
 /// <p>The result of a DeleteTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTrustResult {
     /// <p>The Trust ID of the trust relationship that was deleted.</p>
     #[serde(rename = "TrustId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_id: Option<String>,
 }
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeregisterCertificateRequest {
-    /// <p>The identifier of the certificate.</p>
-    #[serde(rename = "CertificateId")]
-    pub certificate_id: String,
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeregisterCertificateResult {}
 
 /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -564,27 +503,8 @@ pub struct DeregisterEventTopicRequest {
 
 /// <p>The result of a DeregisterEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterEventTopicResult {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeCertificateRequest {
-    /// <p>The identifier of the certificate.</p>
-    #[serde(rename = "CertificateId")]
-    pub certificate_id: String,
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeCertificateResult {
-    /// <p>Information about the certificate, including registered date time, certificate state, the reason for the state, expiration date time, and certificate common name.</p>
-    #[serde(rename = "Certificate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate: Option<Certificate>,
-}
 
 /// <p>Describes a conditional forwarder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -600,7 +520,7 @@ pub struct DescribeConditionalForwardersRequest {
 
 /// <p>The result of a DescribeConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConditionalForwardersResult {
     /// <p>The list of conditional forwarders that have been created.</p>
     #[serde(rename = "ConditionalForwarders")]
@@ -627,7 +547,7 @@ pub struct DescribeDirectoriesRequest {
 
 /// <p>Contains the results of the <a>DescribeDirectories</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectoriesResult {
     /// <p>The list of <a>DirectoryDescription</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <code>Limit</code> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>
     #[serde(rename = "DirectoryDescriptions")]
@@ -659,7 +579,7 @@ pub struct DescribeDomainControllersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDomainControllersResult {
     /// <p>List of the <a>DomainController</a> objects that were retrieved.</p>
     #[serde(rename = "DomainControllers")]
@@ -686,44 +606,12 @@ pub struct DescribeEventTopicsRequest {
 
 /// <p>The result of a DescribeEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventTopicsResult {
     /// <p>A list of SNS topic names that receive status messages from the specified Directory ID.</p>
     #[serde(rename = "EventTopics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_topics: Option<Vec<EventTopic>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeLDAPSSettingsRequest {
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-    /// <p>Specifies the number of items that should be displayed on one page.</p>
-    #[serde(rename = "Limit")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit: Option<i64>,
-    /// <p>The type of next token used for pagination.</p>
-    #[serde(rename = "NextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The type of LDAP security the customer wants to enable, either server or client. Currently supports only <code>Client</code>, (the default).</p>
-    #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeLDAPSSettingsResult {
-    /// <p>Information about LDAP security for the specified directory, including status of enablement, state last updated date time, and the reason for the state.</p>
-    #[serde(rename = "LDAPSSettingsInfo")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ldaps_settings_info: Option<Vec<LDAPSSettingInfo>>,
-    /// <p>The next token used to retrieve the LDAPS settings if the number of setting types exceeds page limit and there is another page.</p>
-    #[serde(rename = "NextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -746,7 +634,7 @@ pub struct DescribeSharedDirectoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSharedDirectoriesResult {
     /// <p>If not null, token that indicates that more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <a>DescribeSharedDirectories</a> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
@@ -781,7 +669,7 @@ pub struct DescribeSnapshotsRequest {
 
 /// <p>Contains the results of the <a>DescribeSnapshots</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSnapshotsResult {
     /// <p>If not null, more results are available. Pass this value in the <i>NextToken</i> member of a subsequent call to <a>DescribeSnapshots</a>.</p>
     #[serde(rename = "NextToken")]
@@ -816,7 +704,7 @@ pub struct DescribeTrustsRequest {
 
 /// <p>The result of a DescribeTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTrustsResult {
     /// <p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeTrusts</a> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
@@ -847,7 +735,7 @@ pub struct DirectoryConnectSettings {
 
 /// <p>Contains information about an AD Connector directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryConnectSettingsDescription {
     /// <p>A list of the Availability Zones that the directory is in.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -865,7 +753,7 @@ pub struct DirectoryConnectSettingsDescription {
     #[serde(rename = "SecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_id: Option<String>,
-    /// <p>A list of subnet identifiers in the VPC that the AD Connector is in.</p>
+    /// <p>A list of subnet identifiers in the VPC that the AD connector is in.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -877,7 +765,7 @@ pub struct DirectoryConnectSettingsDescription {
 
 /// <p>Contains information about an AWS Directory Service directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryDescription {
     /// <p>The access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>. If no alias has been created for the directory, <code>&lt;alias&gt;</code> is the directory identifier, such as <code>d-XXXXXXXXXX</code>.</p>
     #[serde(rename = "AccessUrl")]
@@ -891,7 +779,7 @@ pub struct DirectoryDescription {
     #[serde(rename = "ConnectSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connect_settings: Option<DirectoryConnectSettingsDescription>,
-    /// <p>The description for the directory.</p>
+    /// <p>The textual description for the directory.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -977,15 +865,15 @@ pub struct DirectoryDescription {
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
 }
 
-/// <p>Contains directory limit information for a Region.</p>
+/// <p>Contains directory limit information for a region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryLimits {
-    /// <p>The current number of cloud directories in the Region.</p>
+    /// <p>The current number of cloud directories in the region.</p>
     #[serde(rename = "CloudOnlyDirectoriesCurrentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_directories_current_count: Option<i64>,
-    /// <p>The maximum number of cloud directories allowed in the Region.</p>
+    /// <p>The maximum number of cloud directories allowed in the region.</p>
     #[serde(rename = "CloudOnlyDirectoriesLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_directories_limit: Option<i64>,
@@ -1005,11 +893,11 @@ pub struct DirectoryLimits {
     #[serde(rename = "CloudOnlyMicrosoftADLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_microsoft_ad_limit_reached: Option<bool>,
-    /// <p>The current number of connected directories in the Region.</p>
+    /// <p>The current number of connected directories in the region.</p>
     #[serde(rename = "ConnectedDirectoriesCurrentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_directories_current_count: Option<i64>,
-    /// <p>The maximum number of connected directories allowed in the Region.</p>
+    /// <p>The maximum number of connected directories allowed in the region.</p>
     #[serde(rename = "ConnectedDirectoriesLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_directories_limit: Option<i64>,
@@ -1032,7 +920,7 @@ pub struct DirectoryVpcSettings {
 
 /// <p>Contains information about the directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryVpcSettingsDescription {
     /// <p>The list of Availability Zones that the directory is in.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -1052,21 +940,6 @@ pub struct DirectoryVpcSettingsDescription {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DisableLDAPSRequest {
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-    /// <p>The type of LDAP security that the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
-    #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DisableLDAPSResult {}
-
 /// <p>Contains the inputs for the <a>DisableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableRadiusRequest {
@@ -1077,7 +950,7 @@ pub struct DisableRadiusRequest {
 
 /// <p>Contains the results of the <a>DisableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>DisableSso</a> operation.</p>
@@ -1098,12 +971,12 @@ pub struct DisableSsoRequest {
 
 /// <p>Contains the results of the <a>DisableSso</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableSsoResult {}
 
 /// <p>Contains information about the domain controllers for a specified directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainController {
     /// <p>The Availability Zone where the domain controller is located.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -1147,21 +1020,6 @@ pub struct DomainController {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct EnableLDAPSRequest {
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-    /// <p>The type of LDAP security the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
-    #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct EnableLDAPSResult {}
-
 /// <p>Contains the inputs for the <a>EnableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableRadiusRequest {
@@ -1175,7 +1033,7 @@ pub struct EnableRadiusRequest {
 
 /// <p>Contains the results of the <a>EnableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>EnableSso</a> operation.</p>
@@ -1196,12 +1054,12 @@ pub struct EnableSsoRequest {
 
 /// <p>Contains the results of the <a>EnableSso</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnableSsoResult {}
 
 /// <p>Information about SNS topic and AWS Directory Service directory associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventTopic {
     /// <p>The date and time of when you associated your directory with the SNS topic.</p>
     #[serde(rename = "CreatedDateTime")]
@@ -1231,9 +1089,9 @@ pub struct GetDirectoryLimitsRequest {}
 
 /// <p>Contains the results of the <a>GetDirectoryLimits</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDirectoryLimitsResult {
-    /// <p>A <a>DirectoryLimits</a> object that contains the directory limits for the current rRegion.</p>
+    /// <p>A <a>DirectoryLimits</a> object that contains the directory limits for the current region.</p>
     #[serde(rename = "DirectoryLimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_limits: Option<DirectoryLimits>,
@@ -1249,7 +1107,7 @@ pub struct GetSnapshotLimitsRequest {
 
 /// <p>Contains the results of the <a>GetSnapshotLimits</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSnapshotLimitsResult {
     /// <p>A <a>SnapshotLimits</a> object that contains the manual snapshot limits for the specified directory.</p>
     #[serde(rename = "SnapshotLimits")]
@@ -1272,7 +1130,7 @@ pub struct IpRoute {
 
 /// <p>Information about one or more IP address blocks.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IpRouteInfo {
     /// <p>The date and time the address block was added to the directory.</p>
     #[serde(rename = "AddedDateTime")]
@@ -1300,52 +1158,6 @@ pub struct IpRouteInfo {
     pub ip_route_status_reason: Option<String>,
 }
 
-/// <p>Contains general information about the LDAPS settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct LDAPSSettingInfo {
-    /// <p>The state of the LDAPS settings.</p>
-    #[serde(rename = "LDAPSStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ldaps_status: Option<String>,
-    /// <p>Describes a state change for LDAPS.</p>
-    #[serde(rename = "LDAPSStatusReason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub ldaps_status_reason: Option<String>,
-    /// <p>The date and time when the LDAPS settings were last updated.</p>
-    #[serde(rename = "LastUpdatedDateTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_updated_date_time: Option<f64>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListCertificatesRequest {
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-    /// <p>The number of items that should show up on one page</p>
-    #[serde(rename = "Limit")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit: Option<i64>,
-    /// <p>A token for requesting another page of certificates if the <code>NextToken</code> response element indicates that more certificates are available. Use the value of the returned <code>NextToken</code> element in your request until the token comes back as <code>null</code>. Pass <code>null</code> if this is the first call.</p>
-    #[serde(rename = "NextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ListCertificatesResult {
-    /// <p>A list of certificates with basic details including certificate ID, certificate common name, certificate state.</p>
-    #[serde(rename = "CertificatesInfo")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificates_info: Option<Vec<CertificateInfo>>,
-    /// <p>Indicates whether another page of certificates is available when the number of available certificates exceeds the page limit.</p>
-    #[serde(rename = "NextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIpRoutesRequest {
     /// <p>Identifier (ID) of the directory for which you want to retrieve the IP addresses.</p>
@@ -1362,7 +1174,7 @@ pub struct ListIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListIpRoutesResult {
     /// <p>A list of <a>IpRoute</a>s.</p>
     #[serde(rename = "IpRoutesInfo")]
@@ -1391,7 +1203,7 @@ pub struct ListLogSubscriptionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListLogSubscriptionsResult {
     /// <p>A list of active <a>LogSubscription</a> objects for calling the AWS account.</p>
     #[serde(rename = "LogSubscriptions")]
@@ -1419,7 +1231,7 @@ pub struct ListSchemaExtensionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSchemaExtensionsResult {
     /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <code>ListSchemaExtensions</code> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
@@ -1447,7 +1259,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "NextToken")]
@@ -1461,7 +1273,7 @@ pub struct ListTagsForResourceResult {
 
 /// <p>Represents a log subscription, which tracks real-time data from a chosen log group to a specified destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LogSubscription {
     /// <p>Identifier (ID) of the directory that you want to associate with the log subscription.</p>
     #[serde(rename = "DirectoryId")]
@@ -1479,7 +1291,7 @@ pub struct LogSubscription {
 
 /// <p>Describes the directory owner account details that have been shared to the directory consumer account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OwnerDirectoryDescription {
     /// <p>Identifier of the directory owner account.</p>
     #[serde(rename = "AccountId")]
@@ -1544,25 +1356,6 @@ pub struct RadiusSettings {
     pub use_same_username: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RegisterCertificateRequest {
-    /// <p>The certificate PEM string that needs to be registered.</p>
-    #[serde(rename = "CertificateData")]
-    pub certificate_data: String,
-    /// <p>The identifier of the directory.</p>
-    #[serde(rename = "DirectoryId")]
-    pub directory_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct RegisterCertificateResult {
-    /// <p>The identifier of the certificate.</p>
-    #[serde(rename = "CertificateId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_id: Option<String>,
-}
-
 /// <p>Registers a new event topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterEventTopicRequest {
@@ -1576,7 +1369,7 @@ pub struct RegisterEventTopicRequest {
 
 /// <p>The result of a RegisterEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterEventTopicResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1587,7 +1380,7 @@ pub struct RejectSharedDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RejectSharedDirectoryResult {
     /// <p>Identifier of the shared directory in the directory consumer account.</p>
     #[serde(rename = "SharedDirectoryId")]
@@ -1606,7 +1399,7 @@ pub struct RemoveIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveIpRoutesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1620,7 +1413,7 @@ pub struct RemoveTagsFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1637,7 +1430,7 @@ pub struct ResetUserPasswordRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResetUserPasswordResult {}
 
 /// <p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>
@@ -1650,12 +1443,12 @@ pub struct RestoreFromSnapshotRequest {
 
 /// <p>Contains the results of the <a>RestoreFromSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RestoreFromSnapshotResult {}
 
 /// <p>Information about a schema extension.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SchemaExtensionInfo {
     /// <p>A description of the schema extension.</p>
     #[serde(rename = "Description")]
@@ -1705,7 +1498,7 @@ pub struct ShareDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ShareDirectoryResult {
     /// <p>Identifier of the directory that is stored in the directory consumer account that is shared from the specified directory (<code>DirectoryId</code>).</p>
     #[serde(rename = "SharedDirectoryId")]
@@ -1726,7 +1519,7 @@ pub struct ShareTarget {
 
 /// <p>Details about the shared directory in the directory owner account for which the share request in the directory consumer account has been accepted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SharedDirectory {
     /// <p>The date and time that the shared directory was created.</p>
     #[serde(rename = "CreatedDateTime")]
@@ -1768,7 +1561,7 @@ pub struct SharedDirectory {
 
 /// <p>Describes a directory snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Snapshot {
     /// <p>The directory identifier.</p>
     #[serde(rename = "DirectoryId")]
@@ -1798,7 +1591,7 @@ pub struct Snapshot {
 
 /// <p>Contains manual snapshot limit information for a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SnapshotLimits {
     /// <p>The current number of manual snapshots of the directory.</p>
     #[serde(rename = "ManualSnapshotsCurrentCount")]
@@ -1831,7 +1624,7 @@ pub struct StartSchemaExtensionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartSchemaExtensionResult {
     /// <p>The identifier of the schema extension that will be applied.</p>
     #[serde(rename = "SchemaExtensionId")]
@@ -1852,7 +1645,7 @@ pub struct Tag {
 
 /// <p>Describes a trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Trust {
     /// <p>The date and time that the trust relationship was created.</p>
     #[serde(rename = "CreatedDateTime")]
@@ -1911,7 +1704,7 @@ pub struct UnshareDirectoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnshareDirectoryResult {
     /// <p>Identifier of the directory stored in the directory consumer account that is to be unshared from the specified directory (<code>DirectoryId</code>).</p>
     #[serde(rename = "SharedDirectoryId")]
@@ -1946,7 +1739,7 @@ pub struct UpdateConditionalForwarderRequest {
 
 /// <p>The result of an UpdateConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConditionalForwarderResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1960,7 +1753,7 @@ pub struct UpdateNumberOfDomainControllersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNumberOfDomainControllersResult {}
 
 /// <p>Contains the inputs for the <a>UpdateRadius</a> operation.</p>
@@ -1976,7 +1769,7 @@ pub struct UpdateRadiusRequest {
 
 /// <p>Contains the results of the <a>UpdateRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRadiusResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1991,7 +1784,7 @@ pub struct UpdateTrustRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTrustResult {
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2012,7 +1805,7 @@ pub struct VerifyTrustRequest {
 
 /// <p>Result of a VerifyTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VerifyTrustResult {
     /// <p>The unique Trust ID of the trust relationship that was verified.</p>
     #[serde(rename = "TrustId")]
@@ -3112,93 +2905,6 @@ impl Error for DeleteTrustError {
         }
     }
 }
-/// Errors returned by DeregisterCertificate
-#[derive(Debug, PartialEq)]
-pub enum DeregisterCertificateError {
-    /// <p>The certificate is not present in the system for describe or deregister activities.</p>
-    CertificateDoesNotExist(String),
-    /// <p>The certificate is being used for the LDAP security connection and cannot be removed without disabling LDAP security.</p>
-    CertificateInUse(String),
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The specified directory is unavailable or could not be found.</p>
-    DirectoryUnavailable(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl DeregisterCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterCertificateError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "CertificateDoesNotExistException" => {
-                    return RusotoError::Service(
-                        DeregisterCertificateError::CertificateDoesNotExist(err.msg),
-                    )
-                }
-                "CertificateInUseException" => {
-                    return RusotoError::Service(DeregisterCertificateError::CertificateInUse(
-                        err.msg,
-                    ))
-                }
-                "ClientException" => {
-                    return RusotoError::Service(DeregisterCertificateError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(DeregisterCertificateError::DirectoryDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "DirectoryUnavailableException" => {
-                    return RusotoError::Service(DeregisterCertificateError::DirectoryUnavailable(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DeregisterCertificateError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(DeregisterCertificateError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(DeregisterCertificateError::UnsupportedOperation(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeregisterCertificateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeregisterCertificateError {
-    fn description(&self) -> &str {
-        match *self {
-            DeregisterCertificateError::CertificateDoesNotExist(ref cause) => cause,
-            DeregisterCertificateError::CertificateInUse(ref cause) => cause,
-            DeregisterCertificateError::Client(ref cause) => cause,
-            DeregisterCertificateError::DirectoryDoesNotExist(ref cause) => cause,
-            DeregisterCertificateError::DirectoryUnavailable(ref cause) => cause,
-            DeregisterCertificateError::InvalidParameter(ref cause) => cause,
-            DeregisterCertificateError::Service(ref cause) => cause,
-            DeregisterCertificateError::UnsupportedOperation(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DeregisterEventTopic
 #[derive(Debug, PartialEq)]
 pub enum DeregisterEventTopicError {
@@ -3251,77 +2957,6 @@ impl Error for DeregisterEventTopicError {
             DeregisterEventTopicError::EntityDoesNotExist(ref cause) => cause,
             DeregisterEventTopicError::InvalidParameter(ref cause) => cause,
             DeregisterEventTopicError::Service(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeCertificate
-#[derive(Debug, PartialEq)]
-pub enum DescribeCertificateError {
-    /// <p>The certificate is not present in the system for describe or deregister activities.</p>
-    CertificateDoesNotExist(String),
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl DescribeCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "CertificateDoesNotExistException" => {
-                    return RusotoError::Service(DescribeCertificateError::CertificateDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "ClientException" => {
-                    return RusotoError::Service(DescribeCertificateError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(DescribeCertificateError::DirectoryDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeCertificateError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(DescribeCertificateError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(DescribeCertificateError::UnsupportedOperation(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeCertificateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeCertificateError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeCertificateError::CertificateDoesNotExist(ref cause) => cause,
-            DescribeCertificateError::Client(ref cause) => cause,
-            DescribeCertificateError::DirectoryDoesNotExist(ref cause) => cause,
-            DescribeCertificateError::InvalidParameter(ref cause) => cause,
-            DescribeCertificateError::Service(ref cause) => cause,
-            DescribeCertificateError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -3591,77 +3226,6 @@ impl Error for DescribeEventTopicsError {
         }
     }
 }
-/// Errors returned by DescribeLDAPSSettings
-#[derive(Debug, PartialEq)]
-pub enum DescribeLDAPSSettingsError {
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The <code>NextToken</code> value is not valid.</p>
-    InvalidNextToken(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl DescribeLDAPSSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLDAPSSettingsError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ClientException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::DirectoryDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "InvalidNextTokenException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::InvalidNextToken(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(DescribeLDAPSSettingsError::UnsupportedOperation(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeLDAPSSettingsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeLDAPSSettingsError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeLDAPSSettingsError::Client(ref cause) => cause,
-            DescribeLDAPSSettingsError::DirectoryDoesNotExist(ref cause) => cause,
-            DescribeLDAPSSettingsError::InvalidNextToken(ref cause) => cause,
-            DescribeLDAPSSettingsError::InvalidParameter(ref cause) => cause,
-            DescribeLDAPSSettingsError::Service(ref cause) => cause,
-            DescribeLDAPSSettingsError::UnsupportedOperation(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DescribeSharedDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeSharedDirectoriesError {
@@ -3855,75 +3419,6 @@ impl Error for DescribeTrustsError {
         }
     }
 }
-/// Errors returned by DisableLDAPS
-#[derive(Debug, PartialEq)]
-pub enum DisableLDAPSError {
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The specified directory is unavailable or could not be found.</p>
-    DirectoryUnavailable(String),
-    /// <p>The LDAP activities could not be performed because they are limited by the LDAPS status.</p>
-    InvalidLDAPSStatus(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl DisableLDAPSError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableLDAPSError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ClientException" => {
-                    return RusotoError::Service(DisableLDAPSError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(DisableLDAPSError::DirectoryDoesNotExist(err.msg))
-                }
-                "DirectoryUnavailableException" => {
-                    return RusotoError::Service(DisableLDAPSError::DirectoryUnavailable(err.msg))
-                }
-                "InvalidLDAPSStatusException" => {
-                    return RusotoError::Service(DisableLDAPSError::InvalidLDAPSStatus(err.msg))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DisableLDAPSError::InvalidParameter(err.msg))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(DisableLDAPSError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(DisableLDAPSError::UnsupportedOperation(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DisableLDAPSError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DisableLDAPSError {
-    fn description(&self) -> &str {
-        match *self {
-            DisableLDAPSError::Client(ref cause) => cause,
-            DisableLDAPSError::DirectoryDoesNotExist(ref cause) => cause,
-            DisableLDAPSError::DirectoryUnavailable(ref cause) => cause,
-            DisableLDAPSError::InvalidLDAPSStatus(ref cause) => cause,
-            DisableLDAPSError::InvalidParameter(ref cause) => cause,
-            DisableLDAPSError::Service(ref cause) => cause,
-            DisableLDAPSError::UnsupportedOperation(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by DisableRadius
 #[derive(Debug, PartialEq)]
 pub enum DisableRadiusError {
@@ -4021,81 +3516,6 @@ impl Error for DisableSsoError {
             DisableSsoError::EntityDoesNotExist(ref cause) => cause,
             DisableSsoError::InsufficientPermissions(ref cause) => cause,
             DisableSsoError::Service(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by EnableLDAPS
-#[derive(Debug, PartialEq)]
-pub enum EnableLDAPSError {
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The specified directory is unavailable or could not be found.</p>
-    DirectoryUnavailable(String),
-    /// <p>The LDAP activities could not be performed because they are limited by the LDAPS status.</p>
-    InvalidLDAPSStatus(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>The LDAP activities could not be performed because at least one valid certificate must be registered with the system.</p>
-    NoAvailableCertificate(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl EnableLDAPSError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableLDAPSError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ClientException" => {
-                    return RusotoError::Service(EnableLDAPSError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(EnableLDAPSError::DirectoryDoesNotExist(err.msg))
-                }
-                "DirectoryUnavailableException" => {
-                    return RusotoError::Service(EnableLDAPSError::DirectoryUnavailable(err.msg))
-                }
-                "InvalidLDAPSStatusException" => {
-                    return RusotoError::Service(EnableLDAPSError::InvalidLDAPSStatus(err.msg))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(EnableLDAPSError::InvalidParameter(err.msg))
-                }
-                "NoAvailableCertificateException" => {
-                    return RusotoError::Service(EnableLDAPSError::NoAvailableCertificate(err.msg))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(EnableLDAPSError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(EnableLDAPSError::UnsupportedOperation(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for EnableLDAPSError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for EnableLDAPSError {
-    fn description(&self) -> &str {
-        match *self {
-            EnableLDAPSError::Client(ref cause) => cause,
-            EnableLDAPSError::DirectoryDoesNotExist(ref cause) => cause,
-            EnableLDAPSError::DirectoryUnavailable(ref cause) => cause,
-            EnableLDAPSError::InvalidLDAPSStatus(ref cause) => cause,
-            EnableLDAPSError::InvalidParameter(ref cause) => cause,
-            EnableLDAPSError::NoAvailableCertificate(ref cause) => cause,
-            EnableLDAPSError::Service(ref cause) => cause,
-            EnableLDAPSError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -4302,73 +3722,6 @@ impl Error for GetSnapshotLimitsError {
             GetSnapshotLimitsError::Client(ref cause) => cause,
             GetSnapshotLimitsError::EntityDoesNotExist(ref cause) => cause,
             GetSnapshotLimitsError::Service(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by ListCertificates
-#[derive(Debug, PartialEq)]
-pub enum ListCertificatesError {
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The <code>NextToken</code> value is not valid.</p>
-    InvalidNextToken(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl ListCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ClientException" => {
-                    return RusotoError::Service(ListCertificatesError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(ListCertificatesError::DirectoryDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListCertificatesError::InvalidNextToken(err.msg))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(ListCertificatesError::InvalidParameter(err.msg))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(ListCertificatesError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(ListCertificatesError::UnsupportedOperation(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ListCertificatesError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ListCertificatesError {
-    fn description(&self) -> &str {
-        match *self {
-            ListCertificatesError::Client(ref cause) => cause,
-            ListCertificatesError::DirectoryDoesNotExist(ref cause) => cause,
-            ListCertificatesError::InvalidNextToken(ref cause) => cause,
-            ListCertificatesError::InvalidParameter(ref cause) => cause,
-            ListCertificatesError::Service(ref cause) => cause,
-            ListCertificatesError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -4599,101 +3952,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
             ListTagsForResourceError::InvalidParameter(ref cause) => cause,
             ListTagsForResourceError::Service(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by RegisterCertificate
-#[derive(Debug, PartialEq)]
-pub enum RegisterCertificateError {
-    /// <p>The certificate has already been registered into the system.</p>
-    CertificateAlreadyExists(String),
-    /// <p>The certificate could not be added because the certificate limit has been reached.</p>
-    CertificateLimitExceeded(String),
-    /// <p>A client exception has occurred.</p>
-    Client(String),
-    /// <p>The specified directory does not exist in the system.</p>
-    DirectoryDoesNotExist(String),
-    /// <p>The specified directory is unavailable or could not be found.</p>
-    DirectoryUnavailable(String),
-    /// <p>The certificate PEM that was provided has incorrect encoding.</p>
-    InvalidCertificate(String),
-    /// <p>One or more parameters are not valid.</p>
-    InvalidParameter(String),
-    /// <p>An exception has occurred in AWS Directory Service.</p>
-    Service(String),
-    /// <p>The operation is not supported.</p>
-    UnsupportedOperation(String),
-}
-
-impl RegisterCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterCertificateError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "CertificateAlreadyExistsException" => {
-                    return RusotoError::Service(
-                        RegisterCertificateError::CertificateAlreadyExists(err.msg),
-                    )
-                }
-                "CertificateLimitExceededException" => {
-                    return RusotoError::Service(
-                        RegisterCertificateError::CertificateLimitExceeded(err.msg),
-                    )
-                }
-                "ClientException" => {
-                    return RusotoError::Service(RegisterCertificateError::Client(err.msg))
-                }
-                "DirectoryDoesNotExistException" => {
-                    return RusotoError::Service(RegisterCertificateError::DirectoryDoesNotExist(
-                        err.msg,
-                    ))
-                }
-                "DirectoryUnavailableException" => {
-                    return RusotoError::Service(RegisterCertificateError::DirectoryUnavailable(
-                        err.msg,
-                    ))
-                }
-                "InvalidCertificateException" => {
-                    return RusotoError::Service(RegisterCertificateError::InvalidCertificate(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(RegisterCertificateError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "ServiceException" => {
-                    return RusotoError::Service(RegisterCertificateError::Service(err.msg))
-                }
-                "UnsupportedOperationException" => {
-                    return RusotoError::Service(RegisterCertificateError::UnsupportedOperation(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for RegisterCertificateError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for RegisterCertificateError {
-    fn description(&self) -> &str {
-        match *self {
-            RegisterCertificateError::CertificateAlreadyExists(ref cause) => cause,
-            RegisterCertificateError::CertificateLimitExceeded(ref cause) => cause,
-            RegisterCertificateError::Client(ref cause) => cause,
-            RegisterCertificateError::DirectoryDoesNotExist(ref cause) => cause,
-            RegisterCertificateError::DirectoryUnavailable(ref cause) => cause,
-            RegisterCertificateError::InvalidCertificate(ref cause) => cause,
-            RegisterCertificateError::InvalidParameter(ref cause) => cause,
-            RegisterCertificateError::Service(ref cause) => cause,
-            RegisterCertificateError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -5592,344 +4850,309 @@ impl Error for VerifyTrustError {
     }
 }
 /// Trait representing the capabilities of the Directory Service API. Directory Service clients implement this trait.
+#[async_trait]
 pub trait DirectoryService {
     /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
-    fn accept_shared_directory(
+    async fn accept_shared_directory(
         &self,
         input: AcceptSharedDirectoryRequest,
-    ) -> RusotoFuture<AcceptSharedDirectoryResult, AcceptSharedDirectoryError>;
+    ) -> Result<AcceptSharedDirectoryResult, RusotoError<AcceptSharedDirectoryError>>;
 
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn add_ip_routes(
+    async fn add_ip_routes(
         &self,
         input: AddIpRoutesRequest,
-    ) -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError>;
+    ) -> Result<AddIpRoutesResult, RusotoError<AddIpRoutesError>>;
 
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
-    ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError>;
+    ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>>;
 
     /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
-    fn cancel_schema_extension(
+    async fn cancel_schema_extension(
         &self,
         input: CancelSchemaExtensionRequest,
-    ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
+    ) -> Result<CancelSchemaExtensionResult, RusotoError<CancelSchemaExtensionError>>;
 
     /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <code>ConnectDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>ConnectDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn connect_directory(
+    async fn connect_directory(
         &self,
         input: ConnectDirectoryRequest,
-    ) -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError>;
+    ) -> Result<ConnectDirectoryResult, RusotoError<ConnectDirectoryError>>;
 
     /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<CreateAliasResult, CreateAliasError>;
+    ) -> Result<CreateAliasResult, RusotoError<CreateAliasError>>;
 
     /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
-    fn create_computer(
+    async fn create_computer(
         &self,
         input: CreateComputerRequest,
-    ) -> RusotoFuture<CreateComputerResult, CreateComputerError>;
+    ) -> Result<CreateComputerResult, RusotoError<CreateComputerError>>;
 
     /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
-    fn create_conditional_forwarder(
+    async fn create_conditional_forwarder(
         &self,
         input: CreateConditionalForwarderRequest,
-    ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
+    ) -> Result<CreateConditionalForwarderResult, RusotoError<CreateConditionalForwarderError>>;
 
-    /// <p>Creates a Simple AD directory. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html">Simple Active Directory</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn create_directory(
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
-    ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError>;
+    ) -> Result<CreateDirectoryResult, RusotoError<CreateDirectoryError>>;
 
-    /// <p>Creates a subscription to forward real-time Directory Service domain controller security logs to the specified Amazon CloudWatch log group in your AWS account.</p>
-    fn create_log_subscription(
+    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    async fn create_log_subscription(
         &self,
         input: CreateLogSubscriptionRequest,
-    ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError>;
+    ) -> Result<CreateLogSubscriptionResult, RusotoError<CreateLogSubscriptionError>>;
 
-    /// <p>Creates a Microsoft AD directory in the AWS Cloud. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html">AWS Managed Microsoft AD</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn create_microsoft_ad(
+    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    async fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
-    ) -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError>;
+    ) -> Result<CreateMicrosoftADResult, RusotoError<CreateMicrosoftADError>>;
 
     /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotRequest,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
+    ) -> Result<CreateSnapshotResult, RusotoError<CreateSnapshotError>>;
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain. You can create either a forest trust or an external trust.</p>
-    fn create_trust(
+    async fn create_trust(
         &self,
         input: CreateTrustRequest,
-    ) -> RusotoFuture<CreateTrustResult, CreateTrustError>;
+    ) -> Result<CreateTrustResult, RusotoError<CreateTrustError>>;
 
     /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
-    fn delete_conditional_forwarder(
+    async fn delete_conditional_forwarder(
         &self,
         input: DeleteConditionalForwarderRequest,
-    ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
+    ) -> Result<DeleteConditionalForwarderResult, RusotoError<DeleteConditionalForwarderError>>;
 
     /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <code>DeleteDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>DeleteDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn delete_directory(
+    async fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
-    ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError>;
+    ) -> Result<DeleteDirectoryResult, RusotoError<DeleteDirectoryError>>;
 
     /// <p>Deletes the specified log subscription.</p>
-    fn delete_log_subscription(
+    async fn delete_log_subscription(
         &self,
         input: DeleteLogSubscriptionRequest,
-    ) -> RusotoFuture<DeleteLogSubscriptionResult, DeleteLogSubscriptionError>;
+    ) -> Result<DeleteLogSubscriptionResult, RusotoError<DeleteLogSubscriptionError>>;
 
     /// <p>Deletes a directory snapshot.</p>
-    fn delete_snapshot(
+    async fn delete_snapshot(
         &self,
         input: DeleteSnapshotRequest,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
+    ) -> Result<DeleteSnapshotResult, RusotoError<DeleteSnapshotError>>;
 
     /// <p>Deletes an existing trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
-    fn delete_trust(
+    async fn delete_trust(
         &self,
         input: DeleteTrustRequest,
-    ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError>;
-
-    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
-    fn deregister_certificate(
-        &self,
-        input: DeregisterCertificateRequest,
-    ) -> RusotoFuture<DeregisterCertificateResult, DeregisterCertificateError>;
+    ) -> Result<DeleteTrustResult, RusotoError<DeleteTrustError>>;
 
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
-    fn deregister_event_topic(
+    async fn deregister_event_topic(
         &self,
         input: DeregisterEventTopicRequest,
-    ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError>;
-
-    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
-    fn describe_certificate(
-        &self,
-        input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResult, DescribeCertificateError>;
+    ) -> Result<DeregisterEventTopicResult, RusotoError<DeregisterEventTopicError>>;
 
     /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
-    fn describe_conditional_forwarders(
+    async fn describe_conditional_forwarders(
         &self,
         input: DescribeConditionalForwardersRequest,
-    ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
+    ) -> Result<DescribeConditionalForwardersResult, RusotoError<DescribeConditionalForwardersError>>;
 
     /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <code>DirectoryIds</code> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>DescribeDirectoriesResult.NextToken</code> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <code>Limit</code> parameter.</p>
-    fn describe_directories(
+    async fn describe_directories(
         &self,
         input: DescribeDirectoriesRequest,
-    ) -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError>;
+    ) -> Result<DescribeDirectoriesResult, RusotoError<DescribeDirectoriesError>>;
 
     /// <p>Provides information about any domain controllers in your directory.</p>
-    fn describe_domain_controllers(
+    async fn describe_domain_controllers(
         &self,
         input: DescribeDomainControllersRequest,
-    ) -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError>;
+    ) -> Result<DescribeDomainControllersResult, RusotoError<DescribeDomainControllersError>>;
 
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
-    fn describe_event_topics(
+    async fn describe_event_topics(
         &self,
         input: DescribeEventTopicsRequest,
-    ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError>;
-
-    /// <p>Describes the status of LDAP security for the specified directory.</p>
-    fn describe_ldaps_settings(
-        &self,
-        input: DescribeLDAPSSettingsRequest,
-    ) -> RusotoFuture<DescribeLDAPSSettingsResult, DescribeLDAPSSettingsError>;
+    ) -> Result<DescribeEventTopicsResult, RusotoError<DescribeEventTopicsError>>;
 
     /// <p>Returns the shared directories in your account. </p>
-    fn describe_shared_directories(
+    async fn describe_shared_directories(
         &self,
         input: DescribeSharedDirectoriesRequest,
-    ) -> RusotoFuture<DescribeSharedDirectoriesResult, DescribeSharedDirectoriesError>;
+    ) -> Result<DescribeSharedDirectoriesResult, RusotoError<DescribeSharedDirectoriesError>>;
 
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
-    fn describe_snapshots(
+    async fn describe_snapshots(
         &self,
         input: DescribeSnapshotsRequest,
-    ) -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError>;
+    ) -> Result<DescribeSnapshotsResult, RusotoError<DescribeSnapshotsError>>;
 
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
-    fn describe_trusts(
+    async fn describe_trusts(
         &self,
         input: DescribeTrustsRequest,
-    ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError>;
-
-    /// <p>Deactivates LDAP secure calls for the specified directory.</p>
-    fn disable_ldaps(
-        &self,
-        input: DisableLDAPSRequest,
-    ) -> RusotoFuture<DisableLDAPSResult, DisableLDAPSError>;
+    ) -> Result<DescribeTrustsResult, RusotoError<DescribeTrustsError>>;
 
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
-    fn disable_radius(
+    async fn disable_radius(
         &self,
         input: DisableRadiusRequest,
-    ) -> RusotoFuture<DisableRadiusResult, DisableRadiusError>;
+    ) -> Result<DisableRadiusResult, RusotoError<DisableRadiusError>>;
 
     /// <p>Disables single-sign on for a directory.</p>
-    fn disable_sso(
+    async fn disable_sso(
         &self,
         input: DisableSsoRequest,
-    ) -> RusotoFuture<DisableSsoResult, DisableSsoError>;
-
-    /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
-    fn enable_ldaps(
-        &self,
-        input: EnableLDAPSRequest,
-    ) -> RusotoFuture<EnableLDAPSResult, EnableLDAPSError>;
+    ) -> Result<DisableSsoResult, RusotoError<DisableSsoError>>;
 
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
-    fn enable_radius(
+    async fn enable_radius(
         &self,
         input: EnableRadiusRequest,
-    ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError>;
+    ) -> Result<EnableRadiusResult, RusotoError<EnableRadiusError>>;
 
-    /// <p>Enables single sign-on for a directory. Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately.</p>
-    fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError>;
-
-    /// <p>Obtains directory limit information for the current Region.</p>
-    fn get_directory_limits(
+    /// <p>Enables single sign-on for a directory.</p>
+    async fn enable_sso(
         &self,
-    ) -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
+        input: EnableSsoRequest,
+    ) -> Result<EnableSsoResult, RusotoError<EnableSsoError>>;
+
+    /// <p>Obtains directory limit information for the current region.</p>
+    async fn get_directory_limits(
+        &self,
+    ) -> Result<GetDirectoryLimitsResult, RusotoError<GetDirectoryLimitsError>>;
 
     /// <p>Obtains the manual snapshot limits for a directory.</p>
-    fn get_snapshot_limits(
+    async fn get_snapshot_limits(
         &self,
         input: GetSnapshotLimitsRequest,
-    ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
-
-    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
-    fn list_certificates(
-        &self,
-        input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResult, ListCertificatesError>;
+    ) -> Result<GetSnapshotLimitsResult, RusotoError<GetSnapshotLimitsError>>;
 
     /// <p>Lists the address blocks that you have added to a directory.</p>
-    fn list_ip_routes(
+    async fn list_ip_routes(
         &self,
         input: ListIpRoutesRequest,
-    ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError>;
+    ) -> Result<ListIpRoutesResult, RusotoError<ListIpRoutesError>>;
 
     /// <p>Lists the active log subscriptions for the AWS account.</p>
-    fn list_log_subscriptions(
+    async fn list_log_subscriptions(
         &self,
         input: ListLogSubscriptionsRequest,
-    ) -> RusotoFuture<ListLogSubscriptionsResult, ListLogSubscriptionsError>;
+    ) -> Result<ListLogSubscriptionsResult, RusotoError<ListLogSubscriptionsError>>;
 
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
-    fn list_schema_extensions(
+    async fn list_schema_extensions(
         &self,
         input: ListSchemaExtensionsRequest,
-    ) -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
+    ) -> Result<ListSchemaExtensionsResult, RusotoError<ListSchemaExtensionsError>>;
 
     /// <p>Lists all tags on a directory.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
-
-    /// <p>Registers a certificate for secured LDAP connection.</p>
-    fn register_certificate(
-        &self,
-        input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResult, RegisterCertificateError>;
+    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
-    fn register_event_topic(
+    async fn register_event_topic(
         &self,
         input: RegisterEventTopicRequest,
-    ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError>;
+    ) -> Result<RegisterEventTopicResult, RusotoError<RegisterEventTopicError>>;
 
     /// <p>Rejects a directory sharing request that was sent from the directory owner account.</p>
-    fn reject_shared_directory(
+    async fn reject_shared_directory(
         &self,
         input: RejectSharedDirectoryRequest,
-    ) -> RusotoFuture<RejectSharedDirectoryResult, RejectSharedDirectoryError>;
+    ) -> Result<RejectSharedDirectoryResult, RusotoError<RejectSharedDirectoryError>>;
 
     /// <p>Removes IP address blocks from a directory.</p>
-    fn remove_ip_routes(
+    async fn remove_ip_routes(
         &self,
         input: RemoveIpRoutesRequest,
-    ) -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError>;
+    ) -> Result<RemoveIpRoutesResult, RusotoError<RemoveIpRoutesError>>;
 
     /// <p>Removes tags from a directory.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
-    ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
+    ) -> Result<RemoveTagsFromResourceResult, RusotoError<RemoveTagsFromResourceError>>;
 
-    /// <p><p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p> <p>You can reset the password for any user in your directory with the following exceptions:</p> <ul> <li> <p>For Simple AD, you cannot reset the password for any user that is a member of either the <b>Domain Admins</b> or <b>Enterprise Admins</b> group except for the administrator user.</p> </li> <li> <p>For AWS Managed Microsoft AD, you can only reset the password for a user that is in an OU based off of the NetBIOS name that you typed when you created your directory. For example, you cannot reset the password for a user in the <b>AWS Reserved</b> OU. For more information about the OU structure for an AWS Managed Microsoft AD directory, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_getting_started_what_gets_created.html">What Gets Created</a> in the <i>AWS Directory Service Administration Guide</i>.</p> </li> </ul></p>
-    fn reset_user_password(
+    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    async fn reset_user_password(
         &self,
         input: ResetUserPasswordRequest,
-    ) -> RusotoFuture<ResetUserPasswordResult, ResetUserPasswordError>;
+    ) -> Result<ResetUserPasswordResult, RusotoError<ResetUserPasswordError>>;
 
     /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
-    fn restore_from_snapshot(
+    async fn restore_from_snapshot(
         &self,
         input: RestoreFromSnapshotRequest,
-    ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
+    ) -> Result<RestoreFromSnapshotResult, RusotoError<RestoreFromSnapshotError>>;
 
     /// <p>Shares a specified directory (<code>DirectoryId</code>) in your AWS account (directory owner) with another AWS account (directory consumer). With this operation you can use your directory from any AWS account and from any Amazon VPC within an AWS Region.</p> <p>When you share your AWS Managed Microsoft AD directory, AWS Directory Service creates a shared directory in the directory consumer account. This shared directory contains the metadata to provide access to the directory within the directory owner account. The shared directory is visible in all VPCs in the directory consumer account.</p> <p>The <code>ShareMethod</code> parameter determines whether the specified directory can be shared between AWS accounts inside the same AWS organization (<code>ORGANIZATIONS</code>). It also determines whether you can share the directory with any other AWS account either inside or outside of the organization (<code>HANDSHAKE</code>).</p> <p>The <code>ShareNotes</code> parameter is only used when <code>HANDSHAKE</code> is called, which sends a directory sharing request to the directory consumer. </p>
-    fn share_directory(
+    async fn share_directory(
         &self,
         input: ShareDirectoryRequest,
-    ) -> RusotoFuture<ShareDirectoryResult, ShareDirectoryError>;
+    ) -> Result<ShareDirectoryResult, RusotoError<ShareDirectoryError>>;
 
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
-    fn start_schema_extension(
+    async fn start_schema_extension(
         &self,
         input: StartSchemaExtensionRequest,
-    ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError>;
+    ) -> Result<StartSchemaExtensionResult, RusotoError<StartSchemaExtensionError>>;
 
     /// <p>Stops the directory sharing between the directory owner and consumer accounts. </p>
-    fn unshare_directory(
+    async fn unshare_directory(
         &self,
         input: UnshareDirectoryRequest,
-    ) -> RusotoFuture<UnshareDirectoryResult, UnshareDirectoryError>;
+    ) -> Result<UnshareDirectoryResult, RusotoError<UnshareDirectoryError>>;
 
     /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
-    fn update_conditional_forwarder(
+    async fn update_conditional_forwarder(
         &self,
         input: UpdateConditionalForwarderRequest,
-    ) -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
+    ) -> Result<UpdateConditionalForwarderResult, RusotoError<UpdateConditionalForwarderError>>;
 
     /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
-    fn update_number_of_domain_controllers(
+    async fn update_number_of_domain_controllers(
         &self,
         input: UpdateNumberOfDomainControllersRequest,
-    ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
+    ) -> Result<
+        UpdateNumberOfDomainControllersResult,
+        RusotoError<UpdateNumberOfDomainControllersError>,
+    >;
 
     /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector or Microsoft AD directory.</p>
-    fn update_radius(
+    async fn update_radius(
         &self,
         input: UpdateRadiusRequest,
-    ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError>;
+    ) -> Result<UpdateRadiusResult, RusotoError<UpdateRadiusError>>;
 
     /// <p>Updates the trust that has been set up between your AWS Managed Microsoft AD directory and an on-premises Active Directory.</p>
-    fn update_trust(
+    async fn update_trust(
         &self,
         input: UpdateTrustRequest,
-    ) -> RusotoFuture<UpdateTrustResult, UpdateTrustError>;
+    ) -> Result<UpdateTrustResult, RusotoError<UpdateTrustError>>;
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
-    fn verify_trust(
+    async fn verify_trust(
         &self,
         input: VerifyTrustRequest,
-    ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError>;
+    ) -> Result<VerifyTrustResult, RusotoError<VerifyTrustError>>;
 }
 /// A client for the Directory Service API.
 #[derive(Clone)]
@@ -5943,7 +5166,10 @@ impl DirectoryServiceClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DirectoryServiceClient {
-        Self::new_with_client(Client::shared(), region)
+        DirectoryServiceClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -5953,35 +5179,22 @@ impl DirectoryServiceClient {
     ) -> DirectoryServiceClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DirectoryServiceClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> DirectoryServiceClient {
-        DirectoryServiceClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for DirectoryServiceClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DirectoryServiceClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl DirectoryService for DirectoryServiceClient {
     /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
-    fn accept_shared_directory(
+    async fn accept_shared_directory(
         &self,
         input: AcceptSharedDirectoryRequest,
-    ) -> RusotoFuture<AcceptSharedDirectoryResult, AcceptSharedDirectoryError> {
+    ) -> Result<AcceptSharedDirectoryResult, RusotoError<AcceptSharedDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5992,27 +5205,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcceptSharedDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AcceptSharedDirectoryError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptSharedDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptSharedDirectoryError::from_response(response))
+        }
     }
 
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn add_ip_routes(
+    async fn add_ip_routes(
         &self,
         input: AddIpRoutesRequest,
-    ) -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError> {
+    ) -> Result<AddIpRoutesResult, RusotoError<AddIpRoutesError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6020,28 +5233,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddIpRoutesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddIpRoutesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddIpRoutesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddIpRoutesError::from_response(response))
+        }
     }
 
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
-    ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
+    ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6052,28 +5263,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddTagsToResourceResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsToResourceError::from_response(response))
+        }
     }
 
     /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
-    fn cancel_schema_extension(
+    async fn cancel_schema_extension(
         &self,
         input: CancelSchemaExtensionRequest,
-    ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
+    ) -> Result<CancelSchemaExtensionResult, RusotoError<CancelSchemaExtensionError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6084,27 +5293,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelSchemaExtensionResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CancelSchemaExtensionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelSchemaExtensionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelSchemaExtensionError::from_response(response))
+        }
     }
 
     /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <code>ConnectDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>ConnectDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn connect_directory(
+    async fn connect_directory(
         &self,
         input: ConnectDirectoryRequest,
-    ) -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError> {
+    ) -> Result<ConnectDirectoryResult, RusotoError<ConnectDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6112,28 +5321,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ConnectDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ConnectDirectoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ConnectDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ConnectDirectoryError::from_response(response))
+        }
     }
 
     /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
-    fn create_alias(
+    async fn create_alias(
         &self,
         input: CreateAliasRequest,
-    ) -> RusotoFuture<CreateAliasResult, CreateAliasError> {
+    ) -> Result<CreateAliasResult, RusotoError<CreateAliasError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6141,28 +5348,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAliasResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAliasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateAliasResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAliasError::from_response(response))
+        }
     }
 
     /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
-    fn create_computer(
+    async fn create_computer(
         &self,
         input: CreateComputerRequest,
-    ) -> RusotoFuture<CreateComputerResult, CreateComputerError> {
+    ) -> Result<CreateComputerResult, RusotoError<CreateComputerError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6170,28 +5375,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateComputerResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateComputerError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateComputerResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateComputerError::from_response(response))
+        }
     }
 
     /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
-    fn create_conditional_forwarder(
+    async fn create_conditional_forwarder(
         &self,
         input: CreateConditionalForwarderRequest,
-    ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
+    ) -> Result<CreateConditionalForwarderResult, RusotoError<CreateConditionalForwarderError>>
+    {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6202,25 +5406,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateConditionalForwarderResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConditionalForwarderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConditionalForwarderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConditionalForwarderError::from_response(response))
+        }
     }
 
-    /// <p>Creates a Simple AD directory. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html">Simple Active Directory</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn create_directory(
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
-    ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError> {
+    ) -> Result<CreateDirectoryResult, RusotoError<CreateDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6228,28 +5434,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateDirectoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDirectoryError::from_response(response))
+        }
     }
 
-    /// <p>Creates a subscription to forward real-time Directory Service domain controller security logs to the specified Amazon CloudWatch log group in your AWS account.</p>
-    fn create_log_subscription(
+    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    async fn create_log_subscription(
         &self,
         input: CreateLogSubscriptionRequest,
-    ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError> {
+    ) -> Result<CreateLogSubscriptionResult, RusotoError<CreateLogSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6260,27 +5464,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLogSubscriptionResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateLogSubscriptionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateLogSubscriptionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateLogSubscriptionError::from_response(response))
+        }
     }
 
-    /// <p>Creates a Microsoft AD directory in the AWS Cloud. For more information, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html">AWS Managed Microsoft AD</a> in the <i>AWS Directory Service Admin Guide</i>.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn create_microsoft_ad(
+    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    async fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
-    ) -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError> {
+    ) -> Result<CreateMicrosoftADResult, RusotoError<CreateMicrosoftADError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6291,28 +5495,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateMicrosoftADResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateMicrosoftADError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateMicrosoftADResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMicrosoftADError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotRequest,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
+    ) -> Result<CreateSnapshotResult, RusotoError<CreateSnapshotError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6320,28 +5522,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSnapshotResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateSnapshotResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSnapshotError::from_response(response))
+        }
     }
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain. You can create either a forest trust or an external trust.</p>
-    fn create_trust(
+    async fn create_trust(
         &self,
         input: CreateTrustRequest,
-    ) -> RusotoFuture<CreateTrustResult, CreateTrustError> {
+    ) -> Result<CreateTrustResult, RusotoError<CreateTrustError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6349,28 +5549,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTrustResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTrustError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTrustResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTrustError::from_response(response))
+        }
     }
 
     /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
-    fn delete_conditional_forwarder(
+    async fn delete_conditional_forwarder(
         &self,
         input: DeleteConditionalForwarderRequest,
-    ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
+    ) -> Result<DeleteConditionalForwarderResult, RusotoError<DeleteConditionalForwarderError>>
+    {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6381,25 +5580,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteConditionalForwarderResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConditionalForwarderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConditionalForwarderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConditionalForwarderError::from_response(response))
+        }
     }
 
     /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <code>DeleteDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>DeleteDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
-    fn delete_directory(
+    async fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
-    ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError> {
+    ) -> Result<DeleteDirectoryResult, RusotoError<DeleteDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6407,28 +5608,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDirectoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified log subscription.</p>
-    fn delete_log_subscription(
+    async fn delete_log_subscription(
         &self,
         input: DeleteLogSubscriptionRequest,
-    ) -> RusotoFuture<DeleteLogSubscriptionResult, DeleteLogSubscriptionError> {
+    ) -> Result<DeleteLogSubscriptionResult, RusotoError<DeleteLogSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6439,27 +5638,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLogSubscriptionResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteLogSubscriptionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteLogSubscriptionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLogSubscriptionError::from_response(response))
+        }
     }
 
     /// <p>Deletes a directory snapshot.</p>
-    fn delete_snapshot(
+    async fn delete_snapshot(
         &self,
         input: DeleteSnapshotRequest,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
+    ) -> Result<DeleteSnapshotResult, RusotoError<DeleteSnapshotError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6467,28 +5666,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSnapshotResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSnapshotError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteSnapshotResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSnapshotError::from_response(response))
+        }
     }
 
     /// <p>Deletes an existing trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
-    fn delete_trust(
+    async fn delete_trust(
         &self,
         input: DeleteTrustRequest,
-    ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError> {
+    ) -> Result<DeleteTrustResult, RusotoError<DeleteTrustError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6496,59 +5693,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTrustResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTrustError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Deletes from the system the certificate that was registered for a secured LDAP connection.</p>
-    fn deregister_certificate(
-        &self,
-        input: DeregisterCertificateRequest,
-    ) -> RusotoFuture<DeregisterCertificateResult, DeregisterCertificateError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "DirectoryService_20150416.DeregisterCertificate",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterCertificateResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeregisterCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTrustResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTrustError::from_response(response))
+        }
     }
 
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
-    fn deregister_event_topic(
+    async fn deregister_event_topic(
         &self,
         input: DeregisterEventTopicRequest,
-    ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError> {
+    ) -> Result<DeregisterEventTopicResult, RusotoError<DeregisterEventTopicError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6559,58 +5723,28 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterEventTopicResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeregisterEventTopicError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Displays information about the certificate registered for a secured LDAP connection.</p>
-    fn describe_certificate(
-        &self,
-        input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResult, DescribeCertificateError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "DirectoryService_20150416.DescribeCertificate",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificateResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterEventTopicResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterEventTopicError::from_response(response))
+        }
     }
 
     /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
-    fn describe_conditional_forwarders(
+    async fn describe_conditional_forwarders(
         &self,
         input: DescribeConditionalForwardersRequest,
-    ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
+    ) -> Result<DescribeConditionalForwardersResult, RusotoError<DescribeConditionalForwardersError>>
+    {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6621,25 +5755,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConditionalForwardersResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConditionalForwardersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConditionalForwardersResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConditionalForwardersError::from_response(response))
+        }
     }
 
     /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <code>DirectoryIds</code> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>DescribeDirectoriesResult.NextToken</code> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <code>Limit</code> parameter.</p>
-    fn describe_directories(
+    async fn describe_directories(
         &self,
         input: DescribeDirectoriesRequest,
-    ) -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError> {
+    ) -> Result<DescribeDirectoriesResult, RusotoError<DescribeDirectoriesError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6650,27 +5786,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectoriesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDirectoriesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDirectoriesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDirectoriesError::from_response(response))
+        }
     }
 
     /// <p>Provides information about any domain controllers in your directory.</p>
-    fn describe_domain_controllers(
+    async fn describe_domain_controllers(
         &self,
         input: DescribeDomainControllersRequest,
-    ) -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError> {
+    ) -> Result<DescribeDomainControllersResult, RusotoError<DescribeDomainControllersError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6681,25 +5817,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDomainControllersResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDomainControllersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDomainControllersResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDomainControllersError::from_response(response))
+        }
     }
 
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
-    fn describe_event_topics(
+    async fn describe_event_topics(
         &self,
         input: DescribeEventTopicsRequest,
-    ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError> {
+    ) -> Result<DescribeEventTopicsResult, RusotoError<DescribeEventTopicsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6710,58 +5848,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventTopicsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeEventTopicsError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Describes the status of LDAP security for the specified directory.</p>
-    fn describe_ldaps_settings(
-        &self,
-        input: DescribeLDAPSSettingsRequest,
-    ) -> RusotoFuture<DescribeLDAPSSettingsResult, DescribeLDAPSSettingsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "DirectoryService_20150416.DescribeLDAPSSettings",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeLDAPSSettingsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeLDAPSSettingsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventTopicsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventTopicsError::from_response(response))
+        }
     }
 
     /// <p>Returns the shared directories in your account. </p>
-    fn describe_shared_directories(
+    async fn describe_shared_directories(
         &self,
         input: DescribeSharedDirectoriesRequest,
-    ) -> RusotoFuture<DescribeSharedDirectoriesResult, DescribeSharedDirectoriesError> {
+    ) -> Result<DescribeSharedDirectoriesResult, RusotoError<DescribeSharedDirectoriesError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6772,25 +5879,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSharedDirectoriesResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSharedDirectoriesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSharedDirectoriesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSharedDirectoriesError::from_response(response))
+        }
     }
 
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
-    fn describe_snapshots(
+    async fn describe_snapshots(
         &self,
         input: DescribeSnapshotsRequest,
-    ) -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError> {
+    ) -> Result<DescribeSnapshotsResult, RusotoError<DescribeSnapshotsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6801,28 +5910,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSnapshotsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSnapshotsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeSnapshotsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSnapshotsError::from_response(response))
+        }
     }
 
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
-    fn describe_trusts(
+    async fn describe_trusts(
         &self,
         input: DescribeTrustsRequest,
-    ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError> {
+    ) -> Result<DescribeTrustsResult, RusotoError<DescribeTrustsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6830,57 +5937,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTrustsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTrustsError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Deactivates LDAP secure calls for the specified directory.</p>
-    fn disable_ldaps(
-        &self,
-        input: DisableLDAPSRequest,
-    ) -> RusotoFuture<DisableLDAPSResult, DisableLDAPSError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "DirectoryService_20150416.DisableLDAPS");
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableLDAPSResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableLDAPSError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTrustsError::from_response(response))
+        }
     }
 
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
-    fn disable_radius(
+    async fn disable_radius(
         &self,
         input: DisableRadiusRequest,
-    ) -> RusotoFuture<DisableRadiusResult, DisableRadiusError> {
+    ) -> Result<DisableRadiusResult, RusotoError<DisableRadiusError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6888,28 +5964,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableRadiusResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableRadiusError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DisableRadiusResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableRadiusError::from_response(response))
+        }
     }
 
     /// <p>Disables single-sign on for a directory.</p>
-    fn disable_sso(
+    async fn disable_sso(
         &self,
         input: DisableSsoRequest,
-    ) -> RusotoFuture<DisableSsoResult, DisableSsoError> {
+    ) -> Result<DisableSsoResult, RusotoError<DisableSsoError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6917,57 +5991,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableSsoResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableSsoError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Activates the switch for the specific directory to always use LDAP secure calls.</p>
-    fn enable_ldaps(
-        &self,
-        input: EnableLDAPSRequest,
-    ) -> RusotoFuture<EnableLDAPSResult, EnableLDAPSError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "DirectoryService_20150416.EnableLDAPS");
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EnableLDAPSResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableLDAPSError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DisableSsoResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableSsoError::from_response(response))
+        }
     }
 
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
-    fn enable_radius(
+    async fn enable_radius(
         &self,
         input: EnableRadiusRequest,
-    ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError> {
+    ) -> Result<EnableRadiusResult, RusotoError<EnableRadiusError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6975,25 +6018,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EnableRadiusResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableRadiusError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<EnableRadiusResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableRadiusError::from_response(response))
+        }
     }
 
-    /// <p>Enables single sign-on for a directory. Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately.</p>
-    fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError> {
+    /// <p>Enables single sign-on for a directory.</p>
+    async fn enable_sso(
+        &self,
+        input: EnableSsoRequest,
+    ) -> Result<EnableSsoResult, RusotoError<EnableSsoError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7001,26 +6045,25 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<EnableSsoResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnableSsoError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<EnableSsoResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableSsoError::from_response(response))
+        }
     }
 
-    /// <p>Obtains directory limit information for the current Region.</p>
-    fn get_directory_limits(
+    /// <p>Obtains directory limit information for the current region.</p>
+    async fn get_directory_limits(
         &self,
-    ) -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
+    ) -> Result<GetDirectoryLimitsResult, RusotoError<GetDirectoryLimitsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7030,28 +6073,27 @@ impl DirectoryService for DirectoryServiceClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDirectoryLimitsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetDirectoryLimitsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDirectoryLimitsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDirectoryLimitsError::from_response(response))
+        }
     }
 
     /// <p>Obtains the manual snapshot limits for a directory.</p>
-    fn get_snapshot_limits(
+    async fn get_snapshot_limits(
         &self,
         input: GetSnapshotLimitsRequest,
-    ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
+    ) -> Result<GetSnapshotLimitsResult, RusotoError<GetSnapshotLimitsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7062,57 +6104,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSnapshotLimitsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetSnapshotLimitsError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>For the specified directory, lists all the certificates registered for a secured LDAP connection.</p>
-    fn list_certificates(
-        &self,
-        input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResult, ListCertificatesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "DirectoryService_20150416.ListCertificates");
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCertificatesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListCertificatesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetSnapshotLimitsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSnapshotLimitsError::from_response(response))
+        }
     }
 
     /// <p>Lists the address blocks that you have added to a directory.</p>
-    fn list_ip_routes(
+    async fn list_ip_routes(
         &self,
         input: ListIpRoutesRequest,
-    ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError> {
+    ) -> Result<ListIpRoutesResult, RusotoError<ListIpRoutesError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7120,28 +6131,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListIpRoutesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListIpRoutesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListIpRoutesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIpRoutesError::from_response(response))
+        }
     }
 
     /// <p>Lists the active log subscriptions for the AWS account.</p>
-    fn list_log_subscriptions(
+    async fn list_log_subscriptions(
         &self,
         input: ListLogSubscriptionsRequest,
-    ) -> RusotoFuture<ListLogSubscriptionsResult, ListLogSubscriptionsError> {
+    ) -> Result<ListLogSubscriptionsResult, RusotoError<ListLogSubscriptionsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7152,27 +6161,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLogSubscriptionsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListLogSubscriptionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListLogSubscriptionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLogSubscriptionsError::from_response(response))
+        }
     }
 
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
-    fn list_schema_extensions(
+    async fn list_schema_extensions(
         &self,
         input: ListSchemaExtensionsRequest,
-    ) -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
+    ) -> Result<ListSchemaExtensionsResult, RusotoError<ListSchemaExtensionsError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7183,27 +6192,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSchemaExtensionsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListSchemaExtensionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSchemaExtensionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSchemaExtensionsError::from_response(response))
+        }
     }
 
     /// <p>Lists all tags on a directory.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7214,58 +6223,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Registers a certificate for secured LDAP connection.</p>
-    fn register_certificate(
-        &self,
-        input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResult, RegisterCertificateError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "DirectoryService_20150416.RegisterCertificate",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterCertificateResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RegisterCertificateError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
-    fn register_event_topic(
+    async fn register_event_topic(
         &self,
         input: RegisterEventTopicRequest,
-    ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError> {
+    ) -> Result<RegisterEventTopicResult, RusotoError<RegisterEventTopicError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7276,28 +6254,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterEventTopicResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterEventTopicError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterEventTopicResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterEventTopicError::from_response(response))
+        }
     }
 
     /// <p>Rejects a directory sharing request that was sent from the directory owner account.</p>
-    fn reject_shared_directory(
+    async fn reject_shared_directory(
         &self,
         input: RejectSharedDirectoryRequest,
-    ) -> RusotoFuture<RejectSharedDirectoryResult, RejectSharedDirectoryError> {
+    ) -> Result<RejectSharedDirectoryResult, RusotoError<RejectSharedDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7308,27 +6285,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RejectSharedDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RejectSharedDirectoryError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectSharedDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectSharedDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Removes IP address blocks from a directory.</p>
-    fn remove_ip_routes(
+    async fn remove_ip_routes(
         &self,
         input: RemoveIpRoutesRequest,
-    ) -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError> {
+    ) -> Result<RemoveIpRoutesResult, RusotoError<RemoveIpRoutesError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7336,28 +6313,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveIpRoutesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RemoveIpRoutesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RemoveIpRoutesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveIpRoutesError::from_response(response))
+        }
     }
 
     /// <p>Removes tags from a directory.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
-    ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+    ) -> Result<RemoveTagsFromResourceResult, RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7368,27 +6343,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsFromResourceResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RemoveTagsFromResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveTagsFromResourceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveTagsFromResourceError::from_response(response))
+        }
     }
 
-    /// <p><p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p> <p>You can reset the password for any user in your directory with the following exceptions:</p> <ul> <li> <p>For Simple AD, you cannot reset the password for any user that is a member of either the <b>Domain Admins</b> or <b>Enterprise Admins</b> group except for the administrator user.</p> </li> <li> <p>For AWS Managed Microsoft AD, you can only reset the password for a user that is in an OU based off of the NetBIOS name that you typed when you created your directory. For example, you cannot reset the password for a user in the <b>AWS Reserved</b> OU. For more information about the OU structure for an AWS Managed Microsoft AD directory, see <a href="https://docs.aws.amazon.com/directoryservice/latest/admin-guide/ms_ad_getting_started_what_gets_created.html">What Gets Created</a> in the <i>AWS Directory Service Administration Guide</i>.</p> </li> </ul></p>
-    fn reset_user_password(
+    /// <p>Resets the password for any user in your AWS Managed Microsoft AD or Simple AD directory.</p>
+    async fn reset_user_password(
         &self,
         input: ResetUserPasswordRequest,
-    ) -> RusotoFuture<ResetUserPasswordResult, ResetUserPasswordError> {
+    ) -> Result<ResetUserPasswordResult, RusotoError<ResetUserPasswordError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7399,28 +6374,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResetUserPasswordResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResetUserPasswordError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ResetUserPasswordResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetUserPasswordError::from_response(response))
+        }
     }
 
     /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
-    fn restore_from_snapshot(
+    async fn restore_from_snapshot(
         &self,
         input: RestoreFromSnapshotRequest,
-    ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
+    ) -> Result<RestoreFromSnapshotResult, RusotoError<RestoreFromSnapshotError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7431,27 +6404,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RestoreFromSnapshotResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RestoreFromSnapshotError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RestoreFromSnapshotResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RestoreFromSnapshotError::from_response(response))
+        }
     }
 
     /// <p>Shares a specified directory (<code>DirectoryId</code>) in your AWS account (directory owner) with another AWS account (directory consumer). With this operation you can use your directory from any AWS account and from any Amazon VPC within an AWS Region.</p> <p>When you share your AWS Managed Microsoft AD directory, AWS Directory Service creates a shared directory in the directory consumer account. This shared directory contains the metadata to provide access to the directory within the directory owner account. The shared directory is visible in all VPCs in the directory consumer account.</p> <p>The <code>ShareMethod</code> parameter determines whether the specified directory can be shared between AWS accounts inside the same AWS organization (<code>ORGANIZATIONS</code>). It also determines whether you can share the directory with any other AWS account either inside or outside of the organization (<code>HANDSHAKE</code>).</p> <p>The <code>ShareNotes</code> parameter is only used when <code>HANDSHAKE</code> is called, which sends a directory sharing request to the directory consumer. </p>
-    fn share_directory(
+    async fn share_directory(
         &self,
         input: ShareDirectoryRequest,
-    ) -> RusotoFuture<ShareDirectoryResult, ShareDirectoryError> {
+    ) -> Result<ShareDirectoryResult, RusotoError<ShareDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7459,28 +6432,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ShareDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ShareDirectoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ShareDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ShareDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
-    fn start_schema_extension(
+    async fn start_schema_extension(
         &self,
         input: StartSchemaExtensionRequest,
-    ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError> {
+    ) -> Result<StartSchemaExtensionResult, RusotoError<StartSchemaExtensionError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7491,27 +6462,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartSchemaExtensionResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartSchemaExtensionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSchemaExtensionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSchemaExtensionError::from_response(response))
+        }
     }
 
     /// <p>Stops the directory sharing between the directory owner and consumer accounts. </p>
-    fn unshare_directory(
+    async fn unshare_directory(
         &self,
         input: UnshareDirectoryRequest,
-    ) -> RusotoFuture<UnshareDirectoryResult, UnshareDirectoryError> {
+    ) -> Result<UnshareDirectoryResult, RusotoError<UnshareDirectoryError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7519,28 +6490,27 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UnshareDirectoryResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UnshareDirectoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UnshareDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UnshareDirectoryError::from_response(response))
+        }
     }
 
     /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
-    fn update_conditional_forwarder(
+    async fn update_conditional_forwarder(
         &self,
         input: UpdateConditionalForwarderRequest,
-    ) -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
+    ) -> Result<UpdateConditionalForwarderResult, RusotoError<UpdateConditionalForwarderError>>
+    {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7551,26 +6521,30 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateConditionalForwarderResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConditionalForwarderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConditionalForwarderResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConditionalForwarderError::from_response(response))
+        }
     }
 
     /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
-    fn update_number_of_domain_controllers(
+    async fn update_number_of_domain_controllers(
         &self,
         input: UpdateNumberOfDomainControllersRequest,
-    ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>
-    {
+    ) -> Result<
+        UpdateNumberOfDomainControllersResult,
+        RusotoError<UpdateNumberOfDomainControllersError>,
+    > {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7581,27 +6555,29 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNumberOfDomainControllersResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateNumberOfDomainControllersError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateNumberOfDomainControllersResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateNumberOfDomainControllersError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector or Microsoft AD directory.</p>
-    fn update_radius(
+    async fn update_radius(
         &self,
         input: UpdateRadiusRequest,
-    ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError> {
+    ) -> Result<UpdateRadiusResult, RusotoError<UpdateRadiusError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7609,28 +6585,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRadiusResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateRadiusError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateRadiusResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRadiusError::from_response(response))
+        }
     }
 
     /// <p>Updates the trust that has been set up between your AWS Managed Microsoft AD directory and an on-premises Active Directory.</p>
-    fn update_trust(
+    async fn update_trust(
         &self,
         input: UpdateTrustRequest,
-    ) -> RusotoFuture<UpdateTrustResult, UpdateTrustError> {
+    ) -> Result<UpdateTrustResult, RusotoError<UpdateTrustError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7638,28 +6612,26 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateTrustResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateTrustError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTrustResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTrustError::from_response(response))
+        }
     }
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
-    fn verify_trust(
+    async fn verify_trust(
         &self,
         input: VerifyTrustRequest,
-    ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError> {
+    ) -> Result<VerifyTrustResult, RusotoError<VerifyTrustError>> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7667,20 +6639,18 @@ impl DirectoryService for DirectoryServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<VerifyTrustResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(VerifyTrustError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<VerifyTrustResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(VerifyTrustError::from_response(response))
+        }
     }
 }

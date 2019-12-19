@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An object representing an AWS Batch array job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -34,7 +35,7 @@ pub struct ArrayProperties {
 
 /// <p>An object representing the array properties of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ArrayPropertiesDetail {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for array job children.</p>
     #[serde(rename = "index")]
@@ -52,7 +53,7 @@ pub struct ArrayPropertiesDetail {
 
 /// <p>An object representing the array properties of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ArrayPropertiesSummary {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for children of array jobs.</p>
     #[serde(rename = "index")]
@@ -66,7 +67,7 @@ pub struct ArrayPropertiesSummary {
 
 /// <p>An object representing the details of a container that is part of a job attempt.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttemptContainerDetail {
     /// <p>The Amazon Resource Name (ARN) of the Amazon ECS container instance that hosts the job attempt.</p>
     #[serde(rename = "containerInstanceArn")]
@@ -96,7 +97,7 @@ pub struct AttemptContainerDetail {
 
 /// <p>An object representing a job attempt.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttemptDetail {
     /// <p>Details about the container in this job attempt.</p>
     #[serde(rename = "container")]
@@ -121,37 +122,37 @@ pub struct CancelJobRequest {
     /// <p>The AWS Batch job ID of the job to cancel.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs.</p>
+    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs. </p>
     #[serde(rename = "reason")]
     pub reason: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelJobResponse {}
 
 /// <p>An object representing an AWS Batch compute environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComputeEnvironmentDetail {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
     pub compute_environment_arn: String,
-    /// <p>The name of the compute environment.</p>
+    /// <p>The name of the compute environment. </p>
     #[serde(rename = "computeEnvironmentName")]
     pub compute_environment_name: String,
-    /// <p>The compute resources defined for the compute environment.</p>
+    /// <p>The compute resources defined for the compute environment. </p>
     #[serde(rename = "computeResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_resources: Option<ComputeResource>,
-    /// <p>The Amazon Resource Name (ARN) of the underlying Amazon ECS cluster used by the compute environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the underlying Amazon ECS cluster used by the compute environment. </p>
     #[serde(rename = "ecsClusterArn")]
     pub ecs_cluster_arn: String,
     /// <p>The service role associated with the compute environment that allows AWS Batch to make calls to AWS API operations on your behalf.</p>
     #[serde(rename = "serviceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>.</p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler does not attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state do not scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
+    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>. </p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler does not attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state do not scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -183,19 +184,15 @@ pub struct ComputeEnvironmentOrder {
 /// <p>An object representing an AWS Batch compute resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeResource {
-    /// <p>The allocation strategy to use for the compute resource in case not enough instances of the best fitting instance type can be allocated. This could be due to availability of the instance type in the region or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a>. If this is not specified, the default is <code>BEST_FIT</code>, which will use only the best fitting instance type, waiting for additional capacity if it's not available. This allocation strategy keeps costs lower but can limit scaling. <code>BEST_FIT_PROGRESSIVE</code> will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type with a lower cost. <code>SPOT_CAPACITY_OPTIMIZED</code> is only available for Spot Instance compute resources and will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type that is less likely to be interrupted.</p>
-    #[serde(rename = "allocationStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocation_strategy: Option<String>,
-    /// <p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that Amazon EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p>
+    /// <p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p>
     #[serde(rename = "bidPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_percentage: Option<i64>,
-    /// <p>The desired number of Amazon EC2 vCPUS in the compute environment.</p>
+    /// <p>The desired number of EC2 vCPUS in the compute environment. </p>
     #[serde(rename = "desiredvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desiredv_cpus: Option<i64>,
-    /// <p>The Amazon EC2 key pair that is used for instances launched in the compute environment.</p>
+    /// <p>The EC2 key pair that is used for instances launched in the compute environment.</p>
     #[serde(rename = "ec2KeyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_key_pair: Option<String>,
@@ -206,24 +203,24 @@ pub struct ComputeResource {
     /// <p>The Amazon ECS instance profile applied to Amazon EC2 instances in a compute environment. You can specify the short name or full Amazon Resource Name (ARN) of an instance profile. For example, <code> <i>ecsInstanceRole</i> </code> or <code>arn:aws:iam::<i>&lt;aws_account_id&gt;</i>:instance-profile/<i>ecsInstanceRole</i> </code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/instance_IAM_role.html">Amazon ECS Instance Role</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "instanceRole")]
     pub instance_role: String,
-    /// <p>The instances types that may be launched. You can specify instance families to launch any instance type within those families (for example, <code>c5</code> or <code>p3</code>), or you can specify specific sizes within a family (such as <code>c5.8xlarge</code>). You can also choose <code>optimal</code> to pick instance types (from the C, M, and R instance families) on the fly that match the demand of your job queues.</p>
+    /// <p>The instances types that may be launched. You can specify instance families to launch any instance type within those families (for example, <code>c4</code> or <code>p3</code>), or you can specify specific sizes within a family (such as <code>c4.8xlarge</code>). You can also choose <code>optimal</code> to pick instance types (from the C, M, and R instance families) on the fly that match the demand of your job queues.</p>
     #[serde(rename = "instanceTypes")]
     pub instance_types: Vec<String>,
     /// <p>The launch template to use for your compute resources. Any other compute resource parameters that you specify in a <a>CreateComputeEnvironment</a> API operation override the same parameters in the launch template. You must specify either the launch template ID or launch template name in the request, but not both. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/launch-templates.html">Launch Template Support</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "launchTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The maximum number of Amazon EC2 vCPUs that an environment can reach.</p>
+    /// <p>The maximum number of EC2 vCPUs that an environment can reach. </p>
     #[serde(rename = "maxvCpus")]
     pub maxv_cpus: i64,
-    /// <p>The minimum number of Amazon EC2 vCPUs that an environment should maintain (even if the compute environment is <code>DISABLED</code>).</p>
+    /// <p>The minimum number of EC2 vCPUs that an environment should maintain (even if the compute environment is <code>DISABLED</code>). </p>
     #[serde(rename = "minvCpus")]
     pub minv_cpus: i64,
     /// <p>The Amazon EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to your compute environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     #[serde(rename = "placementGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_group: Option<String>,
-    /// <p>The Amazon EC2 security groups associated with instances launched in the compute environment. One or more security groups must be specified, either in <code>securityGroupIds</code> or using a launch template referenced in <code>launchTemplate</code>. If security groups are specified using both <code>securityGroupIds</code> and <code>launchTemplate</code>, the values in <code>securityGroupIds</code> will be used.</p>
+    /// <p>The EC2 security group that is associated with instances launched in the compute environment. </p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
@@ -231,14 +228,14 @@ pub struct ComputeResource {
     #[serde(rename = "spotIamFleetRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spot_iam_fleet_role: Option<String>,
-    /// <p>The VPC subnets into which the compute resources are launched. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">VPCs and Subnets</a> in the <i>Amazon VPC User Guide</i>.</p>
+    /// <p>The VPC subnets into which the compute resources are launched. </p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>Key-value pair tags to be applied to resources that are launched in the compute environment. For AWS Batch, these take the form of "String1": "String2", where String1 is the tag key and String2 is the tag value—for example, { "Name": "AWS Batch Instance - C4OnDemand" }.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of compute environment: <code>EC2</code> or <code>SPOT</code>.</p>
+    /// <p>The type of compute environment: EC2 or SPOT.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -246,15 +243,15 @@ pub struct ComputeResource {
 /// <p>An object representing the attributes of a compute environment that can be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComputeResourceUpdate {
-    /// <p>The desired number of Amazon EC2 vCPUS in the compute environment.</p>
+    /// <p>The desired number of EC2 vCPUS in the compute environment.</p>
     #[serde(rename = "desiredvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desiredv_cpus: Option<i64>,
-    /// <p>The maximum number of Amazon EC2 vCPUs that an environment can reach.</p>
+    /// <p>The maximum number of EC2 vCPUs that an environment can reach.</p>
     #[serde(rename = "maxvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maxv_cpus: Option<i64>,
-    /// <p>The minimum number of Amazon EC2 vCPUs that an environment should maintain.</p>
+    /// <p>The minimum number of EC2 vCPUs that an environment should maintain.</p>
     #[serde(rename = "minvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minv_cpus: Option<i64>,
@@ -262,9 +259,9 @@ pub struct ComputeResourceUpdate {
 
 /// <p>An object representing the details of a container that is part of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContainerDetail {
-    /// <p>The command that is passed to the container.</p>
+    /// <p>The command that is passed to the container. </p>
     #[serde(rename = "command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<Vec<String>>,
@@ -288,14 +285,10 @@ pub struct ContainerDetail {
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) associated with the job upon execution.</p>
+    /// <p>The Amazon Resource Name (ARN) associated with the job upon execution. </p>
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
-    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
-    #[serde(rename = "linuxParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub linux_parameters: Option<LinuxParameters>,
     /// <p>The name of the CloudWatch Logs log stream associated with the container. The log group for AWS Batch jobs is <code>/aws/batch/job</code>. Each container attempt receives a log stream name when they reach the <code>RUNNING</code> status.</p>
     #[serde(rename = "logStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,7 +333,7 @@ pub struct ContainerDetail {
     #[serde(rename = "user")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
-    /// <p>The number of VCPUs allocated for the job.</p>
+    /// <p>The number of VCPUs allocated for the job. </p>
     #[serde(rename = "vcpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vcpus: Option<i64>,
@@ -402,10 +395,6 @@ pub struct ContainerProperties {
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
-    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
-    #[serde(rename = "linuxParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub linux_parameters: Option<LinuxParameters>,
     /// <p><p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. You must specify at least 4 MiB of memory for a job.</p> <note> <p>If you are trying to maximize your resource utilization by providing your jobs as much memory as possible for a particular instance type, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/memory-management.html">Memory Management</a> in the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -446,7 +435,7 @@ pub struct ContainerProperties {
 
 /// <p>An object representing summary details of a container within a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContainerSummary {
     /// <p>The exit code to return upon completion.</p>
     #[serde(rename = "exitCode")]
@@ -480,9 +469,9 @@ pub struct CreateComputeEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateComputeEnvironmentResponse {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_arn: Option<String>,
@@ -510,7 +499,7 @@ pub struct CreateJobQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]
@@ -522,40 +511,40 @@ pub struct CreateJobQueueResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteComputeEnvironmentRequest {
-    /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete.</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete. </p>
     #[serde(rename = "computeEnvironment")]
     pub compute_environment: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteComputeEnvironmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobQueueRequest {
-    /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete.</p>
+    /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete. </p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteJobQueueResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterJobDefinitionRequest {
-    /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister.</p>
+    /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister. </p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterJobDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeComputeEnvironmentsRequest {
-    /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries.</p>
+    /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>
     #[serde(rename = "computeEnvironments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environments: Option<Vec<String>>,
@@ -570,7 +559,7 @@ pub struct DescribeComputeEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeComputeEnvironmentsResponse {
     /// <p>The list of compute environments.</p>
     #[serde(rename = "computeEnvironments")]
@@ -607,9 +596,9 @@ pub struct DescribeJobDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobDefinitionsResponse {
-    /// <p>The list of job definitions.</p>
+    /// <p>The list of job definitions. </p>
     #[serde(rename = "jobDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_definitions: Option<Vec<JobDefinition>>,
@@ -636,9 +625,9 @@ pub struct DescribeJobQueuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobQueuesResponse {
-    /// <p>The list of job queues.</p>
+    /// <p>The list of job queues. </p>
     #[serde(rename = "jobQueues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_queues: Option<Vec<JobQueueDetail>>,
@@ -656,28 +645,12 @@ pub struct DescribeJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobsResponse {
-    /// <p>The list of jobs.</p>
+    /// <p>The list of jobs. </p>
     #[serde(rename = "jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<JobDetail>>,
-}
-
-/// <p>An object representing a container instance host device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Device {
-    /// <p>The path inside the container at which to expose the host device. By default the <code>hostPath</code> value is used.</p>
-    #[serde(rename = "containerPath")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub container_path: Option<String>,
-    /// <p>The path for the device on the host container instance.</p>
-    #[serde(rename = "hostPath")]
-    pub host_path: String,
-    /// <p>The explicit permissions to provide to the container for the device. By default, the container has permissions for <code>read</code>, <code>write</code>, and <code>mknod</code> for the device.</p>
-    #[serde(rename = "permissions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
 }
 
 /// <p>Determine whether your data volume persists on the host container instance and where it is stored. If this parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>
@@ -691,16 +664,16 @@ pub struct Host {
 
 /// <p>An object representing an AWS Batch job definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobDefinition {
-    /// <p>An object with various properties specific to container-based jobs.</p>
+    /// <p>An object with various properties specific to container-based jobs. </p>
     #[serde(rename = "containerProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_properties: Option<ContainerProperties>,
-    /// <p>The Amazon Resource Name (ARN) for the job definition.</p>
+    /// <p>The Amazon Resource Name (ARN) for the job definition. </p>
     #[serde(rename = "jobDefinitionArn")]
     pub job_definition_arn: String,
-    /// <p>The name of the job definition.</p>
+    /// <p>The name of the job definition. </p>
     #[serde(rename = "jobDefinitionName")]
     pub job_definition_name: String,
     /// <p>An object with various properties specific to multi-node parallel jobs.</p>
@@ -746,7 +719,7 @@ pub struct JobDependency {
 
 /// <p>An object representing an AWS Batch job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobDetail {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -788,7 +761,7 @@ pub struct JobDetail {
     #[serde(rename = "nodeProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_properties: Option<NodeProperties>,
-    /// <p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition.</p>
+    /// <p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition. </p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -799,10 +772,10 @@ pub struct JobDetail {
     /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     pub started_at: i64,
-    /// <p><p>The current status for the job.</p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in RUNNABLE Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
+    /// <p><p>The current status for the job. </p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in <code>RUNNABLE</code> Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
-    /// <p>A short, human-readable string to provide additional details about the current status of the job.</p>
+    /// <p>A short, human-readable string to provide additional details about the current status of the job. </p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
@@ -810,7 +783,7 @@ pub struct JobDetail {
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_at: Option<i64>,
-    /// <p>The timeout configuration for the job.</p>
+    /// <p>The timeout configuration for the job. </p>
     #[serde(rename = "timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<JobTimeout>,
@@ -818,7 +791,7 @@ pub struct JobDetail {
 
 /// <p>An object representing the details of an AWS Batch job queue.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobQueueDetail {
     /// <p>The compute environments that are attached to the job queue and the order in which job placement is preferred. Compute environments are selected for job placement in ascending order.</p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -829,7 +802,7 @@ pub struct JobQueueDetail {
     /// <p>The name of the job queue.</p>
     #[serde(rename = "jobQueueName")]
     pub job_queue_name: String,
-    /// <p>The priority of the job queue.</p>
+    /// <p>The priority of the job queue. </p>
     #[serde(rename = "priority")]
     pub priority: i64,
     /// <p>Describes the ability of the queue to accept new jobs.</p>
@@ -847,7 +820,7 @@ pub struct JobQueueDetail {
 
 /// <p>An object representing summary details of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobSummary {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -911,7 +884,7 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
-/// <p>An object representing a launch template associated with a compute resource. You must specify either the launch template ID or launch template name in the request, but not both.</p>
+/// <p>An object representing a launch template associated with a compute resource. You must specify either the launch template ID or launch template name in the request, but not both. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LaunchTemplateSpecification {
     /// <p>The ID of the launch template.</p>
@@ -926,15 +899,6 @@ pub struct LaunchTemplateSpecification {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-}
-
-/// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct LinuxParameters {
-    /// <p>Any host devices to expose to the container. This parameter maps to <code>Devices</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--device</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p>
-    #[serde(rename = "devices")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub devices: Option<Vec<Device>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -966,7 +930,7 @@ pub struct ListJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>A list of job summaries that match the request.</p>
     #[serde(rename = "jobSummaryList")]
@@ -996,7 +960,7 @@ pub struct MountPoint {
 
 /// <p>An object representing the elastic network interface for a multi-node parallel job node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The attachment ID for the network interface.</p>
     #[serde(rename = "attachmentId")]
@@ -1014,7 +978,7 @@ pub struct NetworkInterface {
 
 /// <p>An object representing the details of a multi-node parallel job node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NodeDetails {
     /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
     #[serde(rename = "isMainNode")]
@@ -1055,7 +1019,7 @@ pub struct NodeProperties {
 
 /// <p>An object representing the properties of a node that is associated with a multi-node parallel job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NodePropertiesSummary {
     /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
     #[serde(rename = "isMainNode")]
@@ -1090,7 +1054,7 @@ pub struct NodeRangeProperty {
     #[serde(rename = "container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<ContainerProperties>,
-    /// <p>The range of nodes, using node index values. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range. Your accumulative node ranges must account for all nodes (0:n). You may nest node ranges, for example 0:10 and 4:5, in which case the 4:5 range properties override the 0:10 properties.</p>
+    /// <p>The range of nodes, using node index values. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range. Your accumulative node ranges must account for all nodes (0:n). You may nest node ranges, for example 0:10 and 4:5, in which case the 4:5 range properties override the 0:10 properties. </p>
     #[serde(rename = "targetNodes")]
     pub target_nodes: String,
 }
@@ -1112,7 +1076,7 @@ pub struct RegisterJobDefinitionRequest {
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The retry strategy to use for failed jobs that are submitted with this job definition. Any retry strategy that is specified during a <a>SubmitJob</a> operation overrides the retry strategy defined here. If a job is terminated due to a timeout, it is not retried.</p>
+    /// <p>The retry strategy to use for failed jobs that are submitted with this job definition. Any retry strategy that is specified during a <a>SubmitJob</a> operation overrides the retry strategy defined here. If a job is terminated due to a timeout, it is not retried. </p>
     #[serde(rename = "retryStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
@@ -1126,9 +1090,9 @@ pub struct RegisterJobDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterJobDefinitionResponse {
-    /// <p>The Amazon Resource Name (ARN) of the job definition.</p>
+    /// <p>The Amazon Resource Name (ARN) of the job definition. </p>
     #[serde(rename = "jobDefinitionArn")]
     pub job_definition_arn: String,
     /// <p>The name of the job definition.</p>
@@ -1176,10 +1140,10 @@ pub struct SubmitJobRequest {
     /// <p>The job definition used by this job. This value can be either a <code>name:revision</code> or the Amazon Resource Name (ARN) for the job definition.</p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
-    /// <p>The name of the job. The first character must be alphanumeric, and up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
+    /// <p>The name of the job. The first character must be alphanumeric, and up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. </p>
     #[serde(rename = "jobName")]
     pub job_name: String,
-    /// <p>The job queue into which the job is submitted. You can specify either the name or the Amazon Resource Name (ARN) of the queue.</p>
+    /// <p>The job queue into which the job is submitted. You can specify either the name or the Amazon Resource Name (ARN) of the queue. </p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
     /// <p>A list of node overrides in JSON format that specify the node range to target and the container overrides for that node range.</p>
@@ -1201,12 +1165,12 @@ pub struct SubmitJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SubmitJobResponse {
     /// <p>The unique identifier for the job.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>The name of the job.</p>
+    /// <p>The name of the job. </p>
     #[serde(rename = "jobName")]
     pub job_name: String,
 }
@@ -1216,13 +1180,13 @@ pub struct TerminateJobRequest {
     /// <p>The AWS Batch job ID of the job to terminate.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs.</p>
+    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs. </p>
     #[serde(rename = "reason")]
     pub reason: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TerminateJobResponse {}
 
 /// <p>The <code>ulimit</code> settings to pass to the container.</p>
@@ -1259,9 +1223,9 @@ pub struct UpdateComputeEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateComputeEnvironmentResponse {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_arn: Option<String>,
@@ -1273,7 +1237,7 @@ pub struct UpdateComputeEnvironmentResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobQueueRequest {
-    /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job.</p>
+    /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>
     #[serde(rename = "computeEnvironmentOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_order: Option<Vec<ComputeEnvironmentOrder>>,
@@ -1291,7 +1255,7 @@ pub struct UpdateJobQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]
@@ -1319,7 +1283,7 @@ pub struct Volume {
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1354,7 +1318,7 @@ impl Error for CancelJobError {
 /// Errors returned by CreateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1393,7 +1357,7 @@ impl Error for CreateComputeEnvironmentError {
 /// Errors returned by CreateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1432,7 +1396,7 @@ impl Error for CreateJobQueueError {
 /// Errors returned by DeleteComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum DeleteComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1471,7 +1435,7 @@ impl Error for DeleteComputeEnvironmentError {
 /// Errors returned by DeleteJobQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1510,7 +1474,7 @@ impl Error for DeleteJobQueueError {
 /// Errors returned by DeregisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeregisterJobDefinitionError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1549,7 +1513,7 @@ impl Error for DeregisterJobDefinitionError {
 /// Errors returned by DescribeComputeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum DescribeComputeEnvironmentsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1590,7 +1554,7 @@ impl Error for DescribeComputeEnvironmentsError {
 /// Errors returned by DescribeJobDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobDefinitionsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1629,7 +1593,7 @@ impl Error for DescribeJobDefinitionsError {
 /// Errors returned by DescribeJobQueues
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobQueuesError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1668,7 +1632,7 @@ impl Error for DescribeJobQueuesError {
 /// Errors returned by DescribeJobs
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1707,7 +1671,7 @@ impl Error for DescribeJobsError {
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1742,7 +1706,7 @@ impl Error for ListJobsError {
 /// Errors returned by RegisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum RegisterJobDefinitionError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1781,7 +1745,7 @@ impl Error for RegisterJobDefinitionError {
 /// Errors returned by SubmitJob
 #[derive(Debug, PartialEq)]
 pub enum SubmitJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1816,7 +1780,7 @@ impl Error for SubmitJobError {
 /// Errors returned by TerminateJob
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1855,7 +1819,7 @@ impl Error for TerminateJobError {
 /// Errors returned by UpdateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1894,7 +1858,7 @@ impl Error for UpdateComputeEnvironmentError {
 /// Errors returned by UpdateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1931,99 +1895,103 @@ impl Error for UpdateJobQueueError {
     }
 }
 /// Trait representing the capabilities of the AWS Batch API. AWS Batch clients implement this trait.
+#[async_trait]
 pub trait Batch {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
 
     /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
-    fn create_compute_environment(
+    async fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError>;
+    ) -> Result<CreateComputeEnvironmentResponse, RusotoError<CreateComputeEnvironmentError>>;
 
     /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
+    async fn create_job_queue(
         &self,
         input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError>;
+    ) -> Result<CreateJobQueueResponse, RusotoError<CreateJobQueueError>>;
 
     /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
-    fn delete_compute_environment(
+    async fn delete_compute_environment(
         &self,
         input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError>;
+    ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>>;
 
-    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request.</p>
-    fn delete_job_queue(
+    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
+    async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError>;
+    ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>>;
 
     /// <p>Deregisters an AWS Batch job definition.</p>
-    fn deregister_job_definition(
+    async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError>;
+    ) -> Result<DeregisterJobDefinitionResponse, RusotoError<DeregisterJobDefinitionError>>;
 
     /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
-    fn describe_compute_environments(
+    async fn describe_compute_environments(
         &self,
         input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError>;
+    ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>;
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
-    fn describe_job_definitions(
+    async fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError>;
+    ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>>;
 
     /// <p>Describes one or more of your job queues.</p>
-    fn describe_job_queues(
+    async fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError>;
+    ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>>;
 
     /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
+    async fn describe_jobs(
         &self,
         input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError>;
+    ) -> Result<DescribeJobsResponse, RusotoError<DescribeJobsError>>;
 
     /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    async fn list_jobs(
+        &self,
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
-    /// <p>Registers an AWS Batch job definition.</p>
-    fn register_job_definition(
+    /// <p>Registers an AWS Batch job definition. </p>
+    async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError>;
+    ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>>;
 
-    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition.</p>
-    fn submit_job(
+    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
+    async fn submit_job(
         &self,
         input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError>;
+    ) -> Result<SubmitJobResponse, RusotoError<SubmitJobError>>;
 
     /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
+    async fn terminate_job(
         &self,
         input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError>;
+    ) -> Result<TerminateJobResponse, RusotoError<TerminateJobError>>;
 
     /// <p>Updates an AWS Batch compute environment.</p>
-    fn update_compute_environment(
+    async fn update_compute_environment(
         &self,
         input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError>;
+    ) -> Result<UpdateComputeEnvironmentResponse, RusotoError<UpdateComputeEnvironmentError>>;
 
     /// <p>Updates a job queue.</p>
-    fn update_job_queue(
+    async fn update_job_queue(
         &self,
         input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError>;
+    ) -> Result<UpdateJobQueueResponse, RusotoError<UpdateJobQueueError>>;
 }
 /// A client for the AWS Batch API.
 #[derive(Clone)]
@@ -2037,7 +2005,10 @@ impl BatchClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> BatchClient {
-        Self::new_with_client(Client::shared(), region)
+        BatchClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -2047,35 +2018,22 @@ impl BatchClient {
     ) -> BatchClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        BatchClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> BatchClient {
-        BatchClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for BatchClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("BatchClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Batch for BatchClient {
     /// <p>Cancels a job in an AWS Batch job queue. Jobs that are in the <code>SUBMITTED</code>, <code>PENDING</code>, or <code>RUNNABLE</code> state are cancelled. Jobs that have progressed to <code>STARTING</code> or <code>RUNNING</code> are not cancelled (but the API operation still succeeds, even if no job is cancelled); these jobs must be terminated with the <a>TerminateJob</a> operation.</p>
-    fn cancel_job(
+    async fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
         let request_uri = "/v1/canceljob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2084,30 +2042,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelJobError::from_response(response))
+        }
     }
 
     /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
-    fn create_compute_environment(
+    async fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
-    ) -> RusotoFuture<CreateComputeEnvironmentResponse, CreateComputeEnvironmentError> {
+    ) -> Result<CreateComputeEnvironmentResponse, RusotoError<CreateComputeEnvironmentError>> {
         let request_uri = "/v1/createcomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2116,27 +2072,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateComputeEnvironmentResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateComputeEnvironmentResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateComputeEnvironmentError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateComputeEnvironmentError::from_response(response))
+        }
     }
 
     /// <p>Creates an AWS Batch job queue. When you create a job queue, you associate one or more compute environments to the queue and assign an order of preference for the compute environments.</p> <p>You also set a priority to the job queue that determines the order in which the AWS Batch scheduler places jobs onto its associated compute environments. For example, if a compute environment is associated with more than one job queue, the job queue with a higher priority is given preference for scheduling jobs to that compute environment.</p>
-    fn create_job_queue(
+    async fn create_job_queue(
         &self,
         input: CreateJobQueueRequest,
-    ) -> RusotoFuture<CreateJobQueueResponse, CreateJobQueueError> {
+    ) -> Result<CreateJobQueueResponse, RusotoError<CreateJobQueueError>> {
         let request_uri = "/v1/createjobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2145,30 +2102,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateJobQueueResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobQueueResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateJobQueueError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateJobQueueError::from_response(response))
+        }
     }
 
     /// <p>Deletes an AWS Batch compute environment.</p> <p>Before you can delete a compute environment, you must set its state to <code>DISABLED</code> with the <a>UpdateComputeEnvironment</a> API operation and disassociate it from any job queues with the <a>UpdateJobQueue</a> API operation.</p>
-    fn delete_compute_environment(
+    async fn delete_compute_environment(
         &self,
         input: DeleteComputeEnvironmentRequest,
-    ) -> RusotoFuture<DeleteComputeEnvironmentResponse, DeleteComputeEnvironmentError> {
+    ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>> {
         let request_uri = "/v1/deletecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2177,27 +2132,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteComputeEnvironmentResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteComputeEnvironmentResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteComputeEnvironmentError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteComputeEnvironmentError::from_response(response))
+        }
     }
 
-    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request.</p>
-    fn delete_job_queue(
+    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
+    async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
-    ) -> RusotoFuture<DeleteJobQueueResponse, DeleteJobQueueError> {
+    ) -> Result<DeleteJobQueueResponse, RusotoError<DeleteJobQueueError>> {
         let request_uri = "/v1/deletejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2206,30 +2162,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteJobQueueResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteJobQueueResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteJobQueueError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteJobQueueError::from_response(response))
+        }
     }
 
     /// <p>Deregisters an AWS Batch job definition.</p>
-    fn deregister_job_definition(
+    async fn deregister_job_definition(
         &self,
         input: DeregisterJobDefinitionRequest,
-    ) -> RusotoFuture<DeregisterJobDefinitionResponse, DeregisterJobDefinitionError> {
+    ) -> Result<DeregisterJobDefinitionResponse, RusotoError<DeregisterJobDefinitionError>> {
         let request_uri = "/v1/deregisterjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2238,27 +2192,29 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeregisterJobDefinitionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterJobDefinitionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterJobDefinitionError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterJobDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your compute environments.</p> <p>If you are using an unmanaged compute environment, you can use the <code>DescribeComputeEnvironment</code> operation to determine the <code>ecsClusterArn</code> that you should launch your Amazon ECS container instances into.</p>
-    fn describe_compute_environments(
+    async fn describe_compute_environments(
         &self,
         input: DescribeComputeEnvironmentsRequest,
-    ) -> RusotoFuture<DescribeComputeEnvironmentsResponse, DescribeComputeEnvironmentsError> {
+    ) -> Result<DescribeComputeEnvironmentsResponse, RusotoError<DescribeComputeEnvironmentsError>>
+    {
         let request_uri = "/v1/describecomputeenvironments";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2267,27 +2223,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeComputeEnvironmentsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeComputeEnvironmentsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeComputeEnvironmentsError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeComputeEnvironmentsError::from_response(response))
+        }
     }
 
     /// <p>Describes a list of job definitions. You can specify a <code>status</code> (such as <code>ACTIVE</code>) to only return job definitions that match that status.</p>
-    fn describe_job_definitions(
+    async fn describe_job_definitions(
         &self,
         input: DescribeJobDefinitionsRequest,
-    ) -> RusotoFuture<DescribeJobDefinitionsResponse, DescribeJobDefinitionsError> {
+    ) -> Result<DescribeJobDefinitionsResponse, RusotoError<DescribeJobDefinitionsError>> {
         let request_uri = "/v1/describejobdefinitions";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2296,29 +2253,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobDefinitionsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobDefinitionsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeJobDefinitionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your job queues.</p>
-    fn describe_job_queues(
+    async fn describe_job_queues(
         &self,
         input: DescribeJobQueuesRequest,
-    ) -> RusotoFuture<DescribeJobQueuesResponse, DescribeJobQueuesError> {
+    ) -> Result<DescribeJobQueuesResponse, RusotoError<DescribeJobQueuesError>> {
         let request_uri = "/v1/describejobqueues";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2327,30 +2283,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobQueuesResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobQueuesResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeJobQueuesError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobQueuesError::from_response(response))
+        }
     }
 
     /// <p>Describes a list of AWS Batch jobs.</p>
-    fn describe_jobs(
+    async fn describe_jobs(
         &self,
         input: DescribeJobsRequest,
-    ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError> {
+    ) -> Result<DescribeJobsResponse, RusotoError<DescribeJobsError>> {
         let request_uri = "/v1/describejobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2359,27 +2313,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeJobsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobsError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+    async fn list_jobs(
+        &self,
+        input: ListJobsRequest,
+    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
         let request_uri = "/v1/listjobs";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2388,30 +2343,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListJobsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListJobsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobsError::from_response(response))
+        }
     }
 
-    /// <p>Registers an AWS Batch job definition.</p>
-    fn register_job_definition(
+    /// <p>Registers an AWS Batch job definition. </p>
+    async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
-    ) -> RusotoFuture<RegisterJobDefinitionResponse, RegisterJobDefinitionError> {
+    ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>> {
         let request_uri = "/v1/registerjobdefinition";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2420,29 +2373,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterJobDefinitionResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterJobDefinitionResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RegisterJobDefinitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterJobDefinitionError::from_response(response))
+        }
     }
 
-    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition.</p>
-    fn submit_job(
+    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
+    async fn submit_job(
         &self,
         input: SubmitJobRequest,
-    ) -> RusotoFuture<SubmitJobResponse, SubmitJobError> {
+    ) -> Result<SubmitJobResponse, RusotoError<SubmitJobError>> {
         let request_uri = "/v1/submitjob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2451,30 +2403,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SubmitJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SubmitJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SubmitJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SubmitJobError::from_response(response))
+        }
     }
 
     /// <p>Terminates a job in a job queue. Jobs that are in the <code>STARTING</code> or <code>RUNNING</code> state are terminated, which causes them to transition to <code>FAILED</code>. Jobs that have not progressed to the <code>STARTING</code> state are cancelled.</p>
-    fn terminate_job(
+    async fn terminate_job(
         &self,
         input: TerminateJobRequest,
-    ) -> RusotoFuture<TerminateJobResponse, TerminateJobError> {
+    ) -> Result<TerminateJobResponse, RusotoError<TerminateJobError>> {
         let request_uri = "/v1/terminatejob";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2483,30 +2433,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TerminateJobResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TerminateJobResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TerminateJobError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TerminateJobError::from_response(response))
+        }
     }
 
     /// <p>Updates an AWS Batch compute environment.</p>
-    fn update_compute_environment(
+    async fn update_compute_environment(
         &self,
         input: UpdateComputeEnvironmentRequest,
-    ) -> RusotoFuture<UpdateComputeEnvironmentResponse, UpdateComputeEnvironmentError> {
+    ) -> Result<UpdateComputeEnvironmentResponse, RusotoError<UpdateComputeEnvironmentError>> {
         let request_uri = "/v1/updatecomputeenvironment";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2515,27 +2463,28 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateComputeEnvironmentResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateComputeEnvironmentResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateComputeEnvironmentError::from_response(response))
-                }))
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateComputeEnvironmentError::from_response(response))
+        }
     }
 
     /// <p>Updates a job queue.</p>
-    fn update_job_queue(
+    async fn update_job_queue(
         &self,
         input: UpdateJobQueueRequest,
-    ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError> {
+    ) -> Result<UpdateJobQueueResponse, RusotoError<UpdateJobQueueError>> {
         let request_uri = "/v1/updatejobqueue";
 
         let mut request = SignedRequest::new("POST", "batch", &self.region, &request_uri);
@@ -2544,22 +2493,20 @@ impl Batch for BatchClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateJobQueueResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateJobQueueResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateJobQueueError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateJobQueueError::from_response(response))
+        }
     }
 }

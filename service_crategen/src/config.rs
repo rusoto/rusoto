@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{self, Read};
 use std::path::Path;
 
-use serde_derive::Deserialize;
+use serde::Deserialize;
 use serde_json;
 
 use crate::cargo;

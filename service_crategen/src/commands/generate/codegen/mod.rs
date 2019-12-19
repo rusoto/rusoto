@@ -98,7 +98,7 @@ pub fn generate_source(service: &Service<'_>, writer: &mut FileWriter) -> IoResu
 /// escape reserved words with an underscore
 pub fn generate_field_name(member_name: &str) -> String {
     let name = member_name.to_snake_case();
-    if name == "return" || name == "type" || name == "match" {
+    if name == "return" || name == "type" {
         name + "_"
     } else {
         name
@@ -131,16 +131,16 @@ where
         //  must be updated to generate the changes.
         //
         // =================================================================
-        #![allow(warnings)]
 
         use std::error::Error;
         use std::fmt;
-        use futures::future;
-        use futures::Future;
+
+        use async_trait::async_trait;
+        #[allow(warnings)]
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
-        use rusoto_core::{{Client, RusotoFuture, RusotoError}};
+        use rusoto_core::{{Client, RusotoError}};
     "
     )?;
 
@@ -165,6 +165,7 @@ where
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
+        #[async_trait]
         pub trait {trait_name} {{
         ",
              trait_name = service.service_type_name(),
@@ -187,35 +188,24 @@ where
             ///
             /// The client will use the default credentials provider and tls client.
             pub fn new(region: region::Region) -> {type_name} {{
-                Self::new_with_client(Client::shared(), region)
+                {type_name} {{
+                    client: Client::shared(),
+                    region
+                }}
             }}
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
                 where P: ProvideAwsCredentials + Send + Sync + 'static,
-                      P::Future: Send,
                       D: DispatchSignedRequest + Send + Sync + 'static,
-                      D::Future: Send
-            {{
-                Self::new_with_client(Client::new_with(credentials_provider, request_dispatcher), region)
-            }}
-
-            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
             {{
                 {type_name} {{
-                    client,
+                    client: Client::new_with(credentials_provider, request_dispatcher),
                     region
                 }}
             }}
         }}
 
-        impl fmt::Debug for {type_name} {{
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
-                f.debug_struct(\"{type_name}\")
-                    .field(\"region\", &self.region)
-                    .finish()
-            }}
-        }}
-
+        #[async_trait]
         impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),
@@ -293,7 +283,7 @@ fn is_streaming_shape(service: &Service<'_>, name: &str) -> bool {
         .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
-// do any type name mutation for shapes needed to avoid collisions with Rust types and Error enum types
+// do any type name mutation needed to avoid collisions with Rust types
 fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
 
@@ -313,32 +303,11 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
-        // Discovery has a BatchDeleteImportDataError struct, avoid collision with our error enum
+        // Discovery has an BatchDeleteImportDataError struct, avoid collision with our error enum
         "BatchDeleteImportDataError" => "DiscoveryBatchDeleteImportDataError".to_owned(),
 
-        // EC2 has a CreateFleetError struct, avoid collision with our error enum
+        // EC2 has an CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
-
-        // EC2 has a DeleteQueuedReservedInstancesError struct, avoid collision with our error enum
-        "DeleteQueuedReservedInstancesError" => "EC2DeleteQueuedReservedInstancesError".to_owned(),
-
-        // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
-        "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
-
-        // codecommit has a BatchGetCommitsError, avoid collision with our error enum
-        "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
-
-        // codecommit has a BatchDisassociateApprovalRuleTemplateFromRepositoriesError, avoid collision with our error enum
-        "BatchDisassociateApprovalRuleTemplateFromRepositoriesError" => "CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError".to_owned(),
-
-        // codecommit has a BatchAssociateApprovalRuleTemplateWithRepositoriesError, avoid collision with our error enum
-        "BatchAssociateApprovalRuleTemplateWithRepositoriesError" => "CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError".to_owned(),
-
-        // CloudSearch has a UpdateDomainEndpointOptionsError, avoid collision with our error enum
-        "UpdateDomainEndpointOptionsError" => "CloudSearchUpdateDomainEndpointOptionsError".to_owned(),
-
-        // Chime has a CreateAttendeeError, avoid collision with our error enum
-        "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
@@ -370,7 +339,7 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
             }
         }
     }
-    shapes_to_generate
+    return shapes_to_generate;
 }
 
 fn generate_types<P>(
@@ -487,7 +456,7 @@ where
     let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
         && !derived.iter().any(|&x| x == "Serialize")
     {
-        "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
+        "\n#[cfg_attr(test, derive(Serialize))]"
     } else {
         ""
     };

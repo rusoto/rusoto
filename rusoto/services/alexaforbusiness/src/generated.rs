@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An address book with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddressBook {
     /// <p>The ARN of the address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -43,7 +44,7 @@ pub struct AddressBook {
 
 /// <p>Information related to an address book.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddressBookData {
     /// <p>The ARN of the address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -67,7 +68,7 @@ pub struct ApproveSkillRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApproveSkillResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -81,7 +82,7 @@ pub struct AssociateContactWithAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateContactWithAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -95,7 +96,7 @@ pub struct AssociateDeviceWithNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDeviceWithNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -111,7 +112,7 @@ pub struct AssociateDeviceWithRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDeviceWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -127,7 +128,7 @@ pub struct AssociateSkillGroupWithRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSkillGroupWithRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -142,7 +143,7 @@ pub struct AssociateSkillWithSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSkillWithSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -153,7 +154,7 @@ pub struct AssociateSkillWithUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSkillWithUsersResponse {}
 
 /// <p>The audio message. There is a 1 MB limit on the audio file input and the only supported format is MP3. To convert your MP3 audio files to an Alexa-friendly, </p> <p>required codec version (MPEG version 2) and bit rate (48 kbps), you might use converter software. One option for this is a command-line tool, FFmpeg. For more information, see <a href="https://www.ffmpeg.org/">FFmpeg</a>. The following command converts the provided &lt;input-file&gt; to an MP3 file that is played in the announcement:</p> <p> <code>ffmpeg -i &lt;input-file&gt; -ac 2 -codec:a libmp3lame -b:a 48k -ar 16000 &lt;output-file.mp3&gt;</code> </p>
@@ -169,7 +170,7 @@ pub struct Audio {
 
 /// <p>Usage report with specified parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BusinessReport {
     /// <p>The time of report delivery.</p>
     #[serde(rename = "DeliveryTime")]
@@ -213,7 +214,7 @@ pub struct BusinessReportRecurrence {
 
 /// <p>The S3 location of the output reports.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BusinessReportS3Location {
     /// <p>The S3 bucket name of the output reports.</p>
     #[serde(rename = "BucketName")]
@@ -227,7 +228,7 @@ pub struct BusinessReportS3Location {
 
 /// <p>The schedule of the usage report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BusinessReportSchedule {
     /// <p>The content range of the reports.</p>
     #[serde(rename = "ContentRange")]
@@ -265,7 +266,7 @@ pub struct BusinessReportSchedule {
 
 /// <p>The skill store category that is shown. Alexa skills are assigned a specific skill category during creation, such as News, Social, and Sports.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Category {
     /// <p>The ID of the skill store category.</p>
     #[serde(rename = "CategoryId")]
@@ -288,7 +289,7 @@ pub struct ConferencePreference {
 
 /// <p>An entity that provides a conferencing solution. Alexa for Business acts as the voice interface and mediator that connects users to their preferred conference provider. Examples of conference providers include Amazon Chime, Zoom, Cisco, and Polycom. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConferenceProvider {
     /// <p>The ARN of the newly created conference provider.</p>
     #[serde(rename = "Arn")]
@@ -318,7 +319,7 @@ pub struct ConferenceProvider {
 
 /// <p>A contact with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Contact {
     /// <p>The ARN of the contact.</p>
     #[serde(rename = "ContactArn")]
@@ -336,23 +337,15 @@ pub struct Contact {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
+    /// <p>The phone number of the contact.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    /// <p>The list of phone numbers for the contact.</p>
-    #[serde(rename = "PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_numbers: Option<Vec<PhoneNumber>>,
-    /// <p>The list of SIP addresses for the contact.</p>
-    #[serde(rename = "SipAddresses")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 /// <p>Information related to a contact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContactData {
     /// <p>The ARN of the contact.</p>
     #[serde(rename = "ContactArn")]
@@ -370,18 +363,10 @@ pub struct ContactData {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
+    /// <p>The phone number of the contact.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    /// <p>The list of phone numbers for the contact.</p>
-    #[serde(rename = "PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_numbers: Option<Vec<PhoneNumber>>,
-    /// <p>The list of SIP addresses for the contact.</p>
-    #[serde(rename = "SipAddresses")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 /// <p>The content definition. This can contain only one text, SSML, or audio list object.</p>
@@ -417,7 +402,7 @@ pub struct CreateAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAddressBookResponse {
     /// <p>The ARN of the newly created address book.</p>
     #[serde(rename = "AddressBookArn")]
@@ -456,7 +441,7 @@ pub struct CreateBusinessReportScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBusinessReportScheduleResponse {
     /// <p>The ARN of the business report schedule.</p>
     #[serde(rename = "ScheduleArn")]
@@ -490,7 +475,7 @@ pub struct CreateConferenceProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateConferenceProviderResponse {
     /// <p>The ARN of the newly-created conference provider.</p>
     #[serde(rename = "ConferenceProviderArn")]
@@ -515,41 +500,19 @@ pub struct CreateContactRequest {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The phone number of the contact in E.164 format. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
+    /// <p>The phone number of the contact in E.164 format.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    /// <p>The list of phone numbers for the contact.</p>
-    #[serde(rename = "PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_numbers: Option<Vec<PhoneNumber>>,
-    /// <p>The list of SIP addresses for the contact.</p>
-    #[serde(rename = "SipAddresses")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateContactResponse {
     /// <p>The ARN of the newly created address book.</p>
     #[serde(rename = "ContactArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_arn: Option<String>,
-}
-
-/// <p>Creates settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEndOfMeetingReminder {
-    /// <p>Whether an end of meeting reminder is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    pub enabled: bool,
-    /// <p> A range of 3 to 15 minutes that determines when the reminder begins.</p>
-    #[serde(rename = "ReminderAtMinutes")]
-    pub reminder_at_minutes: Vec<i64>,
-    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
-    #[serde(rename = "ReminderType")]
-    pub reminder_type: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -567,43 +530,12 @@ pub struct CreateGatewayGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGatewayGroupResponse {
     /// <p>The ARN of the created gateway group.</p>
     #[serde(rename = "GatewayGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_group_arn: Option<String>,
-}
-
-/// <p>Creates settings for the instant booking feature that are applied to a room profile. When users start their meeting with Alexa, Alexa automatically books the room for the configured duration if the room is available.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateInstantBooking {
-    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
-    #[serde(rename = "DurationInMinutes")]
-    pub duration_in_minutes: i64,
-    /// <p>Whether instant booking is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    pub enabled: bool,
-}
-
-/// <p>Creates meeting room settings of a room profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateMeetingRoomConfiguration {
-    #[serde(rename = "EndOfMeetingReminder")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_of_meeting_reminder: Option<CreateEndOfMeetingReminder>,
-    /// <p>Settings to automatically book a room for a configured duration if it's free when joining a meeting with Alexa.</p>
-    #[serde(rename = "InstantBooking")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub instant_booking: Option<CreateInstantBooking>,
-    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into to make the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.”</p>
-    #[serde(rename = "RequireCheckIn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub require_check_in: Option<CreateRequireCheckIn>,
-    /// <p>Whether room utilization metrics are enabled or not.</p>
-    #[serde(rename = "RoomUtilizationMetricsEnabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub room_utilization_metrics_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -646,7 +578,7 @@ pub struct CreateNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNetworkProfileResponse {
     /// <p>The ARN of the network profile associated with a device.</p>
     #[serde(rename = "NetworkProfileArn")]
@@ -666,18 +598,10 @@ pub struct CreateProfileRequest {
     /// <p>The distance unit to be used by devices in the profile.</p>
     #[serde(rename = "DistanceUnit")]
     pub distance_unit: String,
-    /// <p>The locale of the room profile. (This is currently only available to a limited preview audience.)</p>
-    #[serde(rename = "Locale")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
     /// <p>The maximum volume limit for a room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
-    /// <p>The meeting room settings of a room profile.</p>
-    #[serde(rename = "MeetingRoomConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub meeting_room_configuration: Option<CreateMeetingRoomConfiguration>,
     /// <p>Whether PSTN calling is enabled.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -701,23 +625,12 @@ pub struct CreateProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProfileResponse {
     /// <p>The ARN of the newly created room profile in the response.</p>
     #[serde(rename = "ProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile_arn: Option<String>,
-}
-
-/// <p>Creates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateRequireCheckIn {
-    /// <p>Whether require check in is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    pub enabled: bool,
-    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into.</p>
-    #[serde(rename = "ReleaseAfterMinutes")]
-    pub release_after_minutes: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -748,7 +661,7 @@ pub struct CreateRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateRoomResponse {
     /// <p>The ARN of the newly created room in the response.</p>
     #[serde(rename = "RoomArn")]
@@ -772,7 +685,7 @@ pub struct CreateSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSkillGroupResponse {
     /// <p>The ARN of the newly created skill group in the response.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -808,7 +721,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The ARN of the newly created user in the response.</p>
     #[serde(rename = "UserArn")]
@@ -824,7 +737,7 @@ pub struct DeleteAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -835,7 +748,7 @@ pub struct DeleteBusinessReportScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -846,7 +759,7 @@ pub struct DeleteConferenceProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -857,7 +770,7 @@ pub struct DeleteContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -868,7 +781,7 @@ pub struct DeleteDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -882,7 +795,7 @@ pub struct DeleteDeviceUsageDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDeviceUsageDataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -893,7 +806,7 @@ pub struct DeleteGatewayGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -904,7 +817,7 @@ pub struct DeleteNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -916,7 +829,7 @@ pub struct DeleteProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -928,7 +841,7 @@ pub struct DeleteRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -946,7 +859,7 @@ pub struct DeleteRoomSkillParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -961,7 +874,7 @@ pub struct DeleteSkillAuthorizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -973,7 +886,7 @@ pub struct DeleteSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -988,12 +901,12 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserResponse {}
 
 /// <p>The details about the developer that published the skill.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeveloperInfo {
     /// <p>The name of the developer.</p>
     #[serde(rename = "DeveloperName")]
@@ -1015,7 +928,7 @@ pub struct DeveloperInfo {
 
 /// <p>A device with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Device {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -1061,7 +974,7 @@ pub struct Device {
 
 /// <p>Device attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceData {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
@@ -1115,7 +1028,7 @@ pub struct DeviceData {
 
 /// <p>The list of device events.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceEvent {
     /// <p>The time (in epoch) when the event occurred. </p>
     #[serde(rename = "Timestamp")]
@@ -1133,7 +1046,7 @@ pub struct DeviceEvent {
 
 /// <p>Detailed information about a device's network profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceNetworkProfileInfo {
     /// <p>The ARN of the certificate associated with a device.</p>
     #[serde(rename = "CertificateArn")]
@@ -1151,7 +1064,7 @@ pub struct DeviceNetworkProfileInfo {
 
 /// <p>Details of a device’s status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceStatusDetail {
     /// <p>The device status detail code.</p>
     #[serde(rename = "Code")]
@@ -1165,7 +1078,7 @@ pub struct DeviceStatusDetail {
 
 /// <p>Detailed information about a device's status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceStatusInfo {
     /// <p>The latest available information about the connection status of a device. </p>
     #[serde(rename = "ConnectionStatus")]
@@ -1188,7 +1101,7 @@ pub struct DisassociateContactFromAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateContactFromAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1200,7 +1113,7 @@ pub struct DisassociateDeviceFromRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateDeviceFromRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1215,7 +1128,7 @@ pub struct DisassociateSkillFromSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateSkillFromSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1226,7 +1139,7 @@ pub struct DisassociateSkillFromUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateSkillFromUsersResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1242,26 +1155,8 @@ pub struct DisassociateSkillGroupFromRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateSkillGroupFromRoomResponse {}
-
-/// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct EndOfMeetingReminder {
-    /// <p>Whether an end of meeting reminder is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>A range of 3 to 15 minutes that determines when the reminder begins.</p>
-    #[serde(rename = "ReminderAtMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reminder_at_minutes: Option<Vec<i64>>,
-    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
-    #[serde(rename = "ReminderType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reminder_type: Option<String>,
-}
 
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1282,12 +1177,12 @@ pub struct ForgetSmartHomeAppliancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ForgetSmartHomeAppliancesResponse {}
 
 /// <p>The details of the gateway. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Gateway {
     /// <p>The ARN of the gateway.</p>
     #[serde(rename = "Arn")]
@@ -1313,7 +1208,7 @@ pub struct Gateway {
 
 /// <p>The details of the gateway group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GatewayGroup {
     /// <p>The ARN of the gateway group.</p>
     #[serde(rename = "Arn")]
@@ -1331,7 +1226,7 @@ pub struct GatewayGroup {
 
 /// <p>The summary of a gateway group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GatewayGroupSummary {
     /// <p>The ARN of the gateway group.</p>
     #[serde(rename = "Arn")]
@@ -1349,7 +1244,7 @@ pub struct GatewayGroupSummary {
 
 /// <p>The summary of a gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GatewaySummary {
     /// <p>The ARN of the gateway.</p>
     #[serde(rename = "Arn")]
@@ -1381,7 +1276,7 @@ pub struct GetAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAddressBookResponse {
     /// <p>The details of the requested address book.</p>
     #[serde(rename = "AddressBook")]
@@ -1393,7 +1288,7 @@ pub struct GetAddressBookResponse {
 pub struct GetConferencePreferenceRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConferencePreferenceResponse {
     /// <p>The conference preference.</p>
     #[serde(rename = "Preference")]
@@ -1409,7 +1304,7 @@ pub struct GetConferenceProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConferenceProviderResponse {
     /// <p>The conference provider.</p>
     #[serde(rename = "ConferenceProvider")]
@@ -1425,7 +1320,7 @@ pub struct GetContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetContactResponse {
     /// <p>The details of the requested contact.</p>
     #[serde(rename = "Contact")]
@@ -1442,7 +1337,7 @@ pub struct GetDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceResponse {
     /// <p>The details of the device requested. Required.</p>
     #[serde(rename = "Device")]
@@ -1458,7 +1353,7 @@ pub struct GetGatewayGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGatewayGroupResponse {
     #[serde(rename = "GatewayGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1473,7 +1368,7 @@ pub struct GetGatewayRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGatewayResponse {
     /// <p>The details of the gateway.</p>
     #[serde(rename = "Gateway")]
@@ -1485,7 +1380,7 @@ pub struct GetGatewayResponse {
 pub struct GetInvitationConfigurationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInvitationConfigurationResponse {
     /// <p>The email ID of the organization or individual contact that the enrolled user can use. </p>
     #[serde(rename = "ContactEmail")]
@@ -1509,7 +1404,7 @@ pub struct GetNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetNetworkProfileResponse {
     /// <p>The network profile associated with a device.</p>
     #[serde(rename = "NetworkProfile")]
@@ -1526,7 +1421,7 @@ pub struct GetProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetProfileResponse {
     /// <p>The details of the room profile requested. Required.</p>
     #[serde(rename = "Profile")]
@@ -1543,7 +1438,7 @@ pub struct GetRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRoomResponse {
     /// <p>The details of the room requested.</p>
     #[serde(rename = "Room")]
@@ -1566,7 +1461,7 @@ pub struct GetRoomSkillParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRoomSkillParameterResponse {
     /// <p>The details of the room skill parameter requested. Required.</p>
     #[serde(rename = "RoomSkillParameter")]
@@ -1583,7 +1478,7 @@ pub struct GetSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSkillGroupResponse {
     /// <p>The details of the skill group requested. Required.</p>
     #[serde(rename = "SkillGroup")]
@@ -1602,20 +1497,6 @@ pub struct IPDialIn {
     pub endpoint: String,
 }
 
-/// <p>Settings for the instant booking feature that are applied to a room profile. When users start their meeting with Alexa, Alexa automatically books the room for the configured duration if the room is available.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct InstantBooking {
-    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa. </p>
-    #[serde(rename = "DurationInMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_in_minutes: Option<i64>,
-    /// <p>Whether instant booking is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBusinessReportSchedulesRequest {
     /// <p>The maximum number of schedules listed in the call.</p>
@@ -1629,7 +1510,7 @@ pub struct ListBusinessReportSchedulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListBusinessReportSchedulesResponse {
     /// <p>The schedule of the reports.</p>
     #[serde(rename = "BusinessReportSchedules")]
@@ -1654,7 +1535,7 @@ pub struct ListConferenceProvidersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListConferenceProvidersResponse {
     /// <p>The conference providers.</p>
     #[serde(rename = "ConferenceProviders")]
@@ -1686,7 +1567,7 @@ pub struct ListDeviceEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeviceEventsResponse {
     /// <p>The device events requested for the device ARN.</p>
     #[serde(rename = "DeviceEvents")]
@@ -1711,7 +1592,7 @@ pub struct ListGatewayGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGatewayGroupsResponse {
     /// <p>The gateway groups in the list.</p>
     #[serde(rename = "GatewayGroups")]
@@ -1740,7 +1621,7 @@ pub struct ListGatewaysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGatewaysResponse {
     /// <p>The gateways in the list.</p>
     #[serde(rename = "Gateways")]
@@ -1754,19 +1635,19 @@ pub struct ListGatewaysResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
-    /// <p>Whether the skill is enabled under the user's account.</p>
+    /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
     #[serde(rename = "EnablementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enablement_type: Option<String>,
-    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the skill group for which to list enabled skills.</p>
+    /// <p>The ARN of the skill group for which to list enabled skills. Required.</p>
     #[serde(rename = "SkillGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skill_group_arn: Option<String>,
@@ -1777,7 +1658,7 @@ pub struct ListSkillsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSkillsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1802,7 +1683,7 @@ pub struct ListSkillsStoreCategoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSkillsStoreCategoriesResponse {
     /// <p>The list of categories.</p>
     #[serde(rename = "CategoryList")]
@@ -1830,7 +1711,7 @@ pub struct ListSkillsStoreSkillsByCategoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSkillsStoreSkillsByCategoryResponse {
     /// <p>The tokens used for pagination.</p>
     #[serde(rename = "NextToken")]
@@ -1858,7 +1739,7 @@ pub struct ListSmartHomeAppliancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSmartHomeAppliancesResponse {
     /// <p>The tokens used for pagination.</p>
     #[serde(rename = "NextToken")]
@@ -1886,7 +1767,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -1896,28 +1777,6 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-}
-
-/// <p>Meeting room settings of a room profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct MeetingRoomConfiguration {
-    /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
-    #[serde(rename = "EndOfMeetingReminder")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_of_meeting_reminder: Option<EndOfMeetingReminder>,
-    /// <p>Settings to automatically book the room if available for a configured duration when joining a meeting with Alexa. </p>
-    #[serde(rename = "InstantBooking")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub instant_booking: Option<InstantBooking>,
-    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into. This makes the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.” </p>
-    #[serde(rename = "RequireCheckIn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub require_check_in: Option<RequireCheckIn>,
-    /// <p>Whether room utilization metrics are enabled or not.</p>
-    #[serde(rename = "RoomUtilizationMetricsEnabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub room_utilization_metrics_enabled: Option<bool>,
 }
 
 /// <p><p>The values that indicate whether a pin is always required (YES), never required (NO), or OPTIONAL.</p> <ul> <li> <p>If YES, Alexa will always ask for a meeting pin.</p> </li> <li> <p>If NO, Alexa will never ask for a meeting pin.</p> </li> <li> <p>If OPTIONAL, Alexa will ask if you have a meeting pin and if the customer responds with yes, it will ask for the meeting pin.</p> </li> </ul></p>
@@ -1930,7 +1789,7 @@ pub struct MeetingSetting {
 
 /// <p>The network profile associated with a device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkProfile {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -1976,7 +1835,7 @@ pub struct NetworkProfile {
 
 /// <p>The data associated with a network profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkProfileData {
     /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices.</p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -2025,20 +1884,9 @@ pub struct PSTNDialIn {
     pub phone_number: String,
 }
 
-/// <p>The phone number for the contact containing the raw number and phone number type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct PhoneNumber {
-    /// <p>The raw value of the phone number.</p>
-    #[serde(rename = "Number")]
-    pub number: String,
-    /// <p>The type of the phone number.</p>
-    #[serde(rename = "Type")]
-    pub type_: String,
-}
-
 /// <p>A room profile with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Profile {
     /// <p>The address of a room profile.</p>
     #[serde(rename = "Address")]
@@ -2056,18 +1904,10 @@ pub struct Profile {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The locale of a room profile. (This is currently available only to a limited preview audience.)</p>
-    #[serde(rename = "Locale")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
     /// <p>The max volume limit of a room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
-    /// <p>Meeting room settings of a room profile.</p>
-    #[serde(rename = "MeetingRoomConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub meeting_room_configuration: Option<MeetingRoomConfiguration>,
     /// <p>The PSTN setting of a room profile.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2100,7 +1940,7 @@ pub struct Profile {
 
 /// <p>The data of a room profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProfileData {
     /// <p>The address of a room profile.</p>
     #[serde(rename = "Address")]
@@ -2114,10 +1954,6 @@ pub struct ProfileData {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The locale of a room profile. (This is currently available only to a limited preview audience.)</p>
-    #[serde(rename = "Locale")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
     /// <p>The ARN of a room profile.</p>
     #[serde(rename = "ProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2130,7 +1966,7 @@ pub struct ProfileData {
     #[serde(rename = "TemperatureUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature_unit: Option<String>,
-    /// <p>The time zone of a room profile.</p>
+    /// <p>The timezone of a room profile.</p>
     #[serde(rename = "Timezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
@@ -2148,7 +1984,7 @@ pub struct PutConferencePreferenceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutConferencePreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2167,7 +2003,7 @@ pub struct PutInvitationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutInvitationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2185,7 +2021,7 @@ pub struct PutRoomSkillParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2203,7 +2039,7 @@ pub struct PutSkillAuthorizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutSkillAuthorizationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2226,7 +2062,7 @@ pub struct RegisterAVSDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterAVSDeviceResponse {
     /// <p>The ARN of the device.</p>
     #[serde(rename = "DeviceArn")]
@@ -2242,22 +2078,8 @@ pub struct RejectSkillRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RejectSkillResponse {}
-
-/// <p>Settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct RequireCheckIn {
-    /// <p>Whether require check in is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into. </p>
-    #[serde(rename = "ReleaseAfterMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub release_after_minutes: Option<i64>,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResolveRoomRequest {
@@ -2270,7 +2092,7 @@ pub struct ResolveRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResolveRoomResponse {
     /// <p>The ARN of the room from which the skill request was invoked.</p>
     #[serde(rename = "RoomArn")]
@@ -2299,12 +2121,12 @@ pub struct RevokeInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RevokeInvitationResponse {}
 
 /// <p>A room with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Room {
     /// <p>The description of a room.</p>
     #[serde(rename = "Description")]
@@ -2330,7 +2152,7 @@ pub struct Room {
 
 /// <p>The data of a room.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RoomData {
     /// <p>The description of a room.</p>
     #[serde(rename = "Description")]
@@ -2390,7 +2212,7 @@ pub struct SearchAddressBooksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchAddressBooksResponse {
     /// <p>The address books that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "AddressBooks")]
@@ -2427,7 +2249,7 @@ pub struct SearchContactsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchContactsResponse {
     /// <p>The contacts that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "Contacts")]
@@ -2464,7 +2286,7 @@ pub struct SearchDevicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchDevicesResponse {
     /// <p>The devices that meet the specified set of filter criteria, in sort order.</p>
     #[serde(rename = "Devices")]
@@ -2501,7 +2323,7 @@ pub struct SearchNetworkProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchNetworkProfilesResponse {
     /// <p>The network profiles that meet the specified set of filter criteria, in sort order. It is a list of NetworkProfileData objects. </p>
     #[serde(rename = "NetworkProfiles")]
@@ -2538,7 +2360,7 @@ pub struct SearchProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchProfilesResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -2575,7 +2397,7 @@ pub struct SearchRoomsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchRoomsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -2612,7 +2434,7 @@ pub struct SearchSkillGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchSkillGroupsResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -2649,7 +2471,7 @@ pub struct SearchUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchUsersResponse {
     /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
@@ -2683,7 +2505,7 @@ pub struct SendAnnouncementRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SendAnnouncementResponse {
     /// <p>The identifier of the announcement.</p>
     #[serde(rename = "AnnouncementArn")]
@@ -2700,23 +2522,12 @@ pub struct SendInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SendInvitationResponse {}
-
-/// <p>The SIP address for the contact containing the URI and SIP address type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SipAddress {
-    /// <p>The type of the SIP address.</p>
-    #[serde(rename = "Type")]
-    pub type_: String,
-    /// <p>The URI for the SIP address.</p>
-    #[serde(rename = "Uri")]
-    pub uri: String,
-}
 
 /// <p>Granular information about the skill.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SkillDetails {
     /// <p>The details about what the skill supports organized as bullet points.</p>
     #[serde(rename = "BulletPoints")]
@@ -2762,7 +2573,7 @@ pub struct SkillDetails {
 
 /// <p>A skill group with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SkillGroup {
     /// <p>The description of a skill group.</p>
     #[serde(rename = "Description")]
@@ -2780,7 +2591,7 @@ pub struct SkillGroup {
 
 /// <p>The attributes of a skill group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SkillGroupData {
     /// <p>The description of a skill group.</p>
     #[serde(rename = "Description")]
@@ -2798,7 +2609,7 @@ pub struct SkillGroupData {
 
 /// <p>The summary of skills.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SkillSummary {
     /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
     #[serde(rename = "EnablementType")]
@@ -2824,7 +2635,7 @@ pub struct SkillSummary {
 
 /// <p>The detailed information about an Alexa skill.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SkillsStoreSkill {
     /// <p>The URL where the skill icon resides.</p>
     #[serde(rename = "IconUrl")]
@@ -2858,7 +2669,7 @@ pub struct SkillsStoreSkill {
 
 /// <p>A smart home appliance that can connect to a central system. Any domestic device can be a smart appliance. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SmartHomeAppliance {
     /// <p>The description of the smart home appliance.</p>
     #[serde(rename = "Description")]
@@ -2912,7 +2723,7 @@ pub struct StartDeviceSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartDeviceSyncResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2923,7 +2734,7 @@ pub struct StartSmartHomeApplianceDiscoveryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartSmartHomeApplianceDiscoveryResponse {}
 
 /// <p>A key-value pair that can be associated with a resource. </p>
@@ -2932,7 +2743,7 @@ pub struct Tag {
     /// <p>The key of a tag. Tag keys are case-sensitive. </p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>The value of a tag. Tag values are case sensitive and can be null.</p>
+    /// <p>The value of a tag. Tag values are case-sensitive and can be null.</p>
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -2948,7 +2759,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>The text message.</p>
@@ -2973,7 +2784,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2992,7 +2803,7 @@ pub struct UpdateAddressBookRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3023,7 +2834,7 @@ pub struct UpdateBusinessReportScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBusinessReportScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3048,7 +2859,7 @@ pub struct UpdateConferenceProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3068,22 +2879,14 @@ pub struct UpdateContactRequest {
     #[serde(rename = "LastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    /// <p>The updated phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>
+    /// <p>The updated phone number of the contact.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    /// <p>The list of phone numbers for the contact.</p>
-    #[serde(rename = "PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub phone_numbers: Option<Vec<PhoneNumber>>,
-    /// <p>The list of SIP addresses for the contact.</p>
-    #[serde(rename = "SipAddresses")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub sip_addresses: Option<Vec<SipAddress>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3099,25 +2902,8 @@ pub struct UpdateDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDeviceResponse {}
-
-/// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateEndOfMeetingReminder {
-    /// <p>Whether an end of meeting reminder is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>Updates settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
-    #[serde(rename = "ReminderAtMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reminder_at_minutes: Option<Vec<i64>>,
-    /// <p>The type of sound that users hear during the end of meeting reminder. </p>
-    #[serde(rename = "ReminderType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reminder_type: Option<String>,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewayGroupRequest {
@@ -3135,7 +2921,7 @@ pub struct UpdateGatewayGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGatewayGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3158,42 +2944,8 @@ pub struct UpdateGatewayRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGatewayResponse {}
-
-/// <p>Updates settings for the instant booking feature that are applied to a room profile. If instant booking is enabled, Alexa automatically reserves a room if it is free when a user joins a meeting with Alexa.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateInstantBooking {
-    /// <p>Duration between 15 and 240 minutes at increments of 15 that determines how long to book an available room when a meeting is started with Alexa.</p>
-    #[serde(rename = "DurationInMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration_in_minutes: Option<i64>,
-    /// <p>Whether instant booking is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-}
-
-/// <p>Updates meeting room settings of a room profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateMeetingRoomConfiguration {
-    /// <p>Settings for the end of meeting reminder feature that are applied to a room profile. The end of meeting reminder enables Alexa to remind users when a meeting is ending. </p>
-    #[serde(rename = "EndOfMeetingReminder")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_of_meeting_reminder: Option<UpdateEndOfMeetingReminder>,
-    /// <p>Settings to automatically book an available room available for a configured duration when joining a meeting with Alexa.</p>
-    #[serde(rename = "InstantBooking")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub instant_booking: Option<UpdateInstantBooking>,
-    /// <p>Settings for requiring a check in when a room is reserved. Alexa can cancel a room reservation if it's not checked into to make the room available for others. Users can check in by joining the meeting with Alexa or an AVS device, or by saying “Alexa, check in.” </p>
-    #[serde(rename = "RequireCheckIn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub require_check_in: Option<UpdateRequireCheckIn>,
-    /// <p>Whether room utilization metrics are enabled or not.</p>
-    #[serde(rename = "RoomUtilizationMetricsEnabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub room_utilization_metrics_enabled: Option<bool>,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNetworkProfileRequest {
@@ -3227,7 +2979,7 @@ pub struct UpdateNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNetworkProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3244,18 +2996,10 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "IsDefault")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
-    /// <p>The updated locale for the room profile. (This is currently only available to a limited preview audience.)</p>
-    #[serde(rename = "Locale")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
     /// <p>The updated maximum volume limit for the room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_volume_limit: Option<i64>,
-    /// <p>The updated meeting room settings of a room profile.</p>
-    #[serde(rename = "MeetingRoomConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub meeting_room_configuration: Option<UpdateMeetingRoomConfiguration>,
     /// <p>Whether the PSTN setting of the room profile is enabled.</p>
     #[serde(rename = "PSTNEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3287,21 +3031,8 @@ pub struct UpdateProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProfileResponse {}
-
-/// <p>Updates settings for the require check in feature that are applied to a room profile. Require check in allows a meeting room’s Alexa or AVS device to prompt the user to check in; otherwise, the room will be released. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateRequireCheckIn {
-    /// <p>Whether require check in is enabled or not.</p>
-    #[serde(rename = "Enabled")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    /// <p>Duration between 5 and 20 minutes to determine when to release the room if it's not checked into. </p>
-    #[serde(rename = "ReleaseAfterMinutes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub release_after_minutes: Option<i64>,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoomRequest {
@@ -3328,7 +3059,7 @@ pub struct UpdateRoomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3348,12 +3079,12 @@ pub struct UpdateSkillGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSkillGroupResponse {}
 
 /// <p>Information related to a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserData {
     /// <p>The email of a user.</p>
     #[serde(rename = "Email")]
@@ -6867,562 +6598,584 @@ impl Error for UpdateSkillGroupError {
     }
 }
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
+#[async_trait]
 pub trait AlexaForBusiness {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
-    fn approve_skill(
+    async fn approve_skill(
         &self,
         input: ApproveSkillRequest,
-    ) -> RusotoFuture<ApproveSkillResponse, ApproveSkillError>;
+    ) -> Result<ApproveSkillResponse, RusotoError<ApproveSkillError>>;
 
     /// <p>Associates a contact with a given address book.</p>
-    fn associate_contact_with_address_book(
+    async fn associate_contact_with_address_book(
         &self,
         input: AssociateContactWithAddressBookRequest,
-    ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>;
+    ) -> Result<
+        AssociateContactWithAddressBookResponse,
+        RusotoError<AssociateContactWithAddressBookError>,
+    >;
 
     /// <p>Associates a device with the specified network profile.</p>
-    fn associate_device_with_network_profile(
+    async fn associate_device_with_network_profile(
         &self,
         input: AssociateDeviceWithNetworkProfileRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateDeviceWithNetworkProfileResponse,
-        AssociateDeviceWithNetworkProfileError,
+        RusotoError<AssociateDeviceWithNetworkProfileError>,
     >;
 
     /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
-    fn associate_device_with_room(
+    async fn associate_device_with_room(
         &self,
         input: AssociateDeviceWithRoomRequest,
-    ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError>;
+    ) -> Result<AssociateDeviceWithRoomResponse, RusotoError<AssociateDeviceWithRoomError>>;
 
     /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
-    fn associate_skill_group_with_room(
+    async fn associate_skill_group_with_room(
         &self,
         input: AssociateSkillGroupWithRoomRequest,
-    ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError>;
+    ) -> Result<AssociateSkillGroupWithRoomResponse, RusotoError<AssociateSkillGroupWithRoomError>>;
 
     /// <p>Associates a skill with a skill group.</p>
-    fn associate_skill_with_skill_group(
+    async fn associate_skill_with_skill_group(
         &self,
         input: AssociateSkillWithSkillGroupRequest,
-    ) -> RusotoFuture<AssociateSkillWithSkillGroupResponse, AssociateSkillWithSkillGroupError>;
+    ) -> Result<AssociateSkillWithSkillGroupResponse, RusotoError<AssociateSkillWithSkillGroupError>>;
 
     /// <p>Makes a private skill available for enrolled users to enable on their devices.</p>
-    fn associate_skill_with_users(
+    async fn associate_skill_with_users(
         &self,
         input: AssociateSkillWithUsersRequest,
-    ) -> RusotoFuture<AssociateSkillWithUsersResponse, AssociateSkillWithUsersError>;
+    ) -> Result<AssociateSkillWithUsersResponse, RusotoError<AssociateSkillWithUsersError>>;
 
     /// <p>Creates an address book with the specified details.</p>
-    fn create_address_book(
+    async fn create_address_book(
         &self,
         input: CreateAddressBookRequest,
-    ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError>;
+    ) -> Result<CreateAddressBookResponse, RusotoError<CreateAddressBookError>>;
 
     /// <p>Creates a recurring schedule for usage reports to deliver to the specified S3 location with a specified daily or weekly interval.</p>
-    fn create_business_report_schedule(
+    async fn create_business_report_schedule(
         &self,
         input: CreateBusinessReportScheduleRequest,
-    ) -> RusotoFuture<CreateBusinessReportScheduleResponse, CreateBusinessReportScheduleError>;
+    ) -> Result<CreateBusinessReportScheduleResponse, RusotoError<CreateBusinessReportScheduleError>>;
 
     /// <p>Adds a new conference provider under the user's AWS account.</p>
-    fn create_conference_provider(
+    async fn create_conference_provider(
         &self,
         input: CreateConferenceProviderRequest,
-    ) -> RusotoFuture<CreateConferenceProviderResponse, CreateConferenceProviderError>;
+    ) -> Result<CreateConferenceProviderResponse, RusotoError<CreateConferenceProviderError>>;
 
     /// <p>Creates a contact with the specified details.</p>
-    fn create_contact(
+    async fn create_contact(
         &self,
         input: CreateContactRequest,
-    ) -> RusotoFuture<CreateContactResponse, CreateContactError>;
+    ) -> Result<CreateContactResponse, RusotoError<CreateContactError>>;
 
     /// <p>Creates a gateway group with the specified details.</p>
-    fn create_gateway_group(
+    async fn create_gateway_group(
         &self,
         input: CreateGatewayGroupRequest,
-    ) -> RusotoFuture<CreateGatewayGroupResponse, CreateGatewayGroupError>;
+    ) -> Result<CreateGatewayGroupResponse, RusotoError<CreateGatewayGroupError>>;
 
     /// <p>Creates a network profile with the specified details.</p>
-    fn create_network_profile(
+    async fn create_network_profile(
         &self,
         input: CreateNetworkProfileRequest,
-    ) -> RusotoFuture<CreateNetworkProfileResponse, CreateNetworkProfileError>;
+    ) -> Result<CreateNetworkProfileResponse, RusotoError<CreateNetworkProfileError>>;
 
     /// <p>Creates a new room profile with the specified details.</p>
-    fn create_profile(
+    async fn create_profile(
         &self,
         input: CreateProfileRequest,
-    ) -> RusotoFuture<CreateProfileResponse, CreateProfileError>;
+    ) -> Result<CreateProfileResponse, RusotoError<CreateProfileError>>;
 
     /// <p>Creates a room with the specified details.</p>
-    fn create_room(
+    async fn create_room(
         &self,
         input: CreateRoomRequest,
-    ) -> RusotoFuture<CreateRoomResponse, CreateRoomError>;
+    ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>>;
 
     /// <p>Creates a skill group with a specified name and description.</p>
-    fn create_skill_group(
+    async fn create_skill_group(
         &self,
         input: CreateSkillGroupRequest,
-    ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError>;
+    ) -> Result<CreateSkillGroupResponse, RusotoError<CreateSkillGroupError>>;
 
     /// <p>Creates a user.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
     /// <p>Deletes an address book by the address book ARN.</p>
-    fn delete_address_book(
+    async fn delete_address_book(
         &self,
         input: DeleteAddressBookRequest,
-    ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError>;
+    ) -> Result<DeleteAddressBookResponse, RusotoError<DeleteAddressBookError>>;
 
     /// <p>Deletes the recurring report delivery schedule with the specified schedule ARN.</p>
-    fn delete_business_report_schedule(
+    async fn delete_business_report_schedule(
         &self,
         input: DeleteBusinessReportScheduleRequest,
-    ) -> RusotoFuture<DeleteBusinessReportScheduleResponse, DeleteBusinessReportScheduleError>;
+    ) -> Result<DeleteBusinessReportScheduleResponse, RusotoError<DeleteBusinessReportScheduleError>>;
 
     /// <p>Deletes a conference provider.</p>
-    fn delete_conference_provider(
+    async fn delete_conference_provider(
         &self,
         input: DeleteConferenceProviderRequest,
-    ) -> RusotoFuture<DeleteConferenceProviderResponse, DeleteConferenceProviderError>;
+    ) -> Result<DeleteConferenceProviderResponse, RusotoError<DeleteConferenceProviderError>>;
 
     /// <p>Deletes a contact by the contact ARN.</p>
-    fn delete_contact(
+    async fn delete_contact(
         &self,
         input: DeleteContactRequest,
-    ) -> RusotoFuture<DeleteContactResponse, DeleteContactError>;
+    ) -> Result<DeleteContactResponse, RusotoError<DeleteContactError>>;
 
     /// <p>Removes a device from Alexa For Business.</p>
-    fn delete_device(
+    async fn delete_device(
         &self,
         input: DeleteDeviceRequest,
-    ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError>;
+    ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>>;
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p>
-    fn delete_device_usage_data(
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    async fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,
-    ) -> RusotoFuture<DeleteDeviceUsageDataResponse, DeleteDeviceUsageDataError>;
+    ) -> Result<DeleteDeviceUsageDataResponse, RusotoError<DeleteDeviceUsageDataError>>;
 
     /// <p>Deletes a gateway group.</p>
-    fn delete_gateway_group(
+    async fn delete_gateway_group(
         &self,
         input: DeleteGatewayGroupRequest,
-    ) -> RusotoFuture<DeleteGatewayGroupResponse, DeleteGatewayGroupError>;
+    ) -> Result<DeleteGatewayGroupResponse, RusotoError<DeleteGatewayGroupError>>;
 
     /// <p>Deletes a network profile by the network profile ARN.</p>
-    fn delete_network_profile(
+    async fn delete_network_profile(
         &self,
         input: DeleteNetworkProfileRequest,
-    ) -> RusotoFuture<DeleteNetworkProfileResponse, DeleteNetworkProfileError>;
+    ) -> Result<DeleteNetworkProfileResponse, RusotoError<DeleteNetworkProfileError>>;
 
     /// <p>Deletes a room profile by the profile ARN.</p>
-    fn delete_profile(
+    async fn delete_profile(
         &self,
         input: DeleteProfileRequest,
-    ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError>;
+    ) -> Result<DeleteProfileResponse, RusotoError<DeleteProfileError>>;
 
     /// <p>Deletes a room by the room ARN.</p>
-    fn delete_room(
+    async fn delete_room(
         &self,
         input: DeleteRoomRequest,
-    ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError>;
+    ) -> Result<DeleteRoomResponse, RusotoError<DeleteRoomError>>;
 
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
-    fn delete_room_skill_parameter(
+    async fn delete_room_skill_parameter(
         &self,
         input: DeleteRoomSkillParameterRequest,
-    ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError>;
+    ) -> Result<DeleteRoomSkillParameterResponse, RusotoError<DeleteRoomSkillParameterError>>;
 
     /// <p>Unlinks a third-party account from a skill.</p>
-    fn delete_skill_authorization(
+    async fn delete_skill_authorization(
         &self,
         input: DeleteSkillAuthorizationRequest,
-    ) -> RusotoFuture<DeleteSkillAuthorizationResponse, DeleteSkillAuthorizationError>;
+    ) -> Result<DeleteSkillAuthorizationResponse, RusotoError<DeleteSkillAuthorizationError>>;
 
     /// <p>Deletes a skill group by skill group ARN.</p>
-    fn delete_skill_group(
+    async fn delete_skill_group(
         &self,
         input: DeleteSkillGroupRequest,
-    ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError>;
+    ) -> Result<DeleteSkillGroupResponse, RusotoError<DeleteSkillGroupError>>;
 
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>>;
 
     /// <p>Disassociates a contact from a given address book.</p>
-    fn disassociate_contact_from_address_book(
+    async fn disassociate_contact_from_address_book(
         &self,
         input: DisassociateContactFromAddressBookRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateContactFromAddressBookResponse,
-        DisassociateContactFromAddressBookError,
+        RusotoError<DisassociateContactFromAddressBookError>,
     >;
 
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
-    fn disassociate_device_from_room(
+    async fn disassociate_device_from_room(
         &self,
         input: DisassociateDeviceFromRoomRequest,
-    ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError>;
+    ) -> Result<DisassociateDeviceFromRoomResponse, RusotoError<DisassociateDeviceFromRoomError>>;
 
     /// <p>Disassociates a skill from a skill group.</p>
-    fn disassociate_skill_from_skill_group(
+    async fn disassociate_skill_from_skill_group(
         &self,
         input: DisassociateSkillFromSkillGroupRequest,
-    ) -> RusotoFuture<DisassociateSkillFromSkillGroupResponse, DisassociateSkillFromSkillGroupError>;
+    ) -> Result<
+        DisassociateSkillFromSkillGroupResponse,
+        RusotoError<DisassociateSkillFromSkillGroupError>,
+    >;
 
     /// <p>Makes a private skill unavailable for enrolled users and prevents them from enabling it on their devices.</p>
-    fn disassociate_skill_from_users(
+    async fn disassociate_skill_from_users(
         &self,
         input: DisassociateSkillFromUsersRequest,
-    ) -> RusotoFuture<DisassociateSkillFromUsersResponse, DisassociateSkillFromUsersError>;
+    ) -> Result<DisassociateSkillFromUsersResponse, RusotoError<DisassociateSkillFromUsersError>>;
 
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
-    fn disassociate_skill_group_from_room(
+    async fn disassociate_skill_group_from_room(
         &self,
         input: DisassociateSkillGroupFromRoomRequest,
-    ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>;
+    ) -> Result<
+        DisassociateSkillGroupFromRoomResponse,
+        RusotoError<DisassociateSkillGroupFromRoomError>,
+    >;
 
     /// <p>Forgets smart home appliances associated to a room.</p>
-    fn forget_smart_home_appliances(
+    async fn forget_smart_home_appliances(
         &self,
         input: ForgetSmartHomeAppliancesRequest,
-    ) -> RusotoFuture<ForgetSmartHomeAppliancesResponse, ForgetSmartHomeAppliancesError>;
+    ) -> Result<ForgetSmartHomeAppliancesResponse, RusotoError<ForgetSmartHomeAppliancesError>>;
 
     /// <p>Gets address the book details by the address book ARN.</p>
-    fn get_address_book(
+    async fn get_address_book(
         &self,
         input: GetAddressBookRequest,
-    ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError>;
+    ) -> Result<GetAddressBookResponse, RusotoError<GetAddressBookError>>;
 
     /// <p>Retrieves the existing conference preferences.</p>
-    fn get_conference_preference(
+    async fn get_conference_preference(
         &self,
-    ) -> RusotoFuture<GetConferencePreferenceResponse, GetConferencePreferenceError>;
+    ) -> Result<GetConferencePreferenceResponse, RusotoError<GetConferencePreferenceError>>;
 
     /// <p>Gets details about a specific conference provider.</p>
-    fn get_conference_provider(
+    async fn get_conference_provider(
         &self,
         input: GetConferenceProviderRequest,
-    ) -> RusotoFuture<GetConferenceProviderResponse, GetConferenceProviderError>;
+    ) -> Result<GetConferenceProviderResponse, RusotoError<GetConferenceProviderError>>;
 
     /// <p>Gets the contact details by the contact ARN.</p>
-    fn get_contact(
+    async fn get_contact(
         &self,
         input: GetContactRequest,
-    ) -> RusotoFuture<GetContactResponse, GetContactError>;
+    ) -> Result<GetContactResponse, RusotoError<GetContactError>>;
 
     /// <p>Gets the details of a device by device ARN.</p>
-    fn get_device(
+    async fn get_device(
         &self,
         input: GetDeviceRequest,
-    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
+    ) -> Result<GetDeviceResponse, RusotoError<GetDeviceError>>;
 
     /// <p>Retrieves the details of a gateway.</p>
-    fn get_gateway(
+    async fn get_gateway(
         &self,
         input: GetGatewayRequest,
-    ) -> RusotoFuture<GetGatewayResponse, GetGatewayError>;
+    ) -> Result<GetGatewayResponse, RusotoError<GetGatewayError>>;
 
     /// <p>Retrieves the details of a gateway group.</p>
-    fn get_gateway_group(
+    async fn get_gateway_group(
         &self,
         input: GetGatewayGroupRequest,
-    ) -> RusotoFuture<GetGatewayGroupResponse, GetGatewayGroupError>;
+    ) -> Result<GetGatewayGroupResponse, RusotoError<GetGatewayGroupError>>;
 
     /// <p>Retrieves the configured values for the user enrollment invitation email template.</p>
-    fn get_invitation_configuration(
+    async fn get_invitation_configuration(
         &self,
-    ) -> RusotoFuture<GetInvitationConfigurationResponse, GetInvitationConfigurationError>;
+    ) -> Result<GetInvitationConfigurationResponse, RusotoError<GetInvitationConfigurationError>>;
 
     /// <p>Gets the network profile details by the network profile ARN.</p>
-    fn get_network_profile(
+    async fn get_network_profile(
         &self,
         input: GetNetworkProfileRequest,
-    ) -> RusotoFuture<GetNetworkProfileResponse, GetNetworkProfileError>;
+    ) -> Result<GetNetworkProfileResponse, RusotoError<GetNetworkProfileError>>;
 
     /// <p>Gets the details of a room profile by profile ARN.</p>
-    fn get_profile(
+    async fn get_profile(
         &self,
         input: GetProfileRequest,
-    ) -> RusotoFuture<GetProfileResponse, GetProfileError>;
+    ) -> Result<GetProfileResponse, RusotoError<GetProfileError>>;
 
     /// <p>Gets room details by room ARN.</p>
-    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError>;
+    async fn get_room(
+        &self,
+        input: GetRoomRequest,
+    ) -> Result<GetRoomResponse, RusotoError<GetRoomError>>;
 
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
-    fn get_room_skill_parameter(
+    async fn get_room_skill_parameter(
         &self,
         input: GetRoomSkillParameterRequest,
-    ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError>;
+    ) -> Result<GetRoomSkillParameterResponse, RusotoError<GetRoomSkillParameterError>>;
 
     /// <p>Gets skill group details by skill group ARN.</p>
-    fn get_skill_group(
+    async fn get_skill_group(
         &self,
         input: GetSkillGroupRequest,
-    ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError>;
+    ) -> Result<GetSkillGroupResponse, RusotoError<GetSkillGroupError>>;
 
-    /// <p>Lists the details of the schedules that a user configured. A download URL of the report associated with each schedule is returned every time this action is called. A new download URL is returned each time, and is valid for 24 hours.</p>
-    fn list_business_report_schedules(
+    /// <p>Lists the details of the schedules that a user configured.</p>
+    async fn list_business_report_schedules(
         &self,
         input: ListBusinessReportSchedulesRequest,
-    ) -> RusotoFuture<ListBusinessReportSchedulesResponse, ListBusinessReportSchedulesError>;
+    ) -> Result<ListBusinessReportSchedulesResponse, RusotoError<ListBusinessReportSchedulesError>>;
 
     /// <p>Lists conference providers under a specific AWS account.</p>
-    fn list_conference_providers(
+    async fn list_conference_providers(
         &self,
         input: ListConferenceProvidersRequest,
-    ) -> RusotoFuture<ListConferenceProvidersResponse, ListConferenceProvidersError>;
+    ) -> Result<ListConferenceProvidersResponse, RusotoError<ListConferenceProvidersError>>;
 
     /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
-    fn list_device_events(
+    async fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
-    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError>;
+    ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>>;
 
     /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
-    fn list_gateway_groups(
+    async fn list_gateway_groups(
         &self,
         input: ListGatewayGroupsRequest,
-    ) -> RusotoFuture<ListGatewayGroupsResponse, ListGatewayGroupsError>;
+    ) -> Result<ListGatewayGroupsResponse, RusotoError<ListGatewayGroupsError>>;
 
     /// <p>Retrieves a list of gateway summaries. Use GetGateway to retrieve details of a specific gateway. An optional gateway group ARN can be provided to only retrieve gateway summaries of gateways that are associated with that gateway group ARN.</p>
-    fn list_gateways(
+    async fn list_gateways(
         &self,
         input: ListGatewaysRequest,
-    ) -> RusotoFuture<ListGatewaysResponse, ListGatewaysError>;
+    ) -> Result<ListGatewaysResponse, RusotoError<ListGatewaysError>>;
 
     /// <p>Lists all enabled skills in a specific skill group.</p>
-    fn list_skills(
+    async fn list_skills(
         &self,
         input: ListSkillsRequest,
-    ) -> RusotoFuture<ListSkillsResponse, ListSkillsError>;
+    ) -> Result<ListSkillsResponse, RusotoError<ListSkillsError>>;
 
     /// <p>Lists all categories in the Alexa skill store.</p>
-    fn list_skills_store_categories(
+    async fn list_skills_store_categories(
         &self,
         input: ListSkillsStoreCategoriesRequest,
-    ) -> RusotoFuture<ListSkillsStoreCategoriesResponse, ListSkillsStoreCategoriesError>;
+    ) -> Result<ListSkillsStoreCategoriesResponse, RusotoError<ListSkillsStoreCategoriesError>>;
 
     /// <p>Lists all skills in the Alexa skill store by category.</p>
-    fn list_skills_store_skills_by_category(
+    async fn list_skills_store_skills_by_category(
         &self,
         input: ListSkillsStoreSkillsByCategoryRequest,
-    ) -> RusotoFuture<ListSkillsStoreSkillsByCategoryResponse, ListSkillsStoreSkillsByCategoryError>;
+    ) -> Result<
+        ListSkillsStoreSkillsByCategoryResponse,
+        RusotoError<ListSkillsStoreSkillsByCategoryError>,
+    >;
 
     /// <p>Lists all of the smart home appliances associated with a room.</p>
-    fn list_smart_home_appliances(
+    async fn list_smart_home_appliances(
         &self,
         input: ListSmartHomeAppliancesRequest,
-    ) -> RusotoFuture<ListSmartHomeAppliancesResponse, ListSmartHomeAppliancesError>;
+    ) -> Result<ListSmartHomeAppliancesResponse, RusotoError<ListSmartHomeAppliancesError>>;
 
     /// <p>Lists all tags for the specified resource.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
     /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
-    fn put_conference_preference(
+    async fn put_conference_preference(
         &self,
         input: PutConferencePreferenceRequest,
-    ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError>;
+    ) -> Result<PutConferencePreferenceResponse, RusotoError<PutConferencePreferenceError>>;
 
     /// <p>Configures the email template for the user enrollment invitation with the specified attributes.</p>
-    fn put_invitation_configuration(
+    async fn put_invitation_configuration(
         &self,
         input: PutInvitationConfigurationRequest,
-    ) -> RusotoFuture<PutInvitationConfigurationResponse, PutInvitationConfigurationError>;
+    ) -> Result<PutInvitationConfigurationResponse, RusotoError<PutInvitationConfigurationError>>;
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
-    fn put_room_skill_parameter(
+    async fn put_room_skill_parameter(
         &self,
         input: PutRoomSkillParameterRequest,
-    ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError>;
+    ) -> Result<PutRoomSkillParameterResponse, RusotoError<PutRoomSkillParameterError>>;
 
     /// <p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>
-    fn put_skill_authorization(
+    async fn put_skill_authorization(
         &self,
         input: PutSkillAuthorizationRequest,
-    ) -> RusotoFuture<PutSkillAuthorizationResponse, PutSkillAuthorizationError>;
+    ) -> Result<PutSkillAuthorizationResponse, RusotoError<PutSkillAuthorizationError>>;
 
     /// <p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>
-    fn register_avs_device(
+    async fn register_avs_device(
         &self,
         input: RegisterAVSDeviceRequest,
-    ) -> RusotoFuture<RegisterAVSDeviceResponse, RegisterAVSDeviceError>;
+    ) -> Result<RegisterAVSDeviceResponse, RusotoError<RegisterAVSDeviceError>>;
 
     /// <p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>
-    fn reject_skill(
+    async fn reject_skill(
         &self,
         input: RejectSkillRequest,
-    ) -> RusotoFuture<RejectSkillResponse, RejectSkillError>;
+    ) -> Result<RejectSkillResponse, RusotoError<RejectSkillError>>;
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
-    fn resolve_room(
+    async fn resolve_room(
         &self,
         input: ResolveRoomRequest,
-    ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError>;
+    ) -> Result<ResolveRoomResponse, RusotoError<ResolveRoomError>>;
 
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
-    fn revoke_invitation(
+    async fn revoke_invitation(
         &self,
         input: RevokeInvitationRequest,
-    ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError>;
+    ) -> Result<RevokeInvitationResponse, RusotoError<RevokeInvitationError>>;
 
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_address_books(
+    async fn search_address_books(
         &self,
         input: SearchAddressBooksRequest,
-    ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError>;
+    ) -> Result<SearchAddressBooksResponse, RusotoError<SearchAddressBooksError>>;
 
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_contacts(
+    async fn search_contacts(
         &self,
         input: SearchContactsRequest,
-    ) -> RusotoFuture<SearchContactsResponse, SearchContactsError>;
+    ) -> Result<SearchContactsResponse, RusotoError<SearchContactsError>>;
 
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
-    fn search_devices(
+    async fn search_devices(
         &self,
         input: SearchDevicesRequest,
-    ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError>;
+    ) -> Result<SearchDevicesResponse, RusotoError<SearchDevicesError>>;
 
     /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_network_profiles(
+    async fn search_network_profiles(
         &self,
         input: SearchNetworkProfilesRequest,
-    ) -> RusotoFuture<SearchNetworkProfilesResponse, SearchNetworkProfilesError>;
+    ) -> Result<SearchNetworkProfilesResponse, RusotoError<SearchNetworkProfilesError>>;
 
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
-    fn search_profiles(
+    async fn search_profiles(
         &self,
         input: SearchProfilesRequest,
-    ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError>;
+    ) -> Result<SearchProfilesResponse, RusotoError<SearchProfilesError>>;
 
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_rooms(
+    async fn search_rooms(
         &self,
         input: SearchRoomsRequest,
-    ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError>;
+    ) -> Result<SearchRoomsResponse, RusotoError<SearchRoomsError>>;
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_skill_groups(
+    async fn search_skill_groups(
         &self,
         input: SearchSkillGroupsRequest,
-    ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError>;
+    ) -> Result<SearchSkillGroupsResponse, RusotoError<SearchSkillGroupsError>>;
 
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_users(
+    async fn search_users(
         &self,
         input: SearchUsersRequest,
-    ) -> RusotoFuture<SearchUsersResponse, SearchUsersError>;
+    ) -> Result<SearchUsersResponse, RusotoError<SearchUsersError>>;
 
     /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
-    fn send_announcement(
+    async fn send_announcement(
         &self,
         input: SendAnnouncementRequest,
-    ) -> RusotoFuture<SendAnnouncementResponse, SendAnnouncementError>;
+    ) -> Result<SendAnnouncementResponse, RusotoError<SendAnnouncementError>>;
 
-    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>
-    fn send_invitation(
+    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
+    async fn send_invitation(
         &self,
         input: SendInvitationRequest,
-    ) -> RusotoFuture<SendInvitationResponse, SendInvitationError>;
+    ) -> Result<SendInvitationResponse, RusotoError<SendInvitationError>>;
 
     /// <p><p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device&#39;s volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room&#39;s profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul></p>
-    fn start_device_sync(
+    async fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,
-    ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError>;
+    ) -> Result<StartDeviceSyncResponse, RusotoError<StartDeviceSyncError>>;
 
     /// <p>Initiates the discovery of any smart home appliances associated with the room.</p>
-    fn start_smart_home_appliance_discovery(
+    async fn start_smart_home_appliance_discovery(
         &self,
         input: StartSmartHomeApplianceDiscoveryRequest,
-    ) -> RusotoFuture<StartSmartHomeApplianceDiscoveryResponse, StartSmartHomeApplianceDiscoveryError>;
+    ) -> Result<
+        StartSmartHomeApplianceDiscoveryResponse,
+        RusotoError<StartSmartHomeApplianceDiscoveryError>,
+    >;
 
     /// <p>Adds metadata tags to a specified resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Removes metadata tags from a specified resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates address book details by the address book ARN.</p>
-    fn update_address_book(
+    async fn update_address_book(
         &self,
         input: UpdateAddressBookRequest,
-    ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError>;
+    ) -> Result<UpdateAddressBookResponse, RusotoError<UpdateAddressBookError>>;
 
     /// <p>Updates the configuration of the report delivery schedule with the specified schedule ARN.</p>
-    fn update_business_report_schedule(
+    async fn update_business_report_schedule(
         &self,
         input: UpdateBusinessReportScheduleRequest,
-    ) -> RusotoFuture<UpdateBusinessReportScheduleResponse, UpdateBusinessReportScheduleError>;
+    ) -> Result<UpdateBusinessReportScheduleResponse, RusotoError<UpdateBusinessReportScheduleError>>;
 
     /// <p>Updates an existing conference provider's settings.</p>
-    fn update_conference_provider(
+    async fn update_conference_provider(
         &self,
         input: UpdateConferenceProviderRequest,
-    ) -> RusotoFuture<UpdateConferenceProviderResponse, UpdateConferenceProviderError>;
+    ) -> Result<UpdateConferenceProviderResponse, RusotoError<UpdateConferenceProviderError>>;
 
     /// <p>Updates the contact details by the contact ARN.</p>
-    fn update_contact(
+    async fn update_contact(
         &self,
         input: UpdateContactRequest,
-    ) -> RusotoFuture<UpdateContactResponse, UpdateContactError>;
+    ) -> Result<UpdateContactResponse, RusotoError<UpdateContactError>>;
 
     /// <p>Updates the device name by device ARN.</p>
-    fn update_device(
+    async fn update_device(
         &self,
         input: UpdateDeviceRequest,
-    ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError>;
+    ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>>;
 
     /// <p>Updates the details of a gateway. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
-    fn update_gateway(
+    async fn update_gateway(
         &self,
         input: UpdateGatewayRequest,
-    ) -> RusotoFuture<UpdateGatewayResponse, UpdateGatewayError>;
+    ) -> Result<UpdateGatewayResponse, RusotoError<UpdateGatewayError>>;
 
     /// <p>Updates the details of a gateway group. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
-    fn update_gateway_group(
+    async fn update_gateway_group(
         &self,
         input: UpdateGatewayGroupRequest,
-    ) -> RusotoFuture<UpdateGatewayGroupResponse, UpdateGatewayGroupError>;
+    ) -> Result<UpdateGatewayGroupResponse, RusotoError<UpdateGatewayGroupError>>;
 
     /// <p>Updates a network profile by the network profile ARN.</p>
-    fn update_network_profile(
+    async fn update_network_profile(
         &self,
         input: UpdateNetworkProfileRequest,
-    ) -> RusotoFuture<UpdateNetworkProfileResponse, UpdateNetworkProfileError>;
+    ) -> Result<UpdateNetworkProfileResponse, RusotoError<UpdateNetworkProfileError>>;
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
-    fn update_profile(
+    async fn update_profile(
         &self,
         input: UpdateProfileRequest,
-    ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError>;
+    ) -> Result<UpdateProfileResponse, RusotoError<UpdateProfileError>>;
 
     /// <p>Updates room details by room ARN.</p>
-    fn update_room(
+    async fn update_room(
         &self,
         input: UpdateRoomRequest,
-    ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError>;
+    ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>>;
 
     /// <p>Updates skill group details by skill group ARN.</p>
-    fn update_skill_group(
+    async fn update_skill_group(
         &self,
         input: UpdateSkillGroupRequest,
-    ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError>;
+    ) -> Result<UpdateSkillGroupResponse, RusotoError<UpdateSkillGroupError>>;
 }
 /// A client for the Alexa For Business API.
 #[derive(Clone)]
@@ -7436,7 +7189,10 @@ impl AlexaForBusinessClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AlexaForBusinessClient {
-        Self::new_with_client(Client::shared(), region)
+        AlexaForBusinessClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -7446,35 +7202,22 @@ impl AlexaForBusinessClient {
     ) -> AlexaForBusinessClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        AlexaForBusinessClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> AlexaForBusinessClient {
-        AlexaForBusinessClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for AlexaForBusinessClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AlexaForBusinessClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl AlexaForBusiness for AlexaForBusinessClient {
     /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
-    fn approve_skill(
+    async fn approve_skill(
         &self,
         input: ApproveSkillRequest,
-    ) -> RusotoFuture<ApproveSkillResponse, ApproveSkillError> {
+    ) -> Result<ApproveSkillResponse, RusotoError<ApproveSkillError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7482,29 +7225,29 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ApproveSkillResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ApproveSkillError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ApproveSkillResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ApproveSkillError::from_response(response))
+        }
     }
 
     /// <p>Associates a contact with a given address book.</p>
-    fn associate_contact_with_address_book(
+    async fn associate_contact_with_address_book(
         &self,
         input: AssociateContactWithAddressBookRequest,
-    ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>
-    {
+    ) -> Result<
+        AssociateContactWithAddressBookResponse,
+        RusotoError<AssociateContactWithAddressBookError>,
+    > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7515,29 +7258,31 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateContactWithAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateContactWithAddressBookError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateContactWithAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateContactWithAddressBookError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Associates a device with the specified network profile.</p>
-    fn associate_device_with_network_profile(
+    async fn associate_device_with_network_profile(
         &self,
         input: AssociateDeviceWithNetworkProfileRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateDeviceWithNetworkProfileResponse,
-        AssociateDeviceWithNetworkProfileError,
+        RusotoError<AssociateDeviceWithNetworkProfileError>,
     > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -7549,27 +7294,29 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateDeviceWithNetworkProfileError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDeviceWithNetworkProfileError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
-    fn associate_device_with_room(
+    async fn associate_device_with_room(
         &self,
         input: AssociateDeviceWithRoomRequest,
-    ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError> {
+    ) -> Result<AssociateDeviceWithRoomResponse, RusotoError<AssociateDeviceWithRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7577,25 +7324,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDeviceWithRoomResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateDeviceWithRoomError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDeviceWithRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDeviceWithRoomError::from_response(response))
+        }
     }
 
     /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
-    fn associate_skill_group_with_room(
+    async fn associate_skill_group_with_room(
         &self,
         input: AssociateSkillGroupWithRoomRequest,
-    ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError> {
+    ) -> Result<AssociateSkillGroupWithRoomResponse, RusotoError<AssociateSkillGroupWithRoomError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7606,25 +7356,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateSkillGroupWithRoomError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateSkillGroupWithRoomError::from_response(response))
+        }
     }
 
     /// <p>Associates a skill with a skill group.</p>
-    fn associate_skill_with_skill_group(
+    async fn associate_skill_with_skill_group(
         &self,
         input: AssociateSkillWithSkillGroupRequest,
-    ) -> RusotoFuture<AssociateSkillWithSkillGroupResponse, AssociateSkillWithSkillGroupError> {
+    ) -> Result<AssociateSkillWithSkillGroupResponse, RusotoError<AssociateSkillWithSkillGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7635,25 +7388,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateSkillWithSkillGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateSkillWithSkillGroupError::from_response(response))
+        }
     }
 
     /// <p>Makes a private skill available for enrolled users to enable on their devices.</p>
-    fn associate_skill_with_users(
+    async fn associate_skill_with_users(
         &self,
         input: AssociateSkillWithUsersRequest,
-    ) -> RusotoFuture<AssociateSkillWithUsersResponse, AssociateSkillWithUsersError> {
+    ) -> Result<AssociateSkillWithUsersResponse, RusotoError<AssociateSkillWithUsersError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7661,25 +7416,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateSkillWithUsersResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateSkillWithUsersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateSkillWithUsersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateSkillWithUsersError::from_response(response))
+        }
     }
 
     /// <p>Creates an address book with the specified details.</p>
-    fn create_address_book(
+    async fn create_address_book(
         &self,
         input: CreateAddressBookRequest,
-    ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError> {
+    ) -> Result<CreateAddressBookResponse, RusotoError<CreateAddressBookError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7687,28 +7444,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateAddressBookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAddressBookError::from_response(response))
+        }
     }
 
     /// <p>Creates a recurring schedule for usage reports to deliver to the specified S3 location with a specified daily or weekly interval.</p>
-    fn create_business_report_schedule(
+    async fn create_business_report_schedule(
         &self,
         input: CreateBusinessReportScheduleRequest,
-    ) -> RusotoFuture<CreateBusinessReportScheduleResponse, CreateBusinessReportScheduleError> {
+    ) -> Result<CreateBusinessReportScheduleResponse, RusotoError<CreateBusinessReportScheduleError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7719,25 +7476,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateBusinessReportScheduleResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBusinessReportScheduleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateBusinessReportScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateBusinessReportScheduleError::from_response(response))
+        }
     }
 
     /// <p>Adds a new conference provider under the user's AWS account.</p>
-    fn create_conference_provider(
+    async fn create_conference_provider(
         &self,
         input: CreateConferenceProviderRequest,
-    ) -> RusotoFuture<CreateConferenceProviderResponse, CreateConferenceProviderError> {
+    ) -> Result<CreateConferenceProviderResponse, RusotoError<CreateConferenceProviderError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7745,25 +7504,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateConferenceProviderResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConferenceProviderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateConferenceProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConferenceProviderError::from_response(response))
+        }
     }
 
     /// <p>Creates a contact with the specified details.</p>
-    fn create_contact(
+    async fn create_contact(
         &self,
         input: CreateContactRequest,
-    ) -> RusotoFuture<CreateContactResponse, CreateContactError> {
+    ) -> Result<CreateContactResponse, RusotoError<CreateContactError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7771,28 +7532,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateContactResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateContactError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateContactResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContactError::from_response(response))
+        }
     }
 
     /// <p>Creates a gateway group with the specified details.</p>
-    fn create_gateway_group(
+    async fn create_gateway_group(
         &self,
         input: CreateGatewayGroupRequest,
-    ) -> RusotoFuture<CreateGatewayGroupResponse, CreateGatewayGroupError> {
+    ) -> Result<CreateGatewayGroupResponse, RusotoError<CreateGatewayGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7800,28 +7559,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateGatewayGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateGatewayGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGatewayGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGatewayGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a network profile with the specified details.</p>
-    fn create_network_profile(
+    async fn create_network_profile(
         &self,
         input: CreateNetworkProfileRequest,
-    ) -> RusotoFuture<CreateNetworkProfileResponse, CreateNetworkProfileError> {
+    ) -> Result<CreateNetworkProfileResponse, RusotoError<CreateNetworkProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7829,27 +7587,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNetworkProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateNetworkProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateNetworkProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateNetworkProfileError::from_response(response))
+        }
     }
 
     /// <p>Creates a new room profile with the specified details.</p>
-    fn create_profile(
+    async fn create_profile(
         &self,
         input: CreateProfileRequest,
-    ) -> RusotoFuture<CreateProfileResponse, CreateProfileError> {
+    ) -> Result<CreateProfileResponse, RusotoError<CreateProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7857,28 +7615,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateProfileError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProfileError::from_response(response))
+        }
     }
 
     /// <p>Creates a room with the specified details.</p>
-    fn create_room(
+    async fn create_room(
         &self,
         input: CreateRoomRequest,
-    ) -> RusotoFuture<CreateRoomResponse, CreateRoomError> {
+    ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7886,28 +7642,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRoomResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateRoomError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRoomError::from_response(response))
+        }
     }
 
     /// <p>Creates a skill group with a specified name and description.</p>
-    fn create_skill_group(
+    async fn create_skill_group(
         &self,
         input: CreateSkillGroupRequest,
-    ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError> {
+    ) -> Result<CreateSkillGroupResponse, RusotoError<CreateSkillGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7915,28 +7669,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSkillGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSkillGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a user.</p>
-    fn create_user(
+    async fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7944,28 +7697,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserError::from_response(response))
+        }
     }
 
     /// <p>Deletes an address book by the address book ARN.</p>
-    fn delete_address_book(
+    async fn delete_address_book(
         &self,
         input: DeleteAddressBookRequest,
-    ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError> {
+    ) -> Result<DeleteAddressBookResponse, RusotoError<DeleteAddressBookError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7973,28 +7724,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteAddressBookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAddressBookError::from_response(response))
+        }
     }
 
     /// <p>Deletes the recurring report delivery schedule with the specified schedule ARN.</p>
-    fn delete_business_report_schedule(
+    async fn delete_business_report_schedule(
         &self,
         input: DeleteBusinessReportScheduleRequest,
-    ) -> RusotoFuture<DeleteBusinessReportScheduleResponse, DeleteBusinessReportScheduleError> {
+    ) -> Result<DeleteBusinessReportScheduleResponse, RusotoError<DeleteBusinessReportScheduleError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8005,25 +7756,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBusinessReportScheduleResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBusinessReportScheduleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBusinessReportScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBusinessReportScheduleError::from_response(response))
+        }
     }
 
     /// <p>Deletes a conference provider.</p>
-    fn delete_conference_provider(
+    async fn delete_conference_provider(
         &self,
         input: DeleteConferenceProviderRequest,
-    ) -> RusotoFuture<DeleteConferenceProviderResponse, DeleteConferenceProviderError> {
+    ) -> Result<DeleteConferenceProviderResponse, RusotoError<DeleteConferenceProviderError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8031,25 +7784,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteConferenceProviderResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConferenceProviderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConferenceProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConferenceProviderError::from_response(response))
+        }
     }
 
     /// <p>Deletes a contact by the contact ARN.</p>
-    fn delete_contact(
+    async fn delete_contact(
         &self,
         input: DeleteContactRequest,
-    ) -> RusotoFuture<DeleteContactResponse, DeleteContactError> {
+    ) -> Result<DeleteContactResponse, RusotoError<DeleteContactError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8057,28 +7812,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteContactResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteContactError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteContactResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContactError::from_response(response))
+        }
     }
 
     /// <p>Removes a device from Alexa For Business.</p>
-    fn delete_device(
+    async fn delete_device(
         &self,
         input: DeleteDeviceRequest,
-    ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError> {
+    ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8086,28 +7839,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDeviceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteDeviceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDeviceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeviceError::from_response(response))
+        }
     }
 
-    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p>
-    fn delete_device_usage_data(
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    async fn delete_device_usage_data(
         &self,
         input: DeleteDeviceUsageDataRequest,
-    ) -> RusotoFuture<DeleteDeviceUsageDataResponse, DeleteDeviceUsageDataError> {
+    ) -> Result<DeleteDeviceUsageDataResponse, RusotoError<DeleteDeviceUsageDataError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8115,27 +7866,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDeviceUsageDataResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDeviceUsageDataError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDeviceUsageDataResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDeviceUsageDataError::from_response(response))
+        }
     }
 
     /// <p>Deletes a gateway group.</p>
-    fn delete_gateway_group(
+    async fn delete_gateway_group(
         &self,
         input: DeleteGatewayGroupRequest,
-    ) -> RusotoFuture<DeleteGatewayGroupResponse, DeleteGatewayGroupError> {
+    ) -> Result<DeleteGatewayGroupResponse, RusotoError<DeleteGatewayGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8143,28 +7894,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteGatewayGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteGatewayGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGatewayGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGatewayGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a network profile by the network profile ARN.</p>
-    fn delete_network_profile(
+    async fn delete_network_profile(
         &self,
         input: DeleteNetworkProfileRequest,
-    ) -> RusotoFuture<DeleteNetworkProfileResponse, DeleteNetworkProfileError> {
+    ) -> Result<DeleteNetworkProfileResponse, RusotoError<DeleteNetworkProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8172,27 +7922,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteNetworkProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteNetworkProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteNetworkProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteNetworkProfileError::from_response(response))
+        }
     }
 
     /// <p>Deletes a room profile by the profile ARN.</p>
-    fn delete_profile(
+    async fn delete_profile(
         &self,
         input: DeleteProfileRequest,
-    ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError> {
+    ) -> Result<DeleteProfileResponse, RusotoError<DeleteProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8200,28 +7950,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteProfileError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProfileError::from_response(response))
+        }
     }
 
     /// <p>Deletes a room by the room ARN.</p>
-    fn delete_room(
+    async fn delete_room(
         &self,
         input: DeleteRoomRequest,
-    ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError> {
+    ) -> Result<DeleteRoomResponse, RusotoError<DeleteRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8229,28 +7977,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRoomResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteRoomError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRoomError::from_response(response))
+        }
     }
 
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
-    fn delete_room_skill_parameter(
+    async fn delete_room_skill_parameter(
         &self,
         input: DeleteRoomSkillParameterRequest,
-    ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError> {
+    ) -> Result<DeleteRoomSkillParameterResponse, RusotoError<DeleteRoomSkillParameterError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8258,25 +8004,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRoomSkillParameterResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRoomSkillParameterError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRoomSkillParameterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRoomSkillParameterError::from_response(response))
+        }
     }
 
     /// <p>Unlinks a third-party account from a skill.</p>
-    fn delete_skill_authorization(
+    async fn delete_skill_authorization(
         &self,
         input: DeleteSkillAuthorizationRequest,
-    ) -> RusotoFuture<DeleteSkillAuthorizationResponse, DeleteSkillAuthorizationError> {
+    ) -> Result<DeleteSkillAuthorizationResponse, RusotoError<DeleteSkillAuthorizationError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8284,25 +8032,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSkillAuthorizationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSkillAuthorizationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSkillAuthorizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSkillAuthorizationError::from_response(response))
+        }
     }
 
     /// <p>Deletes a skill group by skill group ARN.</p>
-    fn delete_skill_group(
+    async fn delete_skill_group(
         &self,
         input: DeleteSkillGroupRequest,
-    ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError> {
+    ) -> Result<DeleteSkillGroupResponse, RusotoError<DeleteSkillGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8310,28 +8060,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSkillGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSkillGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
-    fn delete_user(
+    async fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8339,30 +8088,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUserResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteUserError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a contact from a given address book.</p>
-    fn disassociate_contact_from_address_book(
+    async fn disassociate_contact_from_address_book(
         &self,
         input: DisassociateContactFromAddressBookRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateContactFromAddressBookResponse,
-        DisassociateContactFromAddressBookError,
+        RusotoError<DisassociateContactFromAddressBookError>,
     > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -8374,27 +8121,30 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateContactFromAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateContactFromAddressBookError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateContactFromAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateContactFromAddressBookError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
-    fn disassociate_device_from_room(
+    async fn disassociate_device_from_room(
         &self,
         input: DisassociateDeviceFromRoomRequest,
-    ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError> {
+    ) -> Result<DisassociateDeviceFromRoomResponse, RusotoError<DisassociateDeviceFromRoomError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8405,26 +8155,30 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDeviceFromRoomResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateDeviceFromRoomError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDeviceFromRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDeviceFromRoomError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a skill from a skill group.</p>
-    fn disassociate_skill_from_skill_group(
+    async fn disassociate_skill_from_skill_group(
         &self,
         input: DisassociateSkillFromSkillGroupRequest,
-    ) -> RusotoFuture<DisassociateSkillFromSkillGroupResponse, DisassociateSkillFromSkillGroupError>
-    {
+    ) -> Result<
+        DisassociateSkillFromSkillGroupResponse,
+        RusotoError<DisassociateSkillFromSkillGroupError>,
+    > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8435,27 +8189,30 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateSkillFromSkillGroupError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateSkillFromSkillGroupError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Makes a private skill unavailable for enrolled users and prevents them from enabling it on their devices.</p>
-    fn disassociate_skill_from_users(
+    async fn disassociate_skill_from_users(
         &self,
         input: DisassociateSkillFromUsersRequest,
-    ) -> RusotoFuture<DisassociateSkillFromUsersResponse, DisassociateSkillFromUsersError> {
+    ) -> Result<DisassociateSkillFromUsersResponse, RusotoError<DisassociateSkillFromUsersError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8466,26 +8223,30 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateSkillFromUsersResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateSkillFromUsersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateSkillFromUsersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateSkillFromUsersError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
-    fn disassociate_skill_group_from_room(
+    async fn disassociate_skill_group_from_room(
         &self,
         input: DisassociateSkillGroupFromRoomRequest,
-    ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>
-    {
+    ) -> Result<
+        DisassociateSkillGroupFromRoomResponse,
+        RusotoError<DisassociateSkillGroupFromRoomError>,
+    > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8496,25 +8257,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateSkillGroupFromRoomError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateSkillGroupFromRoomError::from_response(response))
+        }
     }
 
     /// <p>Forgets smart home appliances associated to a room.</p>
-    fn forget_smart_home_appliances(
+    async fn forget_smart_home_appliances(
         &self,
         input: ForgetSmartHomeAppliancesRequest,
-    ) -> RusotoFuture<ForgetSmartHomeAppliancesResponse, ForgetSmartHomeAppliancesError> {
+    ) -> Result<ForgetSmartHomeAppliancesResponse, RusotoError<ForgetSmartHomeAppliancesError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8522,25 +8286,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ForgetSmartHomeAppliancesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ForgetSmartHomeAppliancesError::from_response(response))
+        }
     }
 
     /// <p>Gets address the book details by the address book ARN.</p>
-    fn get_address_book(
+    async fn get_address_book(
         &self,
         input: GetAddressBookRequest,
-    ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError> {
+    ) -> Result<GetAddressBookResponse, RusotoError<GetAddressBookError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8548,52 +8314,52 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetAddressBookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAddressBookError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the existing conference preferences.</p>
-    fn get_conference_preference(
+    async fn get_conference_preference(
         &self,
-    ) -> RusotoFuture<GetConferencePreferenceResponse, GetConferencePreferenceError> {
+    ) -> Result<GetConferencePreferenceResponse, RusotoError<GetConferencePreferenceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetConferencePreference");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetConferencePreferenceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetConferencePreferenceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConferencePreferenceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConferencePreferenceError::from_response(response))
+        }
     }
 
     /// <p>Gets details about a specific conference provider.</p>
-    fn get_conference_provider(
+    async fn get_conference_provider(
         &self,
         input: GetConferenceProviderRequest,
-    ) -> RusotoFuture<GetConferenceProviderResponse, GetConferenceProviderError> {
+    ) -> Result<GetConferenceProviderResponse, RusotoError<GetConferenceProviderError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8601,27 +8367,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetConferenceProviderResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetConferenceProviderError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetConferenceProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetConferenceProviderError::from_response(response))
+        }
     }
 
     /// <p>Gets the contact details by the contact ARN.</p>
-    fn get_contact(
+    async fn get_contact(
         &self,
         input: GetContactRequest,
-    ) -> RusotoFuture<GetContactResponse, GetContactError> {
+    ) -> Result<GetContactResponse, RusotoError<GetContactError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8629,28 +8395,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetContactResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetContactError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetContactResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContactError::from_response(response))
+        }
     }
 
     /// <p>Gets the details of a device by device ARN.</p>
-    fn get_device(
+    async fn get_device(
         &self,
         input: GetDeviceRequest,
-    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
+    ) -> Result<GetDeviceResponse, RusotoError<GetDeviceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8658,28 +8422,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeviceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetDeviceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDeviceError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the details of a gateway.</p>
-    fn get_gateway(
+    async fn get_gateway(
         &self,
         input: GetGatewayRequest,
-    ) -> RusotoFuture<GetGatewayResponse, GetGatewayError> {
+    ) -> Result<GetGatewayResponse, RusotoError<GetGatewayError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8687,28 +8449,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetGatewayResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGatewayError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the details of a gateway group.</p>
-    fn get_gateway_group(
+    async fn get_gateway_group(
         &self,
         input: GetGatewayGroupRequest,
-    ) -> RusotoFuture<GetGatewayGroupResponse, GetGatewayGroupError> {
+    ) -> Result<GetGatewayGroupResponse, RusotoError<GetGatewayGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8716,27 +8476,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetGatewayGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetGatewayGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetGatewayGroupError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the configured values for the user enrollment invitation email template.</p>
-    fn get_invitation_configuration(
+    async fn get_invitation_configuration(
         &self,
-    ) -> RusotoFuture<GetInvitationConfigurationResponse, GetInvitationConfigurationError> {
+    ) -> Result<GetInvitationConfigurationResponse, RusotoError<GetInvitationConfigurationError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8746,25 +8505,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInvitationConfigurationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInvitationConfigurationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInvitationConfigurationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInvitationConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Gets the network profile details by the network profile ARN.</p>
-    fn get_network_profile(
+    async fn get_network_profile(
         &self,
         input: GetNetworkProfileRequest,
-    ) -> RusotoFuture<GetNetworkProfileResponse, GetNetworkProfileError> {
+    ) -> Result<GetNetworkProfileResponse, RusotoError<GetNetworkProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8772,28 +8533,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetNetworkProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetNetworkProfileError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetNetworkProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetNetworkProfileError::from_response(response))
+        }
     }
 
     /// <p>Gets the details of a room profile by profile ARN.</p>
-    fn get_profile(
+    async fn get_profile(
         &self,
         input: GetProfileRequest,
-    ) -> RusotoFuture<GetProfileResponse, GetProfileError> {
+    ) -> Result<GetProfileResponse, RusotoError<GetProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8801,25 +8561,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetProfileError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetProfileError::from_response(response))
+        }
     }
 
     /// <p>Gets room details by room ARN.</p>
-    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
+    async fn get_room(
+        &self,
+        input: GetRoomRequest,
+    ) -> Result<GetRoomResponse, RusotoError<GetRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8827,27 +8588,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetRoomError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRoomError::from_response(response))
+        }
     }
 
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
-    fn get_room_skill_parameter(
+    async fn get_room_skill_parameter(
         &self,
         input: GetRoomSkillParameterRequest,
-    ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError> {
+    ) -> Result<GetRoomSkillParameterResponse, RusotoError<GetRoomSkillParameterError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8855,27 +8615,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRoomSkillParameterResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetRoomSkillParameterError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRoomSkillParameterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRoomSkillParameterError::from_response(response))
+        }
     }
 
     /// <p>Gets skill group details by skill group ARN.</p>
-    fn get_skill_group(
+    async fn get_skill_group(
         &self,
         input: GetSkillGroupRequest,
-    ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError> {
+    ) -> Result<GetSkillGroupResponse, RusotoError<GetSkillGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8883,28 +8643,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetSkillGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSkillGroupError::from_response(response))
+        }
     }
 
-    /// <p>Lists the details of the schedules that a user configured. A download URL of the report associated with each schedule is returned every time this action is called. A new download URL is returned each time, and is valid for 24 hours.</p>
-    fn list_business_report_schedules(
+    /// <p>Lists the details of the schedules that a user configured.</p>
+    async fn list_business_report_schedules(
         &self,
         input: ListBusinessReportSchedulesRequest,
-    ) -> RusotoFuture<ListBusinessReportSchedulesResponse, ListBusinessReportSchedulesError> {
+    ) -> Result<ListBusinessReportSchedulesResponse, RusotoError<ListBusinessReportSchedulesError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8915,25 +8674,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBusinessReportSchedulesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBusinessReportSchedulesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBusinessReportSchedulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBusinessReportSchedulesError::from_response(response))
+        }
     }
 
     /// <p>Lists conference providers under a specific AWS account.</p>
-    fn list_conference_providers(
+    async fn list_conference_providers(
         &self,
         input: ListConferenceProvidersRequest,
-    ) -> RusotoFuture<ListConferenceProvidersResponse, ListConferenceProvidersError> {
+    ) -> Result<ListConferenceProvidersResponse, RusotoError<ListConferenceProvidersError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8941,25 +8702,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListConferenceProvidersResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConferenceProvidersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConferenceProvidersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConferenceProvidersError::from_response(response))
+        }
     }
 
     /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
-    fn list_device_events(
+    async fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
-    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
+    ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8967,28 +8730,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeviceEventsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListDeviceEventsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDeviceEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDeviceEventsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
-    fn list_gateway_groups(
+    async fn list_gateway_groups(
         &self,
         input: ListGatewayGroupsRequest,
-    ) -> RusotoFuture<ListGatewayGroupsResponse, ListGatewayGroupsError> {
+    ) -> Result<ListGatewayGroupsResponse, RusotoError<ListGatewayGroupsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8996,28 +8758,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGatewayGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGatewayGroupsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGatewayGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGatewayGroupsError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of gateway summaries. Use GetGateway to retrieve details of a specific gateway. An optional gateway group ARN can be provided to only retrieve gateway summaries of gateways that are associated with that gateway group ARN.</p>
-    fn list_gateways(
+    async fn list_gateways(
         &self,
         input: ListGatewaysRequest,
-    ) -> RusotoFuture<ListGatewaysResponse, ListGatewaysError> {
+    ) -> Result<ListGatewaysResponse, RusotoError<ListGatewaysError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9025,28 +8786,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGatewaysResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGatewaysError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListGatewaysResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGatewaysError::from_response(response))
+        }
     }
 
     /// <p>Lists all enabled skills in a specific skill group.</p>
-    fn list_skills(
+    async fn list_skills(
         &self,
         input: ListSkillsRequest,
-    ) -> RusotoFuture<ListSkillsResponse, ListSkillsError> {
+    ) -> Result<ListSkillsResponse, RusotoError<ListSkillsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9054,28 +8813,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSkillsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListSkillsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListSkillsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSkillsError::from_response(response))
+        }
     }
 
     /// <p>Lists all categories in the Alexa skill store.</p>
-    fn list_skills_store_categories(
+    async fn list_skills_store_categories(
         &self,
         input: ListSkillsStoreCategoriesRequest,
-    ) -> RusotoFuture<ListSkillsStoreCategoriesResponse, ListSkillsStoreCategoriesError> {
+    ) -> Result<ListSkillsStoreCategoriesResponse, RusotoError<ListSkillsStoreCategoriesError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9083,26 +8841,30 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSkillsStoreCategoriesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSkillsStoreCategoriesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSkillsStoreCategoriesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSkillsStoreCategoriesError::from_response(response))
+        }
     }
 
     /// <p>Lists all skills in the Alexa skill store by category.</p>
-    fn list_skills_store_skills_by_category(
+    async fn list_skills_store_skills_by_category(
         &self,
         input: ListSkillsStoreSkillsByCategoryRequest,
-    ) -> RusotoFuture<ListSkillsStoreSkillsByCategoryResponse, ListSkillsStoreSkillsByCategoryError>
-    {
+    ) -> Result<
+        ListSkillsStoreSkillsByCategoryResponse,
+        RusotoError<ListSkillsStoreSkillsByCategoryError>,
+    > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9113,27 +8875,29 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSkillsStoreSkillsByCategoryError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSkillsStoreSkillsByCategoryError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists all of the smart home appliances associated with a room.</p>
-    fn list_smart_home_appliances(
+    async fn list_smart_home_appliances(
         &self,
         input: ListSmartHomeAppliancesRequest,
-    ) -> RusotoFuture<ListSmartHomeAppliancesResponse, ListSmartHomeAppliancesError> {
+    ) -> Result<ListSmartHomeAppliancesResponse, RusotoError<ListSmartHomeAppliancesError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9141,22 +8905,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListSmartHomeAppliancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSmartHomeAppliancesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSmartHomeAppliancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSmartHomeAppliancesError::from_response(response))
+        }
     }
 
     /// <p>Lists all tags for the specified resource.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    async fn list_tags(
+        &self,
+        input: ListTagsRequest,
+    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9164,28 +8933,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTagsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsError::from_response(response))
+        }
     }
 
     /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
-    fn put_conference_preference(
+    async fn put_conference_preference(
         &self,
         input: PutConferencePreferenceRequest,
-    ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError> {
+    ) -> Result<PutConferencePreferenceResponse, RusotoError<PutConferencePreferenceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9193,25 +8960,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutConferencePreferenceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConferencePreferenceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutConferencePreferenceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutConferencePreferenceError::from_response(response))
+        }
     }
 
     /// <p>Configures the email template for the user enrollment invitation with the specified attributes.</p>
-    fn put_invitation_configuration(
+    async fn put_invitation_configuration(
         &self,
         input: PutInvitationConfigurationRequest,
-    ) -> RusotoFuture<PutInvitationConfigurationResponse, PutInvitationConfigurationError> {
+    ) -> Result<PutInvitationConfigurationResponse, RusotoError<PutInvitationConfigurationError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9222,25 +8992,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutInvitationConfigurationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutInvitationConfigurationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutInvitationConfigurationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutInvitationConfigurationError::from_response(response))
+        }
     }
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
-    fn put_room_skill_parameter(
+    async fn put_room_skill_parameter(
         &self,
         input: PutRoomSkillParameterRequest,
-    ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError> {
+    ) -> Result<PutRoomSkillParameterResponse, RusotoError<PutRoomSkillParameterError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9248,27 +9020,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutRoomSkillParameterResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutRoomSkillParameterError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRoomSkillParameterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRoomSkillParameterError::from_response(response))
+        }
     }
 
     /// <p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>
-    fn put_skill_authorization(
+    async fn put_skill_authorization(
         &self,
         input: PutSkillAuthorizationRequest,
-    ) -> RusotoFuture<PutSkillAuthorizationResponse, PutSkillAuthorizationError> {
+    ) -> Result<PutSkillAuthorizationResponse, RusotoError<PutSkillAuthorizationError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9276,27 +9048,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutSkillAuthorizationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutSkillAuthorizationError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutSkillAuthorizationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutSkillAuthorizationError::from_response(response))
+        }
     }
 
     /// <p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>
-    fn register_avs_device(
+    async fn register_avs_device(
         &self,
         input: RegisterAVSDeviceRequest,
-    ) -> RusotoFuture<RegisterAVSDeviceResponse, RegisterAVSDeviceError> {
+    ) -> Result<RegisterAVSDeviceResponse, RusotoError<RegisterAVSDeviceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9304,28 +9076,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterAVSDeviceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterAVSDeviceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterAVSDeviceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterAVSDeviceError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>
-    fn reject_skill(
+    async fn reject_skill(
         &self,
         input: RejectSkillRequest,
-    ) -> RusotoFuture<RejectSkillResponse, RejectSkillError> {
+    ) -> Result<RejectSkillResponse, RusotoError<RejectSkillError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9333,28 +9104,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RejectSkillResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RejectSkillError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RejectSkillResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectSkillError::from_response(response))
+        }
     }
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
-    fn resolve_room(
+    async fn resolve_room(
         &self,
         input: ResolveRoomRequest,
-    ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError> {
+    ) -> Result<ResolveRoomResponse, RusotoError<ResolveRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9362,28 +9131,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResolveRoomResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResolveRoomError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ResolveRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ResolveRoomError::from_response(response))
+        }
     }
 
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
-    fn revoke_invitation(
+    async fn revoke_invitation(
         &self,
         input: RevokeInvitationRequest,
-    ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError> {
+    ) -> Result<RevokeInvitationResponse, RusotoError<RevokeInvitationError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9391,28 +9158,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RevokeInvitationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RevokeInvitationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RevokeInvitationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RevokeInvitationError::from_response(response))
+        }
     }
 
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_address_books(
+    async fn search_address_books(
         &self,
         input: SearchAddressBooksRequest,
-    ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError> {
+    ) -> Result<SearchAddressBooksResponse, RusotoError<SearchAddressBooksError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9420,28 +9186,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchAddressBooksResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchAddressBooksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchAddressBooksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchAddressBooksError::from_response(response))
+        }
     }
 
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_contacts(
+    async fn search_contacts(
         &self,
         input: SearchContactsRequest,
-    ) -> RusotoFuture<SearchContactsResponse, SearchContactsError> {
+    ) -> Result<SearchContactsResponse, RusotoError<SearchContactsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9449,28 +9214,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchContactsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchContactsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchContactsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchContactsError::from_response(response))
+        }
     }
 
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
-    fn search_devices(
+    async fn search_devices(
         &self,
         input: SearchDevicesRequest,
-    ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError> {
+    ) -> Result<SearchDevicesResponse, RusotoError<SearchDevicesError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9478,28 +9241,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchDevicesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchDevicesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchDevicesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchDevicesError::from_response(response))
+        }
     }
 
     /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_network_profiles(
+    async fn search_network_profiles(
         &self,
         input: SearchNetworkProfilesRequest,
-    ) -> RusotoFuture<SearchNetworkProfilesResponse, SearchNetworkProfilesError> {
+    ) -> Result<SearchNetworkProfilesResponse, RusotoError<SearchNetworkProfilesError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9507,27 +9268,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchNetworkProfilesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SearchNetworkProfilesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchNetworkProfilesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchNetworkProfilesError::from_response(response))
+        }
     }
 
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
-    fn search_profiles(
+    async fn search_profiles(
         &self,
         input: SearchProfilesRequest,
-    ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError> {
+    ) -> Result<SearchProfilesResponse, RusotoError<SearchProfilesError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9535,28 +9296,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchProfilesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchProfilesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchProfilesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchProfilesError::from_response(response))
+        }
     }
 
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_rooms(
+    async fn search_rooms(
         &self,
         input: SearchRoomsRequest,
-    ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError> {
+    ) -> Result<SearchRoomsResponse, RusotoError<SearchRoomsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9564,28 +9323,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchRoomsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchRoomsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchRoomsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchRoomsError::from_response(response))
+        }
     }
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_skill_groups(
+    async fn search_skill_groups(
         &self,
         input: SearchSkillGroupsRequest,
-    ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError> {
+    ) -> Result<SearchSkillGroupsResponse, RusotoError<SearchSkillGroupsError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9593,28 +9350,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchSkillGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchSkillGroupsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchSkillGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchSkillGroupsError::from_response(response))
+        }
     }
 
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
-    fn search_users(
+    async fn search_users(
         &self,
         input: SearchUsersRequest,
-    ) -> RusotoFuture<SearchUsersResponse, SearchUsersError> {
+    ) -> Result<SearchUsersResponse, RusotoError<SearchUsersError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9622,28 +9378,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchUsersResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchUsersError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchUsersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchUsersError::from_response(response))
+        }
     }
 
     /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
-    fn send_announcement(
+    async fn send_announcement(
         &self,
         input: SendAnnouncementRequest,
-    ) -> RusotoFuture<SendAnnouncementResponse, SendAnnouncementError> {
+    ) -> Result<SendAnnouncementResponse, RusotoError<SendAnnouncementError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9651,28 +9405,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SendAnnouncementResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SendAnnouncementError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SendAnnouncementResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SendAnnouncementError::from_response(response))
+        }
     }
 
-    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>
-    fn send_invitation(
+    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
+    async fn send_invitation(
         &self,
         input: SendInvitationRequest,
-    ) -> RusotoFuture<SendInvitationResponse, SendInvitationError> {
+    ) -> Result<SendInvitationResponse, RusotoError<SendInvitationError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9680,28 +9433,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SendInvitationResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SendInvitationError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SendInvitationResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SendInvitationError::from_response(response))
+        }
     }
 
     /// <p><p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device&#39;s volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room&#39;s profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul></p>
-    fn start_device_sync(
+    async fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,
-    ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError> {
+    ) -> Result<StartDeviceSyncResponse, RusotoError<StartDeviceSyncError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9709,29 +9460,29 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartDeviceSyncResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartDeviceSyncError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartDeviceSyncResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartDeviceSyncError::from_response(response))
+        }
     }
 
     /// <p>Initiates the discovery of any smart home appliances associated with the room.</p>
-    fn start_smart_home_appliance_discovery(
+    async fn start_smart_home_appliance_discovery(
         &self,
         input: StartSmartHomeApplianceDiscoveryRequest,
-    ) -> RusotoFuture<StartSmartHomeApplianceDiscoveryResponse, StartSmartHomeApplianceDiscoveryError>
-    {
+    ) -> Result<
+        StartSmartHomeApplianceDiscoveryResponse,
+        RusotoError<StartSmartHomeApplianceDiscoveryError>,
+    > {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9742,27 +9493,29 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartSmartHomeApplianceDiscoveryError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSmartHomeApplianceDiscoveryError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Adds metadata tags to a specified resource.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9770,28 +9523,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Removes metadata tags from a specified resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9799,28 +9550,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p>Updates address book details by the address book ARN.</p>
-    fn update_address_book(
+    async fn update_address_book(
         &self,
         input: UpdateAddressBookRequest,
-    ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError> {
+    ) -> Result<UpdateAddressBookResponse, RusotoError<UpdateAddressBookError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9828,28 +9577,28 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateAddressBookResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateAddressBookError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAddressBookResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAddressBookError::from_response(response))
+        }
     }
 
     /// <p>Updates the configuration of the report delivery schedule with the specified schedule ARN.</p>
-    fn update_business_report_schedule(
+    async fn update_business_report_schedule(
         &self,
         input: UpdateBusinessReportScheduleRequest,
-    ) -> RusotoFuture<UpdateBusinessReportScheduleResponse, UpdateBusinessReportScheduleError> {
+    ) -> Result<UpdateBusinessReportScheduleResponse, RusotoError<UpdateBusinessReportScheduleError>>
+    {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9860,25 +9609,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBusinessReportScheduleResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBusinessReportScheduleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBusinessReportScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBusinessReportScheduleError::from_response(response))
+        }
     }
 
     /// <p>Updates an existing conference provider's settings.</p>
-    fn update_conference_provider(
+    async fn update_conference_provider(
         &self,
         input: UpdateConferenceProviderRequest,
-    ) -> RusotoFuture<UpdateConferenceProviderResponse, UpdateConferenceProviderError> {
+    ) -> Result<UpdateConferenceProviderResponse, RusotoError<UpdateConferenceProviderError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9886,25 +9637,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateConferenceProviderResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConferenceProviderError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConferenceProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConferenceProviderError::from_response(response))
+        }
     }
 
     /// <p>Updates the contact details by the contact ARN.</p>
-    fn update_contact(
+    async fn update_contact(
         &self,
         input: UpdateContactRequest,
-    ) -> RusotoFuture<UpdateContactResponse, UpdateContactError> {
+    ) -> Result<UpdateContactResponse, RusotoError<UpdateContactError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9912,28 +9665,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateContactResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateContactError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateContactResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateContactError::from_response(response))
+        }
     }
 
     /// <p>Updates the device name by device ARN.</p>
-    fn update_device(
+    async fn update_device(
         &self,
         input: UpdateDeviceRequest,
-    ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError> {
+    ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9941,28 +9692,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDeviceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateDeviceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeviceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDeviceError::from_response(response))
+        }
     }
 
     /// <p>Updates the details of a gateway. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
-    fn update_gateway(
+    async fn update_gateway(
         &self,
         input: UpdateGatewayRequest,
-    ) -> RusotoFuture<UpdateGatewayResponse, UpdateGatewayError> {
+    ) -> Result<UpdateGatewayResponse, RusotoError<UpdateGatewayError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9970,28 +9719,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGatewayResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateGatewayResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGatewayError::from_response(response))
+        }
     }
 
     /// <p>Updates the details of a gateway group. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
-    fn update_gateway_group(
+    async fn update_gateway_group(
         &self,
         input: UpdateGatewayGroupRequest,
-    ) -> RusotoFuture<UpdateGatewayGroupResponse, UpdateGatewayGroupError> {
+    ) -> Result<UpdateGatewayGroupResponse, RusotoError<UpdateGatewayGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9999,28 +9746,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGatewayGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateGatewayGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGatewayGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGatewayGroupError::from_response(response))
+        }
     }
 
     /// <p>Updates a network profile by the network profile ARN.</p>
-    fn update_network_profile(
+    async fn update_network_profile(
         &self,
         input: UpdateNetworkProfileRequest,
-    ) -> RusotoFuture<UpdateNetworkProfileResponse, UpdateNetworkProfileError> {
+    ) -> Result<UpdateNetworkProfileResponse, RusotoError<UpdateNetworkProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10028,27 +9774,27 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNetworkProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateNetworkProfileError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateNetworkProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateNetworkProfileError::from_response(response))
+        }
     }
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
-    fn update_profile(
+    async fn update_profile(
         &self,
         input: UpdateProfileRequest,
-    ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError> {
+    ) -> Result<UpdateProfileResponse, RusotoError<UpdateProfileError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10056,28 +9802,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProfileResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateProfileError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProfileError::from_response(response))
+        }
     }
 
     /// <p>Updates room details by room ARN.</p>
-    fn update_room(
+    async fn update_room(
         &self,
         input: UpdateRoomRequest,
-    ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError> {
+    ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10085,28 +9829,26 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRoomResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateRoomError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateRoomResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoomError::from_response(response))
+        }
     }
 
     /// <p>Updates skill group details by skill group ARN.</p>
-    fn update_skill_group(
+    async fn update_skill_group(
         &self,
         input: UpdateSkillGroupRequest,
-    ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError> {
+    ) -> Result<UpdateSkillGroupResponse, RusotoError<UpdateSkillGroupError>> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10114,20 +9856,19 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSkillGroupResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateSkillGroupError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSkillGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSkillGroupError::from_response(response))
+        }
     }
 }

@@ -9,16 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -42,15 +42,13 @@ pub struct Action {
     pub authenticate_oidc_config: Option<AuthenticateOidcActionConfig>,
     /// <p>[Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when <code>Type</code> is <code>fixed-response</code>.</p>
     pub fixed_response_config: Option<FixedResponseActionConfig>,
-    /// <p>Information for creating an action that distributes requests among one or more target groups. For Network Load Balancers, you can specify a single target group. Specify only when <code>Type</code> is <code>forward</code>. If you specify both <code>ForwardConfig</code> and <code>TargetGroupArn</code>, you can specify only one target group using <code>ForwardConfig</code> and it must be the same target group specified in <code>TargetGroupArn</code>.</p>
-    pub forward_config: Option<ForwardActionConfig>,
-    /// <p>The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first. The last action to be performed must be one of the following types of actions: a <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p>
+    /// <p>The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first. The final action to be performed must be a <code>forward</code> or a <code>fixed-response</code> action.</p>
     pub order: Option<i64>,
     /// <p>[Application Load Balancer] Information for creating a redirect action. Specify only when <code>Type</code> is <code>redirect</code>.</p>
     pub redirect_config: Option<RedirectActionConfig>,
-    /// <p>The Amazon Resource Name (ARN) of the target group. Specify only when <code>Type</code> is <code>forward</code> and you want to route to a single target group. To route to one or more target groups, use <code>ForwardConfig</code> instead.</p>
+    /// <p>The Amazon Resource Name (ARN) of the target group. Specify only when <code>Type</code> is <code>forward</code>.</p>
     pub target_group_arn: Option<String>,
-    /// <p>The type of action.</p>
+    /// <p>The type of action. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p>
     pub type_: String,
 }
 
@@ -80,12 +78,6 @@ impl ActionDeserializer {
                             "FixedResponseConfig",
                             stack,
                         )?);
-                }
-                "ForwardConfig" => {
-                    obj.forward_config = Some(ForwardActionConfigDeserializer::deserialize(
-                        "ForwardConfig",
-                        stack,
-                    )?);
                 }
                 "Order" => {
                     obj.order = Some(ActionOrderDeserializer::deserialize("Order", stack)?);
@@ -139,13 +131,6 @@ impl ActionSerializer {
             FixedResponseActionConfigSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "FixedResponseConfig"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.forward_config {
-            ForwardActionConfigSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ForwardConfig"),
                 field_value,
             );
         }
@@ -245,7 +230,7 @@ impl AddListenerCertificatesInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddListenerCertificatesOutput {
-    /// <p>Information about the certificates in the certificate list.</p>
+    /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
 }
 
@@ -981,9 +966,9 @@ impl AuthenticateOidcActionUserInfoEndpointDeserializer {
 /// <p>Information about an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
-    /// <p>[Network Load Balancers] If you need static IP addresses for your load balancer, you can specify one Elastic IP address per Availability Zone when you create an internal-facing load balancer. For internal load balancers, you can specify a private IP address from the IPv4 range of the subnet.</p>
+    /// <p>[Network Load Balancers] The static IP address.</p>
     pub load_balancer_addresses: Option<Vec<LoadBalancerAddress>>,
-    /// <p>The ID of the subnet. You can specify one subnet per Availability Zone.</p>
+    /// <p>The ID of the subnet.</p>
     pub subnet_id: Option<String>,
     /// <p>The name of the Availability Zone.</p>
     pub zone_name: Option<String>,
@@ -1051,7 +1036,7 @@ impl CanonicalHostedZoneIdDeserializer {
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
     pub certificate_arn: Option<String>,
-    /// <p>Indicates whether the certificate is the default certificate. Do not set this value when specifying a certificate as an input. This value is not included in the output when describing a listener, but is included when describing listener certificates.</p>
+    /// <p>Indicates whether the certificate is the default certificate. Do not set <code>IsDefault</code> when specifying a certificate as an input parameter.</p>
     pub is_default: Option<bool>,
 }
 
@@ -1218,15 +1203,15 @@ impl ConditionFieldNameDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateListenerInput {
-    /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list for the listener, use <a>AddListenerCertificates</a>.</p>
+    /// <p>[HTTPS and TLS listeners] The default SSL server certificate. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub default_actions: Vec<Action>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
     /// <p>The port on which the load balancer is listening.</p>
     pub port: i64,
-    /// <p>The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP.</p>
+    /// <p>The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP and TLS.</p>
     pub protocol: String,
     /// <p>[HTTPS and TLS listeners] The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>
     pub ssl_policy: Option<String>,
@@ -1297,11 +1282,11 @@ pub struct CreateLoadBalancerInput {
     pub ip_address_type: Option<String>,
     /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-".</p>
     pub name: String,
-    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
+    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
     pub scheme: Option<String>,
     /// <p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet if you need static IP addresses for your internet-facing load balancer. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet.</p>
+    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
     /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
     pub subnets: Option<Vec<String>>,
@@ -1385,9 +1370,9 @@ impl CreateLoadBalancerOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRuleInput {
-    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Vec<Action>,
-    /// <p>The conditions. Each rule can include zero or one of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>, and zero or more of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
+    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Vec<RuleCondition>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -1443,19 +1428,19 @@ impl CreateRuleOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTargetGroupInput {
-    /// <p>Indicates whether health checks are enabled. If the target type is <code>lambda</code>, health checks are disabled by default but can be enabled. If the target type is <code>instance</code> or <code>ip</code>, health checks are always enabled and cannot be disabled.</p>
+    /// <p>Indicates whether health checks are enabled. If the target type is <code>instance</code> or <code>ip</code>, the default is <code>true</code>. If the target type is <code>lambda</code>, the default is <code>false</code>.</p>
     pub health_check_enabled: Option<bool>,
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For HTTP and HTTPS health checks, the range is 5–300 seconds. For TCP health checks, the supported values are 10 and 30 seconds. If the target type is <code>instance</code> or <code>ip</code>, the default is 30 seconds. If the target type is <code>lambda</code>, the default is 35 seconds.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. If the target type is <code>instance</code> or <code>ip</code>, the default is 30 seconds. If the target type is <code>lambda</code>, the default is 35 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
     /// <p>[HTTP/HTTPS health checks] The ping path that is the destination on the targets for health checks. The default is /.</p>
     pub health_check_path: Option<String>,
     /// <p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which is the port on which each target receives traffic from the load balancer.</p>
     pub health_check_port: Option<String>,
-    /// <p>The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers, the default is TCP. The TCP protocol is supported for health checks only if the protocol of the target group is TCP, TLS, UDP, or TCP_UDP. The TLS, UDP, and TCP_UDP protocols are not supported for health checks.</p>
+    /// <p>The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers, the default is TCP. The TCP protocol is supported for health checks only if the protocol of the target group is TCP or TLS. The TLS protocol is not supported for health checks.</p>
     pub health_check_protocol: Option<String>,
-    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For target groups with a protocol of HTTP or HTTPS, the default is 5 seconds. For target groups with a protocol of TCP or TLS, this value must be 6 seconds for HTTP health checks and 10 seconds for TCP and HTTPS health checks. If the target type is <code>lambda</code>, the default is 30 seconds.</p>
+    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For Application Load Balancers, the range is 2–120 seconds and the default is 5 seconds if the target type is <code>instance</code> or <code>ip</code> and 30 seconds if the target type is <code>lambda</code>. For Network Load Balancers, this is 10 seconds for TCP and HTTPS health checks and 6 seconds for HTTP health checks.</p>
     pub health_check_timeout_seconds: Option<i64>,
-    /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For target groups with a protocol of HTTP or HTTPS, the default is 5. For target groups with a protocol of TCP or TLS, the default is 3. If the target type is <code>lambda</code>, the default is 5.</p>
+    /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For Application Load Balancers, the default is 5. For Network Load Balancers, the default is 3.</p>
     pub healthy_threshold_count: Option<i64>,
     /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
@@ -1463,13 +1448,13 @@ pub struct CreateTargetGroupInput {
     pub name: String,
     /// <p>The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply.</p>
     pub port: Option<i64>,
-    /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.</p>
+    /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP and TLS. If the target is a Lambda function, this parameter does not apply.</p>
     pub protocol: Option<String>,
-    /// <p><p>The type of target that you must specify when registering targets with this target group. You can&#39;t specify targets for a target group using more than one target type.</p> <ul> <li> <p> <code>instance</code> - Targets are specified by instance ID. This is the default value. If the target group protocol is UDP or TCP_UDP, the target type must be <code>instance</code>.</p> </li> <li> <p> <code>ip</code> - Targets are specified by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can&#39;t specify publicly routable IP addresses.</p> </li> <li> <p> <code>lambda</code> - The target groups contains a single Lambda function.</p> </li> </ul></p>
+    /// <p><p>The type of target that you must specify when registering targets with this target group. You can&#39;t specify targets for a target group using more than one target type.</p> <ul> <li> <p> <code>instance</code> - Targets are specified by instance ID. This is the default value.</p> </li> <li> <p> <code>ip</code> - Targets are specified by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can&#39;t specify publicly routable IP addresses.</p> </li> <li> <p> <code>lambda</code> - The target groups contains a single Lambda function.</p> </li> </ul></p>
     pub target_type: Option<String>,
-    /// <p>The number of consecutive health check failures required before considering a target unhealthy. For target groups with a protocol of HTTP or HTTPS, the default is 2. For target groups with a protocol of TCP or TLS, this value must be the same as the healthy threshold count. If the target type is <code>lambda</code>, the default is 2.</p>
+    /// <p>The number of consecutive health check failures required before considering a target unhealthy. For Application Load Balancers, the default is 2. For Network Load Balancers, this value must be the same as the healthy threshold count.</p>
     pub unhealthy_threshold_count: Option<i64>,
-    /// <p>The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply. Otherwise, this parameter is required.</p>
+    /// <p>The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply.</p>
     pub vpc_id: Option<String>,
 }
 
@@ -1839,7 +1824,7 @@ impl DescribeAccountLimitsInputSerializer {
 pub struct DescribeAccountLimitsOutput {
     /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
@@ -1904,7 +1889,7 @@ impl DescribeListenerCertificatesInputSerializer {
 pub struct DescribeListenerCertificatesOutput {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
@@ -1980,7 +1965,7 @@ impl DescribeListenersInputSerializer {
 pub struct DescribeListenersOutput {
     /// <p>Information about the listeners.</p>
     pub listeners: Option<Vec<Listener>>,
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
@@ -2112,7 +2097,7 @@ impl DescribeLoadBalancersInputSerializer {
 pub struct DescribeLoadBalancersOutput {
     /// <p>Information about the load balancers.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
@@ -2186,7 +2171,7 @@ impl DescribeRulesInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRulesOutput {
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
@@ -2252,7 +2237,7 @@ impl DescribeSSLPoliciesInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSSLPoliciesOutput {
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the policies.</p>
     pub ssl_policies: Option<Vec<SslPolicy>>,
@@ -2438,7 +2423,7 @@ impl DescribeTargetGroupsInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetGroupsOutput {
-    /// <p>If there are additional results, this is the marker for the next set of results. Otherwise, this is null.</p>
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
     /// <p>Information about the target groups.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -2650,69 +2635,6 @@ impl FixedResponseActionStatusCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about a forward action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ForwardActionConfig {
-    /// <p>The target group stickiness for the rule.</p>
-    pub target_group_stickiness_config: Option<TargetGroupStickinessConfig>,
-    /// <p>One or more target groups. For Network Load Balancers, you can specify a single target group.</p>
-    pub target_groups: Option<Vec<TargetGroupTuple>>,
-}
-
-struct ForwardActionConfigDeserializer;
-impl ForwardActionConfigDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ForwardActionConfig, XmlParseError> {
-        deserialize_elements::<_, ForwardActionConfig, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TargetGroupStickinessConfig" => {
-                    obj.target_group_stickiness_config =
-                        Some(TargetGroupStickinessConfigDeserializer::deserialize(
-                            "TargetGroupStickinessConfig",
-                            stack,
-                        )?);
-                }
-                "TargetGroups" => {
-                    obj.target_groups.get_or_insert(vec![]).extend(
-                        TargetGroupListDeserializer::deserialize("TargetGroups", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-
-/// Serialize `ForwardActionConfig` contents to a `SignedRequest`.
-struct ForwardActionConfigSerializer;
-impl ForwardActionConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ForwardActionConfig) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.target_group_stickiness_config {
-            TargetGroupStickinessConfigSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "TargetGroupStickinessConfig"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.target_groups {
-            TargetGroupListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "TargetGroups"),
-                field_value,
-            );
-        }
-    }
-}
-
 struct HealthCheckEnabledDeserializer;
 impl HealthCheckEnabledDeserializer {
     #[allow(unused_variables)]
@@ -2768,10 +2690,8 @@ impl HealthCheckTimeoutSecondsDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about a host header condition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostHeaderConditionConfig {
-    /// <p>One or more host names. The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).</p> <p>If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -2830,12 +2750,9 @@ impl HttpCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about an HTTP header condition.</p> <p>There is a set of standard HTTP header fields. You can also define custom HTTP header fields.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HttpHeaderConditionConfig {
-    /// <p>The name of the HTTP header field. The maximum size is 40 characters. The header name is case insensitive. The allowed characters are specified by RFC 7230. Wildcards are not supported.</p> <p>You can't use an HTTP header condition to specify the host header. Use <a>HostHeaderConditionConfig</a> to specify a host header condition.</p>
     pub http_header_name: Option<String>,
-    /// <p>One or more strings to compare against the value of the HTTP header. The maximum size of each string is 128 characters. The comparison strings are case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).</p> <p>If the same header appears multiple times in the request, we search them in order until a match is found.</p> <p>If you specify multiple strings, the condition is satisfied if one of the strings matches the value of the HTTP header. To require that all of the strings are a match, create one condition per string.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -2904,10 +2821,8 @@ impl HttpHeaderConditionNameDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about an HTTP method condition.</p> <p>HTTP defines a set of request methods, also referred to as HTTP verbs. For more information, see the <a href="https://www.iana.org/assignments/http-methods/http-methods.xhtml">HTTP Method Registry</a>. You can also define custom HTTP methods.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct HttpRequestMethodConditionConfig {
-    /// <p>The name of the request method. The maximum size is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match.</p> <p>If you specify multiple strings, the condition is satisfied if one of the strings matches the HTTP request method. We recommend that you route GET and HEAD requests in the same way, because the response to a HEAD request may be cached.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -2993,7 +2908,7 @@ impl IsDefaultDeserializer {
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
-    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>listeners-per-network-load-balancer</p> </li> <li> <p>network-load-balancers</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>target-groups-per-action-on-application-load-balancer</p> </li> <li> <p>target-groups-per-action-on-network-load-balancer</p> </li> <li> <p>target-groups-per-application-load-balancer</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> <li> <p>targets-per-availability-zone-per-network-load-balancer</p> </li> <li> <p>targets-per-network-load-balancer</p> </li> </ul></p>
+    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>listeners-per-network-load-balancer</p> </li> <li> <p>network-load-balancers</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> <li> <p>targets-per-availability-zone-per-network-load-balancer</p> </li> <li> <p>targets-per-network-load-balancer</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -3064,7 +2979,7 @@ impl ListOfStringSerializer {
 /// <p>Information about a listener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Listener {
-    /// <p>[HTTPS or TLS listener] The default certificate for the listener.</p>
+    /// <p>The SSL server certificate. You must provide a certificate if the protocol is HTTPS or TLS.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The default actions for the listener.</p>
     pub default_actions: Option<Vec<Action>>,
@@ -3076,7 +2991,7 @@ pub struct Listener {
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer.</p>
     pub protocol: Option<String>,
-    /// <p>[HTTPS or TLS listener] The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>
+    /// <p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>
     pub ssl_policy: Option<String>,
 }
 
@@ -3182,7 +3097,7 @@ pub struct LoadBalancer {
     pub load_balancer_arn: Option<String>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer.</p>
+    /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p>
     pub scheme: Option<String>,
     /// <p>The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
@@ -3270,12 +3185,10 @@ impl LoadBalancerDeserializer {
 /// <p>Information about a static IP address for a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAddress {
-    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address for an internal-facing load balancer.</p>
+    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
     pub allocation_id: Option<String>,
     /// <p>The static IP address.</p>
     pub ip_address: Option<String>,
-    /// <p>[Network Load Balancers] The private IPv4 address for an internal load balancer.</p>
-    pub private_i_pv_4_address: Option<String>,
 }
 
 struct LoadBalancerAddressDeserializer;
@@ -3295,12 +3208,6 @@ impl LoadBalancerAddressDeserializer {
                 }
                 "IpAddress" => {
                     obj.ip_address = Some(IpAddressDeserializer::deserialize("IpAddress", stack)?);
-                }
-                "PrivateIPv4Address" => {
-                    obj.private_i_pv_4_address = Some(PrivateIPv4AddressDeserializer::deserialize(
-                        "PrivateIPv4Address",
-                        stack,
-                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -3370,7 +3277,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http.drop<em>invalid</em>header<em>fields.enabled</code> - Indicates whether HTTP headers with invalid header fields are removed by the load balancer (<code>true</code>) or routed to targets (<code>false</code>). The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load</em>balancing.cross_zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3641,15 +3548,15 @@ impl MaxDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyListenerInput {
-    /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
+    /// <p>[HTTPS and TLS listeners] The default SSL server certificate. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub default_actions: Option<Vec<Action>>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
     /// <p>The port for connections from clients to the load balancer.</p>
     pub port: Option<i64>,
-    /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support the HTTP and HTTPS protocols. Network Load Balancers support the TCP, TLS, UDP, and TCP_UDP protocols.</p>
+    /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support the HTTP and HTTPS protocols. Network Load Balancers support the TCP and TLS protocols.</p>
     pub protocol: Option<String>,
     /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
@@ -3778,9 +3685,9 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyRuleInput {
-    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>fixed-response</code>, or <code>redirect</code>, and it must be the last action to be performed.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
+    /// <p>The actions.</p> <p>If the action type is <code>forward</code>, you specify a target group. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP or TLS for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
     pub actions: Option<Vec<Action>>,
-    /// <p>The conditions. Each rule can include zero or one of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>, and zero or more of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
+    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Option<Vec<RuleCondition>>,
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
@@ -3898,19 +3805,19 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 pub struct ModifyTargetGroupInput {
     /// <p>Indicates whether health checks are enabled.</p>
     pub health_check_enabled: Option<bool>,
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5–300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p> <p>If the protocol of the target group is TCP, you can't modify this setting.</p>
     pub health_check_interval_seconds: Option<i64>,
     /// <p>[HTTP/HTTPS health checks] The ping path that is the destination for the health check request.</p>
     pub health_check_path: Option<String>,
     /// <p>The port the load balancer uses when performing health checks on targets.</p>
     pub health_check_port: Option<String>,
-    /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported for health checks only if the protocol of the target group is TCP, TLS, UDP, or TCP_UDP. The TLS, UDP, and TCP_UDP protocols are not supported for health checks.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported for health checks only if the protocol of the target group is TCP or TLS. The TLS protocol is not supported for health checks.</p> <p>If the protocol of the target group is TCP, you can't modify this setting.</p>
     pub health_check_protocol: Option<String>,
-    /// <p>[HTTP/HTTPS health checks] The amount of time, in seconds, during which no response means a failed health check.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>[HTTP/HTTPS health checks] The amount of time, in seconds, during which no response means a failed health check.</p> <p>If the protocol of the target group is TCP, you can't modify this setting.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>
     pub healthy_threshold_count: Option<i64>,
-    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
+    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p> <p>If the protocol of the target group is TCP, you can't modify this setting.</p>
     pub matcher: Option<Matcher>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -4028,10 +3935,8 @@ impl PathDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about a path pattern condition.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PathPatternConditionConfig {
-    /// <p>One or more path patterns to compare against the request URL. The maximum size of each string is 128 characters. The comparison is case sensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).</p> <p>If you specify multiple strings, the condition is satisfied if one of them matches the request URL. The path pattern is compared only to the path of the URL, not to its query string. To compare against the query string, use <a>QueryStringConditionConfig</a>.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -4090,17 +3995,6 @@ impl PortDeserializer {
         Ok(obj)
     }
 }
-struct PrivateIPv4AddressDeserializer;
-impl PrivateIPv4AddressDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
     #[allow(unused_variables)]
@@ -4112,10 +4006,8 @@ impl ProtocolEnumDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about a query string condition.</p> <p>The query string component of a URI starts after the first '?' character and is terminated by either a '#' character or the end of the URI. A typical query string contains key/value pairs separated by '&amp;' characters. The allowed characters are specified by RFC 3986. Any character can be percentage encoded.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueryStringConditionConfig {
-    /// <p>One or more key/value pairs or values to find in the query string. The maximum size of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in <code>Values</code> using a '\' character.</p> <p>If you specify multiple key/value pairs or values, the condition is satisfied if one of them is found in the query string.</p>
     pub values: Option<Vec<QueryStringKeyValuePair>>,
 }
 
@@ -4163,12 +4055,9 @@ impl QueryStringConditionConfigSerializer {
     }
 }
 
-/// <p>Information about a key/value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueryStringKeyValuePair {
-    /// <p>The key. You can omit the key.</p>
     pub key: Option<String>,
-    /// <p>The value.</p>
     pub value: Option<String>,
 }
 
@@ -4561,9 +4450,9 @@ impl ResourceArnsSerializer {
 /// <p>Information about a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Rule {
-    /// <p>The actions. Each rule must include exactly one of the following types of actions: <code>forward</code>, <code>redirect</code>, or <code>fixed-response</code>, and it must be the last action to be performed.</p>
+    /// <p>The actions.</p>
     pub actions: Option<Vec<Action>>,
-    /// <p>The conditions. Each rule can include zero or one of the following conditions: <code>http-request-method</code>, <code>host-header</code>, <code>path-pattern</code>, and <code>source-ip</code>, and zero or more of the following conditions: <code>http-header</code> and <code>query-string</code>.</p>
+    /// <p>The conditions.</p>
     pub conditions: Option<Vec<RuleCondition>>,
     /// <p>Indicates whether this is the default rule.</p>
     pub is_default: Option<bool>,
@@ -4630,21 +4519,15 @@ impl RuleArnsSerializer {
 /// <p>Information about a condition for a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RuleCondition {
-    /// <p><p>The field in the HTTP request. The following are the possible values:</p> <ul> <li> <p> <code>http-header</code> </p> </li> <li> <p> <code>http-request-method</code> </p> </li> <li> <p> <code>host-header</code> </p> </li> <li> <p> <code>path-pattern</code> </p> </li> <li> <p> <code>query-string</code> </p> </li> <li> <p> <code>source-ip</code> </p> </li> </ul></p>
+    /// <p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>
     pub field: Option<String>,
-    /// <p>Information for a host header condition. Specify only when <code>Field</code> is <code>host-header</code>.</p>
     pub host_header_config: Option<HostHeaderConditionConfig>,
-    /// <p>Information for an HTTP header condition. Specify only when <code>Field</code> is <code>http-header</code>.</p>
     pub http_header_config: Option<HttpHeaderConditionConfig>,
-    /// <p>Information for an HTTP method condition. Specify only when <code>Field</code> is <code>http-request-method</code>.</p>
     pub http_request_method_config: Option<HttpRequestMethodConditionConfig>,
-    /// <p>Information for a path pattern condition. Specify only when <code>Field</code> is <code>path-pattern</code>.</p>
     pub path_pattern_config: Option<PathPatternConditionConfig>,
-    /// <p>Information for a query string condition. Specify only when <code>Field</code> is <code>query-string</code>.</p>
     pub query_string_config: Option<QueryStringConditionConfig>,
-    /// <p>Information for a source IP condition. Specify only when <code>Field</code> is <code>source-ip</code>.</p>
     pub source_ip_config: Option<SourceIpConditionConfig>,
-    /// <p><p>The condition value. You can use <code>Values</code> if the rule contains only <code>host-header</code> and <code>path-pattern</code> conditions. Otherwise, you can use <code>HostHeaderConfig</code> for <code>host-header</code> conditions and <code>PathPatternConfig</code> for <code>path-pattern</code> conditions.</p> <p>If <code>Field</code> is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If <code>Field</code> is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
+    /// <p><p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
 
@@ -4903,7 +4786,7 @@ impl SecurityGroupsSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetIpAddressTypeInput {
-    /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>. Network Load Balancers must use <code>ipv4</code>.</p>
+    /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: String,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -5072,7 +4955,7 @@ impl SetSecurityGroupsOutputDeserializer {
 pub struct SetSubnetsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
-    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. If you need static IP addresses for your internet-facing load balancer, you can specify one Elastic IP address per subnet. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet.</p>
+    /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
     /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p>
     pub subnets: Option<Vec<String>>,
@@ -5130,10 +5013,8 @@ impl SetSubnetsOutputDeserializer {
         })
     }
 }
-/// <p>Information about a source IP condition.</p> <p>You can use this condition to route based on the IP address of the source that connects to the load balancer. If a client is behind a proxy, this is the IP address of the proxy not the IP address of the client.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceIpConditionConfig {
-    /// <p>One or more source IP addresses, in CIDR format. You can use both IPv4 and IPv6 addresses. Wildcards are not supported.</p> <p>If you specify multiple addresses, the condition is satisfied if the source IP address of the request matches one of the CIDR blocks. This condition is not satisfied by the addresses in the X-Forwarded-For header. To search for addresses in the X-Forwarded-For header, use <a>HttpHeaderConditionConfig</a>.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -5335,10 +5216,8 @@ impl SubnetIdDeserializer {
 /// <p>Information about a subnet mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SubnetMapping {
-    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address for an internet-facing load balancer.</p>
+    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
     pub allocation_id: Option<String>,
-    /// <p>[Network Load Balancers] The private IPv4 address for an internal load balancer.</p>
-    pub private_i_pv_4_address: Option<String>,
     /// <p>The ID of the subnet.</p>
     pub subnet_id: Option<String>,
 }
@@ -5354,9 +5233,6 @@ impl SubnetMappingSerializer {
 
         if let Some(ref field_value) = obj.allocation_id {
             params.put(&format!("{}{}", prefix, "AllocationId"), &field_value);
-        }
-        if let Some(ref field_value) = obj.private_i_pv_4_address {
-            params.put(&format!("{}{}", prefix, "PrivateIPv4Address"), &field_value);
         }
         if let Some(ref field_value) = obj.subnet_id {
             params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
@@ -5550,7 +5426,7 @@ pub struct TargetDescription {
     pub availability_zone: Option<String>,
     /// <p>The ID of the target. If the target type of the target group is <code>instance</code>, specify an instance ID. If the target type is <code>ip</code>, specify an IP address. If the target type is <code>lambda</code>, specify the ARN of the Lambda function.</p>
     pub id: String,
-    /// <p>The port on which the target is listening. Not used if the target is a Lambda function.</p>
+    /// <p>The port on which the target is listening.</p>
     pub port: Option<i64>,
 }
 
@@ -5633,7 +5509,7 @@ pub struct TargetGroup {
     pub load_balancer_arns: Option<Vec<String>>,
     /// <p>The HTTP codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
-    /// <p>The port on which the targets are listening. Not used if the target is a Lambda function.</p>
+    /// <p>The port on which the targets are listening.</p>
     pub port: Option<i64>,
     /// <p>The protocol to use for routing traffic to the targets.</p>
     pub protocol: Option<String>,
@@ -5775,7 +5651,7 @@ impl TargetGroupArnsSerializer {
 /// <p>Information about a target group attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroupAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attribute is supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> </ul> <p>The following attributes are supported by Application Load Balancers if the target is not a Lambda function:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives a linearly increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb</em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb<em>cookie.duration</em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the target is a Lambda function.</p> <ul> <li> <p> <code>lambda.multi<em>value</em>headers.enabled</code> - Indicates whether the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy<em>protocol</em>v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attribute is supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> </ul> <p>The following attributes are supported by Application Load Balancers if the target is not a Lambda function:</p> <ul> <li> <p> <code>slow<em>start.duration</em>seconds</code> - The time period, in seconds, during which a newly registered target receives a linearly increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the target is a Lambda function.</p> <ul> <li> <p> <code>lambda.multi</em>value<em>headers.enabled</code> - Indicates whether the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -5878,35 +5754,6 @@ impl TargetGroupAttributesSerializer {
     }
 }
 
-struct TargetGroupListDeserializer;
-impl TargetGroupListDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Vec<TargetGroupTuple>, XmlParseError> {
-        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
-            if name == "member" {
-                obj.push(TargetGroupTupleDeserializer::deserialize("member", stack)?);
-            } else {
-                skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-
-/// Serialize `TargetGroupList` contents to a `SignedRequest`.
-struct TargetGroupListSerializer;
-impl TargetGroupListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetGroupTuple>) {
-        for (index, obj) in obj.iter().enumerate() {
-            let key = format!("{}.member.{}", name, index + 1);
-            TargetGroupTupleSerializer::serialize(params, &key, obj);
-        }
-    }
-}
-
 struct TargetGroupNameDeserializer;
 impl TargetGroupNameDeserializer {
     #[allow(unused_variables)]
@@ -5930,151 +5777,6 @@ impl TargetGroupNamesSerializer {
     }
 }
 
-/// <p>Information about the target group stickiness for a rule.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TargetGroupStickinessConfig {
-    /// <p>The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days).</p>
-    pub duration_seconds: Option<i64>,
-    /// <p>Indicates whether target group stickiness is enabled.</p>
-    pub enabled: Option<bool>,
-}
-
-struct TargetGroupStickinessConfigDeserializer;
-impl TargetGroupStickinessConfigDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TargetGroupStickinessConfig, XmlParseError> {
-        deserialize_elements::<_, TargetGroupStickinessConfig, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DurationSeconds" => {
-                        obj.duration_seconds = Some(
-                            TargetGroupStickinessDurationSecondsDeserializer::deserialize(
-                                "DurationSeconds",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Enabled" => {
-                        obj.enabled = Some(TargetGroupStickinessEnabledDeserializer::deserialize(
-                            "Enabled", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-
-/// Serialize `TargetGroupStickinessConfig` contents to a `SignedRequest`.
-struct TargetGroupStickinessConfigSerializer;
-impl TargetGroupStickinessConfigSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupStickinessConfig) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.duration_seconds {
-            params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
-        }
-        if let Some(ref field_value) = obj.enabled {
-            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
-        }
-    }
-}
-
-struct TargetGroupStickinessDurationSecondsDeserializer;
-impl TargetGroupStickinessDurationSecondsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-struct TargetGroupStickinessEnabledDeserializer;
-impl TargetGroupStickinessEnabledDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-/// <p>Information about how traffic will be distributed between multiple target groups in a forward rule.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TargetGroupTuple {
-    /// <p>The Amazon Resource Name (ARN) of the target group.</p>
-    pub target_group_arn: Option<String>,
-    /// <p>The weight. The range is 0 to 999.</p>
-    pub weight: Option<i64>,
-}
-
-struct TargetGroupTupleDeserializer;
-impl TargetGroupTupleDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TargetGroupTuple, XmlParseError> {
-        deserialize_elements::<_, TargetGroupTuple, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TargetGroupArn" => {
-                    obj.target_group_arn = Some(TargetGroupArnDeserializer::deserialize(
-                        "TargetGroupArn",
-                        stack,
-                    )?);
-                }
-                "Weight" => {
-                    obj.weight = Some(TargetGroupWeightDeserializer::deserialize("Weight", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-
-/// Serialize `TargetGroupTuple` contents to a `SignedRequest`.
-struct TargetGroupTupleSerializer;
-impl TargetGroupTupleSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupTuple) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.target_group_arn {
-            params.put(&format!("{}{}", prefix, "TargetGroupArn"), &field_value);
-        }
-        if let Some(ref field_value) = obj.weight {
-            params.put(&format!("{}{}", prefix, "Weight"), &field_value);
-        }
-    }
-}
-
-struct TargetGroupWeightDeserializer;
-impl TargetGroupWeightDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
 struct TargetGroupsDeserializer;
 impl TargetGroupsDeserializer {
     #[allow(unused_variables)]
@@ -6097,7 +5799,7 @@ impl TargetGroupsDeserializer {
 pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
-    /// <p><p>The reason code.</p> <p>If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code. Applies only to Application Load Balancers.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out. Applies only to Application Load Balancers.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The load balancer received an error while establishing a connection to the target or the target response was malformed.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error. Applies only to Application Load Balancers.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> <li> <p> <code>Target.IpUnusable</code> - The target IP address is reserved for use by a load balancer.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul> <p>If the target state is <code>unavailable</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.HealthCheckDisabled</code> - Health checks are disabled for the target group. Applies only to Application Load Balancers.</p> </li> <li> <p> <code>Elb.InternalError</code> - Target health is unavailable due to an internal error. Applies only to Network Load Balancers.</p> </li> </ul></p>
+    /// <p><p>The reason code.</p> <p>If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.IpUnusable</code> - The target IP address is reserved for use by a load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul> <p>If the target state is <code>unavailable</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.HealthCheckDisabled</code> - Health checks are disabled for the target group.</p> </li> </ul></p>
     pub reason: Option<String>,
     /// <p>The state of the target.</p>
     pub state: Option<String>,
@@ -6428,8 +6130,6 @@ pub enum CreateListenerError {
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
-    /// <p>You've reached the limit on the number of unique target groups per load balancer across all listeners. If a target group is used by multiple actions for a load balancer, it is counted as only one use.</p>
-    TooManyUniqueTargetGroupsPerLoadBalancer(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
 }
@@ -6514,13 +6214,6 @@ impl CreateListenerError {
                             parsed_error.message,
                         ))
                     }
-                    "TooManyUniqueTargetGroupsPerLoadBalancer" => {
-                        return RusotoError::Service(
-                            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(CreateListenerError::UnsupportedProtocol(
                             parsed_error.message,
@@ -6563,7 +6256,6 @@ impl Error for CreateListenerError {
             CreateListenerError::TooManyListeners(ref cause) => cause,
             CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
             CreateListenerError::TooManyTargets(ref cause) => cause,
-            CreateListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
             CreateListenerError::UnsupportedProtocol(ref cause) => cause,
         }
     }
@@ -6744,8 +6436,6 @@ pub enum CreateRuleError {
     TooManyTargetGroups(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
-    /// <p>You've reached the limit on the number of unique target groups per load balancer across all listeners. If a target group is used by multiple actions for a load balancer, it is counted as only one use.</p>
-    TooManyUniqueTargetGroupsPerLoadBalancer(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
 }
@@ -6818,13 +6508,6 @@ impl CreateRuleError {
                             parsed_error.message,
                         ))
                     }
-                    "TooManyUniqueTargetGroupsPerLoadBalancer" => {
-                        return RusotoError::Service(
-                            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(CreateRuleError::UnsupportedProtocol(
                             parsed_error.message,
@@ -6865,7 +6548,6 @@ impl Error for CreateRuleError {
             CreateRuleError::TooManyRules(ref cause) => cause,
             CreateRuleError::TooManyTargetGroups(ref cause) => cause,
             CreateRuleError::TooManyTargets(ref cause) => cause,
-            CreateRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
             CreateRuleError::UnsupportedProtocol(ref cause) => cause,
         }
     }
@@ -7832,8 +7514,6 @@ pub enum ModifyListenerError {
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
-    /// <p>You've reached the limit on the number of unique target groups per load balancer across all listeners. If a target group is used by multiple actions for a load balancer, it is counted as only one use.</p>
-    TooManyUniqueTargetGroupsPerLoadBalancer(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
 }
@@ -7918,13 +7598,6 @@ impl ModifyListenerError {
                             parsed_error.message,
                         ))
                     }
-                    "TooManyUniqueTargetGroupsPerLoadBalancer" => {
-                        return RusotoError::Service(
-                            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(ModifyListenerError::UnsupportedProtocol(
                             parsed_error.message,
@@ -7967,7 +7640,6 @@ impl Error for ModifyListenerError {
             ModifyListenerError::TooManyListeners(ref cause) => cause,
             ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
             ModifyListenerError::TooManyTargets(ref cause) => cause,
-            ModifyListenerError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
             ModifyListenerError::UnsupportedProtocol(ref cause) => cause,
         }
     }
@@ -8054,8 +7726,6 @@ pub enum ModifyRuleError {
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
-    /// <p>You've reached the limit on the number of unique target groups per load balancer across all listeners. If a target group is used by multiple actions for a load balancer, it is counted as only one use.</p>
-    TooManyUniqueTargetGroupsPerLoadBalancer(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
 }
@@ -8113,13 +7783,6 @@ impl ModifyRuleError {
                             parsed_error.message,
                         ))
                     }
-                    "TooManyUniqueTargetGroupsPerLoadBalancer" => {
-                        return RusotoError::Service(
-                            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(ModifyRuleError::UnsupportedProtocol(
                             parsed_error.message,
@@ -8157,7 +7820,6 @@ impl Error for ModifyRuleError {
             ModifyRuleError::TooManyActions(ref cause) => cause,
             ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
             ModifyRuleError::TooManyTargets(ref cause) => cause,
-            ModifyRuleError::TooManyUniqueTargetGroupsPerLoadBalancer(ref cause) => cause,
             ModifyRuleError::UnsupportedProtocol(ref cause) => cause,
         }
     }
@@ -8772,207 +8434,214 @@ impl Error for SetSubnetsError {
     }
 }
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
+#[async_trait]
 pub trait Elb {
-    /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>To get the certificate list for a listener, use <a>DescribeListenerCertificates</a>. To remove certificates from the certificate list for a listener, use <a>RemoveListenerCertificates</a>. To replace the default certificate for a listener, use <a>ModifyListener</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn add_listener_certificates(
+    /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
+    async fn add_listener_certificates(
         &self,
         input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError>;
+    ) -> Result<AddListenerCertificatesOutput, RusotoError<AddListenerCertificatesError>>;
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
+    async fn create_listener(
         &self,
         input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
+    ) -> Result<CreateListenerOutput, RusotoError<CreateListenerError>>;
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
+    async fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
+    ) -> Result<CreateLoadBalancerOutput, RusotoError<CreateLoadBalancerError>>;
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
+    async fn create_rule(
         &self,
         input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError>;
+    ) -> Result<CreateRuleOutput, RusotoError<CreateRuleError>>;
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_target_group(
+    async fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError>;
+    ) -> Result<CreateTargetGroupOutput, RusotoError<CreateTargetGroupError>>;
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
+    async fn delete_listener(
         &self,
         input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError>;
+    ) -> Result<DeleteListenerOutput, RusotoError<DeleteListenerError>>;
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
-    fn delete_load_balancer(
+    async fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
+    ) -> Result<DeleteLoadBalancerOutput, RusotoError<DeleteLoadBalancerError>>;
 
     /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
+    async fn delete_rule(
         &self,
         input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError>;
+    ) -> Result<DeleteRuleOutput, RusotoError<DeleteRuleError>>;
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
-    fn delete_target_group(
+    async fn delete_target_group(
         &self,
         input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError>;
+    ) -> Result<DeleteTargetGroupOutput, RusotoError<DeleteTargetGroupError>>;
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
-    fn deregister_targets(
+    async fn deregister_targets(
         &self,
         input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError>;
+    ) -> Result<DeregisterTargetsOutput, RusotoError<DeregisterTargetsError>>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
+    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
 
-    /// <p>Describes the default certificate and the certificate list for the specified HTTPS or TLS listener.</p> <p>If the default certificate is also in the certificate list, it appears twice in the results (once with <code>IsDefault</code> set to true and once with <code>IsDefault</code> set to false).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_listener_certificates(
+    /// <p>Describes the certificates for the specified HTTPS listener.</p>
+    async fn describe_listener_certificates(
         &self,
         input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError>;
+    ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>;
 
-    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p> <p>For an HTTPS or TLS listener, the output includes the default certificate for the listener. To describe the certificate list for the listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn describe_listeners(
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
+    async fn describe_listeners(
         &self,
         input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
+    ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>>;
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_load_balancer_attributes(
+    async fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
+    ) -> Result<
+        DescribeLoadBalancerAttributesOutput,
+        RusotoError<DescribeLoadBalancerAttributesError>,
+    >;
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
+    ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>>;
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
+    async fn describe_rules(
         &self,
         input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError>;
+    ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>>;
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_ssl_policies(
+    async fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
+    ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>>;
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>>;
 
     /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_target_group_attributes(
+    async fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
+    ) -> Result<DescribeTargetGroupAttributesOutput, RusotoError<DescribeTargetGroupAttributesError>>;
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
-    fn describe_target_groups(
+    async fn describe_target_groups(
         &self,
         input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
+    ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>>;
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
-    fn describe_target_health(
+    async fn describe_target_health(
         &self,
         input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError>;
+    ) -> Result<DescribeTargetHealthOutput, RusotoError<DescribeTargetHealthError>>;
 
-    /// <p>Replaces the specified properties of the specified listener. Any properties that you do not specify remain unchanged.</p> <p>Changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and default certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and default certificate properties.</p> <p>To add an item to a list, remove an item from a list, or update an item in a list, you must provide the entire list. For example, to add an action, specify a list with the current actions plus the new action.</p>
-    fn modify_listener(
+    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
+    async fn modify_listener(
         &self,
         input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError>;
+    ) -> Result<ModifyListenerOutput, RusotoError<ModifyListenerError>>;
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
-    fn modify_load_balancer_attributes(
+    async fn modify_load_balancer_attributes(
         &self,
         input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
+    ) -> Result<ModifyLoadBalancerAttributesOutput, RusotoError<ModifyLoadBalancerAttributesError>>;
 
-    /// <p>Replaces the specified properties of the specified rule. Any properties that you do not specify are unchanged.</p> <p>To add an item to a list, remove an item from a list, or update an item in a list, you must provide the entire list. For example, to add an action, specify a list with the current actions plus the new action.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
+    async fn modify_rule(
         &self,
         input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError>;
+    ) -> Result<ModifyRuleOutput, RusotoError<ModifyRuleError>>;
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
-    fn modify_target_group(
+    async fn modify_target_group(
         &self,
         input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError>;
+    ) -> Result<ModifyTargetGroupOutput, RusotoError<ModifyTargetGroupError>>;
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
-    fn modify_target_group_attributes(
+    async fn modify_target_group_attributes(
         &self,
         input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
+    ) -> Result<ModifyTargetGroupAttributesOutput, RusotoError<ModifyTargetGroupAttributesError>>;
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
+    async fn register_targets(
         &self,
         input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError>;
+    ) -> Result<RegisterTargetsOutput, RusotoError<RegisterTargetsError>>;
 
-    /// <p>Removes the specified certificate from the certificate list for the specified HTTPS or TLS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn remove_listener_certificates(
+    /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
+    async fn remove_listener_certificates(
         &self,
         input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError>;
+    ) -> Result<RemoveListenerCertificatesOutput, RusotoError<RemoveListenerCertificatesError>>;
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
+    async fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
+    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>>;
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p>
-    fn set_ip_address_type(
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
+    async fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError>;
+    ) -> Result<SetIpAddressTypeOutput, RusotoError<SetIpAddressTypeError>>;
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
-    fn set_rule_priorities(
+    async fn set_rule_priorities(
         &self,
         input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError>;
+    ) -> Result<SetRulePrioritiesOutput, RusotoError<SetRulePrioritiesError>>;
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
-    fn set_security_groups(
+    async fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
+    ) -> Result<SetSecurityGroupsOutput, RusotoError<SetSecurityGroupsError>>;
 
-    /// <p>Enables the Availability Zones for the specified public subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p> <p>When you specify subnets for a Network Load Balancer, you must include all subnets that were enabled previously, with their existing configurations, plus any additional subnets.</p>
-    fn set_subnets(
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
+    async fn set_subnets(
         &self,
         input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
+    ) -> Result<SetSubnetsOutput, RusotoError<SetSubnetsError>>;
 }
 /// A client for the Elastic Load Balancing v2 API.
 #[derive(Clone)]
@@ -8986,7 +8655,10 @@ impl ElbClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ElbClient {
-        Self::new_with_client(Client::shared(), region)
+        ElbClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -8996,35 +8668,22 @@ impl ElbClient {
     ) -> ElbClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ElbClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> ElbClient {
-        ElbClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for ElbClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ElbClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Elb for ElbClient {
-    /// <p>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener.</p> <p>If the certificate in already in the certificate list, the call is successful but the certificate is not added again.</p> <p>To get the certificate list for a listener, use <a>DescribeListenerCertificates</a>. To remove certificates from the certificate list for a listener, use <a>RemoveListenerCertificates</a>. To replace the default certificate for a listener, use <a>ModifyListener</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn add_listener_certificates(
+    /// <p>Adds the specified certificate to the specified HTTPS listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>. To specify the default SSL server certificate, use <a>ModifyListener</a>.</p>
+    async fn add_listener_certificates(
         &self,
         input: AddListenerCertificatesInput,
-    ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError> {
+    ) -> Result<AddListenerCertificatesOutput, RusotoError<AddListenerCertificatesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9034,42 +8693,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddListenerCertificatesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddListenerCertificatesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AddListenerCertificatesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AddListenerCertificatesOutputDeserializer::deserialize(
-                        "AddListenerCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AddListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AddListenerCertificatesOutputDeserializer::deserialize(
+                "AddListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+    async fn add_tags(
+        &self,
+        input: AddTagsInput,
+    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9079,45 +8742,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddTagsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AddTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AddTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_listener(
+    async fn create_listener(
         &self,
         input: CreateListenerInput,
-    ) -> RusotoFuture<CreateListenerOutput, CreateListenerError> {
+    ) -> Result<CreateListenerOutput, RusotoError<CreateListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9127,48 +8788,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateListenerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateListenerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateListenerOutputDeserializer::deserialize(
-                        "CreateListenerResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                CreateListenerOutputDeserializer::deserialize("CreateListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
+    async fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
-    ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError> {
+    ) -> Result<CreateLoadBalancerOutput, RusotoError<CreateLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9178,48 +8835,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateLoadBalancerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateLoadBalancerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateLoadBalancerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateLoadBalancerOutputDeserializer::deserialize(
-                        "CreateLoadBalancerResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateLoadBalancerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateLoadBalancerOutputDeserializer::deserialize(
+                "CreateLoadBalancerResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
-    fn create_rule(
+    async fn create_rule(
         &self,
         input: CreateRuleInput,
-    ) -> RusotoFuture<CreateRuleOutput, CreateRuleError> {
+    ) -> Result<CreateRuleOutput, RusotoError<CreateRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9229,46 +8884,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateRuleError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateRuleError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateRuleOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateRuleOutputDeserializer::deserialize("CreateRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn create_target_group(
+    async fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
-    ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError> {
+    ) -> Result<CreateTargetGroupOutput, RusotoError<CreateTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9278,48 +8930,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTargetGroupError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateTargetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateTargetGroupOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateTargetGroupOutputDeserializer::deserialize(
-                        "CreateTargetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateTargetGroupOutputDeserializer::deserialize(
+                "CreateTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer to which it is attached, using <a>DeleteLoadBalancer</a>.</p>
-    fn delete_listener(
+    async fn delete_listener(
         &self,
         input: DeleteListenerInput,
-    ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError> {
+    ) -> Result<DeleteListenerOutput, RusotoError<DeleteListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9329,48 +8979,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteListenerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteListenerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteListenerOutputDeserializer::deserialize(
-                        "DeleteListenerResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DeleteListenerOutputDeserializer::deserialize("DeleteListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
-    fn delete_load_balancer(
+    async fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError> {
+    ) -> Result<DeleteLoadBalancerOutput, RusotoError<DeleteLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9380,48 +9026,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteLoadBalancerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteLoadBalancerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteLoadBalancerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLoadBalancerOutputDeserializer::deserialize(
-                        "DeleteLoadBalancerResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteLoadBalancerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteLoadBalancerOutputDeserializer::deserialize(
+                "DeleteLoadBalancerResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified rule.</p>
-    fn delete_rule(
+    async fn delete_rule(
         &self,
         input: DeleteRuleInput,
-    ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError> {
+    ) -> Result<DeleteRuleOutput, RusotoError<DeleteRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9431,46 +9075,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteRuleError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteRuleError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteRuleOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
-    fn delete_target_group(
+    async fn delete_target_group(
         &self,
         input: DeleteTargetGroupInput,
-    ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError> {
+    ) -> Result<DeleteTargetGroupOutput, RusotoError<DeleteTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9480,48 +9121,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTargetGroupError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTargetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteTargetGroupOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteTargetGroupOutputDeserializer::deserialize(
-                        "DeleteTargetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteTargetGroupOutputDeserializer::deserialize(
+                "DeleteTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
-    fn deregister_targets(
+    async fn deregister_targets(
         &self,
         input: DeregisterTargetsInput,
-    ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError> {
+    ) -> Result<DeregisterTargetsOutput, RusotoError<DeregisterTargetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9531,48 +9170,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeregisterTargetsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeregisterTargetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeregisterTargetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeregisterTargetsOutputDeserializer::deserialize(
-                        "DeregisterTargetsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeregisterTargetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeregisterTargetsOutputDeserializer::deserialize(
+                "DeregisterTargetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
+    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9582,45 +9219,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAccountLimitsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeAccountLimitsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountLimitsOutputDeserializer::deserialize(
-                        "DescribeAccountLimitsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAccountLimitsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAccountLimitsOutputDeserializer::deserialize(
+                "DescribeAccountLimitsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Describes the default certificate and the certificate list for the specified HTTPS or TLS listener.</p> <p>If the default certificate is also in the certificate list, it appears twice in the results (once with <code>IsDefault</code> set to true and once with <code>IsDefault</code> set to false).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#https-listener-certificates">SSL Certificates</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_listener_certificates(
+    /// <p>Describes the certificates for the specified HTTPS listener.</p>
+    async fn describe_listener_certificates(
         &self,
         input: DescribeListenerCertificatesInput,
-    ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError> {
+    ) -> Result<DescribeListenerCertificatesOutput, RusotoError<DescribeListenerCertificatesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9630,45 +9269,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeListenerCertificatesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeListenerCertificatesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeListenerCertificatesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeListenerCertificatesOutputDeserializer::deserialize(
-                        "DescribeListenerCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeListenerCertificatesOutputDeserializer::deserialize(
+                "DescribeListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p> <p>For an HTTPS or TLS listener, the output includes the default certificate for the listener. To describe the certificate list for the listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn describe_listeners(
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
+    async fn describe_listeners(
         &self,
         input: DescribeListenersInput,
-    ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError> {
+    ) -> Result<DescribeListenersOutput, RusotoError<DescribeListenersError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9678,49 +9318,49 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeListenersError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeListenersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeListenersOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeListenersOutputDeserializer::deserialize(
-                        "DescribeListenersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeListenersOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeListenersOutputDeserializer::deserialize(
+                "DescribeListenersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_load_balancer_attributes(
+    async fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
-    {
+    ) -> Result<
+        DescribeLoadBalancerAttributesOutput,
+        RusotoError<DescribeLoadBalancerAttributesError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9730,45 +9370,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerAttributesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancerAttributesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancerAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
-                        "DescribeLoadBalancerAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancerAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+                "DescribeLoadBalancerAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersInput,
-    ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError> {
+    ) -> Result<DescribeLoadBalancersOutput, RusotoError<DescribeLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9778,45 +9419,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancersError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancersOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancersOutputDeserializer::deserialize(
-                        "DescribeLoadBalancersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancersOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancersOutputDeserializer::deserialize(
+                "DescribeLoadBalancersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
-    fn describe_rules(
+    async fn describe_rules(
         &self,
         input: DescribeRulesInput,
-    ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError> {
+    ) -> Result<DescribeRulesOutput, RusotoError<DescribeRulesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9826,48 +9468,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeRulesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeRulesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeRulesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeRulesOutputDeserializer::deserialize(
-                        "DescribeRulesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeRulesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DescribeRulesOutputDeserializer::deserialize("DescribeRulesResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
-    fn describe_ssl_policies(
+    async fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
-    ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError> {
+    ) -> Result<DescribeSSLPoliciesOutput, RusotoError<DescribeSSLPoliciesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9877,47 +9515,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeSSLPoliciesError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeSSLPoliciesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeSSLPoliciesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSSLPoliciesOutputDeserializer::deserialize(
-                        "DescribeSSLPoliciesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeSSLPoliciesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeSSLPoliciesOutputDeserializer::deserialize(
+                "DescribeSSLPoliciesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
-    fn describe_tags(
+    async fn describe_tags(
         &self,
         input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
+    ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9927,48 +9564,44 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTagsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTagsOutputDeserializer::deserialize(
-                        "DescribeTagsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
-    fn describe_target_group_attributes(
+    async fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
-    ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError> {
+    ) -> Result<DescribeTargetGroupAttributesOutput, RusotoError<DescribeTargetGroupAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9978,45 +9611,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTargetGroupAttributesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetGroupAttributesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeTargetGroupAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetGroupAttributesOutputDeserializer::deserialize(
-                        "DescribeTargetGroupAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetGroupAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetGroupAttributesOutputDeserializer::deserialize(
+                "DescribeTargetGroupAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
-    fn describe_target_groups(
+    async fn describe_target_groups(
         &self,
         input: DescribeTargetGroupsInput,
-    ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError> {
+    ) -> Result<DescribeTargetGroupsOutput, RusotoError<DescribeTargetGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10026,47 +9660,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeTargetGroupsError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeTargetGroupsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetGroupsOutputDeserializer::deserialize(
-                        "DescribeTargetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetGroupsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetGroupsOutputDeserializer::deserialize(
+                "DescribeTargetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
-    fn describe_target_health(
+    async fn describe_target_health(
         &self,
         input: DescribeTargetHealthInput,
-    ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError> {
+    ) -> Result<DescribeTargetHealthOutput, RusotoError<DescribeTargetHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10076,47 +9709,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeTargetHealthError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTargetHealthError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeTargetHealthOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTargetHealthOutputDeserializer::deserialize(
-                        "DescribeTargetHealthResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTargetHealthOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTargetHealthOutputDeserializer::deserialize(
+                "DescribeTargetHealthResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Replaces the specified properties of the specified listener. Any properties that you do not specify remain unchanged.</p> <p>Changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and default certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and default certificate properties.</p> <p>To add an item to a list, remove an item from a list, or update an item in a list, you must provide the entire list. For example, to add an action, specify a list with the current actions plus the new action.</p>
-    fn modify_listener(
+    /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP, or from TLS to TCP, removes the security policy and server certificate properties. If you change the protocol from HTTP to HTTPS, or from TCP to TLS, you must add the security policy and server certificate properties.</p>
+    async fn modify_listener(
         &self,
         input: ModifyListenerInput,
-    ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError> {
+    ) -> Result<ModifyListenerOutput, RusotoError<ModifyListenerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10126,48 +9758,45 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyListenerError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyListenerError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyListenerOutputDeserializer::deserialize(
-                        "ModifyListenerResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyListenerOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                ModifyListenerOutputDeserializer::deserialize("ModifyListenerResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
-    fn modify_load_balancer_attributes(
+    async fn modify_load_balancer_attributes(
         &self,
         input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
+    ) -> Result<ModifyLoadBalancerAttributesOutput, RusotoError<ModifyLoadBalancerAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10177,45 +9806,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyLoadBalancerAttributesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyLoadBalancerAttributesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyLoadBalancerAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
-                        "ModifyLoadBalancerAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyLoadBalancerAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                "ModifyLoadBalancerAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Replaces the specified properties of the specified rule. Any properties that you do not specify are unchanged.</p> <p>To add an item to a list, remove an item from a list, or update an item in a list, you must provide the entire list. For example, to add an action, specify a list with the current actions plus the new action.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
-    fn modify_rule(
+    /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the actions for the default rule, use <a>ModifyListener</a>.</p>
+    async fn modify_rule(
         &self,
         input: ModifyRuleInput,
-    ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError> {
+    ) -> Result<ModifyRuleOutput, RusotoError<ModifyRuleError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10225,46 +9855,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyRuleError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyRuleError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyRuleOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyRuleOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyRuleOutputDeserializer::deserialize("ModifyRuleResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
-    fn modify_target_group(
+    async fn modify_target_group(
         &self,
         input: ModifyTargetGroupInput,
-    ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError> {
+    ) -> Result<ModifyTargetGroupOutput, RusotoError<ModifyTargetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10274,48 +9901,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyTargetGroupError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyTargetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyTargetGroupOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyTargetGroupOutputDeserializer::deserialize(
-                        "ModifyTargetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyTargetGroupOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyTargetGroupOutputDeserializer::deserialize(
+                "ModifyTargetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
-    fn modify_target_group_attributes(
+    async fn modify_target_group_attributes(
         &self,
         input: ModifyTargetGroupAttributesInput,
-    ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError> {
+    ) -> Result<ModifyTargetGroupAttributesOutput, RusotoError<ModifyTargetGroupAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10325,45 +9951,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyTargetGroupAttributesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyTargetGroupAttributesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyTargetGroupAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyTargetGroupAttributesOutputDeserializer::deserialize(
-                        "ModifyTargetGroupAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyTargetGroupAttributesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyTargetGroupAttributesOutputDeserializer::deserialize(
+                "ModifyTargetGroupAttributesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
-    fn register_targets(
+    async fn register_targets(
         &self,
         input: RegisterTargetsInput,
-    ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError> {
+    ) -> Result<RegisterTargetsOutput, RusotoError<RegisterTargetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10373,48 +10000,47 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RegisterTargetsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RegisterTargetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RegisterTargetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RegisterTargetsOutputDeserializer::deserialize(
-                        "RegisterTargetsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RegisterTargetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RegisterTargetsOutputDeserializer::deserialize(
+                "RegisterTargetsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Removes the specified certificate from the certificate list for the specified HTTPS or TLS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
-    fn remove_listener_certificates(
+    /// <p>Removes the specified certificate from the specified HTTPS listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
+    async fn remove_listener_certificates(
         &self,
         input: RemoveListenerCertificatesInput,
-    ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError> {
+    ) -> Result<RemoveListenerCertificatesOutput, RusotoError<RemoveListenerCertificatesError>>
+    {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10424,45 +10050,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveListenerCertificatesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveListenerCertificatesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RemoveListenerCertificatesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveListenerCertificatesOutputDeserializer::deserialize(
-                        "RemoveListenerCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RemoveListenerCertificatesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RemoveListenerCertificatesOutputDeserializer::deserialize(
+                "RemoveListenerCertificatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
-    fn remove_tags(
+    async fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
+    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10472,46 +10099,43 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RemoveTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveTagsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RemoveTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RemoveTagsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p>
-    fn set_ip_address_type(
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Network Load Balancers must use <code>ipv4</code>.</p>
+    async fn set_ip_address_type(
         &self,
         input: SetIpAddressTypeInput,
-    ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError> {
+    ) -> Result<SetIpAddressTypeOutput, RusotoError<SetIpAddressTypeError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10521,48 +10145,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetIpAddressTypeError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetIpAddressTypeError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = SetIpAddressTypeOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SetIpAddressTypeOutputDeserializer::deserialize(
-                        "SetIpAddressTypeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = SetIpAddressTypeOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetIpAddressTypeOutputDeserializer::deserialize(
+                "SetIpAddressTypeResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
-    fn set_rule_priorities(
+    async fn set_rule_priorities(
         &self,
         input: SetRulePrioritiesInput,
-    ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError> {
+    ) -> Result<SetRulePrioritiesOutput, RusotoError<SetRulePrioritiesError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10572,48 +10194,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetRulePrioritiesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetRulePrioritiesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = SetRulePrioritiesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SetRulePrioritiesOutputDeserializer::deserialize(
-                        "SetRulePrioritiesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = SetRulePrioritiesOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetRulePrioritiesOutputDeserializer::deserialize(
+                "SetRulePrioritiesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>You can't specify a security group for a Network Load Balancer.</p>
-    fn set_security_groups(
+    async fn set_security_groups(
         &self,
         input: SetSecurityGroupsInput,
-    ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError> {
+    ) -> Result<SetSecurityGroupsOutput, RusotoError<SetSecurityGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10623,48 +10243,46 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetSecurityGroupsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSecurityGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = SetSecurityGroupsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SetSecurityGroupsOutputDeserializer::deserialize(
-                        "SetSecurityGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = SetSecurityGroupsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetSecurityGroupsOutputDeserializer::deserialize(
+                "SetSecurityGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Enables the Availability Zones for the specified public subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p> <p>When you specify subnets for a Network Load Balancer, you must include all subnets that were enabled previously, with their existing configurations, plus any additional subnets.</p>
-    fn set_subnets(
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>You can't change the subnets for a Network Load Balancer.</p>
+    async fn set_subnets(
         &self,
         input: SetSubnetsInput,
-    ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError> {
+    ) -> Result<SetSubnetsOutput, RusotoError<SetSubnetsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -10674,39 +10292,36 @@ impl Elb for ElbClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetSubnetsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetSubnetsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = SetSubnetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = SetSubnetsOutput::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetSubnetsOutputDeserializer::deserialize("SetSubnetsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }
 
@@ -10719,8 +10334,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_elb_describe_load_balancers() {
+    #[tokio::test]
+    async fn test_parse_error_elb_describe_load_balancers() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "elb-describe-load-balancers.xml",
@@ -10728,12 +10343,12 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(request).sync();
+        let result = client.describe_load_balancers(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_elb_describe_load_balancers() {
+    #[tokio::test]
+    async fn test_parse_valid_elb_describe_load_balancers() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "elb-describe-load-balancers.xml",
@@ -10741,7 +10356,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(request).sync();
+        let result = client.describe_load_balancers(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

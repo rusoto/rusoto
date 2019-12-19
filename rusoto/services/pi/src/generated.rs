@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DataPoint {
     /// <p>The time, in epoch format, associated with a particular <code>Value</code>.</p>
     #[serde(rename = "Timestamp")]
@@ -78,7 +79,7 @@ pub struct DescribeDimensionKeysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDimensionKeysResponse {
     /// <p>The end time for the returned dimension keys, after alignment to a granular boundary (as specified by <code>PeriodInSeconds</code>). <code>AlignedEndTime</code> will be greater than or equal to the value of the user-specified <code>Endtime</code>.</p>
     #[serde(rename = "AlignedEndTime")]
@@ -120,7 +121,7 @@ pub struct DimensionGroup {
 
 /// <p>An array of descriptions and aggregated values for each dimension within a dimension group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DimensionKeyDescription {
     /// <p>A map of name-value pairs for the dimensions in the group.</p>
     #[serde(rename = "Dimensions")]
@@ -168,7 +169,7 @@ pub struct GetResourceMetricsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetResourceMetricsResponse {
     /// <p>The end time for the returned metrics, after alignment to a granular boundary (as specified by <code>PeriodInSeconds</code>). <code>AlignedEndTime</code> will be greater than or equal to the value of the user-specified <code>Endtime</code>.</p>
     #[serde(rename = "AlignedEndTime")]
@@ -194,7 +195,7 @@ pub struct GetResourceMetricsResponse {
 
 /// <p>A time-ordered series of data points, correpsonding to a dimension of a Performance Insights metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MetricKeyDataPoints {
     /// <p>An array of timestamp-value pairs, representing measurements over a period of time.</p>
     #[serde(rename = "DataPoints")]
@@ -224,7 +225,7 @@ pub struct MetricQuery {
 
 /// <p>If <code>PartitionBy</code> was specified in a <code>DescribeDimensionKeys</code> request, the dimensions are returned in an array. Each element in the array specifies one dimension. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResponsePartitionKey {
     /// <p>A dimension map that contains the dimension(s) for this partition.</p>
     #[serde(rename = "Dimensions")]
@@ -233,7 +234,7 @@ pub struct ResponsePartitionKey {
 
 /// <p>An object describing a Performance Insights metric and one or more dimensions for that metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResponseResourceMetricKey {
     /// <p>The valid dimensions for the metric.</p>
     #[serde(rename = "Dimensions")]
@@ -341,18 +342,19 @@ impl Error for GetResourceMetricsError {
     }
 }
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
+#[async_trait]
 pub trait PerformanceInsights {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
-    fn describe_dimension_keys(
+    async fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError>;
+    ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>>;
 
     /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
-    fn get_resource_metrics(
+    async fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
-    ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError>;
+    ) -> Result<GetResourceMetricsResponse, RusotoError<GetResourceMetricsError>>;
 }
 /// A client for the AWS PI API.
 #[derive(Clone)]
@@ -366,7 +368,10 @@ impl PerformanceInsightsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> PerformanceInsightsClient {
-        Self::new_with_client(Client::shared(), region)
+        PerformanceInsightsClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -376,35 +381,22 @@ impl PerformanceInsightsClient {
     ) -> PerformanceInsightsClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        PerformanceInsightsClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> PerformanceInsightsClient {
-        PerformanceInsightsClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for PerformanceInsightsClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("PerformanceInsightsClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl PerformanceInsights for PerformanceInsightsClient {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
-    fn describe_dimension_keys(
+    async fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError> {
+    ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>> {
         let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -415,27 +407,27 @@ impl PerformanceInsights for PerformanceInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDimensionKeysResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeDimensionKeysError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDimensionKeysResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDimensionKeysError::from_response(response))
+        }
     }
 
     /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
-    fn get_resource_metrics(
+    async fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
-    ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError> {
+    ) -> Result<GetResourceMetricsResponse, RusotoError<GetResourceMetricsError>> {
         let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -446,20 +438,19 @@ impl PerformanceInsights for PerformanceInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetResourceMetricsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetResourceMetricsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourceMetricsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourceMetricsError::from_response(response))
+        }
     }
 }

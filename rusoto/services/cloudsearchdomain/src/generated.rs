@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 /// <p>A container for facet information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Bucket {
     /// <p>The number of hits that contain the facet value in the specified facet field.</p>
     #[serde(rename = "count")]
@@ -39,7 +40,7 @@ pub struct Bucket {
 
 /// <p>A container for the calculated facet values and counts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BucketInfo {
     /// <p>A list of the calculated facet values and counts.</p>
     #[serde(rename = "buckets")]
@@ -49,7 +50,7 @@ pub struct BucketInfo {
 
 /// <p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentServiceWarning {
     /// <p>The description for a warning returned by the document service.</p>
     #[serde(rename = "message")]
@@ -59,7 +60,7 @@ pub struct DocumentServiceWarning {
 
 /// <p>The statistics for a field calculated in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FieldStats {
     /// <p>The number of documents that contain a value in the specified field in the result set.</p>
     #[serde(rename = "count")]
@@ -97,7 +98,7 @@ pub struct FieldStats {
 
 /// <p>Information about a document that matches the search request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Hit {
     /// <p>The expressions returned from a document that matches the search request.</p>
     #[serde(rename = "exprs")]
@@ -119,7 +120,7 @@ pub struct Hit {
 
 /// <p>The collection of documents that match the search request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Hits {
     /// <p>A cursor that can be used to retrieve the next set of matching documents when you want to page through a large result set.</p>
     #[serde(rename = "cursor")]
@@ -201,7 +202,7 @@ pub struct SearchRequest {
 
 /// <p>The result of a <code>Search</code> request. Contains the documents that match the specified search criteria and any requested fields, highlights, and facet information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchResponse {
     /// <p>The requested facet information.</p>
     #[serde(rename = "facets")]
@@ -223,7 +224,7 @@ pub struct SearchResponse {
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -237,7 +238,7 @@ pub struct SearchStatus {
 
 /// <p>Container for the suggestion information returned in a <code>SuggestResponse</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SuggestModel {
     /// <p>The number of documents that were found to match the query string.</p>
     #[serde(rename = "found")]
@@ -270,7 +271,7 @@ pub struct SuggestRequest {
 
 /// <p>Contains the response to a <code>Suggest</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SuggestResponse {
     /// <p>The status of a <code>SuggestRequest</code>. Contains the resource ID (<code>rid</code>) and how long it took to process the request (<code>timems</code>).</p>
     #[serde(rename = "status")]
@@ -284,7 +285,7 @@ pub struct SuggestResponse {
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SuggestStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -298,7 +299,7 @@ pub struct SuggestStatus {
 
 /// <p>An autocomplete suggestion that matches the query string specified in a <code>SuggestRequest</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SuggestionMatch {
     /// <p>The document ID of the suggested document.</p>
     #[serde(rename = "id")]
@@ -332,7 +333,7 @@ pub struct UploadDocumentsRequest {
 
 /// <p>Contains the response to an <code>UploadDocuments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UploadDocumentsResponse {
     /// <p>The number of documents that were added to the search domain.</p>
     #[serde(rename = "adds")]
@@ -448,18 +449,25 @@ impl Error for UploadDocumentsError {
     }
 }
 /// Trait representing the capabilities of the Amazon CloudSearch Domain API. Amazon CloudSearch Domain clients implement this trait.
+#[async_trait]
 pub trait CloudSearchDomain {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError>;
+    async fn search(
+        &self,
+        input: SearchRequest,
+    ) -> Result<SearchResponse, RusotoError<SearchError>>;
 
     /// <p>Retrieves autocomplete suggestions for a partial query string. You can use suggestions enable you to display likely matches before users finish typing. In Amazon CloudSearch, suggestions are based on the contents of a particular text field. When you request suggestions, Amazon CloudSearch finds all of the documents whose values in the suggester field start with the specified query string. The beginning of the field must match the query string to be considered a match. </p> <p>For more information about configuring suggesters and retrieving suggestions, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html">Getting Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p> <p>The endpoint for submitting <code>Suggest</code> requests is domain-specific. You submit suggest requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn suggest(&self, input: SuggestRequest) -> RusotoFuture<SuggestResponse, SuggestError>;
+    async fn suggest(
+        &self,
+        input: SuggestRequest,
+    ) -> Result<SuggestResponse, RusotoError<SuggestError>>;
 
     /// <p>Posts a batch of documents to a search domain for indexing. A document batch is a collection of add and delete operations that represent the documents you want to add, update, or delete from your domain. Batches can be described in either JSON or XML. Each item that you want Amazon CloudSearch to return as a search result (such as a product) is represented as a document. Every document has a unique ID and one or more fields that contain the data that you want to search and return in results. Individual documents cannot contain more than 1 MB of data. The entire batch cannot exceed 5 MB. To get the best possible upload performance, group add and delete operations in batches that are close the 5 MB limit. Submitting a large volume of single-document batches can overload a domain's document service. </p> <p>The endpoint for submitting <code>UploadDocuments</code> requests is domain-specific. To get the document endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p> <p>For more information about formatting your data for Amazon CloudSearch, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/preparing-data.html">Preparing Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. For more information about uploading data for indexing, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/uploading-data.html">Uploading Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn upload_documents(
+    async fn upload_documents(
         &self,
         input: UploadDocumentsRequest,
-    ) -> RusotoFuture<UploadDocumentsResponse, UploadDocumentsError>;
+    ) -> Result<UploadDocumentsResponse, RusotoError<UploadDocumentsError>>;
 }
 /// A client for the Amazon CloudSearch Domain API.
 #[derive(Clone)]
@@ -473,7 +481,10 @@ impl CloudSearchDomainClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudSearchDomainClient {
-        Self::new_with_client(Client::shared(), region)
+        CloudSearchDomainClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -483,32 +494,22 @@ impl CloudSearchDomainClient {
     ) -> CloudSearchDomainClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        CloudSearchDomainClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> CloudSearchDomainClient {
-        CloudSearchDomainClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for CloudSearchDomainClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CloudSearchDomainClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl CloudSearchDomain for CloudSearchDomainClient {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError> {
+    async fn search(
+        &self,
+        input: SearchRequest,
+    ) -> Result<SearchResponse, RusotoError<SearchError>> {
         let request_uri = "/2013-01-01/search";
 
         let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
@@ -557,31 +558,31 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         if let Some(ref x) = input.stats {
             params.put("stats", x);
         }
-        params.put("format", "sdk");
-        params.put("pretty", "true");
+        params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<SearchResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchError::from_response(response))
+        }
     }
 
     /// <p>Retrieves autocomplete suggestions for a partial query string. You can use suggestions enable you to display likely matches before users finish typing. In Amazon CloudSearch, suggestions are based on the contents of a particular text field. When you request suggestions, Amazon CloudSearch finds all of the documents whose values in the suggester field start with the specified query string. The beginning of the field must match the query string to be considered a match. </p> <p>For more information about configuring suggesters and retrieving suggestions, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html">Getting Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p> <p>The endpoint for submitting <code>Suggest</code> requests is domain-specific. You submit suggest requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn suggest(&self, input: SuggestRequest) -> RusotoFuture<SuggestResponse, SuggestError> {
+    async fn suggest(
+        &self,
+        input: SuggestRequest,
+    ) -> Result<SuggestResponse, RusotoError<SuggestError>> {
         let request_uri = "/2013-01-01/suggest";
 
         let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
@@ -595,34 +596,31 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             params.put("size", x);
         }
         params.put("suggester", &input.suggester);
-        params.put("format", "sdk");
-        params.put("pretty", "true");
+        params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SuggestResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<SuggestResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SuggestError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SuggestError::from_response(response))
+        }
     }
 
     /// <p>Posts a batch of documents to a search domain for indexing. A document batch is a collection of add and delete operations that represent the documents you want to add, update, or delete from your domain. Batches can be described in either JSON or XML. Each item that you want Amazon CloudSearch to return as a search result (such as a product) is represented as a document. Every document has a unique ID and one or more fields that contain the data that you want to search and return in results. Individual documents cannot contain more than 1 MB of data. The entire batch cannot exceed 5 MB. To get the best possible upload performance, group add and delete operations in batches that are close the 5 MB limit. Submitting a large volume of single-document batches can overload a domain's document service. </p> <p>The endpoint for submitting <code>UploadDocuments</code> requests is domain-specific. To get the document endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p> <p>For more information about formatting your data for Amazon CloudSearch, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/preparing-data.html">Preparing Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. For more information about uploading data for indexing, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/uploading-data.html">Uploading Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn upload_documents(
+    async fn upload_documents(
         &self,
         input: UploadDocumentsRequest,
-    ) -> RusotoFuture<UploadDocumentsResponse, UploadDocumentsError> {
+    ) -> Result<UploadDocumentsResponse, RusotoError<UploadDocumentsError>> {
         let request_uri = "/2013-01-01/documents/batch";
 
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, &request_uri);
@@ -636,22 +634,20 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         params.put("format", "sdk");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UploadDocumentsResponse, _>()?;
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UploadDocumentsResponse, _>()?;
 
-                    Ok(result)
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UploadDocumentsError::from_response(response))),
-                )
-            }
-        })
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UploadDocumentsError::from_response(response))
+        }
     }
 }

@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents an application source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,7 +51,7 @@ pub struct CreateScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateScalingPlanResponse {
     /// <p>The version number of the scaling plan. This value is always 1.</p> <p>Currently, you cannot specify multiple scaling plan versions.</p>
     #[serde(rename = "ScalingPlanVersion")]
@@ -103,7 +104,7 @@ pub struct CustomizedScalingMetricSpecification {
 
 /// <p>Represents a single value in the forecast data used for predictive scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Datapoint {
     /// <p>The time stamp for the data point in UTC format.</p>
     #[serde(rename = "Timestamp")]
@@ -126,7 +127,7 @@ pub struct DeleteScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteScalingPlanResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -148,7 +149,7 @@ pub struct DescribeScalingPlanResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScalingPlanResourcesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -185,7 +186,7 @@ pub struct DescribeScalingPlansRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScalingPlansResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -226,7 +227,7 @@ pub struct GetScalingPlanResourceForecastDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetScalingPlanResourceForecastDataResponse {
     /// <p>The data points to return.</p>
     #[serde(rename = "Datapoints")]
@@ -325,7 +326,7 @@ pub struct ScalingInstruction {
 
 /// <p>Represents a scaling plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalingPlan {
     /// <p>The application source.</p>
     #[serde(rename = "ApplicationSource")]
@@ -358,7 +359,7 @@ pub struct ScalingPlan {
 
 /// <p>Represents a scalable resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalingPlanResource {
     /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -390,7 +391,7 @@ pub struct ScalingPlanResource {
 
 /// <p>Represents a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalingPolicy {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -468,7 +469,7 @@ pub struct UpdateScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateScalingPlanResponse {}
 
 /// Errors returned by CreateScalingPlan
@@ -748,45 +749,46 @@ impl Error for UpdateScalingPlanError {
     }
 }
 /// Trait representing the capabilities of the AWS Auto Scaling Plans API. AWS Auto Scaling Plans clients implement this trait.
+#[async_trait]
 pub trait AutoscalingPlans {
     /// <p>Creates a scaling plan.</p>
-    fn create_scaling_plan(
+    async fn create_scaling_plan(
         &self,
         input: CreateScalingPlanRequest,
-    ) -> RusotoFuture<CreateScalingPlanResponse, CreateScalingPlanError>;
+    ) -> Result<CreateScalingPlanResponse, RusotoError<CreateScalingPlanError>>;
 
     /// <p>Deletes the specified scaling plan.</p> <p>Deleting a scaling plan deletes the underlying <a>ScalingInstruction</a> for all of the scalable resources that are covered by the plan.</p> <p>If the plan has launched resources or has scaling activities in progress, you must delete those resources separately.</p>
-    fn delete_scaling_plan(
+    async fn delete_scaling_plan(
         &self,
         input: DeleteScalingPlanRequest,
-    ) -> RusotoFuture<DeleteScalingPlanResponse, DeleteScalingPlanError>;
+    ) -> Result<DeleteScalingPlanResponse, RusotoError<DeleteScalingPlanError>>;
 
     /// <p>Describes the scalable resources in the specified scaling plan.</p>
-    fn describe_scaling_plan_resources(
+    async fn describe_scaling_plan_resources(
         &self,
         input: DescribeScalingPlanResourcesRequest,
-    ) -> RusotoFuture<DescribeScalingPlanResourcesResponse, DescribeScalingPlanResourcesError>;
+    ) -> Result<DescribeScalingPlanResourcesResponse, RusotoError<DescribeScalingPlanResourcesError>>;
 
     /// <p>Describes one or more of your scaling plans.</p>
-    fn describe_scaling_plans(
+    async fn describe_scaling_plans(
         &self,
         input: DescribeScalingPlansRequest,
-    ) -> RusotoFuture<DescribeScalingPlansResponse, DescribeScalingPlansError>;
+    ) -> Result<DescribeScalingPlansResponse, RusotoError<DescribeScalingPlansError>>;
 
     /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>
-    fn get_scaling_plan_resource_forecast_data(
+    async fn get_scaling_plan_resource_forecast_data(
         &self,
         input: GetScalingPlanResourceForecastDataRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetScalingPlanResourceForecastDataResponse,
-        GetScalingPlanResourceForecastDataError,
+        RusotoError<GetScalingPlanResourceForecastDataError>,
     >;
 
     /// <p>Updates the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
-    fn update_scaling_plan(
+    async fn update_scaling_plan(
         &self,
         input: UpdateScalingPlanRequest,
-    ) -> RusotoFuture<UpdateScalingPlanResponse, UpdateScalingPlanError>;
+    ) -> Result<UpdateScalingPlanResponse, RusotoError<UpdateScalingPlanError>>;
 }
 /// A client for the AWS Auto Scaling Plans API.
 #[derive(Clone)]
@@ -800,7 +802,10 @@ impl AutoscalingPlansClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AutoscalingPlansClient {
-        Self::new_with_client(Client::shared(), region)
+        AutoscalingPlansClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -810,37 +815,24 @@ impl AutoscalingPlansClient {
     ) -> AutoscalingPlansClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        AutoscalingPlansClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> AutoscalingPlansClient {
-        AutoscalingPlansClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for AutoscalingPlansClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AutoscalingPlansClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl AutoscalingPlans for AutoscalingPlansClient {
     /// <p>Creates a scaling plan.</p>
-    fn create_scaling_plan(
+    async fn create_scaling_plan(
         &self,
         input: CreateScalingPlanRequest,
-    ) -> RusotoFuture<CreateScalingPlanResponse, CreateScalingPlanError> {
+    ) -> Result<CreateScalingPlanResponse, RusotoError<CreateScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -849,30 +841,29 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateScalingPlanResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateScalingPlanError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateScalingPlanResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateScalingPlanError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified scaling plan.</p> <p>Deleting a scaling plan deletes the underlying <a>ScalingInstruction</a> for all of the scalable resources that are covered by the plan.</p> <p>If the plan has launched resources or has scaling activities in progress, you must delete those resources separately.</p>
-    fn delete_scaling_plan(
+    async fn delete_scaling_plan(
         &self,
         input: DeleteScalingPlanRequest,
-    ) -> RusotoFuture<DeleteScalingPlanResponse, DeleteScalingPlanError> {
+    ) -> Result<DeleteScalingPlanResponse, RusotoError<DeleteScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -881,30 +872,30 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteScalingPlanResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteScalingPlanError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteScalingPlanResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteScalingPlanError::from_response(response))
+        }
     }
 
     /// <p>Describes the scalable resources in the specified scaling plan.</p>
-    fn describe_scaling_plan_resources(
+    async fn describe_scaling_plan_resources(
         &self,
         input: DescribeScalingPlanResourcesRequest,
-    ) -> RusotoFuture<DescribeScalingPlanResourcesResponse, DescribeScalingPlanResourcesError> {
+    ) -> Result<DescribeScalingPlanResourcesResponse, RusotoError<DescribeScalingPlanResourcesError>>
+    {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -913,27 +904,29 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeScalingPlanResourcesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingPlanResourcesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScalingPlanResourcesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScalingPlanResourcesError::from_response(response))
+        }
     }
 
     /// <p>Describes one or more of your scaling plans.</p>
-    fn describe_scaling_plans(
+    async fn describe_scaling_plans(
         &self,
         input: DescribeScalingPlansRequest,
-    ) -> RusotoFuture<DescribeScalingPlansResponse, DescribeScalingPlansError> {
+    ) -> Result<DescribeScalingPlansResponse, RusotoError<DescribeScalingPlansError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -942,32 +935,32 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeScalingPlansResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeScalingPlansError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeScalingPlansResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeScalingPlansError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>
-    fn get_scaling_plan_resource_forecast_data(
+    async fn get_scaling_plan_resource_forecast_data(
         &self,
         input: GetScalingPlanResourceForecastDataRequest,
-    ) -> RusotoFuture<
+    ) -> Result<
         GetScalingPlanResourceForecastDataResponse,
-        GetScalingPlanResourceForecastDataError,
+        RusotoError<GetScalingPlanResourceForecastDataError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -976,29 +969,31 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetScalingPlanResourceForecastDataResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetScalingPlanResourceForecastDataError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetScalingPlanResourceForecastDataResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetScalingPlanResourceForecastDataError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
-    fn update_scaling_plan(
+    async fn update_scaling_plan(
         &self,
         input: UpdateScalingPlanRequest,
-    ) -> RusotoFuture<UpdateScalingPlanResponse, UpdateScalingPlanError> {
+    ) -> Result<UpdateScalingPlanResponse, RusotoError<UpdateScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-
+        request.set_endpoint_prefix("autoscaling".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -1007,20 +1002,19 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateScalingPlanResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateScalingPlanError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateScalingPlanResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateScalingPlanError::from_response(response))
+        }
     }
 }

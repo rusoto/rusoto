@@ -9,16 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -462,13 +462,11 @@ pub struct AutoScalingGroup {
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>One or more load balancers associated with the group.</p>
     pub load_balancer_names: Option<Vec<String>>,
-    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
-    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the group.</p>
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
     pub min_size: i64,
-    /// <p>The mixed instances policy for the group.</p>
+    /// <p>The mixed instances policy for the group. </p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
@@ -570,12 +568,6 @@ impl AutoScalingGroupDeserializer {
                     obj.load_balancer_names.get_or_insert(vec![]).extend(
                         LoadBalancerNamesDeserializer::deserialize("LoadBalancerNames", stack)?,
                     );
-                }
-                "MaxInstanceLifetime" => {
-                    obj.max_instance_lifetime = Some(MaxInstanceLifetimeDeserializer::deserialize(
-                        "MaxInstanceLifetime",
-                        stack,
-                    )?);
                 }
                 "MaxSize" => {
                     obj.max_size =
@@ -695,9 +687,9 @@ impl AutoScalingGroupNamesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AutoScalingGroupNamesType {
-    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter.</p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
+    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter. </p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
     pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>. </p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -789,8 +781,6 @@ pub struct AutoScalingInstanceDetails {
     pub health_status: String,
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
-    /// <p>The instance type of the EC2 instance.</p>
-    pub instance_type: Option<String>,
     /// <p>The launch configuration used to launch the instance. This value is not available if you attached the instance to the Auto Scaling group.</p>
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
@@ -799,8 +789,6 @@ pub struct AutoScalingInstanceDetails {
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
-    /// <p>The number of capacity units contributed by the instance based on its instance type.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
-    pub weighted_capacity: Option<String>,
 }
 
 struct AutoScalingInstanceDetailsDeserializer;
@@ -833,12 +821,6 @@ impl AutoScalingInstanceDetailsDeserializer {
                         obj.instance_id =
                             XmlStringMaxLen19Deserializer::deserialize("InstanceId", stack)?;
                     }
-                    "InstanceType" => {
-                        obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
-                            "InstanceType",
-                            stack,
-                        )?);
-                    }
                     "LaunchConfigurationName" => {
                         obj.launch_configuration_name =
                             Some(XmlStringMaxLen255Deserializer::deserialize(
@@ -862,12 +844,6 @@ impl AutoScalingInstanceDetailsDeserializer {
                             "ProtectedFromScaleIn",
                             stack,
                         )?;
-                    }
-                    "WeightedCapacity" => {
-                        obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
-                            "WeightedCapacity",
-                            stack,
-                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -998,7 +974,7 @@ impl AvailabilityZonesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchDeleteScheduledActionAnswer {
-    /// <p>The names of the scheduled actions that could not be deleted, including an error message.</p>
+    /// <p>The names of the scheduled actions that could not be deleted, including an error message. </p>
     pub failed_scheduled_actions: Option<Vec<FailedScheduledUpdateGroupActionRequest>>,
 }
 
@@ -1097,7 +1073,7 @@ impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
 pub struct BatchPutScheduledUpdateGroupActionType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more scheduled actions. The maximum number allowed is 50.</p>
+    /// <p>One or more scheduled actions. The maximum number allowed is 50. </p>
     pub scheduled_update_group_actions: Vec<ScheduledUpdateGroupActionRequest>,
 }
 
@@ -1385,35 +1361,33 @@ impl CooldownDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAutoScalingGroupType {
-    /// <p>The name of the Auto Scaling group. This name must be unique per Region per account.</p>
+    /// <p>The name of the Auto Scaling group. This name must be unique within the scope of your AWS account.</p>
     pub auto_scaling_group_name: String,
     /// <p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets for <code>VPCZoneIdentifier</code>.</p> <p>Conditional: If your account supports EC2-Classic and VPC, this parameter is required to launch instances into EC2-Classic.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default value is <code>300</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub default_cooldown: Option<i64>,
-    /// <p>The number of Amazon EC2 instances that the Auto Scaling group attempts to maintain. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group. If you do not specify a desired capacity, the default is the minimum size of the group.</p>
+    /// <p>The number of EC2 instances that should be running in the group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group. If you do not specify a desired capacity, the default is the minimum size of the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html#health-check-grace-period">Health Check Grace Period</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
+    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
     pub health_check_grace_period: Option<i64>,
     /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. The default value is <code>EC2</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub health_check_type: Option<String>,
-    /// <p>The ID of the instance used to create a launch configuration for the group.</p> <p>When you specify an ID of an instance, Amazon EC2 Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, except for the block device mapping.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You must specify one of the following parameters in your request: <code>LaunchConfigurationName</code>, <code>LaunchTemplate</code>, <code>InstanceId</code>, or <code>MixedInstancesPolicy</code>.</p>
+    /// <p>The ID of the instance used to create a launch configuration for the group. This parameter, a launch configuration, a launch template, or a mixed instances policy must be specified.</p> <p>When you specify an ID of an instance, Amazon EC2 Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, except for the block device mapping.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_id: Option<String>,
-    /// <p>The name of the launch configuration.</p> <p>If you do not specify <code>LaunchConfigurationName</code>, you must specify one of the following parameters: <code>InstanceId</code>, <code>LaunchTemplate</code>, or <code>MixedInstancesPolicy</code>.</p>
+    /// <p>The name of the launch configuration. This parameter, a launch template, a mixed instances policy, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg.html">Creating an Auto Scaling Group Using a Launch Configuration</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub launch_configuration_name: Option<String>,
-    /// <p>The launch template to use to launch instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LaunchTemplateSpecification.html">LaunchTemplateSpecification</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p> <p>If you do not specify <code>LaunchTemplate</code>, you must specify one of the following parameters: <code>InstanceId</code>, <code>LaunchConfigurationName</code>, or <code>MixedInstancesPolicy</code>.</p>
+    /// <p>The launch template to use to launch instances. This parameter, a launch configuration, a mixed instances policy, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-launch-template.html">Creating an Auto Scaling Group Using a Launch Template</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>One or more lifecycle hooks.</p>
     pub lifecycle_hook_specification_list: Option<Vec<LifecycleHookSpecification>>,
-    /// <p>A list of Classic Load Balancers associated with this Auto Scaling group. For Application Load Balancers and Network Load Balancers, specify a list of target groups using the <code>TargetGroupARNs</code> property instead.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Using a Load Balancer with an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>One or more Classic Load Balancers. To specify an Application Load Balancer or a Network Load Balancer, use <code>TargetGroupARNs</code> instead.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Using a Load Balancer With an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub load_balancer_names: Option<Vec<String>>,
-    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
-    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the group.</p>
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
     pub min_size: i64,
-    /// <p>An embedded object that specifies a mixed instances policy. The required parameters must be specified. If optional parameters are unspecified, their default values are used.</p> <p>The policy includes parameters that not only define the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacity, but also the parameters that specify the instance configuration information—the launch template and instance types.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_MixedInstancesPolicy.html">MixedInstancesPolicy</a> in the <i>Amazon EC2 Auto Scaling API Reference</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You must specify one of the following parameters in your request: <code>LaunchConfigurationName</code>, <code>LaunchTemplate</code>, <code>InstanceId</code>, or <code>MixedInstancesPolicy</code>.</p>
+    /// <p>The mixed instances policy to use to launch instances. This parameter, a launch template, a launch configuration, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p> <p>For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
@@ -1423,7 +1397,7 @@ pub struct CreateAutoScalingGroupType {
     pub service_linked_role_arn: Option<String>,
     /// <p>One or more tags.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>The Amazon Resource Names (ARN) of the target groups to associate with the Auto Scaling group. Instances are registered as targets in a target group, and traffic is routed to the target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Using a Load Balancer with an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
     pub target_group_ar_ns: Option<Vec<String>>,
     /// <p>One or more termination policies used to select the instance to terminate. These policies are executed in the order that they are listed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
@@ -1496,12 +1470,6 @@ impl CreateAutoScalingGroupTypeSerializer {
                 field_value,
             );
         }
-        if let Some(ref field_value) = obj.max_instance_lifetime {
-            params.put(
-                &format!("{}{}", prefix, "MaxInstanceLifetime"),
-                &field_value,
-            );
-        }
         params.put(&format!("{}{}", prefix, "MaxSize"), &obj.max_size);
         params.put(&format!("{}{}", prefix, "MinSize"), &obj.min_size);
         if let Some(ref field_value) = obj.mixed_instances_policy {
@@ -1551,41 +1519,41 @@ impl CreateAutoScalingGroupTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchConfigurationType {
-    /// <p><p>For Auto Scaling groups that are running in a virtual private cloud (VPC), specifies whether to assign a public IP address to the group&#39;s instances. If you specify <code>true</code>, each instance in the Auto Scaling group receives a unique public IP address. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <note> <p>If the instance is launched into a default subnet, the default is to assign a public IP address, unless you disabled the option to assign a public IP address on the subnet. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address, unless you enabled the option to assign a public IP address on the subnet.</p> </note></p>
+    /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is to assign a public IP address. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address.</p>
     pub associate_public_ip_address: Option<bool>,
-    /// <p>A block device mapping, which specifies the block devices for the instance. You can specify virtual devices and EBS volumes. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This parameter can only be used if you are launching EC2-Classic instances.</p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter is supported only if you are launching EC2-Classic instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify the <code>ClassicLinkVPCId</code> parameter, you must specify this parameter.</p>
+    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you specify a ClassicLink-enabled VPC, and is not supported otherwise.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
-    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>). The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional fees are incurred when you enable EBS optimization for an instance type that is not EBS-optimized by default. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>The default value is <code>false</code>.</p>
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. By default, the instance is not optimized for EBS I/O. The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional usage charges apply. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub ebs_optimized: Option<bool>,
-    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p> <p>EC2 instances launched with an IAM role automatically have AWS security credentials available. You can use IAM roles with Amazon EC2 Auto Scaling to automatically enable applications running on your EC2 instances to securely access other AWS resources. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">Use an IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub iam_instance_profile: Option<String>,
-    /// <p>The ID of the Amazon Machine Image (AMI) that was assigned during registration. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p>
+    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub image_id: Option<String>,
-    /// <p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, except for the block device mapping.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-lc-with-instanceID.html">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p>
+    /// <p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, except for the block device mapping.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-lc-with-instanceID.html">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_id: Option<String>,
-    /// <p><p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>The default value is <code>true</code> (enabled).</p> <important> <p>When detailed monitoring is enabled, Amazon CloudWatch generates metrics every minute and your account is charged a fee. When you disable detailed monitoring, CloudWatch generates metrics every 5 minutes. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </important></p>
+    /// <p>Enables detailed monitoring (<code>true</code>) or basic monitoring (<code>false</code>) for the Auto Scaling instances. The default value is <code>true</code>.</p>
     pub instance_monitoring: Option<InstanceMonitoring>,
-    /// <p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>
+    /// <p>The instance type of the EC2 instance.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>
     pub instance_type: Option<String>,
     /// <p>The ID of the kernel associated with the AMI.</p>
     pub kernel_id: Option<String>,
     /// <p>The name of the key pair. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub key_name: Option<String>,
-    /// <p>The name of the launch configuration. This name must be unique per Region per account.</p>
+    /// <p>The name of the launch configuration. This name must be unique within the scope of your AWS account.</p>
     pub launch_configuration_name: String,
-    /// <p>The tenancy of the instance. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>To launch dedicated instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify <code>PlacementTenancy</code>, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-vpc-tenancy">Instance Placement Tenancy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid Values: <code>default</code> | <code>dedicated</code> </p>
+    /// <p>The tenancy of the instance. An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware and can only be launched into a VPC.</p> <p>To launch Dedicated Instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>
     pub placement_tenancy: Option<String>,
-    /// <p>The ID of the RAM disk to select.</p>
+    /// <p>The ID of the RAM disk associated with the AMI.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>A list that contains the security groups to assign to the instances in the Auto Scaling group.</p> <p>[EC2-VPC] Specify the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>[EC2-Classic] Specify either the security group names or the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>One or more security groups with which to associate the instances.</p> <p>If your instances are launched in EC2-Classic, you can either specify security group names or the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If your instances are launched into a VPC, specify security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p><p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <note> <p>When you change your maximum price by creating a new launch configuration, running instances will continue to run as long as the maximum price for those running instances is higher than the current Spot price.</p> </note></p>
+    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub spot_price: Option<String>,
-    /// <p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub user_data: Option<String>,
 }
 
@@ -1694,7 +1662,7 @@ impl CreateOrUpdateTagsTypeSerializer {
     }
 }
 
-/// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases.</p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>.</p>
+/// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases. </p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomizedMetricSpecification {
     /// <p>The dimensions of the metric.</p> <p>Conditional: If you published your metric with dimensions, you must specify the same dimensions in your scaling policy.</p>
@@ -1948,9 +1916,9 @@ impl DeleteTagsTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsAnswer {
-    /// <p>The maximum number of groups allowed for your AWS account. The default limit is 200 per AWS Region.</p>
+    /// <p>The maximum number of groups allowed for your AWS account. The default limit is 200 per region.</p>
     pub max_number_of_auto_scaling_groups: Option<i64>,
-    /// <p>The maximum number of launch configurations allowed for your AWS account. The default limit is 200 per AWS Region.</p>
+    /// <p>The maximum number of launch configurations allowed for your AWS account. The default limit is 200 per region.</p>
     pub max_number_of_launch_configurations: Option<i64>,
     /// <p>The current number of groups for your AWS account.</p>
     pub number_of_auto_scaling_groups: Option<i64>,
@@ -2862,17 +2830,17 @@ impl DisableScaleInDeserializer {
 /// <p>Describes an Amazon EBS volume. Used in combination with <a>BlockDeviceMapping</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ebs {
-    /// <p>Indicates whether the volume is deleted on instance termination. For Amazon EC2 Auto Scaling, the default value is <code>true</code>.</p>
+    /// <p>Indicates whether the volume is deleted on instance termination. The default value is <code>true</code>.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>. If your AMI uses encrypted volumes, you can also only launch it on supported instance types.</p> <note> <p>If you are creating a volume from a snapshot, you cannot specify an encryption value. Volumes that are created from encrypted snapshots are automatically encrypted, and volumes that are created from unencrypted snapshots are automatically unencrypted. By default, encrypted snapshots use the AWS managed CMK that is used for EBS encryption, but you can specify a custom CMK when you create the snapshot. The ability to encrypt a snapshot during copying also allows you to apply a new CMK to an already-encrypted snapshot. Volumes restored from the resulting copy are only accessible using the new CMK.</p> <p>Enabling <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">encryption by default</a> results in all EBS volumes being encrypted with the AWS managed CMK or a customer managed CMK, whether or not the snapshot was encrypted.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIEncryption.html">Using Encryption with EBS-Backed AMIs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html">Required CMK Key Policy for Use with Encrypted Volumes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. If your AMI uses encrypted volumes, you can only launch it on supported instance types. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) to provision for the volume. The maximum ratio of IOPS to volume size (in GiB) is 50:1. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Conditional: This parameter is required when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
+    /// <p>The number of I/O operations per second (IOPS) to provision for the volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Conditional: This parameter is required when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
     pub iops: Option<i64>,
-    /// <p>The snapshot ID of the volume to use.</p> <p>Conditional: This parameter is optional if you specify a volume size. If you specify both <code>SnapshotId</code> and <code>VolumeSize</code>, <code>VolumeSize</code> must be equal or greater than the size of the snapshot.</p>
+    /// <p>The ID of the snapshot. This parameter is optional if you specify a volume size. </p>
     pub snapshot_id: Option<String>,
-    /// <p><p>The volume size, in Gibibytes (GiB).</p> <p>This can be a number from 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of VolumeSize or SnapshotId is required.</p> </note></p>
+    /// <p><p>The volume size, in GiB. </p> <p>Constraints: 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of VolumeSize or SnapshotId is required.</p> </note></p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid Values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
+    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -3129,7 +3097,7 @@ pub struct ExecutePolicyType {
     pub auto_scaling_group_name: Option<String>,
     /// <p>The breach threshold for the alarm.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub breach_threshold: Option<f64>,
-    /// <p>Indicates whether Amazon EC2 Auto Scaling waits for the cooldown period to complete before executing the policy.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code> or <code>TargetTrackingScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Indicates whether Amazon EC2 Auto Scaling waits for the cooldown period to complete before executing the policy.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub honor_cooldown: Option<bool>,
     /// <p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub metric_value: Option<f64>,
@@ -3369,8 +3337,6 @@ pub struct Instance {
     pub health_status: String,
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
-    /// <p>The instance type of the EC2 instance.</p>
-    pub instance_type: Option<String>,
     /// <p>The launch configuration associated with the instance.</p>
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
@@ -3379,8 +3345,6 @@ pub struct Instance {
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
-    /// <p>The number of capacity units contributed by the instance based on its instance type.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
-    pub weighted_capacity: Option<String>,
 }
 
 struct InstanceDeserializer;
@@ -3404,12 +3368,6 @@ impl InstanceDeserializer {
                     obj.instance_id =
                         XmlStringMaxLen19Deserializer::deserialize("InstanceId", stack)?;
                 }
-                "InstanceType" => {
-                    obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
-                        "InstanceType",
-                        stack,
-                    )?);
-                }
                 "LaunchConfigurationName" => {
                     obj.launch_configuration_name =
                         Some(XmlStringMaxLen255Deserializer::deserialize(
@@ -3431,12 +3389,6 @@ impl InstanceDeserializer {
                 "ProtectedFromScaleIn" => {
                     obj.protected_from_scale_in =
                         InstanceProtectedDeserializer::deserialize("ProtectedFromScaleIn", stack)?;
-                }
-                "WeightedCapacity" => {
-                    obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
-                        "WeightedCapacity",
-                        stack,
-                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -3527,18 +3479,18 @@ impl InstancesDeserializer {
         })
     }
 }
-/// <p>Describes an instances distribution for an Auto Scaling group with <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacity.</p> <p>When you update <code>SpotAllocationStrategy</code>, <code>SpotInstancePools</code>, or <code>SpotMaxPrice</code>, this update action does not deploy any changes across the running Amazon EC2 instances in the group. Your existing Spot Instances continue to run as long as the maximum price for those instances is higher than the current Spot price. When scale out occurs, Amazon EC2 Auto Scaling launches instances based on the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
+/// <p>Describes an instances distribution for an Auto Scaling group with <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstancesDistribution {
-    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity.</p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance type overrides for the <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>
+    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. </p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance type overrides for the <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on. </p>
     pub on_demand_allocation_strategy: Option<String>,
-    /// <p><p>The minimum amount of the Auto Scaling group&#39;s capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>Default if not set is 0. If you leave it set to 0, On-Demand Instances are launched as a percentage of the Auto Scaling group&#39;s desired capacity, per the <code>OnDemandPercentageAboveBaseCapacity</code> setting.</p> <note> <p>An update to this setting means a gradual replacement of instances to maintain the specified number of On-Demand Instances for your base capacity. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones.</p> </note></p>
+    /// <p>The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>The default value is <code>0</code>. If you leave this parameter set to <code>0</code>, On-Demand Instances are launched as a percentage of the Auto Scaling group's desired capacity, per the <code>OnDemandPercentageAboveBaseCapacity</code> setting.</p>
     pub on_demand_base_capacity: Option<i64>,
-    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>.</p> <p>Default if not set is 100. If you leave it set to 100, the percentages are 100% for On-Demand Instances and 0% for Spot Instances.</p> <note> <p>An update to this setting means a gradual replacement of instances to maintain the percentage of On-Demand Instances for your additional capacity above the base capacity. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones.</p> </note> <p>Valid Range: Minimum value of 0. Maximum value of 100.</p>
+    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>.</p> <p>The range is 0–100. The default value is <code>100</code>. If you leave this parameter set to <code>100</code>, the percentages are 100% for On-Demand Instances and 0% for Spot Instances. </p>
     pub on_demand_percentage_above_base_capacity: Option<i64>,
-    /// <p>Indicates how to allocate instances across Spot Instance pools.</p> <p>If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. If the allocation strategy is <code>capacity-optimized</code>, the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity.</p> <p>The default Spot allocation strategy for calls that you make through the API, the AWS CLI, or the AWS SDKs is <code>lowest-price</code>. The default Spot allocation strategy for the AWS Management Console is <code>capacity-optimized</code>.</p> <p>Valid values: <code>lowest-price</code> | <code>capacity-optimized</code> </p>
+    /// <p>Indicates how to allocate Spot capacity across Spot pools.</p> <p>The only valid value is <code>lowest-price</code>, which is also the default value. The Auto Scaling group selects the cheapest Spot pools and evenly allocates your Spot capacity across the number of Spot pools that you specify. </p>
     pub spot_allocation_strategy: Option<String>,
-    /// <p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the Overrides array of <a>LaunchTemplate</a>. Default if not set is 2.</p> <p>Used only when the Spot allocation strategy is <code>lowest-price</code>.</p> <p>Valid Range: Minimum value of 1. Maximum value of 20.</p>
+    /// <p>The number of Spot pools to use to allocate your Spot capacity. The Spot pools are determined from the different instance types in the Overrides array of <a>LaunchTemplate</a>. </p> <p>The range is 1–20 and the default is 2. </p>
     pub spot_instance_pools: Option<i64>,
     /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave the value of this parameter blank (which is the default), the maximum Spot price is set at the On-Demand price.</p> <p>To remove a value that you previously set, include the parameter but leave the value blank.</p>
     pub spot_max_price: Option<String>,
@@ -3644,43 +3596,43 @@ impl InstancesDistributionSerializer {
 /// <p>Describes a launch configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchConfiguration {
-    /// <p>For Auto Scaling groups that are running in a VPC, specifies whether to assign a public IP address to the group's instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>[EC2-VPC] Indicates whether to assign a public IP address to each instance.</p>
     pub associate_public_ip_address: Option<bool>,
-    /// <p>A block device mapping, which specifies the block devices for the instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>A block device mapping, which specifies the block devices for the instance.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter can only be used if you are launching EC2-Classic instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you specify a ClassicLink-enabled VPC, and cannot be used otherwise.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
     /// <p>The creation date and time for the launch configuration.</p>
     pub created_time: String,
-    /// <p>Specifies whether the launch configuration is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>Controls whether the instance is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>).</p>
     pub ebs_optimized: Option<bool>,
-    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance. The instance profile contains the IAM role.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p>
     pub iam_instance_profile: Option<String>,
-    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The ID of the Amazon Machine Image (AMI).</p>
     pub image_id: String,
-    /// <p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p>
     pub instance_monitoring: Option<InstanceMonitoring>,
-    /// <p>The instance type for the instances.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>
+    /// <p>The instance type for the instances.</p>
     pub instance_type: String,
     /// <p>The ID of the kernel associated with the AMI.</p>
     pub kernel_id: Option<String>,
-    /// <p>The name of the key pair.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The name of the key pair.</p>
     pub key_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the launch configuration.</p>
     pub launch_configuration_arn: Option<String>,
     /// <p>The name of the launch configuration.</p>
     pub launch_configuration_name: String,
-    /// <p>The tenancy of the instance, either <code>default</code> or <code>dedicated</code>. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-vpc-tenancy">Instance Placement Tenancy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The tenancy of the instance, either <code>default</code> or <code>dedicated</code>. An instance with <code>dedicated</code> tenancy runs in an isolated, single-tenant hardware and can only be launched into a VPC.</p>
     pub placement_tenancy: Option<String>,
     /// <p>The ID of the RAM disk associated with the AMI.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>A list that contains the security groups to assign to the instances in the Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>The security groups to associate with the instances.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The price to bid when launching Spot Instances.</p>
     pub spot_price: Option<String>,
-    /// <p>The Base64-encoded user data to make available to the launched EC2 instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The user data available to the instances.</p>
     pub user_data: Option<String>,
 }
 
@@ -3927,12 +3879,12 @@ impl LaunchConfigurationsTypeDeserializer {
         )
     }
 }
-/// <p>Describes a launch template and overrides.</p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances.</p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
+/// <p>Describes a launch template and overrides. </p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplate {
-    /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request.</p>
+    /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request. </p>
     pub launch_template_specification: Option<LaunchTemplateSpecification>,
-    /// <p>An optional setting. Any parameters that you specify override the same parameters in the launch template. Currently, the only supported override is instance type. You can specify between 1 and 20 instance types.</p>
+    /// <p>Any parameters that you specify override the same parameters in the launch template. Currently, the only supported override is instance type. </p> <p>You must specify between 2 and 20 overrides.</p>
     pub overrides: Option<Vec<LaunchTemplateOverrides>>,
 }
 
@@ -4001,13 +3953,11 @@ impl LaunchTemplateNameDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes an override for a launch template.</p>
+/// <p>Describes an override for a launch template. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateOverrides {
-    /// <p>The instance type.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
+    /// <p>The instance type. </p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
     pub instance_type: Option<String>,
-    /// <p>The number of capacity units, which gives the instance type a proportional weight to other instance types. For example, larger instance types are generally weighted more than smaller instance types. These are the same units that you chose to set the desired capacity in terms of instances, or a performance attribute such as vCPUs, memory, or I/O.</p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>
-    pub weighted_capacity: Option<String>,
 }
 
 struct LaunchTemplateOverridesDeserializer;
@@ -4025,12 +3975,6 @@ impl LaunchTemplateOverridesDeserializer {
                     "InstanceType" => {
                         obj.instance_type = Some(XmlStringMaxLen255Deserializer::deserialize(
                             "InstanceType",
-                            stack,
-                        )?);
-                    }
-                    "WeightedCapacity" => {
-                        obj.weighted_capacity = Some(XmlStringMaxLen32Deserializer::deserialize(
-                            "WeightedCapacity",
                             stack,
                         )?);
                     }
@@ -4053,9 +3997,6 @@ impl LaunchTemplateOverridesSerializer {
 
         if let Some(ref field_value) = obj.instance_type {
             params.put(&format!("{}{}", prefix, "InstanceType"), &field_value);
-        }
-        if let Some(ref field_value) = obj.weighted_capacity {
-            params.put(&format!("{}{}", prefix, "WeightedCapacity"), &field_value);
         }
     }
 }
@@ -4141,7 +4082,7 @@ impl LifecycleActionResultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or terminates instances. Used in response to <a>DescribeLifecycleHooks</a>.</p>
+/// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or whenever it terminates instances. Used in response to <a>DescribeLifecycleHooks</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleHook {
     /// <p>The name of the Auto Scaling group for the lifecycle hook.</p>
@@ -4242,7 +4183,7 @@ impl LifecycleHookNamesSerializer {
     }
 }
 
-/// <p>Describes a lifecycle hook. Used in combination with <a>CreateAutoScalingGroup</a>.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for creating a lifecycle hook for an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. You can modify an existing lifecycle hook or create new lifecycle hooks using <a>PutLifecycleHook</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
+/// <p>Describes a lifecycle hook. Used in combination with <a>CreateAutoScalingGroup</a>.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for creating a lifecycle hook for an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. You can modify an existing lifecycle hook or create new lifecycle hooks using <a>PutLifecycleHook</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleHookSpecification {
     /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>
@@ -4489,17 +4430,6 @@ impl LoadBalancerTargetGroupStatesDeserializer {
             }
             Ok(())
         })
-    }
-}
-struct MaxInstanceLifetimeDeserializer;
-impl MaxInstanceLifetimeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
     }
 }
 struct MaxNumberOfAutoScalingGroupsDeserializer;
@@ -4824,12 +4754,12 @@ impl MixedInstanceSpotPriceDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level parameter instead of a launch configuration or template. For more information, see <a>CreateAutoScalingGroup</a> and <a>UpdateAutoScalingGroup</a>.</p>
+/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. Used in combination with <a>CreateAutoScalingGroup</a>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>When you create your Auto Scaling group, you can specify a launch configuration or template as a parameter for the top-level object, or you can specify a mixed instances policy, but not both at the same time.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MixedInstancesPolicy {
-    /// <p>The instances distribution to use.</p> <p>If you leave this parameter unspecified, the value for each parameter in <code>InstancesDistribution</code> uses a default value.</p>
+    /// <p>The instances distribution to use. </p> <p>If you leave this parameter unspecified when creating the group, the default values are used.</p>
     pub instances_distribution: Option<InstancesDistribution>,
-    /// <p>The launch template and instance types (overrides).</p> <p>This parameter must be specified when creating a mixed instances policy.</p>
+    /// <p>The launch template and overrides.</p> <p>This parameter is required when creating an Auto Scaling group with a mixed instances policy, but is not required when updating the group.</p>
     pub launch_template: Option<LaunchTemplate>,
 }
 
@@ -5151,9 +5081,9 @@ impl PolicyTypesSerializer {
 /// <p>Represents a predefined metric for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PredefinedMetricSpecification {
-    /// <p><p>The metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer target group.</p> </li> </ul></p>
+    /// <p>The metric type.</p>
     pub predefined_metric_type: String,
-    /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group attached to the Auto Scaling group.</p> <p>The format is <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where </p> <ul> <li> <p> <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and</p> </li> <li> <p> <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN.</p> </li> </ul></p>
+    /// <p>Identifies the resource associated with the metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer or a Network Load Balancer target group.</p> </li> </ul> <p>For predefined metric types <code>ASGAverageCPUUtilization</code>, <code>ASGAverageNetworkIn</code>, and <code>ASGAverageNetworkOut</code>, the parameter must not be specified as the resource associated with the metric type is the Auto Scaling group. For predefined metric type <code>ALBRequestCountPerTarget</code>, the parameter must be specified in the format: <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN. The target group must be attached to the Auto Scaling group.</p>
     pub resource_label: Option<String>,
 }
 
@@ -5428,17 +5358,17 @@ impl PutNotificationConfigurationTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutScalingPolicyType {
-    /// <p>Specifies whether the <code>ScalingAdjustment</code> parameter is an absolute number or a percentage of the current capacity. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>Valid only if the policy type is <code>StepScaling</code> or <code>SimpleScaling</code>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html#as-scaling-adjustment">Scaling Adjustment Types</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub adjustment_type: Option<String>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The amount of time, in seconds, after a scaling activity completes before any further dynamic scaling activities can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>Valid only if the policy type is <code>SimpleScaling</code>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub cooldown: Option<i64>,
-    /// <p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics. The default is to use the value specified for the default cooldown period for the group.</p> <p>Valid only if the policy type is <code>StepScaling</code> or <code>TargetTrackingScaling</code>.</p>
+    /// <p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics. The default is to use the value specified for the default cooldown period for the group.</p> <p>This parameter is supported if the policy type is <code>StepScaling</code> or <code>TargetTrackingScaling</code>.</p>
     pub estimated_instance_warmup: Option<i64>,
-    /// <p>The aggregation type for the CloudWatch metrics. The valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>. If the aggregation type is null, the value is treated as <code>Average</code>.</p> <p>Valid only if the policy type is <code>StepScaling</code>.</p>
+    /// <p>The aggregation type for the CloudWatch metrics. The valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>. If the aggregation type is null, the value is treated as <code>Average</code>.</p> <p>This parameter is supported if the policy type is <code>StepScaling</code>.</p>
     pub metric_aggregation_type: Option<String>,
-    /// <p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p> <p>This property replaces the <code>MinAdjustmentStep</code> property. For example, suppose that you create a step scaling policy to scale out an Auto Scaling group by 25 percent and you specify a <code>MinAdjustmentMagnitude</code> of 2. If the group has 4 instances and the scaling policy is performed, 25 percent of 4 is 1. However, because you specified a <code>MinAdjustmentMagnitude</code> of 2, Amazon EC2 Auto Scaling scales out the group by 2 instances.</p> <p>Valid only if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p>
+    /// <p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p>
     pub min_adjustment_magnitude: Option<i64>,
     /// <p>Available for backward compatibility. Use <code>MinAdjustmentMagnitude</code> instead.</p>
     pub min_adjustment_step: Option<i64>,
@@ -5446,11 +5376,11 @@ pub struct PutScalingPolicyType {
     pub policy_name: String,
     /// <p>The policy type. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>. If the policy type is null, the value is treated as <code>SimpleScaling</code>.</p>
     pub policy_type: Option<String>,
-    /// <p>The amount by which a simple scaling policy scales the Auto Scaling group in response to an alarm breach. The adjustment is based on the value that you specified in the <code>AdjustmentType</code> parameter (either an absolute number or a percentage). A positive value adds to the current capacity and a negative value subtracts from the current capacity. For exact capacity, you must specify a positive value.</p> <p>Conditional: If you specify <code>SimpleScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
+    /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p> <p>Conditional: This parameter is required if the policy type is <code>SimpleScaling</code> and not supported otherwise.</p>
     pub scaling_adjustment: Option<i64>,
-    /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>Conditional: If you specify <code>StepScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
+    /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub step_adjustments: Option<Vec<StepAdjustment>>,
-    /// <p>A target tracking scaling policy. Includes support for predefined or customized metrics.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_TargetTrackingConfiguration.html">TargetTrackingConfiguration</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p> <p>Conditional: If you specify <code>TargetTrackingScaling</code> for the policy type, you must specify this parameter. (Not used with any other policy type.) </p>
+    /// <p>A target tracking scaling policy. Includes support for predefined or customized metrics.</p> <p>Conditional: This parameter is required if the policy type is <code>TargetTrackingScaling</code> and not supported otherwise.</p>
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -5522,21 +5452,21 @@ impl PutScalingPolicyTypeSerializer {
 pub struct PutScheduledUpdateGroupActionType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The number of EC2 instances that should be running in the Auto Scaling group.</p>
+    /// <p>The number of EC2 instances that should be running in the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
+    /// <p>The time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
     pub end_time: Option<String>,
-    /// <p>The maximum number of instances in the Auto Scaling group.</p>
+    /// <p>The maximum size for the Auto Scaling group.</p>
     pub max_size: Option<i64>,
-    /// <p>The minimum number of instances in the Auto Scaling group.</p>
+    /// <p>The minimum size for the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for this action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for this action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
     pub recurrence: Option<String>,
     /// <p>The name of this scaling action.</p>
     pub scheduled_action_name: String,
-    /// <p>The date and time for this action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
+    /// <p>The time for this action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
     pub start_time: Option<String>,
-    /// <p>This parameter is no longer used.</p>
+    /// <p>This parameter is deprecated.</p>
     pub time: Option<String>,
 }
 
@@ -5703,7 +5633,7 @@ pub struct ScalingPolicy {
     pub policy_arn: Option<String>,
     /// <p>The name of the scaling policy.</p>
     pub policy_name: Option<String>,
-    /// <p>The policy type. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>.</p>
+    /// <p>The policy type. The valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>
     pub policy_type: Option<String>,
     /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>
     pub scaling_adjustment: Option<i64>,
@@ -5883,28 +5813,28 @@ impl ScheduledActionsTypeDeserializer {
         })
     }
 }
-/// <p>Describes a scheduled scaling action. Used in response to <a>DescribeScheduledActions</a>.</p>
+/// <p>Describes a scheduled scaling action. Used in response to <a>DescribeScheduledActions</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupAction {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
     /// <p>The number of instances you prefer to maintain in the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time in UTC for the recurring schedule to end. For example, <code>"2019-06-01T00:00:00Z"</code>. </p>
+    /// <p>The date and time that the action is scheduled to end. </p>
     pub end_time: Option<String>,
-    /// <p>The maximum number of instances in the Auto Scaling group.</p>
+    /// <p>The maximum size of the group.</p>
     pub max_size: Option<i64>,
-    /// <p>The minimum number of instances in the Auto Scaling group.</p>
+    /// <p>The minimum size of the group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for the action, in Unix cron syntax format.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for the action.</p>
     pub recurrence: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the scheduled action.</p>
     pub scheduled_action_arn: Option<String>,
     /// <p>The name of the scheduled action.</p>
     pub scheduled_action_name: Option<String>,
-    /// <p>The date and time in UTC for this action to start. For example, <code>"2019-06-01T00:00:00Z"</code>. </p>
+    /// <p>The date and time that the action is scheduled to begin. </p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
     pub start_time: Option<String>,
-    /// <p>This parameter is no longer used.</p>
+    /// <p>This parameter is deprecated.</p>
     pub time: Option<String>,
 }
 
@@ -5981,22 +5911,22 @@ impl ScheduledUpdateGroupActionDeserializer {
         )
     }
 }
-/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified.</p>
+/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupActionRequest {
     /// <p>The number of EC2 instances that should be running in the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
+    /// <p>The time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
     pub end_time: Option<String>,
-    /// <p>The maximum number of instances in the Auto Scaling group.</p>
+    /// <p>The maximum size of the group.</p>
     pub max_size: Option<i64>,
-    /// <p>The minimum number of instances in the Auto Scaling group.</p>
+    /// <p>The minimum size of the group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
     pub recurrence: Option<String>,
     /// <p>The name of the scaling action.</p>
     pub scheduled_action_name: String,
-    /// <p>The date and time for the action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule the action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
+    /// <p>The time for the action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule the action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
     pub start_time: Option<String>,
 }
 
@@ -6591,11 +6521,11 @@ impl TargetGroupARNsSerializer {
 /// <p>Represents a target tracking scaling policy configuration to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetTrackingConfiguration {
-    /// <p>A customized metric. You must specify either a predefined metric or a customized metric.</p>
+    /// <p>A customized metric. You can specify either a predefined metric or a customized metric.</p>
     pub customized_metric_specification: Option<CustomizedMetricSpecification>,
-    /// <p>Indicates whether scaling in by the target tracking scaling policy is disabled. If scaling in is disabled, the target tracking scaling policy doesn't remove instances from the Auto Scaling group. Otherwise, the target tracking scaling policy can remove instances from the Auto Scaling group. The default is <code>false</code>.</p>
+    /// <p>Indicates whether scaling in by the target tracking scaling policy is disabled. If scaling in is disabled, the target tracking scaling policy doesn't remove instances from the Auto Scaling group. Otherwise, the target tracking scaling policy can remove instances from the Auto Scaling group. The default is disabled.</p>
     pub disable_scale_in: Option<bool>,
-    /// <p>A predefined metric. You must specify either a predefined metric or a customized metric.</p>
+    /// <p>A predefined metric. You can specify either a predefined metric or a customized metric.</p>
     pub predefined_metric_specification: Option<PredefinedMetricSpecification>,
     /// <p>The target value for the metric.</p>
     pub target_value: f64,
@@ -6748,25 +6678,23 @@ pub struct UpdateAutoScalingGroupType {
     pub auto_scaling_group_name: String,
     /// <p>One or more Availability Zones for the group.</p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default value is <code>300</code>. This cooldown period is not used when a scaling-specific cooldown is specified.</p> <p>Cooldown periods are not supported for target tracking scaling policies, step scaling policies, or scheduled scaling. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default value is <code>300</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub default_cooldown: Option<i64>,
     /// <p>The number of EC2 instances that should be running in the Auto Scaling group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html#health-check-grace-period">Health Check Grace Period</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
+    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
     pub health_check_grace_period: Option<i64>,
     /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: Option<String>,
-    /// <p>The name of the launch configuration. If you specify <code>LaunchConfigurationName</code> in your update request, you can't specify <code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p>
+    /// <p>The name of the launch configuration. If you specify this parameter, you can't specify a launch template or a mixed instances policy.</p>
     pub launch_configuration_name: Option<String>,
-    /// <p>The launch template and version to use to specify the updates. If you specify <code>LaunchTemplate</code> in your update request, you can't specify <code>LaunchConfigurationName</code> or <code>MixedInstancesPolicy</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LaunchTemplateSpecification.html">LaunchTemplateSpecification</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
+    /// <p>The launch template and version to use to specify the updates. If you specify this parameter, you can't specify a launch configuration or a mixed instances policy.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The maximum amount of time, in seconds, that an instance can be in service.</p> <p>Valid Range: Minimum value of 604800.</p>
-    pub max_instance_lifetime: Option<i64>,
     /// <p>The maximum size of the Auto Scaling group.</p>
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>An embedded object that specifies a mixed instances policy.</p> <p>In your call to <code>UpdateAutoScalingGroup</code>, you can make changes to the policy that is specified. All optional parameters are left unchanged if not specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_MixedInstancesPolicy.html">MixedInstancesPolicy</a> in the <i>Amazon EC2 Auto Scaling API Reference</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The mixed instances policy to use to specify the updates. If you specify this parameter, you can't specify a launch configuration or a launch template. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p> <p>For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
@@ -6776,7 +6704,7 @@ pub struct UpdateAutoScalingGroupType {
     pub service_linked_role_arn: Option<String>,
     /// <p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
-    /// <p>A comma-separated list of subnet IDs for virtual private cloud (VPC).</p> <p>If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets that you specify for this parameter must reside in those Availability Zones.</p>
+    /// <p>A comma-separated list of subnet IDs, if you are launching into a VPC.</p> <p>If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets that you specify for this parameter must reside in those Availability Zones.</p>
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -6826,12 +6754,6 @@ impl UpdateAutoScalingGroupTypeSerializer {
                 params,
                 &format!("{}{}", prefix, "LaunchTemplate"),
                 field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.max_instance_lifetime {
-            params.put(
-                &format!("{}{}", prefix, "MaxInstanceLifetime"),
-                &field_value,
             );
         }
         if let Some(ref field_value) = obj.max_size {
@@ -10019,320 +9941,345 @@ impl Error for UpdateAutoScalingGroupError {
     }
 }
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
+#[async_trait]
 pub trait Autoscaling {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_instances(
+    async fn attach_instances(
         &self,
         input: AttachInstancesQuery,
-    ) -> RusotoFuture<(), AttachInstancesError>;
+    ) -> Result<(), RusotoError<AttachInstancesError>>;
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancer_target_groups(
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
+    ) -> Result<
+        AttachLoadBalancerTargetGroupsResultType,
+        RusotoError<AttachLoadBalancerTargetGroupsError>,
+    >;
 
     /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancers(
+    async fn attach_load_balancers(
         &self,
         input: AttachLoadBalancersType,
-    ) -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError>;
+    ) -> Result<AttachLoadBalancersResultType, RusotoError<AttachLoadBalancersError>>;
 
     /// <p>Deletes one or more scheduled actions for the specified Auto Scaling group.</p>
-    fn batch_delete_scheduled_action(
+    async fn batch_delete_scheduled_action(
         &self,
         input: BatchDeleteScheduledActionType,
-    ) -> RusotoFuture<BatchDeleteScheduledActionAnswer, BatchDeleteScheduledActionError>;
+    ) -> Result<BatchDeleteScheduledActionAnswer, RusotoError<BatchDeleteScheduledActionError>>;
 
     /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
-    fn batch_put_scheduled_update_group_action(
+    async fn batch_put_scheduled_update_group_action(
         &self,
         input: BatchPutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchPutScheduledUpdateGroupActionAnswer,
-        BatchPutScheduledUpdateGroupActionError,
+        RusotoError<BatchPutScheduledUpdateGroupActionError>,
     >;
 
     /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn complete_lifecycle_action(
+    async fn complete_lifecycle_action(
         &self,
         input: CompleteLifecycleActionType,
-    ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
+    ) -> Result<CompleteLifecycleActionAnswer, RusotoError<CompleteLifecycleActionError>>;
 
     /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_auto_scaling_group(
+    async fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
-    ) -> RusotoFuture<(), CreateAutoScalingGroupError>;
+    ) -> Result<(), RusotoError<CreateAutoScalingGroupError>>;
 
     /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_launch_configuration(
+    async fn create_launch_configuration(
         &self,
         input: CreateLaunchConfigurationType,
-    ) -> RusotoFuture<(), CreateLaunchConfigurationError>;
+    ) -> Result<(), RusotoError<CreateLaunchConfigurationError>>;
 
     /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_or_update_tags(
+    async fn create_or_update_tags(
         &self,
         input: CreateOrUpdateTagsType,
-    ) -> RusotoFuture<(), CreateOrUpdateTagsError>;
+    ) -> Result<(), RusotoError<CreateOrUpdateTagsError>>;
 
     /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
-    fn delete_auto_scaling_group(
+    async fn delete_auto_scaling_group(
         &self,
         input: DeleteAutoScalingGroupType,
-    ) -> RusotoFuture<(), DeleteAutoScalingGroupError>;
+    ) -> Result<(), RusotoError<DeleteAutoScalingGroupError>>;
 
     /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
-    fn delete_launch_configuration(
+    async fn delete_launch_configuration(
         &self,
         input: LaunchConfigurationNameType,
-    ) -> RusotoFuture<(), DeleteLaunchConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteLaunchConfigurationError>>;
 
     /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
-    fn delete_lifecycle_hook(
+    async fn delete_lifecycle_hook(
         &self,
         input: DeleteLifecycleHookType,
-    ) -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
+    ) -> Result<DeleteLifecycleHookAnswer, RusotoError<DeleteLifecycleHookError>>;
 
     /// <p>Deletes the specified notification.</p>
-    fn delete_notification_configuration(
+    async fn delete_notification_configuration(
         &self,
         input: DeleteNotificationConfigurationType,
-    ) -> RusotoFuture<(), DeleteNotificationConfigurationError>;
+    ) -> Result<(), RusotoError<DeleteNotificationConfigurationError>>;
 
-    /// <p>Deletes the specified scaling policy.</p> <p>Deleting either a step scaling policy or a simple scaling policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/deleting-scaling-policy.html">Deleting a Scaling Policy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError>;
+    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
+    async fn delete_policy(
+        &self,
+        input: DeletePolicyType,
+    ) -> Result<(), RusotoError<DeletePolicyError>>;
 
     /// <p>Deletes the specified scheduled action.</p>
-    fn delete_scheduled_action(
+    async fn delete_scheduled_action(
         &self,
         input: DeleteScheduledActionType,
-    ) -> RusotoFuture<(), DeleteScheduledActionError>;
+    ) -> Result<(), RusotoError<DeleteScheduledActionError>>;
 
     /// <p>Deletes the specified tags.</p>
-    fn delete_tags(&self, input: DeleteTagsType) -> RusotoFuture<(), DeleteTagsError>;
+    async fn delete_tags(&self, input: DeleteTagsType) -> Result<(), RusotoError<DeleteTagsError>>;
 
     /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
-    ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
+    ) -> Result<DescribeAccountLimitsAnswer, RusotoError<DescribeAccountLimitsError>>;
 
     /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
-    fn describe_adjustment_types(
+    async fn describe_adjustment_types(
         &self,
-    ) -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
+    ) -> Result<DescribeAdjustmentTypesAnswer, RusotoError<DescribeAdjustmentTypesError>>;
 
     /// <p>Describes one or more Auto Scaling groups.</p>
-    fn describe_auto_scaling_groups(
+    async fn describe_auto_scaling_groups(
         &self,
         input: AutoScalingGroupNamesType,
-    ) -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
+    ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>>;
 
     /// <p>Describes one or more Auto Scaling instances.</p>
-    fn describe_auto_scaling_instances(
+    async fn describe_auto_scaling_instances(
         &self,
         input: DescribeAutoScalingInstancesType,
-    ) -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
+    ) -> Result<AutoScalingInstancesType, RusotoError<DescribeAutoScalingInstancesError>>;
 
     /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
-    fn describe_auto_scaling_notification_types(
+    async fn describe_auto_scaling_notification_types(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAutoScalingNotificationTypesAnswer,
-        DescribeAutoScalingNotificationTypesError,
+        RusotoError<DescribeAutoScalingNotificationTypesError>,
     >;
 
     /// <p>Describes one or more launch configurations.</p>
-    fn describe_launch_configurations(
+    async fn describe_launch_configurations(
         &self,
         input: LaunchConfigurationNamesType,
-    ) -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
+    ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>>;
 
     /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
-    fn describe_lifecycle_hook_types(
+    async fn describe_lifecycle_hook_types(
         &self,
-    ) -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
+    ) -> Result<DescribeLifecycleHookTypesAnswer, RusotoError<DescribeLifecycleHookTypesError>>;
 
     /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
-    fn describe_lifecycle_hooks(
+    async fn describe_lifecycle_hooks(
         &self,
         input: DescribeLifecycleHooksType,
-    ) -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
+    ) -> Result<DescribeLifecycleHooksAnswer, RusotoError<DescribeLifecycleHooksError>>;
 
     /// <p>Describes the target groups for the specified Auto Scaling group.</p>
-    fn describe_load_balancer_target_groups(
+    async fn describe_load_balancer_target_groups(
         &self,
         input: DescribeLoadBalancerTargetGroupsRequest,
-    ) -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
+    ) -> Result<
+        DescribeLoadBalancerTargetGroupsResponse,
+        RusotoError<DescribeLoadBalancerTargetGroupsError>,
+    >;
 
     /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
+    ) -> Result<DescribeLoadBalancersResponse, RusotoError<DescribeLoadBalancersError>>;
 
     /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
-    fn describe_metric_collection_types(
+    async fn describe_metric_collection_types(
         &self,
-    ) -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
+    ) -> Result<DescribeMetricCollectionTypesAnswer, RusotoError<DescribeMetricCollectionTypesError>>;
 
     /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
-    fn describe_notification_configurations(
+    async fn describe_notification_configurations(
         &self,
         input: DescribeNotificationConfigurationsType,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeNotificationConfigurationsAnswer,
-        DescribeNotificationConfigurationsError,
+        RusotoError<DescribeNotificationConfigurationsError>,
     >;
 
     /// <p>Describes the policies for the specified Auto Scaling group.</p>
-    fn describe_policies(
+    async fn describe_policies(
         &self,
         input: DescribePoliciesType,
-    ) -> RusotoFuture<PoliciesType, DescribePoliciesError>;
+    ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>>;
 
     /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
-    fn describe_scaling_activities(
+    async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesType,
-    ) -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError>;
+    ) -> Result<ActivitiesType, RusotoError<DescribeScalingActivitiesError>>;
 
     /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
-    fn describe_scaling_process_types(
+    async fn describe_scaling_process_types(
         &self,
-    ) -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError>;
+    ) -> Result<ProcessesType, RusotoError<DescribeScalingProcessTypesError>>;
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
-    fn describe_scheduled_actions(
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
+    async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
-    ) -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError>;
+    ) -> Result<ScheduledActionsType, RusotoError<DescribeScheduledActionsError>>;
 
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
-    fn describe_tags(&self, input: DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError>;
+    async fn describe_tags(
+        &self,
+        input: DescribeTagsType,
+    ) -> Result<TagsType, RusotoError<DescribeTagsError>>;
 
     /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_termination_policy_types(
+    async fn describe_termination_policy_types(
         &self,
-    ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
+    ) -> Result<
+        DescribeTerminationPolicyTypesAnswer,
+        RusotoError<DescribeTerminationPolicyTypesError>,
+    >;
 
     /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn detach_instances(
+    async fn detach_instances(
         &self,
         input: DetachInstancesQuery,
-    ) -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError>;
+    ) -> Result<DetachInstancesAnswer, RusotoError<DetachInstancesError>>;
 
     /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
-    fn detach_load_balancer_target_groups(
+    async fn detach_load_balancer_target_groups(
         &self,
         input: DetachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
+    ) -> Result<
+        DetachLoadBalancerTargetGroupsResultType,
+        RusotoError<DetachLoadBalancerTargetGroupsError>,
+    >;
 
     /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
-    fn detach_load_balancers(
+    async fn detach_load_balancers(
         &self,
         input: DetachLoadBalancersType,
-    ) -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError>;
+    ) -> Result<DetachLoadBalancersResultType, RusotoError<DetachLoadBalancersError>>;
 
     /// <p>Disables group metrics for the specified Auto Scaling group.</p>
-    fn disable_metrics_collection(
+    async fn disable_metrics_collection(
         &self,
         input: DisableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), DisableMetricsCollectionError>;
+    ) -> Result<(), RusotoError<DisableMetricsCollectionError>>;
 
     /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enable_metrics_collection(
+    async fn enable_metrics_collection(
         &self,
         input: EnableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), EnableMetricsCollectionError>;
+    ) -> Result<(), RusotoError<EnableMetricsCollectionError>>;
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>If you choose to decrement the desired capacity of the Auto Scaling group, the instances can enter standby as long as the desired capacity of the Auto Scaling group after the instances are placed into standby is equal to or greater than the minimum capacity of the group.</p> <p>If you choose not to decrement the desired capacity of the Auto Scaling group, the Auto Scaling group launches new instances to replace the instances on standby.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enter_standby(
+    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn enter_standby(
         &self,
         input: EnterStandbyQuery,
-    ) -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError>;
+    ) -> Result<EnterStandbyAnswer, RusotoError<EnterStandbyError>>;
 
     /// <p>Executes the specified policy.</p>
-    fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError>;
+    async fn execute_policy(
+        &self,
+        input: ExecutePolicyType,
+    ) -> Result<(), RusotoError<ExecutePolicyError>>;
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>After you put the instances back in service, the desired capacity is incremented.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn exit_standby(
+    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn exit_standby(
         &self,
         input: ExitStandbyQuery,
-    ) -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError>;
+    ) -> Result<ExitStandbyAnswer, RusotoError<ExitStandbyError>>;
 
-    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
-    fn put_lifecycle_hook(
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
+    async fn put_lifecycle_hook(
         &self,
         input: PutLifecycleHookType,
-    ) -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError>;
+    ) -> Result<PutLifecycleHookAnswer, RusotoError<PutLifecycleHookError>>;
 
     /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_notification_configuration(
+    async fn put_notification_configuration(
         &self,
         input: PutNotificationConfigurationType,
-    ) -> RusotoFuture<(), PutNotificationConfigurationError>;
+    ) -> Result<(), RusotoError<PutNotificationConfigurationError>>;
 
-    /// <p>Creates or updates a scaling policy for an Auto Scaling group. To update an existing scaling policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>For more information about using scaling policies to scale your Auto Scaling group automatically, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_scaling_policy(
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
+    async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
-    ) -> RusotoFuture<PolicyARNType, PutScalingPolicyError>;
+    ) -> Result<PolicyARNType, RusotoError<PutScalingPolicyError>>;
 
     /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_scheduled_update_group_action(
+    async fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<(), PutScheduledUpdateGroupActionError>;
+    ) -> Result<(), RusotoError<PutScheduledUpdateGroupActionError>>;
 
     /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn record_lifecycle_action_heartbeat(
+    async fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
-    ) -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
+    ) -> Result<
+        RecordLifecycleActionHeartbeatAnswer,
+        RusotoError<RecordLifecycleActionHeartbeatError>,
+    >;
 
     /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn resume_processes(
+    async fn resume_processes(
         &self,
         input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), ResumeProcessesError>;
+    ) -> Result<(), RusotoError<ResumeProcessesError>>;
 
     /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_desired_capacity(
+    async fn set_desired_capacity(
         &self,
         input: SetDesiredCapacityType,
-    ) -> RusotoFuture<(), SetDesiredCapacityError>;
+    ) -> Result<(), RusotoError<SetDesiredCapacityError>>;
 
     /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_health(
+    async fn set_instance_health(
         &self,
         input: SetInstanceHealthQuery,
-    ) -> RusotoFuture<(), SetInstanceHealthError>;
+    ) -> Result<(), RusotoError<SetInstanceHealthError>>;
 
     /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_protection(
+    async fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
-    ) -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
+    ) -> Result<SetInstanceProtectionAnswer, RusotoError<SetInstanceProtectionError>>;
 
     /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn suspend_processes(
+    async fn suspend_processes(
         &self,
         input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), SuspendProcessesError>;
+    ) -> Result<(), RusotoError<SuspendProcessesError>>;
 
     /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
-    fn terminate_instance_in_auto_scaling_group(
+    async fn terminate_instance_in_auto_scaling_group(
         &self,
         input: TerminateInstanceInAutoScalingGroupType,
-    ) -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError>;
+    ) -> Result<ActivityType, RusotoError<TerminateInstanceInAutoScalingGroupError>>;
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
-    fn update_auto_scaling_group(
+    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
+    async fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,
-    ) -> RusotoFuture<(), UpdateAutoScalingGroupError>;
+    ) -> Result<(), RusotoError<UpdateAutoScalingGroupError>>;
 }
 /// A client for the Auto Scaling API.
 #[derive(Clone)]
@@ -10346,7 +10293,10 @@ impl AutoscalingClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AutoscalingClient {
-        Self::new_with_client(Client::shared(), region)
+        AutoscalingClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -10356,35 +10306,22 @@ impl AutoscalingClient {
     ) -> AutoscalingClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        AutoscalingClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> AutoscalingClient {
-        AutoscalingClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for AutoscalingClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AutoscalingClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Autoscaling for AutoscalingClient {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_instances(
+    async fn attach_instances(
         &self,
         input: AttachInstancesQuery,
-    ) -> RusotoFuture<(), AttachInstancesError> {
+    ) -> Result<(), RusotoError<AttachInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10394,26 +10331,27 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AttachInstancesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AttachInstancesError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancer_target_groups(
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>
-    {
+    ) -> Result<
+        AttachLoadBalancerTargetGroupsResultType,
+        RusotoError<AttachLoadBalancerTargetGroupsError>,
+    > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10423,45 +10361,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachLoadBalancerTargetGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AttachLoadBalancerTargetGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AttachLoadBalancerTargetGroupsResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
-                        "AttachLoadBalancerTargetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AttachLoadBalancerTargetGroupsResultType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
+                "AttachLoadBalancerTargetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancers(
+    async fn attach_load_balancers(
         &self,
         input: AttachLoadBalancersType,
-    ) -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError> {
+    ) -> Result<AttachLoadBalancersResultType, RusotoError<AttachLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10471,47 +10410,47 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AttachLoadBalancersError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AttachLoadBalancersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AttachLoadBalancersResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AttachLoadBalancersResultTypeDeserializer::deserialize(
-                        "AttachLoadBalancersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AttachLoadBalancersResultType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AttachLoadBalancersResultTypeDeserializer::deserialize(
+                "AttachLoadBalancersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes one or more scheduled actions for the specified Auto Scaling group.</p>
-    fn batch_delete_scheduled_action(
+    async fn batch_delete_scheduled_action(
         &self,
         input: BatchDeleteScheduledActionType,
-    ) -> RusotoFuture<BatchDeleteScheduledActionAnswer, BatchDeleteScheduledActionError> {
+    ) -> Result<BatchDeleteScheduledActionAnswer, RusotoError<BatchDeleteScheduledActionError>>
+    {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10521,47 +10460,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDeleteScheduledActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(BatchDeleteScheduledActionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = BatchDeleteScheduledActionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
-                        "BatchDeleteScheduledActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = BatchDeleteScheduledActionAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
+                "BatchDeleteScheduledActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
-    fn batch_put_scheduled_update_group_action(
+    async fn batch_put_scheduled_update_group_action(
         &self,
         input: BatchPutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchPutScheduledUpdateGroupActionAnswer,
-        BatchPutScheduledUpdateGroupActionError,
+        RusotoError<BatchPutScheduledUpdateGroupActionError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -10572,47 +10512,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchPutScheduledUpdateGroupActionError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(BatchPutScheduledUpdateGroupActionError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = BatchPutScheduledUpdateGroupActionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
-                        "BatchPutScheduledUpdateGroupActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = BatchPutScheduledUpdateGroupActionAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
+                "BatchPutScheduledUpdateGroupActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn complete_lifecycle_action(
+    async fn complete_lifecycle_action(
         &self,
         input: CompleteLifecycleActionType,
-    ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
+    ) -> Result<CompleteLifecycleActionAnswer, RusotoError<CompleteLifecycleActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10622,45 +10563,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteLifecycleActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CompleteLifecycleActionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CompleteLifecycleActionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CompleteLifecycleActionAnswerDeserializer::deserialize(
-                        "CompleteLifecycleActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CompleteLifecycleActionAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CompleteLifecycleActionAnswerDeserializer::deserialize(
+                "CompleteLifecycleActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_auto_scaling_group(
+    async fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
-    ) -> RusotoFuture<(), CreateAutoScalingGroupError> {
+    ) -> Result<(), RusotoError<CreateAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10670,22 +10612,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAutoScalingGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateAutoScalingGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_launch_configuration(
+    async fn create_launch_configuration(
         &self,
         input: CreateLaunchConfigurationType,
-    ) -> RusotoFuture<(), CreateLaunchConfigurationError> {
+    ) -> Result<(), RusotoError<CreateLaunchConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10695,22 +10639,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLaunchConfigurationError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateLaunchConfigurationError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_or_update_tags(
+    async fn create_or_update_tags(
         &self,
         input: CreateOrUpdateTagsType,
-    ) -> RusotoFuture<(), CreateOrUpdateTagsError> {
+    ) -> Result<(), RusotoError<CreateOrUpdateTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10720,25 +10666,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateOrUpdateTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateOrUpdateTagsError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
-    fn delete_auto_scaling_group(
+    async fn delete_auto_scaling_group(
         &self,
         input: DeleteAutoScalingGroupType,
-    ) -> RusotoFuture<(), DeleteAutoScalingGroupError> {
+    ) -> Result<(), RusotoError<DeleteAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10748,22 +10693,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAutoScalingGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteAutoScalingGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
-    fn delete_launch_configuration(
+    async fn delete_launch_configuration(
         &self,
         input: LaunchConfigurationNameType,
-    ) -> RusotoFuture<(), DeleteLaunchConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteLaunchConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10773,22 +10720,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLaunchConfigurationError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteLaunchConfigurationError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
-    fn delete_lifecycle_hook(
+    async fn delete_lifecycle_hook(
         &self,
         input: DeleteLifecycleHookType,
-    ) -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
+    ) -> Result<DeleteLifecycleHookAnswer, RusotoError<DeleteLifecycleHookError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10798,47 +10747,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteLifecycleHookError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteLifecycleHookError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteLifecycleHookAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLifecycleHookAnswerDeserializer::deserialize(
-                        "DeleteLifecycleHookResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteLifecycleHookAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteLifecycleHookAnswerDeserializer::deserialize(
+                "DeleteLifecycleHookResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified notification.</p>
-    fn delete_notification_configuration(
+    async fn delete_notification_configuration(
         &self,
         input: DeleteNotificationConfigurationType,
-    ) -> RusotoFuture<(), DeleteNotificationConfigurationError> {
+    ) -> Result<(), RusotoError<DeleteNotificationConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10848,21 +10796,26 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNotificationConfigurationError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteNotificationConfigurationError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
-    /// <p>Deletes the specified scaling policy.</p> <p>Deleting either a step scaling policy or a simple scaling policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/deleting-scaling-policy.html">Deleting a Scaling Policy</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError> {
+    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
+    async fn delete_policy(
+        &self,
+        input: DeletePolicyType,
+    ) -> Result<(), RusotoError<DeletePolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10872,25 +10825,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePolicyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeletePolicyError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified scheduled action.</p>
-    fn delete_scheduled_action(
+    async fn delete_scheduled_action(
         &self,
         input: DeleteScheduledActionType,
-    ) -> RusotoFuture<(), DeleteScheduledActionError> {
+    ) -> Result<(), RusotoError<DeleteScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10900,19 +10852,21 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteScheduledActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteScheduledActionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Deletes the specified tags.</p>
-    fn delete_tags(&self, input: DeleteTagsType) -> RusotoFuture<(), DeleteTagsError> {
+    async fn delete_tags(&self, input: DeleteTagsType) -> Result<(), RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10922,24 +10876,23 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteTagsError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_account_limits(
+    async fn describe_account_limits(
         &self,
-    ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
+    ) -> Result<DescribeAccountLimitsAnswer, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10949,44 +10902,45 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAccountLimitsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeAccountLimitsAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountLimitsAnswerDeserializer::deserialize(
-                        "DescribeAccountLimitsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAccountLimitsAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAccountLimitsAnswerDeserializer::deserialize(
+                "DescribeAccountLimitsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
-    fn describe_adjustment_types(
+    async fn describe_adjustment_types(
         &self,
-    ) -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
+    ) -> Result<DescribeAdjustmentTypesAnswer, RusotoError<DescribeAdjustmentTypesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -10996,45 +10950,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAdjustmentTypesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAdjustmentTypesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeAdjustmentTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
-                        "DescribeAdjustmentTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAdjustmentTypesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
+                "DescribeAdjustmentTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes one or more Auto Scaling groups.</p>
-    fn describe_auto_scaling_groups(
+    async fn describe_auto_scaling_groups(
         &self,
         input: AutoScalingGroupNamesType,
-    ) -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
+    ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11044,45 +10999,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAutoScalingGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AutoScalingGroupsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AutoScalingGroupsTypeDeserializer::deserialize(
-                        "DescribeAutoScalingGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AutoScalingGroupsType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AutoScalingGroupsTypeDeserializer::deserialize(
+                "DescribeAutoScalingGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes one or more Auto Scaling instances.</p>
-    fn describe_auto_scaling_instances(
+    async fn describe_auto_scaling_instances(
         &self,
         input: DescribeAutoScalingInstancesType,
-    ) -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
+    ) -> Result<AutoScalingInstancesType, RusotoError<DescribeAutoScalingInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11092,46 +11048,47 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingInstancesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAutoScalingInstancesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AutoScalingInstancesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AutoScalingInstancesTypeDeserializer::deserialize(
-                        "DescribeAutoScalingInstancesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AutoScalingInstancesType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AutoScalingInstancesTypeDeserializer::deserialize(
+                "DescribeAutoScalingInstancesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
-    fn describe_auto_scaling_notification_types(
+    async fn describe_auto_scaling_notification_types(
         &self,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeAutoScalingNotificationTypesAnswer,
-        DescribeAutoScalingNotificationTypesError,
+        RusotoError<DescribeAutoScalingNotificationTypesError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -11142,47 +11099,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingNotificationTypesError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeAutoScalingNotificationTypesError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeAutoScalingNotificationTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
-                        "DescribeAutoScalingNotificationTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeAutoScalingNotificationTypesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
+                "DescribeAutoScalingNotificationTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes one or more launch configurations.</p>
-    fn describe_launch_configurations(
+    async fn describe_launch_configurations(
         &self,
         input: LaunchConfigurationNamesType,
-    ) -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
+    ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11192,44 +11150,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLaunchConfigurationsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLaunchConfigurationsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = LaunchConfigurationsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = LaunchConfigurationsTypeDeserializer::deserialize(
-                        "DescribeLaunchConfigurationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = LaunchConfigurationsType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = LaunchConfigurationsTypeDeserializer::deserialize(
+                "DescribeLaunchConfigurationsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
-    fn describe_lifecycle_hook_types(
+    async fn describe_lifecycle_hook_types(
         &self,
-    ) -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
+    ) -> Result<DescribeLifecycleHookTypesAnswer, RusotoError<DescribeLifecycleHookTypesError>>
+    {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11239,45 +11199,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLifecycleHookTypesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLifecycleHookTypesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLifecycleHookTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
-                        "DescribeLifecycleHookTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLifecycleHookTypesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
+                "DescribeLifecycleHookTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
-    fn describe_lifecycle_hooks(
+    async fn describe_lifecycle_hooks(
         &self,
         input: DescribeLifecycleHooksType,
-    ) -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
+    ) -> Result<DescribeLifecycleHooksAnswer, RusotoError<DescribeLifecycleHooksError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11287,46 +11248,49 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLifecycleHooksError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLifecycleHooksError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLifecycleHooksAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
-                        "DescribeLifecycleHooksResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLifecycleHooksAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
+                "DescribeLifecycleHooksResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the target groups for the specified Auto Scaling group.</p>
-    fn describe_load_balancer_target_groups(
+    async fn describe_load_balancer_target_groups(
         &self,
         input: DescribeLoadBalancerTargetGroupsRequest,
-    ) -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>
-    {
+    ) -> Result<
+        DescribeLoadBalancerTargetGroupsResponse,
+        RusotoError<DescribeLoadBalancerTargetGroupsError>,
+    > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11336,47 +11300,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerTargetGroupsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancerTargetGroupsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancerTargetGroupsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
-                        "DescribeLoadBalancerTargetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancerTargetGroupsResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
+                "DescribeLoadBalancerTargetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
-    fn describe_load_balancers(
+    async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
+    ) -> Result<DescribeLoadBalancersResponse, RusotoError<DescribeLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11386,44 +11351,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancersError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeLoadBalancersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancersResponseDeserializer::deserialize(
-                        "DescribeLoadBalancersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeLoadBalancersResponse::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeLoadBalancersResponseDeserializer::deserialize(
+                "DescribeLoadBalancersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
-    fn describe_metric_collection_types(
+    async fn describe_metric_collection_types(
         &self,
-    ) -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
+    ) -> Result<DescribeMetricCollectionTypesAnswer, RusotoError<DescribeMetricCollectionTypesError>>
+    {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11433,47 +11400,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMetricCollectionTypesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeMetricCollectionTypesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeMetricCollectionTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
-                        "DescribeMetricCollectionTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeMetricCollectionTypesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
+                "DescribeMetricCollectionTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
-    fn describe_notification_configurations(
+    async fn describe_notification_configurations(
         &self,
         input: DescribeNotificationConfigurationsType,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeNotificationConfigurationsAnswer,
-        DescribeNotificationConfigurationsError,
+        RusotoError<DescribeNotificationConfigurationsError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -11484,47 +11452,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeNotificationConfigurationsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeNotificationConfigurationsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeNotificationConfigurationsAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
-                        "DescribeNotificationConfigurationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeNotificationConfigurationsAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
+                "DescribeNotificationConfigurationsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the policies for the specified Auto Scaling group.</p>
-    fn describe_policies(
+    async fn describe_policies(
         &self,
         input: DescribePoliciesType,
-    ) -> RusotoFuture<PoliciesType, DescribePoliciesError> {
+    ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11534,48 +11503,43 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribePoliciesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribePoliciesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = PoliciesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PoliciesTypeDeserializer::deserialize(
-                        "DescribePoliciesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = PoliciesType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
-    fn describe_scaling_activities(
+    async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesType,
-    ) -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError> {
+    ) -> Result<ActivitiesType, RusotoError<DescribeScalingActivitiesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11585,44 +11549,45 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingActivitiesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeScalingActivitiesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ActivitiesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ActivitiesTypeDeserializer::deserialize(
-                        "DescribeScalingActivitiesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ActivitiesType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ActivitiesTypeDeserializer::deserialize(
+                "DescribeScalingActivitiesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
-    fn describe_scaling_process_types(
+    async fn describe_scaling_process_types(
         &self,
-    ) -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError> {
+    ) -> Result<ProcessesType, RusotoError<DescribeScalingProcessTypesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11632,45 +11597,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingProcessTypesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeScalingProcessTypesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ProcessesType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ProcessesTypeDeserializer::deserialize(
-                        "DescribeScalingProcessTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ProcessesType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ProcessesTypeDeserializer::deserialize(
+                "DescribeScalingProcessTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
-    fn describe_scheduled_actions(
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
+    async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
-    ) -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError> {
+    ) -> Result<ScheduledActionsType, RusotoError<DescribeScheduledActionsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11680,42 +11646,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScheduledActionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeScheduledActionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ScheduledActionsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ScheduledActionsTypeDeserializer::deserialize(
-                        "DescribeScheduledActionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ScheduledActionsType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ScheduledActionsTypeDeserializer::deserialize(
+                "DescribeScheduledActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
-    fn describe_tags(&self, input: DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError> {
+    async fn describe_tags(
+        &self,
+        input: DescribeTagsType,
+    ) -> Result<TagsType, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11725,45 +11695,45 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTagsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TagsType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TagsType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_termination_policy_types(
+    async fn describe_termination_policy_types(
         &self,
-    ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>
-    {
+    ) -> Result<
+        DescribeTerminationPolicyTypesAnswer,
+        RusotoError<DescribeTerminationPolicyTypesError>,
+    > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11773,45 +11743,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTerminationPolicyTypesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeTerminationPolicyTypesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeTerminationPolicyTypesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
-                        "DescribeTerminationPolicyTypesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeTerminationPolicyTypesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
+                "DescribeTerminationPolicyTypesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn detach_instances(
+    async fn detach_instances(
         &self,
         input: DetachInstancesQuery,
-    ) -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError> {
+    ) -> Result<DetachInstancesAnswer, RusotoError<DetachInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11821,49 +11792,49 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetachInstancesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DetachInstancesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DetachInstancesAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachInstancesAnswerDeserializer::deserialize(
-                        "DetachInstancesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DetachInstancesAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DetachInstancesAnswerDeserializer::deserialize(
+                "DetachInstancesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
-    fn detach_load_balancer_target_groups(
+    async fn detach_load_balancer_target_groups(
         &self,
         input: DetachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>
-    {
+    ) -> Result<
+        DetachLoadBalancerTargetGroupsResultType,
+        RusotoError<DetachLoadBalancerTargetGroupsError>,
+    > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11873,45 +11844,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachLoadBalancerTargetGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DetachLoadBalancerTargetGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DetachLoadBalancerTargetGroupsResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
-                        "DetachLoadBalancerTargetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DetachLoadBalancerTargetGroupsResultType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
+                "DetachLoadBalancerTargetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
-    fn detach_load_balancers(
+    async fn detach_load_balancers(
         &self,
         input: DetachLoadBalancersType,
-    ) -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError> {
+    ) -> Result<DetachLoadBalancersResultType, RusotoError<DetachLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11921,47 +11893,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DetachLoadBalancersError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DetachLoadBalancersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DetachLoadBalancersResultType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachLoadBalancersResultTypeDeserializer::deserialize(
-                        "DetachLoadBalancersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DetachLoadBalancersResultType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DetachLoadBalancersResultTypeDeserializer::deserialize(
+                "DetachLoadBalancersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Disables group metrics for the specified Auto Scaling group.</p>
-    fn disable_metrics_collection(
+    async fn disable_metrics_collection(
         &self,
         input: DisableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), DisableMetricsCollectionError> {
+    ) -> Result<(), RusotoError<DisableMetricsCollectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11971,22 +11942,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableMetricsCollectionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DisableMetricsCollectionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enable_metrics_collection(
+    async fn enable_metrics_collection(
         &self,
         input: EnableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), EnableMetricsCollectionError> {
+    ) -> Result<(), RusotoError<EnableMetricsCollectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -11996,22 +11969,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableMetricsCollectionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(EnableMetricsCollectionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>If you choose to decrement the desired capacity of the Auto Scaling group, the instances can enter standby as long as the desired capacity of the Auto Scaling group after the instances are placed into standby is equal to or greater than the minimum capacity of the group.</p> <p>If you choose not to decrement the desired capacity of the Auto Scaling group, the Auto Scaling group launches new instances to replace the instances on standby.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enter_standby(
+    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn enter_standby(
         &self,
         input: EnterStandbyQuery,
-    ) -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError> {
+    ) -> Result<EnterStandbyAnswer, RusotoError<EnterStandbyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12021,45 +11996,43 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(EnterStandbyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(EnterStandbyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = EnterStandbyAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnterStandbyAnswerDeserializer::deserialize(
-                        "EnterStandbyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = EnterStandbyAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Executes the specified policy.</p>
-    fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError> {
+    async fn execute_policy(
+        &self,
+        input: ExecutePolicyType,
+    ) -> Result<(), RusotoError<ExecutePolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12069,25 +12042,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ExecutePolicyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ExecutePolicyError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>After you put the instances back in service, the desired capacity is incremented.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn exit_standby(
+    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn exit_standby(
         &self,
         input: ExitStandbyQuery,
-    ) -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError> {
+    ) -> Result<ExitStandbyAnswer, RusotoError<ExitStandbyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12097,48 +12069,43 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ExitStandbyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ExitStandbyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ExitStandbyAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ExitStandbyAnswerDeserializer::deserialize(
-                        "ExitStandbyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ExitStandbyAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
-    fn put_lifecycle_hook(
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
+    async fn put_lifecycle_hook(
         &self,
         input: PutLifecycleHookType,
-    ) -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError> {
+    ) -> Result<PutLifecycleHookAnswer, RusotoError<PutLifecycleHookError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12148,48 +12115,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutLifecycleHookError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutLifecycleHookError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = PutLifecycleHookAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PutLifecycleHookAnswerDeserializer::deserialize(
-                        "PutLifecycleHookResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = PutLifecycleHookAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PutLifecycleHookAnswerDeserializer::deserialize(
+                "PutLifecycleHookResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_notification_configuration(
+    async fn put_notification_configuration(
         &self,
         input: PutNotificationConfigurationType,
-    ) -> RusotoFuture<(), PutNotificationConfigurationError> {
+    ) -> Result<(), RusotoError<PutNotificationConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12199,22 +12164,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutNotificationConfigurationError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutNotificationConfigurationError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
-    /// <p>Creates or updates a scaling policy for an Auto Scaling group. To update an existing scaling policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>For more information about using scaling policies to scale your Auto Scaling group automatically, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_scaling_policy(
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
+    async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
-    ) -> RusotoFuture<PolicyARNType, PutScalingPolicyError> {
+    ) -> Result<PolicyARNType, RusotoError<PutScalingPolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12224,48 +12191,43 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutScalingPolicyError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutScalingPolicyError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = PolicyARNType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PolicyARNTypeDeserializer::deserialize(
-                        "PutScalingPolicyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = PolicyARNType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_scheduled_update_group_action(
+    async fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<(), PutScheduledUpdateGroupActionError> {
+    ) -> Result<(), RusotoError<PutScheduledUpdateGroupActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12275,23 +12237,27 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScheduledUpdateGroupActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PutScheduledUpdateGroupActionError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn record_lifecycle_action_heartbeat(
+    async fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
-    ) -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>
-    {
+    ) -> Result<
+        RecordLifecycleActionHeartbeatAnswer,
+        RusotoError<RecordLifecycleActionHeartbeatError>,
+    > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12301,45 +12267,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RecordLifecycleActionHeartbeatError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RecordLifecycleActionHeartbeatError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RecordLifecycleActionHeartbeatAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize(
-                        "RecordLifecycleActionHeartbeatResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RecordLifecycleActionHeartbeatAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize(
+                "RecordLifecycleActionHeartbeatResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn resume_processes(
+    async fn resume_processes(
         &self,
         input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), ResumeProcessesError> {
+    ) -> Result<(), RusotoError<ResumeProcessesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12349,25 +12316,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResumeProcessesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ResumeProcessesError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_desired_capacity(
+    async fn set_desired_capacity(
         &self,
         input: SetDesiredCapacityType,
-    ) -> RusotoFuture<(), SetDesiredCapacityError> {
+    ) -> Result<(), RusotoError<SetDesiredCapacityError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12377,25 +12343,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetDesiredCapacityError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetDesiredCapacityError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_health(
+    async fn set_instance_health(
         &self,
         input: SetInstanceHealthQuery,
-    ) -> RusotoFuture<(), SetInstanceHealthError> {
+    ) -> Result<(), RusotoError<SetInstanceHealthError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12405,25 +12370,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SetInstanceHealthError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetInstanceHealthError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_protection(
+    async fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
-    ) -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
+    ) -> Result<SetInstanceProtectionAnswer, RusotoError<SetInstanceProtectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12433,45 +12397,46 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetInstanceProtectionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SetInstanceProtectionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = SetInstanceProtectionAnswer::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SetInstanceProtectionAnswerDeserializer::deserialize(
-                        "SetInstanceProtectionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = SetInstanceProtectionAnswer::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = SetInstanceProtectionAnswerDeserializer::deserialize(
+                "SetInstanceProtectionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn suspend_processes(
+    async fn suspend_processes(
         &self,
         input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), SuspendProcessesError> {
+    ) -> Result<(), RusotoError<SuspendProcessesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12481,25 +12446,24 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SuspendProcessesError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(SuspendProcessesError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
-    fn terminate_instance_in_auto_scaling_group(
+    async fn terminate_instance_in_auto_scaling_group(
         &self,
         input: TerminateInstanceInAutoScalingGroupType,
-    ) -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError> {
+    ) -> Result<ActivityType, RusotoError<TerminateInstanceInAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12509,47 +12473,48 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateInstanceInAutoScalingGroupError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TerminateInstanceInAutoScalingGroupError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ActivityType::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ActivityTypeDeserializer::deserialize(
-                        "TerminateInstanceInAutoScalingGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ActivityType::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ActivityTypeDeserializer::deserialize(
+                "TerminateInstanceInAutoScalingGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in event occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, use <a>DescribeAutoScalingGroups</a>. You can also view the scaling policies for an Auto Scaling group using <a>DescribePolicies</a>. If the group has scaling policies, you can update them using <a>PutScalingPolicy</a>.</p>
-    fn update_auto_scaling_group(
+    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
+    async fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,
-    ) -> RusotoFuture<(), UpdateAutoScalingGroupError> {
+    ) -> Result<(), RusotoError<UpdateAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
@@ -12559,15 +12524,17 @@ impl Autoscaling for AutoscalingClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAutoScalingGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(UpdateAutoScalingGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 }
 
@@ -12580,8 +12547,8 @@ mod protocol_tests {
     use super::*;
     use rusoto_core::Region as rusoto_region;
 
-    #[test]
-    fn test_parse_error_autoscaling_delete_policy() {
+    #[tokio::test]
+    async fn test_parse_error_autoscaling_delete_policy() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/error",
             "autoscaling-delete-policy.xml",
@@ -12590,12 +12557,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeletePolicyType::default();
-        let result = client.delete_policy(request).sync();
+        let result = client.delete_policy(request).await;
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_adjustment_types() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_adjustment_types() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-adjustment-types.xml",
@@ -12604,12 +12571,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_adjustment_types().sync();
+        let result = client.describe_adjustment_types().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_auto_scaling_groups() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_auto_scaling_groups() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-auto-scaling-groups.xml",
@@ -12618,12 +12585,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AutoScalingGroupNamesType::default();
-        let result = client.describe_auto_scaling_groups(request).sync();
+        let result = client.describe_auto_scaling_groups(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_auto_scaling_instances() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_auto_scaling_instances() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-auto-scaling-instances.xml",
@@ -12632,12 +12599,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAutoScalingInstancesType::default();
-        let result = client.describe_auto_scaling_instances(request).sync();
+        let result = client.describe_auto_scaling_instances(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_auto_scaling_notification_types() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_auto_scaling_notification_types() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-auto-scaling-notification-types.xml",
@@ -12646,12 +12613,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_auto_scaling_notification_types().sync();
+        let result = client.describe_auto_scaling_notification_types().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_launch_configurations() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_launch_configurations() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-launch-configurations.xml",
@@ -12660,12 +12627,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = LaunchConfigurationNamesType::default();
-        let result = client.describe_launch_configurations(request).sync();
+        let result = client.describe_launch_configurations(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_metric_collection_types() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_metric_collection_types() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-metric-collection-types.xml",
@@ -12674,12 +12641,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_metric_collection_types().sync();
+        let result = client.describe_metric_collection_types().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_notification_configurations() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_notification_configurations() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-notification-configurations.xml",
@@ -12688,12 +12655,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeNotificationConfigurationsType::default();
-        let result = client.describe_notification_configurations(request).sync();
+        let result = client.describe_notification_configurations(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_policies() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_policies() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-policies.xml",
@@ -12702,12 +12669,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribePoliciesType::default();
-        let result = client.describe_policies(request).sync();
+        let result = client.describe_policies(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_scaling_activities() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_scaling_activities() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-scaling-activities.xml",
@@ -12716,12 +12683,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeScalingActivitiesType::default();
-        let result = client.describe_scaling_activities(request).sync();
+        let result = client.describe_scaling_activities(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_scaling_process_types() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_scaling_process_types() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-scaling-process-types.xml",
@@ -12730,12 +12697,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_scaling_process_types().sync();
+        let result = client.describe_scaling_process_types().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_scheduled_actions() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_scheduled_actions() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-scheduled-actions.xml",
@@ -12744,12 +12711,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeScheduledActionsType::default();
-        let result = client.describe_scheduled_actions(request).sync();
+        let result = client.describe_scheduled_actions(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_tags() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_tags() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-tags.xml",
@@ -12758,12 +12725,12 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeTagsType::default();
-        let result = client.describe_tags(request).sync();
+        let result = client.describe_tags(request).await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-    #[test]
-    fn test_parse_valid_autoscaling_describe_termination_policy_types() {
+    #[tokio::test]
+    async fn test_parse_valid_autoscaling_describe_termination_policy_types() {
         let mock_response = MockResponseReader::read_response(
             "test_resources/generated/valid",
             "autoscaling-describe-termination-policy-types.xml",
@@ -12772,7 +12739,7 @@ mod protocol_tests {
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_termination_policy_types().sync();
+        let result = client.describe_termination_policy_types().await;
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

@@ -9,16 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
+
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -70,8 +70,6 @@ impl AllowedNodeGroupIdDeserializer {
 /// <p>Represents the allowed node types you can use to modify your cluster or replication group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllowedNodeTypeModificationsMessage {
-    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling down on a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
-    pub scale_down_modifications: Option<Vec<String>>,
     /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
     pub scale_up_modifications: Option<Vec<String>>,
 }
@@ -88,11 +86,6 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
-                    "ScaleDownModifications" => {
-                        obj.scale_down_modifications.get_or_insert(vec![]).extend(
-                            NodeTypeListDeserializer::deserialize("ScaleDownModifications", stack)?,
-                        );
-                    }
                     "ScaleUpModifications" => {
                         obj.scale_up_modifications.get_or_insert(vec![]).extend(
                             NodeTypeListDeserializer::deserialize("ScaleUpModifications", stack)?,
@@ -103,17 +96,6 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
                 Ok(())
             },
         )
-    }
-}
-struct AuthTokenUpdateStatusDeserializer;
-impl AuthTokenUpdateStatusDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
     }
 }
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
@@ -249,10 +231,8 @@ impl AvailabilityZonesListSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchApplyUpdateActionMessage {
-    /// <p>The cache cluster IDs</p>
-    pub cache_cluster_ids: Option<Vec<String>>,
     /// <p>The replication group IDs</p>
-    pub replication_group_ids: Option<Vec<String>>,
+    pub replication_group_ids: Vec<String>,
     /// <p>The unique ID of the service update</p>
     pub service_update_name: String,
 }
@@ -266,20 +246,11 @@ impl BatchApplyUpdateActionMessageSerializer {
             prefix.push_str(".");
         }
 
-        if let Some(ref field_value) = obj.cache_cluster_ids {
-            CacheClusterIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "CacheClusterIds"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.replication_group_ids {
-            ReplicationGroupIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ReplicationGroupIds"),
-                field_value,
-            );
-        }
+        ReplicationGroupIdListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ReplicationGroupIds"),
+            &obj.replication_group_ids,
+        );
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
             &obj.service_update_name,
@@ -289,10 +260,8 @@ impl BatchApplyUpdateActionMessageSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchStopUpdateActionMessage {
-    /// <p>The cache cluster IDs</p>
-    pub cache_cluster_ids: Option<Vec<String>>,
     /// <p>The replication group IDs</p>
-    pub replication_group_ids: Option<Vec<String>>,
+    pub replication_group_ids: Vec<String>,
     /// <p>The unique ID of the service update</p>
     pub service_update_name: String,
 }
@@ -306,20 +275,11 @@ impl BatchStopUpdateActionMessageSerializer {
             prefix.push_str(".");
         }
 
-        if let Some(ref field_value) = obj.cache_cluster_ids {
-            CacheClusterIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "CacheClusterIds"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.replication_group_ids {
-            ReplicationGroupIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ReplicationGroupIds"),
-                field_value,
-            );
-        }
+        ReplicationGroupIdListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ReplicationGroupIds"),
+            &obj.replication_group_ids,
+        );
         params.put(
             &format!("{}{}", prefix, "ServiceUpdateName"),
             &obj.service_update_name,
@@ -352,12 +312,10 @@ impl BooleanOptionalDeserializer {
 /// <p>Contains all of the attributes of a specific cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheCluster {
-    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable at-rest encryption on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable at-rest encryption on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
-    /// <p>The date the auth token was last modified</p>
-    pub auth_token_last_modified_date: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The date and time when the cluster was created.</p>
@@ -401,7 +359,7 @@ pub struct CacheCluster {
     pub snapshot_retention_limit: Option<i64>,
     /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cluster.</p> <p>Example: <code>05:00-09:00</code> </p>
     pub snapshot_window: Option<String>,
-    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -422,12 +380,6 @@ impl CacheClusterDeserializer {
                 "AuthTokenEnabled" => {
                     obj.auth_token_enabled = Some(BooleanOptionalDeserializer::deserialize(
                         "AuthTokenEnabled",
-                        stack,
-                    )?);
-                }
-                "AuthTokenLastModifiedDate" => {
-                    obj.auth_token_last_modified_date = Some(TStampDeserializer::deserialize(
-                        "AuthTokenLastModifiedDate",
                         stack,
                     )?);
                 }
@@ -571,18 +523,6 @@ impl CacheClusterDeserializer {
         })
     }
 }
-
-/// Serialize `CacheClusterIdList` contents to a `SignedRequest`.
-struct CacheClusterIdListSerializer;
-impl CacheClusterIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
-        for (index, obj) in obj.iter().enumerate() {
-            let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
-        }
-    }
-}
-
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
     #[allow(unused_variables)]
@@ -1010,105 +950,6 @@ impl CacheNodeTypeSpecificValueListDeserializer {
             if name == "CacheNodeTypeSpecificValue" {
                 obj.push(CacheNodeTypeSpecificValueDeserializer::deserialize(
                     "CacheNodeTypeSpecificValue",
-                    stack,
-                )?);
-            } else {
-                skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>The status of the service update on the cache node</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheNodeUpdateStatus {
-    /// <p>The node ID of the cache cluster</p>
-    pub cache_node_id: Option<String>,
-    /// <p>The deletion date of the node</p>
-    pub node_deletion_date: Option<String>,
-    /// <p>The end date of the update for a node</p>
-    pub node_update_end_date: Option<String>,
-    /// <p>Reflects whether the update was initiated by the customer or automatically applied</p>
-    pub node_update_initiated_by: Option<String>,
-    /// <p>The date when the update is triggered</p>
-    pub node_update_initiated_date: Option<String>,
-    /// <p>The start date of the update for a node</p>
-    pub node_update_start_date: Option<String>,
-    /// <p>The update status of the node</p>
-    pub node_update_status: Option<String>,
-    /// <p>The date when the NodeUpdateStatus was last modified&gt;</p>
-    pub node_update_status_modified_date: Option<String>,
-}
-
-struct CacheNodeUpdateStatusDeserializer;
-impl CacheNodeUpdateStatusDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheNodeUpdateStatus, XmlParseError> {
-        deserialize_elements::<_, CacheNodeUpdateStatus, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "CacheNodeId" => {
-                    obj.cache_node_id =
-                        Some(StringDeserializer::deserialize("CacheNodeId", stack)?);
-                }
-                "NodeDeletionDate" => {
-                    obj.node_deletion_date =
-                        Some(TStampDeserializer::deserialize("NodeDeletionDate", stack)?);
-                }
-                "NodeUpdateEndDate" => {
-                    obj.node_update_end_date =
-                        Some(TStampDeserializer::deserialize("NodeUpdateEndDate", stack)?);
-                }
-                "NodeUpdateInitiatedBy" => {
-                    obj.node_update_initiated_by =
-                        Some(NodeUpdateInitiatedByDeserializer::deserialize(
-                            "NodeUpdateInitiatedBy",
-                            stack,
-                        )?);
-                }
-                "NodeUpdateInitiatedDate" => {
-                    obj.node_update_initiated_date = Some(TStampDeserializer::deserialize(
-                        "NodeUpdateInitiatedDate",
-                        stack,
-                    )?);
-                }
-                "NodeUpdateStartDate" => {
-                    obj.node_update_start_date = Some(TStampDeserializer::deserialize(
-                        "NodeUpdateStartDate",
-                        stack,
-                    )?);
-                }
-                "NodeUpdateStatus" => {
-                    obj.node_update_status = Some(NodeUpdateStatusDeserializer::deserialize(
-                        "NodeUpdateStatus",
-                        stack,
-                    )?);
-                }
-                "NodeUpdateStatusModifiedDate" => {
-                    obj.node_update_status_modified_date = Some(TStampDeserializer::deserialize(
-                        "NodeUpdateStatusModifiedDate",
-                        stack,
-                    )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-struct CacheNodeUpdateStatusListDeserializer;
-impl CacheNodeUpdateStatusListDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Vec<CacheNodeUpdateStatus>, XmlParseError> {
-        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
-            if name == "CacheNodeUpdateStatus" {
-                obj.push(CacheNodeUpdateStatusDeserializer::deserialize(
-                    "CacheNodeUpdateStatus",
                     stack,
                 )?);
             } else {
@@ -1653,63 +1494,6 @@ impl ClusterIdListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteMigrationMessage {
-    /// <p>Forces the migration to stop without ensuring that data is in sync. It is recommended to use this option only to abort the migration and not recommended when application wants to continue migration to ElastiCache.</p>
-    pub force: Option<bool>,
-    /// <p>The ID of the replication group to which data is being migrated.</p>
-    pub replication_group_id: String,
-}
-
-/// Serialize `CompleteMigrationMessage` contents to a `SignedRequest`.
-struct CompleteMigrationMessageSerializer;
-impl CompleteMigrationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CompleteMigrationMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.force {
-            params.put(&format!("{}{}", prefix, "Force"), &field_value);
-        }
-        params.put(
-            &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteMigrationResponse {
-    pub replication_group: Option<ReplicationGroup>,
-}
-
-struct CompleteMigrationResponseDeserializer;
-impl CompleteMigrationResponseDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CompleteMigrationResponse, XmlParseError> {
-        deserialize_elements::<_, CompleteMigrationResponse, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ReplicationGroup" => {
-                        obj.replication_group = Some(ReplicationGroupDeserializer::deserialize(
-                            "ReplicationGroup",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Node group (shard) configuration options when adding or removing replicas. Each node group (shard) configuration has the following members: NodeGroupId, NewReplicaCount, and PreferredAvailabilityZones. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConfigureShard {
@@ -1748,8 +1532,6 @@ impl ConfigureShardSerializer {
 /// <p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotMessage {
-    /// <p>The ID of the KMS key used to encrypt the target snapshot.</p>
-    pub kms_key_id: Option<String>,
     /// <p>The name of an existing snapshot from which to make a copy.</p>
     pub source_snapshot_name: String,
     /// <p>The Amazon S3 bucket to which the snapshot is exported. This parameter is used only when exporting a snapshot for external access.</p> <p>When using this parameter to export a snapshot, be sure Amazon ElastiCache has the needed permissions to this S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the <i>Amazon ElastiCache User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting a Snapshot</a> in the <i>Amazon ElastiCache User Guide</i>.</p>
@@ -1767,9 +1549,6 @@ impl CopySnapshotMessageSerializer {
             prefix.push_str(".");
         }
 
-        if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
-        }
         params.put(
             &format!("{}{}", prefix, "SourceSnapshotName"),
             &obj.source_snapshot_name,
@@ -1812,11 +1591,11 @@ impl CopySnapshotResultDeserializer {
 pub struct CreateCacheClusterMessage {
     /// <p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>
     pub az_mode: Option<String>,
-    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>The only permitted printable special characters are !, &amp;, #, $, ^, &lt;, &gt;, and -. Other printable special characters cannot be used in the AUTH token.</p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
+    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 50 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cache_cluster_id: String,
     /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
@@ -2196,9 +1975,9 @@ impl CreateCacheSubnetGroupResultDeserializer {
 /// <p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateReplicationGroupMessage {
-    /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
-    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>The only permitted printable special characters are !, &amp;, #, $, ^, &lt;, &gt;, and -. Other printable special characters cannot be used in the AUTH token.</p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
+    /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
@@ -2216,8 +1995,6 @@ pub struct CreateReplicationGroupMessage {
     pub engine: Option<String>,
     /// <p>The version number of the cache engine to be used for the clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster or replication group and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p>The ID of the KMS key used to encrypt the disk on the cluster.</p>
-    pub kms_key_id: Option<String>,
     /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following members: <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>, and <code>Slots</code>.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter. However, when seeding a Redis (cluster mode enabled) cluster from a S3 rdb file, you must configure each node group (shard) using this parameter because you must specify the slots for each node group.</p>
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cluster owner.</p> </note></p>
@@ -2238,7 +2015,7 @@ pub struct CreateReplicationGroupMessage {
     pub replicas_per_node_group: Option<i64>,
     /// <p>A user-created description for the replication group.</p>
     pub replication_group_description: String,
-    /// <p><p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 40 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub replication_group_id: String,
     /// <p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub security_group_ids: Option<Vec<String>>,
@@ -2252,7 +2029,7 @@ pub struct CreateReplicationGroupMessage {
     pub snapshot_window: Option<String>,
     /// <p>A list of cost allocation tags to be added to this resource. Tags are comma-separated key,value pairs (e.g. Key=<code>myKey</code>, Value=<code>myKeyValue</code>. You can include multiple tags as shown following: Key=<code>myKey</code>, Value=<code>myKeyValue</code> Key=<code>mySecondKey</code>, Value=<code>mySecondKeyValue</code>.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p><p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p>This parameter is valid only if the <code>Engine</code> parameter is <code>redis</code>, the <code>EngineVersion</code> parameter is <code>3.2.6</code>, <code>4.x</code> or later, and the cluster is being created in an Amazon VPC.</p> <p>If you enable in-transit encryption, you must also specify a value for <code>CacheSubnetGroup</code>.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important></p>
+    /// <p><p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p>This parameter is valid only if the <code>Engine</code> parameter is <code>redis</code>, the <code>EngineVersion</code> parameter is <code>3.2.6</code> or <code>4.x</code>, and the cluster is being created in an Amazon VPC.</p> <p>If you enable in-transit encryption, you must also specify a value for <code>CacheSubnetGroup</code>.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important></p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -2313,9 +2090,6 @@ impl CreateReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
-        }
-        if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
         if let Some(ref field_value) = obj.node_group_configuration {
             NodeGroupConfigurationListSerializer::serialize(
@@ -2442,8 +2216,6 @@ impl CreateReplicationGroupResultDeserializer {
 pub struct CreateSnapshotMessage {
     /// <p>The identifier of an existing cluster. The snapshot is created from this cluster.</p>
     pub cache_cluster_id: Option<String>,
-    /// <p>The ID of the KMS key used to encrypt the snapshot.</p>
-    pub kms_key_id: Option<String>,
     /// <p>The identifier of an existing replication group. The snapshot is created from this replication group.</p>
     pub replication_group_id: Option<String>,
     /// <p>A name for the snapshot being created.</p>
@@ -2461,9 +2233,6 @@ impl CreateSnapshotMessageSerializer {
 
         if let Some(ref field_value) = obj.cache_cluster_id {
             params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
-        }
-        if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
             params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
@@ -2495,44 +2264,6 @@ impl CreateSnapshotResultDeserializer {
         })
     }
 }
-/// <p>The endpoint from which data should be migrated.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CustomerNodeEndpoint {
-    /// <p>The address of the node endpoint</p>
-    pub address: Option<String>,
-    /// <p>The port of the node endpoint</p>
-    pub port: Option<i64>,
-}
-
-/// Serialize `CustomerNodeEndpoint` contents to a `SignedRequest`.
-struct CustomerNodeEndpointSerializer;
-impl CustomerNodeEndpointSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CustomerNodeEndpoint) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.address {
-            params.put(&format!("{}{}", prefix, "Address"), &field_value);
-        }
-        if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value);
-        }
-    }
-}
-
-/// Serialize `CustomerNodeEndpointList` contents to a `SignedRequest`.
-struct CustomerNodeEndpointListSerializer;
-impl CustomerNodeEndpointListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<CustomerNodeEndpoint>) {
-        for (index, obj) in obj.iter().enumerate() {
-            let key = format!("{}.member.{}", name, index + 1);
-            CustomerNodeEndpointSerializer::serialize(params, &key, obj);
-        }
-    }
-}
-
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DecreaseReplicaCountMessage {
     /// <p>If <code>True</code>, the number of replica nodes is decreased immediately. <code>ApplyImmediately=False</code> is not currently supported.</p>
@@ -3496,10 +3227,6 @@ impl DescribeSnapshotsMessageSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeUpdateActionsMessage {
-    /// <p>The cache cluster IDs</p>
-    pub cache_cluster_ids: Option<Vec<String>>,
-    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached </p>
-    pub engine: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response</p>
@@ -3527,16 +3254,6 @@ impl DescribeUpdateActionsMessageSerializer {
             prefix.push_str(".");
         }
 
-        if let Some(ref field_value) = obj.cache_cluster_ids {
-            CacheClusterIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "CacheClusterIds"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.engine {
-            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
-        }
         if let Some(ref field_value) = obj.marker {
             params.put(&format!("{}{}", prefix, "Marker"), &field_value);
         }
@@ -3981,14 +3698,10 @@ impl ListTagsForResourceMessageSerializer {
 /// <p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyCacheClusterMessage {
-    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. </p> </note></p>
+    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
     pub az_mode: Option<String>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cluster.</p> <p>If <code>false</code>, changes to the cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
-    /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update</code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
-    pub auth_token: Option<String>,
-    /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
-    pub auth_token_update_strategy: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The cluster identifier. This value is stored as a lowercase string.</p>
@@ -4003,7 +3716,7 @@ pub struct ModifyCacheClusterMessage {
     pub cache_security_group_names: Option<Vec<String>>,
     /// <p>The upgraded version of the cache engine to be run on the cache nodes.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p><p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNodes.SupportedTypes.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul></p>
+    /// <p><p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul></p>
     pub new_availability_zones: Option<Vec<String>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
@@ -4035,15 +3748,6 @@ impl ModifyCacheClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
-        }
-        if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
-        }
-        if let Some(ref field_value) = obj.auth_token_update_strategy {
-            params.put(
-                &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
-                &field_value,
-            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -4263,10 +3967,6 @@ impl ModifyCacheSubnetGroupResultDeserializer {
 pub struct ModifyReplicationGroupMessage {
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the replication group.</p> <p>If <code>false</code>, changes to the nodes in the replication group are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
-    /// <p>Reserved parameter. The password used to access a password protected server. This parameter must be specified with the <code>auth-token-update-strategy </code> parameter. Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@', '%'</p> </li> </ul> <p> For more information, see AUTH password at <a href="http://redis.io/commands/AUTH">AUTH</a>.</p>
-    pub auth_token: Option<String>,
-    /// <p>Specifies the strategy to use to update the AUTH token. This parameter must be specified with the <code>auth-token</code> parameter. Possible values:</p> <ul> <li> <p>Rotate</p> </li> <li> <p>Set</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/auth.html">Authenticating Users with Redis AUTH</a> </p>
-    pub auth_token_update_strategy: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p><p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
@@ -4312,15 +4012,6 @@ impl ModifyReplicationGroupMessageSerializer {
 
         if let Some(ref field_value) = obj.apply_immediately {
             params.put(&format!("{}{}", prefix, "ApplyImmediately"), &field_value);
-        }
-        if let Some(ref field_value) = obj.auth_token {
-            params.put(&format!("{}{}", prefix, "AuthToken"), &field_value);
-        }
-        if let Some(ref field_value) = obj.auth_token_update_strategy {
-            params.put(
-                &format!("{}{}", prefix, "AuthTokenUpdateStrategy"),
-                &field_value,
-            );
         }
         if let Some(ref field_value) = obj.auto_minor_version_upgrade {
             params.put(
@@ -4539,14 +4230,12 @@ impl ModifyReplicationGroupShardConfigurationResultDeserializer {
 /// <p>Represents a collection of cache nodes in a replication group. One node in the node group is the read/write primary node. All the other nodes are read-only Replica nodes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NodeGroup {
-    /// <p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 90 node groups numbered 0001 to 0090. Optionally, the user can provide the id for a node group. </p>
+    /// <p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 15 node groups numbered 0001 to 0015. Optionally, the user can provide the id for a node group. </p>
     pub node_group_id: Option<String>,
     /// <p>A list containing information about individual nodes within the node group (shard).</p>
     pub node_group_members: Option<Vec<NodeGroupMember>>,
     /// <p>The endpoint of the primary node in this node group (shard).</p>
     pub primary_endpoint: Option<Endpoint>,
-    /// <p>The endpoint of the replica nodes in this node group (shard).</p>
-    pub reader_endpoint: Option<Endpoint>,
     /// <p>The keyspace for this node group (shard).</p>
     pub slots: Option<String>,
     /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, etc.</p>
@@ -4574,10 +4263,6 @@ impl NodeGroupDeserializer {
                 "PrimaryEndpoint" => {
                     obj.primary_endpoint =
                         Some(EndpointDeserializer::deserialize("PrimaryEndpoint", stack)?);
-                }
-                "ReaderEndpoint" => {
-                    obj.reader_endpoint =
-                        Some(EndpointDeserializer::deserialize("ReaderEndpoint", stack)?);
                 }
                 "Slots" => {
                     obj.slots = Some(StringDeserializer::deserialize("Slots", stack)?);
@@ -5275,8 +4960,6 @@ impl PendingAutomaticFailoverStatusDeserializer {
 /// <p>A group of settings that are applied to the cluster in the future, or that are currently being applied.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingModifiedValues {
-    /// <p>The auth token status</p>
-    pub auth_token_status: Option<String>,
     /// <p>A list of cache node IDs that are being removed (or will be removed) from the cluster. A node ID is a 4-digit numeric identifier (0001, 0002, etc.).</p>
     pub cache_node_ids_to_remove: Option<Vec<String>>,
     /// <p>The cache node type that this cluster or replication group is scaled to.</p>
@@ -5296,12 +4979,6 @@ impl PendingModifiedValuesDeserializer {
     ) -> Result<PendingModifiedValues, XmlParseError> {
         deserialize_elements::<_, PendingModifiedValues, _>(tag_name, stack, |name, stack, obj| {
             match name {
-                "AuthTokenStatus" => {
-                    obj.auth_token_status = Some(AuthTokenUpdateStatusDeserializer::deserialize(
-                        "AuthTokenStatus",
-                        stack,
-                    )?);
-                }
                 "CacheNodeIdsToRemove" => {
                     obj.cache_node_ids_to_remove.get_or_insert(vec![]).extend(
                         CacheNodeIdsListDeserializer::deserialize("CacheNodeIdsToRemove", stack)?,
@@ -5342,8 +5019,6 @@ impl PreferredAvailabilityZoneListSerializer {
 /// <p>Update action that has been processed for the corresponding apply/stop request</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProcessedUpdateAction {
-    /// <p>The ID of the cache cluster</p>
-    pub cache_cluster_id: Option<String>,
     /// <p>The ID of the replication group</p>
     pub replication_group_id: Option<String>,
     /// <p>The unique ID of the service update</p>
@@ -5361,10 +5036,6 @@ impl ProcessedUpdateActionDeserializer {
     ) -> Result<ProcessedUpdateAction, XmlParseError> {
         deserialize_elements::<_, ProcessedUpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
-                "CacheClusterId" => {
-                    obj.cache_cluster_id =
-                        Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
-                }
                 "ReplicationGroupId" => {
                     obj.replication_group_id = Some(StringDeserializer::deserialize(
                         "ReplicationGroupId",
@@ -5638,12 +5309,10 @@ impl ReplicaConfigurationListSerializer {
 /// <p>Contains all of the attributes of a specific Redis replication group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationGroup {
-    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable encryption at-rest on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable encryption at-rest on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
-    /// <p>The date the auth token was last modified</p>
-    pub auth_token_last_modified_date: Option<String>,
     /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
     pub automatic_failover: Option<String>,
     /// <p>The name of the compute and memory capacity node type for each node in the replication group.</p>
@@ -5654,8 +5323,6 @@ pub struct ReplicationGroup {
     pub configuration_endpoint: Option<Endpoint>,
     /// <p>The user supplied description of the replication group.</p>
     pub description: Option<String>,
-    /// <p>The ID of the KMS key used to encrypt the disk in the cluster.</p>
-    pub kms_key_id: Option<String>,
     /// <p>The names of all the cache clusters that are part of this replication group.</p>
     pub member_clusters: Option<Vec<String>>,
     /// <p>A list of node groups in this replication group. For Redis (cluster mode disabled) replication groups, this is a single-element list. For Redis (cluster mode enabled) replication groups, the list contains an entry for each node group (shard).</p>
@@ -5672,7 +5339,7 @@ pub struct ReplicationGroup {
     pub snapshotting_cluster_id: Option<String>,
     /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, <code>modifying</code>, <code>deleting</code>, <code>create-failed</code>, <code>snapshotting</code>.</p>
     pub status: Option<String>,
-    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -5693,12 +5360,6 @@ impl ReplicationGroupDeserializer {
                 "AuthTokenEnabled" => {
                     obj.auth_token_enabled = Some(BooleanOptionalDeserializer::deserialize(
                         "AuthTokenEnabled",
-                        stack,
-                    )?);
-                }
-                "AuthTokenLastModifiedDate" => {
-                    obj.auth_token_last_modified_date = Some(TStampDeserializer::deserialize(
-                        "AuthTokenLastModifiedDate",
                         stack,
                     )?);
                 }
@@ -5727,9 +5388,6 @@ impl ReplicationGroupDeserializer {
                 }
                 "Description" => {
                     obj.description = Some(StringDeserializer::deserialize("Description", stack)?);
-                }
-                "KmsKeyId" => {
-                    obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                 }
                 "MemberClusters" => {
                     obj.member_clusters.get_or_insert(vec![]).extend(
@@ -5861,8 +5519,6 @@ impl ReplicationGroupMessageDeserializer {
 /// <p>The settings to be applied to the Redis replication group, either immediately or during the next maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationGroupPendingModifiedValues {
-    /// <p>The auth token status</p>
-    pub auth_token_status: Option<String>,
     /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
     pub automatic_failover_status: Option<String>,
     /// <p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>
@@ -5883,13 +5539,6 @@ impl ReplicationGroupPendingModifiedValuesDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
-                    "AuthTokenStatus" => {
-                        obj.auth_token_status =
-                            Some(AuthTokenUpdateStatusDeserializer::deserialize(
-                                "AuthTokenStatus",
-                                stack,
-                            )?);
-                    }
                     "AutomaticFailoverStatus" => {
                         obj.automatic_failover_status =
                             Some(PendingAutomaticFailoverStatusDeserializer::deserialize(
@@ -6454,9 +6103,9 @@ impl SecurityGroupMembershipListDeserializer {
 pub struct ServiceUpdate {
     /// <p>Indicates whether the service update will be automatically applied once the recommended apply-by date has expired. </p>
     pub auto_update_after_recommended_apply_by_date: Option<bool>,
-    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached</p>
+    /// <p>The Redis engine to which the service update applies</p>
     pub engine: Option<String>,
-    /// <p>The Elasticache engine version to which the update applies. Either Redis or Memcached engine version</p>
+    /// <p>The Redis engine version to which the service update applies</p>
     pub engine_version: Option<String>,
     /// <p>The estimated length of time the service update will take</p>
     pub estimated_update_time: Option<String>,
@@ -6717,8 +6366,6 @@ pub struct Snapshot {
     pub engine: Option<String>,
     /// <p>The version of the cache engine version that is used by the source cluster.</p>
     pub engine_version: Option<String>,
-    /// <p>The ID of the KMS key used to encrypt the snapshot.</p>
-    pub kms_key_id: Option<String>,
     /// <p>A list of the cache nodes in the source cluster.</p>
     pub node_snapshots: Option<Vec<NodeSnapshot>>,
     /// <p>The number of cache nodes in the source cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>
@@ -6805,9 +6452,6 @@ impl SnapshotDeserializer {
                 "EngineVersion" => {
                     obj.engine_version =
                         Some(StringDeserializer::deserialize("EngineVersion", stack)?);
-                }
-                "KmsKeyId" => {
-                    obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                 }
                 "NodeSnapshots" => {
                     obj.node_snapshots.get_or_insert(vec![]).extend(
@@ -6925,61 +6569,6 @@ impl SourceTypeDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartMigrationMessage {
-    /// <p>List of endpoints from which data should be migrated. For Redis (cluster mode disabled), list should have only one element.</p>
-    pub customer_node_endpoint_list: Vec<CustomerNodeEndpoint>,
-    /// <p>The ID of the replication group to which data should be migrated.</p>
-    pub replication_group_id: String,
-}
-
-/// Serialize `StartMigrationMessage` contents to a `SignedRequest`.
-struct StartMigrationMessageSerializer;
-impl StartMigrationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StartMigrationMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        CustomerNodeEndpointListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "CustomerNodeEndpointList"),
-            &obj.customer_node_endpoint_list,
-        );
-        params.put(
-            &format!("{}{}", prefix, "ReplicationGroupId"),
-            &obj.replication_group_id,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct StartMigrationResponse {
-    pub replication_group: Option<ReplicationGroup>,
-}
-
-struct StartMigrationResponseDeserializer;
-impl StartMigrationResponseDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<StartMigrationResponse, XmlParseError> {
-        deserialize_elements::<_, StartMigrationResponse, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "ReplicationGroup" => {
-                    obj.replication_group = Some(ReplicationGroupDeserializer::deserialize(
-                        "ReplicationGroup",
-                        stack,
-                    )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
     }
 }
 struct StringDeserializer;
@@ -7247,8 +6836,6 @@ impl TimeRangeFilterSerializer {
 /// <p>Update action that has failed to be processed for the corresponding apply/stop request</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnprocessedUpdateAction {
-    /// <p>The ID of the cache cluster</p>
-    pub cache_cluster_id: Option<String>,
     /// <p>The error message that describes the reason the request was not processed</p>
     pub error_message: Option<String>,
     /// <p>The error type for requests that are not processed</p>
@@ -7271,10 +6858,6 @@ impl UnprocessedUpdateActionDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
-                    "CacheClusterId" => {
-                        obj.cache_cluster_id =
-                            Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
-                    }
                     "ErrorMessage" => {
                         obj.error_message =
                             Some(StringDeserializer::deserialize("ErrorMessage", stack)?);
@@ -7322,12 +6905,6 @@ impl UnprocessedUpdateActionListDeserializer {
 /// <p>The status of the service update for a specific replication group</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAction {
-    /// <p>The ID of the cache cluster</p>
-    pub cache_cluster_id: Option<String>,
-    /// <p>The status of the service update on the cache node</p>
-    pub cache_node_update_status: Option<Vec<CacheNodeUpdateStatus>>,
-    /// <p>The Elasticache engine to which the update applies. Either Redis or Memcached</p>
-    pub engine: Option<String>,
     /// <p>The estimated length of time for the update to complete</p>
     pub estimated_update_time: Option<String>,
     /// <p>The status of the service update on the node group</p>
@@ -7367,21 +6944,6 @@ impl UpdateActionDeserializer {
     ) -> Result<UpdateAction, XmlParseError> {
         deserialize_elements::<_, UpdateAction, _>(tag_name, stack, |name, stack, obj| {
             match name {
-                "CacheClusterId" => {
-                    obj.cache_cluster_id =
-                        Some(StringDeserializer::deserialize("CacheClusterId", stack)?);
-                }
-                "CacheNodeUpdateStatus" => {
-                    obj.cache_node_update_status.get_or_insert(vec![]).extend(
-                        CacheNodeUpdateStatusListDeserializer::deserialize(
-                            "CacheNodeUpdateStatus",
-                            stack,
-                        )?,
-                    );
-                }
-                "Engine" => {
-                    obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
-                }
                 "EstimatedUpdateTime" => {
                     obj.estimated_update_time = Some(StringDeserializer::deserialize(
                         "EstimatedUpdateTime",
@@ -7836,75 +7398,6 @@ impl Error for BatchStopUpdateActionError {
         match *self {
             BatchStopUpdateActionError::InvalidParameterValue(ref cause) => cause,
             BatchStopUpdateActionError::ServiceUpdateNotFoundFault(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by CompleteMigration
-#[derive(Debug, PartialEq)]
-pub enum CompleteMigrationError {
-    /// <p>The requested replication group is not in the <code>available</code> state.</p>
-    InvalidReplicationGroupStateFault(String),
-    /// <p>The specified replication group does not exist.</p>
-    ReplicationGroupNotFoundFault(String),
-    /// <p>The designated replication group is not available for data migration.</p>
-    ReplicationGroupNotUnderMigrationFault(String),
-}
-
-impl CompleteMigrationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMigrationError> {
-        {
-            let reader = EventReader::new(res.body.as_ref());
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotUnderMigrationFault" => {
-                        return RusotoError::Service(
-                            CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
-                }
-            }
-        }
-        RusotoError::Unknown(res)
-    }
-
-    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
-    where
-        T: Peek + Next,
-    {
-        start_element("ErrorResponse", stack)?;
-        XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-impl fmt::Display for CompleteMigrationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for CompleteMigrationError {
-    fn description(&self) -> &str {
-        match *self {
-            CompleteMigrationError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            CompleteMigrationError::ReplicationGroupNotFoundFault(ref cause) => cause,
-            CompleteMigrationError::ReplicationGroupNotUnderMigrationFault(ref cause) => cause,
         }
     }
 }
@@ -8446,7 +7939,7 @@ pub enum CreateReplicationGroupError {
     InvalidParameterValue(String),
     /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cluster.</p>
     NodeQuotaForClusterExceededFault(String),
@@ -8647,7 +8140,7 @@ pub enum DecreaseReplicaCountError {
     InvalidVPCNetworkStateFault(String),
     /// <p>The operation was not performed because no changes were required.</p>
     NoOperationFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -10173,8 +9666,6 @@ pub enum IncreaseReplicaCountError {
     InsufficientCacheClusterCapacityFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    /// <p>The KMS key supplied is not valid.</p>
-    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10185,7 +9676,7 @@ pub enum IncreaseReplicaCountError {
     InvalidVPCNetworkStateFault(String),
     /// <p>The operation was not performed because no changes were required.</p>
     NoOperationFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -10221,11 +9712,6 @@ impl IncreaseReplicaCountError {
                                 parsed_error.message,
                             ),
                         )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(IncreaseReplicaCountError::InvalidKMSKeyFault(
-                            parsed_error.message,
-                        ))
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
@@ -10303,7 +9789,6 @@ impl Error for IncreaseReplicaCountError {
             IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
             IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
             IncreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => cause,
-            IncreaseReplicaCountError::InvalidKMSKeyFault(ref cause) => cause,
             IncreaseReplicaCountError::InvalidParameterCombination(ref cause) => cause,
             IncreaseReplicaCountError::InvalidParameterValue(ref cause) => cause,
             IncreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10783,8 +10268,6 @@ pub enum ModifyReplicationGroupError {
     InvalidCacheClusterStateFault(String),
     /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
-    /// <p>The KMS key supplied is not valid.</p>
-    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10849,11 +10332,6 @@ impl ModifyReplicationGroupError {
                             ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
                                 parsed_error.message,
                             ),
-                        )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidKMSKeyFault(parsed_error.message),
                         )
                     }
                     "InvalidParameterCombination" => {
@@ -10934,7 +10412,6 @@ impl Error for ModifyReplicationGroupError {
             ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
-            ModifyReplicationGroupError::InvalidKMSKeyFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
             ModifyReplicationGroupError::InvalidParameterValue(ref cause) => cause,
             ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10952,8 +10429,6 @@ pub enum ModifyReplicationGroupShardConfigurationError {
     InsufficientCacheClusterCapacityFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    /// <p>The KMS key supplied is not valid.</p>
-    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10962,7 +10437,7 @@ pub enum ModifyReplicationGroupShardConfigurationError {
     InvalidReplicationGroupStateFault(String),
     /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -10980,7 +10455,7 @@ impl ModifyReplicationGroupShardConfigurationError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidKMSKeyFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
+                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -11005,7 +10480,6 @@ impl Error for ModifyReplicationGroupShardConfigurationError {
         match *self {
                             ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(ref cause) => cause,
-ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -11386,83 +10860,6 @@ impl Error for RevokeCacheSecurityGroupIngressError {
         }
     }
 }
-/// Errors returned by StartMigration
-#[derive(Debug, PartialEq)]
-pub enum StartMigrationError {
-    /// <p>The value for a parameter is invalid.</p>
-    InvalidParameterValue(String),
-    /// <p>The requested replication group is not in the <code>available</code> state.</p>
-    InvalidReplicationGroupStateFault(String),
-    /// <p>The targeted replication group is not available. </p>
-    ReplicationGroupAlreadyUnderMigrationFault(String),
-    /// <p>The specified replication group does not exist.</p>
-    ReplicationGroupNotFoundFault(String),
-}
-
-impl StartMigrationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMigrationError> {
-        {
-            let reader = EventReader::new(res.body.as_ref());
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            find_start_element(&mut stack);
-            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
-                match &parsed_error.code[..] {
-                    "InvalidParameterValue" => {
-                        return RusotoError::Service(StartMigrationError::InvalidParameterValue(
-                            parsed_error.message,
-                        ))
-                    }
-                    "InvalidReplicationGroupState" => {
-                        return RusotoError::Service(
-                            StartMigrationError::InvalidReplicationGroupStateFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupAlreadyUnderMigrationFault" => {
-                        return RusotoError::Service(
-                            StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    "ReplicationGroupNotFoundFault" => {
-                        return RusotoError::Service(
-                            StartMigrationError::ReplicationGroupNotFoundFault(
-                                parsed_error.message,
-                            ),
-                        )
-                    }
-                    _ => {}
-                }
-            }
-        }
-        RusotoError::Unknown(res)
-    }
-
-    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
-    where
-        T: Peek + Next,
-    {
-        start_element("ErrorResponse", stack)?;
-        XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-impl fmt::Display for StartMigrationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartMigrationError {
-    fn description(&self) -> &str {
-        match *self {
-            StartMigrationError::InvalidParameterValue(ref cause) => cause,
-            StartMigrationError::InvalidReplicationGroupStateFault(ref cause) => cause,
-            StartMigrationError::ReplicationGroupAlreadyUnderMigrationFault(ref cause) => cause,
-            StartMigrationError::ReplicationGroupNotFoundFault(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by TestFailover
 #[derive(Debug, PartialEq)]
 pub enum TestFailoverError {
@@ -11470,8 +10867,6 @@ pub enum TestFailoverError {
     APICallRateForCustomerExceededFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
-    /// <p>The KMS key supplied is not valid.</p>
-    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -11505,11 +10900,6 @@ impl TestFailoverError {
                         return RusotoError::Service(
                             TestFailoverError::InvalidCacheClusterStateFault(parsed_error.message),
                         )
-                    }
-                    "InvalidKMSKeyFault" => {
-                        return RusotoError::Service(TestFailoverError::InvalidKMSKeyFault(
-                            parsed_error.message,
-                        ))
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
@@ -11568,7 +10958,6 @@ impl Error for TestFailoverError {
         match *self {
             TestFailoverError::APICallRateForCustomerExceededFault(ref cause) => cause,
             TestFailoverError::InvalidCacheClusterStateFault(ref cause) => cause,
-            TestFailoverError::InvalidKMSKeyFault(ref cause) => cause,
             TestFailoverError::InvalidParameterCombination(ref cause) => cause,
             TestFailoverError::InvalidParameterValue(ref cause) => cause,
             TestFailoverError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -11579,303 +10968,304 @@ impl Error for TestFailoverError {
     }
 }
 /// Trait representing the capabilities of the Amazon ElastiCache API. Amazon ElastiCache clients implement this trait.
+#[async_trait]
 pub trait ElastiCache {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<TagListMessage, AddTagsToResourceError>;
+    ) -> Result<TagListMessage, RusotoError<AddTagsToResourceError>>;
 
     /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
-    fn authorize_cache_security_group_ingress(
+    async fn authorize_cache_security_group_ingress(
         &self,
         input: AuthorizeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         AuthorizeCacheSecurityGroupIngressResult,
-        AuthorizeCacheSecurityGroupIngressError,
+        RusotoError<AuthorizeCacheSecurityGroupIngressError>,
     >;
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
-    fn batch_apply_update_action(
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    async fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,
-    ) -> RusotoFuture<UpdateActionResultsMessage, BatchApplyUpdateActionError>;
+    ) -> Result<UpdateActionResultsMessage, RusotoError<BatchApplyUpdateActionError>>;
 
     /// <p>Stop the service update. For more information on service updates and stopping them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/stopping-self-service-updates.html">Stopping Service Updates</a>.</p>
-    fn batch_stop_update_action(
+    async fn batch_stop_update_action(
         &self,
         input: BatchStopUpdateActionMessage,
-    ) -> RusotoFuture<UpdateActionResultsMessage, BatchStopUpdateActionError>;
+    ) -> Result<UpdateActionResultsMessage, RusotoError<BatchStopUpdateActionError>>;
 
-    /// <p>Complete the migration of data.</p>
-    fn complete_migration(
-        &self,
-        input: CompleteMigrationMessage,
-    ) -> RusotoFuture<CompleteMigrationResponse, CompleteMigrationError>;
-
-    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn copy_snapshot(
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    async fn copy_snapshot(
         &self,
         input: CopySnapshotMessage,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError>;
+    ) -> Result<CopySnapshotResult, RusotoError<CopySnapshotError>>;
 
     /// <p>Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <p>This operation is not supported for Redis (cluster mode enabled) clusters.</p>
-    fn create_cache_cluster(
+    async fn create_cache_cluster(
         &self,
         input: CreateCacheClusterMessage,
-    ) -> RusotoFuture<CreateCacheClusterResult, CreateCacheClusterError>;
+    ) -> Result<CreateCacheClusterResult, RusotoError<CreateCacheClusterError>>;
 
     /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn create_cache_parameter_group(
+    async fn create_cache_parameter_group(
         &self,
         input: CreateCacheParameterGroupMessage,
-    ) -> RusotoFuture<CreateCacheParameterGroupResult, CreateCacheParameterGroupError>;
+    ) -> Result<CreateCacheParameterGroupResult, RusotoError<CreateCacheParameterGroupError>>;
 
     /// <p>Creates a new cache security group. Use a cache security group to control access to one or more clusters.</p> <p>Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
-    fn create_cache_security_group(
+    async fn create_cache_security_group(
         &self,
         input: CreateCacheSecurityGroupMessage,
-    ) -> RusotoFuture<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError>;
+    ) -> Result<CreateCacheSecurityGroupResult, RusotoError<CreateCacheSecurityGroupError>>;
 
     /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
-    fn create_cache_subnet_group(
+    async fn create_cache_subnet_group(
         &self,
         input: CreateCacheSubnetGroupMessage,
-    ) -> RusotoFuture<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
+    ) -> Result<CreateCacheSubnetGroupResult, RusotoError<CreateCacheSubnetGroupError>>;
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_replication_group(
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
-    ) -> RusotoFuture<CreateReplicationGroupResult, CreateReplicationGroupError>;
+    ) -> Result<CreateReplicationGroupResult, RusotoError<CreateReplicationGroupError>>;
 
     /// <p><p>Creates a copy of an entire cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotMessage,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
+    ) -> Result<CreateSnapshotResult, RusotoError<CreateSnapshotError>>;
 
     /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn decrease_replica_count(
+    async fn decrease_replica_count(
         &self,
         input: DecreaseReplicaCountMessage,
-    ) -> RusotoFuture<DecreaseReplicaCountResult, DecreaseReplicaCountError>;
+    ) -> Result<DecreaseReplicaCountResult, RusotoError<DecreaseReplicaCountError>>;
 
     /// <p><p>Deletes a previously provisioned cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation.</p> <p>This operation is not valid for:</p> <ul> <li> <p>Redis (cluster mode enabled) clusters</p> </li> <li> <p>A cluster that is the last read replica of a replication group</p> </li> <li> <p>A node group (shard) that has Multi-AZ mode enabled</p> </li> <li> <p>A cluster from a Redis (cluster mode enabled) replication group</p> </li> <li> <p>A cluster that is not in the <code>available</code> state</p> </li> </ul></p>
-    fn delete_cache_cluster(
+    async fn delete_cache_cluster(
         &self,
         input: DeleteCacheClusterMessage,
-    ) -> RusotoFuture<DeleteCacheClusterResult, DeleteCacheClusterError>;
+    ) -> Result<DeleteCacheClusterResult, RusotoError<DeleteCacheClusterError>>;
 
     /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
-    fn delete_cache_parameter_group(
+    async fn delete_cache_parameter_group(
         &self,
         input: DeleteCacheParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheParameterGroupError>;
+    ) -> Result<(), RusotoError<DeleteCacheParameterGroupError>>;
 
     /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_security_group(
+    async fn delete_cache_security_group(
         &self,
         input: DeleteCacheSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSecurityGroupError>;
+    ) -> Result<(), RusotoError<DeleteCacheSecurityGroupError>>;
 
     /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_subnet_group(
+    async fn delete_cache_subnet_group(
         &self,
         input: DeleteCacheSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSubnetGroupError>;
+    ) -> Result<(), RusotoError<DeleteCacheSubnetGroupError>>;
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_replication_group(
+    async fn delete_replication_group(
         &self,
         input: DeleteReplicationGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationGroupResult, DeleteReplicationGroupError>;
+    ) -> Result<DeleteReplicationGroupResult, RusotoError<DeleteReplicationGroupError>>;
 
     /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_snapshot(
+    async fn delete_snapshot(
         &self,
         input: DeleteSnapshotMessage,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
+    ) -> Result<DeleteSnapshotResult, RusotoError<DeleteSnapshotError>>;
 
     /// <p>Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied.</p> <p>By default, abbreviated information about the clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_cache_clusters(
+    async fn describe_cache_clusters(
         &self,
         input: DescribeCacheClustersMessage,
-    ) -> RusotoFuture<CacheClusterMessage, DescribeCacheClustersError>;
+    ) -> Result<CacheClusterMessage, RusotoError<DescribeCacheClustersError>>;
 
     /// <p>Returns a list of the available cache engines and their versions.</p>
-    fn describe_cache_engine_versions(
+    async fn describe_cache_engine_versions(
         &self,
         input: DescribeCacheEngineVersionsMessage,
-    ) -> RusotoFuture<CacheEngineVersionMessage, DescribeCacheEngineVersionsError>;
+    ) -> Result<CacheEngineVersionMessage, RusotoError<DescribeCacheEngineVersionsError>>;
 
     /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
-    fn describe_cache_parameter_groups(
+    async fn describe_cache_parameter_groups(
         &self,
         input: DescribeCacheParameterGroupsMessage,
-    ) -> RusotoFuture<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError>;
+    ) -> Result<CacheParameterGroupsMessage, RusotoError<DescribeCacheParameterGroupsError>>;
 
     /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
-    fn describe_cache_parameters(
+    async fn describe_cache_parameters(
         &self,
         input: DescribeCacheParametersMessage,
-    ) -> RusotoFuture<CacheParameterGroupDetails, DescribeCacheParametersError>;
+    ) -> Result<CacheParameterGroupDetails, RusotoError<DescribeCacheParametersError>>;
 
     /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group. This applicable only when you have ElastiCache in Classic setup </p>
-    fn describe_cache_security_groups(
+    async fn describe_cache_security_groups(
         &self,
         input: DescribeCacheSecurityGroupsMessage,
-    ) -> RusotoFuture<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError>;
+    ) -> Result<CacheSecurityGroupMessage, RusotoError<DescribeCacheSecurityGroupsError>>;
 
     /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group. This is applicable only when you have ElastiCache in VPC setup. All ElastiCache clusters now launch in VPC by default. </p>
-    fn describe_cache_subnet_groups(
+    async fn describe_cache_subnet_groups(
         &self,
         input: DescribeCacheSubnetGroupsMessage,
-    ) -> RusotoFuture<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError>;
+    ) -> Result<CacheSubnetGroupMessage, RusotoError<DescribeCacheSubnetGroupsError>>;
 
     /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
-    fn describe_engine_default_parameters(
+    async fn describe_engine_default_parameters(
         &self,
         input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
+    ) -> Result<
+        DescribeEngineDefaultParametersResult,
+        RusotoError<DescribeEngineDefaultParametersError>,
+    >;
 
     /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_replication_groups(
+    async fn describe_replication_groups(
         &self,
         input: DescribeReplicationGroupsMessage,
-    ) -> RusotoFuture<ReplicationGroupMessage, DescribeReplicationGroupsError>;
+    ) -> Result<ReplicationGroupMessage, RusotoError<DescribeReplicationGroupsError>>;
 
     /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
-    fn describe_reserved_cache_nodes(
+    async fn describe_reserved_cache_nodes(
         &self,
         input: DescribeReservedCacheNodesMessage,
-    ) -> RusotoFuture<ReservedCacheNodeMessage, DescribeReservedCacheNodesError>;
+    ) -> Result<ReservedCacheNodeMessage, RusotoError<DescribeReservedCacheNodesError>>;
 
     /// <p>Lists available reserved cache node offerings.</p>
-    fn describe_reserved_cache_nodes_offerings(
+    async fn describe_reserved_cache_nodes_offerings(
         &self,
         input: DescribeReservedCacheNodesOfferingsMessage,
-    ) -> RusotoFuture<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>;
+    ) -> Result<
+        ReservedCacheNodesOfferingMessage,
+        RusotoError<DescribeReservedCacheNodesOfferingsError>,
+    >;
 
     /// <p>Returns details of the service updates</p>
-    fn describe_service_updates(
+    async fn describe_service_updates(
         &self,
         input: DescribeServiceUpdatesMessage,
-    ) -> RusotoFuture<ServiceUpdatesMessage, DescribeServiceUpdatesError>;
+    ) -> Result<ServiceUpdatesMessage, RusotoError<DescribeServiceUpdatesError>>;
 
     /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_snapshots(
+    async fn describe_snapshots(
         &self,
         input: DescribeSnapshotsMessage,
-    ) -> RusotoFuture<DescribeSnapshotsListMessage, DescribeSnapshotsError>;
+    ) -> Result<DescribeSnapshotsListMessage, RusotoError<DescribeSnapshotsError>>;
 
     /// <p>Returns details of the update actions </p>
-    fn describe_update_actions(
+    async fn describe_update_actions(
         &self,
         input: DescribeUpdateActionsMessage,
-    ) -> RusotoFuture<UpdateActionsMessage, DescribeUpdateActionsError>;
+    ) -> Result<UpdateActionsMessage, RusotoError<DescribeUpdateActionsError>>;
 
     /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn increase_replica_count(
+    async fn increase_replica_count(
         &self,
         input: IncreaseReplicaCountMessage,
-    ) -> RusotoFuture<IncreaseReplicaCountResult, IncreaseReplicaCountError>;
+    ) -> Result<IncreaseReplicaCountResult, RusotoError<IncreaseReplicaCountError>>;
 
-    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
-    fn list_allowed_node_type_modifications(
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
+    async fn list_allowed_node_type_modifications(
         &self,
         input: ListAllowedNodeTypeModificationsMessage,
-    ) -> RusotoFuture<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>;
+    ) -> Result<
+        AllowedNodeTypeModificationsMessage,
+        RusotoError<ListAllowedNodeTypeModificationsError>,
+    >;
 
     /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>If the cluster is not in the <i>available</i> state, <code>ListTagsForResource</code> returns an error.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Monitoring Costs with Tags</a>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
+    ) -> Result<TagListMessage, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn modify_cache_cluster(
+    async fn modify_cache_cluster(
         &self,
         input: ModifyCacheClusterMessage,
-    ) -> RusotoFuture<ModifyCacheClusterResult, ModifyCacheClusterError>;
+    ) -> Result<ModifyCacheClusterResult, RusotoError<ModifyCacheClusterError>>;
 
     /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn modify_cache_parameter_group(
+    async fn modify_cache_parameter_group(
         &self,
         input: ModifyCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError>;
+    ) -> Result<CacheParameterGroupNameMessage, RusotoError<ModifyCacheParameterGroupError>>;
 
     /// <p>Modifies an existing cache subnet group.</p>
-    fn modify_cache_subnet_group(
+    async fn modify_cache_subnet_group(
         &self,
         input: ModifyCacheSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError>;
+    ) -> Result<ModifyCacheSubnetGroupResult, RusotoError<ModifyCacheSubnetGroupError>>;
 
     /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn modify_replication_group(
+    async fn modify_replication_group(
         &self,
         input: ModifyReplicationGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationGroupResult, ModifyReplicationGroupError>;
+    ) -> Result<ModifyReplicationGroupResult, RusotoError<ModifyReplicationGroupError>>;
 
     /// <p>Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among exisiting shards.</p>
-    fn modify_replication_group_shard_configuration(
+    async fn modify_replication_group_shard_configuration(
         &self,
         input: ModifyReplicationGroupShardConfigurationMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         ModifyReplicationGroupShardConfigurationResult,
-        ModifyReplicationGroupShardConfigurationError,
+        RusotoError<ModifyReplicationGroupShardConfigurationError>,
     >;
 
     /// <p>Allows you to purchase a reserved cache node offering.</p>
-    fn purchase_reserved_cache_nodes_offering(
+    async fn purchase_reserved_cache_nodes_offering(
         &self,
         input: PurchaseReservedCacheNodesOfferingMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         PurchaseReservedCacheNodesOfferingResult,
-        PurchaseReservedCacheNodesOfferingError,
+        RusotoError<PurchaseReservedCacheNodesOfferingError>,
     >;
 
     /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
-    fn reboot_cache_cluster(
+    async fn reboot_cache_cluster(
         &self,
         input: RebootCacheClusterMessage,
-    ) -> RusotoFuture<RebootCacheClusterResult, RebootCacheClusterError>;
+    ) -> Result<RebootCacheClusterResult, RusotoError<RebootCacheClusterError>>;
 
     /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<TagListMessage, RemoveTagsFromResourceError>;
+    ) -> Result<TagListMessage, RusotoError<RemoveTagsFromResourceError>>;
 
     /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
-    fn reset_cache_parameter_group(
+    async fn reset_cache_parameter_group(
         &self,
         input: ResetCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ResetCacheParameterGroupError>;
+    ) -> Result<CacheParameterGroupNameMessage, RusotoError<ResetCacheParameterGroupError>>;
 
     /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
-    fn revoke_cache_security_group_ingress(
+    async fn revoke_cache_security_group_ingress(
         &self,
         input: RevokeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
-
-    /// <p>Start the migration of data.</p>
-    fn start_migration(
-        &self,
-        input: StartMigrationMessage,
-    ) -> RusotoFuture<StartMigrationResponse, StartMigrationError>;
+    ) -> Result<
+        RevokeCacheSecurityGroupIngressResult,
+        RusotoError<RevokeCacheSecurityGroupIngressError>,
+    >;
 
     /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn test_failover(
+    async fn test_failover(
         &self,
         input: TestFailoverMessage,
-    ) -> RusotoFuture<TestFailoverResult, TestFailoverError>;
+    ) -> Result<TestFailoverResult, RusotoError<TestFailoverError>>;
 }
 /// A client for the Amazon ElastiCache API.
 #[derive(Clone)]
@@ -11889,7 +11279,10 @@ impl ElastiCacheClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ElastiCacheClient {
-        Self::new_with_client(Client::shared(), region)
+        ElastiCacheClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -11899,35 +11292,22 @@ impl ElastiCacheClient {
     ) -> ElastiCacheClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ElastiCacheClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> ElastiCacheClient {
-        ElastiCacheClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for ElastiCacheClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ElastiCacheClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl ElastiCache for ElastiCacheClient {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<TagListMessage, AddTagsToResourceError> {
+    ) -> Result<TagListMessage, RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -11937,50 +11317,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AddTagsToResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TagListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
-                        "AddTagsToResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TagListMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                TagListMessageDeserializer::deserialize("AddTagsToResourceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
-    fn authorize_cache_security_group_ingress(
+    async fn authorize_cache_security_group_ingress(
         &self,
         input: AuthorizeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         AuthorizeCacheSecurityGroupIngressResult,
-        AuthorizeCacheSecurityGroupIngressError,
+        RusotoError<AuthorizeCacheSecurityGroupIngressError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
@@ -11991,47 +11367,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeCacheSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AuthorizeCacheSecurityGroupIngressError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AuthorizeCacheSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
-                        "AuthorizeCacheSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AuthorizeCacheSecurityGroupIngressResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
+                "AuthorizeCacheSecurityGroupIngressResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
-    fn batch_apply_update_action(
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    async fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,
-    ) -> RusotoFuture<UpdateActionResultsMessage, BatchApplyUpdateActionError> {
+    ) -> Result<UpdateActionResultsMessage, RusotoError<BatchApplyUpdateActionError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12041,45 +11418,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchApplyUpdateActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(BatchApplyUpdateActionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = UpdateActionResultsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = UpdateActionResultsMessageDeserializer::deserialize(
-                        "BatchApplyUpdateActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateActionResultsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateActionResultsMessageDeserializer::deserialize(
+                "BatchApplyUpdateActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Stop the service update. For more information on service updates and stopping them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/stopping-self-service-updates.html">Stopping Service Updates</a>.</p>
-    fn batch_stop_update_action(
+    async fn batch_stop_update_action(
         &self,
         input: BatchStopUpdateActionMessage,
-    ) -> RusotoFuture<UpdateActionResultsMessage, BatchStopUpdateActionError> {
+    ) -> Result<UpdateActionResultsMessage, RusotoError<BatchStopUpdateActionError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12089,96 +11467,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchStopUpdateActionError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(BatchStopUpdateActionError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = UpdateActionResultsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = UpdateActionResultsMessageDeserializer::deserialize(
-                        "BatchStopUpdateActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateActionResultsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateActionResultsMessageDeserializer::deserialize(
+                "BatchStopUpdateActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Complete the migration of data.</p>
-    fn complete_migration(
-        &self,
-        input: CompleteMigrationMessage,
-    ) -> RusotoFuture<CompleteMigrationResponse, CompleteMigrationError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CompleteMigration");
-        params.put("Version", "2015-02-02");
-        CompleteMigrationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
-        request.set_content_type("application/x-www-form-urlencoded".to_owned());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CompleteMigrationError::from_response(response))),
-                );
-            }
-
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
-
-                if response.body.is_empty() {
-                    result = CompleteMigrationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CompleteMigrationResponseDeserializer::deserialize(
-                        "CompleteMigrationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
-    }
-
-    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn copy_snapshot(
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    async fn copy_snapshot(
         &self,
         input: CopySnapshotMessage,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError> {
+    ) -> Result<CopySnapshotResult, RusotoError<CopySnapshotError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12188,48 +11516,43 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CopySnapshotError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CopySnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CopySnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopySnapshotResultDeserializer::deserialize(
-                        "CopySnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CopySnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CopySnapshotResultDeserializer::deserialize("CopySnapshotResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <p>This operation is not supported for Redis (cluster mode enabled) clusters.</p>
-    fn create_cache_cluster(
+    async fn create_cache_cluster(
         &self,
         input: CreateCacheClusterMessage,
-    ) -> RusotoFuture<CreateCacheClusterResult, CreateCacheClusterError> {
+    ) -> Result<CreateCacheClusterResult, RusotoError<CreateCacheClusterError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12239,48 +11562,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateCacheClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCacheClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateCacheClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheClusterResultDeserializer::deserialize(
-                        "CreateCacheClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateCacheClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateCacheClusterResultDeserializer::deserialize(
+                "CreateCacheClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn create_cache_parameter_group(
+    async fn create_cache_parameter_group(
         &self,
         input: CreateCacheParameterGroupMessage,
-    ) -> RusotoFuture<CreateCacheParameterGroupResult, CreateCacheParameterGroupError> {
+    ) -> Result<CreateCacheParameterGroupResult, RusotoError<CreateCacheParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12290,45 +11611,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCacheParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateCacheParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheParameterGroupResultDeserializer::deserialize(
-                        "CreateCacheParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateCacheParameterGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateCacheParameterGroupResultDeserializer::deserialize(
+                "CreateCacheParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new cache security group. Use a cache security group to control access to one or more clusters.</p> <p>Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
-    fn create_cache_security_group(
+    async fn create_cache_security_group(
         &self,
         input: CreateCacheSecurityGroupMessage,
-    ) -> RusotoFuture<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError> {
+    ) -> Result<CreateCacheSecurityGroupResult, RusotoError<CreateCacheSecurityGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12338,45 +11660,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSecurityGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCacheSecurityGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateCacheSecurityGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheSecurityGroupResultDeserializer::deserialize(
-                        "CreateCacheSecurityGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateCacheSecurityGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateCacheSecurityGroupResultDeserializer::deserialize(
+                "CreateCacheSecurityGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
-    fn create_cache_subnet_group(
+    async fn create_cache_subnet_group(
         &self,
         input: CreateCacheSubnetGroupMessage,
-    ) -> RusotoFuture<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError> {
+    ) -> Result<CreateCacheSubnetGroupResult, RusotoError<CreateCacheSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12386,45 +11709,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSubnetGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateCacheSubnetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateCacheSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheSubnetGroupResultDeserializer::deserialize(
-                        "CreateCacheSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateCacheSubnetGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateCacheSubnetGroupResultDeserializer::deserialize(
+                "CreateCacheSubnetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_replication_group(
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
-    ) -> RusotoFuture<CreateReplicationGroupResult, CreateReplicationGroupError> {
+    ) -> Result<CreateReplicationGroupResult, RusotoError<CreateReplicationGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12434,45 +11758,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateReplicationGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateReplicationGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateReplicationGroupResultDeserializer::deserialize(
-                        "CreateReplicationGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateReplicationGroupResultDeserializer::deserialize(
+                "CreateReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Creates a copy of an entire cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotMessage,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
+    ) -> Result<CreateSnapshotResult, RusotoError<CreateSnapshotError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12482,48 +11807,44 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CreateSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateSnapshotResultDeserializer::deserialize(
-                        "CreateSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CreateSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                CreateSnapshotResultDeserializer::deserialize("CreateSnapshotResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn decrease_replica_count(
+    async fn decrease_replica_count(
         &self,
         input: DecreaseReplicaCountMessage,
-    ) -> RusotoFuture<DecreaseReplicaCountResult, DecreaseReplicaCountError> {
+    ) -> Result<DecreaseReplicaCountResult, RusotoError<DecreaseReplicaCountError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12533,47 +11854,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DecreaseReplicaCountError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DecreaseReplicaCountError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DecreaseReplicaCountResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DecreaseReplicaCountResultDeserializer::deserialize(
-                        "DecreaseReplicaCountResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DecreaseReplicaCountResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DecreaseReplicaCountResultDeserializer::deserialize(
+                "DecreaseReplicaCountResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes a previously provisioned cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation.</p> <p>This operation is not valid for:</p> <ul> <li> <p>Redis (cluster mode enabled) clusters</p> </li> <li> <p>A cluster that is the last read replica of a replication group</p> </li> <li> <p>A node group (shard) that has Multi-AZ mode enabled</p> </li> <li> <p>A cluster from a Redis (cluster mode enabled) replication group</p> </li> <li> <p>A cluster that is not in the <code>available</code> state</p> </li> </ul></p>
-    fn delete_cache_cluster(
+    async fn delete_cache_cluster(
         &self,
         input: DeleteCacheClusterMessage,
-    ) -> RusotoFuture<DeleteCacheClusterResult, DeleteCacheClusterError> {
+    ) -> Result<DeleteCacheClusterResult, RusotoError<DeleteCacheClusterError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12583,48 +11903,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteCacheClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCacheClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteCacheClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteCacheClusterResultDeserializer::deserialize(
-                        "DeleteCacheClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteCacheClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteCacheClusterResultDeserializer::deserialize(
+                "DeleteCacheClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
-    fn delete_cache_parameter_group(
+    async fn delete_cache_parameter_group(
         &self,
         input: DeleteCacheParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheParameterGroupError> {
+    ) -> Result<(), RusotoError<DeleteCacheParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12634,22 +11952,24 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCacheParameterGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_security_group(
+    async fn delete_cache_security_group(
         &self,
         input: DeleteCacheSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSecurityGroupError> {
+    ) -> Result<(), RusotoError<DeleteCacheSecurityGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12659,22 +11979,24 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSecurityGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCacheSecurityGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_subnet_group(
+    async fn delete_cache_subnet_group(
         &self,
         input: DeleteCacheSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSubnetGroupError> {
+    ) -> Result<(), RusotoError<DeleteCacheSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12684,22 +12006,24 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSubnetGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteCacheSubnetGroupError::from_response(response));
+        }
 
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        Ok(std::mem::drop(response))
     }
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_replication_group(
+    async fn delete_replication_group(
         &self,
         input: DeleteReplicationGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationGroupResult, DeleteReplicationGroupError> {
+    ) -> Result<DeleteReplicationGroupResult, RusotoError<DeleteReplicationGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12709,45 +12033,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteReplicationGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteReplicationGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteReplicationGroupResultDeserializer::deserialize(
-                        "DeleteReplicationGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteReplicationGroupResultDeserializer::deserialize(
+                "DeleteReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_snapshot(
+    async fn delete_snapshot(
         &self,
         input: DeleteSnapshotMessage,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
+    ) -> Result<DeleteSnapshotResult, RusotoError<DeleteSnapshotError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12757,48 +12082,44 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteSnapshotError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteSnapshotError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DeleteSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteSnapshotResultDeserializer::deserialize(
-                        "DeleteSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DeleteSnapshotResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                DeleteSnapshotResultDeserializer::deserialize("DeleteSnapshotResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied.</p> <p>By default, abbreviated information about the clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_cache_clusters(
+    async fn describe_cache_clusters(
         &self,
         input: DescribeCacheClustersMessage,
-    ) -> RusotoFuture<CacheClusterMessage, DescribeCacheClustersError> {
+    ) -> Result<CacheClusterMessage, RusotoError<DescribeCacheClustersError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12808,45 +12129,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheClustersError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheClustersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheClusterMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheClusterMessageDeserializer::deserialize(
-                        "DescribeCacheClustersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheClusterMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheClusterMessageDeserializer::deserialize(
+                "DescribeCacheClustersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of the available cache engines and their versions.</p>
-    fn describe_cache_engine_versions(
+    async fn describe_cache_engine_versions(
         &self,
         input: DescribeCacheEngineVersionsMessage,
-    ) -> RusotoFuture<CacheEngineVersionMessage, DescribeCacheEngineVersionsError> {
+    ) -> Result<CacheEngineVersionMessage, RusotoError<DescribeCacheEngineVersionsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12856,45 +12178,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheEngineVersionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheEngineVersionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheEngineVersionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheEngineVersionMessageDeserializer::deserialize(
-                        "DescribeCacheEngineVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheEngineVersionMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheEngineVersionMessageDeserializer::deserialize(
+                "DescribeCacheEngineVersionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
-    fn describe_cache_parameter_groups(
+    async fn describe_cache_parameter_groups(
         &self,
         input: DescribeCacheParameterGroupsMessage,
-    ) -> RusotoFuture<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError> {
+    ) -> Result<CacheParameterGroupsMessage, RusotoError<DescribeCacheParameterGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12904,45 +12227,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParameterGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheParameterGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupsMessageDeserializer::deserialize(
-                        "DescribeCacheParameterGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheParameterGroupsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheParameterGroupsMessageDeserializer::deserialize(
+                "DescribeCacheParameterGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
-    fn describe_cache_parameters(
+    async fn describe_cache_parameters(
         &self,
         input: DescribeCacheParametersMessage,
-    ) -> RusotoFuture<CacheParameterGroupDetails, DescribeCacheParametersError> {
+    ) -> Result<CacheParameterGroupDetails, RusotoError<DescribeCacheParametersError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -12952,45 +12276,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParametersError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheParametersError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupDetailsDeserializer::deserialize(
-                        "DescribeCacheParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheParameterGroupDetails::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheParameterGroupDetailsDeserializer::deserialize(
+                "DescribeCacheParametersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group. This applicable only when you have ElastiCache in Classic setup </p>
-    fn describe_cache_security_groups(
+    async fn describe_cache_security_groups(
         &self,
         input: DescribeCacheSecurityGroupsMessage,
-    ) -> RusotoFuture<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError> {
+    ) -> Result<CacheSecurityGroupMessage, RusotoError<DescribeCacheSecurityGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13000,45 +12325,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSecurityGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheSecurityGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheSecurityGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheSecurityGroupMessageDeserializer::deserialize(
-                        "DescribeCacheSecurityGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheSecurityGroupMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheSecurityGroupMessageDeserializer::deserialize(
+                "DescribeCacheSecurityGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group. This is applicable only when you have ElastiCache in VPC setup. All ElastiCache clusters now launch in VPC by default. </p>
-    fn describe_cache_subnet_groups(
+    async fn describe_cache_subnet_groups(
         &self,
         input: DescribeCacheSubnetGroupsMessage,
-    ) -> RusotoFuture<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError> {
+    ) -> Result<CacheSubnetGroupMessage, RusotoError<DescribeCacheSubnetGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13048,46 +12374,49 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSubnetGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeCacheSubnetGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheSubnetGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheSubnetGroupMessageDeserializer::deserialize(
-                        "DescribeCacheSubnetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheSubnetGroupMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheSubnetGroupMessageDeserializer::deserialize(
+                "DescribeCacheSubnetGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
-    fn describe_engine_default_parameters(
+    async fn describe_engine_default_parameters(
         &self,
         input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>
-    {
+    ) -> Result<
+        DescribeEngineDefaultParametersResult,
+        RusotoError<DescribeEngineDefaultParametersError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13097,47 +12426,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultParametersError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEngineDefaultParametersError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEngineDefaultParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeEngineDefaultParametersResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+                "DescribeEngineDefaultParametersResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
+    ) -> Result<EventsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13147,46 +12477,43 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeEventsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = EventsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = EventsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_replication_groups(
+    async fn describe_replication_groups(
         &self,
         input: DescribeReplicationGroupsMessage,
-    ) -> RusotoFuture<ReplicationGroupMessage, DescribeReplicationGroupsError> {
+    ) -> Result<ReplicationGroupMessage, RusotoError<DescribeReplicationGroupsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13196,45 +12523,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationGroupsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeReplicationGroupsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ReplicationGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReplicationGroupMessageDeserializer::deserialize(
-                        "DescribeReplicationGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ReplicationGroupMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ReplicationGroupMessageDeserializer::deserialize(
+                "DescribeReplicationGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
-    fn describe_reserved_cache_nodes(
+    async fn describe_reserved_cache_nodes(
         &self,
         input: DescribeReservedCacheNodesMessage,
-    ) -> RusotoFuture<ReservedCacheNodeMessage, DescribeReservedCacheNodesError> {
+    ) -> Result<ReservedCacheNodeMessage, RusotoError<DescribeReservedCacheNodesError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13244,46 +12572,49 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeReservedCacheNodesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ReservedCacheNodeMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedCacheNodeMessageDeserializer::deserialize(
-                        "DescribeReservedCacheNodesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ReservedCacheNodeMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ReservedCacheNodeMessageDeserializer::deserialize(
+                "DescribeReservedCacheNodesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists available reserved cache node offerings.</p>
-    fn describe_reserved_cache_nodes_offerings(
+    async fn describe_reserved_cache_nodes_offerings(
         &self,
         input: DescribeReservedCacheNodesOfferingsMessage,
-    ) -> RusotoFuture<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>
-    {
+    ) -> Result<
+        ReservedCacheNodesOfferingMessage,
+        RusotoError<DescribeReservedCacheNodesOfferingsError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13293,47 +12624,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesOfferingsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeReservedCacheNodesOfferingsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ReservedCacheNodesOfferingMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
-                        "DescribeReservedCacheNodesOfferingsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ReservedCacheNodesOfferingMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
+                "DescribeReservedCacheNodesOfferingsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns details of the service updates</p>
-    fn describe_service_updates(
+    async fn describe_service_updates(
         &self,
         input: DescribeServiceUpdatesMessage,
-    ) -> RusotoFuture<ServiceUpdatesMessage, DescribeServiceUpdatesError> {
+    ) -> Result<ServiceUpdatesMessage, RusotoError<DescribeServiceUpdatesError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13343,45 +12675,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeServiceUpdatesError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeServiceUpdatesError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ServiceUpdatesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ServiceUpdatesMessageDeserializer::deserialize(
-                        "DescribeServiceUpdatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ServiceUpdatesMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ServiceUpdatesMessageDeserializer::deserialize(
+                "DescribeServiceUpdatesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_snapshots(
+    async fn describe_snapshots(
         &self,
         input: DescribeSnapshotsMessage,
-    ) -> RusotoFuture<DescribeSnapshotsListMessage, DescribeSnapshotsError> {
+    ) -> Result<DescribeSnapshotsListMessage, RusotoError<DescribeSnapshotsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13391,48 +12724,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSnapshotsError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeSnapshotsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = DescribeSnapshotsListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSnapshotsListMessageDeserializer::deserialize(
-                        "DescribeSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = DescribeSnapshotsListMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeSnapshotsListMessageDeserializer::deserialize(
+                "DescribeSnapshotsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Returns details of the update actions </p>
-    fn describe_update_actions(
+    async fn describe_update_actions(
         &self,
         input: DescribeUpdateActionsMessage,
-    ) -> RusotoFuture<UpdateActionsMessage, DescribeUpdateActionsError> {
+    ) -> Result<UpdateActionsMessage, RusotoError<DescribeUpdateActionsError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13442,45 +12773,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUpdateActionsError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeUpdateActionsError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = UpdateActionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = UpdateActionsMessageDeserializer::deserialize(
-                        "DescribeUpdateActionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = UpdateActionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UpdateActionsMessageDeserializer::deserialize(
+                "DescribeUpdateActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn increase_replica_count(
+    async fn increase_replica_count(
         &self,
         input: IncreaseReplicaCountMessage,
-    ) -> RusotoFuture<IncreaseReplicaCountResult, IncreaseReplicaCountError> {
+    ) -> Result<IncreaseReplicaCountResult, RusotoError<IncreaseReplicaCountError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13490,48 +12822,49 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(IncreaseReplicaCountError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(IncreaseReplicaCountError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = IncreaseReplicaCountResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = IncreaseReplicaCountResultDeserializer::deserialize(
-                        "IncreaseReplicaCountResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = IncreaseReplicaCountResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = IncreaseReplicaCountResultDeserializer::deserialize(
+                "IncreaseReplicaCountResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
-    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
-    fn list_allowed_node_type_modifications(
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
+    async fn list_allowed_node_type_modifications(
         &self,
         input: ListAllowedNodeTypeModificationsMessage,
-    ) -> RusotoFuture<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>
-    {
+    ) -> Result<
+        AllowedNodeTypeModificationsMessage,
+        RusotoError<ListAllowedNodeTypeModificationsError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13541,47 +12874,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAllowedNodeTypeModificationsError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListAllowedNodeTypeModificationsError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = AllowedNodeTypeModificationsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
-                        "ListAllowedNodeTypeModificationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = AllowedNodeTypeModificationsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
+                "ListAllowedNodeTypeModificationsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>If the cluster is not in the <i>available</i> state, <code>ListTagsForResource</code> returns an error.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Monitoring Costs with Tags</a>.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
+    ) -> Result<TagListMessage, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13591,47 +12925,44 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListTagsForResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TagListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
-                        "ListTagsForResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TagListMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn modify_cache_cluster(
+    async fn modify_cache_cluster(
         &self,
         input: ModifyCacheClusterMessage,
-    ) -> RusotoFuture<ModifyCacheClusterResult, ModifyCacheClusterError> {
+    ) -> Result<ModifyCacheClusterResult, RusotoError<ModifyCacheClusterError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13641,48 +12972,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyCacheClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyCacheClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyCacheClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyCacheClusterResultDeserializer::deserialize(
-                        "ModifyCacheClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyCacheClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyCacheClusterResultDeserializer::deserialize(
+                "ModifyCacheClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn modify_cache_parameter_group(
+    async fn modify_cache_parameter_group(
         &self,
         input: ModifyCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError> {
+    ) -> Result<CacheParameterGroupNameMessage, RusotoError<ModifyCacheParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13692,45 +13021,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyCacheParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupNameMessageDeserializer::deserialize(
-                        "ModifyCacheParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheParameterGroupNameMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
+                "ModifyCacheParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies an existing cache subnet group.</p>
-    fn modify_cache_subnet_group(
+    async fn modify_cache_subnet_group(
         &self,
         input: ModifyCacheSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError> {
+    ) -> Result<ModifyCacheSubnetGroupResult, RusotoError<ModifyCacheSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13740,45 +13070,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheSubnetGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyCacheSubnetGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyCacheSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
-                        "ModifyCacheSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyCacheSubnetGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
+                "ModifyCacheSubnetGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn modify_replication_group(
+    async fn modify_replication_group(
         &self,
         input: ModifyReplicationGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationGroupResult, ModifyReplicationGroupError> {
+    ) -> Result<ModifyReplicationGroupResult, RusotoError<ModifyReplicationGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13788,47 +13119,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyReplicationGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyReplicationGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyReplicationGroupResultDeserializer::deserialize(
-                        "ModifyReplicationGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyReplicationGroupResultDeserializer::deserialize(
+                "ModifyReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among exisiting shards.</p>
-    fn modify_replication_group_shard_configuration(
+    async fn modify_replication_group_shard_configuration(
         &self,
         input: ModifyReplicationGroupShardConfigurationMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         ModifyReplicationGroupShardConfigurationResult,
-        ModifyReplicationGroupShardConfigurationError,
+        RusotoError<ModifyReplicationGroupShardConfigurationError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
@@ -13843,48 +13175,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupShardConfigurationError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyReplicationGroupShardConfigurationError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = ModifyReplicationGroupShardConfigurationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
-                            "ModifyReplicationGroupShardConfigurationResult",
-                            &mut stack,
-                        )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = ModifyReplicationGroupShardConfigurationResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
+                "ModifyReplicationGroupShardConfigurationResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Allows you to purchase a reserved cache node offering.</p>
-    fn purchase_reserved_cache_nodes_offering(
+    async fn purchase_reserved_cache_nodes_offering(
         &self,
         input: PurchaseReservedCacheNodesOfferingMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         PurchaseReservedCacheNodesOfferingResult,
-        PurchaseReservedCacheNodesOfferingError,
+        RusotoError<PurchaseReservedCacheNodesOfferingError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
@@ -13895,47 +13227,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseReservedCacheNodesOfferingError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PurchaseReservedCacheNodesOfferingError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = PurchaseReservedCacheNodesOfferingResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
-                        "PurchaseReservedCacheNodesOfferingResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = PurchaseReservedCacheNodesOfferingResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
+                "PurchaseReservedCacheNodesOfferingResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
-    fn reboot_cache_cluster(
+    async fn reboot_cache_cluster(
         &self,
         input: RebootCacheClusterMessage,
-    ) -> RusotoFuture<RebootCacheClusterResult, RebootCacheClusterError> {
+    ) -> Result<RebootCacheClusterResult, RusotoError<RebootCacheClusterError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13945,48 +13278,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RebootCacheClusterError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RebootCacheClusterError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RebootCacheClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootCacheClusterResultDeserializer::deserialize(
-                        "RebootCacheClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RebootCacheClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RebootCacheClusterResultDeserializer::deserialize(
+                "RebootCacheClusterResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<TagListMessage, RemoveTagsFromResourceError> {
+    ) -> Result<TagListMessage, RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -13996,45 +13327,46 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RemoveTagsFromResourceError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TagListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
-                        "RemoveTagsFromResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TagListMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = TagListMessageDeserializer::deserialize(
+                "RemoveTagsFromResourceResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
-    fn reset_cache_parameter_group(
+    async fn reset_cache_parameter_group(
         &self,
         input: ResetCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ResetCacheParameterGroupError> {
+    ) -> Result<CacheParameterGroupNameMessage, RusotoError<ResetCacheParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -14044,46 +13376,49 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetCacheParameterGroupError::from_response(response))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ResetCacheParameterGroupError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = CacheParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupNameMessageDeserializer::deserialize(
-                        "ResetCacheParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = CacheParameterGroupNameMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CacheParameterGroupNameMessageDeserializer::deserialize(
+                "ResetCacheParameterGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
-    fn revoke_cache_security_group_ingress(
+    async fn revoke_cache_security_group_ingress(
         &self,
         input: RevokeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>
-    {
+    ) -> Result<
+        RevokeCacheSecurityGroupIngressResult,
+        RusotoError<RevokeCacheSecurityGroupIngressError>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -14093,98 +13428,48 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeCacheSecurityGroupIngressError::from_response(
-                        response,
-                    ))
-                }));
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RevokeCacheSecurityGroupIngressError::from_response(
+                response,
+            ));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = RevokeCacheSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
-                        "RevokeCacheSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
-    }
-
-    /// <p>Start the migration of data.</p>
-    fn start_migration(
-        &self,
-        input: StartMigrationMessage,
-    ) -> RusotoFuture<StartMigrationResponse, StartMigrationError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "StartMigration");
-        params.put("Version", "2015-02-02");
-        StartMigrationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
-        request.set_content_type("application/x-www-form-urlencoded".to_owned());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartMigrationError::from_response(response))),
-                );
-            }
-
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
-
-                if response.body.is_empty() {
-                    result = StartMigrationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StartMigrationResponseDeserializer::deserialize(
-                        "StartMigrationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = RevokeCacheSecurityGroupIngressResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
+                "RevokeCacheSecurityGroupIngressResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn test_failover(
+    async fn test_failover(
         &self,
         input: TestFailoverMessage,
-    ) -> RusotoFuture<TestFailoverResult, TestFailoverError> {
+    ) -> Result<TestFailoverResult, RusotoError<TestFailoverError>> {
         let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
         let mut params = Params::new();
 
@@ -14194,40 +13479,35 @@ impl ElastiCache for ElastiCacheClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestFailoverError::from_response(response))),
-                );
-            }
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(TestFailoverError::from_response(response));
+        }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
 
-                if response.body.is_empty() {
-                    result = TestFailoverResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(false),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TestFailoverResultDeserializer::deserialize(
-                        "TestFailoverResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
-        })
+        if xml_response.body.is_empty() {
+            result = TestFailoverResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = TestFailoverResultDeserializer::deserialize("TestFailoverResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 }

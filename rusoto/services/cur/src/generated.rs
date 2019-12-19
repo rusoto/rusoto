@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Deletes the specified report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -33,7 +34,7 @@ pub struct DeleteReportDefinitionRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,7 +54,7 @@ pub struct DescribeReportDefinitionsRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -63,18 +64,6 @@ pub struct DescribeReportDefinitionsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyReportDefinitionRequest {
-    #[serde(rename = "ReportDefinition")]
-    pub report_definition: ReportDefinition,
-    #[serde(rename = "ReportName")]
-    pub report_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -86,7 +75,7 @@ pub struct PutReportDefinitionRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. You can specify the report name, time unit, report format, compression format, S3 bucket, additional artifacts, and schema elements in the definition. </p>
@@ -193,41 +182,6 @@ impl Error for DescribeReportDefinitionsError {
         }
     }
 }
-/// Errors returned by ModifyReportDefinition
-#[derive(Debug, PartialEq)]
-pub enum ModifyReportDefinitionError {
-    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
-    InternalError(String),
-}
-
-impl ModifyReportDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReportDefinitionError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InternalErrorException" => {
-                    return RusotoError::Service(ModifyReportDefinitionError::InternalError(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for ModifyReportDefinitionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for ModifyReportDefinitionError {
-    fn description(&self) -> &str {
-        match *self {
-            ModifyReportDefinitionError::InternalError(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by PutReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutReportDefinitionError {
@@ -278,30 +232,25 @@ impl Error for PutReportDefinitionError {
     }
 }
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
+#[async_trait]
 pub trait CostAndUsageReport {
     /// <p>Deletes the specified report.</p>
-    fn delete_report_definition(
+    async fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
-    ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
+    ) -> Result<DeleteReportDefinitionResponse, RusotoError<DeleteReportDefinitionError>>;
 
     /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
-    fn describe_report_definitions(
+    async fn describe_report_definitions(
         &self,
         input: DescribeReportDefinitionsRequest,
-    ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
-
-    /// <p>Allows you to programatically update your report preferences.</p>
-    fn modify_report_definition(
-        &self,
-        input: ModifyReportDefinitionRequest,
-    ) -> RusotoFuture<ModifyReportDefinitionResponse, ModifyReportDefinitionError>;
+    ) -> Result<DescribeReportDefinitionsResponse, RusotoError<DescribeReportDefinitionsError>>;
 
     /// <p>Creates a new report using the description that you provide.</p>
-    fn put_report_definition(
+    async fn put_report_definition(
         &self,
         input: PutReportDefinitionRequest,
-    ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError>;
+    ) -> Result<PutReportDefinitionResponse, RusotoError<PutReportDefinitionError>>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
 #[derive(Clone)]
@@ -315,7 +264,10 @@ impl CostAndUsageReportClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CostAndUsageReportClient {
-        Self::new_with_client(Client::shared(), region)
+        CostAndUsageReportClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -325,35 +277,22 @@ impl CostAndUsageReportClient {
     ) -> CostAndUsageReportClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        CostAndUsageReportClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> CostAndUsageReportClient {
-        CostAndUsageReportClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for CostAndUsageReportClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CostAndUsageReportClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl CostAndUsageReport for CostAndUsageReportClient {
     /// <p>Deletes the specified report.</p>
-    fn delete_report_definition(
+    async fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
-    ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
+    ) -> Result<DeleteReportDefinitionResponse, RusotoError<DeleteReportDefinitionError>> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -364,27 +303,28 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReportDefinitionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteReportDefinitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReportDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReportDefinitionError::from_response(response))
+        }
     }
 
     /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
-    fn describe_report_definitions(
+    async fn describe_report_definitions(
         &self,
         input: DescribeReportDefinitionsRequest,
-    ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
+    ) -> Result<DescribeReportDefinitionsResponse, RusotoError<DescribeReportDefinitionsError>>
+    {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -395,56 +335,27 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReportDefinitionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReportDefinitionsError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Allows you to programatically update your report preferences.</p>
-    fn modify_report_definition(
-        &self,
-        input: ModifyReportDefinitionRequest,
-    ) -> RusotoFuture<ModifyReportDefinitionResponse, ModifyReportDefinitionError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AWSOrigamiServiceGatewayService.ModifyReportDefinition",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReportDefinitionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyReportDefinitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReportDefinitionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReportDefinitionsError::from_response(response))
+        }
     }
 
     /// <p>Creates a new report using the description that you provide.</p>
-    fn put_report_definition(
+    async fn put_report_definition(
         &self,
         input: PutReportDefinitionRequest,
-    ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
+    ) -> Result<PutReportDefinitionResponse, RusotoError<PutReportDefinitionError>> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -455,19 +366,19 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutReportDefinitionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutReportDefinitionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutReportDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutReportDefinitionError::from_response(response))
+        }
     }
 }

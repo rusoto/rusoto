@@ -9,23 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccountQuota {
     /// <p>The name of the AWS DMS quota for this AWS account.</p>
     #[serde(rename = "AccountQuotaName")]
@@ -41,20 +42,20 @@ pub struct AccountQuota {
     pub used: Option<i64>,
 }
 
-/// <p>Associates a set of tags with an AWS DMS resource.</p>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceMessage {
-    /// <p>Identifies the AWS DMS resource to which tags should be added. The value for this parameter is an Amazon Resource Name (ARN).</p> <p>For AWS DMS, you can tag a replication instance, an endpoint, or a replication task.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>One or more tags to be assigned to the resource.</p>
+    /// <p>The tag to be assigned to the DMS resource.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
@@ -63,7 +64,7 @@ pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p>
     #[serde(rename = "ApplyAction")]
     pub apply_action: String,
-    /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. You can&#39;t undo an opt-in request of type <code>immediate</code>.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
+    /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> cannot be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
     #[serde(rename = "OptInType")]
     pub opt_in_type: String,
     /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource that the pending maintenance action applies to.</p>
@@ -73,7 +74,7 @@ pub struct ApplyPendingMaintenanceActionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResponse {
     /// <p>The AWS DMS resource that the pending maintenance action will be applied to.</p>
     #[serde(rename = "ResourcePendingMaintenanceActions")]
@@ -83,7 +84,7 @@ pub struct ApplyPendingMaintenanceActionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
     #[serde(rename = "Name")]
@@ -93,7 +94,7 @@ pub struct AvailabilityZone {
 
 /// <p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     #[serde(rename = "CertificateArn")]
@@ -103,7 +104,7 @@ pub struct Certificate {
     #[serde(rename = "CertificateCreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_creation_date: Option<f64>,
-    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
     #[serde(rename = "CertificateIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_identifier: Option<String>,
@@ -111,11 +112,11 @@ pub struct Certificate {
     #[serde(rename = "CertificateOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_owner: Option<String>,
-    /// <p>The contents of a <code>.pem</code> file, which contains an X.509 certificate.</p>
+    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
     #[serde(rename = "CertificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    /// <p>The location of an imported Oracle Wallet certificate for use with SSL.</p>
+    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -144,7 +145,7 @@ pub struct Certificate {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -183,7 +184,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible settings include the following:</p> <ul> <li> <p> <code>ServiceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>BucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>CompressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these settings is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these settings is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -198,25 +199,25 @@ pub struct CreateEndpointMessage {
     /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     pub endpoint_identifier: String,
-    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
+    /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndpointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndPointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
     /// <p>The external table definition. </p>
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p>Additional attributes associated with the connection. Each attribute is specified as a name-value pair associated by an equal sign (=). Multiple attributes are separated by a semicolon (;) with no additional white space. For information on the attributes available for connecting your source or target endpoint, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Endpoints.html">Working with AWS DMS Endpoints</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Additional attributes associated with the connection.</p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
-    /// <p>An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier to use to encrypt the connection parameters. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -247,11 +248,11 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The default is <code>none</code> </p>
+    /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The SSL mode can be one of four values: <code>none</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code>. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
-    /// <p>One or more tags to be assigned to the endpoint.</p>
+    /// <p>Tags to be added to the endpoint.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -263,7 +264,7 @@ pub struct CreateEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEndpointResponse {
     /// <p>The endpoint that was created.</p>
     #[serde(rename = "Endpoint")]
@@ -278,25 +279,25 @@ pub struct CreateEventSubscriptionMessage {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>A list of event categories for a source type that you want to subscribe to. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
     /// <p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>
     #[serde(rename = "SnsTopicArn")]
     pub sns_topic_arn: String,
-    /// <p>A list of identifiers for which AWS DMS provides notification events.</p> <p>If you don't specify a value, notifications are provided for all sources.</p> <p>If you specify multiple values, they must be of the same type. For example, if you specify a database instance ID, then all of the other values must be database instance IDs.</p>
+    /// <p> The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p>
     #[serde(rename = "SourceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: <code>replication-instance</code> | <code>replication-task</code> </p>
+    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: replication-instance | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
-    /// <p>The name of the AWS DMS event notification subscription. This name must be less than 255 characters.</p>
+    /// <p>The name of the AWS DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>
     #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
-    /// <p>One or more tags to be assigned to the event subscription.</p>
+    /// <p>A tag to be attached to the event subscription.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -304,7 +305,7 @@ pub struct CreateEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEventSubscriptionResponse {
     /// <p>The event subscription that was created.</p>
     #[serde(rename = "EventSubscription")]
@@ -319,11 +320,11 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    /// <p>Indicates whether minor engine upgrades will be applied automatically to the replication instance during the maintenance window. This parameter defaults to <code>true</code>.</p> <p>Default: <code>true</code> </p>
+    /// <p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The AWS Availability Zone where the replication instance will be created. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region, for example: <code>us-east-1d</code> </p>
+    /// <p>The EC2 Availability Zone that the replication instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -335,15 +336,15 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p>An AWS KMS key identifier that is used to encrypt the data on the replication instance.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per AWS Region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
     #[serde(rename = "PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
@@ -361,7 +362,7 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_identifier: Option<String>,
-    /// <p>One or more tags to be assigned to the replication instance.</p>
+    /// <p>Tags to be associated with the replication instance.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -373,7 +374,7 @@ pub struct CreateReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationInstanceResponse {
     /// <p>The replication instance that was created.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -390,10 +391,10 @@ pub struct CreateReplicationSubnetGroupMessage {
     /// <p>The name for the replication subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, spaces, underscores, or hyphens. Must not be "default".</p> <p>Example: <code>mySubnetgroup</code> </p>
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
-    /// <p>One or more subnet IDs to be assigned to the subnet group.</p>
+    /// <p>The EC2 subnet IDs for the subnet group.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
-    /// <p>One or more tags to be assigned to the subnet group.</p>
+    /// <p>The tag to be assigned to the subnet group.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -401,7 +402,7 @@ pub struct CreateReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationSubnetGroupResponse {
     /// <p>The replication subnet group that was created.</p>
     #[serde(rename = "ReplicationSubnetGroup")]
@@ -412,7 +413,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateReplicationTaskMessage {
-    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -424,37 +425,37 @@ pub struct CreateReplicationTaskMessage {
     #[serde(rename = "CdcStopPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_stop_position: Option<String>,
-    /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
+    /// <p>The migration type.</p>
     #[serde(rename = "MigrationType")]
     pub migration_type: String,
-    /// <p>The Amazon Resource Name (ARN) of a replication instance.</p>
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
-    /// <p><p>An identifier for the replication task.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    /// <p>Overall settings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    /// <p>An Amazon Resource Name (ARN) that uniquely identifies the source endpoint.</p>
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "SourceEndpointArn")]
     pub source_endpoint_arn: String,
-    /// <p>The table mappings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html">Table Mapping</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
     #[serde(rename = "TableMappings")]
     pub table_mappings: String,
-    /// <p>One or more tags to be assigned to the replication task.</p>
+    /// <p>Tags to be added to the replication instance.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>An Amazon Resource Name (ARN) that uniquely identifies the target endpoint.</p>
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "TargetEndpointArn")]
     pub target_endpoint_arn: String,
 }
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationTaskResponse {
     /// <p>The replication task that was created.</p>
     #[serde(rename = "ReplicationTask")]
@@ -470,33 +471,12 @@ pub struct DeleteCertificateMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteCertificateResponse {
     /// <p>The Secure Sockets Layer (SSL) certificate.</p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<Certificate>,
-}
-
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteConnectionMessage {
-    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
-    #[serde(rename = "EndpointArn")]
-    pub endpoint_arn: String,
-    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
-    #[serde(rename = "ReplicationInstanceArn")]
-    pub replication_instance_arn: String,
-}
-
-/// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DeleteConnectionResponse {
-    /// <p>The connection that is being deleted.</p>
-    #[serde(rename = "Connection")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection: Option<Connection>,
 }
 
 /// <p><p/></p>
@@ -509,7 +489,7 @@ pub struct DeleteEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEndpointResponse {
     /// <p>The endpoint that was deleted.</p>
     #[serde(rename = "Endpoint")]
@@ -527,7 +507,7 @@ pub struct DeleteEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEventSubscriptionResponse {
     /// <p>The event subscription that was deleted.</p>
     #[serde(rename = "EventSubscription")]
@@ -545,7 +525,7 @@ pub struct DeleteReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationInstanceResponse {
     /// <p>The replication instance that was deleted.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -563,7 +543,7 @@ pub struct DeleteReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
@@ -576,7 +556,7 @@ pub struct DeleteReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationTaskResponse {
     /// <p>The deleted replication task.</p>
     #[serde(rename = "ReplicationTask")]
@@ -590,16 +570,12 @@ pub struct DescribeAccountAttributesMessage {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
     /// <p>Account quota information.</p>
     #[serde(rename = "AccountQuotas")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_quotas: Option<Vec<AccountQuota>>,
-    /// <p><p>A unique AWS DMS identifier for an account in a particular AWS Region. The value of this identifier has the following format: <code>c99999999999</code>. DMS uses this identifier to name artifacts. For example, DMS uses this identifier to name the default Amazon S3 bucket for storing task assessment reports in a given AWS Region. The format of this S3 bucket name is the following: <code>dms-<i>AccountNumber</i>-<i>UniqueAccountIdentifier</i>.</code> Here is an example name for this default S3 bucket: <code>dms-111122223333-c44445555666</code>.</p> <note> <p>AWS DMS supports the <code>UniqueAccountIdentifier</code> parameter in versions 3.1.4 and later.</p> </note></p>
-    #[serde(rename = "UniqueAccountIdentifier")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub unique_account_identifier: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -608,7 +584,7 @@ pub struct DescribeCertificatesMessage {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the vlue specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
@@ -619,7 +595,7 @@ pub struct DescribeCertificatesMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCertificatesResponse {
     /// <p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>
     #[serde(rename = "Certificates")]
@@ -650,7 +626,7 @@ pub struct DescribeConnectionsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConnectionsResponse {
     /// <p>A description of the connections.</p>
     #[serde(rename = "Connections")]
@@ -681,13 +657,13 @@ pub struct DescribeEndpointTypesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointTypesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>The types of endpoints that are supported.</p>
+    /// <p>The type of endpoints that are supported.</p>
     #[serde(rename = "SupportedEndpointTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
@@ -712,7 +688,7 @@ pub struct DescribeEndpointsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointsResponse {
     /// <p>Endpoint description.</p>
     #[serde(rename = "Endpoints")]
@@ -731,7 +707,7 @@ pub struct DescribeEventCategoriesMessage {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -739,7 +715,7 @@ pub struct DescribeEventCategoriesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventCategoriesResponse {
     /// <p>A list of event categories.</p>
     #[serde(rename = "EventCategoryGroupList")]
@@ -770,7 +746,7 @@ pub struct DescribeEventSubscriptionsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventSubscriptionsResponse {
     /// <p>A list of event subscriptions.</p>
     #[serde(rename = "EventSubscriptionsList")]
@@ -793,7 +769,7 @@ pub struct DescribeEventsMessage {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>A list of event categories for the source type that you've chosen.</p>
+    /// <p>A list of event categories for a source type that you want to subscribe to.</p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
@@ -809,11 +785,11 @@ pub struct DescribeEventsMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p> The identifier of an event source.</p>
+    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It cannot end with a hyphen or contain two consecutive hyphens. </p>
     #[serde(rename = "SourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | replication-task</p>
+    /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -825,7 +801,7 @@ pub struct DescribeEventsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventsResponse {
     /// <p>The events described.</p>
     #[serde(rename = "Events")]
@@ -852,7 +828,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeOrderableReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -879,7 +855,7 @@ pub struct DescribePendingMaintenanceActionsMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    /// <p>The ARN of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
@@ -887,7 +863,7 @@ pub struct DescribePendingMaintenanceActionsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePendingMaintenanceActionsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -909,7 +885,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRefreshSchemasStatusResponse {
     /// <p>The status of the schema.</p>
     #[serde(rename = "RefreshSchemasStatus")]
@@ -933,7 +909,7 @@ pub struct DescribeReplicationInstanceTaskLogsMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationInstanceTaskLogsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     #[serde(rename = "Marker")]
@@ -968,7 +944,7 @@ pub struct DescribeReplicationInstancesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -999,7 +975,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationSubnetGroupsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1030,7 +1006,7 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationTaskAssessmentResultsResponse {
     /// <p>- The Amazon S3 bucket where the task assessment report is located. </p>
     #[serde(rename = "BucketName")]
@@ -1061,7 +1037,7 @@ pub struct DescribeReplicationTasksMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p>An option to set to avoid returning information about settings. Use this to reduce overhead when setting information is too large. To use this option, choose <code>true</code>; otherwise, choose <code>false</code> (the default).</p>
+    /// <p>Set this flag to avoid returning setting information. Use this to reduce overhead when settings are too large. Choose TRUE to use this flag, otherwise choose FALSE (default).</p>
     #[serde(rename = "WithoutSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub without_settings: Option<bool>,
@@ -1069,7 +1045,7 @@ pub struct DescribeReplicationTasksMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationTasksResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1099,7 +1075,7 @@ pub struct DescribeSchemasMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSchemasResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1133,7 +1109,7 @@ pub struct DescribeTableStatisticsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTableStatisticsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1173,7 +1149,7 @@ pub struct DynamoDbSettings {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElasticsearchSettings {
-    /// <p>The endpoint for the Elasticsearch cluster.</p>
+    /// <p>The endpoint for the ElasticSearch cluster.</p>
     #[serde(rename = "EndpointUri")]
     pub endpoint_uri: String,
     /// <p>The maximum number of seconds that DMS retries failed API requests to the Elasticsearch cluster.</p>
@@ -1191,7 +1167,7 @@ pub struct ElasticsearchSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Endpoint {
     /// <p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>
     #[serde(rename = "CertificateArn")]
@@ -1201,7 +1177,7 @@ pub struct Endpoint {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible settings include the following:</p> <ul> <li> <p> <code>ServiceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>BucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>CompressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these settings is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these settings is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -1221,7 +1197,7 @@ pub struct Endpoint {
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
+    /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -1229,7 +1205,7 @@ pub struct Endpoint {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1249,7 +1225,7 @@ pub struct Endpoint {
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
-    /// <p>An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1261,7 +1237,7 @@ pub struct Endpoint {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings for the Amazon Redshift endpoint.</p>
+    /// <p>Settings for the Amazon Redshift endpoint</p>
     #[serde(rename = "RedshiftSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redshift_settings: Option<RedshiftSettings>,
@@ -1277,7 +1253,7 @@ pub struct Endpoint {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
+    /// <p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
@@ -1293,7 +1269,7 @@ pub struct Endpoint {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Event {
     /// <p>The date of the event.</p>
     #[serde(rename = "Date")]
@@ -1307,11 +1283,11 @@ pub struct Event {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p> The identifier of an event source.</p>
+    /// <p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p> <p>Constraints:replication instance, endpoint, migration task</p>
     #[serde(rename = "SourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_identifier: Option<String>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | replication-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1319,13 +1295,13 @@ pub struct Event {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventCategoryGroup {
-    /// <p> A list of event categories from a source type that you've chosen.</p>
+    /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | replication-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1333,7 +1309,7 @@ pub struct EventCategoryGroup {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The AWS DMS event notification subscription Id.</p>
     #[serde(rename = "CustSubscriptionId")]
@@ -1359,7 +1335,7 @@ pub struct EventSubscription {
     #[serde(rename = "SourceIdsList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids_list: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | replication-task</p>
+    /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1386,14 +1362,14 @@ pub struct Filter {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportCertificateMessage {
-    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
     #[serde(rename = "CertificateIdentifier")]
     pub certificate_identifier: String,
-    /// <p>The contents of a <code>.pem</code> file, which contains an X.509 certificate.</p>
+    /// <p>The contents of the .pem X.509 certificate file for the certificate.</p>
     #[serde(rename = "CertificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
-    /// <p>The location of an imported Oracle Wallet certificate for use with SSL.</p>
+    /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -1409,7 +1385,7 @@ pub struct ImportCertificateMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportCertificateResponse {
     /// <p>The certificate to be uploaded.</p>
     #[serde(rename = "Certificate")]
@@ -1444,7 +1420,7 @@ pub struct ListTagsForResourceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags for the resource.</p>
     #[serde(rename = "TagList")]
@@ -1482,11 +1458,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
-    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
+    /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1498,7 +1474,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -1529,7 +1505,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
+    /// <p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
@@ -1541,7 +1517,7 @@ pub struct ModifyEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyEndpointResponse {
     /// <p>The modified endpoint.</p>
     #[serde(rename = "Endpoint")]
@@ -1564,7 +1540,7 @@ pub struct ModifyEventSubscriptionMessage {
     #[serde(rename = "SnsTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | replication-task</p>
+    /// <p> The type of AWS DMS resource that generates the events you want to subscribe to. </p> <p>Valid values: replication-instance | migration-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -1575,7 +1551,7 @@ pub struct ModifyEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyEventSubscriptionResponse {
     /// <p>The modified event subscription.</p>
     #[serde(rename = "EventSubscription")]
@@ -1590,7 +1566,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    /// <p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage, and the change is asynchronously applied as soon as possible.</p> <p>This parameter must be set to <code>true</code> when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>
+    /// <p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>
     #[serde(rename = "AllowMajorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_major_version_upgrade: Option<bool>,
@@ -1606,7 +1582,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -1633,7 +1609,7 @@ pub struct ModifyReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationInstanceResponse {
     /// <p>The modified replication instance.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -1644,7 +1620,7 @@ pub struct ModifyReplicationInstanceResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyReplicationSubnetGroupMessage {
-    /// <p>A description for the replication instance subnet group.</p>
+    /// <p>The description of the replication instance subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
@@ -1658,7 +1634,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationSubnetGroupResponse {
     /// <p>The modified replication subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroup")]
@@ -1669,7 +1645,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyReplicationTaskMessage {
-    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -1681,7 +1657,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "CdcStopPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_stop_position: Option<String>,
-    /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
+    /// <p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_type: Option<String>,
@@ -1696,7 +1672,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with <code>file://</code>. When working with the DMS API, provide the JSON as the parameter value, for example: <code>--table-mappings file://mappingfile.json</code> </p>
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with "file://". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>
     #[serde(rename = "TableMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
@@ -1704,7 +1680,7 @@ pub struct ModifyReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationTaskResponse {
     /// <p>The replication task that was modified.</p>
     #[serde(rename = "ReplicationTask")]
@@ -1715,11 +1691,11 @@ pub struct ModifyReplicationTaskResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MongoDbSettings {
-    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This setting is not used when authType=No.</p>
+    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>
     #[serde(rename = "AuthMechanism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_mechanism: Option<String>,
-    /// <p> The MongoDB database name. This setting is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
+    /// <p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
     #[serde(rename = "AuthSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_source: Option<String>,
@@ -1731,11 +1707,11 @@ pub struct MongoDbSettings {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p> Indicates the number of documents to preview to determine the document organization. Use this setting when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>
+    /// <p> Indicates the number of documents to preview to determine the document organization. Use this attribute when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>
     #[serde(rename = "DocsToInvestigate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub docs_to_investigate: Option<String>,
-    /// <p> Specifies the document ID. Use this setting when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>
+    /// <p> Specifies the document ID. Use this attribute when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>
     #[serde(rename = "ExtractDocId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extract_doc_id: Option<String>,
@@ -1767,9 +1743,9 @@ pub struct MongoDbSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OrderableReplicationInstance {
-    /// <p>List of Availability Zones for this replication instance.</p>
+    /// <p>List of availability zones for this replication instance.</p>
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
@@ -1793,10 +1769,6 @@ pub struct OrderableReplicationInstance {
     #[serde(rename = "MinAllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_allocated_storage: Option<i64>,
-    /// <p><p>The value returned when the specified <code>EngineVersion</code> of the replication instance is in Beta or test mode. This indicates some features might not work as expected.</p> <note> <p>AWS DMS supports the <code>ReleaseStatus</code> parameter in versions 3.1.4 and later.</p> </note></p>
-    #[serde(rename = "ReleaseStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub release_status: Option<String>,
     /// <p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
     #[serde(rename = "ReplicationInstanceClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1809,7 +1781,7 @@ pub struct OrderableReplicationInstance {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PendingMaintenanceAction {
     /// <p>The type of pending maintenance action that is available for the resource.</p>
     #[serde(rename = "Action")]
@@ -1849,7 +1821,7 @@ pub struct RebootReplicationInstanceMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RebootReplicationInstanceResponse {
     /// <p>The replication instance that is being rebooted. </p>
     #[serde(rename = "ReplicationInstance")]
@@ -1860,15 +1832,15 @@ pub struct RebootReplicationInstanceResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RedshiftSettings {
-    /// <p>A value that indicates to allow any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose <code>true</code> or <code>false</code> (the default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data doesn't match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
+    /// <p>Allows any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose TRUE or FALSE (default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data does not match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
     #[serde(rename = "AcceptAnyDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_any_date: Option<bool>,
-    /// <p>Code to run after connecting. This parameter should contain the code itself, not the name of a file containing the code.</p>
+    /// <p>Code to run after connecting. This should be the code, not a filename.</p>
     #[serde(rename = "AfterConnectScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub after_connect_script: Option<String>,
-    /// <p>The location where the comma-separated value (.csv) files are stored before being uploaded to the S3 bucket. </p>
+    /// <p>The location where the CSV files are stored before being uploaded to the S3 bucket. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -1876,39 +1848,39 @@ pub struct RedshiftSettings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p>A value that sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>
+    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>
     #[serde(rename = "ConnectionTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_timeout: Option<i64>,
-    /// <p>The name of the Amazon Redshift data warehouse (service) that you are working with.</p>
+    /// <p>The name of the Amazon Redshift data warehouse (service) you are working with.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The date format that you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this parameter is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that aren't supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
+    /// <p>The date format you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
     #[serde(rename = "DateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_format: Option<String>,
-    /// <p>A value that specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of <code>true</code> sets empty CHAR and VARCHAR fields to null. The default is <code>false</code>.</p>
+    /// <p>Specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of TRUE sets empty CHAR and VARCHAR fields to null. The default is FALSE.</p>
     #[serde(rename = "EmptyAsNull")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub empty_as_null: Option<bool>,
-    /// <p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE_S3</code> (the default) or <code>SSE_KMS</code>. To use <code>SSE_S3</code>, create an AWS Identity and Access Management (IAM) role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code> </p>
+    /// <p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either SSE_S3 (default) or SSE_KMS. To use SSE_S3, create an IAM role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code>.</p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_mode: Option<String>,
-    /// <p>The number of threads used to upload a single file. This parameter accepts a value from 1 through 64. It defaults to 10.</p>
+    /// <p>Specifies the number of threads used to upload a single file. This accepts a value between 1 and 64. It defaults to 10.</p>
     #[serde(rename = "FileTransferUploadStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_transfer_upload_streams: Option<i64>,
-    /// <p>The amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>
+    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>
     #[serde(rename = "LoadTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_timeout: Option<i64>,
-    /// <p>The maximum size (in KB) of any .csv file used to transfer data to Amazon Redshift. This accepts a value from 1 through 1,048,576. It defaults to 32,768 KB (32 MB).</p>
+    /// <p>Specifies the maximum size (in KB) of any CSV file used to transfer data to Amazon Redshift. This accepts a value between 1 and 1048576. It defaults to 32768 KB (32 MB).</p>
     #[serde(rename = "MaxFileSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_file_size: Option<i64>,
-    /// <p>The password for the user named in the <code>username</code> property.</p>
+    /// <p>The password for the user named in the username property.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
@@ -1916,15 +1888,15 @@ pub struct RedshiftSettings {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>A value that specifies to remove surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose <code>true</code> to remove quotation marks. The default is <code>false</code>.</p>
+    /// <p>Removes surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose TRUE to remove quotation marks. The default is FALSE.</p>
     #[serde(rename = "RemoveQuotes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_quotes: Option<bool>,
-    /// <p>A value that specifies to replaces the invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified characters instead. The default is <code>"?"</code>.</p>
+    /// <p>Replaces invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified value instead. The default is "?".</p>
     #[serde(rename = "ReplaceChars")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace_chars: Option<String>,
-    /// <p>A list of characters that you want to replace. Use with <code>ReplaceChars</code>.</p>
+    /// <p>A list of chars you want to replace. Use with <code>ReplaceChars</code>.</p>
     #[serde(rename = "ReplaceInvalidChars")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace_invalid_chars: Option<String>,
@@ -1932,23 +1904,23 @@ pub struct RedshiftSettings {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    /// <p>The AWS KMS key ID. If you are using <code>SSE_KMS</code> for the <code>EncryptionMode</code>, provide this key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>
+    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>
     #[serde(rename = "ServerSideEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_kms_key_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role that has access to the Amazon Redshift service.</p>
+    /// <p>The ARN of the role that has access to the Redshift service.</p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The time format that you want to use. Valid values are <code>auto</code> (case-sensitive), <code>'timeformat_string'</code>, <code>'epochsecs'</code>, or <code>'epochmillisecs'</code>. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that aren't supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this parameter to <code>auto</code>. </p>
+    /// <p>The time format you want to use. Valid values are <code>auto</code> (case-sensitive), 'timeformat_string', 'epochsecs', or 'epochmillisecs'. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
     #[serde(rename = "TimeFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_format: Option<String>,
-    /// <p>A value that specifies to remove the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose <code>true</code> to remove unneeded white space. The default is <code>false</code>.</p>
+    /// <p>Removes the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose TRUE to remove unneeded white space. The default is FALSE.</p>
     #[serde(rename = "TrimBlanks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trim_blanks: Option<bool>,
-    /// <p>A value that specifies to truncate data in columns to the appropriate number of characters, so that the data fits in the column. This parameter applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose <code>true</code> to truncate data. The default is <code>false</code>.</p>
+    /// <p>Truncates data in columns to the appropriate number of characters, so that it fits in the column. Applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose TRUE to truncate data. The default is FALSE.</p>
     #[serde(rename = "TruncateColumns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncate_columns: Option<bool>,
@@ -1956,7 +1928,7 @@ pub struct RedshiftSettings {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
-    /// <p>The size of the write buffer to use in rows. Valid values range from 1 through 2,048. The default is 1,024. Use this setting to tune performance. </p>
+    /// <p>The size of the write buffer to use in rows. Valid values range from 1 to 2048. Defaults to 1024. Use this setting to tune performance. </p>
     #[serde(rename = "WriteBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_buffer_size: Option<i64>,
@@ -1975,7 +1947,7 @@ pub struct RefreshSchemasMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RefreshSchemasResponse {
     /// <p>The status of the refreshed schema.</p>
     #[serde(rename = "RefreshSchemasStatus")]
@@ -1985,7 +1957,7 @@ pub struct RefreshSchemasResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RefreshSchemasStatus {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -2024,7 +1996,7 @@ pub struct ReloadTablesMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReloadTablesResponse {
     /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
@@ -2032,10 +2004,10 @@ pub struct ReloadTablesResponse {
     pub replication_task_arn: Option<String>,
 }
 
-/// <p>Removes one or more tags from an AWS DMS resource.</p>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromResourceMessage {
-    /// <p>An AWS DMS resource from which you want to remove tag(s). The value for this parameter is an Amazon Resource Name (ARN).</p>
+    /// <p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The tag key (name) of the tag to be removed.</p>
@@ -2045,12 +2017,12 @@ pub struct RemoveTagsFromResourceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationInstance {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -2080,11 +2052,11 @@ pub struct ReplicationInstance {
     #[serde(rename = "InstanceCreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_create_time: Option<f64>,
-    /// <p>An AWS KMS key identifier that is used to encrypt the data on the replication instance.</p> <p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key.</p> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2112,11 +2084,11 @@ pub struct ReplicationInstance {
     #[serde(rename = "ReplicationInstanceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_identifier: Option<String>,
-    /// <p>One or more private IP addresses for the replication instance.</p>
+    /// <p>The private IP address of the replication instance.</p>
     #[serde(rename = "ReplicationInstancePrivateIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_private_ip_addresses: Option<Vec<String>>,
-    /// <p>One or more public IP addresses for the replication instance.</p>
+    /// <p>The public IP address of the replication instance.</p>
     #[serde(rename = "ReplicationInstancePublicIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_public_ip_addresses: Option<Vec<String>>,
@@ -2140,7 +2112,7 @@ pub struct ReplicationInstance {
 
 /// <p>Contains metadata for a replication instance task log.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationInstanceTaskLog {
     /// <p>The size, in bytes, of the replication task log.</p>
     #[serde(rename = "ReplicationInstanceTaskLogSize")]
@@ -2158,7 +2130,7 @@ pub struct ReplicationInstanceTaskLog {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationPendingModifiedValues {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -2168,7 +2140,7 @@ pub struct ReplicationPendingModifiedValues {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2180,9 +2152,9 @@ pub struct ReplicationPendingModifiedValues {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationSubnetGroup {
-    /// <p>A description for the replication subnet group.</p>
+    /// <p>The description of the replication subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group_description: Option<String>,
@@ -2206,9 +2178,9 @@ pub struct ReplicationSubnetGroup {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTask {
-    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either <code>CdcStartPosition</code> or <code>CdcStartTime</code> to specify when you want the CDC operation to start. Specifying both values results in an error.</p> <p>The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -2280,7 +2252,7 @@ pub struct ReplicationTask {
 
 /// <p> The task assessment report in JSON format. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTaskAssessmentResult {
     /// <p> The task assessment results in JSON format. </p>
     #[serde(rename = "AssessmentResults")]
@@ -2314,36 +2286,16 @@ pub struct ReplicationTaskAssessmentResult {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTaskStats {
     /// <p>The elapsed time of the task, in milliseconds.</p>
     #[serde(rename = "ElapsedTimeMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elapsed_time_millis: Option<i64>,
-    /// <p>The date the replication task was started either with a fresh start or a target reload.</p>
-    #[serde(rename = "FreshStartDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub fresh_start_date: Option<f64>,
-    /// <p>The date the replication task full load was completed.</p>
-    #[serde(rename = "FullLoadFinishDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub full_load_finish_date: Option<f64>,
     /// <p>The percent complete for the full load migration task.</p>
     #[serde(rename = "FullLoadProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_progress_percent: Option<i64>,
-    /// <p>The date the the replication task full load was started.</p>
-    #[serde(rename = "FullLoadStartDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub full_load_start_date: Option<f64>,
-    /// <p>The date the replication task was started either with a fresh start or a resume. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_StartReplicationTask.html#DMS-StartReplicationTask-request-StartReplicationTaskType">StartReplicationTaskType</a>.</p>
-    #[serde(rename = "StartDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_date: Option<f64>,
-    /// <p>The date the replication task was stopped.</p>
-    #[serde(rename = "StopDate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stop_date: Option<f64>,
     /// <p>The number of errors that have occurred during this task.</p>
     #[serde(rename = "TablesErrored")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2364,13 +2316,13 @@ pub struct ReplicationTaskStats {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourcePendingMaintenanceActions {
     /// <p>Detailed information about the pending maintenance action.</p>
     #[serde(rename = "PendingMaintenanceActionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
-    /// <p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Introduction.AWS.ARN.html"> Constructing an Amazon Resource Name (ARN) for AWS DMS</a> in the DMS documentation.</p>
+    /// <p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/dms/latest/UserGuide/USER_Tagging.html#USER_Tagging.ARN"> Constructing an Amazon Resource Name (ARN)</a> in the DMS documentation.</p>
     #[serde(rename = "ResourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<String>,
@@ -2379,7 +2331,7 @@ pub struct ResourcePendingMaintenanceActions {
 /// <p>Settings for exporting data to Amazon S3. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Settings {
-    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code> <i>bucketFolder</i>/<i>schema_name</i>/<i>table_name</i>/</code>. If this parameter is not specified, then the path used is <code> <i>schema_name</i>/<i>table_name</i>/</code>. </p>
+    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code>&lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/</code>. If this parameter is not specified, then the path used is <code>&lt;schema_name&gt;/&lt;table_name&gt;/</code>. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -2387,11 +2339,11 @@ pub struct S3Settings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>CdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports this interaction between the <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> parameters in versions 3.1.4 and later. </p> </note></p>
+    /// <p>Option to write only <code>INSERT</code> operations to the comma-separated value (CSV) output files. By default, the first field in a CSV record contains the letter <code>I</code> (insert), <code>U</code> (update) or <code>D</code> (delete) to indicate whether the row was inserted, updated, or deleted at the source database. If <code>cdcInsertsOnly</code> is set to true, then only <code>INSERT</code>s are recorded in the CSV file, without the <code>I</code> annotation on each line. Valid values are <code>TRUE</code> and <code>FALSE</code>.</p>
     #[serde(rename = "CdcInsertsOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_inserts_only: Option<bool>,
-    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both .csv and .parquet file formats. </p>
+    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both CSV and PARQUET data formats. </p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compression_type: Option<String>,
@@ -2403,27 +2355,27 @@ pub struct S3Settings {
     #[serde(rename = "CsvRowDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_row_delimiter: Option<String>,
-    /// <p><p>The format of the data that you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>csv</code> : This is a row-based file format with comma-separated values (.csv). </p> </li> <li> <p> <code>parquet</code> : Apache Parquet (.parquet) is a columnar storage file format that features efficient compression and provides faster query response. </p> </li> </ul></p>
+    /// <p><p>The format of the data which you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>CSV</code> : This is a row-based format with comma-separated values. </p> </li> <li> <p> <code>PARQUET</code> : Apache Parquet is a columnar storage format that features efficient compression and provides faster query response. </p> </li> </ul></p>
     #[serde(rename = "DataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_format: Option<String>,
-    /// <p>The size of one data page in bytes. This parameter defaults to 1024 * 1024 bytes (1 MiB). This number is used for .parquet file format only. </p>
+    /// <p>The size of one data page in bytes. Defaults to 1024 * 1024 bytes (1MiB). For <code>PARQUET</code> format only. </p>
     #[serde(rename = "DataPageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_page_size: Option<i64>,
-    /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. This parameter defaults to 1024 * 1024 bytes (1 MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. This size is used for .parquet file format only. </p>
+    /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. Defaults to 1024 * 1024 bytes (1MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. For <code>PARQUET</code> format only. </p>
     #[serde(rename = "DictPageSizeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dict_page_size_limit: Option<i64>,
-    /// <p>A value that enables statistics for Parquet pages and row groups. Choose <code>true</code> to enable statistics, <code>false</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. This parameter defaults to <code>true</code>. This value is used for .parquet file format only.</p>
+    /// <p>Enables statistics for Parquet pages and rowGroups. Choose <code>TRUE</code> to enable statistics, choose <code>FALSE</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. Defaults to <code>TRUE</code>. For <code>PARQUET</code> format only.</p>
     #[serde(rename = "EnableStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_statistics: Option<bool>,
-    /// <p><p>The type of encoding you are using: </p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently. This is the default.</p> </li> <li> <p> <code>PLAIN</code> doesn&#39;t use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
+    /// <p><p>The type of encoding you are using: <code>RLE<em>DICTIONARY</code> (default), <code>PLAIN</code>, or <code>PLAIN</em>DICTIONARY</code>.</p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently.</p> </li> <li> <p> <code>PLAIN</code> does not use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
     #[serde(rename = "EncodingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encoding_type: Option<String>,
-    /// <p><p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (the default) or <code>SSE</em>KMS</code>. To use <code>SSE_S3</code>, you need an AWS Identity and Access Management (IAM) role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p> <code>s3:CreateBucket</code> </p> </li> <li> <p> <code>s3:ListBucket</code> </p> </li> <li> <p> <code>s3:DeleteBucket</code> </p> </li> <li> <p> <code>s3:GetBucketLocation</code> </p> </li> <li> <p> <code>s3:GetObject</code> </p> </li> <li> <p> <code>s3:PutObject</code> </p> </li> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:GetObjectVersion</code> </p> </li> <li> <p> <code>s3:GetBucketPolicy</code> </p> </li> <li> <p> <code>s3:PutBucketPolicy</code> </p> </li> <li> <p> <code>s3:DeleteBucketPolicy</code> </p> </li> </ul></p>
+    /// <p><p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (default) or <code>SSE</em>KMS</code>. To use <code>SSE_S3</code>, you need an IAM role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p>s3:CreateBucket</p> </li> <li> <p>s3:ListBucket</p> </li> <li> <p>s3:DeleteBucket</p> </li> <li> <p>s3:GetBucketLocation</p> </li> <li> <p>s3:GetObject</p> </li> <li> <p>s3:PutObject</p> </li> <li> <p>s3:DeleteObject</p> </li> <li> <p>s3:GetObjectVersion</p> </li> <li> <p>s3:GetBucketPolicy</p> </li> <li> <p>s3:PutBucketPolicy</p> </li> <li> <p>s3:DeleteBucketPolicy</p> </li> </ul></p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_mode: Option<String>,
@@ -2431,23 +2383,15 @@ pub struct S3Settings {
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports the <code>IncludeOpForFullLoad</code> parameter in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with the <code>CdcInsertsOnly</code> parameter for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
-    #[serde(rename = "IncludeOpForFullLoad")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_op_for_full_load: Option<bool>,
-    /// <p><p>A value that specifies the precision of any <code>TIMESTAMP</code> column values that are written to an Amazon S3 object file in .parquet format.</p> <note> <p>AWS DMS supports the <code>ParquetTimestampInMillisecond</code> parameter in versions 3.1.4 and later.</p> </note> <p>When <code>ParquetTimestampInMillisecond</code> is set to <code>true</code> or <code>y</code>, AWS DMS writes all <code>TIMESTAMP</code> columns in a .parquet formatted file with millisecond precision. Otherwise, DMS writes them with microsecond precision.</p> <p>Currently, Amazon Athena and AWS Glue can handle only millisecond precision for <code>TIMESTAMP</code> values. Set this parameter to <code>true</code> for S3 endpoint object files that are .parquet formatted only if you plan to query or process the data with Athena or AWS Glue.</p> <note> <p>AWS DMS writes any <code>TIMESTAMP</code> column values written to an S3 file in .csv format with microsecond precision.</p> <p>Setting <code>ParquetTimestampInMillisecond</code> has no effect on the string format of the timestamp column value that is inserted by setting the <code>TimestampColumnName</code> parameter.</p> </note></p>
-    #[serde(rename = "ParquetTimestampInMillisecond")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parquet_timestamp_in_millisecond: Option<bool>,
-    /// <p>The version of the Apache Parquet format that you want to use: <code>parquet_1_0</code> (the default) or <code>parquet_2_0</code>.</p>
+    /// <p>The version of Apache Parquet format you want to use: <code>PARQUET_1_0</code> (default) or <code>PARQUET_2_0</code>.</p>
     #[serde(rename = "ParquetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parquet_version: Option<String>,
-    /// <p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. This parameter defaults to 10,000 rows. This number is used for .parquet file format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>
+    /// <p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. Defaults to 10,000 (ten thousand) rows. For <code>PARQUET</code> format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>
     #[serde(rename = "RowGroupLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_group_length: Option<i64>,
-    /// <p>If you are using <code>SSE_KMS</code> for the <code>EncryptionMode</code>, provide the AWS KMS key ID. The key that you use needs an attached policy that enables AWS Identity and Access Management (IAM) user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier <i>value</i> --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=<i>value</i>,BucketFolder=<i>value</i>,BucketName=<i>value</i>,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=<i>value</i> </code> </p>
+    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier &lt;value&gt; --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=&lt;value&gt;,BucketFolder=&lt;value&gt;,BucketName=&lt;value&gt;,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=&lt;value&gt; </code> </p>
     #[serde(rename = "ServerSideEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_kms_key_id: Option<String>,
@@ -2455,10 +2399,6 @@ pub struct S3Settings {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>A value that when nonblank causes AWS DMS to add a column with timestamp information to the endpoint data for an Amazon S3 target.</p> <note> <p>AWS DMS supports the <code>TimestampColumnName</code> parameter in versions 3.1.4 and later.</p> </note> <p>DMS includes an additional <code>STRING</code> column in the .csv or .parquet object files of your migrated data when you set <code>TimestampColumnName</code> to a nonblank value.</p> <p>For a full load, each row of this timestamp column contains a timestamp for when the data was transferred from the source to the target by DMS. </p> <p>For a change data capture (CDC) load, each row of the timestamp column contains the timestamp for the commit of that row in the source database.</p> <p>The string format for this timestamp column value is <code>yyyy-MM-dd HH:mm:ss.SSSSSS</code>. By default, the precision of this value is in microseconds. For a CDC load, the rounding of the precision depends on the commit timestamp supported by DMS for the source database.</p> <p>When the <code>AddColumnName</code> parameter is set to <code>true</code>, DMS also includes a name for the timestamp column that you set with <code>TimestampColumnName</code>.</p>
-    #[serde(rename = "TimestampColumnName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp_column_name: Option<String>,
 }
 
 /// <p><p/></p>
@@ -2471,7 +2411,7 @@ pub struct StartReplicationTaskAssessmentMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartReplicationTaskAssessmentResponse {
     /// <p> The assessed replication task. </p>
     #[serde(rename = "ReplicationTask")]
@@ -2482,7 +2422,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartReplicationTaskMessage {
-    /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
+    /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_position: Option<String>,
@@ -2504,7 +2444,7 @@ pub struct StartReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartReplicationTaskResponse {
     /// <p>The replication task started.</p>
     #[serde(rename = "ReplicationTask")]
@@ -2522,7 +2462,7 @@ pub struct StopReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopReplicationTaskResponse {
     /// <p>The replication task stopped.</p>
     #[serde(rename = "ReplicationTask")]
@@ -2532,7 +2472,7 @@ pub struct StopReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Subnet {
     /// <p>The Availability Zone of the subnet.</p>
     #[serde(rename = "SubnetAvailabilityZone")]
@@ -2550,9 +2490,9 @@ pub struct Subnet {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SupportedEndpointType {
-    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
+    /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -2560,7 +2500,7 @@ pub struct SupportedEndpointType {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -2572,7 +2512,7 @@ pub struct SupportedEndpointType {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableStatistics {
     /// <p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>
     #[serde(rename = "Ddls")]
@@ -2679,7 +2619,7 @@ pub struct TestConnectionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TestConnectionResponse {
     /// <p>The connection tested.</p>
     #[serde(rename = "Connection")]
@@ -2689,7 +2629,7 @@ pub struct TestConnectionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
     #[serde(rename = "Status")]
@@ -2780,7 +2720,7 @@ pub enum CreateEndpointError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -2849,15 +2789,15 @@ impl Error for CreateEndpointError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
-    /// <p>The ciphertext references a key that doesn't exist or that the DMS account doesn't have access to.</p>
+    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
     KMSAccessDeniedFault(String),
     /// <p>The specified master key (CMK) isn't enabled.</p>
     KMSDisabledFault(String),
-    /// <p>The state of the specified AWS KMS resource isn't valid for this request.</p>
+    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
     KMSInvalidStateFault(String),
-    /// <p>The specified AWS KMS entity or resource can't be found.</p>
+    /// <p>The specified KMS entity or resource can't be found.</p>
     KMSNotFoundFault(String),
-    /// <p>This request triggered AWS KMS request throttling.</p>
+    /// <p>This request triggered KMS request throttling.</p>
     KMSThrottlingFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -2964,7 +2904,7 @@ pub enum CreateReplicationInstanceError {
     InvalidResourceStateFault(String),
     /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
     ReplicationSubnetGroupDoesNotCoverEnoughAZs(String),
@@ -3150,7 +3090,7 @@ pub enum CreateReplicationTaskError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -3258,55 +3198,6 @@ impl Error for DeleteCertificateError {
         match *self {
             DeleteCertificateError::InvalidResourceStateFault(ref cause) => cause,
             DeleteCertificateError::ResourceNotFoundFault(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DeleteConnection
-#[derive(Debug, PartialEq)]
-pub enum DeleteConnectionError {
-    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
-    AccessDeniedFault(String),
-    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
-    InvalidResourceStateFault(String),
-    /// <p>The resource could not be found.</p>
-    ResourceNotFoundFault(String),
-}
-
-impl DeleteConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "AccessDeniedFault" => {
-                    return RusotoError::Service(DeleteConnectionError::AccessDeniedFault(err.msg))
-                }
-                "InvalidResourceStateFault" => {
-                    return RusotoError::Service(DeleteConnectionError::InvalidResourceStateFault(
-                        err.msg,
-                    ))
-                }
-                "ResourceNotFoundFault" => {
-                    return RusotoError::Service(DeleteConnectionError::ResourceNotFoundFault(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DeleteConnectionError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DeleteConnectionError {
-    fn description(&self) -> &str {
-        match *self {
-            DeleteConnectionError::AccessDeniedFault(ref cause) => cause,
-            DeleteConnectionError::InvalidResourceStateFault(ref cause) => cause,
-            DeleteConnectionError::ResourceNotFoundFault(ref cause) => cause,
         }
     }
 }
@@ -4254,7 +4145,7 @@ pub enum ModifyEndpointError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -4315,15 +4206,15 @@ impl Error for ModifyEndpointError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
-    /// <p>The ciphertext references a key that doesn't exist or that the DMS account doesn't have access to.</p>
+    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
     KMSAccessDeniedFault(String),
     /// <p>The specified master key (CMK) isn't enabled.</p>
     KMSDisabledFault(String),
-    /// <p>The state of the specified AWS KMS resource isn't valid for this request.</p>
+    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
     KMSInvalidStateFault(String),
-    /// <p>The specified AWS KMS entity or resource can't be found.</p>
+    /// <p>The specified KMS entity or resource can't be found.</p>
     KMSNotFoundFault(String),
-    /// <p>This request triggered AWS KMS request throttling.</p>
+    /// <p>This request triggered KMS request throttling.</p>
     KMSThrottlingFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -4578,7 +4469,7 @@ impl Error for ModifyReplicationSubnetGroupError {
 pub enum ModifyReplicationTaskError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
@@ -4680,7 +4571,7 @@ impl Error for RebootReplicationInstanceError {
 pub enum RefreshSchemasError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -4954,7 +4845,7 @@ impl Error for StopReplicationTaskError {
 pub enum TestConnectionError {
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
@@ -5009,299 +4900,303 @@ impl Error for TestConnectionError {
     }
 }
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
+#[async_trait]
 pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError>;
+    ) -> Result<AddTagsToResourceResponse, RusotoError<AddTagsToResourceError>>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>;
+    ) -> Result<
+        ApplyPendingMaintenanceActionResponse,
+        RusotoError<ApplyPendingMaintenanceActionError>,
+    >;
 
     /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
+    async fn create_endpoint(
         &self,
         input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>;
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn create_event_subscription(
+    async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
+    ) -> Result<CreateEventSubscriptionResponse, RusotoError<CreateEventSubscriptionError>>;
 
-    /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
-    fn create_replication_instance(
+    /// <p>Creates the replication instance using the specified parameters.</p>
+    async fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
+    ) -> Result<CreateReplicationInstanceResponse, RusotoError<CreateReplicationInstanceError>>;
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
-    fn create_replication_subnet_group(
+    async fn create_replication_subnet_group(
         &self,
         input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
+    ) -> Result<CreateReplicationSubnetGroupResponse, RusotoError<CreateReplicationSubnetGroupError>>;
 
     /// <p>Creates a replication task using the specified parameters.</p>
-    fn create_replication_task(
+    async fn create_replication_task(
         &self,
         input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError>;
+    ) -> Result<CreateReplicationTaskResponse, RusotoError<CreateReplicationTaskError>>;
 
     /// <p>Deletes the specified certificate. </p>
-    fn delete_certificate(
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError>;
-
-    /// <p>Deletes the connection between a replication instance and an endpoint.</p>
-    fn delete_connection(
-        &self,
-        input: DeleteConnectionMessage,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
+    ) -> Result<DeleteCertificateResponse, RusotoError<DeleteCertificateError>>;
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
+    async fn delete_endpoint(
         &self,
         input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError>;
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>;
 
     /// <p> Deletes an AWS DMS event subscription. </p>
-    fn delete_event_subscription(
+    async fn delete_event_subscription(
         &self,
         input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
+    ) -> Result<DeleteEventSubscriptionResponse, RusotoError<DeleteEventSubscriptionError>>;
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
-    fn delete_replication_instance(
+    async fn delete_replication_instance(
         &self,
         input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
+    ) -> Result<DeleteReplicationInstanceResponse, RusotoError<DeleteReplicationInstanceError>>;
 
     /// <p>Deletes a subnet group.</p>
-    fn delete_replication_subnet_group(
+    async fn delete_replication_subnet_group(
         &self,
         input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
+    ) -> Result<DeleteReplicationSubnetGroupResponse, RusotoError<DeleteReplicationSubnetGroupError>>;
 
     /// <p>Deletes the specified replication task.</p>
-    fn delete_replication_task(
+    async fn delete_replication_task(
         &self,
         input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
+    ) -> Result<DeleteReplicationTaskResponse, RusotoError<DeleteReplicationTaskError>>;
 
-    /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
+    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
+    ) -> Result<DescribeAccountAttributesResponse, RusotoError<DescribeAccountAttributesError>>;
 
     /// <p>Provides a description of the certificate.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError>;
+    ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>>;
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError>;
+    ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>>;
 
     /// <p>Returns information about the type of endpoints available.</p>
-    fn describe_endpoint_types(
+    async fn describe_endpoint_types(
         &self,
         input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
+    ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>>;
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
-    fn describe_endpoints(
+    async fn describe_endpoints(
         &self,
         input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
+    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
+    ) -> Result<DescribeEventCategoriesResponse, RusotoError<DescribeEventCategoriesError>>;
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
+    async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
+    ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>;
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>>;
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
-    fn describe_orderable_replication_instances(
+    async fn describe_orderable_replication_instances(
         &self,
         input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
+        RusotoError<DescribeOrderableReplicationInstancesError>,
     >;
 
     /// <p>For internal use only</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
+        RusotoError<DescribePendingMaintenanceActionsError>,
     >;
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
-    fn describe_refresh_schemas_status(
+    async fn describe_refresh_schemas_status(
         &self,
         input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
+    ) -> Result<DescribeRefreshSchemasStatusResponse, RusotoError<DescribeRefreshSchemasStatusError>>;
 
     /// <p>Returns information about the task logs for the specified task.</p>
-    fn describe_replication_instance_task_logs(
+    async fn describe_replication_instance_task_logs(
         &self,
         input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
+        RusotoError<DescribeReplicationInstanceTaskLogsError>,
     >;
 
     /// <p>Returns information about replication instances for your account in the current region.</p>
-    fn describe_replication_instances(
+    async fn describe_replication_instances(
         &self,
         input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
+    ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>;
 
     /// <p>Returns information about the replication subnet groups.</p>
-    fn describe_replication_subnet_groups(
+    async fn describe_replication_subnet_groups(
         &self,
         input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
+    ) -> Result<
+        DescribeReplicationSubnetGroupsResponse,
+        RusotoError<DescribeReplicationSubnetGroupsError>,
+    >;
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
-    fn describe_replication_task_assessment_results(
+    async fn describe_replication_task_assessment_results(
         &self,
         input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
+        RusotoError<DescribeReplicationTaskAssessmentResultsError>,
     >;
 
     /// <p>Returns information about replication tasks for your account in the current region.</p>
-    fn describe_replication_tasks(
+    async fn describe_replication_tasks(
         &self,
         input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
+    ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>>;
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
+    async fn describe_schemas(
         &self,
         input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError>;
+    ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>>;
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
-    fn describe_table_statistics(
+    async fn describe_table_statistics(
         &self,
         input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
+    ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>>;
 
     /// <p>Uploads the specified certificate.</p>
-    fn import_certificate(
+    async fn import_certificate(
         &self,
         input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError>;
+    ) -> Result<ImportCertificateResponse, RusotoError<ImportCertificateError>>;
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
+    async fn modify_endpoint(
         &self,
         input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError>;
+    ) -> Result<ModifyEndpointResponse, RusotoError<ModifyEndpointError>>;
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
-    fn modify_event_subscription(
+    async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
+    ) -> Result<ModifyEventSubscriptionResponse, RusotoError<ModifyEventSubscriptionError>>;
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
-    fn modify_replication_instance(
+    async fn modify_replication_instance(
         &self,
         input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
+    ) -> Result<ModifyReplicationInstanceResponse, RusotoError<ModifyReplicationInstanceError>>;
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
-    fn modify_replication_subnet_group(
+    async fn modify_replication_subnet_group(
         &self,
         input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
+    ) -> Result<ModifyReplicationSubnetGroupResponse, RusotoError<ModifyReplicationSubnetGroupError>>;
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
-    fn modify_replication_task(
+    async fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
+    ) -> Result<ModifyReplicationTaskResponse, RusotoError<ModifyReplicationTaskError>>;
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
-    fn reboot_replication_instance(
+    async fn reboot_replication_instance(
         &self,
         input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError>;
+    ) -> Result<RebootReplicationInstanceResponse, RusotoError<RebootReplicationInstanceError>>;
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
+    async fn refresh_schemas(
         &self,
         input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError>;
+    ) -> Result<RefreshSchemasResponse, RusotoError<RefreshSchemasError>>;
 
     /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
+    async fn reload_tables(
         &self,
         input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError>;
+    ) -> Result<ReloadTablesResponse, RusotoError<ReloadTablesError>>;
 
     /// <p>Removes metadata tags from a DMS resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
+    ) -> Result<RemoveTagsFromResourceResponse, RusotoError<RemoveTagsFromResourceError>>;
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn start_replication_task(
+    async fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError>;
+    ) -> Result<StartReplicationTaskResponse, RusotoError<StartReplicationTaskError>>;
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
-    fn start_replication_task_assessment(
+    async fn start_replication_task_assessment(
         &self,
         input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>;
+    ) -> Result<
+        StartReplicationTaskAssessmentResponse,
+        RusotoError<StartReplicationTaskAssessmentError>,
+    >;
 
     /// <p><p>Stops the replication task.</p> <p/></p>
-    fn stop_replication_task(
+    async fn stop_replication_task(
         &self,
         input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError>;
+    ) -> Result<StopReplicationTaskResponse, RusotoError<StopReplicationTaskError>>;
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
+    async fn test_connection(
         &self,
         input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError>;
+    ) -> Result<TestConnectionResponse, RusotoError<TestConnectionError>>;
 }
 /// A client for the AWS Database Migration Service API.
 #[derive(Clone)]
@@ -5315,7 +5210,10 @@ impl DatabaseMigrationServiceClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DatabaseMigrationServiceClient {
-        Self::new_with_client(Client::shared(), region)
+        DatabaseMigrationServiceClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -5325,38 +5223,22 @@ impl DatabaseMigrationServiceClient {
     ) -> DatabaseMigrationServiceClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        DatabaseMigrationServiceClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(
-        client: Client,
-        region: region::Region,
-    ) -> DatabaseMigrationServiceClient {
-        DatabaseMigrationServiceClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for DatabaseMigrationServiceClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("DatabaseMigrationServiceClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
+    ) -> Result<AddTagsToResourceResponse, RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5364,29 +5246,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddTagsToResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddTagsToResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsToResourceError::from_response(response))
+        }
     }
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
-    fn apply_pending_maintenance_action(
+    async fn apply_pending_maintenance_action(
         &self,
         input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>
-    {
+    ) -> Result<
+        ApplyPendingMaintenanceActionResponse,
+        RusotoError<ApplyPendingMaintenanceActionError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5397,25 +5280,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplyPendingMaintenanceActionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ApplyPendingMaintenanceActionError::from_response(response))
+        }
     }
 
     /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
+    async fn create_endpoint(
         &self,
         input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5423,28 +5308,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEndpointError::from_response(response))
+        }
     }
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn create_event_subscription(
+    async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
+    ) -> Result<CreateEventSubscriptionResponse, RusotoError<CreateEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5452,25 +5335,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEventSubscriptionError::from_response(response))
+        }
     }
 
-    /// <p>Creates the replication instance using the specified parameters.</p> <p>AWS DMS requires that your account have certain roles with appropriate permissions before you can create a replication instance. For information on the required roles, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html">Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>. For information on the required permissions, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html">IAM Permissions Needed to Use AWS DMS</a>.</p>
-    fn create_replication_instance(
+    /// <p>Creates the replication instance using the specified parameters.</p>
+    async fn create_replication_instance(
         &self,
         input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
+    ) -> Result<CreateReplicationInstanceResponse, RusotoError<CreateReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5481,25 +5367,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
-    fn create_replication_subnet_group(
+    async fn create_replication_subnet_group(
         &self,
         input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
+    ) -> Result<CreateReplicationSubnetGroupResponse, RusotoError<CreateReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5510,25 +5399,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Creates a replication task using the specified parameters.</p>
-    fn create_replication_task(
+    async fn create_replication_task(
         &self,
         input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError> {
+    ) -> Result<CreateReplicationTaskResponse, RusotoError<CreateReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5536,27 +5427,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified certificate. </p>
-    fn delete_certificate(
+    async fn delete_certificate(
         &self,
         input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError> {
+    ) -> Result<DeleteCertificateResponse, RusotoError<DeleteCertificateError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5564,57 +5455,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteCertificateError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p>Deletes the connection between a replication instance and an endpoint.</p>
-    fn delete_connection(
-        &self,
-        input: DeleteConnectionMessage,
-    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteConnectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCertificateError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
+    async fn delete_endpoint(
         &self,
         input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5622,28 +5483,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEndpointError::from_response(response))
+        }
     }
 
     /// <p> Deletes an AWS DMS event subscription. </p>
-    fn delete_event_subscription(
+    async fn delete_event_subscription(
         &self,
         input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
+    ) -> Result<DeleteEventSubscriptionResponse, RusotoError<DeleteEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5651,25 +5510,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEventSubscriptionError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
-    fn delete_replication_instance(
+    async fn delete_replication_instance(
         &self,
         input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
+    ) -> Result<DeleteReplicationInstanceResponse, RusotoError<DeleteReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5680,25 +5542,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Deletes a subnet group.</p>
-    fn delete_replication_subnet_group(
+    async fn delete_replication_subnet_group(
         &self,
         input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
+    ) -> Result<DeleteReplicationSubnetGroupResponse, RusotoError<DeleteReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5709,25 +5574,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified replication task.</p>
-    fn delete_replication_task(
+    async fn delete_replication_task(
         &self,
         input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
+    ) -> Result<DeleteReplicationTaskResponse, RusotoError<DeleteReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5735,26 +5602,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteReplicationTaskError::from_response(response))
+        }
     }
 
-    /// <p>Lists all of the AWS DMS attributes for a customer account. These attributes include AWS DMS quotas for the account and a unique account identifier in a particular DMS region. DMS quotas include a list of resource quotas supported by the account, such as the number of replication instances allowed. The description for each resource quota, includes the quota name, current usage toward that quota, and the quota's maximum value. DMS uses the unique account identifier to name each artifact used by DMS in the given region.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
+    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
+    async fn describe_account_attributes(
         &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
+    ) -> Result<DescribeAccountAttributesResponse, RusotoError<DescribeAccountAttributesError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5764,25 +5632,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAccountAttributesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountAttributesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAccountAttributesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAccountAttributesError::from_response(response))
+        }
     }
 
     /// <p>Provides a description of the certificate.</p>
-    fn describe_certificates(
+    async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError> {
+    ) -> Result<DescribeCertificatesResponse, RusotoError<DescribeCertificatesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5790,27 +5660,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCertificatesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeCertificatesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCertificatesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCertificatesError::from_response(response))
+        }
     }
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
-    fn describe_connections(
+    async fn describe_connections(
         &self,
         input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError> {
+    ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5818,27 +5688,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConnectionsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeConnectionsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConnectionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConnectionsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the type of endpoints available.</p>
-    fn describe_endpoint_types(
+    async fn describe_endpoint_types(
         &self,
         input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
+    ) -> Result<DescribeEndpointTypesResponse, RusotoError<DescribeEndpointTypesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5846,27 +5716,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointTypesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeEndpointTypesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointTypesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointTypesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
-    fn describe_endpoints(
+    async fn describe_endpoints(
         &self,
         input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
+    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5874,28 +5744,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEndpointsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointsError::from_response(response))
+        }
     }
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn describe_event_categories(
+    async fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
+    ) -> Result<DescribeEventCategoriesResponse, RusotoError<DescribeEventCategoriesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5903,25 +5772,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventCategoriesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventCategoriesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventCategoriesError::from_response(response))
+        }
     }
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
+    async fn describe_event_subscriptions(
         &self,
         input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
+    ) -> Result<DescribeEventSubscriptionsResponse, RusotoError<DescribeEventSubscriptionsError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5932,25 +5804,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventSubscriptionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventSubscriptionsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEventSubscriptionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventSubscriptionsError::from_response(response))
+        }
     }
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
+    async fn describe_events(
         &self,
         input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
+    ) -> Result<DescribeEventsResponse, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5958,30 +5832,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEventsResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeEventsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEventsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
-    fn describe_orderable_replication_instances(
+    async fn describe_orderable_replication_instances(
         &self,
         input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
+        RusotoError<DescribeOrderableReplicationInstancesError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -5993,29 +5865,31 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableReplicationInstancesError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrderableReplicationInstancesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>For internal use only</p>
-    fn describe_pending_maintenance_actions(
+    async fn describe_pending_maintenance_actions(
         &self,
         input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
+        RusotoError<DescribePendingMaintenanceActionsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6027,27 +5901,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingMaintenanceActionsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePendingMaintenanceActionsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
-    fn describe_refresh_schemas_status(
+    async fn describe_refresh_schemas_status(
         &self,
         input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
+    ) -> Result<DescribeRefreshSchemasStatusResponse, RusotoError<DescribeRefreshSchemasStatusError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6058,27 +5935,29 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRefreshSchemasStatusError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRefreshSchemasStatusError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the task logs for the specified task.</p>
-    fn describe_replication_instance_task_logs(
+    async fn describe_replication_instance_task_logs(
         &self,
         input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
+        RusotoError<DescribeReplicationInstanceTaskLogsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6090,27 +5969,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationInstanceTaskLogsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationInstanceTaskLogsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns information about replication instances for your account in the current region.</p>
-    fn describe_replication_instances(
+    async fn describe_replication_instances(
         &self,
         input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
+    ) -> Result<DescribeReplicationInstancesResponse, RusotoError<DescribeReplicationInstancesError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6121,26 +6003,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationInstancesResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationInstancesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationInstancesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationInstancesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the replication subnet groups.</p>
-    fn describe_replication_subnet_groups(
+    async fn describe_replication_subnet_groups(
         &self,
         input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>
-    {
+    ) -> Result<
+        DescribeReplicationSubnetGroupsResponse,
+        RusotoError<DescribeReplicationSubnetGroupsError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6151,29 +6037,31 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationSubnetGroupsError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationSubnetGroupsError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
-    fn describe_replication_task_assessment_results(
+    async fn describe_replication_task_assessment_results(
         &self,
         input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
+    ) -> Result<
         DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
+        RusotoError<DescribeReplicationTaskAssessmentResultsError>,
     > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6185,25 +6073,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
+        }
     }
 
     /// <p>Returns information about replication tasks for your account in the current region.</p>
-    fn describe_replication_tasks(
+    async fn describe_replication_tasks(
         &self,
         input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
+    ) -> Result<DescribeReplicationTasksResponse, RusotoError<DescribeReplicationTasksError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6214,25 +6104,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeReplicationTasksResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationTasksError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeReplicationTasksResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeReplicationTasksError::from_response(response))
+        }
     }
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
+    async fn describe_schemas(
         &self,
         input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError> {
+    ) -> Result<DescribeSchemasResponse, RusotoError<DescribeSchemasError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6240,28 +6132,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSchemasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeSchemasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeSchemasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSchemasError::from_response(response))
+        }
     }
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
-    fn describe_table_statistics(
+    async fn describe_table_statistics(
         &self,
         input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
+    ) -> Result<DescribeTableStatisticsResponse, RusotoError<DescribeTableStatisticsError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6269,25 +6159,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTableStatisticsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTableStatisticsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTableStatisticsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTableStatisticsError::from_response(response))
+        }
     }
 
     /// <p>Uploads the specified certificate.</p>
-    fn import_certificate(
+    async fn import_certificate(
         &self,
         input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
+    ) -> Result<ImportCertificateResponse, RusotoError<ImportCertificateError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6295,28 +6187,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportCertificateResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ImportCertificateError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportCertificateResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportCertificateError::from_response(response))
+        }
     }
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6324,27 +6215,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
+    async fn modify_endpoint(
         &self,
         input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError> {
+    ) -> Result<ModifyEndpointResponse, RusotoError<ModifyEndpointError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6352,28 +6243,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyEndpointResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ModifyEndpointError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ModifyEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyEndpointError::from_response(response))
+        }
     }
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
-    fn modify_event_subscription(
+    async fn modify_event_subscription(
         &self,
         input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
+    ) -> Result<ModifyEventSubscriptionResponse, RusotoError<ModifyEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6381,25 +6270,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyEventSubscriptionResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyEventSubscriptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyEventSubscriptionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyEventSubscriptionError::from_response(response))
+        }
     }
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
-    fn modify_replication_instance(
+    async fn modify_replication_instance(
         &self,
         input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
+    ) -> Result<ModifyReplicationInstanceResponse, RusotoError<ModifyReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6410,25 +6302,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
-    fn modify_replication_subnet_group(
+    async fn modify_replication_subnet_group(
         &self,
         input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
+    ) -> Result<ModifyReplicationSubnetGroupResponse, RusotoError<ModifyReplicationSubnetGroupError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6439,25 +6334,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationSubnetGroupError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationSubnetGroupError::from_response(response))
+        }
     }
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
-    fn modify_replication_task(
+    async fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
+    ) -> Result<ModifyReplicationTaskResponse, RusotoError<ModifyReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6465,27 +6362,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ModifyReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ModifyReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
-    fn reboot_replication_instance(
+    async fn reboot_replication_instance(
         &self,
         input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
+    ) -> Result<RebootReplicationInstanceResponse, RusotoError<RebootReplicationInstanceError>>
+    {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6496,25 +6394,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RebootReplicationInstanceResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootReplicationInstanceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RebootReplicationInstanceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootReplicationInstanceError::from_response(response))
+        }
     }
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
+    async fn refresh_schemas(
         &self,
         input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError> {
+    ) -> Result<RefreshSchemasResponse, RusotoError<RefreshSchemasError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6522,28 +6422,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RefreshSchemasResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RefreshSchemasError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RefreshSchemasResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RefreshSchemasError::from_response(response))
+        }
     }
 
     /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
+    async fn reload_tables(
         &self,
         input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError> {
+    ) -> Result<ReloadTablesResponse, RusotoError<ReloadTablesError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6551,28 +6449,26 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ReloadTablesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ReloadTablesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ReloadTablesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ReloadTablesError::from_response(response))
+        }
     }
 
     /// <p>Removes metadata tags from a DMS resource.</p>
-    fn remove_tags_from_resource(
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
+    ) -> Result<RemoveTagsFromResourceResponse, RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6580,27 +6476,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsFromResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RemoveTagsFromResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveTagsFromResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveTagsFromResourceError::from_response(response))
+        }
     }
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn start_replication_task(
+    async fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError> {
+    ) -> Result<StartReplicationTaskResponse, RusotoError<StartReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6608,28 +6504,30 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StartReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
-    fn start_replication_task_assessment(
+    async fn start_replication_task_assessment(
         &self,
         input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>
-    {
+    ) -> Result<
+        StartReplicationTaskAssessmentResponse,
+        RusotoError<StartReplicationTaskAssessmentError>,
+    > {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6640,25 +6538,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartReplicationTaskAssessmentResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartReplicationTaskAssessmentError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartReplicationTaskAssessmentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartReplicationTaskAssessmentError::from_response(response))
+        }
     }
 
     /// <p><p>Stops the replication task.</p> <p/></p>
-    fn stop_replication_task(
+    async fn stop_replication_task(
         &self,
         input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError> {
+    ) -> Result<StopReplicationTaskResponse, RusotoError<StopReplicationTaskError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6666,27 +6566,27 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopReplicationTaskResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopReplicationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopReplicationTaskResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopReplicationTaskError::from_response(response))
+        }
     }
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
+    async fn test_connection(
         &self,
         input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError> {
+    ) -> Result<TestConnectionResponse, RusotoError<TestConnectionError>> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6694,20 +6594,18 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestConnectionResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TestConnectionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TestConnectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TestConnectionError::from_response(response))
+        }
     }
 }

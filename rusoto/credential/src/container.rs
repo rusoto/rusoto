@@ -3,11 +3,10 @@
 use std::error::Error;
 use std::time::Duration;
 
-use futures::future::{err, FutureResult};
-use futures::{Async, Future, Poll};
+use async_trait::async_trait;
 use hyper::{Body, Request};
 
-use crate::request::{HttpClient, HttpClientFuture};
+use crate::request::HttpClient;
 use crate::{
     non_empty_env_var, parse_credentials_from_aws_service, AwsCredentials, CredentialsError,
     ProvideAwsCredentials,
@@ -81,48 +80,17 @@ impl Default for ContainerProvider {
     }
 }
 
-/// Future returned from `ContainerProvider`.
-pub struct ContainerProviderFuture {
-    inner: ContainerProviderFutureInner,
-}
-
-enum ContainerProviderFutureInner {
-    Result(FutureResult<String, CredentialsError>),
-    Future(HttpClientFuture),
-}
-
-impl Future for ContainerProviderFuture {
-    type Item = AwsCredentials;
-    type Error = CredentialsError;
-
-    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        let resp = match self.inner {
-            ContainerProviderFutureInner::Result(ref mut result) => try_ready!(result.poll()),
-            ContainerProviderFutureInner::Future(ref mut future) => try_ready!(future.poll()),
-        };
-        let creds = parse_credentials_from_aws_service(&resp)?;
-        Ok(Async::Ready(creds))
-    }
-}
-
+#[async_trait]
 impl ProvideAwsCredentials for ContainerProvider {
-    type Future = ContainerProviderFuture;
-
-    fn credentials(&self) -> Self::Future {
-        let inner = match credentials_from_container(&self.client, self.timeout) {
-            Ok(future) => ContainerProviderFutureInner::Future(future),
-            Err(e) => ContainerProviderFutureInner::Result(err(e)),
-        };
-        ContainerProviderFuture { inner }
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let req = request_from_env_vars().map_err(|err| {
+            CredentialsError { message: format!("Could not get request from environment: {}", err.to_string()) }
+        })?;
+        let resp = self.client.request(req, self.timeout).await.map_err(|err| {
+            CredentialsError { message: format!("Could not get credentials from container: {}", err.to_string()) }
+        })?;
+        parse_credentials_from_aws_service(&resp)
     }
-}
-
-/// Grabs the Credentials from the AWS Container Credentials Provider. (169.254.170.2).
-fn credentials_from_container(
-    client: &HttpClient,
-    timeout: Duration,
-) -> Result<HttpClientFuture, CredentialsError> {
-    Ok(client.request(request_from_env_vars()?, timeout))
 }
 
 fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {

@@ -1,23 +1,19 @@
 extern crate rusoto_mock;
 
-use crate::generated::{
-    GetQueueUrlError, GetQueueUrlRequest, MessageAttributeValue, ReceiveMessageRequest,
-    SendMessageRequest, Sqs, SqsClient,
-};
 use std::collections::HashMap;
+use crate::generated::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
-use self::rusoto_mock::*;
-use rusoto_core::param::Params;
+use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::signature::SignedRequestPayload;
-use rusoto_core::{Region, RusotoError};
+use rusoto_core::param::Params;
 use serde_urlencoded;
+use self::rusoto_mock::*;
 
-#[test]
-fn should_serialize_map_parameters_in_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
-        .with_body(
-            r#"<?xml version="1.0" encoding="UTF-8"?>
+        .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
         <SendMessageResponse>
             <SendMessageResult>
                 <MD5OfMessageBody>
@@ -35,8 +31,7 @@ fn should_serialize_map_parameters_in_request_body() {
                     27daac76-34dd-47df-bd01-1f6e873584a0
                 </RequestId>
             </ResponseMetadata>
-        </SendMessageResponse>"#,
-        )
+        </SendMessageResponse>"#)
         .with_request_checker(|request: &SignedRequest| {
             println!("{:#?}", request.params);
 
@@ -44,18 +39,12 @@ fn should_serialize_map_parameters_in_request_body() {
             assert_eq!("/", request.path);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
                 let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
-                assert_eq!(
-                    Some(&Some("test_attribute_name".to_owned())),
-                    params.get("MessageAttribute.1.Name")
-                );
-                assert_eq!(
-                    Some(&Some("test_attribute_value".to_owned())),
-                    params.get("MessageAttribute.1.Value.StringValue")
-                );
-                assert_eq!(
-                    Some(&Some("String".to_owned())),
-                    params.get("MessageAttribute.1.Value.DataType")
-                );
+                assert_eq!(Some(&Some("test_attribute_name".to_owned())),
+                            params.get("MessageAttribute.1.Name"));
+                assert_eq!(Some(&Some("test_attribute_value".to_owned())),
+                            params.get("MessageAttribute.1.Value.StringValue"));
+                assert_eq!(Some(&Some("String".to_owned())),
+                            params.get("MessageAttribute.1.Value.DataType"));
             } else {
                 panic!("Unexpected request.payload: {:?}", request.payload);
             }
@@ -63,14 +52,12 @@ fn should_serialize_map_parameters_in_request_body() {
 
     let mut message_attributes = HashMap::new();
 
-    message_attributes.insert(
-        "test_attribute_name".to_owned(),
-        MessageAttributeValue {
-            string_value: Some("test_attribute_value".to_owned()),
-            data_type: "String".to_owned(),
-            ..Default::default()
-        },
-    );
+    message_attributes.insert("test_attribute_name".to_owned(),
+                                MessageAttributeValue {
+                                    string_value: Some("test_attribute_value".to_owned()),
+                                    data_type: "String".to_owned(),
+                                    ..Default::default()
+                                });
     let request = SendMessageRequest {
         message_body: "foo".to_owned(),
         queue_url: "bar".to_owned(),
@@ -79,14 +66,13 @@ fn should_serialize_map_parameters_in_request_body() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.send_message(request).sync().unwrap();
+    let _result = client.send_message(request).await.unwrap();
 }
 
-#[test]
-fn should_fix_issue_323() {
+#[tokio::test]
+async fn should_fix_issue_323() {
     let mock = MockRequestDispatcher::with_status(200)
-        .with_body(
-            r#"<?xml version="1.0" encoding="UTF-8"?>
+        .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
         <ReceiveMessageResponse>
             <ReceiveMessageResult>
             <Message>
@@ -113,23 +99,20 @@ fn should_fix_issue_323() {
                 b6633655-283d-45b4-aee4-4e84e0ae6afa
             </RequestId>
             </ResponseMetadata>
-        </ReceiveMessageResponse>"#,
-        )
+        </ReceiveMessageResponse>"#)
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
                 let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
-                assert_eq!(
-                    params.get("Action"),
-                    Some(&Some("ReceiveMessage".to_owned()))
-                );
-                assert_eq!(
-                    params.get("MaxNumberOfMessages"),
-                    Some(&Some("1".to_owned()))
-                );
-                assert_eq!(params.get("VisibilityTimeout"), Some(&Some("2".to_owned())));
-                assert_eq!(params.get("WaitTimeSeconds"), Some(&Some("3".to_owned())));
+                assert_eq!(params.get("Action"),
+                            Some(&Some("ReceiveMessage".to_owned())));
+                assert_eq!(params.get("MaxNumberOfMessages"),
+                            Some(&Some("1".to_owned())));
+                assert_eq!(params.get("VisibilityTimeout"),
+                            Some(&Some("2".to_owned())));
+                assert_eq!(params.get("WaitTimeSeconds"),
+                            Some(&Some("3".to_owned())));
                 assert_eq!(params.get("Integer"), None);
             } else {
                 panic!("Unexpected request.payload: {:?}", request.payload);
@@ -145,13 +128,13 @@ fn should_fix_issue_323() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.receive_message(request).sync().unwrap();
+    let _result = client.receive_message(request).await.unwrap();
 }
 
-#[test]
-fn test_parse_queue_does_not_exist_error() {
-    let mock = MockRequestDispatcher::with_status(400).with_body(
-        r#"<?xml version="1.0"?>
+#[tokio::test]
+async fn test_parse_queue_does_not_exist_error() {
+    let mock = MockRequestDispatcher::with_status(400)
+        .with_body(r#"<?xml version="1.0"?>
         <ErrorResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/">
             <Error>
                 <Type>Sender</Type>
@@ -160,8 +143,7 @@ fn test_parse_queue_does_not_exist_error() {
                 <Detail/>
             </Error>
             <RequestId>8f8f9957-c0d9-536a-9ca6-ca7483be06ad</RequestId>
-        </ErrorResponse>"#,
-    );
+        </ErrorResponse>"#);
 
     let request = GetQueueUrlRequest {
         queue_name: "no-such-queue".to_owned(),
@@ -169,13 +151,8 @@ fn test_parse_queue_does_not_exist_error() {
     };
 
     let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.get_queue_url(request).sync();
+    let result = client.get_queue_url(request).await;
     assert!(result.is_err());
     let err = result.err().unwrap();
-    assert_eq!(
-        RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
-            "The specified queue does not exist for this wsdl version.".to_owned()
-        )),
-        err
-    );
+    assert_eq!(RusotoError::Service(GetQueueUrlError::QueueDoesNotExist("The specified queue does not exist for this wsdl version.".to_owned())), err);
 }

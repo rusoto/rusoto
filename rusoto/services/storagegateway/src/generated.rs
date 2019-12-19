@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -32,7 +33,7 @@ pub struct ActivateGatewayInput {
     /// <p>The name you configured for your gateway.</p>
     #[serde(rename = "GatewayName")]
     pub gateway_name: String,
-    /// <p>A value that indicates the AWS Region where you want to store your data. The gateway AWS Region specified must be the same AWS Region as the AWS Region in your <code>Host</code> header in the request. For more information about available AWS Regions and endpoints for AWS Storage Gateway, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: See <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">AWS Storage Gateway Regions and Endpoints</a> in the AWS General Reference. </p>
+    /// <p>A value that indicates the region where you want to store your data. The gateway region specified must be the same region as the region in your <code>Host</code> header in the request. For more information about available regions and endpoints for AWS Storage Gateway, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: See <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">AWS Storage Gateway Regions and Endpoints</a> in the AWS General Reference. </p>
     #[serde(rename = "GatewayRegion")]
     pub gateway_region: String,
     /// <p>A value that indicates the time zone you want to set for the gateway. The time zone is of the format "GMT-hr:mm" or "GMT+hr:mm". For example, GMT-4:00 indicates the time is 4 hours behind GMT. GMT+2:00 indicates the time is 2 hours ahead of GMT. The time zone is used, for example, for scheduling snapshots and your gateway's maintenance schedule.</p>
@@ -46,7 +47,7 @@ pub struct ActivateGatewayInput {
     #[serde(rename = "MediumChangerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub medium_changer_type: Option<String>,
-    /// <p><p>A list of up to 50 tags that you can assign to the gateway. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers that can be represented in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256 characters.</p> </note></p>
+    /// <p><p>A list of up to 50 tags that can be assigned to the gateway. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -56,9 +57,9 @@ pub struct ActivateGatewayInput {
     pub tape_drive_type: Option<String>,
 }
 
-/// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and AWS Region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
+/// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivateGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -75,7 +76,7 @@ pub struct AddCacheInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddCacheOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -95,7 +96,7 @@ pub struct AddTagsToResourceInput {
 
 /// <p>AddTagsToResourceOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceOutput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
     #[serde(rename = "ResourceARN")]
@@ -113,7 +114,7 @@ pub struct AddUploadBufferInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddUploadBufferOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,7 +133,7 @@ pub struct AddWorkingStorageInput {
 
 /// <p>A JSON object containing the of the gateway for which working storage was configured.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddWorkingStorageOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -150,7 +151,7 @@ pub struct AssignTapePoolInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssignTapePoolOutput {
     /// <p>The unique Amazon Resource Names (ARN) of the virtual tape that was added to the tape pool.</p>
     #[serde(rename = "TapeARN")]
@@ -182,7 +183,7 @@ pub struct AttachVolumeInput {
 
 /// <p>AttachVolumeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AttachVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name for the initiator that was used to connect to the target.</p>
     #[serde(rename = "TargetARN")]
@@ -196,7 +197,7 @@ pub struct AttachVolumeOutput {
 
 /// <p>Describes an iSCSI cached volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CachediSCSIVolume {
     /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
     #[serde(rename = "CreatedDate")]
@@ -263,7 +264,7 @@ pub struct CancelArchivalInput {
 
 /// <p>CancelArchivalOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelArchivalOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which archiving was canceled.</p>
     #[serde(rename = "TapeARN")]
@@ -283,7 +284,7 @@ pub struct CancelRetrievalInput {
 
 /// <p>CancelRetrievalOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelRetrievalOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which retrieval was canceled.</p>
     #[serde(rename = "TapeARN")]
@@ -293,7 +294,7 @@ pub struct CancelRetrievalOutput {
 
 /// <p>Describes Challenge-Handshake Authentication Protocol (CHAP) information that supports authentication between your gateway and iSCSI initiators.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChapInfo {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -339,7 +340,7 @@ pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename = "SourceVolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_volume_arn: Option<String>,
-    /// <p><p>A list of up to 50 tags that you can assign to a cached volume. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers that you can represent in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256 characters.</p> </note></p>
+    /// <p><p>A list of up to 50 tags that can be assigned to a cached volume. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -352,7 +353,7 @@ pub struct CreateCachediSCSIVolumeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCachediSCSIVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
@@ -427,7 +428,7 @@ pub struct CreateNFSFileShareInput {
 
 /// <p>CreateNFSFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNFSFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the newly created file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -438,7 +439,7 @@ pub struct CreateNFSFileShareOutput {
 /// <p>CreateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSMBFileShareInput {
-    /// <p><p>A list of users in the Active Directory that will be granted administrator privileges on the file share. These users can do all file operations as the super-user. </p> <important> <p>Use this option very carefully, because any user in this list can do anything they like on the file share, regardless of file permissions.</p> </important></p>
+    /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
@@ -506,7 +507,7 @@ pub struct CreateSMBFileShareInput {
 
 /// <p>CreateSMBFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSMBFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the newly created file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -519,17 +520,13 @@ pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     /// <p>Textual description of the snapshot that appears in the Amazon EC2 console, Elastic Block Store snapshots panel in the <b>Description</b> field, and in the AWS Storage Gateway snapshot <b>Details</b> pane, <b>Description</b> field</p>
     #[serde(rename = "SnapshotDescription")]
     pub snapshot_description: String,
-    /// <p><p>A list of up to 50 tags that can be assigned to a snapshot. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
-    #[serde(rename = "Tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<Vec<Tag>>,
     /// <p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>
     #[serde(rename = "VolumeARN")]
     pub volume_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
     /// <p>The ID of the snapshot.</p>
     #[serde(rename = "SnapshotId")]
@@ -562,7 +559,7 @@ pub struct CreateSnapshotInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSnapshotOutput {
     /// <p>The snapshot ID that is used to refer to the snapshot in future operations such as describing snapshots (Amazon Elastic Compute Cloud API <code>DescribeSnapshots</code>) or creating a volume from a snapshot (<a>CreateStorediSCSIVolume</a>).</p>
     #[serde(rename = "SnapshotId")]
@@ -611,7 +608,7 @@ pub struct CreateStorediSCSIVolumeInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateStorediSCSIVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
@@ -630,7 +627,7 @@ pub struct CreateStorediSCSIVolumeOutput {
 /// <p>CreateTapeWithBarcodeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTapeWithBarcodeInput {
-    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
@@ -659,7 +656,7 @@ pub struct CreateTapeWithBarcodeInput {
 
 /// <p>CreateTapeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTapeWithBarcodeOutput {
     /// <p>A unique Amazon Resource Name (ARN) that represents the virtual tape that was created.</p>
     #[serde(rename = "TapeARN")]
@@ -673,7 +670,7 @@ pub struct CreateTapesInput {
     /// <p><p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p> <note> <p>Using the same <code>ClientToken</code> prevents creating the tape multiple times.</p> </note></p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
-    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tapes with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tapes with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
@@ -705,7 +702,7 @@ pub struct CreateTapesInput {
 
 /// <p>CreateTapeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTapesOutput {
     /// <p>A list of unique Amazon Resource Names (ARNs) that represents the virtual tapes that were created.</p>
     #[serde(rename = "TapeARNs")]
@@ -725,7 +722,7 @@ pub struct DeleteBandwidthRateLimitInput {
 
 /// <p>A JSON object containing the of the gateway whose bandwidth rate information was deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBandwidthRateLimitOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -745,7 +742,7 @@ pub struct DeleteChapCredentialsInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteChapCredentialsOutput {
     /// <p>The iSCSI initiator that connects to the target.</p>
     #[serde(rename = "InitiatorName")]
@@ -771,7 +768,7 @@ pub struct DeleteFileShareInput {
 
 /// <p>DeleteFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the deleted file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -788,7 +785,7 @@ pub struct DeleteGatewayInput {
 
 /// <p>A JSON object containing the ID of the deleted gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -803,7 +800,7 @@ pub struct DeleteSnapshotScheduleInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSnapshotScheduleOutput {
     /// <p>The volume which snapshot schedule was deleted.</p>
     #[serde(rename = "VolumeARN")]
@@ -821,7 +818,7 @@ pub struct DeleteTapeArchiveInput {
 
 /// <p>DeleteTapeArchiveOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTapeArchiveOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape that was deleted from the virtual tape shelf (VTS).</p>
     #[serde(rename = "TapeARN")]
@@ -832,7 +829,7 @@ pub struct DeleteTapeArchiveOutput {
 /// <p>DeleteTapeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTapeInput {
-    /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape to delete.</p>
@@ -842,7 +839,7 @@ pub struct DeleteTapeInput {
 
 /// <p>DeleteTapeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTapeOutput {
     /// <p>The Amazon Resource Name (ARN) of the deleted virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -860,34 +857,12 @@ pub struct DeleteVolumeInput {
 
 /// <p>A JSON object containing the of the storage volume that was deleted</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the storage volume that was deleted. It is the same ARN you provided in the request.</p>
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeAvailabilityMonitorTestInput {
-    #[serde(rename = "GatewayARN")]
-    pub gateway_arn: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeAvailabilityMonitorTestOutput {
-    #[serde(rename = "GatewayARN")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub gateway_arn: Option<String>,
-    /// <p>The time the High Availability monitoring test was started. If a test hasn't been performed, the value of this field is null.</p>
-    #[serde(rename = "StartTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<f64>,
-    /// <p>The status of the High Availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
-    #[serde(rename = "Status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
@@ -899,7 +874,7 @@ pub struct DescribeBandwidthRateLimitInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBandwidthRateLimitOutput {
     /// <p>The average download bandwidth rate limit in bits per second. This field does not appear in the response if the download rate limit is not set.</p>
     #[serde(rename = "AverageDownloadRateLimitInBitsPerSec")]
@@ -921,7 +896,7 @@ pub struct DescribeCacheInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCacheOutput {
     /// <p>The amount of cache in bytes allocated to the a gateway.</p>
     #[serde(rename = "CacheAllocatedInBytes")]
@@ -961,7 +936,7 @@ pub struct DescribeCachediSCSIVolumesInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCachediSCSIVolumesOutput {
     /// <p>An array of objects where each object contains metadata about one cached volume.</p>
     #[serde(rename = "CachediSCSIVolumes")]
@@ -979,7 +954,7 @@ pub struct DescribeChapCredentialsInput {
 
 /// <p>A JSON object containing a .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeChapCredentialsOutput {
     /// <p><p>An array of <a>ChapInfo</a> objects that represent CHAP credentials. Each object in the array contains CHAP credential information for one target-initiator pair. If no CHAP credentials are set, an empty array is returned. CHAP credential information is provided in a JSON object with the following fields:</p> <ul> <li> <p> <b>InitiatorName</b>: The iSCSI initiator that connects to the target.</p> </li> <li> <p> <b>SecretToAuthenticateInitiator</b>: The secret key that the initiator (for example, the Windows client) must provide to participate in mutual CHAP with the target.</p> </li> <li> <p> <b>SecretToAuthenticateTarget</b>: The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p> </li> <li> <p> <b>TargetARN</b>: The Amazon Resource Name (ARN) of the storage volume.</p> </li> </ul></p>
     #[serde(rename = "ChapCredentials")]
@@ -996,12 +971,8 @@ pub struct DescribeGatewayInformationInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeGatewayInformationOutput {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch Log Group that is used to monitor events in the gateway.</p>
-    #[serde(rename = "CloudWatchLogGroupARN")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub cloud_watch_log_group_arn: Option<String>,
     /// <p>The ID of the Amazon EC2 instance that was used to launch the gateway.</p>
     #[serde(rename = "Ec2InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1037,10 +1008,6 @@ pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
-    /// <p>The type of hypervisor environment used by the host.</p>
-    #[serde(rename = "HostEnvironment")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub host_environment: Option<String>,
     /// <p>The date on which the last software update was applied to the gateway. If the gateway has never been updated, this field does not return a value in the response.</p>
     #[serde(rename = "LastSoftwareUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1068,7 +1035,7 @@ pub struct DescribeMaintenanceStartTimeInput {
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfMonth</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfWeek</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$HourOfDay</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$MinuteOfHour</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$Timezone</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceStartTimeOutput {
     /// <p><p>The day of the month component of the maintenance start time represented as an ordinal number from 1 to 28, where 1 represents the first day of the month and 28 represents the last day of the month.</p> <note> <p>This value is only available for tape and volume gateways.</p> </note></p>
     #[serde(rename = "DayOfMonth")]
@@ -1105,7 +1072,7 @@ pub struct DescribeNFSFileSharesInput {
 
 /// <p>DescribeNFSFileSharesOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNFSFileSharesOutput {
     /// <p>An array containing a description for each requested file share. </p>
     #[serde(rename = "NFSFileShareInfoList")]
@@ -1123,7 +1090,7 @@ pub struct DescribeSMBFileSharesInput {
 
 /// <p>DescribeSMBFileSharesOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSMBFileSharesOutput {
     /// <p>An array containing a description for each requested file share. </p>
     #[serde(rename = "SMBFileShareInfoList")]
@@ -1138,12 +1105,8 @@ pub struct DescribeSMBSettingsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSMBSettingsOutput {
-    /// <p><p>Indicates the status of a gateway that is a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
-    #[serde(rename = "ActiveDirectoryStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_directory_status: Option<String>,
     /// <p>The name of the domain that the gateway is joined to.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1155,7 +1118,7 @@ pub struct DescribeSMBSettingsOutput {
     #[serde(rename = "SMBGuestPasswordSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smb_guest_password_set: Option<bool>,
-    /// <p>The type of security strategy that was specified for file gateway.</p> <p>ClientSpecified: if you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment. </p> <p>MandatorySigning: if you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer. </p> <p>MandatoryEncryption: if you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer. </p>
+    /// <p>The type of security strategy that was specified for file gateway.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
     #[serde(rename = "SMBSecurityStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smb_security_strategy: Option<String>,
@@ -1170,7 +1133,7 @@ pub struct DescribeSnapshotScheduleInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSnapshotScheduleOutput {
     /// <p>The snapshot description.</p>
     #[serde(rename = "Description")]
@@ -1184,10 +1147,6 @@ pub struct DescribeSnapshotScheduleOutput {
     #[serde(rename = "StartAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_at: Option<i64>,
-    /// <p>A list of up to 50 tags assigned to the snapshot schedule, sorted alphabetically by key name. Each tag is a key-value pair. For a gateway with more than 10 tags assigned, you can view all tags using the <code>ListTagsForResource</code> API operation.</p>
-    #[serde(rename = "Tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<Vec<Tag>>,
     /// <p>A value that indicates the time zone of the gateway.</p>
     #[serde(rename = "Timezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1207,7 +1166,7 @@ pub struct DescribeStorediSCSIVolumesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStorediSCSIVolumesOutput {
     /// <p><p>Describes a single unit of output from <a>DescribeStorediSCSIVolumes</a>. The following fields are returned:</p> <ul> <li> <p> <b>ChapEnabled</b>: Indicates whether mutual CHAP is enabled for the iSCSI target.</p> </li> <li> <p> <b>LunNumber</b>: The logical disk number.</p> </li> <li> <p> <b>NetworkInterfaceId</b>: The network interface ID of the stored volume that initiator use to map the stored volume as an iSCSI target.</p> </li> <li> <p> <b>NetworkInterfacePort</b>: The port used to communicate with iSCSI targets.</p> </li> <li> <p> <b>PreservedExistingData</b>: Indicates if when the stored volume was created, existing data on the underlying local disk was preserved.</p> </li> <li> <p> <b>SourceSnapshotId</b>: If the stored volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-1122aabb. Otherwise, this field is not included.</p> </li> <li> <p> <b>StorediSCSIVolumes</b>: An array of StorediSCSIVolume objects where each object contains metadata about one stored volume.</p> </li> <li> <p> <b>TargetARN</b>: The Amazon Resource Name (ARN) of the volume target.</p> </li> <li> <p> <b>VolumeARN</b>: The Amazon Resource Name (ARN) of the stored volume.</p> </li> <li> <p> <b>VolumeDiskId</b>: The disk ID of the local disk that was specified in the <a>CreateStorediSCSIVolume</a> operation.</p> </li> <li> <p> <b>VolumeId</b>: The unique identifier of the storage volume, e.g. vol-1122AABB.</p> </li> <li> <p> <b>VolumeiSCSIAttributes</b>: An <a>VolumeiSCSIAttributes</a> object that represents a collection of iSCSI attributes for one stored volume.</p> </li> <li> <p> <b>VolumeProgress</b>: Represents the percentage complete if the volume is restoring or bootstrapping that represents the percent of data transferred. This field does not appear in the response if the stored volume is not restoring or bootstrapping.</p> </li> <li> <p> <b>VolumeSizeInBytes</b>: The size of the volume in bytes.</p> </li> <li> <p> <b>VolumeStatus</b>: One of the <code>VolumeStatus</code> values that indicates the state of the volume.</p> </li> <li> <p> <b>VolumeType</b>: One of the enumeration values describing the type of the volume. Currently, on STORED volumes are supported.</p> </li> </ul></p>
     #[serde(rename = "StorediSCSIVolumes")]
@@ -1234,7 +1193,7 @@ pub struct DescribeTapeArchivesInput {
 
 /// <p>DescribeTapeArchivesOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTapeArchivesOutput {
     /// <p>An opaque string that indicates the position at which the virtual tapes that were fetched for description ended. Use this marker in your next request to fetch the next set of virtual tapes in the virtual tape shelf (VTS). If there are no more virtual tapes to describe, this field does not appear in the response.</p>
     #[serde(rename = "Marker")]
@@ -1263,7 +1222,7 @@ pub struct DescribeTapeRecoveryPointsInput {
 
 /// <p>DescribeTapeRecoveryPointsOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTapeRecoveryPointsOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1299,7 +1258,7 @@ pub struct DescribeTapesInput {
 
 /// <p>DescribeTapesOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTapesOutput {
     /// <p>An opaque string which can be used as part of a subsequent DescribeTapes call to retrieve the next page of results.</p> <p>If a response does not contain a marker, then there are no more results to be retrieved.</p>
     #[serde(rename = "Marker")]
@@ -1318,7 +1277,7 @@ pub struct DescribeUploadBufferInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUploadBufferOutput {
     /// <p>An array of the gateway's local disk IDs that are configured as working storage. Each local disk ID is specified as a string (minimum length of 1 and maximum length of 300). If no local disks are configured as working storage, then the DiskIds array is empty.</p>
     #[serde(rename = "DiskIds")]
@@ -1358,7 +1317,7 @@ pub struct DescribeVTLDevicesInput {
 
 /// <p>DescribeVTLDevicesOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeVTLDevicesOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1382,7 +1341,7 @@ pub struct DescribeWorkingStorageInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkingStorageOutput {
     /// <p>An array of the gateway's local disk IDs that are configured as working storage. Each local disk ID is specified as a string (minimum length of 1 and maximum length of 300). If no local disks are configured as working storage, then the DiskIds array is empty.</p>
     #[serde(rename = "DiskIds")]
@@ -1415,7 +1374,7 @@ pub struct DetachVolumeInput {
 
 /// <p>AttachVolumeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DetachVolumeOutput {
     /// <p>The Amazon Resource Name (ARN) of the volume that was detached.</p>
     #[serde(rename = "VolumeARN")]
@@ -1425,7 +1384,7 @@ pub struct DetachVolumeOutput {
 
 /// <p>Lists iSCSI information about a VTL device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceiSCSIAttributes {
     /// <p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>
     #[serde(rename = "ChapEnabled")]
@@ -1454,7 +1413,7 @@ pub struct DisableGatewayInput {
 
 /// <p>DisableGatewayOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableGatewayOutput {
     /// <p>The unique Amazon Resource Name (ARN) of the disabled gateway.</p>
     #[serde(rename = "GatewayARN")]
@@ -1464,7 +1423,7 @@ pub struct DisableGatewayOutput {
 
 /// <p>Represents a gateway's local disk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Disk {
     /// <p>The iSCSI qualified name (IQN) that is defined for a disk. This field is not included in the response if the local disk is not defined as an iSCSI target. The format of this field is <i>targetIqn::LUNNumber::region-volumeId</i>. </p>
     #[serde(rename = "DiskAllocationResource")]
@@ -1500,7 +1459,7 @@ pub struct Disk {
 
 /// <p>Describes a file share.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FileShareInfo {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1521,7 +1480,7 @@ pub struct FileShareInfo {
 
 /// <p>Describes a gateway object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GatewayInfo {
     /// <p>The ID of the Amazon EC2 instance that was used to launch the gateway.</p>
     #[serde(rename = "Ec2InstanceId")]
@@ -1531,7 +1490,7 @@ pub struct GatewayInfo {
     #[serde(rename = "Ec2InstanceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_instance_region: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1563,33 +1522,25 @@ pub struct JoinDomainInput {
     /// <p>The name of the domain that you want the gateway to join.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
-    /// <p>The organizational unit (OU) is a container in an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>
+    /// <p>The organizational unit (OU) is a container with an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>
     #[serde(rename = "OrganizationalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit: Option<String>,
     /// <p>Sets the password of the user who has permission to add the gateway to the Active Directory domain.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>Specifies the time in seconds, in which the <code>JoinDomain</code> operation must complete. The default is 20 seconds.</p>
-    #[serde(rename = "TimeoutInSeconds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timeout_in_seconds: Option<i64>,
-    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain. The domain user account should be enabled to join computers to the domain. For example, you can use the domain administrator account or an account with delegated permissions to join computers to the domain.</p>
+    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
 
 /// <p>JoinDomainOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JoinDomainOutput {
-    /// <p><p>Indicates the status of the gateway as a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
-    #[serde(rename = "ActiveDirectoryStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_directory_status: Option<String>,
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1615,7 +1566,7 @@ pub struct ListFileSharesInput {
 
 /// <p>ListFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFileSharesOutput {
     /// <p>An array of information about the file gateway's file shares. </p>
     #[serde(rename = "FileShareInfoList")]
@@ -1645,7 +1596,7 @@ pub struct ListGatewaysInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGatewaysOutput {
     /// <p>An array of <a>GatewayInfo</a> objects.</p>
     #[serde(rename = "Gateways")]
@@ -1665,7 +1616,7 @@ pub struct ListLocalDisksInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListLocalDisksOutput {
     /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListLocalDisksOutput$Disks</a> </p> </li> </ul></p>
     #[serde(rename = "Disks")]
@@ -1694,7 +1645,7 @@ pub struct ListTagsForResourceInput {
 
 /// <p>ListTagsForResourceOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>An opaque string that indicates the position at which to stop returning the list of tags.</p>
     #[serde(rename = "Marker")]
@@ -1728,7 +1679,7 @@ pub struct ListTapesInput {
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListTapesOutput$Marker</a> </p> </li> <li> <p> <a>ListTapesOutput$VolumeInfos</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTapesOutput {
     /// <p>A string that indicates the position at which to begin returning the next list of tapes. Use the marker in your next request to continue pagination of tapes. If there are no more tapes to list, this element does not appear in the response body.</p>
     #[serde(rename = "Marker")]
@@ -1749,7 +1700,7 @@ pub struct ListVolumeInitiatorsInput {
 
 /// <p>ListVolumeInitiatorsOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVolumeInitiatorsOutput {
     /// <p>The host names and port numbers of all iSCSI initiators that are connected to the gateway.</p>
     #[serde(rename = "Initiators")]
@@ -1764,7 +1715,7 @@ pub struct ListVolumeRecoveryPointsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVolumeRecoveryPointsOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1793,7 +1744,7 @@ pub struct ListVolumesInput {
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>ListVolumesOutput$Marker</a> </p> </li> <li> <p> <a>ListVolumesOutput$VolumeInfos</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVolumesOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1831,7 +1782,7 @@ pub struct NFSFileShareDefaults {
 
 /// <p>The Unix file permissions and ownership information assigned, by default, to native S3 objects when file gateway discovers them in S3 buckets. This operation is only supported in file gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NFSFileShareInfo {
     #[serde(rename = "ClientList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1897,7 +1848,7 @@ pub struct NFSFileShareInfo {
 
 /// <p>Describes a gateway's network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The Internet Protocol version 4 (IPv4) address of the interface.</p>
     #[serde(rename = "Ipv4Address")]
@@ -1920,7 +1871,7 @@ pub struct NotifyWhenUploadedInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotifyWhenUploadedOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1948,7 +1899,7 @@ pub struct RefreshCacheInput {
 
 /// <p>RefreshCacheOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RefreshCacheOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1971,7 +1922,7 @@ pub struct RemoveTagsFromResourceInput {
 
 /// <p>RemoveTagsFromResourceOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceOutput {
     /// <p>The Amazon Resource Name (ARN) of the resource that the tags were removed from.</p>
     #[serde(rename = "ResourceARN")]
@@ -1986,7 +1937,7 @@ pub struct ResetCacheInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResetCacheOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1996,7 +1947,7 @@ pub struct ResetCacheOutput {
 /// <p>RetrieveTapeArchiveInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RetrieveTapeArchiveInput {
-    /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape you want to retrieve from the virtual tape shelf (VTS).</p>
@@ -2006,7 +1957,7 @@ pub struct RetrieveTapeArchiveInput {
 
 /// <p>RetrieveTapeArchiveOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RetrieveTapeArchiveOutput {
     /// <p>The Amazon Resource Name (ARN) of the retrieved virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -2026,7 +1977,7 @@ pub struct RetrieveTapeRecoveryPointInput {
 
 /// <p>RetrieveTapeRecoveryPointOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RetrieveTapeRecoveryPointOutput {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which the recovery point was retrieved.</p>
     #[serde(rename = "TapeARN")]
@@ -2036,7 +1987,7 @@ pub struct RetrieveTapeRecoveryPointOutput {
 
 /// <p>The Windows file permissions and ownership information assigned, by default, to native S3 objects when file gateway discovers them in S3 buckets. This operation is only supported for file gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SMBFileShareInfo {
     /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
@@ -2122,7 +2073,7 @@ pub struct SetLocalConsolePasswordInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetLocalConsolePasswordOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2141,7 +2092,7 @@ pub struct SetSMBGuestPasswordInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetSMBGuestPasswordOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2157,22 +2108,8 @@ pub struct ShutdownGatewayInput {
 
 /// <p>A JSON object containing the of the gateway that was shut down.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ShutdownGatewayOutput {
-    #[serde(rename = "GatewayARN")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub gateway_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartAvailabilityMonitorTestInput {
-    #[serde(rename = "GatewayARN")]
-    pub gateway_arn: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct StartAvailabilityMonitorTestOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -2187,7 +2124,7 @@ pub struct StartGatewayInput {
 
 /// <p>A JSON object containing the of the gateway that was restarted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartGatewayOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2205,7 +2142,7 @@ pub struct StorageGatewayError {
 
 /// <p>Describes an iSCSI stored volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StorediSCSIVolume {
     /// <p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>
     #[serde(rename = "CreatedDate")]
@@ -2281,7 +2218,7 @@ pub struct Tag {
 
 /// <p>Describes a virtual tape object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Tape {
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2326,7 +2263,7 @@ pub struct Tape {
 
 /// <p>Represents a virtual tape that is archived in the virtual tape shelf (VTS).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TapeArchive {
     /// <p>The time that the archiving of the virtual tape was completed.</p> <p>The default time stamp format is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>
     #[serde(rename = "CompletionTime")]
@@ -2371,9 +2308,9 @@ pub struct TapeArchive {
 
 /// <p>Describes a virtual tape.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TapeInfo {
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -2401,7 +2338,7 @@ pub struct TapeInfo {
 
 /// <p>Describes a recovery point.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TapeRecoveryPointInfo {
     /// <p>The Amazon Resource Name (ARN) of the virtual tape.</p>
     #[serde(rename = "TapeARN")]
@@ -2438,7 +2375,7 @@ pub struct UpdateBandwidthRateLimitInput {
 
 /// <p>A JSON object containing the of the gateway whose throttle information was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBandwidthRateLimitOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2465,7 +2402,7 @@ pub struct UpdateChapCredentialsInput {
 
 /// <p>A JSON object containing the following fields:</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateChapCredentialsOutput {
     /// <p>The iSCSI initiator that connects to the target. This is the same initiator name specified in the request.</p>
     #[serde(rename = "InitiatorName")]
@@ -2479,10 +2416,6 @@ pub struct UpdateChapCredentialsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewayInformationInput {
-    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What Is Amazon CloudWatch Logs?</a>.</p>
-    #[serde(rename = "CloudWatchLogGroupARN")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub cloud_watch_log_group_arn: Option<String>,
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     #[serde(rename = "GatewayName")]
@@ -2496,7 +2429,7 @@ pub struct UpdateGatewayInformationInput {
 
 /// <p>A JSON object containing the ARN of the gateway that was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGatewayInformationOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2516,7 +2449,7 @@ pub struct UpdateGatewaySoftwareNowInput {
 
 /// <p>A JSON object containing the of the gateway that was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGatewaySoftwareNowOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2546,7 +2479,7 @@ pub struct UpdateMaintenanceStartTimeInput {
 
 /// <p>A JSON object containing the of the gateway whose maintenance start time is updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateMaintenanceStartTimeOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2603,7 +2536,7 @@ pub struct UpdateNFSFileShareInput {
 
 /// <p>UpdateNFSFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNFSFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -2614,7 +2547,7 @@ pub struct UpdateNFSFileShareOutput {
 /// <p>UpdateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSMBFileShareInput {
-    /// <p>A list of users in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
@@ -2665,7 +2598,7 @@ pub struct UpdateSMBFileShareInput {
 
 /// <p>UpdateSMBFileShareOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSMBFileShareOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated SMB file share. </p>
     #[serde(rename = "FileShareARN")]
@@ -2677,13 +2610,13 @@ pub struct UpdateSMBFileShareOutput {
 pub struct UpdateSMBSecurityStrategyInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
-    /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: if you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment. </p> <p>MandatorySigning: if you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer. </p> <p>MandatoryEncryption: if you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer. </p>
+    /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
     #[serde(rename = "SMBSecurityStrategy")]
     pub smb_security_strategy: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSMBSecurityStrategyOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2714,7 +2647,7 @@ pub struct UpdateSnapshotScheduleInput {
 
 /// <p>A JSON object containing the of the updated storage volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSnapshotScheduleOutput {
     /// <p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>
     #[serde(rename = "VolumeARN")]
@@ -2734,7 +2667,7 @@ pub struct UpdateVTLDeviceTypeInput {
 
 /// <p>UpdateVTLDeviceTypeOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateVTLDeviceTypeOutput {
     /// <p>The Amazon Resource Name (ARN) of the medium changer you have selected.</p>
     #[serde(rename = "VTLDeviceARN")]
@@ -2744,7 +2677,7 @@ pub struct UpdateVTLDeviceTypeOutput {
 
 /// <p>Represents a device object associated with a tape gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VTLDevice {
     /// <p>A list of iSCSI information about a VTL device.</p>
     #[serde(rename = "DeviceiSCSIAttributes")]
@@ -2770,7 +2703,7 @@ pub struct VTLDevice {
 
 /// <p>Describes a storage volume object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VolumeInfo {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2803,7 +2736,7 @@ pub struct VolumeInfo {
 
 /// <p>Describes a storage volume recovery point object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VolumeRecoveryPointInfo {
     /// <p>The Amazon Resource Name (ARN) of the volume target.</p>
     #[serde(rename = "VolumeARN")]
@@ -2825,7 +2758,7 @@ pub struct VolumeRecoveryPointInfo {
 
 /// <p>Lists iSCSI information about a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VolumeiSCSIAttributes {
     /// <p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>
     #[serde(rename = "ChapEnabled")]
@@ -3903,51 +3836,6 @@ impl Error for DeleteVolumeError {
         match *self {
             DeleteVolumeError::InternalServerError(ref cause) => cause,
             DeleteVolumeError::InvalidGatewayRequest(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeAvailabilityMonitorTest
-#[derive(Debug, PartialEq)]
-pub enum DescribeAvailabilityMonitorTestError {
-    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
-    InternalServerError(String),
-    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
-    InvalidGatewayRequest(String),
-}
-
-impl DescribeAvailabilityMonitorTestError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeAvailabilityMonitorTestError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InternalServerError" => {
-                    return RusotoError::Service(
-                        DescribeAvailabilityMonitorTestError::InternalServerError(err.msg),
-                    )
-                }
-                "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(
-                        DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeAvailabilityMonitorTestError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeAvailabilityMonitorTestError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
-            DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
         }
     }
 }
@@ -5510,51 +5398,6 @@ impl Error for ShutdownGatewayError {
         }
     }
 }
-/// Errors returned by StartAvailabilityMonitorTest
-#[derive(Debug, PartialEq)]
-pub enum StartAvailabilityMonitorTestError {
-    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
-    InternalServerError(String),
-    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
-    InvalidGatewayRequest(String),
-}
-
-impl StartAvailabilityMonitorTestError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<StartAvailabilityMonitorTestError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InternalServerError" => {
-                    return RusotoError::Service(
-                        StartAvailabilityMonitorTestError::InternalServerError(err.msg),
-                    )
-                }
-                "InvalidGatewayRequestException" => {
-                    return RusotoError::Service(
-                        StartAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for StartAvailabilityMonitorTestError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartAvailabilityMonitorTestError {
-    fn description(&self) -> &str {
-        match *self {
-            StartAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
-            StartAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
-        }
-    }
-}
 /// Errors returned by StartGateway
 #[derive(Debug, PartialEq)]
 pub enum StartGatewayError {
@@ -6027,453 +5870,448 @@ impl Error for UpdateVTLDeviceTypeError {
     }
 }
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
+#[async_trait]
 pub trait StorageGateway {
-    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
-    fn activate_gateway(
+    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
+    async fn activate_gateway(
         &self,
         input: ActivateGatewayInput,
-    ) -> RusotoFuture<ActivateGatewayOutput, ActivateGatewayError>;
+    ) -> Result<ActivateGatewayOutput, RusotoError<ActivateGatewayError>>;
 
     /// <p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway type (see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>
-    fn add_cache(&self, input: AddCacheInput) -> RusotoFuture<AddCacheOutput, AddCacheError>;
+    async fn add_cache(
+        &self,
+        input: AddCacheInput,
+    ) -> Result<AddCacheOutput, RusotoError<AddCacheError>>;
 
     /// <p>Adds one or more tags to the specified resource. You use tags to add metadata to resources, which you can use to categorize these resources. For example, you can categorize resources by purpose, owner, environment, or team. Each tag consists of a key and a value, which you define. You can add tags to the following AWS Storage Gateway resources:</p> <ul> <li> <p>Storage gateways of all types</p> </li> <li> <p>Storage volumes</p> </li> <li> <p>Virtual tapes</p> </li> <li> <p>NFS and SMB file shares</p> </li> </ul> <p>You can create a maximum of 50 tags for each resource. Virtual tapes and storage volumes that are recovered to a new gateway maintain their tags.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceInput,
-    ) -> RusotoFuture<AddTagsToResourceOutput, AddTagsToResourceError>;
+    ) -> Result<AddTagsToResourceOutput, RusotoError<AddTagsToResourceError>>;
 
     /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
-    fn add_upload_buffer(
+    async fn add_upload_buffer(
         &self,
         input: AddUploadBufferInput,
-    ) -> RusotoFuture<AddUploadBufferOutput, AddUploadBufferError>;
+    ) -> Result<AddUploadBufferOutput, RusotoError<AddUploadBufferError>>;
 
     /// <p>Configures one or more gateway local disks as working storage for a gateway. This operation is only supported in the stored volume gateway type. This operation is deprecated in cached volume API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>
-    fn add_working_storage(
+    async fn add_working_storage(
         &self,
         input: AddWorkingStorageInput,
-    ) -> RusotoFuture<AddWorkingStorageOutput, AddWorkingStorageError>;
+    ) -> Result<AddWorkingStorageOutput, RusotoError<AddWorkingStorageError>>;
 
     /// <p>Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
-    fn assign_tape_pool(
+    async fn assign_tape_pool(
         &self,
         input: AssignTapePoolInput,
-    ) -> RusotoFuture<AssignTapePoolOutput, AssignTapePoolError>;
+    ) -> Result<AssignTapePoolOutput, RusotoError<AssignTapePoolError>>;
 
     /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
-    fn attach_volume(
+    async fn attach_volume(
         &self,
         input: AttachVolumeInput,
-    ) -> RusotoFuture<AttachVolumeOutput, AttachVolumeError>;
+    ) -> Result<AttachVolumeOutput, RusotoError<AttachVolumeError>>;
 
     /// <p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway type.</p>
-    fn cancel_archival(
+    async fn cancel_archival(
         &self,
         input: CancelArchivalInput,
-    ) -> RusotoFuture<CancelArchivalOutput, CancelArchivalError>;
+    ) -> Result<CancelArchivalOutput, RusotoError<CancelArchivalError>>;
 
     /// <p>Cancels retrieval of a virtual tape from the virtual tape shelf (VTS) to a gateway after the retrieval process is initiated. The virtual tape is returned to the VTS. This operation is only supported in the tape gateway type.</p>
-    fn cancel_retrieval(
+    async fn cancel_retrieval(
         &self,
         input: CancelRetrievalInput,
-    ) -> RusotoFuture<CancelRetrievalOutput, CancelRetrievalError>;
+    ) -> Result<CancelRetrievalOutput, RusotoError<CancelRetrievalError>>;
 
     /// <p>Creates a cached volume on a specified cached volume gateway. This operation is only supported in the cached volume gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, the gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>
-    fn create_cachedi_scsi_volume(
+    async fn create_cachedi_scsi_volume(
         &self,
         input: CreateCachediSCSIVolumeInput,
-    ) -> RusotoFuture<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError>;
+    ) -> Result<CreateCachediSCSIVolumeOutput, RusotoError<CreateCachediSCSIVolumeError>>;
 
-    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in the AWS Region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
-    fn create_nfs_file_share(
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    async fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
-    ) -> RusotoFuture<CreateNFSFileShareOutput, CreateNFSFileShareError>;
+    ) -> Result<CreateNFSFileShareOutput, RusotoError<CreateNFSFileShareError>>;
 
     /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using a SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
-    fn create_smb_file_share(
+    async fn create_smb_file_share(
         &self,
         input: CreateSMBFileShareInput,
-    ) -> RusotoFuture<CreateSMBFileShareOutput, CreateSMBFileShareError>;
+    ) -> Result<CreateSMBFileShareOutput, RusotoError<CreateSMBFileShareError>>;
 
     /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a Snapshot Schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
-    ) -> RusotoFuture<CreateSnapshotOutput, CreateSnapshotError>;
+    ) -> Result<CreateSnapshotOutput, RusotoError<CreateSnapshotError>>;
 
     /// <p><p>Initiates a snapshot of a gateway from a volume recovery point. This operation is only supported in the cached volume gateway type.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for cached volume gateway, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When the gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, the gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
-    fn create_snapshot_from_volume_recovery_point(
+    async fn create_snapshot_from_volume_recovery_point(
         &self,
         input: CreateSnapshotFromVolumeRecoveryPointInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateSnapshotFromVolumeRecoveryPointOutput,
-        CreateSnapshotFromVolumeRecoveryPointError,
+        RusotoError<CreateSnapshotFromVolumeRecoveryPointError>,
     >;
 
     /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
-    fn create_storedi_scsi_volume(
+    async fn create_storedi_scsi_volume(
         &self,
         input: CreateStorediSCSIVolumeInput,
-    ) -> RusotoFuture<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError>;
+    ) -> Result<CreateStorediSCSIVolumeOutput, RusotoError<CreateStorediSCSIVolumeError>>;
 
     /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape . This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
-    fn create_tape_with_barcode(
+    async fn create_tape_with_barcode(
         &self,
         input: CreateTapeWithBarcodeInput,
-    ) -> RusotoFuture<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError>;
+    ) -> Result<CreateTapeWithBarcodeOutput, RusotoError<CreateTapeWithBarcodeError>>;
 
     /// <p><p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note></p>
-    fn create_tapes(
+    async fn create_tapes(
         &self,
         input: CreateTapesInput,
-    ) -> RusotoFuture<CreateTapesOutput, CreateTapesError>;
+    ) -> Result<CreateTapesOutput, RusotoError<CreateTapesError>>;
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
-    fn delete_bandwidth_rate_limit(
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
-    ) -> RusotoFuture<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError>;
+    ) -> Result<DeleteBandwidthRateLimitOutput, RusotoError<DeleteBandwidthRateLimitError>>;
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
-    fn delete_chap_credentials(
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    async fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
-    ) -> RusotoFuture<DeleteChapCredentialsOutput, DeleteChapCredentialsError>;
+    ) -> Result<DeleteChapCredentialsOutput, RusotoError<DeleteChapCredentialsError>>;
 
     /// <p>Deletes a file share from a file gateway. This operation is only supported for file gateways.</p>
-    fn delete_file_share(
+    async fn delete_file_share(
         &self,
         input: DeleteFileShareInput,
-    ) -> RusotoFuture<DeleteFileShareOutput, DeleteFileShareError>;
+    ) -> Result<DeleteFileShareOutput, RusotoError<DeleteFileShareError>>;
 
     /// <p><p>Deletes a gateway. To specify which gateway to delete, use the Amazon Resource Name (ARN) of the gateway in your request. The operation deletes the gateway; however, it does not delete the gateway virtual machine (VM) from your host computer.</p> <p>After you delete a gateway, you cannot reactivate it. Completed snapshots of the gateway volumes are not deleted upon deleting the gateway, however, pending snapshots will not complete. After you delete a gateway, your next step is to remove it from your environment.</p> <important> <p>You no longer pay software charges after the gateway is deleted; however, your existing Amazon EBS snapshots persist and you will continue to be billed for these snapshots. You can choose to remove all remaining Amazon EBS snapshots by canceling your Amazon EC2 subscription.  If you prefer not to cancel your Amazon EC2 subscription, you can delete your snapshots using the Amazon EC2 console. For more information, see the <a href="http://aws.amazon.com/storagegateway"> AWS Storage Gateway Detail Page</a>. </p> </important></p>
-    fn delete_gateway(
+    async fn delete_gateway(
         &self,
         input: DeleteGatewayInput,
-    ) -> RusotoFuture<DeleteGatewayOutput, DeleteGatewayError>;
+    ) -> Result<DeleteGatewayOutput, RusotoError<DeleteGatewayError>>;
 
     /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html">Working with Snapshots</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
-    fn delete_snapshot_schedule(
+    async fn delete_snapshot_schedule(
         &self,
         input: DeleteSnapshotScheduleInput,
-    ) -> RusotoFuture<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError>;
+    ) -> Result<DeleteSnapshotScheduleOutput, RusotoError<DeleteSnapshotScheduleError>>;
 
     /// <p>Deletes the specified virtual tape. This operation is only supported in the tape gateway type.</p>
-    fn delete_tape(
+    async fn delete_tape(
         &self,
         input: DeleteTapeInput,
-    ) -> RusotoFuture<DeleteTapeOutput, DeleteTapeError>;
+    ) -> Result<DeleteTapeOutput, RusotoError<DeleteTapeError>>;
 
     /// <p>Deletes the specified virtual tape from the virtual tape shelf (VTS). This operation is only supported in the tape gateway type.</p>
-    fn delete_tape_archive(
+    async fn delete_tape_archive(
         &self,
         input: DeleteTapeArchiveInput,
-    ) -> RusotoFuture<DeleteTapeArchiveOutput, DeleteTapeArchiveError>;
+    ) -> Result<DeleteTapeArchiveOutput, RusotoError<DeleteTapeArchiveError>>;
 
     /// <p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume types. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>
-    fn delete_volume(
+    async fn delete_volume(
         &self,
         input: DeleteVolumeInput,
-    ) -> RusotoFuture<DeleteVolumeOutput, DeleteVolumeError>;
+    ) -> Result<DeleteVolumeOutput, RusotoError<DeleteVolumeError>>;
 
-    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
-    fn describe_availability_monitor_test(
-        &self,
-        input: DescribeAvailabilityMonitorTestInput,
-    ) -> RusotoFuture<DescribeAvailabilityMonitorTestOutput, DescribeAvailabilityMonitorTestError>;
-
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn describe_bandwidth_rate_limit(
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
-    ) -> RusotoFuture<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError>;
+    ) -> Result<DescribeBandwidthRateLimitOutput, RusotoError<DescribeBandwidthRateLimitError>>;
 
     /// <p>Returns information about the cache of a gateway. This operation is only supported in the cached volume, tape and file gateway types.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>
-    fn describe_cache(
+    async fn describe_cache(
         &self,
         input: DescribeCacheInput,
-    ) -> RusotoFuture<DescribeCacheOutput, DescribeCacheError>;
+    ) -> Result<DescribeCacheOutput, RusotoError<DescribeCacheError>>;
 
     /// <p>Returns a description of the gateway volumes specified in the request. This operation is only supported in the cached volume gateway types.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>
-    fn describe_cachedi_scsi_volumes(
+    async fn describe_cachedi_scsi_volumes(
         &self,
         input: DescribeCachediSCSIVolumesInput,
-    ) -> RusotoFuture<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError>;
+    ) -> Result<DescribeCachediSCSIVolumesOutput, RusotoError<DescribeCachediSCSIVolumesError>>;
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
-    fn describe_chap_credentials(
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    async fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
-    ) -> RusotoFuture<DescribeChapCredentialsOutput, DescribeChapCredentialsError>;
+    ) -> Result<DescribeChapCredentialsOutput, RusotoError<DescribeChapCredentialsError>>;
 
     /// <p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn describe_gateway_information(
+    async fn describe_gateway_information(
         &self,
         input: DescribeGatewayInformationInput,
-    ) -> RusotoFuture<DescribeGatewayInformationOutput, DescribeGatewayInformationError>;
+    ) -> Result<DescribeGatewayInformationOutput, RusotoError<DescribeGatewayInformationError>>;
 
     /// <p>Returns your gateway's weekly maintenance start time including the day and time of the week. Note that values are in terms of the gateway's time zone.</p>
-    fn describe_maintenance_start_time(
+    async fn describe_maintenance_start_time(
         &self,
         input: DescribeMaintenanceStartTimeInput,
-    ) -> RusotoFuture<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError>;
+    ) -> Result<DescribeMaintenanceStartTimeOutput, RusotoError<DescribeMaintenanceStartTimeError>>;
 
     /// <p>Gets a description for one or more Network File System (NFS) file shares from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_nfs_file_shares(
+    async fn describe_nfs_file_shares(
         &self,
         input: DescribeNFSFileSharesInput,
-    ) -> RusotoFuture<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError>;
+    ) -> Result<DescribeNFSFileSharesOutput, RusotoError<DescribeNFSFileSharesError>>;
 
     /// <p>Gets a description for one or more Server Message Block (SMB) file shares from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_smb_file_shares(
+    async fn describe_smb_file_shares(
         &self,
         input: DescribeSMBFileSharesInput,
-    ) -> RusotoFuture<DescribeSMBFileSharesOutput, DescribeSMBFileSharesError>;
+    ) -> Result<DescribeSMBFileSharesOutput, RusotoError<DescribeSMBFileSharesError>>;
 
     /// <p>Gets a description of a Server Message Block (SMB) file share settings from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_smb_settings(
+    async fn describe_smb_settings(
         &self,
         input: DescribeSMBSettingsInput,
-    ) -> RusotoFuture<DescribeSMBSettingsOutput, DescribeSMBSettingsError>;
+    ) -> Result<DescribeSMBSettingsOutput, RusotoError<DescribeSMBSettingsError>>;
 
     /// <p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume. This operation is only supported in the cached volume and stored volume types.</p>
-    fn describe_snapshot_schedule(
+    async fn describe_snapshot_schedule(
         &self,
         input: DescribeSnapshotScheduleInput,
-    ) -> RusotoFuture<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError>;
+    ) -> Result<DescribeSnapshotScheduleOutput, RusotoError<DescribeSnapshotScheduleError>>;
 
     /// <p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs. This operation is only supported in stored volume gateway type.</p>
-    fn describe_storedi_scsi_volumes(
+    async fn describe_storedi_scsi_volumes(
         &self,
         input: DescribeStorediSCSIVolumesInput,
-    ) -> RusotoFuture<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError>;
+    ) -> Result<DescribeStorediSCSIVolumesOutput, RusotoError<DescribeStorediSCSIVolumesError>>;
 
     /// <p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS). This operation is only supported in the tape gateway type.</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>
-    fn describe_tape_archives(
+    async fn describe_tape_archives(
         &self,
         input: DescribeTapeArchivesInput,
-    ) -> RusotoFuture<DescribeTapeArchivesOutput, DescribeTapeArchivesError>;
+    ) -> Result<DescribeTapeArchivesOutput, RusotoError<DescribeTapeArchivesError>>;
 
     /// <p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway type.</p>
-    fn describe_tape_recovery_points(
+    async fn describe_tape_recovery_points(
         &self,
         input: DescribeTapeRecoveryPointsInput,
-    ) -> RusotoFuture<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError>;
+    ) -> Result<DescribeTapeRecoveryPointsOutput, RusotoError<DescribeTapeRecoveryPointsError>>;
 
     /// <p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway type.</p>
-    fn describe_tapes(
+    async fn describe_tapes(
         &self,
         input: DescribeTapesInput,
-    ) -> RusotoFuture<DescribeTapesOutput, DescribeTapesError>;
+    ) -> Result<DescribeTapesOutput, RusotoError<DescribeTapesError>>;
 
     /// <p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>
-    fn describe_upload_buffer(
+    async fn describe_upload_buffer(
         &self,
         input: DescribeUploadBufferInput,
-    ) -> RusotoFuture<DescribeUploadBufferOutput, DescribeUploadBufferError>;
+    ) -> Result<DescribeUploadBufferOutput, RusotoError<DescribeUploadBufferError>>;
 
     /// <p>Returns a description of virtual tape library (VTL) devices for the specified tape gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>This operation is only supported in the tape gateway type.</p>
-    fn describe_vtl_devices(
+    async fn describe_vtl_devices(
         &self,
         input: DescribeVTLDevicesInput,
-    ) -> RusotoFuture<DescribeVTLDevicesOutput, DescribeVTLDevicesError>;
+    ) -> Result<DescribeVTLDevicesOutput, RusotoError<DescribeVTLDevicesError>>;
 
     /// <p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway type. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>
-    fn describe_working_storage(
+    async fn describe_working_storage(
         &self,
         input: DescribeWorkingStorageInput,
-    ) -> RusotoFuture<DescribeWorkingStorageOutput, DescribeWorkingStorageError>;
+    ) -> Result<DescribeWorkingStorageOutput, RusotoError<DescribeWorkingStorageError>>;
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
-    fn detach_volume(
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    async fn detach_volume(
         &self,
         input: DetachVolumeInput,
-    ) -> RusotoFuture<DetachVolumeOutput, DetachVolumeError>;
+    ) -> Result<DetachVolumeOutput, RusotoError<DetachVolumeError>>;
 
     /// <p><p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway type.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important></p>
-    fn disable_gateway(
+    async fn disable_gateway(
         &self,
         input: DisableGatewayInput,
-    ) -> RusotoFuture<DisableGatewayOutput, DisableGatewayError>;
+    ) -> Result<DisableGatewayOutput, RusotoError<DisableGatewayError>>;
 
     /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
-    fn join_domain(
+    async fn join_domain(
         &self,
         input: JoinDomainInput,
-    ) -> RusotoFuture<JoinDomainOutput, JoinDomainError>;
+    ) -> Result<JoinDomainOutput, RusotoError<JoinDomainError>>;
 
     /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported for file gateways.</p>
-    fn list_file_shares(
+    async fn list_file_shares(
         &self,
         input: ListFileSharesInput,
-    ) -> RusotoFuture<ListFileSharesOutput, ListFileSharesError>;
+    ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>>;
 
-    /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
-    fn list_gateways(
+    /// <p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
+    async fn list_gateways(
         &self,
         input: ListGatewaysInput,
-    ) -> RusotoFuture<ListGatewaysOutput, ListGatewaysError>;
+    ) -> Result<ListGatewaysOutput, RusotoError<ListGatewaysError>>;
 
     /// <p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>
-    fn list_local_disks(
+    async fn list_local_disks(
         &self,
         input: ListLocalDisksInput,
-    ) -> RusotoFuture<ListLocalDisksOutput, ListLocalDisksError>;
+    ) -> Result<ListLocalDisksOutput, RusotoError<ListLocalDisksError>>;
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
-    fn list_tags_for_resource(
+    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
-    fn list_tapes(&self, input: ListTapesInput) -> RusotoFuture<ListTapesOutput, ListTapesError>;
+    async fn list_tapes(
+        &self,
+        input: ListTapesInput,
+    ) -> Result<ListTapesOutput, RusotoError<ListTapesError>>;
 
     /// <p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway types.</p>
-    fn list_volume_initiators(
+    async fn list_volume_initiators(
         &self,
         input: ListVolumeInitiatorsInput,
-    ) -> RusotoFuture<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError>;
+    ) -> Result<ListVolumeInitiatorsOutput, RusotoError<ListVolumeInitiatorsError>>;
 
     /// <p>Lists the recovery points for a specified gateway. This operation is only supported in the cached volume gateway type.</p> <p>Each cache volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot or clone a new cached volume from a source volume. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>
-    fn list_volume_recovery_points(
+    async fn list_volume_recovery_points(
         &self,
         input: ListVolumeRecoveryPointsInput,
-    ) -> RusotoFuture<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError>;
+    ) -> Result<ListVolumeRecoveryPointsOutput, RusotoError<ListVolumeRecoveryPointsError>>;
 
     /// <p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes. This operation is only supported in the cached volume and stored volume gateway types.</p>
-    fn list_volumes(
+    async fn list_volumes(
         &self,
         input: ListVolumesInput,
-    ) -> RusotoFuture<ListVolumesOutput, ListVolumesError>;
+    ) -> Result<ListVolumesOutput, RusotoError<ListVolumesError>>;
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
-    fn notify_when_uploaded(
+    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    async fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
-    ) -> RusotoFuture<NotifyWhenUploadedOutput, NotifyWhenUploadedError>;
+    ) -> Result<NotifyWhenUploadedOutput, RusotoError<NotifyWhenUploadedError>>;
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
-    fn refresh_cache(
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
-    ) -> RusotoFuture<RefreshCacheOutput, RefreshCacheError>;
+    ) -> Result<RefreshCacheOutput, RusotoError<RefreshCacheError>>;
 
-    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
-    fn remove_tags_from_resource(
+    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
-    ) -> RusotoFuture<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError>;
+    ) -> Result<RemoveTagsFromResourceOutput, RusotoError<RemoveTagsFromResourceError>>;
 
     /// <p><p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume and tape types.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important></p>
-    fn reset_cache(
+    async fn reset_cache(
         &self,
         input: ResetCacheInput,
-    ) -> RusotoFuture<ResetCacheOutput, ResetCacheError>;
+    ) -> Result<ResetCacheOutput, RusotoError<ResetCacheError>>;
 
     /// <p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a tape gateway. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS, that is, archive. This operation is only supported in the tape gateway type.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway. This operation is only supported in the tape gateway type.</p>
-    fn retrieve_tape_archive(
+    async fn retrieve_tape_archive(
         &self,
         input: RetrieveTapeArchiveInput,
-    ) -> RusotoFuture<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError>;
+    ) -> Result<RetrieveTapeArchiveOutput, RusotoError<RetrieveTapeArchiveError>>;
 
     /// <p><p>Retrieves the recovery point for the specified virtual tape. This operation is only supported in the tape gateway type.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a tape gateway. There is no charge for retrieving recovery points.</p> </note></p>
-    fn retrieve_tape_recovery_point(
+    async fn retrieve_tape_recovery_point(
         &self,
         input: RetrieveTapeRecoveryPointInput,
-    ) -> RusotoFuture<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError>;
+    ) -> Result<RetrieveTapeRecoveryPointOutput, RusotoError<RetrieveTapeRecoveryPointError>>;
 
     /// <p>Sets the password for your VM local console. When you log in to the local console for the first time, you log in to the VM with the default credentials. We recommend that you set a new password. You don't need to know the default password to set a new password.</p>
-    fn set_local_console_password(
+    async fn set_local_console_password(
         &self,
         input: SetLocalConsolePasswordInput,
-    ) -> RusotoFuture<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError>;
+    ) -> Result<SetLocalConsolePasswordOutput, RusotoError<SetLocalConsolePasswordError>>;
 
     /// <p>Sets the password for the guest user <code>smbguest</code>. The <code>smbguest</code> user is the user when the authentication method for the file share is set to <code>GuestAccess</code>.</p>
-    fn set_smb_guest_password(
+    async fn set_smb_guest_password(
         &self,
         input: SetSMBGuestPasswordInput,
-    ) -> RusotoFuture<SetSMBGuestPasswordOutput, SetSMBGuestPasswordError>;
+    ) -> Result<SetSMBGuestPasswordOutput, RusotoError<SetSMBGuestPasswordError>>;
 
     /// <p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the gateway's virtual machine (VM) and not the host VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>
-    fn shutdown_gateway(
+    async fn shutdown_gateway(
         &self,
         input: ShutdownGatewayInput,
-    ) -> RusotoFuture<ShutdownGatewayOutput, ShutdownGatewayError>;
-
-    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
-    fn start_availability_monitor_test(
-        &self,
-        input: StartAvailabilityMonitorTestInput,
-    ) -> RusotoFuture<StartAvailabilityMonitorTestOutput, StartAvailabilityMonitorTestError>;
+    ) -> Result<ShutdownGatewayOutput, RusotoError<ShutdownGatewayError>>;
 
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn start_gateway(
+    async fn start_gateway(
         &self,
         input: StartGatewayInput,
-    ) -> RusotoFuture<StartGatewayOutput, StartGatewayError>;
+    ) -> Result<StartGatewayOutput, RusotoError<StartGatewayError>>;
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn update_bandwidth_rate_limit(
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
-    ) -> RusotoFuture<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError>;
+    ) -> Result<UpdateBandwidthRateLimitOutput, RusotoError<UpdateBandwidthRateLimitError>>;
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
-    fn update_chap_credentials(
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    async fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,
-    ) -> RusotoFuture<UpdateChapCredentialsOutput, UpdateChapCredentialsError>;
+    ) -> Result<UpdateChapCredentialsOutput, RusotoError<UpdateChapCredentialsError>>;
 
     /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
-    fn update_gateway_information(
+    async fn update_gateway_information(
         &self,
         input: UpdateGatewayInformationInput,
-    ) -> RusotoFuture<UpdateGatewayInformationOutput, UpdateGatewayInformationError>;
+    ) -> Result<UpdateGatewayInformationOutput, RusotoError<UpdateGatewayInformationError>>;
 
     /// <p><p>Updates the gateway virtual machine (VM) software. The request immediately triggers the software update.</p> <note> <p>When you make this request, you get a <code>200 OK</code> success response immediately. However, it might take some time for the update to complete. You can call <a>DescribeGatewayInformation</a> to verify the gateway is in the <code>STATE_RUNNING</code> state.</p> </note> <important> <p>A software update forces a system restart of your gateway. You can minimize the chance of any disruption to your applications by increasing your iSCSI Initiators&#39; timeouts. For more information about increasing iSCSI Initiator timeouts for Windows and Linux, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorWindowsClient.html#CustomizeWindowsiSCSISettings">Customizing Your Windows iSCSI Settings</a> and <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorRedHatClient.html#CustomizeLinuxiSCSISettings">Customizing Your Linux iSCSI Settings</a>, respectively.</p> </important></p>
-    fn update_gateway_software_now(
+    async fn update_gateway_software_now(
         &self,
         input: UpdateGatewaySoftwareNowInput,
-    ) -> RusotoFuture<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError>;
+    ) -> Result<UpdateGatewaySoftwareNowOutput, RusotoError<UpdateGatewaySoftwareNowError>>;
 
     /// <p>Updates a gateway's weekly maintenance start time information, including day and time of the week. The maintenance time is the time in your gateway's time zone.</p>
-    fn update_maintenance_start_time(
+    async fn update_maintenance_start_time(
         &self,
         input: UpdateMaintenanceStartTimeInput,
-    ) -> RusotoFuture<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError>;
+    ) -> Result<UpdateMaintenanceStartTimeOutput, RusotoError<UpdateMaintenanceStartTimeError>>;
 
     /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
-    fn update_nfs_file_share(
+    async fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
-    ) -> RusotoFuture<UpdateNFSFileShareOutput, UpdateNFSFileShareError>;
+    ) -> Result<UpdateNFSFileShareOutput, RusotoError<UpdateNFSFileShareError>>;
 
     /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
-    fn update_smb_file_share(
+    async fn update_smb_file_share(
         &self,
         input: UpdateSMBFileShareInput,
-    ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError>;
+    ) -> Result<UpdateSMBFileShareOutput, RusotoError<UpdateSMBFileShareError>>;
 
-    /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>
-    fn update_smb_security_strategy(
+    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    async fn update_smb_security_strategy(
         &self,
         input: UpdateSMBSecurityStrategyInput,
-    ) -> RusotoFuture<UpdateSMBSecurityStrategyOutput, UpdateSMBSecurityStrategyError>;
+    ) -> Result<UpdateSMBSecurityStrategyOutput, RusotoError<UpdateSMBSecurityStrategyError>>;
 
     /// <p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway types.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>
-    fn update_snapshot_schedule(
+    async fn update_snapshot_schedule(
         &self,
         input: UpdateSnapshotScheduleInput,
-    ) -> RusotoFuture<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError>;
+    ) -> Result<UpdateSnapshotScheduleOutput, RusotoError<UpdateSnapshotScheduleError>>;
 
     /// <p>Updates the type of medium changer in a tape gateway. When you activate a tape gateway, you select a medium changer type for the tape gateway. This operation enables you to select a different type of medium changer after a tape gateway is activated. This operation is only supported in the tape gateway type.</p>
-    fn update_vtl_device_type(
+    async fn update_vtl_device_type(
         &self,
         input: UpdateVTLDeviceTypeInput,
-    ) -> RusotoFuture<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError>;
+    ) -> Result<UpdateVTLDeviceTypeOutput, RusotoError<UpdateVTLDeviceTypeError>>;
 }
 /// A client for the AWS Storage Gateway API.
 #[derive(Clone)]
@@ -6487,7 +6325,10 @@ impl StorageGatewayClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> StorageGatewayClient {
-        Self::new_with_client(Client::shared(), region)
+        StorageGatewayClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -6497,35 +6338,22 @@ impl StorageGatewayClient {
     ) -> StorageGatewayClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        StorageGatewayClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> StorageGatewayClient {
-        StorageGatewayClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for StorageGatewayClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("StorageGatewayClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl StorageGateway for StorageGatewayClient {
-    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
-    fn activate_gateway(
+    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
+    async fn activate_gateway(
         &self,
         input: ActivateGatewayInput,
-    ) -> RusotoFuture<ActivateGatewayOutput, ActivateGatewayError> {
+    ) -> Result<ActivateGatewayOutput, RusotoError<ActivateGatewayError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6533,25 +6361,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ActivateGatewayOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ActivateGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ActivateGatewayOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ActivateGatewayError::from_response(response))
+        }
     }
 
     /// <p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway type (see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>
-    fn add_cache(&self, input: AddCacheInput) -> RusotoFuture<AddCacheOutput, AddCacheError> {
+    async fn add_cache(
+        &self,
+        input: AddCacheInput,
+    ) -> Result<AddCacheOutput, RusotoError<AddCacheError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6559,27 +6388,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddCacheOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddCacheError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddCacheOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddCacheError::from_response(response))
+        }
     }
 
     /// <p>Adds one or more tags to the specified resource. You use tags to add metadata to resources, which you can use to categorize these resources. For example, you can categorize resources by purpose, owner, environment, or team. Each tag consists of a key and a value, which you define. You can add tags to the following AWS Storage Gateway resources:</p> <ul> <li> <p>Storage gateways of all types</p> </li> <li> <p>Storage volumes</p> </li> <li> <p>Virtual tapes</p> </li> <li> <p>NFS and SMB file shares</p> </li> </ul> <p>You can create a maximum of 50 tags for each resource. Virtual tapes and storage volumes that are recovered to a new gateway maintain their tags.</p>
-    fn add_tags_to_resource(
+    async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceInput,
-    ) -> RusotoFuture<AddTagsToResourceOutput, AddTagsToResourceError> {
+    ) -> Result<AddTagsToResourceOutput, RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6587,28 +6415,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddTagsToResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddTagsToResourceError::from_response(response))
+        }
     }
 
     /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
-    fn add_upload_buffer(
+    async fn add_upload_buffer(
         &self,
         input: AddUploadBufferInput,
-    ) -> RusotoFuture<AddUploadBufferOutput, AddUploadBufferError> {
+    ) -> Result<AddUploadBufferOutput, RusotoError<AddUploadBufferError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6616,28 +6442,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddUploadBufferOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddUploadBufferError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddUploadBufferOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddUploadBufferError::from_response(response))
+        }
     }
 
     /// <p>Configures one or more gateway local disks as working storage for a gateway. This operation is only supported in the stored volume gateway type. This operation is deprecated in cached volume API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>
-    fn add_working_storage(
+    async fn add_working_storage(
         &self,
         input: AddWorkingStorageInput,
-    ) -> RusotoFuture<AddWorkingStorageOutput, AddWorkingStorageError> {
+    ) -> Result<AddWorkingStorageOutput, RusotoError<AddWorkingStorageError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6645,28 +6469,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AddWorkingStorageOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AddWorkingStorageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AddWorkingStorageOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AddWorkingStorageError::from_response(response))
+        }
     }
 
     /// <p>Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool.</p> <p>Valid values: "GLACIER", "DEEP_ARCHIVE"</p>
-    fn assign_tape_pool(
+    async fn assign_tape_pool(
         &self,
         input: AssignTapePoolInput,
-    ) -> RusotoFuture<AssignTapePoolOutput, AssignTapePoolError> {
+    ) -> Result<AssignTapePoolOutput, RusotoError<AssignTapePoolError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6674,28 +6496,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssignTapePoolOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AssignTapePoolError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AssignTapePoolOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssignTapePoolError::from_response(response))
+        }
     }
 
     /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
-    fn attach_volume(
+    async fn attach_volume(
         &self,
         input: AttachVolumeInput,
-    ) -> RusotoFuture<AttachVolumeOutput, AttachVolumeError> {
+    ) -> Result<AttachVolumeOutput, RusotoError<AttachVolumeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6703,28 +6523,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachVolumeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(AttachVolumeError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<AttachVolumeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AttachVolumeError::from_response(response))
+        }
     }
 
     /// <p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway type.</p>
-    fn cancel_archival(
+    async fn cancel_archival(
         &self,
         input: CancelArchivalInput,
-    ) -> RusotoFuture<CancelArchivalOutput, CancelArchivalError> {
+    ) -> Result<CancelArchivalOutput, RusotoError<CancelArchivalError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6732,28 +6550,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelArchivalOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelArchivalError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CancelArchivalOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelArchivalError::from_response(response))
+        }
     }
 
     /// <p>Cancels retrieval of a virtual tape from the virtual tape shelf (VTS) to a gateway after the retrieval process is initiated. The virtual tape is returned to the VTS. This operation is only supported in the tape gateway type.</p>
-    fn cancel_retrieval(
+    async fn cancel_retrieval(
         &self,
         input: CancelRetrievalInput,
-    ) -> RusotoFuture<CancelRetrievalOutput, CancelRetrievalError> {
+    ) -> Result<CancelRetrievalOutput, RusotoError<CancelRetrievalError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6761,28 +6577,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelRetrievalOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CancelRetrievalError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CancelRetrievalOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelRetrievalError::from_response(response))
+        }
     }
 
     /// <p>Creates a cached volume on a specified cached volume gateway. This operation is only supported in the cached volume gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, the gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>
-    fn create_cachedi_scsi_volume(
+    async fn create_cachedi_scsi_volume(
         &self,
         input: CreateCachediSCSIVolumeInput,
-    ) -> RusotoFuture<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError> {
+    ) -> Result<CreateCachediSCSIVolumeOutput, RusotoError<CreateCachediSCSIVolumeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6793,25 +6607,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCachediSCSIVolumeOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCachediSCSIVolumeError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateCachediSCSIVolumeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateCachediSCSIVolumeError::from_response(response))
+        }
     }
 
-    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in the AWS Region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
-    fn create_nfs_file_share(
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    async fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
-    ) -> RusotoFuture<CreateNFSFileShareOutput, CreateNFSFileShareError> {
+    ) -> Result<CreateNFSFileShareOutput, RusotoError<CreateNFSFileShareError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6819,28 +6635,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNFSFileShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateNFSFileShareError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateNFSFileShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateNFSFileShareError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a Server Message Block (SMB) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway expose file shares using a SMB interface. This operation is only supported for file gateways.</p> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
-    fn create_smb_file_share(
+    async fn create_smb_file_share(
         &self,
         input: CreateSMBFileShareInput,
-    ) -> RusotoFuture<CreateSMBFileShareOutput, CreateSMBFileShareError> {
+    ) -> Result<CreateSMBFileShareOutput, RusotoError<CreateSMBFileShareError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6848,28 +6663,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSMBFileShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSMBFileShareError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSMBFileShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSMBFileShareError::from_response(response))
+        }
     }
 
     /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a Snapshot Schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
-    fn create_snapshot(
+    async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
-    ) -> RusotoFuture<CreateSnapshotOutput, CreateSnapshotError> {
+    ) -> Result<CreateSnapshotOutput, RusotoError<CreateSnapshotError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6877,30 +6691,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSnapshotOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateSnapshotOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSnapshotError::from_response(response))
+        }
     }
 
     /// <p><p>Initiates a snapshot of a gateway from a volume recovery point. This operation is only supported in the cached volume gateway type.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for cached volume gateway, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When the gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, the gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
-    fn create_snapshot_from_volume_recovery_point(
+    async fn create_snapshot_from_volume_recovery_point(
         &self,
         input: CreateSnapshotFromVolumeRecoveryPointInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         CreateSnapshotFromVolumeRecoveryPointOutput,
-        CreateSnapshotFromVolumeRecoveryPointError,
+        RusotoError<CreateSnapshotFromVolumeRecoveryPointError>,
     > {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
@@ -6912,27 +6724,29 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateSnapshotFromVolumeRecoveryPointOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotFromVolumeRecoveryPointError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSnapshotFromVolumeRecoveryPointOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSnapshotFromVolumeRecoveryPointError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway type.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>
-    fn create_storedi_scsi_volume(
+    async fn create_storedi_scsi_volume(
         &self,
         input: CreateStorediSCSIVolumeInput,
-    ) -> RusotoFuture<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError> {
+    ) -> Result<CreateStorediSCSIVolumeOutput, RusotoError<CreateStorediSCSIVolumeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6943,25 +6757,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStorediSCSIVolumeOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStorediSCSIVolumeError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateStorediSCSIVolumeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateStorediSCSIVolumeError::from_response(response))
+        }
     }
 
     /// <p><p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. A barcode is unique and can not be reused if it has already been used on a tape . This applies to barcodes used on deleted tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note></p>
-    fn create_tape_with_barcode(
+    async fn create_tape_with_barcode(
         &self,
         input: CreateTapeWithBarcodeInput,
-    ) -> RusotoFuture<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError> {
+    ) -> Result<CreateTapeWithBarcodeOutput, RusotoError<CreateTapeWithBarcodeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6972,27 +6788,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTapeWithBarcodeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateTapeWithBarcodeError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateTapeWithBarcodeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTapeWithBarcodeError::from_response(response))
+        }
     }
 
     /// <p><p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes. This operation is only supported in the tape gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note></p>
-    fn create_tapes(
+    async fn create_tapes(
         &self,
         input: CreateTapesInput,
-    ) -> RusotoFuture<CreateTapesOutput, CreateTapesError> {
+    ) -> Result<CreateTapesOutput, RusotoError<CreateTapesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7000,28 +6816,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTapesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTapesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTapesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTapesError::from_response(response))
+        }
     }
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
-    fn delete_bandwidth_rate_limit(
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
-    ) -> RusotoFuture<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError> {
+    ) -> Result<DeleteBandwidthRateLimitOutput, RusotoError<DeleteBandwidthRateLimitError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7032,25 +6846,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBandwidthRateLimitOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBandwidthRateLimitError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteBandwidthRateLimitOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteBandwidthRateLimitError::from_response(response))
+        }
     }
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
-    fn delete_chap_credentials(
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    async fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
-    ) -> RusotoFuture<DeleteChapCredentialsOutput, DeleteChapCredentialsError> {
+    ) -> Result<DeleteChapCredentialsOutput, RusotoError<DeleteChapCredentialsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7061,27 +6877,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteChapCredentialsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteChapCredentialsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteChapCredentialsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChapCredentialsError::from_response(response))
+        }
     }
 
     /// <p>Deletes a file share from a file gateway. This operation is only supported for file gateways.</p>
-    fn delete_file_share(
+    async fn delete_file_share(
         &self,
         input: DeleteFileShareInput,
-    ) -> RusotoFuture<DeleteFileShareOutput, DeleteFileShareError> {
+    ) -> Result<DeleteFileShareOutput, RusotoError<DeleteFileShareError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7089,28 +6905,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteFileShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteFileShareError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteFileShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFileShareError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a gateway. To specify which gateway to delete, use the Amazon Resource Name (ARN) of the gateway in your request. The operation deletes the gateway; however, it does not delete the gateway virtual machine (VM) from your host computer.</p> <p>After you delete a gateway, you cannot reactivate it. Completed snapshots of the gateway volumes are not deleted upon deleting the gateway, however, pending snapshots will not complete. After you delete a gateway, your next step is to remove it from your environment.</p> <important> <p>You no longer pay software charges after the gateway is deleted; however, your existing Amazon EBS snapshots persist and you will continue to be billed for these snapshots. You can choose to remove all remaining Amazon EBS snapshots by canceling your Amazon EC2 subscription.  If you prefer not to cancel your Amazon EC2 subscription, you can delete your snapshots using the Amazon EC2 console. For more information, see the <a href="http://aws.amazon.com/storagegateway"> AWS Storage Gateway Detail Page</a>. </p> </important></p>
-    fn delete_gateway(
+    async fn delete_gateway(
         &self,
         input: DeleteGatewayInput,
-    ) -> RusotoFuture<DeleteGatewayOutput, DeleteGatewayError> {
+    ) -> Result<DeleteGatewayOutput, RusotoError<DeleteGatewayError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7118,28 +6932,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteGatewayOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteGatewayOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGatewayError::from_response(response))
+        }
     }
 
     /// <p><p>Deletes a snapshot of a volume.</p> <p>You can take snapshots of your gateway volumes on a scheduled or ad hoc basis. This API action enables you to delete a snapshot schedule for a volume. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html">Working with Snapshots</a>. In the <code>DeleteSnapshotSchedule</code> request, you identify the volume by providing its Amazon Resource Name (ARN). This operation is only supported in stored and cached volume gateway types.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note></p>
-    fn delete_snapshot_schedule(
+    async fn delete_snapshot_schedule(
         &self,
         input: DeleteSnapshotScheduleInput,
-    ) -> RusotoFuture<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError> {
+    ) -> Result<DeleteSnapshotScheduleOutput, RusotoError<DeleteSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7150,27 +6962,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteSnapshotScheduleOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteSnapshotScheduleError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSnapshotScheduleOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSnapshotScheduleError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified virtual tape. This operation is only supported in the tape gateway type.</p>
-    fn delete_tape(
+    async fn delete_tape(
         &self,
         input: DeleteTapeInput,
-    ) -> RusotoFuture<DeleteTapeOutput, DeleteTapeError> {
+    ) -> Result<DeleteTapeOutput, RusotoError<DeleteTapeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7178,28 +6990,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTapeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTapeError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTapeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTapeError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified virtual tape from the virtual tape shelf (VTS). This operation is only supported in the tape gateway type.</p>
-    fn delete_tape_archive(
+    async fn delete_tape_archive(
         &self,
         input: DeleteTapeArchiveInput,
-    ) -> RusotoFuture<DeleteTapeArchiveOutput, DeleteTapeArchiveError> {
+    ) -> Result<DeleteTapeArchiveOutput, RusotoError<DeleteTapeArchiveError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7207,28 +7017,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTapeArchiveOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTapeArchiveError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTapeArchiveOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTapeArchiveError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume types. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>
-    fn delete_volume(
+    async fn delete_volume(
         &self,
         input: DeleteVolumeInput,
-    ) -> RusotoFuture<DeleteVolumeOutput, DeleteVolumeError> {
+    ) -> Result<DeleteVolumeOutput, RusotoError<DeleteVolumeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7236,60 +7044,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteVolumeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteVolumeError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteVolumeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVolumeError::from_response(response))
+        }
     }
 
-    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
-    fn describe_availability_monitor_test(
-        &self,
-        input: DescribeAvailabilityMonitorTestInput,
-    ) -> RusotoFuture<DescribeAvailabilityMonitorTestOutput, DescribeAvailabilityMonitorTestError>
-    {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "StorageGateway_20130630.DescribeAvailabilityMonitorTest",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAvailabilityMonitorTestOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAvailabilityMonitorTestError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
-    }
-
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn describe_bandwidth_rate_limit(
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
-    ) -> RusotoFuture<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError> {
+    ) -> Result<DescribeBandwidthRateLimitOutput, RusotoError<DescribeBandwidthRateLimitError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7300,25 +7075,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBandwidthRateLimitOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBandwidthRateLimitError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeBandwidthRateLimitOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBandwidthRateLimitError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the cache of a gateway. This operation is only supported in the cached volume, tape and file gateway types.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>
-    fn describe_cache(
+    async fn describe_cache(
         &self,
         input: DescribeCacheInput,
-    ) -> RusotoFuture<DescribeCacheOutput, DescribeCacheError> {
+    ) -> Result<DescribeCacheOutput, RusotoError<DescribeCacheError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7326,28 +7103,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCacheOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeCacheError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeCacheOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCacheError::from_response(response))
+        }
     }
 
     /// <p>Returns a description of the gateway volumes specified in the request. This operation is only supported in the cached volume gateway types.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>
-    fn describe_cachedi_scsi_volumes(
+    async fn describe_cachedi_scsi_volumes(
         &self,
         input: DescribeCachediSCSIVolumesInput,
-    ) -> RusotoFuture<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError> {
+    ) -> Result<DescribeCachediSCSIVolumesOutput, RusotoError<DescribeCachediSCSIVolumesError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7358,25 +7134,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCachediSCSIVolumesOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCachediSCSIVolumesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCachediSCSIVolumesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCachediSCSIVolumesError::from_response(response))
+        }
     }
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
-    fn describe_chap_credentials(
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    async fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
-    ) -> RusotoFuture<DescribeChapCredentialsOutput, DescribeChapCredentialsError> {
+    ) -> Result<DescribeChapCredentialsOutput, RusotoError<DescribeChapCredentialsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7387,25 +7165,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeChapCredentialsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeChapCredentialsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChapCredentialsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChapCredentialsError::from_response(response))
+        }
     }
 
     /// <p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn describe_gateway_information(
+    async fn describe_gateway_information(
         &self,
         input: DescribeGatewayInformationInput,
-    ) -> RusotoFuture<DescribeGatewayInformationOutput, DescribeGatewayInformationError> {
+    ) -> Result<DescribeGatewayInformationOutput, RusotoError<DescribeGatewayInformationError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7416,25 +7197,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeGatewayInformationOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGatewayInformationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeGatewayInformationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeGatewayInformationError::from_response(response))
+        }
     }
 
     /// <p>Returns your gateway's weekly maintenance start time including the day and time of the week. Note that values are in terms of the gateway's time zone.</p>
-    fn describe_maintenance_start_time(
+    async fn describe_maintenance_start_time(
         &self,
         input: DescribeMaintenanceStartTimeInput,
-    ) -> RusotoFuture<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError> {
+    ) -> Result<DescribeMaintenanceStartTimeOutput, RusotoError<DescribeMaintenanceStartTimeError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7445,25 +7229,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMaintenanceStartTimeOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMaintenanceStartTimeError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMaintenanceStartTimeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMaintenanceStartTimeError::from_response(response))
+        }
     }
 
     /// <p>Gets a description for one or more Network File System (NFS) file shares from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_nfs_file_shares(
+    async fn describe_nfs_file_shares(
         &self,
         input: DescribeNFSFileSharesInput,
-    ) -> RusotoFuture<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError> {
+    ) -> Result<DescribeNFSFileSharesOutput, RusotoError<DescribeNFSFileSharesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7474,27 +7260,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeNFSFileSharesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeNFSFileSharesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeNFSFileSharesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeNFSFileSharesError::from_response(response))
+        }
     }
 
     /// <p>Gets a description for one or more Server Message Block (SMB) file shares from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_smb_file_shares(
+    async fn describe_smb_file_shares(
         &self,
         input: DescribeSMBFileSharesInput,
-    ) -> RusotoFuture<DescribeSMBFileSharesOutput, DescribeSMBFileSharesError> {
+    ) -> Result<DescribeSMBFileSharesOutput, RusotoError<DescribeSMBFileSharesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7505,27 +7291,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSMBFileSharesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeSMBFileSharesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSMBFileSharesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSMBFileSharesError::from_response(response))
+        }
     }
 
     /// <p>Gets a description of a Server Message Block (SMB) file share settings from a file gateway. This operation is only supported for file gateways.</p>
-    fn describe_smb_settings(
+    async fn describe_smb_settings(
         &self,
         input: DescribeSMBSettingsInput,
-    ) -> RusotoFuture<DescribeSMBSettingsOutput, DescribeSMBSettingsError> {
+    ) -> Result<DescribeSMBSettingsOutput, RusotoError<DescribeSMBSettingsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7536,27 +7322,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSMBSettingsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeSMBSettingsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSMBSettingsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSMBSettingsError::from_response(response))
+        }
     }
 
     /// <p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume. This operation is only supported in the cached volume and stored volume types.</p>
-    fn describe_snapshot_schedule(
+    async fn describe_snapshot_schedule(
         &self,
         input: DescribeSnapshotScheduleInput,
-    ) -> RusotoFuture<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError> {
+    ) -> Result<DescribeSnapshotScheduleOutput, RusotoError<DescribeSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7567,25 +7353,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSnapshotScheduleOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotScheduleError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSnapshotScheduleOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSnapshotScheduleError::from_response(response))
+        }
     }
 
     /// <p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs. This operation is only supported in stored volume gateway type.</p>
-    fn describe_storedi_scsi_volumes(
+    async fn describe_storedi_scsi_volumes(
         &self,
         input: DescribeStorediSCSIVolumesInput,
-    ) -> RusotoFuture<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError> {
+    ) -> Result<DescribeStorediSCSIVolumesOutput, RusotoError<DescribeStorediSCSIVolumesError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7596,25 +7385,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStorediSCSIVolumesOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStorediSCSIVolumesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeStorediSCSIVolumesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStorediSCSIVolumesError::from_response(response))
+        }
     }
 
     /// <p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS). This operation is only supported in the tape gateway type.</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>
-    fn describe_tape_archives(
+    async fn describe_tape_archives(
         &self,
         input: DescribeTapeArchivesInput,
-    ) -> RusotoFuture<DescribeTapeArchivesOutput, DescribeTapeArchivesError> {
+    ) -> Result<DescribeTapeArchivesOutput, RusotoError<DescribeTapeArchivesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7625,27 +7416,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTapeArchivesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeTapeArchivesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTapeArchivesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTapeArchivesError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway type.</p>
-    fn describe_tape_recovery_points(
+    async fn describe_tape_recovery_points(
         &self,
         input: DescribeTapeRecoveryPointsInput,
-    ) -> RusotoFuture<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError> {
+    ) -> Result<DescribeTapeRecoveryPointsOutput, RusotoError<DescribeTapeRecoveryPointsError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7656,25 +7448,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTapeRecoveryPointsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTapeRecoveryPointsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTapeRecoveryPointsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTapeRecoveryPointsError::from_response(response))
+        }
     }
 
     /// <p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway type.</p>
-    fn describe_tapes(
+    async fn describe_tapes(
         &self,
         input: DescribeTapesInput,
-    ) -> RusotoFuture<DescribeTapesOutput, DescribeTapesError> {
+    ) -> Result<DescribeTapesOutput, RusotoError<DescribeTapesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7682,28 +7476,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTapesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTapesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTapesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTapesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>
-    fn describe_upload_buffer(
+    async fn describe_upload_buffer(
         &self,
         input: DescribeUploadBufferInput,
-    ) -> RusotoFuture<DescribeUploadBufferOutput, DescribeUploadBufferError> {
+    ) -> Result<DescribeUploadBufferOutput, RusotoError<DescribeUploadBufferError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7714,27 +7506,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUploadBufferOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeUploadBufferError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeUploadBufferOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUploadBufferError::from_response(response))
+        }
     }
 
     /// <p>Returns a description of virtual tape library (VTL) devices for the specified tape gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>This operation is only supported in the tape gateway type.</p>
-    fn describe_vtl_devices(
+    async fn describe_vtl_devices(
         &self,
         input: DescribeVTLDevicesInput,
-    ) -> RusotoFuture<DescribeVTLDevicesOutput, DescribeVTLDevicesError> {
+    ) -> Result<DescribeVTLDevicesOutput, RusotoError<DescribeVTLDevicesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7742,28 +7534,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeVTLDevicesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeVTLDevicesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVTLDevicesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeVTLDevicesError::from_response(response))
+        }
     }
 
     /// <p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway type. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>
-    fn describe_working_storage(
+    async fn describe_working_storage(
         &self,
         input: DescribeWorkingStorageInput,
-    ) -> RusotoFuture<DescribeWorkingStorageOutput, DescribeWorkingStorageError> {
+    ) -> Result<DescribeWorkingStorageOutput, RusotoError<DescribeWorkingStorageError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7774,27 +7565,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeWorkingStorageOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeWorkingStorageError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkingStorageOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkingStorageError::from_response(response))
+        }
     }
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
-    fn detach_volume(
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    async fn detach_volume(
         &self,
         input: DetachVolumeInput,
-    ) -> RusotoFuture<DetachVolumeOutput, DetachVolumeError> {
+    ) -> Result<DetachVolumeOutput, RusotoError<DetachVolumeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7802,28 +7593,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachVolumeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DetachVolumeError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DetachVolumeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DetachVolumeError::from_response(response))
+        }
     }
 
     /// <p><p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway type.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important></p>
-    fn disable_gateway(
+    async fn disable_gateway(
         &self,
         input: DisableGatewayInput,
-    ) -> RusotoFuture<DisableGatewayOutput, DisableGatewayError> {
+    ) -> Result<DisableGatewayOutput, RusotoError<DisableGatewayError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7831,28 +7620,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableGatewayOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DisableGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DisableGatewayOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableGatewayError::from_response(response))
+        }
     }
 
     /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
-    fn join_domain(
+    async fn join_domain(
         &self,
         input: JoinDomainInput,
-    ) -> RusotoFuture<JoinDomainOutput, JoinDomainError> {
+    ) -> Result<JoinDomainOutput, RusotoError<JoinDomainError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7860,28 +7647,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<JoinDomainOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(JoinDomainError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<JoinDomainOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(JoinDomainError::from_response(response))
+        }
     }
 
     /// <p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported for file gateways.</p>
-    fn list_file_shares(
+    async fn list_file_shares(
         &self,
         input: ListFileSharesInput,
-    ) -> RusotoFuture<ListFileSharesOutput, ListFileSharesError> {
+    ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7889,28 +7674,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListFileSharesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListFileSharesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListFileSharesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFileSharesError::from_response(response))
+        }
     }
 
-    /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
-    fn list_gateways(
+    /// <p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
+    async fn list_gateways(
         &self,
         input: ListGatewaysInput,
-    ) -> RusotoFuture<ListGatewaysOutput, ListGatewaysError> {
+    ) -> Result<ListGatewaysOutput, RusotoError<ListGatewaysError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7918,28 +7701,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGatewaysOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListGatewaysError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListGatewaysOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGatewaysError::from_response(response))
+        }
     }
 
     /// <p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>
-    fn list_local_disks(
+    async fn list_local_disks(
         &self,
         input: ListLocalDisksInput,
-    ) -> RusotoFuture<ListLocalDisksOutput, ListLocalDisksError> {
+    ) -> Result<ListLocalDisksOutput, RusotoError<ListLocalDisksError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7947,28 +7728,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLocalDisksOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListLocalDisksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListLocalDisksOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLocalDisksError::from_response(response))
+        }
     }
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
-    fn list_tags_for_resource(
+    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7979,24 +7758,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
-    fn list_tapes(&self, input: ListTapesInput) -> RusotoFuture<ListTapesOutput, ListTapesError> {
+    async fn list_tapes(
+        &self,
+        input: ListTapesInput,
+    ) -> Result<ListTapesOutput, RusotoError<ListTapesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8004,27 +7786,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListTapesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTapesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTapesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTapesError::from_response(response))
+        }
     }
 
     /// <p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway types.</p>
-    fn list_volume_initiators(
+    async fn list_volume_initiators(
         &self,
         input: ListVolumeInitiatorsInput,
-    ) -> RusotoFuture<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError> {
+    ) -> Result<ListVolumeInitiatorsOutput, RusotoError<ListVolumeInitiatorsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8035,27 +7816,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVolumeInitiatorsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListVolumeInitiatorsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVolumeInitiatorsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVolumeInitiatorsError::from_response(response))
+        }
     }
 
     /// <p>Lists the recovery points for a specified gateway. This operation is only supported in the cached volume gateway type.</p> <p>Each cache volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot or clone a new cached volume from a source volume. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>
-    fn list_volume_recovery_points(
+    async fn list_volume_recovery_points(
         &self,
         input: ListVolumeRecoveryPointsInput,
-    ) -> RusotoFuture<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError> {
+    ) -> Result<ListVolumeRecoveryPointsOutput, RusotoError<ListVolumeRecoveryPointsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8066,25 +7847,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVolumeRecoveryPointsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVolumeRecoveryPointsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVolumeRecoveryPointsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVolumeRecoveryPointsError::from_response(response))
+        }
     }
 
     /// <p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes. This operation is only supported in the cached volume and stored volume gateway types.</p>
-    fn list_volumes(
+    async fn list_volumes(
         &self,
         input: ListVolumesInput,
-    ) -> RusotoFuture<ListVolumesOutput, ListVolumesError> {
+    ) -> Result<ListVolumesOutput, RusotoError<ListVolumesError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8092,28 +7875,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListVolumesOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListVolumesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListVolumesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVolumesError::from_response(response))
+        }
     }
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
-    fn notify_when_uploaded(
+    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    async fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
-    ) -> RusotoFuture<NotifyWhenUploadedOutput, NotifyWhenUploadedError> {
+    ) -> Result<NotifyWhenUploadedOutput, RusotoError<NotifyWhenUploadedError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8121,28 +7902,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<NotifyWhenUploadedOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(NotifyWhenUploadedError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<NotifyWhenUploadedOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(NotifyWhenUploadedError::from_response(response))
+        }
     }
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
-    fn refresh_cache(
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
-    ) -> RusotoFuture<RefreshCacheOutput, RefreshCacheError> {
+    ) -> Result<RefreshCacheOutput, RusotoError<RefreshCacheError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8150,28 +7930,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RefreshCacheOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(RefreshCacheError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RefreshCacheOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RefreshCacheError::from_response(response))
+        }
     }
 
-    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
-    fn remove_tags_from_resource(
+    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
-    ) -> RusotoFuture<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError> {
+    ) -> Result<RemoveTagsFromResourceOutput, RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8182,27 +7960,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsFromResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RemoveTagsFromResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveTagsFromResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveTagsFromResourceError::from_response(response))
+        }
     }
 
     /// <p><p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume and tape types.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important></p>
-    fn reset_cache(
+    async fn reset_cache(
         &self,
         input: ResetCacheInput,
-    ) -> RusotoFuture<ResetCacheOutput, ResetCacheError> {
+    ) -> Result<ResetCacheOutput, RusotoError<ResetCacheError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8210,28 +7988,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResetCacheOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ResetCacheError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ResetCacheOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetCacheError::from_response(response))
+        }
     }
 
     /// <p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a tape gateway. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS, that is, archive. This operation is only supported in the tape gateway type.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway. This operation is only supported in the tape gateway type.</p>
-    fn retrieve_tape_archive(
+    async fn retrieve_tape_archive(
         &self,
         input: RetrieveTapeArchiveInput,
-    ) -> RusotoFuture<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError> {
+    ) -> Result<RetrieveTapeArchiveOutput, RusotoError<RetrieveTapeArchiveError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8242,27 +8018,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RetrieveTapeArchiveOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RetrieveTapeArchiveError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RetrieveTapeArchiveOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RetrieveTapeArchiveError::from_response(response))
+        }
     }
 
     /// <p><p>Retrieves the recovery point for the specified virtual tape. This operation is only supported in the tape gateway type.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a tape gateway. There is no charge for retrieving recovery points.</p> </note></p>
-    fn retrieve_tape_recovery_point(
+    async fn retrieve_tape_recovery_point(
         &self,
         input: RetrieveTapeRecoveryPointInput,
-    ) -> RusotoFuture<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError> {
+    ) -> Result<RetrieveTapeRecoveryPointOutput, RusotoError<RetrieveTapeRecoveryPointError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8273,25 +8049,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RetrieveTapeRecoveryPointOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetrieveTapeRecoveryPointError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RetrieveTapeRecoveryPointOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RetrieveTapeRecoveryPointError::from_response(response))
+        }
     }
 
     /// <p>Sets the password for your VM local console. When you log in to the local console for the first time, you log in to the VM with the default credentials. We recommend that you set a new password. You don't need to know the default password to set a new password.</p>
-    fn set_local_console_password(
+    async fn set_local_console_password(
         &self,
         input: SetLocalConsolePasswordInput,
-    ) -> RusotoFuture<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError> {
+    ) -> Result<SetLocalConsolePasswordOutput, RusotoError<SetLocalConsolePasswordError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8302,25 +8080,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetLocalConsolePasswordOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetLocalConsolePasswordError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SetLocalConsolePasswordOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SetLocalConsolePasswordError::from_response(response))
+        }
     }
 
     /// <p>Sets the password for the guest user <code>smbguest</code>. The <code>smbguest</code> user is the user when the authentication method for the file share is set to <code>GuestAccess</code>.</p>
-    fn set_smb_guest_password(
+    async fn set_smb_guest_password(
         &self,
         input: SetSMBGuestPasswordInput,
-    ) -> RusotoFuture<SetSMBGuestPasswordOutput, SetSMBGuestPasswordError> {
+    ) -> Result<SetSMBGuestPasswordOutput, RusotoError<SetSMBGuestPasswordError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8331,27 +8111,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetSMBGuestPasswordOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetSMBGuestPasswordError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SetSMBGuestPasswordOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SetSMBGuestPasswordError::from_response(response))
+        }
     }
 
     /// <p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the gateway's virtual machine (VM) and not the host VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>
-    fn shutdown_gateway(
+    async fn shutdown_gateway(
         &self,
         input: ShutdownGatewayInput,
-    ) -> RusotoFuture<ShutdownGatewayOutput, ShutdownGatewayError> {
+    ) -> Result<ShutdownGatewayOutput, RusotoError<ShutdownGatewayError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8359,57 +8139,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ShutdownGatewayOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ShutdownGatewayError::from_response(response))),
-                )
-            }
-        })
-    }
-
-    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
-    fn start_availability_monitor_test(
-        &self,
-        input: StartAvailabilityMonitorTestInput,
-    ) -> RusotoFuture<StartAvailabilityMonitorTestOutput, StartAvailabilityMonitorTestError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "StorageGateway_20130630.StartAvailabilityMonitorTest",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartAvailabilityMonitorTestOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartAvailabilityMonitorTestError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ShutdownGatewayOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ShutdownGatewayError::from_response(response))
+        }
     }
 
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn start_gateway(
+    async fn start_gateway(
         &self,
         input: StartGatewayInput,
-    ) -> RusotoFuture<StartGatewayOutput, StartGatewayError> {
+    ) -> Result<StartGatewayOutput, RusotoError<StartGatewayError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8417,28 +8166,26 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartGatewayOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartGatewayError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StartGatewayOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartGatewayError::from_response(response))
+        }
     }
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
-    fn update_bandwidth_rate_limit(
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    async fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
-    ) -> RusotoFuture<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError> {
+    ) -> Result<UpdateBandwidthRateLimitOutput, RusotoError<UpdateBandwidthRateLimitError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8449,25 +8196,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateBandwidthRateLimitOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBandwidthRateLimitError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBandwidthRateLimitOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBandwidthRateLimitError::from_response(response))
+        }
     }
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
-    fn update_chap_credentials(
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    async fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,
-    ) -> RusotoFuture<UpdateChapCredentialsOutput, UpdateChapCredentialsError> {
+    ) -> Result<UpdateChapCredentialsOutput, RusotoError<UpdateChapCredentialsError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8478,27 +8227,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateChapCredentialsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateChapCredentialsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateChapCredentialsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateChapCredentialsError::from_response(response))
+        }
     }
 
     /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For Gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
-    fn update_gateway_information(
+    async fn update_gateway_information(
         &self,
         input: UpdateGatewayInformationInput,
-    ) -> RusotoFuture<UpdateGatewayInformationOutput, UpdateGatewayInformationError> {
+    ) -> Result<UpdateGatewayInformationOutput, RusotoError<UpdateGatewayInformationError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8509,25 +8258,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGatewayInformationOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGatewayInformationError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGatewayInformationOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGatewayInformationError::from_response(response))
+        }
     }
 
     /// <p><p>Updates the gateway virtual machine (VM) software. The request immediately triggers the software update.</p> <note> <p>When you make this request, you get a <code>200 OK</code> success response immediately. However, it might take some time for the update to complete. You can call <a>DescribeGatewayInformation</a> to verify the gateway is in the <code>STATE_RUNNING</code> state.</p> </note> <important> <p>A software update forces a system restart of your gateway. You can minimize the chance of any disruption to your applications by increasing your iSCSI Initiators&#39; timeouts. For more information about increasing iSCSI Initiator timeouts for Windows and Linux, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorWindowsClient.html#CustomizeWindowsiSCSISettings">Customizing Your Windows iSCSI Settings</a> and <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/ConfiguringiSCSIClientInitiatorRedHatClient.html#CustomizeLinuxiSCSISettings">Customizing Your Linux iSCSI Settings</a>, respectively.</p> </important></p>
-    fn update_gateway_software_now(
+    async fn update_gateway_software_now(
         &self,
         input: UpdateGatewaySoftwareNowInput,
-    ) -> RusotoFuture<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError> {
+    ) -> Result<UpdateGatewaySoftwareNowOutput, RusotoError<UpdateGatewaySoftwareNowError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8538,25 +8289,28 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateGatewaySoftwareNowOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGatewaySoftwareNowError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGatewaySoftwareNowOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGatewaySoftwareNowError::from_response(response))
+        }
     }
 
     /// <p>Updates a gateway's weekly maintenance start time information, including day and time of the week. The maintenance time is the time in your gateway's time zone.</p>
-    fn update_maintenance_start_time(
+    async fn update_maintenance_start_time(
         &self,
         input: UpdateMaintenanceStartTimeInput,
-    ) -> RusotoFuture<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError> {
+    ) -> Result<UpdateMaintenanceStartTimeOutput, RusotoError<UpdateMaintenanceStartTimeError>>
+    {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8567,25 +8321,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateMaintenanceStartTimeOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateMaintenanceStartTimeError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMaintenanceStartTimeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMaintenanceStartTimeError::from_response(response))
+        }
     }
 
     /// <p><p>Updates a Network File System (NFS) file share. This operation is only supported in the file gateway type.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note></p>
-    fn update_nfs_file_share(
+    async fn update_nfs_file_share(
         &self,
         input: UpdateNFSFileShareInput,
-    ) -> RusotoFuture<UpdateNFSFileShareOutput, UpdateNFSFileShareError> {
+    ) -> Result<UpdateNFSFileShareOutput, RusotoError<UpdateNFSFileShareError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8593,28 +8349,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNFSFileShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateNFSFileShareError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateNFSFileShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateNFSFileShareError::from_response(response))
+        }
     }
 
     /// <p><p>Updates a Server Message Block (SMB) file share.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported for file gateways.</p> </note> <important> <p>File gateways require AWS Security Token Service (AWS STS) to be activated to enable you to create a file share. Make sure that AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in this AWS Region, activate it. For information about how to activate AWS STS, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide.</i> </p> <p>File gateways don&#39;t support creating hard or symbolic links on a file share.</p> </important></p>
-    fn update_smb_file_share(
+    async fn update_smb_file_share(
         &self,
         input: UpdateSMBFileShareInput,
-    ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError> {
+    ) -> Result<UpdateSMBFileShareOutput, RusotoError<UpdateSMBFileShareError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8622,28 +8377,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSMBFileShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateSMBFileShareError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSMBFileShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSMBFileShareError::from_response(response))
+        }
     }
 
-    /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>
-    fn update_smb_security_strategy(
+    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    async fn update_smb_security_strategy(
         &self,
         input: UpdateSMBSecurityStrategyInput,
-    ) -> RusotoFuture<UpdateSMBSecurityStrategyOutput, UpdateSMBSecurityStrategyError> {
+    ) -> Result<UpdateSMBSecurityStrategyOutput, RusotoError<UpdateSMBSecurityStrategyError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8654,25 +8408,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSMBSecurityStrategyOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSMBSecurityStrategyError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSMBSecurityStrategyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSMBSecurityStrategyError::from_response(response))
+        }
     }
 
     /// <p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway types.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>
-    fn update_snapshot_schedule(
+    async fn update_snapshot_schedule(
         &self,
         input: UpdateSnapshotScheduleInput,
-    ) -> RusotoFuture<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError> {
+    ) -> Result<UpdateSnapshotScheduleOutput, RusotoError<UpdateSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8683,27 +8439,27 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateSnapshotScheduleOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateSnapshotScheduleError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSnapshotScheduleOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSnapshotScheduleError::from_response(response))
+        }
     }
 
     /// <p>Updates the type of medium changer in a tape gateway. When you activate a tape gateway, you select a medium changer type for the tape gateway. This operation enables you to select a different type of medium changer after a tape gateway is activated. This operation is only supported in the tape gateway type.</p>
-    fn update_vtl_device_type(
+    async fn update_vtl_device_type(
         &self,
         input: UpdateVTLDeviceTypeInput,
-    ) -> RusotoFuture<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError> {
+    ) -> Result<UpdateVTLDeviceTypeOutput, RusotoError<UpdateVTLDeviceTypeError>> {
         let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8714,19 +8470,19 @@ impl StorageGateway for StorageGatewayClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateVTLDeviceTypeOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateVTLDeviceTypeError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVTLDeviceTypeOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVTLDeviceTypeError::from_response(response))
+        }
     }
 }

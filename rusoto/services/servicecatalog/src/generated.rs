@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptPortfolioShareInput {
@@ -39,7 +40,7 @@ pub struct AcceptPortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AcceptPortfolioShareOutput {}
 
 /// <p>The access level to use to filter results.</p>
@@ -66,7 +67,7 @@ pub struct AssociateBudgetWithResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateBudgetWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -87,7 +88,7 @@ pub struct AssociatePrincipalWithPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociatePrincipalWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -109,7 +110,7 @@ pub struct AssociateProductWithPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateProductWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -130,7 +131,7 @@ pub struct AssociateServiceActionWithProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateServiceActionWithProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -144,7 +145,7 @@ pub struct AssociateTagOptionWithResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateTagOptionWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -159,7 +160,7 @@ pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
     /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
     #[serde(rename = "FailedServiceActionAssociations")]
@@ -179,7 +180,7 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
     /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
     #[serde(rename = "FailedServiceActionAssociations")]
@@ -189,7 +190,7 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
 
 /// <p>Information about a budget.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BudgetDetail {
     /// <p>Name of the associated budget.</p>
     #[serde(rename = "BudgetName")]
@@ -199,7 +200,7 @@ pub struct BudgetDetail {
 
 /// <p>Information about a CloudWatch dashboard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CloudWatchDashboard {
     /// <p>The name of the CloudWatch dashboard.</p>
     #[serde(rename = "Name")]
@@ -209,7 +210,7 @@ pub struct CloudWatchDashboard {
 
 /// <p>Information about a constraint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConstraintDetail {
     /// <p>The identifier of the constraint.</p>
     #[serde(rename = "ConstraintId")]
@@ -231,7 +232,7 @@ pub struct ConstraintDetail {
 
 /// <p>Summary information about a constraint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConstraintSummary {
     /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
@@ -275,7 +276,7 @@ pub struct CopyProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CopyProductOutput {
     /// <p>The token to use to track the progress of the operation.</p>
     #[serde(rename = "CopyProductToken")]
@@ -311,7 +312,7 @@ pub struct CreateConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -353,7 +354,7 @@ pub struct CreatePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -385,7 +386,7 @@ pub struct CreatePortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePortfolioShareOutput {
     /// <p>The portfolio share unique identifier. This will only be returned if portfolio is shared to an organization node.</p>
     #[serde(rename = "PortfolioShareToken")]
@@ -441,7 +442,7 @@ pub struct CreateProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -493,14 +494,14 @@ pub struct CreateProvisionedProductPlanInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
-    /// <p>One or more tags.</p> <p>If the plan is for an existing provisioned product, the product must have a <code>RESOURCE_UPDATE</code> constraint with <code>TagUpdatesOnProvisionedProduct</code> set to <code>ALLOWED</code> to allow tag updates.</p>
+    /// <p>One or more tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProvisionedProductPlanOutput {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -542,7 +543,7 @@ pub struct CreateProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3, in JSON format.</p>
     #[serde(rename = "Info")]
@@ -583,7 +584,7 @@ pub struct CreateServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateServiceActionOutput {
     /// <p>An object containing information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -602,7 +603,7 @@ pub struct CreateTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -622,7 +623,7 @@ pub struct DeleteConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteConstraintOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -637,7 +638,7 @@ pub struct DeletePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeletePortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -660,7 +661,7 @@ pub struct DeletePortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeletePortfolioShareOutput {
     /// <p>The portfolio share unique identifier. This will only be returned if delete is made to an organization node.</p>
     #[serde(rename = "PortfolioShareToken")]
@@ -680,7 +681,7 @@ pub struct DeleteProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProductOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -699,7 +700,7 @@ pub struct DeleteProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProvisionedProductPlanOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -717,7 +718,7 @@ pub struct DeleteProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -732,7 +733,7 @@ pub struct DeleteServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteServiceActionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -743,7 +744,7 @@ pub struct DeleteTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTagOptionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -758,7 +759,7 @@ pub struct DescribeConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -786,7 +787,7 @@ pub struct DescribeCopyProductStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCopyProductStatusOutput {
     /// <p>The status of the copy product operation.</p>
     #[serde(rename = "CopyProductStatus")]
@@ -814,7 +815,7 @@ pub struct DescribePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePortfolioOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -842,7 +843,7 @@ pub struct DescribePortfolioShareStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePortfolioShareStatusOutput {
     /// <p>Organization node identifier. It can be either account id, organizational unit id or organization id.</p>
     #[serde(rename = "OrganizationNodeValue")]
@@ -878,7 +879,7 @@ pub struct DescribeProductAsAdminInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProductAsAdminOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -914,7 +915,7 @@ pub struct DescribeProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProductOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -942,7 +943,7 @@ pub struct DescribeProductViewInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProductViewOutput {
     /// <p>Summary information about the product.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -966,7 +967,7 @@ pub struct DescribeProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProvisionedProductOutput {
     /// <p>Any CloudWatch dashboards that were created when provisioning the product.</p>
     #[serde(rename = "CloudWatchDashboards")]
@@ -998,7 +999,7 @@ pub struct DescribeProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProvisionedProductPlanOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1033,7 +1034,7 @@ pub struct DescribeProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -1068,7 +1069,7 @@ pub struct DescribeProvisioningParametersInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProvisioningParametersOutput {
     /// <p>Information about the constraints used to provision the product.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -1112,7 +1113,7 @@ pub struct DescribeRecordInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRecordOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1129,25 +1130,6 @@ pub struct DescribeRecordOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeServiceActionExecutionParametersInput {
-    #[serde(rename = "AcceptLanguage")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub accept_language: Option<String>,
-    #[serde(rename = "ProvisionedProductId")]
-    pub provisioned_product_id: String,
-    #[serde(rename = "ServiceActionId")]
-    pub service_action_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeServiceActionExecutionParametersOutput {
-    #[serde(rename = "ServiceActionParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_action_parameters: Option<Vec<ExecutionParameter>>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1159,7 +1141,7 @@ pub struct DescribeServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeServiceActionOutput {
     /// <p>Detailed information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -1175,7 +1157,7 @@ pub struct DescribeTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -1187,7 +1169,7 @@ pub struct DescribeTagOptionOutput {
 pub struct DisableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1201,7 +1183,7 @@ pub struct DisassociateBudgetFromResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateBudgetFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1219,7 +1201,7 @@ pub struct DisassociatePrincipalFromPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociatePrincipalFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1237,7 +1219,7 @@ pub struct DisassociateProductFromPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateProductFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1258,7 +1240,7 @@ pub struct DisassociateServiceActionFromProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateServiceActionFromProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1272,14 +1254,14 @@ pub struct DisassociateTagOptionFromResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateTagOptionFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1297,7 +1279,7 @@ pub struct ExecuteProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExecuteProvisionedProductPlanOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -1314,9 +1296,6 @@ pub struct ExecuteProvisionedProductServiceActionInput {
     /// <p>An idempotency token that uniquely identifies the execute request.</p>
     #[serde(rename = "ExecuteToken")]
     pub execute_token: String,
-    #[serde(rename = "Parameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductId")]
     pub provisioned_product_id: String,
@@ -1326,7 +1305,7 @@ pub struct ExecuteProvisionedProductServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExecuteProvisionedProductServiceActionOutput {
     /// <p>An object containing detailed information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -1334,23 +1313,9 @@ pub struct ExecuteProvisionedProductServiceActionOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ExecutionParameter {
-    #[serde(rename = "DefaultValues")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_values: Option<Vec<String>>,
-    #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
-}
-
 /// <p>An object containing information about the error, along with identifying information about the self-service action and its associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailedServiceActionAssociation {
     /// <p>The error code. Valid values are listed below.</p>
     #[serde(rename = "ErrorCode")]
@@ -1378,7 +1343,7 @@ pub struct FailedServiceActionAssociation {
 pub struct GetAWSOrganizationsAccessStatusInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAWSOrganizationsAccessStatusOutput {
     /// <p>The status of the portfolio share feature.</p>
     #[serde(rename = "AccessStatus")]
@@ -1388,7 +1353,7 @@ pub struct GetAWSOrganizationsAccessStatusOutput {
 
 /// <p>Summary information about a product path for a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LaunchPathSummary {
     /// <p>The constraints on the portfolio-product relationship.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -1429,7 +1394,7 @@ pub struct ListAcceptedPortfolioSharesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAcceptedPortfolioSharesOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1461,7 +1426,7 @@ pub struct ListBudgetsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListBudgetsForResourceOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -1497,7 +1462,7 @@ pub struct ListConstraintsForPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListConstraintsForPortfolioOutput {
     /// <p>Information about the constraints.</p>
     #[serde(rename = "ConstraintDetails")]
@@ -1529,7 +1494,7 @@ pub struct ListLaunchPathsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListLaunchPathsOutput {
     /// <p>Information about the launch path.</p>
     #[serde(rename = "LaunchPathSummaries")]
@@ -1564,7 +1529,7 @@ pub struct ListOrganizationPortfolioAccessInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOrganizationPortfolioAccessOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1588,7 +1553,7 @@ pub struct ListPortfolioAccessInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPortfolioAccessOutput {
     /// <p>Information about the AWS accounts with access to the portfolio.</p>
     #[serde(rename = "AccountIds")]
@@ -1620,7 +1585,7 @@ pub struct ListPortfoliosForProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPortfoliosForProductOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1649,7 +1614,7 @@ pub struct ListPortfoliosInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPortfoliosOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1681,7 +1646,7 @@ pub struct ListPrincipalsForPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPrincipalsForPortfolioOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1718,7 +1683,7 @@ pub struct ListProvisionedProductPlansInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProvisionedProductPlansOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1750,7 +1715,7 @@ pub struct ListProvisioningArtifactsForServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProvisioningArtifactsForServiceActionOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1774,7 +1739,7 @@ pub struct ListProvisioningArtifactsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProvisioningArtifactsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1811,7 +1776,7 @@ pub struct ListRecordHistoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRecordHistoryOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1856,7 +1821,7 @@ pub struct ListResourcesForTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourcesForTagOptionOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -1891,7 +1856,7 @@ pub struct ListServiceActionsForProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListServiceActionsForProvisioningArtifactOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1920,7 +1885,7 @@ pub struct ListServiceActionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListServiceActionsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1952,7 +1917,7 @@ pub struct ListStackInstancesForProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListStackInstancesForProvisionedProductOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1998,7 +1963,7 @@ pub struct ListTagOptionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagOptionsOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -2025,7 +1990,7 @@ pub struct OrganizationNode {
 
 /// <p>The constraints that the administrator has put on the parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ParameterConstraints {
     /// <p>The values that the administrator has allowed for the parameter.</p>
     #[serde(rename = "AllowedValues")]
@@ -2035,7 +2000,7 @@ pub struct ParameterConstraints {
 
 /// <p>Information about a portfolio.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PortfolioDetail {
     /// <p>The ARN assigned to the portfolio.</p>
     #[serde(rename = "ARN")]
@@ -2065,7 +2030,7 @@ pub struct PortfolioDetail {
 
 /// <p>Information about a principal.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Principal {
     /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
@@ -2079,7 +2044,7 @@ pub struct Principal {
 
 /// <p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProductViewAggregationValue {
     /// <p>An approximate count of the products that match the value.</p>
     #[serde(rename = "ApproximateCount")]
@@ -2093,7 +2058,7 @@ pub struct ProductViewAggregationValue {
 
 /// <p>Information about a product view.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProductViewDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2115,7 +2080,7 @@ pub struct ProductViewDetail {
 
 /// <p>Summary information about a product view.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProductViewSummary {
     /// <p>The distributor of the product. Contact the product administrator for the significance of this value.</p>
     #[serde(rename = "Distributor")]
@@ -2204,7 +2169,7 @@ pub struct ProvisionProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionProductOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -2214,7 +2179,7 @@ pub struct ProvisionProductOutput {
 
 /// <p>Information about a provisioned product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedProductAttribute {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -2280,7 +2245,7 @@ pub struct ProvisionedProductAttribute {
 
 /// <p>Information about a provisioned product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedProductDetail {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -2330,7 +2295,7 @@ pub struct ProvisionedProductDetail {
 
 /// <p>Information about a plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedProductPlanDetails {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2396,7 +2361,7 @@ pub struct ProvisionedProductPlanDetails {
 
 /// <p>Summary information about a plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedProductPlanSummary {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -2426,7 +2391,7 @@ pub struct ProvisionedProductPlanSummary {
 
 /// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifact {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2436,10 +2401,6 @@ pub struct ProvisioningArtifact {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>
-    #[serde(rename = "Guidance")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub guidance: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2452,7 +2413,7 @@ pub struct ProvisioningArtifact {
 
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifactDetail {
     /// <p>Indicates whether the product version is active.</p>
     #[serde(rename = "Active")]
@@ -2466,10 +2427,6 @@ pub struct ProvisioningArtifactDetail {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>
-    #[serde(rename = "Guidance")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub guidance: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2486,7 +2443,7 @@ pub struct ProvisioningArtifactDetail {
 
 /// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifactParameter {
     /// <p>The default value.</p>
     #[serde(rename = "DefaultValue")]
@@ -2516,7 +2473,7 @@ pub struct ProvisioningArtifactParameter {
 
 /// <p>The user-defined preferences that will be applied during product provisioning, unless overridden by <code>ProvisioningPreferences</code> or <code>UpdateProvisioningPreferences</code>.</p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a> in the <i>AWS CloudFormation User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifactPreferences {
     /// <p>One or more AWS accounts where stack instances are deployed from the stack set. These accounts can be scoped in <code>ProvisioningPreferences$StackSetAccounts</code> and <code>UpdateProvisioningPreferences$StackSetAccounts</code>.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p>
     #[serde(rename = "StackSetAccounts")]
@@ -2554,7 +2511,7 @@ pub struct ProvisioningArtifactProperties {
 
 /// <p>Summary information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifactSummary {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2580,7 +2537,7 @@ pub struct ProvisioningArtifactSummary {
 
 /// <p>An object that contains summary information about a product view and a provisioning artifact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisioningArtifactView {
     /// <p>Summary information about a product view.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -2636,7 +2593,7 @@ pub struct ProvisioningPreferences {
 
 /// <p>Information about a request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecordDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2694,7 +2651,7 @@ pub struct RecordDetail {
 
 /// <p>The error code and description resulting from an operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecordError {
     /// <p>The numeric value of the error.</p>
     #[serde(rename = "Code")]
@@ -2708,7 +2665,7 @@ pub struct RecordError {
 
 /// <p>The output for the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecordOutput {
     /// <p>The description of the output.</p>
     #[serde(rename = "Description")]
@@ -2726,7 +2683,7 @@ pub struct RecordOutput {
 
 /// <p>Information about a tag, which is a key-value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecordTag {
     /// <p>The key for this tag.</p>
     #[serde(rename = "Key")]
@@ -2754,12 +2711,12 @@ pub struct RejectPortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RejectPortfolioShareOutput {}
 
 /// <p>Information about a resource change that will occur when a plan is executed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceChange {
     /// <p>The change action.</p>
     #[serde(rename = "Action")]
@@ -2793,7 +2750,7 @@ pub struct ResourceChange {
 
 /// <p>Information about a change to a resource attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceChangeDetail {
     /// <p>The ID of the entity that caused the change.</p>
     #[serde(rename = "CausingEntity")]
@@ -2811,7 +2768,7 @@ pub struct ResourceChangeDetail {
 
 /// <p>Information about a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceDetail {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ARN")]
@@ -2837,7 +2794,7 @@ pub struct ResourceDetail {
 
 /// <p>Information about a change to a resource attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceTargetDefinition {
     /// <p>The attribute to be changed.</p>
     #[serde(rename = "Attribute")]
@@ -2874,7 +2831,7 @@ pub struct ScanProvisionedProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScanProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2923,7 +2880,7 @@ pub struct SearchProductsAsAdminInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchProductsAsAdminOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2964,7 +2921,7 @@ pub struct SearchProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -3014,7 +2971,7 @@ pub struct SearchProvisionedProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SearchProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -3046,7 +3003,7 @@ pub struct ServiceActionAssociation {
 
 /// <p>An object containing detailed information about the self-service action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceActionDetail {
     /// <p>A map that defines the self-service action.</p>
     #[serde(rename = "Definition")]
@@ -3060,7 +3017,7 @@ pub struct ServiceActionDetail {
 
 /// <p>Detailed information about the self-service action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceActionSummary {
     /// <p>The self-service action definition type. For example, <code>SSM_AUTOMATION</code>.</p>
     #[serde(rename = "DefinitionType")]
@@ -3082,7 +3039,7 @@ pub struct ServiceActionSummary {
 
 /// <p>Information about the portfolio share operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ShareDetails {
     /// <p>List of errors.</p>
     #[serde(rename = "ShareErrors")]
@@ -3096,7 +3053,7 @@ pub struct ShareDetails {
 
 /// <p>Errors that occurred during the portfolio share operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ShareError {
     /// <p>List of accounts impacted by the error.</p>
     #[serde(rename = "Accounts")]
@@ -3114,7 +3071,7 @@ pub struct ShareError {
 
 /// <p>An AWS CloudFormation stack, in a specific account and region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StackInstance {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     #[serde(rename = "Account")]
@@ -3143,7 +3100,7 @@ pub struct Tag {
 
 /// <p>Information about a TagOption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagOptionDetail {
     /// <p>The TagOption active state.</p>
     #[serde(rename = "Active")]
@@ -3165,7 +3122,7 @@ pub struct TagOptionDetail {
 
 /// <p>Summary information about a TagOption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagOptionSummary {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -3201,7 +3158,7 @@ pub struct TerminateProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TerminateProvisionedProductOutput {
     /// <p>Information about the result of this request.</p>
     #[serde(rename = "RecordDetail")]
@@ -3229,7 +3186,7 @@ pub struct UpdateConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -3277,7 +3234,7 @@ pub struct UpdatePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -3337,7 +3294,7 @@ pub struct UpdateProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -3393,7 +3350,7 @@ pub struct UpdateProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProvisionedProductOutput {
     /// <p>Information about the result of the request.</p>
     #[serde(rename = "RecordDetail")]
@@ -3419,7 +3376,7 @@ pub struct UpdateProvisionedProductPropertiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProvisionedProductPropertiesOutput {
     /// <p>The provisioned product identifier.</p>
     #[serde(rename = "ProvisionedProductId")]
@@ -3453,10 +3410,6 @@ pub struct UpdateProvisioningArtifactInput {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p> <p>The <code>DEFAULT</code> value indicates that the product version is active.</p> <p>The administrator can set the guidance to <code>DEPRECATED</code> to inform users that the product version is deprecated. Users are able to make updates to a provisioned product of a deprecated version but cannot launch new provisioned products using a deprecated version.</p>
-    #[serde(rename = "Guidance")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub guidance: Option<String>,
     /// <p>The updated name of the provisioning artifact.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3470,7 +3423,7 @@ pub struct UpdateProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -3560,7 +3513,7 @@ pub struct UpdateServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateServiceActionOutput {
     /// <p>Detailed information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -3584,7 +3537,7 @@ pub struct UpdateTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -3594,7 +3547,7 @@ pub struct UpdateTagOptionOutput {
 
 /// <p>Additional information provided by the administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UsageInstruction {
     /// <p>The usage instruction type for the value.</p>
     #[serde(rename = "Type")]
@@ -4182,8 +4135,6 @@ impl Error for CreatePortfolioError {
 pub enum CreatePortfolioShareError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
-    InvalidState(String),
     /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The operation is not supported.</p>
@@ -4200,9 +4151,6 @@ impl CreatePortfolioShareError {
                     return RusotoError::Service(CreatePortfolioShareError::InvalidParameters(
                         err.msg,
                     ))
-                }
-                "InvalidStateException" => {
-                    return RusotoError::Service(CreatePortfolioShareError::InvalidState(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePortfolioShareError::LimitExceeded(err.msg))
@@ -4233,7 +4181,6 @@ impl Error for CreatePortfolioShareError {
     fn description(&self) -> &str {
         match *self {
             CreatePortfolioShareError::InvalidParameters(ref cause) => cause,
-            CreatePortfolioShareError::InvalidState(ref cause) => cause,
             CreatePortfolioShareError::LimitExceeded(ref cause) => cause,
             CreatePortfolioShareError::OperationNotSupported(ref cause) => cause,
             CreatePortfolioShareError::ResourceNotFound(ref cause) => cause,
@@ -4576,8 +4523,6 @@ impl Error for DeletePortfolioError {
 pub enum DeletePortfolioShareError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
-    InvalidState(String),
     /// <p>The operation is not supported.</p>
     OperationNotSupported(String),
     /// <p>The specified resource was not found.</p>
@@ -4592,9 +4537,6 @@ impl DeletePortfolioShareError {
                     return RusotoError::Service(DeletePortfolioShareError::InvalidParameters(
                         err.msg,
                     ))
-                }
-                "InvalidStateException" => {
-                    return RusotoError::Service(DeletePortfolioShareError::InvalidState(err.msg))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(DeletePortfolioShareError::OperationNotSupported(
@@ -4622,7 +4564,6 @@ impl Error for DeletePortfolioShareError {
     fn description(&self) -> &str {
         match *self {
             DeletePortfolioShareError::InvalidParameters(ref cause) => cause,
-            DeletePortfolioShareError::InvalidState(ref cause) => cause,
             DeletePortfolioShareError::OperationNotSupported(ref cause) => cause,
             DeletePortfolioShareError::ResourceNotFound(ref cause) => cause,
         }
@@ -5365,51 +5306,6 @@ impl Error for DescribeServiceActionError {
     fn description(&self) -> &str {
         match *self {
             DescribeServiceActionError::ResourceNotFound(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeServiceActionExecutionParameters
-#[derive(Debug, PartialEq)]
-pub enum DescribeServiceActionExecutionParametersError {
-    /// <p>One or more parameters provided to the operation are not valid.</p>
-    InvalidParameters(String),
-    /// <p>The specified resource was not found.</p>
-    ResourceNotFound(String),
-}
-
-impl DescribeServiceActionExecutionParametersError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<DescribeServiceActionExecutionParametersError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InvalidParametersException" => {
-                    return RusotoError::Service(
-                        DescribeServiceActionExecutionParametersError::InvalidParameters(err.msg),
-                    )
-                }
-                "ResourceNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeServiceActionExecutionParametersError::ResourceNotFound(err.msg),
-                    )
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeServiceActionExecutionParametersError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeServiceActionExecutionParametersError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeServiceActionExecutionParametersError::InvalidParameters(ref cause) => cause,
-            DescribeServiceActionExecutionParametersError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -7332,533 +7228,553 @@ impl Error for UpdateTagOptionError {
     }
 }
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
+#[async_trait]
 pub trait ServiceCatalog {
     /// <p>Accepts an offer to share the specified portfolio.</p>
-    fn accept_portfolio_share(
+    async fn accept_portfolio_share(
         &self,
         input: AcceptPortfolioShareInput,
-    ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
+    ) -> Result<AcceptPortfolioShareOutput, RusotoError<AcceptPortfolioShareError>>;
 
     /// <p>Associates the specified budget with the specified resource.</p>
-    fn associate_budget_with_resource(
+    async fn associate_budget_with_resource(
         &self,
         input: AssociateBudgetWithResourceInput,
-    ) -> RusotoFuture<AssociateBudgetWithResourceOutput, AssociateBudgetWithResourceError>;
+    ) -> Result<AssociateBudgetWithResourceOutput, RusotoError<AssociateBudgetWithResourceError>>;
 
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
-    fn associate_principal_with_portfolio(
+    async fn associate_principal_with_portfolio(
         &self,
         input: AssociatePrincipalWithPortfolioInput,
-    ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
+    ) -> Result<
+        AssociatePrincipalWithPortfolioOutput,
+        RusotoError<AssociatePrincipalWithPortfolioError>,
+    >;
 
     /// <p>Associates the specified product with the specified portfolio.</p>
-    fn associate_product_with_portfolio(
+    async fn associate_product_with_portfolio(
         &self,
         input: AssociateProductWithPortfolioInput,
-    ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
+    ) -> Result<AssociateProductWithPortfolioOutput, RusotoError<AssociateProductWithPortfolioError>>;
 
     /// <p>Associates a self-service action with a provisioning artifact.</p>
-    fn associate_service_action_with_provisioning_artifact(
+    async fn associate_service_action_with_provisioning_artifact(
         &self,
         input: AssociateServiceActionWithProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateServiceActionWithProvisioningArtifactOutput,
-        AssociateServiceActionWithProvisioningArtifactError,
+        RusotoError<AssociateServiceActionWithProvisioningArtifactError>,
     >;
 
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
-    fn associate_tag_option_with_resource(
+    async fn associate_tag_option_with_resource(
         &self,
         input: AssociateTagOptionWithResourceInput,
-    ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
+    ) -> Result<
+        AssociateTagOptionWithResourceOutput,
+        RusotoError<AssociateTagOptionWithResourceError>,
+    >;
 
     /// <p>Associates multiple self-service actions with provisioning artifacts.</p>
-    fn batch_associate_service_action_with_provisioning_artifact(
+    async fn batch_associate_service_action_with_provisioning_artifact(
         &self,
         input: BatchAssociateServiceActionWithProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchAssociateServiceActionWithProvisioningArtifactOutput,
-        BatchAssociateServiceActionWithProvisioningArtifactError,
+        RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError>,
     >;
 
     /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
-    fn batch_disassociate_service_action_from_provisioning_artifact(
+    async fn batch_disassociate_service_action_from_provisioning_artifact(
         &self,
         input: BatchDisassociateServiceActionFromProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchDisassociateServiceActionFromProvisioningArtifactOutput,
-        BatchDisassociateServiceActionFromProvisioningArtifactError,
+        RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError>,
     >;
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
-    fn copy_product(
+    async fn copy_product(
         &self,
         input: CopyProductInput,
-    ) -> RusotoFuture<CopyProductOutput, CopyProductError>;
+    ) -> Result<CopyProductOutput, RusotoError<CopyProductError>>;
 
     /// <p>Creates a constraint.</p>
-    fn create_constraint(
+    async fn create_constraint(
         &self,
         input: CreateConstraintInput,
-    ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError>;
+    ) -> Result<CreateConstraintOutput, RusotoError<CreateConstraintError>>;
 
     /// <p>Creates a portfolio.</p>
-    fn create_portfolio(
+    async fn create_portfolio(
         &self,
         input: CreatePortfolioInput,
-    ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError>;
+    ) -> Result<CreatePortfolioOutput, RusotoError<CreatePortfolioError>>;
 
     /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
-    fn create_portfolio_share(
+    async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
-    ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError>;
+    ) -> Result<CreatePortfolioShareOutput, RusotoError<CreatePortfolioShareError>>;
 
     /// <p>Creates a product.</p>
-    fn create_product(
+    async fn create_product(
         &self,
         input: CreateProductInput,
-    ) -> RusotoFuture<CreateProductOutput, CreateProductError>;
+    ) -> Result<CreateProductOutput, RusotoError<CreateProductError>>;
 
     /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
-    fn create_provisioned_product_plan(
+    async fn create_provisioned_product_plan(
         &self,
         input: CreateProvisionedProductPlanInput,
-    ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError>;
+    ) -> Result<CreateProvisionedProductPlanOutput, RusotoError<CreateProvisionedProductPlanError>>;
 
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
-    fn create_provisioning_artifact(
+    async fn create_provisioning_artifact(
         &self,
         input: CreateProvisioningArtifactInput,
-    ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
+    ) -> Result<CreateProvisioningArtifactOutput, RusotoError<CreateProvisioningArtifactError>>;
 
     /// <p>Creates a self-service action.</p>
-    fn create_service_action(
+    async fn create_service_action(
         &self,
         input: CreateServiceActionInput,
-    ) -> RusotoFuture<CreateServiceActionOutput, CreateServiceActionError>;
+    ) -> Result<CreateServiceActionOutput, RusotoError<CreateServiceActionError>>;
 
     /// <p>Creates a TagOption.</p>
-    fn create_tag_option(
+    async fn create_tag_option(
         &self,
         input: CreateTagOptionInput,
-    ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError>;
+    ) -> Result<CreateTagOptionOutput, RusotoError<CreateTagOptionError>>;
 
     /// <p>Deletes the specified constraint.</p>
-    fn delete_constraint(
+    async fn delete_constraint(
         &self,
         input: DeleteConstraintInput,
-    ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError>;
+    ) -> Result<DeleteConstraintOutput, RusotoError<DeleteConstraintError>>;
 
     /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
-    fn delete_portfolio(
+    async fn delete_portfolio(
         &self,
         input: DeletePortfolioInput,
-    ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError>;
+    ) -> Result<DeletePortfolioOutput, RusotoError<DeletePortfolioError>>;
 
     /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
-    fn delete_portfolio_share(
+    async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
-    ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError>;
+    ) -> Result<DeletePortfolioShareOutput, RusotoError<DeletePortfolioShareError>>;
 
     /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
-    fn delete_product(
+    async fn delete_product(
         &self,
         input: DeleteProductInput,
-    ) -> RusotoFuture<DeleteProductOutput, DeleteProductError>;
+    ) -> Result<DeleteProductOutput, RusotoError<DeleteProductError>>;
 
     /// <p>Deletes the specified plan.</p>
-    fn delete_provisioned_product_plan(
+    async fn delete_provisioned_product_plan(
         &self,
         input: DeleteProvisionedProductPlanInput,
-    ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError>;
+    ) -> Result<DeleteProvisionedProductPlanOutput, RusotoError<DeleteProvisionedProductPlanError>>;
 
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
-    fn delete_provisioning_artifact(
+    async fn delete_provisioning_artifact(
         &self,
         input: DeleteProvisioningArtifactInput,
-    ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
+    ) -> Result<DeleteProvisioningArtifactOutput, RusotoError<DeleteProvisioningArtifactError>>;
 
     /// <p>Deletes a self-service action.</p>
-    fn delete_service_action(
+    async fn delete_service_action(
         &self,
         input: DeleteServiceActionInput,
-    ) -> RusotoFuture<DeleteServiceActionOutput, DeleteServiceActionError>;
+    ) -> Result<DeleteServiceActionOutput, RusotoError<DeleteServiceActionError>>;
 
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
-    fn delete_tag_option(
+    async fn delete_tag_option(
         &self,
         input: DeleteTagOptionInput,
-    ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError>;
+    ) -> Result<DeleteTagOptionOutput, RusotoError<DeleteTagOptionError>>;
 
     /// <p>Gets information about the specified constraint.</p>
-    fn describe_constraint(
+    async fn describe_constraint(
         &self,
         input: DescribeConstraintInput,
-    ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError>;
+    ) -> Result<DescribeConstraintOutput, RusotoError<DescribeConstraintError>>;
 
     /// <p>Gets the status of the specified copy product operation.</p>
-    fn describe_copy_product_status(
+    async fn describe_copy_product_status(
         &self,
         input: DescribeCopyProductStatusInput,
-    ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError>;
+    ) -> Result<DescribeCopyProductStatusOutput, RusotoError<DescribeCopyProductStatusError>>;
 
     /// <p>Gets information about the specified portfolio.</p>
-    fn describe_portfolio(
+    async fn describe_portfolio(
         &self,
         input: DescribePortfolioInput,
-    ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError>;
+    ) -> Result<DescribePortfolioOutput, RusotoError<DescribePortfolioError>>;
 
     /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
-    fn describe_portfolio_share_status(
+    async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
-    ) -> RusotoFuture<DescribePortfolioShareStatusOutput, DescribePortfolioShareStatusError>;
+    ) -> Result<DescribePortfolioShareStatusOutput, RusotoError<DescribePortfolioShareStatusError>>;
 
     /// <p>Gets information about the specified product.</p>
-    fn describe_product(
+    async fn describe_product(
         &self,
         input: DescribeProductInput,
-    ) -> RusotoFuture<DescribeProductOutput, DescribeProductError>;
+    ) -> Result<DescribeProductOutput, RusotoError<DescribeProductError>>;
 
     /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
-    fn describe_product_as_admin(
+    async fn describe_product_as_admin(
         &self,
         input: DescribeProductAsAdminInput,
-    ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
+    ) -> Result<DescribeProductAsAdminOutput, RusotoError<DescribeProductAsAdminError>>;
 
     /// <p>Gets information about the specified product.</p>
-    fn describe_product_view(
+    async fn describe_product_view(
         &self,
         input: DescribeProductViewInput,
-    ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError>;
+    ) -> Result<DescribeProductViewOutput, RusotoError<DescribeProductViewError>>;
 
     /// <p>Gets information about the specified provisioned product.</p>
-    fn describe_provisioned_product(
+    async fn describe_provisioned_product(
         &self,
         input: DescribeProvisionedProductInput,
-    ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
+    ) -> Result<DescribeProvisionedProductOutput, RusotoError<DescribeProvisionedProductError>>;
 
     /// <p>Gets information about the resource changes for the specified plan.</p>
-    fn describe_provisioned_product_plan(
+    async fn describe_provisioned_product_plan(
         &self,
         input: DescribeProvisionedProductPlanInput,
-    ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>;
-
-    /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
-    fn describe_provisioning_artifact(
-        &self,
-        input: DescribeProvisioningArtifactInput,
-    ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
-
-    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
-    fn describe_provisioning_parameters(
-        &self,
-        input: DescribeProvisioningParametersInput,
-    ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
-
-    /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
-    fn describe_record(
-        &self,
-        input: DescribeRecordInput,
-    ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError>;
-
-    /// <p>Describes a self-service action.</p>
-    fn describe_service_action(
-        &self,
-        input: DescribeServiceActionInput,
-    ) -> RusotoFuture<DescribeServiceActionOutput, DescribeServiceActionError>;
-
-    fn describe_service_action_execution_parameters(
-        &self,
-        input: DescribeServiceActionExecutionParametersInput,
-    ) -> RusotoFuture<
-        DescribeServiceActionExecutionParametersOutput,
-        DescribeServiceActionExecutionParametersError,
+    ) -> Result<
+        DescribeProvisionedProductPlanOutput,
+        RusotoError<DescribeProvisionedProductPlanError>,
     >;
 
+    /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
+    async fn describe_provisioning_artifact(
+        &self,
+        input: DescribeProvisioningArtifactInput,
+    ) -> Result<DescribeProvisioningArtifactOutput, RusotoError<DescribeProvisioningArtifactError>>;
+
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
+    async fn describe_provisioning_parameters(
+        &self,
+        input: DescribeProvisioningParametersInput,
+    ) -> Result<
+        DescribeProvisioningParametersOutput,
+        RusotoError<DescribeProvisioningParametersError>,
+    >;
+
+    /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
+    async fn describe_record(
+        &self,
+        input: DescribeRecordInput,
+    ) -> Result<DescribeRecordOutput, RusotoError<DescribeRecordError>>;
+
+    /// <p>Describes a self-service action.</p>
+    async fn describe_service_action(
+        &self,
+        input: DescribeServiceActionInput,
+    ) -> Result<DescribeServiceActionOutput, RusotoError<DescribeServiceActionError>>;
+
     /// <p>Gets information about the specified TagOption.</p>
-    fn describe_tag_option(
+    async fn describe_tag_option(
         &self,
         input: DescribeTagOptionInput,
-    ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError>;
+    ) -> Result<DescribeTagOptionOutput, RusotoError<DescribeTagOptionError>>;
 
     /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
-    fn disable_aws_organizations_access(
+    async fn disable_aws_organizations_access(
         &self,
-    ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError>;
+    ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>;
 
     /// <p>Disassociates the specified budget from the specified resource.</p>
-    fn disassociate_budget_from_resource(
+    async fn disassociate_budget_from_resource(
         &self,
         input: DisassociateBudgetFromResourceInput,
-    ) -> RusotoFuture<DisassociateBudgetFromResourceOutput, DisassociateBudgetFromResourceError>;
+    ) -> Result<
+        DisassociateBudgetFromResourceOutput,
+        RusotoError<DisassociateBudgetFromResourceError>,
+    >;
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
-    fn disassociate_principal_from_portfolio(
+    async fn disassociate_principal_from_portfolio(
         &self,
         input: DisassociatePrincipalFromPortfolioInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePrincipalFromPortfolioOutput,
-        DisassociatePrincipalFromPortfolioError,
+        RusotoError<DisassociatePrincipalFromPortfolioError>,
     >;
 
     /// <p>Disassociates the specified product from the specified portfolio. </p>
-    fn disassociate_product_from_portfolio(
+    async fn disassociate_product_from_portfolio(
         &self,
         input: DisassociateProductFromPortfolioInput,
-    ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
+    ) -> Result<
+        DisassociateProductFromPortfolioOutput,
+        RusotoError<DisassociateProductFromPortfolioError>,
+    >;
 
     /// <p>Disassociates the specified self-service action association from the specified provisioning artifact.</p>
-    fn disassociate_service_action_from_provisioning_artifact(
+    async fn disassociate_service_action_from_provisioning_artifact(
         &self,
         input: DisassociateServiceActionFromProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateServiceActionFromProvisioningArtifactOutput,
-        DisassociateServiceActionFromProvisioningArtifactError,
+        RusotoError<DisassociateServiceActionFromProvisioningArtifactError>,
     >;
 
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
-    fn disassociate_tag_option_from_resource(
+    async fn disassociate_tag_option_from_resource(
         &self,
         input: DisassociateTagOptionFromResourceInput,
-    ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
+    ) -> Result<
+        DisassociateTagOptionFromResourceOutput,
+        RusotoError<DisassociateTagOptionFromResourceError>,
+    >;
 
     /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
-    fn enable_aws_organizations_access(
+    async fn enable_aws_organizations_access(
         &self,
-    ) -> RusotoFuture<EnableAWSOrganizationsAccessOutput, EnableAWSOrganizationsAccessError>;
+    ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>;
 
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
-    fn execute_provisioned_product_plan(
+    async fn execute_provisioned_product_plan(
         &self,
         input: ExecuteProvisionedProductPlanInput,
-    ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError>;
+    ) -> Result<ExecuteProvisionedProductPlanOutput, RusotoError<ExecuteProvisionedProductPlanError>>;
 
     /// <p>Executes a self-service action against a provisioned product.</p>
-    fn execute_provisioned_product_service_action(
+    async fn execute_provisioned_product_service_action(
         &self,
         input: ExecuteProvisionedProductServiceActionInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ExecuteProvisionedProductServiceActionOutput,
-        ExecuteProvisionedProductServiceActionError,
+        RusotoError<ExecuteProvisionedProductServiceActionError>,
     >;
 
     /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
-    fn get_aws_organizations_access_status(
+    async fn get_aws_organizations_access_status(
         &self,
-    ) -> RusotoFuture<GetAWSOrganizationsAccessStatusOutput, GetAWSOrganizationsAccessStatusError>;
+    ) -> Result<
+        GetAWSOrganizationsAccessStatusOutput,
+        RusotoError<GetAWSOrganizationsAccessStatusError>,
+    >;
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
-    fn list_accepted_portfolio_shares(
+    async fn list_accepted_portfolio_shares(
         &self,
         input: ListAcceptedPortfolioSharesInput,
-    ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
+    ) -> Result<ListAcceptedPortfolioSharesOutput, RusotoError<ListAcceptedPortfolioSharesError>>;
 
     /// <p>Lists all the budgets associated to the specified resource.</p>
-    fn list_budgets_for_resource(
+    async fn list_budgets_for_resource(
         &self,
         input: ListBudgetsForResourceInput,
-    ) -> RusotoFuture<ListBudgetsForResourceOutput, ListBudgetsForResourceError>;
+    ) -> Result<ListBudgetsForResourceOutput, RusotoError<ListBudgetsForResourceError>>;
 
     /// <p>Lists the constraints for the specified portfolio and product.</p>
-    fn list_constraints_for_portfolio(
+    async fn list_constraints_for_portfolio(
         &self,
         input: ListConstraintsForPortfolioInput,
-    ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
+    ) -> Result<ListConstraintsForPortfolioOutput, RusotoError<ListConstraintsForPortfolioError>>;
 
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
-    fn list_launch_paths(
+    async fn list_launch_paths(
         &self,
         input: ListLaunchPathsInput,
-    ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError>;
+    ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>>;
 
     /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
-    fn list_organization_portfolio_access(
+    async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,
-    ) -> RusotoFuture<ListOrganizationPortfolioAccessOutput, ListOrganizationPortfolioAccessError>;
+    ) -> Result<
+        ListOrganizationPortfolioAccessOutput,
+        RusotoError<ListOrganizationPortfolioAccessError>,
+    >;
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
-    fn list_portfolio_access(
+    async fn list_portfolio_access(
         &self,
         input: ListPortfolioAccessInput,
-    ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError>;
+    ) -> Result<ListPortfolioAccessOutput, RusotoError<ListPortfolioAccessError>>;
 
     /// <p>Lists all portfolios in the catalog.</p>
-    fn list_portfolios(
+    async fn list_portfolios(
         &self,
         input: ListPortfoliosInput,
-    ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError>;
+    ) -> Result<ListPortfoliosOutput, RusotoError<ListPortfoliosError>>;
 
     /// <p>Lists all portfolios that the specified product is associated with.</p>
-    fn list_portfolios_for_product(
+    async fn list_portfolios_for_product(
         &self,
         input: ListPortfoliosForProductInput,
-    ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
+    ) -> Result<ListPortfoliosForProductOutput, RusotoError<ListPortfoliosForProductError>>;
 
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
-    fn list_principals_for_portfolio(
+    async fn list_principals_for_portfolio(
         &self,
         input: ListPrincipalsForPortfolioInput,
-    ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
+    ) -> Result<ListPrincipalsForPortfolioOutput, RusotoError<ListPrincipalsForPortfolioError>>;
 
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
-    fn list_provisioned_product_plans(
+    async fn list_provisioned_product_plans(
         &self,
         input: ListProvisionedProductPlansInput,
-    ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError>;
+    ) -> Result<ListProvisionedProductPlansOutput, RusotoError<ListProvisionedProductPlansError>>;
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
-    fn list_provisioning_artifacts(
+    async fn list_provisioning_artifacts(
         &self,
         input: ListProvisioningArtifactsInput,
-    ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
+    ) -> Result<ListProvisioningArtifactsOutput, RusotoError<ListProvisioningArtifactsError>>;
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified self-service action.</p>
-    fn list_provisioning_artifacts_for_service_action(
+    async fn list_provisioning_artifacts_for_service_action(
         &self,
         input: ListProvisioningArtifactsForServiceActionInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListProvisioningArtifactsForServiceActionOutput,
-        ListProvisioningArtifactsForServiceActionError,
+        RusotoError<ListProvisioningArtifactsForServiceActionError>,
     >;
 
     /// <p>Lists the specified requests or all performed requests.</p>
-    fn list_record_history(
+    async fn list_record_history(
         &self,
         input: ListRecordHistoryInput,
-    ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError>;
+    ) -> Result<ListRecordHistoryOutput, RusotoError<ListRecordHistoryError>>;
 
     /// <p>Lists the resources associated with the specified TagOption.</p>
-    fn list_resources_for_tag_option(
+    async fn list_resources_for_tag_option(
         &self,
         input: ListResourcesForTagOptionInput,
-    ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
+    ) -> Result<ListResourcesForTagOptionOutput, RusotoError<ListResourcesForTagOptionError>>;
 
     /// <p>Lists all self-service actions.</p>
-    fn list_service_actions(
+    async fn list_service_actions(
         &self,
         input: ListServiceActionsInput,
-    ) -> RusotoFuture<ListServiceActionsOutput, ListServiceActionsError>;
+    ) -> Result<ListServiceActionsOutput, RusotoError<ListServiceActionsError>>;
 
     /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
-    fn list_service_actions_for_provisioning_artifact(
+    async fn list_service_actions_for_provisioning_artifact(
         &self,
         input: ListServiceActionsForProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListServiceActionsForProvisioningArtifactOutput,
-        ListServiceActionsForProvisioningArtifactError,
+        RusotoError<ListServiceActionsForProvisioningArtifactError>,
     >;
 
     /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
-    fn list_stack_instances_for_provisioned_product(
+    async fn list_stack_instances_for_provisioned_product(
         &self,
         input: ListStackInstancesForProvisionedProductInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListStackInstancesForProvisionedProductOutput,
-        ListStackInstancesForProvisionedProductError,
+        RusotoError<ListStackInstancesForProvisionedProductError>,
     >;
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
-    fn list_tag_options(
+    async fn list_tag_options(
         &self,
         input: ListTagOptionsInput,
-    ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError>;
+    ) -> Result<ListTagOptionsOutput, RusotoError<ListTagOptionsError>>;
 
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
-    fn provision_product(
+    async fn provision_product(
         &self,
         input: ProvisionProductInput,
-    ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError>;
+    ) -> Result<ProvisionProductOutput, RusotoError<ProvisionProductError>>;
 
     /// <p>Rejects an offer to share the specified portfolio.</p>
-    fn reject_portfolio_share(
+    async fn reject_portfolio_share(
         &self,
         input: RejectPortfolioShareInput,
-    ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError>;
+    ) -> Result<RejectPortfolioShareOutput, RusotoError<RejectPortfolioShareError>>;
 
     /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
-    fn scan_provisioned_products(
+    async fn scan_provisioned_products(
         &self,
         input: ScanProvisionedProductsInput,
-    ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
+    ) -> Result<ScanProvisionedProductsOutput, RusotoError<ScanProvisionedProductsError>>;
 
     /// <p>Gets information about the products to which the caller has access.</p>
-    fn search_products(
+    async fn search_products(
         &self,
         input: SearchProductsInput,
-    ) -> RusotoFuture<SearchProductsOutput, SearchProductsError>;
+    ) -> Result<SearchProductsOutput, RusotoError<SearchProductsError>>;
 
     /// <p>Gets information about the products for the specified portfolio or all products.</p>
-    fn search_products_as_admin(
+    async fn search_products_as_admin(
         &self,
         input: SearchProductsAsAdminInput,
-    ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
+    ) -> Result<SearchProductsAsAdminOutput, RusotoError<SearchProductsAsAdminError>>;
 
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
-    fn search_provisioned_products(
+    async fn search_provisioned_products(
         &self,
         input: SearchProvisionedProductsInput,
-    ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError>;
+    ) -> Result<SearchProvisionedProductsOutput, RusotoError<SearchProvisionedProductsError>>;
 
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
-    fn terminate_provisioned_product(
+    async fn terminate_provisioned_product(
         &self,
         input: TerminateProvisionedProductInput,
-    ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
+    ) -> Result<TerminateProvisionedProductOutput, RusotoError<TerminateProvisionedProductError>>;
 
     /// <p>Updates the specified constraint.</p>
-    fn update_constraint(
+    async fn update_constraint(
         &self,
         input: UpdateConstraintInput,
-    ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError>;
+    ) -> Result<UpdateConstraintOutput, RusotoError<UpdateConstraintError>>;
 
     /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
-    fn update_portfolio(
+    async fn update_portfolio(
         &self,
         input: UpdatePortfolioInput,
-    ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError>;
+    ) -> Result<UpdatePortfolioOutput, RusotoError<UpdatePortfolioError>>;
 
     /// <p>Updates the specified product.</p>
-    fn update_product(
+    async fn update_product(
         &self,
         input: UpdateProductInput,
-    ) -> RusotoFuture<UpdateProductOutput, UpdateProductError>;
+    ) -> Result<UpdateProductOutput, RusotoError<UpdateProductError>>;
 
     /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
-    fn update_provisioned_product(
+    async fn update_provisioned_product(
         &self,
         input: UpdateProvisionedProductInput,
-    ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
+    ) -> Result<UpdateProvisionedProductOutput, RusotoError<UpdateProvisionedProductError>>;
 
     /// <p>Requests updates to the properties of the specified provisioned product.</p>
-    fn update_provisioned_product_properties(
+    async fn update_provisioned_product_properties(
         &self,
         input: UpdateProvisionedProductPropertiesInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateProvisionedProductPropertiesOutput,
-        UpdateProvisionedProductPropertiesError,
+        RusotoError<UpdateProvisionedProductPropertiesError>,
     >;
 
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
-    fn update_provisioning_artifact(
+    async fn update_provisioning_artifact(
         &self,
         input: UpdateProvisioningArtifactInput,
-    ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
+    ) -> Result<UpdateProvisioningArtifactOutput, RusotoError<UpdateProvisioningArtifactError>>;
 
     /// <p>Updates a self-service action.</p>
-    fn update_service_action(
+    async fn update_service_action(
         &self,
         input: UpdateServiceActionInput,
-    ) -> RusotoFuture<UpdateServiceActionOutput, UpdateServiceActionError>;
+    ) -> Result<UpdateServiceActionOutput, RusotoError<UpdateServiceActionError>>;
 
     /// <p>Updates the specified TagOption.</p>
-    fn update_tag_option(
+    async fn update_tag_option(
         &self,
         input: UpdateTagOptionInput,
-    ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError>;
+    ) -> Result<UpdateTagOptionOutput, RusotoError<UpdateTagOptionError>>;
 }
 /// A client for the AWS Service Catalog API.
 #[derive(Clone)]
@@ -7872,7 +7788,10 @@ impl ServiceCatalogClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ServiceCatalogClient {
-        Self::new_with_client(Client::shared(), region)
+        ServiceCatalogClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -7882,35 +7801,22 @@ impl ServiceCatalogClient {
     ) -> ServiceCatalogClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        ServiceCatalogClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> ServiceCatalogClient {
-        ServiceCatalogClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for ServiceCatalogClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ServiceCatalogClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl ServiceCatalog for ServiceCatalogClient {
     /// <p>Accepts an offer to share the specified portfolio.</p>
-    fn accept_portfolio_share(
+    async fn accept_portfolio_share(
         &self,
         input: AcceptPortfolioShareInput,
-    ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
+    ) -> Result<AcceptPortfolioShareOutput, RusotoError<AcceptPortfolioShareError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7921,27 +7827,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AcceptPortfolioShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(AcceptPortfolioShareError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptPortfolioShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptPortfolioShareError::from_response(response))
+        }
     }
 
     /// <p>Associates the specified budget with the specified resource.</p>
-    fn associate_budget_with_resource(
+    async fn associate_budget_with_resource(
         &self,
         input: AssociateBudgetWithResourceInput,
-    ) -> RusotoFuture<AssociateBudgetWithResourceOutput, AssociateBudgetWithResourceError> {
+    ) -> Result<AssociateBudgetWithResourceOutput, RusotoError<AssociateBudgetWithResourceError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7952,26 +7859,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateBudgetWithResourceOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateBudgetWithResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateBudgetWithResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateBudgetWithResourceError::from_response(response))
+        }
     }
 
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
-    fn associate_principal_with_portfolio(
+    async fn associate_principal_with_portfolio(
         &self,
         input: AssociatePrincipalWithPortfolioInput,
-    ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>
-    {
+    ) -> Result<
+        AssociatePrincipalWithPortfolioOutput,
+        RusotoError<AssociatePrincipalWithPortfolioError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7982,27 +7893,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociatePrincipalWithPortfolioError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociatePrincipalWithPortfolioError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Associates the specified product with the specified portfolio.</p>
-    fn associate_product_with_portfolio(
+    async fn associate_product_with_portfolio(
         &self,
         input: AssociateProductWithPortfolioInput,
-    ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
+    ) -> Result<AssociateProductWithPortfolioOutput, RusotoError<AssociateProductWithPortfolioError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8013,27 +7927,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateProductWithPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateProductWithPortfolioError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateProductWithPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateProductWithPortfolioError::from_response(response))
+        }
     }
 
     /// <p>Associates a self-service action with a provisioning artifact.</p>
-    fn associate_service_action_with_provisioning_artifact(
+    async fn associate_service_action_with_provisioning_artifact(
         &self,
         input: AssociateServiceActionWithProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         AssociateServiceActionWithProvisioningArtifactOutput,
-        AssociateServiceActionWithProvisioningArtifactError,
+        RusotoError<AssociateServiceActionWithProvisioningArtifactError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8045,25 +7961,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
-    fn associate_tag_option_with_resource(
+    async fn associate_tag_option_with_resource(
         &self,
         input: AssociateTagOptionWithResourceInput,
-    ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>
-    {
+    ) -> Result<
+        AssociateTagOptionWithResourceOutput,
+        RusotoError<AssociateTagOptionWithResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8074,27 +7995,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateTagOptionWithResourceOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateTagOptionWithResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateTagOptionWithResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateTagOptionWithResourceError::from_response(response))
+        }
     }
 
     /// <p>Associates multiple self-service actions with provisioning artifacts.</p>
-    fn batch_associate_service_action_with_provisioning_artifact(
+    async fn batch_associate_service_action_with_provisioning_artifact(
         &self,
         input: BatchAssociateServiceActionWithProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchAssociateServiceActionWithProvisioningArtifactOutput,
-        BatchAssociateServiceActionWithProvisioningArtifactError,
+        RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8106,26 +8029,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
-    fn batch_disassociate_service_action_from_provisioning_artifact(
+    async fn batch_disassociate_service_action_from_provisioning_artifact(
         &self,
         input: BatchDisassociateServiceActionFromProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         BatchDisassociateServiceActionFromProvisioningArtifactOutput,
-        BatchDisassociateServiceActionFromProvisioningArtifactError,
+        RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8137,24 +8063,31 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(
+                BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(
+                    response,
+                ),
+            )
+        }
     }
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
-    fn copy_product(
+    async fn copy_product(
         &self,
         input: CopyProductInput,
-    ) -> RusotoFuture<CopyProductOutput, CopyProductError> {
+    ) -> Result<CopyProductOutput, RusotoError<CopyProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8162,28 +8095,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CopyProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CopyProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CopyProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CopyProductError::from_response(response))
+        }
     }
 
     /// <p>Creates a constraint.</p>
-    fn create_constraint(
+    async fn create_constraint(
         &self,
         input: CreateConstraintInput,
-    ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError> {
+    ) -> Result<CreateConstraintOutput, RusotoError<CreateConstraintError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8194,28 +8125,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateConstraintOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateConstraintError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateConstraintOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateConstraintError::from_response(response))
+        }
     }
 
     /// <p>Creates a portfolio.</p>
-    fn create_portfolio(
+    async fn create_portfolio(
         &self,
         input: CreatePortfolioInput,
-    ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError> {
+    ) -> Result<CreatePortfolioOutput, RusotoError<CreatePortfolioError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8226,28 +8155,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreatePortfolioError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreatePortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePortfolioError::from_response(response))
+        }
     }
 
     /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
-    fn create_portfolio_share(
+    async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
-    ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError> {
+    ) -> Result<CreatePortfolioShareOutput, RusotoError<CreatePortfolioShareError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8258,27 +8185,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePortfolioShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreatePortfolioShareError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePortfolioShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePortfolioShareError::from_response(response))
+        }
     }
 
     /// <p>Creates a product.</p>
-    fn create_product(
+    async fn create_product(
         &self,
         input: CreateProductInput,
-    ) -> RusotoFuture<CreateProductOutput, CreateProductError> {
+    ) -> Result<CreateProductOutput, RusotoError<CreateProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8286,28 +8213,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProductError::from_response(response))
+        }
     }
 
     /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
-    fn create_provisioned_product_plan(
+    async fn create_provisioned_product_plan(
         &self,
         input: CreateProvisionedProductPlanInput,
-    ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError> {
+    ) -> Result<CreateProvisionedProductPlanOutput, RusotoError<CreateProvisionedProductPlanError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8318,25 +8244,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProvisionedProductPlanOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisionedProductPlanError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProvisionedProductPlanOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProvisionedProductPlanError::from_response(response))
+        }
     }
 
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
-    fn create_provisioning_artifact(
+    async fn create_provisioning_artifact(
         &self,
         input: CreateProvisioningArtifactInput,
-    ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
+    ) -> Result<CreateProvisioningArtifactOutput, RusotoError<CreateProvisioningArtifactError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8347,25 +8276,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProvisioningArtifactOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisioningArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Creates a self-service action.</p>
-    fn create_service_action(
+    async fn create_service_action(
         &self,
         input: CreateServiceActionInput,
-    ) -> RusotoFuture<CreateServiceActionOutput, CreateServiceActionError> {
+    ) -> Result<CreateServiceActionOutput, RusotoError<CreateServiceActionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8376,27 +8307,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateServiceActionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateServiceActionError::from_response(response))
+        }
     }
 
     /// <p>Creates a TagOption.</p>
-    fn create_tag_option(
+    async fn create_tag_option(
         &self,
         input: CreateTagOptionInput,
-    ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError> {
+    ) -> Result<CreateTagOptionOutput, RusotoError<CreateTagOptionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8407,28 +8338,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateTagOptionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateTagOptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagOptionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTagOptionError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified constraint.</p>
-    fn delete_constraint(
+    async fn delete_constraint(
         &self,
         input: DeleteConstraintInput,
-    ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError> {
+    ) -> Result<DeleteConstraintOutput, RusotoError<DeleteConstraintError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8439,28 +8368,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteConstraintOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteConstraintError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteConstraintOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConstraintError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
-    fn delete_portfolio(
+    async fn delete_portfolio(
         &self,
         input: DeletePortfolioInput,
-    ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError> {
+    ) -> Result<DeletePortfolioOutput, RusotoError<DeletePortfolioError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8471,28 +8398,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeletePortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeletePortfolioError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeletePortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePortfolioError::from_response(response))
+        }
     }
 
     /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
-    fn delete_portfolio_share(
+    async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
-    ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError> {
+    ) -> Result<DeletePortfolioShareOutput, RusotoError<DeletePortfolioShareError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8503,27 +8428,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeletePortfolioShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeletePortfolioShareError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeletePortfolioShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePortfolioShareError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
-    fn delete_product(
+    async fn delete_product(
         &self,
         input: DeleteProductInput,
-    ) -> RusotoFuture<DeleteProductOutput, DeleteProductError> {
+    ) -> Result<DeleteProductOutput, RusotoError<DeleteProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8531,28 +8456,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProductError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified plan.</p>
-    fn delete_provisioned_product_plan(
+    async fn delete_provisioned_product_plan(
         &self,
         input: DeleteProvisionedProductPlanInput,
-    ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError> {
+    ) -> Result<DeleteProvisionedProductPlanOutput, RusotoError<DeleteProvisionedProductPlanError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8563,25 +8487,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProvisionedProductPlanOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisionedProductPlanError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProvisionedProductPlanOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProvisionedProductPlanError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
-    fn delete_provisioning_artifact(
+    async fn delete_provisioning_artifact(
         &self,
         input: DeleteProvisioningArtifactInput,
-    ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
+    ) -> Result<DeleteProvisioningArtifactOutput, RusotoError<DeleteProvisioningArtifactError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8592,25 +8519,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProvisioningArtifactOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisioningArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Deletes a self-service action.</p>
-    fn delete_service_action(
+    async fn delete_service_action(
         &self,
         input: DeleteServiceActionInput,
-    ) -> RusotoFuture<DeleteServiceActionOutput, DeleteServiceActionError> {
+    ) -> Result<DeleteServiceActionOutput, RusotoError<DeleteServiceActionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8621,27 +8550,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteServiceActionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteServiceActionError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
-    fn delete_tag_option(
+    async fn delete_tag_option(
         &self,
         input: DeleteTagOptionInput,
-    ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError> {
+    ) -> Result<DeleteTagOptionOutput, RusotoError<DeleteTagOptionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8652,28 +8581,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagOptionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteTagOptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagOptionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTagOptionError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified constraint.</p>
-    fn describe_constraint(
+    async fn describe_constraint(
         &self,
         input: DescribeConstraintInput,
-    ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError> {
+    ) -> Result<DescribeConstraintOutput, RusotoError<DescribeConstraintError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8684,28 +8611,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeConstraintOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeConstraintError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeConstraintOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeConstraintError::from_response(response))
+        }
     }
 
     /// <p>Gets the status of the specified copy product operation.</p>
-    fn describe_copy_product_status(
+    async fn describe_copy_product_status(
         &self,
         input: DescribeCopyProductStatusInput,
-    ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError> {
+    ) -> Result<DescribeCopyProductStatusOutput, RusotoError<DescribeCopyProductStatusError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8716,25 +8642,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCopyProductStatusOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCopyProductStatusError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeCopyProductStatusOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeCopyProductStatusError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified portfolio.</p>
-    fn describe_portfolio(
+    async fn describe_portfolio(
         &self,
         input: DescribePortfolioInput,
-    ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError> {
+    ) -> Result<DescribePortfolioOutput, RusotoError<DescribePortfolioError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8745,28 +8673,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribePortfolioError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribePortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePortfolioError::from_response(response))
+        }
     }
 
     /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
-    fn describe_portfolio_share_status(
+    async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
-    ) -> RusotoFuture<DescribePortfolioShareStatusOutput, DescribePortfolioShareStatusError> {
+    ) -> Result<DescribePortfolioShareStatusOutput, RusotoError<DescribePortfolioShareStatusError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8777,25 +8704,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePortfolioShareStatusOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePortfolioShareStatusError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePortfolioShareStatusOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePortfolioShareStatusError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified product.</p>
-    fn describe_product(
+    async fn describe_product(
         &self,
         input: DescribeProductInput,
-    ) -> RusotoFuture<DescribeProductOutput, DescribeProductError> {
+    ) -> Result<DescribeProductOutput, RusotoError<DescribeProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8806,28 +8735,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProductError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
-    fn describe_product_as_admin(
+    async fn describe_product_as_admin(
         &self,
         input: DescribeProductAsAdminInput,
-    ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
+    ) -> Result<DescribeProductAsAdminOutput, RusotoError<DescribeProductAsAdminError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8838,27 +8765,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProductAsAdminOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeProductAsAdminError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProductAsAdminOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProductAsAdminError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified product.</p>
-    fn describe_product_view(
+    async fn describe_product_view(
         &self,
         input: DescribeProductViewInput,
-    ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError> {
+    ) -> Result<DescribeProductViewOutput, RusotoError<DescribeProductViewError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8869,27 +8796,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProductViewOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeProductViewError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProductViewOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProductViewError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified provisioned product.</p>
-    fn describe_provisioned_product(
+    async fn describe_provisioned_product(
         &self,
         input: DescribeProvisionedProductInput,
-    ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
+    ) -> Result<DescribeProvisionedProductOutput, RusotoError<DescribeProvisionedProductError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8900,26 +8828,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisionedProductOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisionedProductError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProvisionedProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProvisionedProductError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the resource changes for the specified plan.</p>
-    fn describe_provisioned_product_plan(
+    async fn describe_provisioned_product_plan(
         &self,
         input: DescribeProvisionedProductPlanInput,
-    ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>
-    {
+    ) -> Result<
+        DescribeProvisionedProductPlanOutput,
+        RusotoError<DescribeProvisionedProductPlanError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8930,25 +8862,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisionedProductPlanOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisionedProductPlanError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProvisionedProductPlanOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProvisionedProductPlanError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
-    fn describe_provisioning_artifact(
+    async fn describe_provisioning_artifact(
         &self,
         input: DescribeProvisioningArtifactInput,
-    ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
+    ) -> Result<DescribeProvisioningArtifactOutput, RusotoError<DescribeProvisioningArtifactError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8959,26 +8894,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisioningArtifactOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
-    fn describe_provisioning_parameters(
+    async fn describe_provisioning_parameters(
         &self,
         input: DescribeProvisioningParametersInput,
-    ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>
-    {
+    ) -> Result<
+        DescribeProvisioningParametersOutput,
+        RusotoError<DescribeProvisioningParametersError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8989,25 +8928,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProvisioningParametersOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningParametersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProvisioningParametersOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProvisioningParametersError::from_response(response))
+        }
     }
 
     /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
-    fn describe_record(
+    async fn describe_record(
         &self,
         input: DescribeRecordInput,
-    ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError> {
+    ) -> Result<DescribeRecordOutput, RusotoError<DescribeRecordError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9015,28 +8956,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRecordOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeRecordError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeRecordOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRecordError::from_response(response))
+        }
     }
 
     /// <p>Describes a self-service action.</p>
-    fn describe_service_action(
+    async fn describe_service_action(
         &self,
         input: DescribeServiceActionInput,
-    ) -> RusotoFuture<DescribeServiceActionOutput, DescribeServiceActionError> {
+    ) -> Result<DescribeServiceActionOutput, RusotoError<DescribeServiceActionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9047,58 +8986,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeServiceActionError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    fn describe_service_action_execution_parameters(
-        &self,
-        input: DescribeServiceActionExecutionParametersInput,
-    ) -> RusotoFuture<
-        DescribeServiceActionExecutionParametersOutput,
-        DescribeServiceActionExecutionParametersError,
-    > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AWS242ServiceCatalogService.DescribeServiceActionExecutionParameters",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeServiceActionExecutionParametersOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeServiceActionExecutionParametersError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeServiceActionError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the specified TagOption.</p>
-    fn describe_tag_option(
+    async fn describe_tag_option(
         &self,
         input: DescribeTagOptionInput,
-    ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError> {
+    ) -> Result<DescribeTagOptionOutput, RusotoError<DescribeTagOptionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9109,27 +9017,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTagOptionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeTagOptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagOptionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTagOptionError::from_response(response))
+        }
     }
 
     /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
-    fn disable_aws_organizations_access(
+    async fn disable_aws_organizations_access(
         &self,
-    ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError> {
+    ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9139,26 +9046,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableAWSOrganizationsAccessError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableAWSOrganizationsAccessError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified budget from the specified resource.</p>
-    fn disassociate_budget_from_resource(
+    async fn disassociate_budget_from_resource(
         &self,
         input: DisassociateBudgetFromResourceInput,
-    ) -> RusotoFuture<DisassociateBudgetFromResourceOutput, DisassociateBudgetFromResourceError>
-    {
+    ) -> Result<
+        DisassociateBudgetFromResourceOutput,
+        RusotoError<DisassociateBudgetFromResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9169,27 +9080,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateBudgetFromResourceOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateBudgetFromResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateBudgetFromResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateBudgetFromResourceError::from_response(response))
+        }
     }
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
-    fn disassociate_principal_from_portfolio(
+    async fn disassociate_principal_from_portfolio(
         &self,
         input: DisassociatePrincipalFromPortfolioInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociatePrincipalFromPortfolioOutput,
-        DisassociatePrincipalFromPortfolioError,
+        RusotoError<DisassociatePrincipalFromPortfolioError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9201,28 +9114,32 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociatePrincipalFromPortfolioError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociatePrincipalFromPortfolioError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates the specified product from the specified portfolio. </p>
-    fn disassociate_product_from_portfolio(
+    async fn disassociate_product_from_portfolio(
         &self,
         input: DisassociateProductFromPortfolioInput,
-    ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>
-    {
+    ) -> Result<
+        DisassociateProductFromPortfolioOutput,
+        RusotoError<DisassociateProductFromPortfolioError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9233,29 +9150,31 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateProductFromPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateProductFromPortfolioError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateProductFromPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateProductFromPortfolioError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Disassociates the specified self-service action association from the specified provisioning artifact.</p>
-    fn disassociate_service_action_from_provisioning_artifact(
+    async fn disassociate_service_action_from_provisioning_artifact(
         &self,
         input: DisassociateServiceActionFromProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         DisassociateServiceActionFromProvisioningArtifactOutput,
-        DisassociateServiceActionFromProvisioningArtifactError,
+        RusotoError<DisassociateServiceActionFromProvisioningArtifactError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9267,25 +9186,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
-                }))
-                        } else {
-                            Box::new(response.buffer().from_err().and_then(|response| {
-                                Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
-                            }))
-                        }
-                    })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
-    fn disassociate_tag_option_from_resource(
+    async fn disassociate_tag_option_from_resource(
         &self,
         input: DisassociateTagOptionFromResourceInput,
-    ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>
-    {
+    ) -> Result<
+        DisassociateTagOptionFromResourceOutput,
+        RusotoError<DisassociateTagOptionFromResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9296,26 +9220,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateTagOptionFromResourceError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateTagOptionFromResourceError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
-    fn enable_aws_organizations_access(
+    async fn enable_aws_organizations_access(
         &self,
-    ) -> RusotoFuture<EnableAWSOrganizationsAccessOutput, EnableAWSOrganizationsAccessError> {
+    ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9325,25 +9252,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableAWSOrganizationsAccessError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableAWSOrganizationsAccessError::from_response(response))
+        }
     }
 
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
-    fn execute_provisioned_product_plan(
+    async fn execute_provisioned_product_plan(
         &self,
         input: ExecuteProvisionedProductPlanInput,
-    ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError> {
+    ) -> Result<ExecuteProvisionedProductPlanOutput, RusotoError<ExecuteProvisionedProductPlanError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9354,27 +9284,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExecuteProvisionedProductPlanError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ExecuteProvisionedProductPlanError::from_response(response))
+        }
     }
 
     /// <p>Executes a self-service action against a provisioned product.</p>
-    fn execute_provisioned_product_service_action(
+    async fn execute_provisioned_product_service_action(
         &self,
         input: ExecuteProvisionedProductServiceActionInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ExecuteProvisionedProductServiceActionOutput,
-        ExecuteProvisionedProductServiceActionError,
+        RusotoError<ExecuteProvisionedProductServiceActionError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9386,27 +9318,31 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExecuteProvisionedProductServiceActionError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ExecuteProvisionedProductServiceActionError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
-    fn get_aws_organizations_access_status(
+    async fn get_aws_organizations_access_status(
         &self,
-    ) -> RusotoFuture<GetAWSOrganizationsAccessStatusOutput, GetAWSOrganizationsAccessStatusError>
-    {
+    ) -> Result<
+        GetAWSOrganizationsAccessStatusOutput,
+        RusotoError<GetAWSOrganizationsAccessStatusError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9416,27 +9352,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAWSOrganizationsAccessStatusError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAWSOrganizationsAccessStatusError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
-    fn list_accepted_portfolio_shares(
+    async fn list_accepted_portfolio_shares(
         &self,
         input: ListAcceptedPortfolioSharesInput,
-    ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
+    ) -> Result<ListAcceptedPortfolioSharesOutput, RusotoError<ListAcceptedPortfolioSharesError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9447,25 +9386,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAcceptedPortfolioSharesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAcceptedPortfolioSharesError::from_response(response))
+        }
     }
 
     /// <p>Lists all the budgets associated to the specified resource.</p>
-    fn list_budgets_for_resource(
+    async fn list_budgets_for_resource(
         &self,
         input: ListBudgetsForResourceInput,
-    ) -> RusotoFuture<ListBudgetsForResourceOutput, ListBudgetsForResourceError> {
+    ) -> Result<ListBudgetsForResourceOutput, RusotoError<ListBudgetsForResourceError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9476,27 +9417,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBudgetsForResourceOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListBudgetsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBudgetsForResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBudgetsForResourceError::from_response(response))
+        }
     }
 
     /// <p>Lists the constraints for the specified portfolio and product.</p>
-    fn list_constraints_for_portfolio(
+    async fn list_constraints_for_portfolio(
         &self,
         input: ListConstraintsForPortfolioInput,
-    ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
+    ) -> Result<ListConstraintsForPortfolioOutput, RusotoError<ListConstraintsForPortfolioError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9507,25 +9449,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListConstraintsForPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConstraintsForPortfolioError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListConstraintsForPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListConstraintsForPortfolioError::from_response(response))
+        }
     }
 
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
-    fn list_launch_paths(
+    async fn list_launch_paths(
         &self,
         input: ListLaunchPathsInput,
-    ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError> {
+    ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9536,29 +9480,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListLaunchPathsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListLaunchPathsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListLaunchPathsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListLaunchPathsError::from_response(response))
+        }
     }
 
     /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
-    fn list_organization_portfolio_access(
+    async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,
-    ) -> RusotoFuture<ListOrganizationPortfolioAccessOutput, ListOrganizationPortfolioAccessError>
-    {
+    ) -> Result<
+        ListOrganizationPortfolioAccessOutput,
+        RusotoError<ListOrganizationPortfolioAccessError>,
+    > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9569,27 +9513,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOrganizationPortfolioAccessError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOrganizationPortfolioAccessError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
-    fn list_portfolio_access(
+    async fn list_portfolio_access(
         &self,
         input: ListPortfolioAccessInput,
-    ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError> {
+    ) -> Result<ListPortfolioAccessOutput, RusotoError<ListPortfolioAccessError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9600,27 +9546,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPortfolioAccessOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListPortfolioAccessError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPortfolioAccessOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPortfolioAccessError::from_response(response))
+        }
     }
 
     /// <p>Lists all portfolios in the catalog.</p>
-    fn list_portfolios(
+    async fn list_portfolios(
         &self,
         input: ListPortfoliosInput,
-    ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError> {
+    ) -> Result<ListPortfoliosOutput, RusotoError<ListPortfoliosError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9628,28 +9574,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPortfoliosOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListPortfoliosError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListPortfoliosOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPortfoliosError::from_response(response))
+        }
     }
 
     /// <p>Lists all portfolios that the specified product is associated with.</p>
-    fn list_portfolios_for_product(
+    async fn list_portfolios_for_product(
         &self,
         input: ListPortfoliosForProductInput,
-    ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
+    ) -> Result<ListPortfoliosForProductOutput, RusotoError<ListPortfoliosForProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9660,25 +9604,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPortfoliosForProductOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPortfoliosForProductError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPortfoliosForProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPortfoliosForProductError::from_response(response))
+        }
     }
 
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
-    fn list_principals_for_portfolio(
+    async fn list_principals_for_portfolio(
         &self,
         input: ListPrincipalsForPortfolioInput,
-    ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
+    ) -> Result<ListPrincipalsForPortfolioOutput, RusotoError<ListPrincipalsForPortfolioError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9689,25 +9636,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPrincipalsForPortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPrincipalsForPortfolioError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPrincipalsForPortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPrincipalsForPortfolioError::from_response(response))
+        }
     }
 
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
-    fn list_provisioned_product_plans(
+    async fn list_provisioned_product_plans(
         &self,
         input: ListProvisionedProductPlansInput,
-    ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError> {
+    ) -> Result<ListProvisionedProductPlansOutput, RusotoError<ListProvisionedProductPlansError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9718,25 +9668,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisionedProductPlansOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisionedProductPlansError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProvisionedProductPlansOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProvisionedProductPlansError::from_response(response))
+        }
     }
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
-    fn list_provisioning_artifacts(
+    async fn list_provisioning_artifacts(
         &self,
         input: ListProvisioningArtifactsInput,
-    ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
+    ) -> Result<ListProvisioningArtifactsOutput, RusotoError<ListProvisioningArtifactsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9747,27 +9699,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisioningArtifactsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisioningArtifactsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProvisioningArtifactsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProvisioningArtifactsError::from_response(response))
+        }
     }
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified self-service action.</p>
-    fn list_provisioning_artifacts_for_service_action(
+    async fn list_provisioning_artifacts_for_service_action(
         &self,
         input: ListProvisioningArtifactsForServiceActionInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListProvisioningArtifactsForServiceActionOutput,
-        ListProvisioningArtifactsForServiceActionError,
+        RusotoError<ListProvisioningArtifactsForServiceActionError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9779,25 +9733,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
+        }
     }
 
     /// <p>Lists the specified requests or all performed requests.</p>
-    fn list_record_history(
+    async fn list_record_history(
         &self,
         input: ListRecordHistoryInput,
-    ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError> {
+    ) -> Result<ListRecordHistoryOutput, RusotoError<ListRecordHistoryError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9808,28 +9764,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRecordHistoryOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListRecordHistoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListRecordHistoryOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRecordHistoryError::from_response(response))
+        }
     }
 
     /// <p>Lists the resources associated with the specified TagOption.</p>
-    fn list_resources_for_tag_option(
+    async fn list_resources_for_tag_option(
         &self,
         input: ListResourcesForTagOptionInput,
-    ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
+    ) -> Result<ListResourcesForTagOptionOutput, RusotoError<ListResourcesForTagOptionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9840,25 +9794,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListResourcesForTagOptionOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourcesForTagOptionError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourcesForTagOptionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourcesForTagOptionError::from_response(response))
+        }
     }
 
     /// <p>Lists all self-service actions.</p>
-    fn list_service_actions(
+    async fn list_service_actions(
         &self,
         input: ListServiceActionsInput,
-    ) -> RusotoFuture<ListServiceActionsOutput, ListServiceActionsError> {
+    ) -> Result<ListServiceActionsOutput, RusotoError<ListServiceActionsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9869,30 +9825,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListServiceActionsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListServiceActionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListServiceActionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListServiceActionsError::from_response(response))
+        }
     }
 
     /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
-    fn list_service_actions_for_provisioning_artifact(
+    async fn list_service_actions_for_provisioning_artifact(
         &self,
         input: ListServiceActionsForProvisioningArtifactInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListServiceActionsForProvisioningArtifactOutput,
-        ListServiceActionsForProvisioningArtifactError,
+        RusotoError<ListServiceActionsForProvisioningArtifactError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9904,27 +9859,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
-    fn list_stack_instances_for_provisioned_product(
+    async fn list_stack_instances_for_provisioned_product(
         &self,
         input: ListStackInstancesForProvisionedProductInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         ListStackInstancesForProvisionedProductOutput,
-        ListStackInstancesForProvisionedProductError,
+        RusotoError<ListStackInstancesForProvisionedProductError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9936,27 +9893,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackInstancesForProvisionedProductError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListStackInstancesForProvisionedProductError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
-    fn list_tag_options(
+    async fn list_tag_options(
         &self,
         input: ListTagOptionsInput,
-    ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError> {
+    ) -> Result<ListTagOptionsOutput, RusotoError<ListTagOptionsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9964,28 +9923,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagOptionsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListTagOptionsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTagOptionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagOptionsError::from_response(response))
+        }
     }
 
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
-    fn provision_product(
+    async fn provision_product(
         &self,
         input: ProvisionProductInput,
-    ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError> {
+    ) -> Result<ProvisionProductOutput, RusotoError<ProvisionProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9996,28 +9953,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ProvisionProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ProvisionProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ProvisionProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ProvisionProductError::from_response(response))
+        }
     }
 
     /// <p>Rejects an offer to share the specified portfolio.</p>
-    fn reject_portfolio_share(
+    async fn reject_portfolio_share(
         &self,
         input: RejectPortfolioShareInput,
-    ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError> {
+    ) -> Result<RejectPortfolioShareOutput, RusotoError<RejectPortfolioShareError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10028,27 +9983,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RejectPortfolioShareOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(RejectPortfolioShareError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectPortfolioShareOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectPortfolioShareError::from_response(response))
+        }
     }
 
     /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
-    fn scan_provisioned_products(
+    async fn scan_provisioned_products(
         &self,
         input: ScanProvisionedProductsInput,
-    ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
+    ) -> Result<ScanProvisionedProductsOutput, RusotoError<ScanProvisionedProductsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10059,25 +10014,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ScanProvisionedProductsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ScanProvisionedProductsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ScanProvisionedProductsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ScanProvisionedProductsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the products to which the caller has access.</p>
-    fn search_products(
+    async fn search_products(
         &self,
         input: SearchProductsInput,
-    ) -> RusotoFuture<SearchProductsOutput, SearchProductsError> {
+    ) -> Result<SearchProductsOutput, RusotoError<SearchProductsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10085,28 +10042,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchProductsOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(SearchProductsError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<SearchProductsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchProductsError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the products for the specified portfolio or all products.</p>
-    fn search_products_as_admin(
+    async fn search_products_as_admin(
         &self,
         input: SearchProductsAsAdminInput,
-    ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
+    ) -> Result<SearchProductsAsAdminOutput, RusotoError<SearchProductsAsAdminError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10117,27 +10072,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchProductsAsAdminOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SearchProductsAsAdminError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchProductsAsAdminOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchProductsAsAdminError::from_response(response))
+        }
     }
 
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
-    fn search_provisioned_products(
+    async fn search_provisioned_products(
         &self,
         input: SearchProvisionedProductsInput,
-    ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError> {
+    ) -> Result<SearchProvisionedProductsOutput, RusotoError<SearchProvisionedProductsError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10148,25 +10103,28 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SearchProvisionedProductsOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchProvisionedProductsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchProvisionedProductsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchProvisionedProductsError::from_response(response))
+        }
     }
 
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
-    fn terminate_provisioned_product(
+    async fn terminate_provisioned_product(
         &self,
         input: TerminateProvisionedProductInput,
-    ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
+    ) -> Result<TerminateProvisionedProductOutput, RusotoError<TerminateProvisionedProductError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10177,25 +10135,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TerminateProvisionedProductOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateProvisionedProductError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<TerminateProvisionedProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TerminateProvisionedProductError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified constraint.</p>
-    fn update_constraint(
+    async fn update_constraint(
         &self,
         input: UpdateConstraintInput,
-    ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError> {
+    ) -> Result<UpdateConstraintOutput, RusotoError<UpdateConstraintError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10206,28 +10166,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateConstraintOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateConstraintError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateConstraintOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConstraintError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
-    fn update_portfolio(
+    async fn update_portfolio(
         &self,
         input: UpdatePortfolioInput,
-    ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError> {
+    ) -> Result<UpdatePortfolioOutput, RusotoError<UpdatePortfolioError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10238,28 +10196,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePortfolioOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdatePortfolioError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdatePortfolioOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePortfolioError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified product.</p>
-    fn update_product(
+    async fn update_product(
         &self,
         input: UpdateProductInput,
-    ) -> RusotoFuture<UpdateProductOutput, UpdateProductError> {
+    ) -> Result<UpdateProductOutput, RusotoError<UpdateProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10267,28 +10223,26 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProductOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateProductError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProductError::from_response(response))
+        }
     }
 
     /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
-    fn update_provisioned_product(
+    async fn update_provisioned_product(
         &self,
         input: UpdateProvisionedProductInput,
-    ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
+    ) -> Result<UpdateProvisionedProductOutput, RusotoError<UpdateProvisionedProductError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10299,27 +10253,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProvisionedProductOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisionedProductError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateProvisionedProductOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProvisionedProductError::from_response(response))
+        }
     }
 
     /// <p>Requests updates to the properties of the specified provisioned product.</p>
-    fn update_provisioned_product_properties(
+    async fn update_provisioned_product_properties(
         &self,
         input: UpdateProvisionedProductPropertiesInput,
-    ) -> RusotoFuture<
+    ) -> Result<
         UpdateProvisionedProductPropertiesOutput,
-        UpdateProvisionedProductPropertiesError,
+        RusotoError<UpdateProvisionedProductPropertiesError>,
     > {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10331,27 +10287,30 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisionedProductPropertiesError::from_response(
-                        response,
-                    ))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProvisionedProductPropertiesError::from_response(
+                response,
+            ))
+        }
     }
 
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
-    fn update_provisioning_artifact(
+    async fn update_provisioning_artifact(
         &self,
         input: UpdateProvisioningArtifactInput,
-    ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
+    ) -> Result<UpdateProvisioningArtifactOutput, RusotoError<UpdateProvisioningArtifactError>>
+    {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10362,25 +10321,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProvisioningArtifactOutput, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisioningArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateProvisioningArtifactOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProvisioningArtifactError::from_response(response))
+        }
     }
 
     /// <p>Updates a self-service action.</p>
-    fn update_service_action(
+    async fn update_service_action(
         &self,
         input: UpdateServiceActionInput,
-    ) -> RusotoFuture<UpdateServiceActionOutput, UpdateServiceActionError> {
+    ) -> Result<UpdateServiceActionOutput, RusotoError<UpdateServiceActionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10391,27 +10352,27 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateServiceActionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateServiceActionError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateServiceActionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateServiceActionError::from_response(response))
+        }
     }
 
     /// <p>Updates the specified TagOption.</p>
-    fn update_tag_option(
+    async fn update_tag_option(
         &self,
         input: UpdateTagOptionInput,
-    ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError> {
+    ) -> Result<UpdateTagOptionOutput, RusotoError<UpdateTagOptionError>> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10422,20 +10383,18 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateTagOptionOutput, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UpdateTagOptionError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTagOptionOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTagOptionError::from_response(response))
+        }
     }
 }

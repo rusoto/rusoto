@@ -1,7 +1,6 @@
 #![cfg(test)]
 
-use std::collections::HashMap;
-use std::ffi::OsString;
+use lazy_static::lazy_static;
 use std::fmt::Debug;
 use std::sync::{Mutex, MutexGuard};
 

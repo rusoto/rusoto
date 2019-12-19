@@ -47,15 +47,13 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        self.client.sign_and_dispatch(request, |response| {{
-                            if !response.status.is_success() {{
-                                return Box::new(response.buffer().from_err().and_then(|response| {{
-                                    Err({error_type}::from_response(response))
-                                }}));
-                            }}
+                        let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
+                        if !response.status.is_success() {{
+                            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                            return Err({error_type}::from_response(response));
+                        }}
 
-                            {parse_response_body}
-                        }})
+                        {parse_response_body}
                     }}
                     ",
                      documentation = generate_documentation(operation, service),
@@ -264,7 +262,7 @@ fn generate_method_signature(
 ) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
+            "async fn {operation_name}(&self, input: {input_type}) -> Result<{output_type}, RusotoError<{error_type}>>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -272,7 +270,7 @@ fn generate_method_signature(
         )
     } else {
         format!(
-            "fn {operation_name}(&self) -> RusotoFuture<{output_type}, {error_type}>",
+            "async fn {operation_name}(&self) -> Result<{output_type}, RusotoError<{error_type}>>",
             operation_name = operation_name.to_snake_case(),
             error_type = error_type_name(service, operation_name),
             output_type = &operation.output_shape_or("()"),

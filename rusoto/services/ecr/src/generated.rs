@@ -9,36 +9,24 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct Attribute {
-    /// <p>The attribute key.</p>
-    #[serde(rename = "key")]
-    pub key: String,
-    /// <p>The value assigned to the attribute key.</p>
-    #[serde(rename = "value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
-}
-
 /// <p>An object representing authorization data for an Amazon ECR registry.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthorizationData {
     /// <p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>
     #[serde(rename = "authorizationToken")]
@@ -69,7 +57,7 @@ pub struct BatchCheckLayerAvailabilityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchCheckLayerAvailabilityResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -97,7 +85,7 @@ pub struct BatchDeleteImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeleteImageResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -128,7 +116,7 @@ pub struct BatchGetImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetImageResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -158,7 +146,7 @@ pub struct CompleteLayerUploadRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CompleteLayerUploadResponse {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
     #[serde(rename = "layerDigest")]
@@ -180,25 +168,17 @@ pub struct CompleteLayerUploadResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRepositoryRequest {
-    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
-    #[serde(rename = "imageScanningConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
-    /// <p>The tag mutability setting for the repository. If this parameter is omitted, the default setting of <code>MUTABLE</code> will be used which will allow image tags to be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
-    #[serde(rename = "imageTagMutability")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
     /// <p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
-    /// <p>The metadata that you apply to the repository to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    /// <p><p/></p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateRepositoryResponse {
     /// <p>The repository that was created.</p>
     #[serde(rename = "repository")]
@@ -218,7 +198,7 @@ pub struct DeleteLifecyclePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
     #[serde(rename = "lastEvaluatedAt")]
@@ -250,7 +230,7 @@ pub struct DeleteRepositoryPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRepositoryPolicyResponse {
     /// <p>The JSON repository policy that was deleted from the repository.</p>
     #[serde(rename = "policyText")]
@@ -282,61 +262,12 @@ pub struct DeleteRepositoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRepositoryResponse {
     /// <p>The repository that was deleted.</p>
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeImageScanFindingsRequest {
-    #[serde(rename = "imageId")]
-    pub image_id: ImageIdentifier,
-    /// <p>The maximum number of image scan results returned by <code>DescribeImageScanFindings</code> in paginated output. When this parameter is used, <code>DescribeImageScanFindings</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImageScanFindings</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeImageScanFindings</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
-    #[serde(rename = "maxResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImageScanFindings</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is null when there are no more results to return.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The AWS account ID associated with the registry that contains the repository in which to describe the image scan findings for. If you do not specify a registry, the default registry is assumed.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The repository for the image for which to describe the scan findings.</p>
-    #[serde(rename = "repositoryName")]
-    pub repository_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct DescribeImageScanFindingsResponse {
-    #[serde(rename = "imageId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_id: Option<ImageIdentifier>,
-    /// <p>The information contained in the image scan findings.</p>
-    #[serde(rename = "imageScanFindings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_findings: Option<ImageScanFindings>,
-    /// <p>The current state of the scan.</p>
-    #[serde(rename = "imageScanStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_status: Option<ImageScanStatus>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeImageScanFindings</code> request. When the results of a <code>DescribeImageScanFindings</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is null when there are no more results to return.</p>
-    #[serde(rename = "nextToken")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-    /// <p>The registry ID associated with the request.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The repository name associated with the request.</p>
-    #[serde(rename = "repositoryName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repository_name: Option<String>,
 }
 
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
@@ -370,13 +301,13 @@ pub struct DescribeImagesRequest {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The repository that contains the images to describe.</p>
+    /// <p>A list of repositories to describe.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeImagesResponse {
     /// <p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>
     #[serde(rename = "imageDetails")]
@@ -409,7 +340,7 @@ pub struct DescribeRepositoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRepositoriesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -430,7 +361,7 @@ pub struct GetAuthorizationTokenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAuthorizationTokenResponse {
     /// <p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>
     #[serde(rename = "authorizationData")]
@@ -453,7 +384,7 @@ pub struct GetDownloadUrlForLayerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDownloadUrlForLayerResponse {
     /// <p>The pre-signed Amazon S3 download URL for the requested layer.</p>
     #[serde(rename = "downloadUrl")]
@@ -493,7 +424,7 @@ pub struct GetLifecyclePolicyPreviewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetLifecyclePolicyPreviewResponse {
     /// <p>The JSON lifecycle policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -537,7 +468,7 @@ pub struct GetLifecyclePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
     #[serde(rename = "lastEvaluatedAt")]
@@ -569,7 +500,7 @@ pub struct GetRepositoryPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text associated with the repository.</p>
     #[serde(rename = "policyText")]
@@ -587,7 +518,7 @@ pub struct GetRepositoryPolicyResponse {
 
 /// <p>An object representing an Amazon ECR image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Image {
     /// <p>An object containing the image tag and image digest associated with an image.</p>
     #[serde(rename = "imageId")]
@@ -609,7 +540,7 @@ pub struct Image {
 
 /// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImageDetail {
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
@@ -619,14 +550,6 @@ pub struct ImageDetail {
     #[serde(rename = "imagePushedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pushed_at: Option<f64>,
-    /// <p>A summary of the last completed image scan.</p>
-    #[serde(rename = "imageScanFindingsSummary")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_findings_summary: Option<ImageScanFindingsSummary>,
-    /// <p>The current state of the scan.</p>
-    #[serde(rename = "imageScanStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_status: Option<ImageScanStatus>,
     /// <p><p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     #[serde(rename = "imageSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -647,7 +570,7 @@ pub struct ImageDetail {
 
 /// <p>An object representing an Amazon ECR image failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImageFailure {
     /// <p>The code associated with the failure.</p>
     #[serde(rename = "failureCode")]
@@ -676,95 +599,6 @@ pub struct ImageIdentifier {
     pub image_tag: Option<String>,
 }
 
-/// <p>Contains information about an image scan finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ImageScanFinding {
-    /// <p>A collection of attributes of the host from which the finding is generated.</p>
-    #[serde(rename = "attributes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<Vec<Attribute>>,
-    /// <p>The description of the finding.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>The name associated with the finding, usually a CVE number.</p>
-    #[serde(rename = "name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>The finding severity.</p>
-    #[serde(rename = "severity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity: Option<String>,
-    /// <p>A link containing additional details about the security vulnerability.</p>
-    #[serde(rename = "uri")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub uri: Option<String>,
-}
-
-/// <p>The details of an image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ImageScanFindings {
-    /// <p>The image vulnerability counts, sorted by severity.</p>
-    #[serde(rename = "findingSeverityCounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
-    /// <p>The findings from the image scan.</p>
-    #[serde(rename = "findings")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub findings: Option<Vec<ImageScanFinding>>,
-    /// <p>The time of the last completed image scan.</p>
-    #[serde(rename = "imageScanCompletedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_completed_at: Option<f64>,
-    /// <p>The time when the vulnerability data was last scanned.</p>
-    #[serde(rename = "vulnerabilitySourceUpdatedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub vulnerability_source_updated_at: Option<f64>,
-}
-
-/// <p>A summary of the last completed image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ImageScanFindingsSummary {
-    /// <p>The image vulnerability counts, sorted by severity.</p>
-    #[serde(rename = "findingSeverityCounts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
-    /// <p>The time of the last completed image scan.</p>
-    #[serde(rename = "imageScanCompletedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_completed_at: Option<f64>,
-    /// <p>The time when the vulnerability data was last scanned.</p>
-    #[serde(rename = "vulnerabilitySourceUpdatedAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub vulnerability_source_updated_at: Option<f64>,
-}
-
-/// <p>The current status of an image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct ImageScanStatus {
-    /// <p>The description of the image scan status.</p>
-    #[serde(rename = "description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>The current state of an image scan.</p>
-    #[serde(rename = "status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
-}
-
-/// <p>The image scanning configuration for a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ImageScanningConfiguration {
-    /// <p>The setting that determines whether images are scanned after being pushed to a repository. If set to <code>true</code>, images will be scanned after being pushed. If this parameter is not specified, it will default to <code>false</code> and images will not be scanned unless a scan is manually started with the <a>StartImageScan</a> API.</p>
-    #[serde(rename = "scanOnPush")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub scan_on_push: Option<bool>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InitiateLayerUploadRequest {
     /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
@@ -777,7 +611,7 @@ pub struct InitiateLayerUploadRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InitiateLayerUploadResponse {
     /// <p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>
     #[serde(rename = "partSize")]
@@ -791,7 +625,7 @@ pub struct InitiateLayerUploadResponse {
 
 /// <p>An object representing an Amazon ECR image layer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Layer {
     /// <p>The availability status of the image layer.</p>
     #[serde(rename = "layerAvailability")]
@@ -813,7 +647,7 @@ pub struct Layer {
 
 /// <p>An object representing an Amazon ECR image layer failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LayerFailure {
     /// <p>The failure code associated with the failure.</p>
     #[serde(rename = "failureCode")]
@@ -840,7 +674,7 @@ pub struct LifecyclePolicyPreviewFilter {
 
 /// <p>The result of the lifecycle policy preview.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LifecyclePolicyPreviewResult {
     /// <p>The type of action to be taken.</p>
     #[serde(rename = "action")]
@@ -866,7 +700,7 @@ pub struct LifecyclePolicyPreviewResult {
 
 /// <p>The summary of the lifecycle policy preview request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LifecyclePolicyPreviewSummary {
     /// <p>The number of expiring images.</p>
     #[serde(rename = "expiringImageTotalCount")]
@@ -876,7 +710,7 @@ pub struct LifecyclePolicyPreviewSummary {
 
 /// <p>The type of action to be taken.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LifecyclePolicyRuleAction {
     /// <p>The type of action to be taken.</p>
     #[serde(rename = "type")]
@@ -917,7 +751,7 @@ pub struct ListImagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListImagesResponse {
     /// <p>The list of image IDs for the requested repository.</p>
     #[serde(rename = "imageIds")]
@@ -937,7 +771,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags for the resource.</p>
     #[serde(rename = "tags")]
@@ -964,74 +798,12 @@ pub struct PutImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutImageResponse {
     /// <p>Details of the image uploaded.</p>
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<Image>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutImageScanningConfigurationRequest {
-    /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
-    #[serde(rename = "imageScanningConfiguration")]
-    pub image_scanning_configuration: ImageScanningConfiguration,
-    /// <p>The AWS account ID associated with the registry that contains the repository in which to update the image scanning configuration setting. If you do not specify a registry, the default registry is assumed.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The name of the repository in which to update the image scanning configuration setting.</p>
-    #[serde(rename = "repositoryName")]
-    pub repository_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct PutImageScanningConfigurationResponse {
-    /// <p>The image scanning configuration setting for the repository.</p>
-    #[serde(rename = "imageScanningConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
-    /// <p>The registry ID associated with the request.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The repository name associated with the request.</p>
-    #[serde(rename = "repositoryName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repository_name: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutImageTagMutabilityRequest {
-    /// <p>The tag mutability setting for the repository. If <code>MUTABLE</code> is specified, image tags can be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
-    #[serde(rename = "imageTagMutability")]
-    pub image_tag_mutability: String,
-    /// <p>The AWS account ID associated with the registry that contains the repository in which to update the image tag mutability settings. If you do not specify a registry, the default registry is assumed.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The name of the repository in which to update the image tag mutability settings.</p>
-    #[serde(rename = "repositoryName")]
-    pub repository_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct PutImageTagMutabilityResponse {
-    /// <p>The image tag mutability setting for the repository.</p>
-    #[serde(rename = "imageTagMutability")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
-    /// <p>The registry ID associated with the request.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The repository name associated with the request.</p>
-    #[serde(rename = "repositoryName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repository_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1049,7 +821,7 @@ pub struct PutLifecyclePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutLifecyclePolicyResponse {
     /// <p>The JSON repository policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -1067,19 +839,12 @@ pub struct PutLifecyclePolicyResponse {
 
 /// <p>An object representing a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Repository {
     /// <p>The date and time, in JavaScript date format, when the repository was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    #[serde(rename = "imageScanningConfiguration")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scanning_configuration: Option<ImageScanningConfiguration>,
-    /// <p>The tag mutability setting for the repository.</p>
-    #[serde(rename = "imageTagMutability")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
     /// <p>The AWS account ID associated with the registry that contains the repository.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,7 +869,7 @@ pub struct SetRepositoryPolicyRequest {
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
-    /// <p>The JSON repository policy text to apply to the repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicyExamples.html">Amazon ECR Repository Policy Examples</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>The JSON repository policy text to apply to the repository.</p>
     #[serde(rename = "policyText")]
     pub policy_text: String,
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
@@ -1117,45 +882,12 @@ pub struct SetRepositoryPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text applied to the repository.</p>
     #[serde(rename = "policyText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_text: Option<String>,
-    /// <p>The registry ID associated with the request.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The repository name associated with the request.</p>
-    #[serde(rename = "repositoryName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub repository_name: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartImageScanRequest {
-    #[serde(rename = "imageId")]
-    pub image_id: ImageIdentifier,
-    /// <p>The AWS account ID associated with the registry that contains the repository in which to start an image scan request. If you do not specify a registry, the default registry is assumed.</p>
-    #[serde(rename = "registryId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub registry_id: Option<String>,
-    /// <p>The name of the repository that contains the images to scan.</p>
-    #[serde(rename = "repositoryName")]
-    pub repository_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct StartImageScanResponse {
-    #[serde(rename = "imageId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_id: Option<ImageIdentifier>,
-    /// <p>The current state of the scan.</p>
-    #[serde(rename = "imageScanStatus")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_scan_status: Option<ImageScanStatus>,
     /// <p>The registry ID associated with the request.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1182,7 +914,7 @@ pub struct StartLifecyclePolicyPreviewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartLifecyclePolicyPreviewResponse {
     /// <p>The JSON repository policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -1226,7 +958,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1240,7 +972,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1272,7 +1004,7 @@ pub struct UploadLayerPartRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UploadLayerPartResponse {
     /// <p>The integer value of the last byte received in the request.</p>
     #[serde(rename = "lastByteReceived")]
@@ -1523,7 +1255,7 @@ pub enum CreateRepositoryError {
     InvalidParameter(String),
     /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     InvalidTagParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
     RepositoryAlreadyExists(String),
@@ -1745,71 +1477,6 @@ impl Error for DeleteRepositoryPolicyError {
             DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
             DeleteRepositoryPolicyError::Server(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by DescribeImageScanFindings
-#[derive(Debug, PartialEq)]
-pub enum DescribeImageScanFindingsError {
-    /// <p>The image requested does not exist in the specified repository.</p>
-    ImageNotFound(String),
-    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-    InvalidParameter(String),
-    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-    RepositoryNotFound(String),
-    /// <p>The specified image scan could not be found. Ensure that image scanning is enabled on the repository and try again.</p>
-    ScanNotFound(String),
-    /// <p>These errors are usually caused by a server-side issue.</p>
-    Server(String),
-}
-
-impl DescribeImageScanFindingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageScanFindingsError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ImageNotFoundException" => {
-                    return RusotoError::Service(DescribeImageScanFindingsError::ImageNotFound(
-                        err.msg,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeImageScanFindingsError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "RepositoryNotFoundException" => {
-                    return RusotoError::Service(
-                        DescribeImageScanFindingsError::RepositoryNotFound(err.msg),
-                    )
-                }
-                "ScanNotFoundException" => {
-                    return RusotoError::Service(DescribeImageScanFindingsError::ScanNotFound(
-                        err.msg,
-                    ))
-                }
-                "ServerException" => {
-                    return RusotoError::Service(DescribeImageScanFindingsError::Server(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for DescribeImageScanFindingsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for DescribeImageScanFindingsError {
-    fn description(&self) -> &str {
-        match *self {
-            DescribeImageScanFindingsError::ImageNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::InvalidParameter(ref cause) => cause,
-            DescribeImageScanFindingsError::RepositoryNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::ScanNotFound(ref cause) => cause,
-            DescribeImageScanFindingsError::Server(ref cause) => cause,
         }
     }
 }
@@ -2334,13 +2001,11 @@ impl Error for ListTagsForResourceError {
 pub enum PutImageError {
     /// <p>The specified image has already been pushed, and there were no changes to the manifest or image tag after the last push.</p>
     ImageAlreadyExists(String),
-    /// <p>The specified image is tagged with a tag that already exists. The repository is configured for tag immutability.</p>
-    ImageTagAlreadyExists(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
     /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2354,9 +2019,6 @@ impl PutImageError {
             match err.typ.as_str() {
                 "ImageAlreadyExistsException" => {
                     return RusotoError::Service(PutImageError::ImageAlreadyExists(err.msg))
-                }
-                "ImageTagAlreadyExistsException" => {
-                    return RusotoError::Service(PutImageError::ImageTagAlreadyExists(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutImageError::InvalidParameter(err.msg))
@@ -2387,114 +2049,11 @@ impl Error for PutImageError {
     fn description(&self) -> &str {
         match *self {
             PutImageError::ImageAlreadyExists(ref cause) => cause,
-            PutImageError::ImageTagAlreadyExists(ref cause) => cause,
             PutImageError::InvalidParameter(ref cause) => cause,
             PutImageError::LayersNotFound(ref cause) => cause,
             PutImageError::LimitExceeded(ref cause) => cause,
             PutImageError::RepositoryNotFound(ref cause) => cause,
             PutImageError::Server(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by PutImageScanningConfiguration
-#[derive(Debug, PartialEq)]
-pub enum PutImageScanningConfigurationError {
-    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-    InvalidParameter(String),
-    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-    RepositoryNotFound(String),
-    /// <p>These errors are usually caused by a server-side issue.</p>
-    Server(String),
-}
-
-impl PutImageScanningConfigurationError {
-    pub fn from_response(
-        res: BufferedHttpResponse,
-    ) -> RusotoError<PutImageScanningConfigurationError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InvalidParameterException" => {
-                    return RusotoError::Service(
-                        PutImageScanningConfigurationError::InvalidParameter(err.msg),
-                    )
-                }
-                "RepositoryNotFoundException" => {
-                    return RusotoError::Service(
-                        PutImageScanningConfigurationError::RepositoryNotFound(err.msg),
-                    )
-                }
-                "ServerException" => {
-                    return RusotoError::Service(PutImageScanningConfigurationError::Server(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for PutImageScanningConfigurationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutImageScanningConfigurationError {
-    fn description(&self) -> &str {
-        match *self {
-            PutImageScanningConfigurationError::InvalidParameter(ref cause) => cause,
-            PutImageScanningConfigurationError::RepositoryNotFound(ref cause) => cause,
-            PutImageScanningConfigurationError::Server(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by PutImageTagMutability
-#[derive(Debug, PartialEq)]
-pub enum PutImageTagMutabilityError {
-    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-    InvalidParameter(String),
-    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-    RepositoryNotFound(String),
-    /// <p>These errors are usually caused by a server-side issue.</p>
-    Server(String),
-}
-
-impl PutImageTagMutabilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImageTagMutabilityError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "InvalidParameterException" => {
-                    return RusotoError::Service(PutImageTagMutabilityError::InvalidParameter(
-                        err.msg,
-                    ))
-                }
-                "RepositoryNotFoundException" => {
-                    return RusotoError::Service(PutImageTagMutabilityError::RepositoryNotFound(
-                        err.msg,
-                    ))
-                }
-                "ServerException" => {
-                    return RusotoError::Service(PutImageTagMutabilityError::Server(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for PutImageTagMutabilityError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for PutImageTagMutabilityError {
-    fn description(&self) -> &str {
-        match *self {
-            PutImageTagMutabilityError::InvalidParameter(ref cause) => cause,
-            PutImageTagMutabilityError::RepositoryNotFound(ref cause) => cause,
-            PutImageTagMutabilityError::Server(ref cause) => cause,
         }
     }
 }
@@ -2591,57 +2150,6 @@ impl Error for SetRepositoryPolicyError {
             SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
             SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             SetRepositoryPolicyError::Server(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by StartImageScan
-#[derive(Debug, PartialEq)]
-pub enum StartImageScanError {
-    /// <p>The image requested does not exist in the specified repository.</p>
-    ImageNotFound(String),
-    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-    InvalidParameter(String),
-    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-    RepositoryNotFound(String),
-    /// <p>These errors are usually caused by a server-side issue.</p>
-    Server(String),
-}
-
-impl StartImageScanError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImageScanError> {
-        if let Some(err) = proto::json::Error::parse(&res) {
-            match err.typ.as_str() {
-                "ImageNotFoundException" => {
-                    return RusotoError::Service(StartImageScanError::ImageNotFound(err.msg))
-                }
-                "InvalidParameterException" => {
-                    return RusotoError::Service(StartImageScanError::InvalidParameter(err.msg))
-                }
-                "RepositoryNotFoundException" => {
-                    return RusotoError::Service(StartImageScanError::RepositoryNotFound(err.msg))
-                }
-                "ServerException" => {
-                    return RusotoError::Service(StartImageScanError::Server(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        return RusotoError::Unknown(res);
-    }
-}
-impl fmt::Display for StartImageScanError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for StartImageScanError {
-    fn description(&self) -> &str {
-        match *self {
-            StartImageScanError::ImageNotFound(ref cause) => cause,
-            StartImageScanError::InvalidParameter(ref cause) => cause,
-            StartImageScanError::RepositoryNotFound(ref cause) => cause,
-            StartImageScanError::Server(ref cause) => cause,
         }
     }
 }
@@ -2833,7 +2341,7 @@ pub enum UploadLayerPartError {
     InvalidLayerPart(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2890,177 +2398,157 @@ impl Error for UploadLayerPartError {
     }
 }
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
+#[async_trait]
 pub trait Ecr {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn batch_check_layer_availability(
+    async fn batch_check_layer_availability(
         &self,
         input: BatchCheckLayerAvailabilityRequest,
-    ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
+    ) -> Result<BatchCheckLayerAvailabilityResponse, RusotoError<BatchCheckLayerAvailabilityError>>;
 
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
-    fn batch_delete_image(
+    async fn batch_delete_image(
         &self,
         input: BatchDeleteImageRequest,
-    ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError>;
+    ) -> Result<BatchDeleteImageResponse, RusotoError<BatchDeleteImageError>>;
 
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
-    fn batch_get_image(
+    async fn batch_get_image(
         &self,
         input: BatchGetImageRequest,
-    ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError>;
+    ) -> Result<BatchGetImageResponse, RusotoError<BatchGetImageError>>;
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn complete_layer_upload(
+    async fn complete_layer_upload(
         &self,
         input: CompleteLayerUploadRequest,
-    ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError>;
+    ) -> Result<CompleteLayerUploadResponse, RusotoError<CompleteLayerUploadError>>;
 
-    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn create_repository(
+    /// <p>Creates an image repository.</p>
+    async fn create_repository(
         &self,
         input: CreateRepositoryRequest,
-    ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError>;
+    ) -> Result<CreateRepositoryResponse, RusotoError<CreateRepositoryError>>;
 
     /// <p>Deletes the specified lifecycle policy.</p>
-    fn delete_lifecycle_policy(
+    async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
-    ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError>;
+    ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>>;
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
-    fn delete_repository(
+    async fn delete_repository(
         &self,
         input: DeleteRepositoryRequest,
-    ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError>;
+    ) -> Result<DeleteRepositoryResponse, RusotoError<DeleteRepositoryError>>;
 
     /// <p>Deletes the repository policy from a specified repository.</p>
-    fn delete_repository_policy(
+    async fn delete_repository_policy(
         &self,
         input: DeleteRepositoryPolicyRequest,
-    ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
-
-    /// <p>Describes the image scan findings for the specified image.</p>
-    fn describe_image_scan_findings(
-        &self,
-        input: DescribeImageScanFindingsRequest,
-    ) -> RusotoFuture<DescribeImageScanFindingsResponse, DescribeImageScanFindingsError>;
+    ) -> Result<DeleteRepositoryPolicyResponse, RusotoError<DeleteRepositoryPolicyError>>;
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
-    fn describe_images(
+    async fn describe_images(
         &self,
         input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError>;
+    ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>>;
 
     /// <p>Describes image repositories in a registry.</p>
-    fn describe_repositories(
+    async fn describe_repositories(
         &self,
         input: DescribeRepositoriesRequest,
-    ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError>;
+    ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>>;
 
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
-    fn get_authorization_token(
+    async fn get_authorization_token(
         &self,
         input: GetAuthorizationTokenRequest,
-    ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
+    ) -> Result<GetAuthorizationTokenResponse, RusotoError<GetAuthorizationTokenError>>;
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn get_download_url_for_layer(
+    async fn get_download_url_for_layer(
         &self,
         input: GetDownloadUrlForLayerRequest,
-    ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
+    ) -> Result<GetDownloadUrlForLayerResponse, RusotoError<GetDownloadUrlForLayerError>>;
 
     /// <p>Retrieves the specified lifecycle policy.</p>
-    fn get_lifecycle_policy(
+    async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
-    ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError>;
+    ) -> Result<GetLifecyclePolicyResponse, RusotoError<GetLifecyclePolicyError>>;
 
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
-    fn get_lifecycle_policy_preview(
+    async fn get_lifecycle_policy_preview(
         &self,
         input: GetLifecyclePolicyPreviewRequest,
-    ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError>;
+    ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>;
 
     /// <p>Retrieves the repository policy for a specified repository.</p>
-    fn get_repository_policy(
+    async fn get_repository_policy(
         &self,
         input: GetRepositoryPolicyRequest,
-    ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
+    ) -> Result<GetRepositoryPolicyResponse, RusotoError<GetRepositoryPolicyError>>;
 
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn initiate_layer_upload(
+    async fn initiate_layer_upload(
         &self,
         input: InitiateLayerUploadRequest,
-    ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError>;
+    ) -> Result<InitiateLayerUploadResponse, RusotoError<InitiateLayerUploadError>>;
 
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
-    fn list_images(
+    async fn list_images(
         &self,
         input: ListImagesRequest,
-    ) -> RusotoFuture<ListImagesResponse, ListImagesError>;
+    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
 
     /// <p>List the tags for an Amazon ECR resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
-
-    /// <p>Updates the image scanning configuration for a repository.</p>
-    fn put_image_scanning_configuration(
+    async fn put_image(
         &self,
-        input: PutImageScanningConfigurationRequest,
-    ) -> RusotoFuture<PutImageScanningConfigurationResponse, PutImageScanningConfigurationError>;
+        input: PutImageRequest,
+    ) -> Result<PutImageResponse, RusotoError<PutImageError>>;
 
-    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn put_image_tag_mutability(
-        &self,
-        input: PutImageTagMutabilityRequest,
-    ) -> RusotoFuture<PutImageTagMutabilityResponse, PutImageTagMutabilityError>;
-
-    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
-    fn put_lifecycle_policy(
+    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
+    async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyRequest,
-    ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError>;
+    ) -> Result<PutLifecyclePolicyResponse, RusotoError<PutLifecyclePolicyError>>;
 
-    /// <p>Applies a repository policy on a specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn set_repository_policy(
+    /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
+    async fn set_repository_policy(
         &self,
         input: SetRepositoryPolicyRequest,
-    ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
-
-    /// <p>Starts an image vulnerability scan. An image scan can only be started once per day on an individual image. This limit includes if an image was scanned on initial push. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html">Image Scanning</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn start_image_scan(
-        &self,
-        input: StartImageScanRequest,
-    ) -> RusotoFuture<StartImageScanResponse, StartImageScanError>;
+    ) -> Result<SetRepositoryPolicyResponse, RusotoError<SetRepositoryPolicyError>>;
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
-    fn start_lifecycle_policy_preview(
+    async fn start_lifecycle_policy_preview(
         &self,
         input: StartLifecyclePolicyPreviewRequest,
-    ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
+    ) -> Result<StartLifecyclePolicyPreviewResponse, RusotoError<StartLifecyclePolicyPreviewError>>;
 
     /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
     /// <p>Deletes specified tags from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn upload_layer_part(
+    async fn upload_layer_part(
         &self,
         input: UploadLayerPartRequest,
-    ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError>;
+    ) -> Result<UploadLayerPartResponse, RusotoError<UploadLayerPartError>>;
 }
 /// A client for the Amazon ECR API.
 #[derive(Clone)]
@@ -3074,7 +2562,10 @@ impl EcrClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> EcrClient {
-        Self::new_with_client(Client::shared(), region)
+        EcrClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -3084,35 +2575,23 @@ impl EcrClient {
     ) -> EcrClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        EcrClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> EcrClient {
-        EcrClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for EcrClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("EcrClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl Ecr for EcrClient {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn batch_check_layer_availability(
+    async fn batch_check_layer_availability(
         &self,
         input: BatchCheckLayerAvailabilityRequest,
-    ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
+    ) -> Result<BatchCheckLayerAvailabilityResponse, RusotoError<BatchCheckLayerAvailabilityError>>
+    {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3123,25 +2602,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchCheckLayerAvailabilityError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchCheckLayerAvailabilityError::from_response(response))
+        }
     }
 
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
-    fn batch_delete_image(
+    async fn batch_delete_image(
         &self,
         input: BatchDeleteImageRequest,
-    ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
+    ) -> Result<BatchDeleteImageResponse, RusotoError<BatchDeleteImageError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3152,28 +2633,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDeleteImageResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchDeleteImageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeleteImageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeleteImageError::from_response(response))
+        }
     }
 
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
-    fn batch_get_image(
+    async fn batch_get_image(
         &self,
         input: BatchGetImageRequest,
-    ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
+    ) -> Result<BatchGetImageResponse, RusotoError<BatchGetImageError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3184,28 +2664,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetImageResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(BatchGetImageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetImageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchGetImageError::from_response(response))
+        }
     }
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn complete_layer_upload(
+    async fn complete_layer_upload(
         &self,
         input: CompleteLayerUploadRequest,
-    ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
+    ) -> Result<CompleteLayerUploadResponse, RusotoError<CompleteLayerUploadError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3216,27 +2694,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CompleteLayerUploadResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CompleteLayerUploadError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CompleteLayerUploadResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CompleteLayerUploadError::from_response(response))
+        }
     }
 
-    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn create_repository(
+    /// <p>Creates an image repository.</p>
+    async fn create_repository(
         &self,
         input: CreateRepositoryRequest,
-    ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
+    ) -> Result<CreateRepositoryResponse, RusotoError<CreateRepositoryError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3247,28 +2725,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRepositoryResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(CreateRepositoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRepositoryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRepositoryError::from_response(response))
+        }
     }
 
     /// <p>Deletes the specified lifecycle policy.</p>
-    fn delete_lifecycle_policy(
+    async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
-    ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
+    ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3279,27 +2756,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLifecyclePolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteLifecyclePolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteLifecyclePolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteLifecyclePolicyError::from_response(response))
+        }
     }
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
-    fn delete_repository(
+    async fn delete_repository(
         &self,
         input: DeleteRepositoryRequest,
-    ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
+    ) -> Result<DeleteRepositoryResponse, RusotoError<DeleteRepositoryError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3310,28 +2787,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRepositoryResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DeleteRepositoryError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRepositoryResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRepositoryError::from_response(response))
+        }
     }
 
     /// <p>Deletes the repository policy from a specified repository.</p>
-    fn delete_repository_policy(
+    async fn delete_repository_policy(
         &self,
         input: DeleteRepositoryPolicyRequest,
-    ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
+    ) -> Result<DeleteRepositoryPolicyResponse, RusotoError<DeleteRepositoryPolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3342,56 +2818,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRepositoryPolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteRepositoryPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Describes the image scan findings for the specified image.</p>
-    fn describe_image_scan_findings(
-        &self,
-        input: DescribeImageScanFindingsRequest,
-    ) -> RusotoFuture<DescribeImageScanFindingsResponse, DescribeImageScanFindingsError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AmazonEC2ContainerRegistry_V20150921.DescribeImageScanFindings",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImageScanFindingsResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeImageScanFindingsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRepositoryPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRepositoryPolicyError::from_response(response))
+        }
     }
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
-    fn describe_images(
+    async fn describe_images(
         &self,
         input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
+    ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3402,28 +2849,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImagesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(DescribeImagesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeImagesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeImagesError::from_response(response))
+        }
     }
 
     /// <p>Describes image repositories in a registry.</p>
-    fn describe_repositories(
+    async fn describe_repositories(
         &self,
         input: DescribeRepositoriesRequest,
-    ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
+    ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3434,27 +2879,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRepositoriesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeRepositoriesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRepositoriesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRepositoriesError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
-    fn get_authorization_token(
+    async fn get_authorization_token(
         &self,
         input: GetAuthorizationTokenRequest,
-    ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
+    ) -> Result<GetAuthorizationTokenResponse, RusotoError<GetAuthorizationTokenError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3465,27 +2910,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetAuthorizationTokenResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetAuthorizationTokenError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAuthorizationTokenResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAuthorizationTokenError::from_response(response))
+        }
     }
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn get_download_url_for_layer(
+    async fn get_download_url_for_layer(
         &self,
         input: GetDownloadUrlForLayerRequest,
-    ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
+    ) -> Result<GetDownloadUrlForLayerResponse, RusotoError<GetDownloadUrlForLayerError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3496,27 +2941,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDownloadUrlForLayerResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetDownloadUrlForLayerError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDownloadUrlForLayerResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDownloadUrlForLayerError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the specified lifecycle policy.</p>
-    fn get_lifecycle_policy(
+    async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
-    ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
+    ) -> Result<GetLifecyclePolicyResponse, RusotoError<GetLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3527,28 +2972,28 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLifecyclePolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(GetLifecyclePolicyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLifecyclePolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLifecyclePolicyError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
-    fn get_lifecycle_policy_preview(
+    async fn get_lifecycle_policy_preview(
         &self,
         input: GetLifecyclePolicyPreviewRequest,
-    ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
+    ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>
+    {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3559,25 +3004,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLifecyclePolicyPreviewError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetLifecyclePolicyPreviewError::from_response(response))
+        }
     }
 
     /// <p>Retrieves the repository policy for a specified repository.</p>
-    fn get_repository_policy(
+    async fn get_repository_policy(
         &self,
         input: GetRepositoryPolicyRequest,
-    ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
+    ) -> Result<GetRepositoryPolicyResponse, RusotoError<GetRepositoryPolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3588,27 +3035,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRepositoryPolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetRepositoryPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRepositoryPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRepositoryPolicyError::from_response(response))
+        }
     }
 
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn initiate_layer_upload(
+    async fn initiate_layer_upload(
         &self,
         input: InitiateLayerUploadRequest,
-    ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
+    ) -> Result<InitiateLayerUploadResponse, RusotoError<InitiateLayerUploadError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3619,27 +3066,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<InitiateLayerUploadResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(InitiateLayerUploadError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<InitiateLayerUploadResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(InitiateLayerUploadError::from_response(response))
+        }
     }
 
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
-    fn list_images(
+    async fn list_images(
         &self,
         input: ListImagesRequest,
-    ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
+    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3650,28 +3097,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListImagesResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListImagesError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListImagesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListImagesError::from_response(response))
+        }
     }
 
     /// <p>List the tags for an Amazon ECR resource.</p>
-    fn list_tags_for_resource(
+    async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3682,24 +3127,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListTagsForResourceError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
     }
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
+    async fn put_image(
+        &self,
+        input: PutImageRequest,
+    ) -> Result<PutImageResponse, RusotoError<PutImageError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3710,89 +3158,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutImageResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutImageError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutImageResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutImageError::from_response(response))
+        }
     }
 
-    /// <p>Updates the image scanning configuration for a repository.</p>
-    fn put_image_scanning_configuration(
-        &self,
-        input: PutImageScanningConfigurationRequest,
-    ) -> RusotoFuture<PutImageScanningConfigurationResponse, PutImageScanningConfigurationError>
-    {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AmazonEC2ContainerRegistry_V20150921.PutImageScanningConfiguration",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutImageScanningConfigurationResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutImageScanningConfigurationError::from_response(response))
-                }))
-            }
-        })
-    }
-
-    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn put_image_tag_mutability(
-        &self,
-        input: PutImageTagMutabilityRequest,
-    ) -> RusotoFuture<PutImageTagMutabilityResponse, PutImageTagMutabilityError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AmazonEC2ContainerRegistry_V20150921.PutImageTagMutability",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutImageTagMutabilityResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutImageTagMutabilityError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
-    fn put_lifecycle_policy(
+    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
+    async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyRequest,
-    ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
+    ) -> Result<PutLifecyclePolicyResponse, RusotoError<PutLifecyclePolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3803,28 +3188,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutLifecyclePolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(PutLifecyclePolicyError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutLifecyclePolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutLifecyclePolicyError::from_response(response))
+        }
     }
 
-    /// <p>Applies a repository policy on a specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn set_repository_policy(
+    /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
+    async fn set_repository_policy(
         &self,
         input: SetRepositoryPolicyRequest,
-    ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
+    ) -> Result<SetRepositoryPolicyResponse, RusotoError<SetRepositoryPolicyError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3835,59 +3219,28 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetRepositoryPolicyResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SetRepositoryPolicyError::from_response(response))
-                    }),
-                )
-            }
-        })
-    }
-
-    /// <p>Starts an image vulnerability scan. An image scan can only be started once per day on an individual image. This limit includes if an image was scanned on initial push. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html">Image Scanning</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
-    fn start_image_scan(
-        &self,
-        input: StartImageScanRequest,
-    ) -> RusotoFuture<StartImageScanResponse, StartImageScanError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header(
-            "x-amz-target",
-            "AmazonEC2ContainerRegistry_V20150921.StartImageScan",
-        );
-        let encoded = serde_json::to_string(&input).unwrap();
-        request.set_payload(Some(encoded));
-
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartImageScanResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(StartImageScanError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SetRepositoryPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SetRepositoryPolicyError::from_response(response))
+        }
     }
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
-    fn start_lifecycle_policy_preview(
+    async fn start_lifecycle_policy_preview(
         &self,
         input: StartLifecyclePolicyPreviewRequest,
-    ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
+    ) -> Result<StartLifecyclePolicyPreviewResponse, RusotoError<StartLifecyclePolicyPreviewError>>
+    {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3898,25 +3251,27 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartLifecyclePolicyPreviewError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartLifecyclePolicyPreviewError::from_response(response))
+        }
     }
 
     /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
-    fn tag_resource(
+    async fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3927,28 +3282,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(TagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
     }
 
     /// <p>Deletes specified tags from a resource.</p>
-    fn untag_resource(
+    async fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3959,28 +3312,26 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UntagResourceError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
     }
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn upload_layer_part(
+    async fn upload_layer_part(
         &self,
         input: UploadLayerPartRequest,
-    ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
+    ) -> Result<UploadLayerPartResponse, RusotoError<UploadLayerPartError>> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
         request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3991,20 +3342,18 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UploadLayerPartResponse, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(UploadLayerPartError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UploadLayerPartResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UploadLayerPartError::from_response(response))
+        }
     }
 }

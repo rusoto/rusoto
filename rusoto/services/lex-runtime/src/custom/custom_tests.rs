@@ -6,8 +6,8 @@ use std::collections::HashMap;
 
 use self::rusoto_mock::*;
 
-#[test]
-fn test_post_text_resposnse_serialization() {
+#[tokio::test]
+async fn test_post_text_resposnse_serialization() {
     let mock_resp_body = r#"{
       "dialogState": "ElicitSlot",
       "intentName": "BookCar",
@@ -49,6 +49,6 @@ fn test_post_text_resposnse_serialization() {
         session_id: None,
     };
 
-    let result: PostTextResponse = lex_client.post_text(post_text_req).sync().unwrap();
+    let result: PostTextResponse = lex_client.post_text(post_text_req).await.unwrap();
     assert_eq!(result, expected);
 }

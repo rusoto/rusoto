@@ -9,19 +9,20 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
-#![allow(warnings)]
 
-use futures::future;
-use futures::Future;
-use rusoto_core::credential::ProvideAwsCredentials;
-use rusoto_core::region;
-use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoError, RusotoFuture};
 use std::error::Error;
 use std::fmt;
 
+use async_trait::async_trait;
+use rusoto_core::credential::ProvideAwsCredentials;
+use rusoto_core::region;
+#[allow(warnings)]
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::{Client, RusotoError};
+
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateCreatedArtifactRequest {
@@ -32,7 +33,7 @@ pub struct AssociateCreatedArtifactRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -41,7 +42,7 @@ pub struct AssociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -53,7 +54,7 @@ pub struct AssociateDiscoveredResourceRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The identifier given to the MigrationTask.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream.</p>
@@ -62,7 +63,7 @@ pub struct AssociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDiscoveredResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -71,13 +72,13 @@ pub struct CreateProgressUpdateStreamRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProgressUpdateStreamResult {}
 
 /// <p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>
@@ -98,24 +99,24 @@ pub struct DeleteProgressUpdateStreamRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProgressUpdateStreamResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeApplicationStateRequest {
-    /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
+    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeApplicationStateResult {
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "ApplicationStatus")]
@@ -129,7 +130,7 @@ pub struct DescribeApplicationStateResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMigrationTaskRequest {
-    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The identifier given to the MigrationTask.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -138,7 +139,7 @@ pub struct DescribeMigrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMigrationTaskResult {
     /// <p>Object encapsulating information about the migration task.</p>
     #[serde(rename = "MigrationTask")]
@@ -155,7 +156,7 @@ pub struct DisassociateCreatedArtifactRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task to be disassociated with the artifact. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task to be disassociated with the artifact.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
@@ -164,19 +165,19 @@ pub struct DisassociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateDiscoveredResourceRequest {
-    /// <p>ConfigurationId of the Application Discovery Service resource to be disassociated.</p>
+    /// <p>ConfigurationId of the ADS resource to be disassociated.</p>
     #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>The identifier given to the MigrationTask. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The identifier given to the MigrationTask.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream.</p>
@@ -185,13 +186,13 @@ pub struct DisassociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateDiscoveredResourceResult {}
 
 /// <p>Object representing the on-premises resource being migrated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DiscoveredResource {
-    /// <p>The configurationId in Application Discovery Service that uniquely identifies the on-premise resource.</p>
+    /// <p>The configurationId in ADS that uniquely identifies the on-premise resource.</p>
     #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
     /// <p>A description that can be free-form text to record additional detail about the discovered resource for clarity or later reference.</p>
@@ -206,16 +207,16 @@ pub struct ImportMigrationTaskRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    /// <p>The name of the ProgressUpdateStream. &gt;</p>
+    /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportMigrationTaskResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -224,7 +225,7 @@ pub struct ListCreatedArtifactsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
@@ -237,7 +238,7 @@ pub struct ListCreatedArtifactsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCreatedArtifactsResult {
     /// <p>List of created artifacts up to the maximum number of results specified in the request.</p>
     #[serde(rename = "CreatedArtifactList")]
@@ -255,7 +256,7 @@ pub struct ListDiscoveredResourcesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The name of the MigrationTask. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The name of the MigrationTask.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
@@ -268,7 +269,7 @@ pub struct ListDiscoveredResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDiscoveredResourcesResult {
     /// <p>Returned list of discovered resources associated with the given MigrationTask.</p>
     #[serde(rename = "DiscoveredResourceList")]
@@ -297,7 +298,7 @@ pub struct ListMigrationTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListMigrationTasksResult {
     /// <p>Lists the migration task's summary which includes: <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and the <code>UpdateDateTime</code> for each task.</p>
     #[serde(rename = "MigrationTaskSummaryList")]
@@ -322,7 +323,7 @@ pub struct ListProgressUpdateStreamsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProgressUpdateStreamsResult {
     /// <p>If there are more streams created than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
     #[serde(rename = "NextToken")]
@@ -336,9 +337,9 @@ pub struct ListProgressUpdateStreamsResult {
 
 /// <p>Represents a migration task in a migration tool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MigrationTask {
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
@@ -346,7 +347,7 @@ pub struct MigrationTask {
     #[serde(rename = "ProgressUpdateStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream: Option<String>,
-    /// <p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service repository.</p>
+    /// <p><p/></p>
     #[serde(rename = "ResourceAttributeList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_attribute_list: Option<Vec<ResourceAttribute>>,
@@ -362,13 +363,13 @@ pub struct MigrationTask {
 
 /// <p>MigrationTaskSummary includes <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and <code>UpdateDateTime</code> for each task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MigrationTaskSummary {
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
-    /// <p>Indication of the percentage completion of the task.</p>
+    /// <p><p/></p>
     #[serde(rename = "ProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
@@ -392,7 +393,7 @@ pub struct MigrationTaskSummary {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotifyApplicationStateRequest {
-    /// <p>The configurationId in Application Discovery Service that uniquely identifies the grouped application.</p>
+    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
@@ -402,14 +403,10 @@ pub struct NotifyApplicationStateRequest {
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p>The timestamp when the application state changed.</p>
-    #[serde(rename = "UpdateDateTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_date_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotifyApplicationStateResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -418,7 +415,7 @@ pub struct NotifyMigrationTaskStateRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>Number of seconds after the UpdateDateTime within which the Migration Hub can expect an update. If Migration Hub does not receive an update within the specified interval, then the migration task will be considered stale.</p>
@@ -436,14 +433,14 @@ pub struct NotifyMigrationTaskStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotifyMigrationTaskStateResult {}
 
 /// <p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProgressUpdateStreamSummary {
-    /// <p>The name of the ProgressUpdateStream. <i>Do not store personal data in this field.</i> </p>
+    /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream_name: Option<String>,
@@ -455,19 +452,19 @@ pub struct PutResourceAttributesRequest {
     #[serde(rename = "DryRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    /// <p>Unique identifier that references the migration task. <i>Do not store personal data in this field.</i> </p>
+    /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
     /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service repository.</p> <note> <p>Takes the object array of <code>ResourceAttribute</code> where the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code> where the identifying value can be a string up to 256 characters.</p> </note> <important> <ul> <li> <p>If any &quot;VM&quot; related value is set for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER<em>ID</code>, as a minimum, is always set. If <code>VM</em>MANAGER<em>ID</code> is not set, then all &quot;VM&quot; fields will be discarded and &quot;VM&quot; fields will not be used for matching the migration task to a server in Application Discovery Service repository. See the &lt;a href=&quot;https://docs.aws.amazon.com/migrationhub/latest/ug/API</em>PutResourceAttributes.html#API<em>PutResourceAttributes</em>Examples&quot;&gt;Example</a> section below for a use case of specifying &quot;VM&quot; related values.</p> </li> <li> <p> If a server you are trying to match has multiple IP or MAC addresses, you should provide as many as you know in separate type/value pairs passed to the <code>ResourceAttributeList</code> parameter to maximize the chances of matching.</p> </li> </ul> </important></p>
+    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)&#39;s repository.</p> <note> <p>Takes the object array of <code>ResourceAttribute</code> where the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code> where the identifying value can be a string up to 256 characters.</p> </note> <important> <ul> <li> <p>If any &quot;VM&quot; related value is set for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER<em>ID</code>, as a minimum, is always set. If <code>VM</em>MANAGER<em>ID</code> is not set, then all &quot;VM&quot; fields will be discarded and &quot;VM&quot; fields will not be used for matching the migration task to a server in Application Discovery Service (ADS)&#39;s repository. See the &lt;a href=&quot;https://docs.aws.amazon.com/migrationhub/latest/ug/API</em>PutResourceAttributes.html#API<em>PutResourceAttributes</em>Examples&quot;&gt;Example</a> section below for a use case of specifying &quot;VM&quot; related values.</p> </li> <li> <p> If a server you are trying to match has multiple IP or MAC addresses, you should provide as many as you know in separate type/value pairs passed to the <code>ResourceAttributeList</code> parameter to maximize the chances of matching.</p> </li> </ul> </important></p>
     #[serde(rename = "ResourceAttributeList")]
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutResourceAttributesResult {}
 
 /// <p><p>Attribute associated with a resource.</p> <p>Note the corresponding format required per type listed below:</p> <dl> <dt>IPV4</dt> <dd> <p> <code>x.x.x.x</code> </p> <p> <i>where x is an integer in the range [0,255]</i> </p> </dd> <dt>IPV6</dt> <dd> <p> <code>y : y : y : y : y : y : y : y</code> </p> <p> <i>where y is a hexadecimal between 0 and FFFF. [0, FFFF]</i> </p> </dd> <dt>MAC_ADDRESS</dt> <dd> <p> <code>^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$</code> </p> </dd> <dt>FQDN</dt> <dd> <p> <code>^[^&lt;&gt;{}\\/?,=\p{Cntrl}]{1,256}$</code> </p> </dd> </dl></p>
@@ -504,13 +501,11 @@ pub enum AssociateCreatedArtifactError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -529,11 +524,6 @@ impl AssociateCreatedArtifactError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(AssociateCreatedArtifactError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(AssociateCreatedArtifactError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -579,7 +569,6 @@ impl Error for AssociateCreatedArtifactError {
         match *self {
             AssociateCreatedArtifactError::AccessDenied(ref cause) => cause,
             AssociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            AssociateCreatedArtifactError::HomeRegionNotSet(ref cause) => cause,
             AssociateCreatedArtifactError::InternalServerError(ref cause) => cause,
             AssociateCreatedArtifactError::InvalidInput(ref cause) => cause,
             AssociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
@@ -595,15 +584,13 @@ pub enum AssociateDiscoveredResourceError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -626,11 +613,6 @@ impl AssociateDiscoveredResourceError {
                     return RusotoError::Service(AssociateDiscoveredResourceError::DryRunOperation(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        AssociateDiscoveredResourceError::HomeRegionNotSet(err.msg),
-                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -679,7 +661,6 @@ impl Error for AssociateDiscoveredResourceError {
         match *self {
             AssociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
             AssociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            AssociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => cause,
             AssociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
             AssociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
             AssociateDiscoveredResourceError::PolicyError(ref cause) => cause,
@@ -696,9 +677,7 @@ pub enum CreateProgressUpdateStreamError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
@@ -721,11 +700,6 @@ impl CreateProgressUpdateStreamError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(CreateProgressUpdateStreamError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(CreateProgressUpdateStreamError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -766,7 +740,6 @@ impl Error for CreateProgressUpdateStreamError {
         match *self {
             CreateProgressUpdateStreamError::AccessDenied(ref cause) => cause,
             CreateProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            CreateProgressUpdateStreamError::HomeRegionNotSet(ref cause) => cause,
             CreateProgressUpdateStreamError::InternalServerError(ref cause) => cause,
             CreateProgressUpdateStreamError::InvalidInput(ref cause) => cause,
             CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => cause,
@@ -781,13 +754,11 @@ pub enum DeleteProgressUpdateStreamError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -808,11 +779,6 @@ impl DeleteProgressUpdateStreamError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(DeleteProgressUpdateStreamError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DeleteProgressUpdateStreamError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -858,7 +824,6 @@ impl Error for DeleteProgressUpdateStreamError {
         match *self {
             DeleteProgressUpdateStreamError::AccessDenied(ref cause) => cause,
             DeleteProgressUpdateStreamError::DryRunOperation(ref cause) => cause,
-            DeleteProgressUpdateStreamError::HomeRegionNotSet(ref cause) => cause,
             DeleteProgressUpdateStreamError::InternalServerError(ref cause) => cause,
             DeleteProgressUpdateStreamError::InvalidInput(ref cause) => cause,
             DeleteProgressUpdateStreamError::ResourceNotFound(ref cause) => cause,
@@ -872,15 +837,13 @@ impl Error for DeleteProgressUpdateStreamError {
 pub enum DescribeApplicationStateError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -892,11 +855,6 @@ impl DescribeApplicationStateError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeApplicationStateError::AccessDenied(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeApplicationStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -941,7 +899,6 @@ impl Error for DescribeApplicationStateError {
     fn description(&self) -> &str {
         match *self {
             DescribeApplicationStateError::AccessDenied(ref cause) => cause,
-            DescribeApplicationStateError::HomeRegionNotSet(ref cause) => cause,
             DescribeApplicationStateError::InternalServerError(ref cause) => cause,
             DescribeApplicationStateError::InvalidInput(ref cause) => cause,
             DescribeApplicationStateError::PolicyError(ref cause) => cause,
@@ -955,13 +912,11 @@ impl Error for DescribeApplicationStateError {
 pub enum DescribeMigrationTaskError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -973,11 +928,6 @@ impl DescribeMigrationTaskError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeMigrationTaskError::AccessDenied(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(DescribeMigrationTaskError::HomeRegionNotSet(
-                        err.msg,
-                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeMigrationTaskError::InternalServerError(
@@ -1013,7 +963,6 @@ impl Error for DescribeMigrationTaskError {
     fn description(&self) -> &str {
         match *self {
             DescribeMigrationTaskError::AccessDenied(ref cause) => cause,
-            DescribeMigrationTaskError::HomeRegionNotSet(ref cause) => cause,
             DescribeMigrationTaskError::InternalServerError(ref cause) => cause,
             DescribeMigrationTaskError::InvalidInput(ref cause) => cause,
             DescribeMigrationTaskError::ResourceNotFound(ref cause) => cause,
@@ -1028,13 +977,11 @@ pub enum DisassociateCreatedArtifactError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1057,11 +1004,6 @@ impl DisassociateCreatedArtifactError {
                     return RusotoError::Service(DisassociateCreatedArtifactError::DryRunOperation(
                         err.msg,
                     ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        DisassociateCreatedArtifactError::HomeRegionNotSet(err.msg),
-                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
@@ -1105,7 +1047,6 @@ impl Error for DisassociateCreatedArtifactError {
         match *self {
             DisassociateCreatedArtifactError::AccessDenied(ref cause) => cause,
             DisassociateCreatedArtifactError::DryRunOperation(ref cause) => cause,
-            DisassociateCreatedArtifactError::HomeRegionNotSet(ref cause) => cause,
             DisassociateCreatedArtifactError::InternalServerError(ref cause) => cause,
             DisassociateCreatedArtifactError::InvalidInput(ref cause) => cause,
             DisassociateCreatedArtifactError::ResourceNotFound(ref cause) => cause,
@@ -1121,13 +1062,11 @@ pub enum DisassociateDiscoveredResourceError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1149,11 +1088,6 @@ impl DisassociateDiscoveredResourceError {
                 "DryRunOperation" => {
                     return RusotoError::Service(
                         DisassociateDiscoveredResourceError::DryRunOperation(err.msg),
-                    )
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(
-                        DisassociateDiscoveredResourceError::HomeRegionNotSet(err.msg),
                     )
                 }
                 "InternalServerError" => {
@@ -1198,7 +1132,6 @@ impl Error for DisassociateDiscoveredResourceError {
         match *self {
             DisassociateDiscoveredResourceError::AccessDenied(ref cause) => cause,
             DisassociateDiscoveredResourceError::DryRunOperation(ref cause) => cause,
-            DisassociateDiscoveredResourceError::HomeRegionNotSet(ref cause) => cause,
             DisassociateDiscoveredResourceError::InternalServerError(ref cause) => cause,
             DisassociateDiscoveredResourceError::InvalidInput(ref cause) => cause,
             DisassociateDiscoveredResourceError::ResourceNotFound(ref cause) => cause,
@@ -1214,13 +1147,11 @@ pub enum ImportMigrationTaskError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1237,11 +1168,6 @@ impl ImportMigrationTaskError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(ImportMigrationTaskError::DryRunOperation(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ImportMigrationTaskError::HomeRegionNotSet(
-                        err.msg,
-                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ImportMigrationTaskError::InternalServerError(
@@ -1283,7 +1209,6 @@ impl Error for ImportMigrationTaskError {
         match *self {
             ImportMigrationTaskError::AccessDenied(ref cause) => cause,
             ImportMigrationTaskError::DryRunOperation(ref cause) => cause,
-            ImportMigrationTaskError::HomeRegionNotSet(ref cause) => cause,
             ImportMigrationTaskError::InternalServerError(ref cause) => cause,
             ImportMigrationTaskError::InvalidInput(ref cause) => cause,
             ImportMigrationTaskError::ResourceNotFound(ref cause) => cause,
@@ -1297,13 +1222,11 @@ impl Error for ImportMigrationTaskError {
 pub enum ListCreatedArtifactsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1315,11 +1238,6 @@ impl ListCreatedArtifactsError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCreatedArtifactsError::AccessDenied(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListCreatedArtifactsError::HomeRegionNotSet(
-                        err.msg,
-                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListCreatedArtifactsError::InternalServerError(
@@ -1355,7 +1273,6 @@ impl Error for ListCreatedArtifactsError {
     fn description(&self) -> &str {
         match *self {
             ListCreatedArtifactsError::AccessDenied(ref cause) => cause,
-            ListCreatedArtifactsError::HomeRegionNotSet(ref cause) => cause,
             ListCreatedArtifactsError::InternalServerError(ref cause) => cause,
             ListCreatedArtifactsError::InvalidInput(ref cause) => cause,
             ListCreatedArtifactsError::ResourceNotFound(ref cause) => cause,
@@ -1368,13 +1285,11 @@ impl Error for ListCreatedArtifactsError {
 pub enum ListDiscoveredResourcesError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1386,11 +1301,6 @@ impl ListDiscoveredResourcesError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::AccessDenied(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListDiscoveredResourcesError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1430,7 +1340,6 @@ impl Error for ListDiscoveredResourcesError {
     fn description(&self) -> &str {
         match *self {
             ListDiscoveredResourcesError::AccessDenied(ref cause) => cause,
-            ListDiscoveredResourcesError::HomeRegionNotSet(ref cause) => cause,
             ListDiscoveredResourcesError::InternalServerError(ref cause) => cause,
             ListDiscoveredResourcesError::InvalidInput(ref cause) => cause,
             ListDiscoveredResourcesError::ResourceNotFound(ref cause) => cause,
@@ -1443,15 +1352,13 @@ impl Error for ListDiscoveredResourcesError {
 pub enum ListMigrationTasksError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1463,9 +1370,6 @@ impl ListMigrationTasksError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListMigrationTasksError::AccessDenied(err.msg))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListMigrationTasksError::HomeRegionNotSet(err.msg))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListMigrationTasksError::InternalServerError(
@@ -1502,7 +1406,6 @@ impl Error for ListMigrationTasksError {
     fn description(&self) -> &str {
         match *self {
             ListMigrationTasksError::AccessDenied(ref cause) => cause,
-            ListMigrationTasksError::HomeRegionNotSet(ref cause) => cause,
             ListMigrationTasksError::InternalServerError(ref cause) => cause,
             ListMigrationTasksError::InvalidInput(ref cause) => cause,
             ListMigrationTasksError::PolicyError(ref cause) => cause,
@@ -1516,9 +1419,7 @@ impl Error for ListMigrationTasksError {
 pub enum ListProgressUpdateStreamsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
@@ -1532,11 +1433,6 @@ impl ListProgressUpdateStreamsError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListProgressUpdateStreamsError::AccessDenied(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(ListProgressUpdateStreamsError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1571,7 +1467,6 @@ impl Error for ListProgressUpdateStreamsError {
     fn description(&self) -> &str {
         match *self {
             ListProgressUpdateStreamsError::AccessDenied(ref cause) => cause,
-            ListProgressUpdateStreamsError::HomeRegionNotSet(ref cause) => cause,
             ListProgressUpdateStreamsError::InternalServerError(ref cause) => cause,
             ListProgressUpdateStreamsError::InvalidInput(ref cause) => cause,
             ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => cause,
@@ -1585,15 +1480,13 @@ pub enum NotifyApplicationStateError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing Application Discovery Service (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1610,11 +1503,6 @@ impl NotifyApplicationStateError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(NotifyApplicationStateError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(NotifyApplicationStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1661,7 +1549,6 @@ impl Error for NotifyApplicationStateError {
         match *self {
             NotifyApplicationStateError::AccessDenied(ref cause) => cause,
             NotifyApplicationStateError::DryRunOperation(ref cause) => cause,
-            NotifyApplicationStateError::HomeRegionNotSet(ref cause) => cause,
             NotifyApplicationStateError::InternalServerError(ref cause) => cause,
             NotifyApplicationStateError::InvalidInput(ref cause) => cause,
             NotifyApplicationStateError::PolicyError(ref cause) => cause,
@@ -1678,13 +1565,11 @@ pub enum NotifyMigrationTaskStateError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1703,11 +1588,6 @@ impl NotifyMigrationTaskStateError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(NotifyMigrationTaskStateError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(NotifyMigrationTaskStateError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1753,7 +1633,6 @@ impl Error for NotifyMigrationTaskStateError {
         match *self {
             NotifyMigrationTaskStateError::AccessDenied(ref cause) => cause,
             NotifyMigrationTaskStateError::DryRunOperation(ref cause) => cause,
-            NotifyMigrationTaskStateError::HomeRegionNotSet(ref cause) => cause,
             NotifyMigrationTaskStateError::InternalServerError(ref cause) => cause,
             NotifyMigrationTaskStateError::InvalidInput(ref cause) => cause,
             NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => cause,
@@ -1769,13 +1648,11 @@ pub enum PutResourceAttributesError {
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
-    /// <p>The home region is not set. Set the home region to continue.</p>
-    HomeRegionNotSet(String),
-    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the request references a resource (Application Discovery Service configuration, update stream, migration task, etc.) that does not exist in Application Discovery Service (Application Discovery Service) or in Migration Hub's repository.</p>
+    /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
@@ -1792,11 +1669,6 @@ impl PutResourceAttributesError {
                 }
                 "DryRunOperation" => {
                     return RusotoError::Service(PutResourceAttributesError::DryRunOperation(
-                        err.msg,
-                    ))
-                }
-                "HomeRegionNotSetException" => {
-                    return RusotoError::Service(PutResourceAttributesError::HomeRegionNotSet(
                         err.msg,
                     ))
                 }
@@ -1840,7 +1712,6 @@ impl Error for PutResourceAttributesError {
         match *self {
             PutResourceAttributesError::AccessDenied(ref cause) => cause,
             PutResourceAttributesError::DryRunOperation(ref cause) => cause,
-            PutResourceAttributesError::HomeRegionNotSet(ref cause) => cause,
             PutResourceAttributesError::InternalServerError(ref cause) => cause,
             PutResourceAttributesError::InvalidInput(ref cause) => cause,
             PutResourceAttributesError::ResourceNotFound(ref cause) => cause,
@@ -1850,102 +1721,106 @@ impl Error for PutResourceAttributesError {
     }
 }
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
+#[async_trait]
 pub trait MigrationHub {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
-    fn associate_created_artifact(
+    async fn associate_created_artifact(
         &self,
         input: AssociateCreatedArtifactRequest,
-    ) -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
+    ) -> Result<AssociateCreatedArtifactResult, RusotoError<AssociateCreatedArtifactError>>;
 
-    /// <p>Associates a discovered resource ID from Application Discovery Service with a migration task.</p>
-    fn associate_discovered_resource(
+    /// <p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>
+    async fn associate_discovered_resource(
         &self,
         input: AssociateDiscoveredResourceRequest,
-    ) -> RusotoFuture<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError>;
+    ) -> Result<AssociateDiscoveredResourceResult, RusotoError<AssociateDiscoveredResourceError>>;
 
     /// <p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>
-    fn create_progress_update_stream(
+    async fn create_progress_update_stream(
         &self,
         input: CreateProgressUpdateStreamRequest,
-    ) -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
+    ) -> Result<CreateProgressUpdateStreamResult, RusotoError<CreateProgressUpdateStreamError>>;
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs related to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
-    fn delete_progress_update_stream(
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    async fn delete_progress_update_stream(
         &self,
         input: DeleteProgressUpdateStreamRequest,
-    ) -> RusotoFuture<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError>;
+    ) -> Result<DeleteProgressUpdateStreamResult, RusotoError<DeleteProgressUpdateStreamError>>;
 
     /// <p>Gets the migration status of an application.</p>
-    fn describe_application_state(
+    async fn describe_application_state(
         &self,
         input: DescribeApplicationStateRequest,
-    ) -> RusotoFuture<DescribeApplicationStateResult, DescribeApplicationStateError>;
+    ) -> Result<DescribeApplicationStateResult, RusotoError<DescribeApplicationStateError>>;
 
     /// <p>Retrieves a list of all attributes associated with a specific migration task.</p>
-    fn describe_migration_task(
+    async fn describe_migration_task(
         &self,
         input: DescribeMigrationTaskRequest,
-    ) -> RusotoFuture<DescribeMigrationTaskResult, DescribeMigrationTaskError>;
+    ) -> Result<DescribeMigrationTaskResult, RusotoError<DescribeMigrationTaskError>>;
 
     /// <p><p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or RDS instance, etc.</p> </li> </ul></p>
-    fn disassociate_created_artifact(
+    async fn disassociate_created_artifact(
         &self,
         input: DisassociateCreatedArtifactRequest,
-    ) -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
+    ) -> Result<DisassociateCreatedArtifactResult, RusotoError<DisassociateCreatedArtifactError>>;
 
-    /// <p>Disassociate an Application Discovery Service discovered resource from a migration task.</p>
-    fn disassociate_discovered_resource(
+    /// <p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>
+    async fn disassociate_discovered_resource(
         &self,
         input: DisassociateDiscoveredResourceRequest,
-    ) -> RusotoFuture<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>;
+    ) -> Result<
+        DisassociateDiscoveredResourceResult,
+        RusotoError<DisassociateDiscoveredResourceError>,
+    >;
 
     /// <p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>
-    fn import_migration_task(
+    async fn import_migration_task(
         &self,
         input: ImportMigrationTaskRequest,
-    ) -> RusotoFuture<ImportMigrationTaskResult, ImportMigrationTaskError>;
+    ) -> Result<ImportMigrationTaskResult, RusotoError<ImportMigrationTaskError>>;
 
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
-    fn list_created_artifacts(
+    async fn list_created_artifacts(
         &self,
         input: ListCreatedArtifactsRequest,
-    ) -> RusotoFuture<ListCreatedArtifactsResult, ListCreatedArtifactsError>;
+    ) -> Result<ListCreatedArtifactsResult, RusotoError<ListCreatedArtifactsError>>;
 
     /// <p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>
-    fn list_discovered_resources(
+    async fn list_discovered_resources(
         &self,
         input: ListDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListDiscoveredResourcesResult, ListDiscoveredResourcesError>;
+    ) -> Result<ListDiscoveredResourcesResult, RusotoError<ListDiscoveredResourcesError>>;
 
     /// <p><p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul></p>
-    fn list_migration_tasks(
+    async fn list_migration_tasks(
         &self,
         input: ListMigrationTasksRequest,
-    ) -> RusotoFuture<ListMigrationTasksResult, ListMigrationTasksError>;
+    ) -> Result<ListMigrationTasksResult, RusotoError<ListMigrationTasksError>>;
 
     /// <p>Lists progress update streams associated with the user account making this call.</p>
-    fn list_progress_update_streams(
+    async fn list_progress_update_streams(
         &self,
         input: ListProgressUpdateStreamsRequest,
-    ) -> RusotoFuture<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError>;
+    ) -> Result<ListProgressUpdateStreamsResult, RusotoError<ListProgressUpdateStreamsError>>;
 
     /// <p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>
-    fn notify_application_state(
+    async fn notify_application_state(
         &self,
         input: NotifyApplicationStateRequest,
-    ) -> RusotoFuture<NotifyApplicationStateResult, NotifyApplicationStateError>;
+    ) -> Result<NotifyApplicationStateResult, RusotoError<NotifyApplicationStateError>>;
 
     /// <p><p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul></p>
-    fn notify_migration_task_state(
+    async fn notify_migration_task_state(
         &self,
         input: NotifyMigrationTaskStateRequest,
-    ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
+    ) -> Result<NotifyMigrationTaskStateResult, RusotoError<NotifyMigrationTaskStateError>>;
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overriding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
-    fn put_resource_attributes(
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    async fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,
-    ) -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError>;
+    ) -> Result<PutResourceAttributesResult, RusotoError<PutResourceAttributesError>>;
 }
 /// A client for the AWS Migration Hub API.
 #[derive(Clone)]
@@ -1959,7 +1834,10 @@ impl MigrationHubClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MigrationHubClient {
-        Self::new_with_client(Client::shared(), region)
+        MigrationHubClient {
+            client: Client::shared(),
+            region,
+        }
     }
 
     pub fn new_with<P, D>(
@@ -1969,35 +1847,22 @@ impl MigrationHubClient {
     ) -> MigrationHubClient
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
-        Self::new_with_client(
-            Client::new_with(credentials_provider, request_dispatcher),
+        MigrationHubClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
             region,
-        )
-    }
-
-    pub fn new_with_client(client: Client, region: region::Region) -> MigrationHubClient {
-        MigrationHubClient { client, region }
+        }
     }
 }
 
-impl fmt::Debug for MigrationHubClient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("MigrationHubClient")
-            .field("region", &self.region)
-            .finish()
-    }
-}
-
+#[async_trait]
 impl MigrationHub for MigrationHubClient {
     /// <p><p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or DMS endpoint, etc.</p> </li> </ul></p>
-    fn associate_created_artifact(
+    async fn associate_created_artifact(
         &self,
         input: AssociateCreatedArtifactRequest,
-    ) -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
+    ) -> Result<AssociateCreatedArtifactResult, RusotoError<AssociateCreatedArtifactError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2005,25 +1870,28 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateCreatedArtifactResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateCreatedArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateCreatedArtifactResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateCreatedArtifactError::from_response(response))
+        }
     }
 
-    /// <p>Associates a discovered resource ID from Application Discovery Service with a migration task.</p>
-    fn associate_discovered_resource(
+    /// <p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>
+    async fn associate_discovered_resource(
         &self,
         input: AssociateDiscoveredResourceRequest,
-    ) -> RusotoFuture<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
+    ) -> Result<AssociateDiscoveredResourceResult, RusotoError<AssociateDiscoveredResourceError>>
+    {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2034,25 +1902,28 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateDiscoveredResourceResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateDiscoveredResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateDiscoveredResourceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateDiscoveredResourceError::from_response(response))
+        }
     }
 
     /// <p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>
-    fn create_progress_update_stream(
+    async fn create_progress_update_stream(
         &self,
         input: CreateProgressUpdateStreamRequest,
-    ) -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
+    ) -> Result<CreateProgressUpdateStreamResult, RusotoError<CreateProgressUpdateStreamError>>
+    {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2060,25 +1931,28 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProgressUpdateStreamResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProgressUpdateStreamError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProgressUpdateStreamResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProgressUpdateStreamError::from_response(response))
+        }
     }
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs related to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
-    fn delete_progress_update_stream(
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    async fn delete_progress_update_stream(
         &self,
         input: DeleteProgressUpdateStreamRequest,
-    ) -> RusotoFuture<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
+    ) -> Result<DeleteProgressUpdateStreamResult, RusotoError<DeleteProgressUpdateStreamError>>
+    {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2086,25 +1960,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProgressUpdateStreamResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProgressUpdateStreamError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProgressUpdateStreamResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProgressUpdateStreamError::from_response(response))
+        }
     }
 
     /// <p>Gets the migration status of an application.</p>
-    fn describe_application_state(
+    async fn describe_application_state(
         &self,
         input: DescribeApplicationStateRequest,
-    ) -> RusotoFuture<DescribeApplicationStateResult, DescribeApplicationStateError> {
+    ) -> Result<DescribeApplicationStateResult, RusotoError<DescribeApplicationStateError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2112,25 +1988,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeApplicationStateResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeApplicationStateError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeApplicationStateResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeApplicationStateError::from_response(response))
+        }
     }
 
     /// <p>Retrieves a list of all attributes associated with a specific migration task.</p>
-    fn describe_migration_task(
+    async fn describe_migration_task(
         &self,
         input: DescribeMigrationTaskRequest,
-    ) -> RusotoFuture<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
+    ) -> Result<DescribeMigrationTaskResult, RusotoError<DescribeMigrationTaskError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2138,27 +2016,28 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMigrationTaskResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeMigrationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMigrationTaskResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMigrationTaskError::from_response(response))
+        }
     }
 
     /// <p><p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or RDS instance, etc.</p> </li> </ul></p>
-    fn disassociate_created_artifact(
+    async fn disassociate_created_artifact(
         &self,
         input: DisassociateCreatedArtifactRequest,
-    ) -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
+    ) -> Result<DisassociateCreatedArtifactResult, RusotoError<DisassociateCreatedArtifactError>>
+    {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2169,26 +2048,30 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateCreatedArtifactResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateCreatedArtifactError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateCreatedArtifactResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateCreatedArtifactError::from_response(response))
+        }
     }
 
-    /// <p>Disassociate an Application Discovery Service discovered resource from a migration task.</p>
-    fn disassociate_discovered_resource(
+    /// <p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>
+    async fn disassociate_discovered_resource(
         &self,
         input: DisassociateDiscoveredResourceRequest,
-    ) -> RusotoFuture<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>
-    {
+    ) -> Result<
+        DisassociateDiscoveredResourceResult,
+        RusotoError<DisassociateDiscoveredResourceError>,
+    > {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2199,25 +2082,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateDiscoveredResourceResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateDiscoveredResourceError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateDiscoveredResourceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateDiscoveredResourceError::from_response(response))
+        }
     }
 
     /// <p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>
-    fn import_migration_task(
+    async fn import_migration_task(
         &self,
         input: ImportMigrationTaskRequest,
-    ) -> RusotoFuture<ImportMigrationTaskResult, ImportMigrationTaskError> {
+    ) -> Result<ImportMigrationTaskResult, RusotoError<ImportMigrationTaskError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2225,27 +2110,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportMigrationTaskResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ImportMigrationTaskError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportMigrationTaskResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportMigrationTaskError::from_response(response))
+        }
     }
 
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
-    fn list_created_artifacts(
+    async fn list_created_artifacts(
         &self,
         input: ListCreatedArtifactsRequest,
-    ) -> RusotoFuture<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
+    ) -> Result<ListCreatedArtifactsResult, RusotoError<ListCreatedArtifactsError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2253,27 +2138,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCreatedArtifactsResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListCreatedArtifactsError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCreatedArtifactsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCreatedArtifactsError::from_response(response))
+        }
     }
 
     /// <p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>
-    fn list_discovered_resources(
+    async fn list_discovered_resources(
         &self,
         input: ListDiscoveredResourcesRequest,
-    ) -> RusotoFuture<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
+    ) -> Result<ListDiscoveredResourcesResult, RusotoError<ListDiscoveredResourcesError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2281,25 +2166,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDiscoveredResourcesResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDiscoveredResourcesError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDiscoveredResourcesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDiscoveredResourcesError::from_response(response))
+        }
     }
 
     /// <p><p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul></p>
-    fn list_migration_tasks(
+    async fn list_migration_tasks(
         &self,
         input: ListMigrationTasksRequest,
-    ) -> RusotoFuture<ListMigrationTasksResult, ListMigrationTasksError> {
+    ) -> Result<ListMigrationTasksResult, RusotoError<ListMigrationTasksError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2307,28 +2194,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMigrationTasksResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response
-                        .buffer()
-                        .from_err()
-                        .and_then(|response| Err(ListMigrationTasksError::from_response(response))),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMigrationTasksResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMigrationTasksError::from_response(response))
+        }
     }
 
     /// <p>Lists progress update streams associated with the user account making this call.</p>
-    fn list_progress_update_streams(
+    async fn list_progress_update_streams(
         &self,
         input: ListProgressUpdateStreamsRequest,
-    ) -> RusotoFuture<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
+    ) -> Result<ListProgressUpdateStreamsResult, RusotoError<ListProgressUpdateStreamsError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2336,25 +2222,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProgressUpdateStreamsResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProgressUpdateStreamsError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProgressUpdateStreamsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProgressUpdateStreamsError::from_response(response))
+        }
     }
 
     /// <p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>
-    fn notify_application_state(
+    async fn notify_application_state(
         &self,
         input: NotifyApplicationStateRequest,
-    ) -> RusotoFuture<NotifyApplicationStateResult, NotifyApplicationStateError> {
+    ) -> Result<NotifyApplicationStateResult, RusotoError<NotifyApplicationStateError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2362,27 +2250,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<NotifyApplicationStateResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(NotifyApplicationStateError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<NotifyApplicationStateResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(NotifyApplicationStateError::from_response(response))
+        }
     }
 
     /// <p><p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul></p>
-    fn notify_migration_task_state(
+    async fn notify_migration_task_state(
         &self,
         input: NotifyMigrationTaskStateRequest,
-    ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
+    ) -> Result<NotifyMigrationTaskStateResult, RusotoError<NotifyMigrationTaskStateError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2390,25 +2278,27 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<NotifyMigrationTaskStateResult, _>()
-                }))
-            } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(NotifyMigrationTaskStateError::from_response(response))
-                }))
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<NotifyMigrationTaskStateResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(NotifyMigrationTaskStateError::from_response(response))
+        }
     }
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overriding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
-    fn put_resource_attributes(
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value. </p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
+    async fn put_resource_attributes(
         &self,
         input: PutResourceAttributesRequest,
-    ) -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError> {
+    ) -> Result<PutResourceAttributesResult, RusotoError<PutResourceAttributesError>> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2416,19 +2306,19 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
-            if response.status.is_success() {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutResourceAttributesResult, _>()
-                }))
-            } else {
-                Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(PutResourceAttributesError::from_response(response))
-                    }),
-                )
-            }
-        })
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutResourceAttributesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutResourceAttributesError::from_response(response))
+        }
     }
 }
