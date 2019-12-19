@@ -118,15 +118,12 @@ impl<'b> Service<'b> {
             "async-trait".to_owned(),
             cargo::Dependency::Simple("0.1".into()),
         );
+        dependencies.insert("bytes".to_owned(), cargo::Dependency::Simple("0.4".into()));
         dependencies.insert(
-            "bytes".to_owned(),
-            cargo::Dependency::Simple("0.4".into()),
-        );
-        dependencies.insert(
-            "futures-preview".to_owned(),
-            cargo::Dependency::Extended{
+            "futures".to_owned(),
+            cargo::Dependency::Extended {
                 path: None,
-                version: Some("0.3.0-alpha.19".to_owned()),
+                version: Some("0.3".to_owned()),
                 optional: None,
                 default_features: None,
                 features: None,
@@ -225,7 +222,7 @@ impl<'b> Service<'b> {
 
     pub fn visit_shapes<F>(&self, shape_name: &str, visitor: &mut F)
     where
-        F: FnMut(&str, &Shape) -> bool
+        F: FnMut(&str, &Shape) -> bool,
     {
         let shape = self
             .get_shape(shape_name)

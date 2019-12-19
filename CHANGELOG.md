@@ -63,7 +63,7 @@ such as an S3 key returned in `list_objects_v2`
 - Fix credential_process behavior when using the non-default profile
 - Correctly read session tokens from credential_process
 
-## [0.40.0] - 2019-06-28
+## [0.42.0] - 2019-06-28
 
 - Only emit types used in service during crate generation
 - Updated CloudFront to use latest API version: `2018-11-05`

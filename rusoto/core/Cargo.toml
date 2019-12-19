@@ -27,13 +27,13 @@ rustc_version = "0.2.1"
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.4"
-futures-preview = "0.3.0-alpha.19"
+bytes = "0.5"
+futures = "0.3"
 hmac = "0.5.0"
 http = "0.1"
-hyper = { version = "0.13.0-alpha.4", features = ["unstable-stream"] }
-hyper-rustls = { version = "0.19.0-alpha.3", optional = true }
-hyper-tls = { version = "0.4.0-alpha.4", optional = true }
+hyper = "0.13"
+hyper-rustls = { version = "0.19", optional = true }
+hyper-tls = { version = "0.4", optional = true }
 lazy_static = "1.4"
 log = "0.4"
 md5 = "0.3"
@@ -46,8 +46,9 @@ serde_json = "1.0"
 sha2 = "0.7"
 time = "0.1"
 url = "2.1"
-tokio = "0.2.0-alpha.6"
+tokio = "0.2"
 xml-rs = "0.7"
+flate2 = { version = "1.0", optional = true }
 
 [dependencies.rusoto_credential]
 path = "../credential"

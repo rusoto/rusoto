@@ -28,10 +28,8 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// # Example
 ///
 /// ```rust
-/// # extern crate futures;
-/// # extern crate rusoto_credential;
-/// #
-/// # fn main() {
+/// # #[tokio::main]
+/// # async fn main() {
 /// use futures::future::Future;
 /// use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 /// use std::env;
@@ -39,9 +37,8 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// env::set_var("AWS_ACCESS_KEY_ID", "ANTN35UAENTS5UIAEATD");
 /// env::set_var("AWS_SECRET_ACCESS_KEY", "TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur");
 /// env::set_var("AWS_SESSION_TOKEN", "DfnGs8Td4rT8r4srxAg6Td4rT8r4srxAg6GtkTir");
-/// env::remove_var("AWS_CREDENTIAL_EXPIRATION");
 ///
-/// let creds = EnvironmentProvider::default().credentials().wait().unwrap();
+/// let creds = EnvironmentProvider::default().credentials().await.unwrap();
 ///
 /// assert_eq!(creds.aws_access_key_id(), "ANTN35UAENTS5UIAEATD");
 /// assert_eq!(creds.aws_secret_access_key(), "TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur");
@@ -49,7 +46,7 @@ use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCrede
 /// assert!(creds.expires_at().is_none()); // doesn't expire
 ///
 /// env::set_var("AWS_CREDENTIAL_EXPIRATION", "2018-04-21T01:13:02Z");
-/// let creds = EnvironmentProvider::default().credentials().wait().unwrap();
+/// let creds = EnvironmentProvider::default().credentials().await.unwrap();
 /// assert_eq!(creds.expires_at().unwrap().to_rfc3339(), "2018-04-21T01:13:02+00:00");
 /// # }
 /// ```
@@ -70,11 +67,10 @@ impl EnvironmentProvider {
     /// Create an EnvironmentProvider with a non-standard variable prefix.
     ///
     /// ```rust
-    /// # extern crate futures;
-    /// # extern crate rusoto_credential;
     /// #
-    /// # fn main() {
-    /// use futures::future::Future;
+    /// #[tokio::main]
+    /// # async fn main() {
+    /// use std::future::Future;
     /// use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
     /// use std::env;
     ///
@@ -82,7 +78,7 @@ impl EnvironmentProvider {
     /// env::set_var("MYAPP_SECRET_ACCESS_KEY", "TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur");
     /// env::set_var("MYAPP_SESSION_TOKEN", "DfnGs8Td4rT8r4srxAg6Td4rT8r4srxAg6GtkTir");
     ///
-    /// let creds = EnvironmentProvider::with_prefix("MYAPP").credentials().wait().unwrap();
+    /// let creds = EnvironmentProvider::with_prefix("MYAPP").credentials().await.unwrap();
     ///
     /// assert_eq!(creds.aws_access_key_id(), "ANTN35UAENTS5UIAEATD");
     /// assert_eq!(creds.aws_secret_access_key(), "TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur");
@@ -90,7 +86,7 @@ impl EnvironmentProvider {
     /// assert!(creds.expires_at().is_none()); // doesn't expire
     ///
     /// env::set_var("MYAPP_CREDENTIAL_EXPIRATION", "2018-04-21T01:13:02Z");
-    /// let creds = EnvironmentProvider::with_prefix("MYAPP").credentials().wait().unwrap();
+    /// let creds = EnvironmentProvider::with_prefix("MYAPP").credentials().await.unwrap();
     /// assert_eq!(creds.expires_at().unwrap().to_rfc3339(), "2018-04-21T01:13:02+00:00");
     /// # }
     /// ```
@@ -165,7 +161,7 @@ fn get_critical_variable(var_name: String) -> Result<String, CredentialsError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::lock_env;
+    use crate::test_utils::{lock, ENV_MUTEX};
     use chrono::Utc;
     use std::env;
 
@@ -320,7 +316,7 @@ mod tests {
         // NOTE: not strictly neccessary here, since we are using a non-standard
         // prefix, so we shouldn't collide with the other env interactions in
         // the other tests.
-        let _guard = lock_env();
+        let _guard = lock(&ENV_MUTEX);
 
         let now = Utc::now();
         let now_str = now.to_rfc3339();
