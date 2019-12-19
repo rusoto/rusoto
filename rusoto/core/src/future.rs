@@ -1,5 +1,5 @@
-use std::pin::Pin;
 use std::future::Future;
+use std::pin::Pin;
 use std::task::{Context, Poll};
 
 use super::error::{RusotoError, RusotoResult};
@@ -142,7 +142,8 @@ pub struct RusotoFuture<T, E> {
     inner: RusotoHandlerFuture<T, E>,
 }
 
-pub(crate) type RusotoHandlerFuture<T, E> = Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
+pub(crate) type RusotoHandlerFuture<T, E> =
+    Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
 
 //pub fn new<T, E>(
 //    future: SignAndDispatchFuture,
@@ -167,7 +168,13 @@ impl<T, E> RusotoFuture<T, E> {
         T: Send + 'static,
         E: Send + From<std::io::Error> + 'static,
     {
-        let mut rt = tokio::runtime::current_thread::Runtime::new().map_err(|_| RusotoError::Blocking)?;
+        let mut rt = tokio::runtime::Builder::new()
+            .enable_io()
+            .enable_time()
+            .basic_scheduler()
+            .build()
+            .map_err(|_| RusotoError::Blocking)?;
+
         rt.block_on(self)
     }
 }

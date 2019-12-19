@@ -13,25 +13,24 @@ use std::rc::Rc;
 use std::sync::Arc;
 use std::time::Duration;
 
-use crate::tls::HttpsConnector;
 use bytes::{Bytes, BytesMut};
 use futures::{FutureExt, StreamExt};
 use http::header::{HeaderName, HeaderValue};
 use http::{HeaderMap, Method, StatusCode};
 use hyper::client::connect::Connect;
 use hyper::client::Builder as HyperBuilder;
-use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
 use hyper::Error as HyperError;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
+use tokio::time;
 
 use log::Level::Debug;
 use log::*;
 
 use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
+use crate::tls::HttpsConnector;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -124,7 +123,7 @@ impl HttpResponse {
             })
             .collect();
         let body = hyper_response.into_body().map(|try_chunk| {
-            try_chunk.map(|c| c.into_bytes()).map_err(|e| {
+            try_chunk.map(|c| c).map_err(|e| {
                 IoError::new(
                     io::ErrorKind::Other,
                     format!("Error obtaining chunk: {}", e),
@@ -224,14 +223,15 @@ impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
+        let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
@@ -242,14 +242,15 @@ impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
+        let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
@@ -260,8 +261,8 @@ impl HttpClient {
 
 impl<C> HttpClient<C>
 where
-    C: Connect,
-    C::Future: 'static,
+    C: Connect + Clone + Send + Sync,
+    // C::Future: 'static,
 {
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
@@ -321,7 +322,7 @@ async fn http_client_dispatch<C>(
     timeout: Option<Duration>,
 ) -> Result<HttpResponse, HttpDispatchError>
 where
-    C: Connect + 'static,
+    C: Connect + Send + Sync + Clone + 'static,
 {
     let hyper_method = match request.method().as_ref() {
         "POST" => Method::POST,
@@ -385,9 +386,7 @@ where
         }
     }
 
-    let mut http_request_builder = HyperRequest::builder();
-    http_request_builder.method(hyper_method);
-    http_request_builder.uri(final_uri);
+    let http_request_builder = HyperRequest::builder().method(hyper_method).uri(final_uri);
 
     let try_http_request = if let Some(p) = request.payload {
         http_request_builder.body(p.into_body())
@@ -405,7 +404,7 @@ where
 
     let try_resp = match timeout {
         None => f.await,
-        Some(duration) => match f.timeout(duration).await {
+        Some(duration) => match time::timeout(duration, f).await {
             Err(_e) => {
                 return Err(HttpDispatchError {
                     message: "Timeout while dispatching request".to_owned(),
@@ -422,7 +421,7 @@ where
 
 impl<C> DispatchSignedRequest for HttpClient<C>
 where
-    C: Connect + 'static,
+    C: Connect + Clone + Send + Sync + 'static,
 {
     fn dispatch(
         &self,

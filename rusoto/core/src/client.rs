@@ -1,13 +1,16 @@
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
-use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::credential::{
+    CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+};
+use crate::encoding::ContentEncoding;
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
 
 use async_trait::async_trait;
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
+use tokio::time;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -63,7 +66,7 @@ impl Client {
     pub fn new_not_signing<D>(dispatcher: D) -> Self
     where
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
+        // D::Future: Send,
     {
         let inner = ClientInner::<StaticProvider, D> {
             credentials_provider: None,
@@ -150,9 +153,10 @@ where
     P: ProvideAwsCredentials + Send + Sync + 'static,
     D: DispatchSignedRequest + Send + Sync + 'static,
 {
-    let f = client.credentials_provider.credentials();
+    let p = client.credentials_provider.clone().unwrap();
+    let f = p.credentials();
     let credentials = if let Some(to) = timeout {
-        match f.timeout(to).await {
+        match time::timeout(to, f).await {
             Err(_e) => {
                 let err = CredentialsError {
                     message: "Timeout getting credentials".to_owned(),
