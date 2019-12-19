@@ -87,9 +87,7 @@ impl Client {
     ) -> Self
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
-        P::Future: Send,
         D: DispatchSignedRequest + Send + Sync + 'static,
-        D::Future: Send,
     {
         let inner = ClientInner {
             credentials_provider: Some(Arc::new(credentials_provider)),
