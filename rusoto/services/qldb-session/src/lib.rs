@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,15 +10,15 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>The transactional data APIs for Amazon QLDB</p>
 //!
 //! If you're using the service, you're probably looking for [QldbSessionClient](struct.QldbSessionClient.html) and [QldbSession](trait.QldbSession.html).
 
-
-mod generated;
 mod custom;
+mod generated;
 
-pub use generated::*;
 pub use custom::*;
-            
+pub use generated::*;

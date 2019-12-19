@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>AWS App Mesh is a service mesh based on the Envoy proxy that makes it easy to monitor and
 //! control microservices. App Mesh standardizes how your microservices communicate, giving you
 //! end-to-end visibility and helping to ensure high availability for your applications.</p>
@@ -30,10 +31,8 @@
 //!
 //! If you're using the service, you're probably looking for [AppMeshClient](struct.AppMeshClient.html) and [AppMesh](trait.AppMesh.html).
 
-
-mod generated;
 mod custom;
+mod generated;
 
-pub use generated::*;
 pub use custom::*;
-            
+pub use generated::*;
