@@ -163,13 +163,11 @@ impl Response {
                 );
 
                 service_name.and_then(|s| {
-                    action.map(|a| {
-                        Response {
-                            service: s,
-                            action: a,
-                            file_name: file_name.to_string_lossy().into_owned(),
-                            full_path: path.to_owned(),
-                        }
+                    action.map(|a| Response {
+                        service: s,
+                        action: a,
+                        file_name: file_name.to_string_lossy().into_owned(),
+                        full_path: path.to_owned(),
                     })
                 })
             } else {

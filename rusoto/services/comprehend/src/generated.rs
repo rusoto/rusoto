@@ -72,7 +72,7 @@ pub struct BatchDetectEntitiesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
@@ -107,7 +107,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -146,7 +146,7 @@ pub struct BatchDetectSentimentItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -181,7 +181,7 @@ pub struct BatchDetectSyntaxItemResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDetectSyntaxRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -263,6 +263,25 @@ pub struct ClassifierMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ClassifyDocumentRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+    /// <p>The document text to be analyzed.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ClassifyDocumentResponse {
+    /// <p>The classes used by the document being analyzed. These are used for multi-class trained models. Individual classes are mutually exclusive and each document is expected to have only a single class assigned to it. For example, an animal can be a dog or a cat, but not both at the same time. </p>
+    #[serde(rename = "Classes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classes: Option<Vec<DocumentClass>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -277,7 +296,7 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>Specifies the format and location of the input data for the job.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: DocumentClassifierInputDataConfig,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
@@ -305,6 +324,36 @@ pub struct CreateDocumentClassifierResponse {
     #[serde(rename = "DocumentClassifierArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_classifier_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateEndpointRequest {
+    /// <p>An idempotency token provided by the customer. If this token matches a previous endpoint creation request, Amazon Comprehend will not return a <code>ResourceInUseException</code>. </p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    pub desired_inference_units: i64,
+    /// <p>This is the descriptive suffix that becomes part of the <code>EndpointArn</code> used for all subsequent requests to this resource. </p>
+    #[serde(rename = "EndpointName")]
+    pub endpoint_name: String,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint will be attached.</p>
+    #[serde(rename = "ModelArn")]
+    pub model_arn: String,
+    /// <p>Tags associated with the endpoint being created. A tag is a key-value pair that adds metadata to the endpoint. For example, a tag with "Sales" as the key might be added to an endpoint to indicate its use by the sales department. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateEndpointResponse {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being created.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -358,6 +407,17 @@ pub struct DeleteDocumentClassifierRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDocumentClassifierResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteEndpointRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being deleted.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteEntityRecognizerRequest {
@@ -416,6 +476,22 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
     #[serde(rename = "DominantLanguageDetectionJobProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dominant_language_detection_job_properties: Option<DominantLanguageDetectionJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeEndpointRequest {
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being described.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeEndpointResponse {
+    /// <p>Describes information associated with the specific endpoint.</p>
+    #[serde(rename = "EndpointProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_properties: Option<EndpointProperties>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -516,7 +592,7 @@ pub struct DetectDominantLanguageResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -535,7 +611,7 @@ pub struct DetectEntitiesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectKeyPhrasesRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -554,7 +630,7 @@ pub struct DetectKeyPhrasesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSentimentRequest {
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -577,7 +653,7 @@ pub struct DetectSentimentResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectSyntaxRequest {
-    /// <p>The language code of the input documents. You can specify English ("en") or Spanish ("es").</p>
+    /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded characters.</p>
@@ -592,6 +668,20 @@ pub struct DetectSyntaxResponse {
     #[serde(rename = "SyntaxTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub syntax_tokens: Option<Vec<SyntaxToken>>,
+}
+
+/// <p>Specifies the class that categorizes the document being analyzed</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DocumentClass {
+    /// <p>The name of the class.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The confidence score that Amazon Comprehend has this class correctly attributed.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 /// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
@@ -854,6 +944,65 @@ pub struct DominantLanguageDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
+/// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct EndpointFilter {
+    /// <p>Specifies a date after which the returned endpoint or endpoints were created.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Specifies a date before which the returned endpoint or endpoints were created.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint is attached.</p>
+    #[serde(rename = "ModelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_arn: Option<String>,
+    /// <p>Specifies the status of the endpoint being returned. Possible values are: Creating, Ready, Updating, Deleting, Failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Specifies information about the specified endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EndpointProperties {
+    /// <p>The creation date and time of the endpoint.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The number of inference units currently used by the model using this endpoint.</p>
+    #[serde(rename = "CurrentInferenceUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_inference_units: Option<i64>,
+    /// <p>The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_inference_units: Option<i64>,
+    /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
+    /// <p>The date and time that the endpoint was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>Specifies a reason for failure in cases of <code>Failed</code> status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The Amazon Resource Number (ARN) of the model to which the endpoint is attached.</p>
+    #[serde(rename = "ModelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_arn: Option<String>,
+    /// <p>Specifies the status of the endpoint. Because the endpoint updates and creation are asynchronous, so customers will need to wait for the endpoint to be <code>Ready</code> status before making inference requests.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EntitiesDetectionJobFilter {
@@ -983,7 +1132,7 @@ pub struct EntityRecognizerEntityList {
     pub s3_uri: String,
 }
 
-/// <p> Detailed information about the accuracy of an entity recognizer. </p>
+/// <p>Detailed information about the accuracy of an entity recognizer. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EntityRecognizerEvaluationMetrics {
@@ -1032,7 +1181,7 @@ pub struct EntityRecognizerInputDataConfig {
     #[serde(rename = "EntityList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_list: Option<EntityRecognizerEntityList>,
-    /// <p>The entity types in the input data for an entity recognizer.</p>
+    /// <p>The entity types in the input data for an entity recognizer. A maximum of 12 entity types can be used at one time to train an entity recognizer.</p>
     #[serde(rename = "EntityTypes")]
     pub entity_types: Vec<EntityTypesListItem>,
 }
@@ -1045,7 +1194,7 @@ pub struct EntityRecognizerMetadata {
     #[serde(rename = "EntityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_types: Option<Vec<EntityRecognizerMetadataEntityTypesListItem>>,
-    /// <p> Detailed information about the accuracy of an entity recognizer.</p>
+    /// <p>Detailed information about the accuracy of an entity recognizer.</p>
     #[serde(rename = "EvaluationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_metrics: Option<EntityRecognizerEvaluationMetrics>,
@@ -1063,6 +1212,14 @@ pub struct EntityRecognizerMetadata {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EntityRecognizerMetadataEntityTypesListItem {
+    /// <p>Detailed information about the accuracy of the entity recognizer for a specific item on the list of entity types. </p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EntityTypesEvaluationMetrics>,
+    /// <p>Indicates the number of times the given entity type was seen in the training data. </p>
+    #[serde(rename = "NumberOfTrainMentions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_train_mentions: Option<i64>,
     /// <p>Type of entity from the list of entity types in the metadata of an entity recognizer. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1125,6 +1282,24 @@ pub struct EntityRecognizerProperties {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityTypesEvaluationMetrics {
+    /// <p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the recognizer results for a specific entity type in the test data. High precision means that the recognizer returned substantially more relevant results than irrelevant ones. </p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>A measure of how complete the recognizer results are for a specific entity type in the test data. High recall means that the recognizer returned most of the relevant results.</p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
 }
 
 /// <p>Information about an individual item on a list of entity types.</p>
@@ -1327,6 +1502,35 @@ pub struct ListDominantLanguageDetectionJobsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dominant_language_detection_job_properties_list:
         Option<Vec<DominantLanguageDetectionJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListEndpointsRequest {
+    /// <p>Filters the endpoints that are returned. You can filter endpoints on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<EndpointFilter>,
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListEndpointsResponse {
+    /// <p>Displays a list of endpoint properties being retrieved by the service in response to the request.</p>
+    #[serde(rename = "EndpointPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_properties_list: Option<Vec<EndpointProperties>>,
     /// <p>Identifies the next page of results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1728,7 +1932,7 @@ pub struct StartEntitiesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), German ("de"), Italian ("it"), or Portuguese ("pt"). If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
+    /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend. If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1773,7 +1977,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -1818,7 +2022,7 @@ pub struct StartSentimentDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files. </p>
@@ -2136,6 +2340,20 @@ pub struct UntagResourceRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateEndpointRequest {
+    /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
+    #[serde(rename = "DesiredInferenceUnits")]
+    pub desired_inference_units: i64,
+    /// <p>The Amazon Resource Number (ARN) of the endpoint being updated.</p>
+    #[serde(rename = "EndpointArn")]
+    pub endpoint_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateEndpointResponse {}
+
 /// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VpcConfig {
@@ -2219,7 +2437,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2282,7 +2500,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2349,7 +2567,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2412,7 +2630,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2464,6 +2682,61 @@ impl Error for BatchDetectSyntaxError {
         }
     }
 }
+/// Errors returned by ClassifyDocument
+#[derive(Debug, PartialEq)]
+pub enum ClassifyDocumentError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
+    TextSizeLimitExceeded(String),
+}
+
+impl ClassifyDocumentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClassifyDocumentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ClassifyDocumentError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ClassifyDocumentError::InvalidRequest(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(ClassifyDocumentError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(ClassifyDocumentError::TextSizeLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ClassifyDocumentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ClassifyDocumentError {
+    fn description(&self) -> &str {
+        match *self {
+            ClassifyDocumentError::InternalServer(ref cause) => cause,
+            ClassifyDocumentError::InvalidRequest(ref cause) => cause,
+            ClassifyDocumentError::ResourceUnavailable(ref cause) => cause,
+            ClassifyDocumentError::TextSizeLimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentClassifierError {
@@ -2481,7 +2754,7 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2555,6 +2828,83 @@ impl Error for CreateDocumentClassifierError {
         }
     }
 }
+/// Errors returned by CreateEndpoint
+#[derive(Debug, PartialEq)]
+pub enum CreateEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
+    TooManyTags(String),
+}
+
+impl CreateEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CreateEndpointError::ResourceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEndpointError::TooManyRequests(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateEndpointError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateEndpointError::InternalServer(ref cause) => cause,
+            CreateEndpointError::InvalidRequest(ref cause) => cause,
+            CreateEndpointError::ResourceInUse(ref cause) => cause,
+            CreateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEndpointError::ResourceNotFound(ref cause) => cause,
+            CreateEndpointError::ResourceUnavailable(ref cause) => cause,
+            CreateEndpointError::TooManyRequests(ref cause) => cause,
+            CreateEndpointError::TooManyTags(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateEntityRecognizer
 #[derive(Debug, PartialEq)]
 pub enum CreateEntityRecognizerError {
@@ -2572,7 +2922,7 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -2716,6 +3066,63 @@ impl Error for DeleteDocumentClassifierError {
             DeleteDocumentClassifierError::ResourceNotFound(ref cause) => cause,
             DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => cause,
             DeleteDocumentClassifierError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteEndpoint
+#[derive(Debug, PartialEq)]
+pub enum DeleteEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteEndpointError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteEndpointError::InternalServer(ref cause) => cause,
+            DeleteEndpointError::InvalidRequest(ref cause) => cause,
+            DeleteEndpointError::ResourceInUse(ref cause) => cause,
+            DeleteEndpointError::ResourceNotFound(ref cause) => cause,
+            DeleteEndpointError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -2974,6 +3381,57 @@ impl Error for DescribeDominantLanguageDetectionJobError {
             DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeEndpoint
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeEndpointError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEndpointError::InternalServer(ref cause) => cause,
+            DescribeEndpointError::InvalidRequest(ref cause) => cause,
+            DescribeEndpointError::ResourceNotFound(ref cause) => cause,
+            DescribeEndpointError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -3340,7 +3798,7 @@ pub enum DetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3393,7 +3851,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3448,7 +3906,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3501,7 +3959,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3548,7 +4006,7 @@ impl Error for DetectSyntaxError {
 pub enum ListDocumentClassificationJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3609,7 +4067,7 @@ impl Error for ListDocumentClassificationJobsError {
 pub enum ListDocumentClassifiersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3668,7 +4126,7 @@ impl Error for ListDocumentClassifiersError {
 pub enum ListDominantLanguageDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3724,12 +4182,57 @@ impl Error for ListDominantLanguageDetectionJobsError {
         }
     }
 }
+/// Errors returned by ListEndpoints
+#[derive(Debug, PartialEq)]
+pub enum ListEndpointsError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl ListEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListEndpointsError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListEndpointsError::InvalidRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListEndpointsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListEndpointsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListEndpointsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListEndpointsError::InternalServer(ref cause) => cause,
+            ListEndpointsError::InvalidRequest(ref cause) => cause,
+            ListEndpointsError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListEntitiesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3788,7 +4291,7 @@ impl Error for ListEntitiesDetectionJobsError {
 pub enum ListEntityRecognizersError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3845,7 +4348,7 @@ impl Error for ListEntityRecognizersError {
 pub enum ListKeyPhrasesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3906,7 +4409,7 @@ impl Error for ListKeyPhrasesDetectionJobsError {
 pub enum ListSentimentDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -4014,7 +4517,7 @@ impl Error for ListTagsForResourceError {
 pub enum ListTopicsDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -4908,6 +5411,77 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateEndpoint
+#[derive(Debug, PartialEq)]
+pub enum UpdateEndpointError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEndpointError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateEndpointError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateEndpointError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UpdateEndpointError::ResourceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEndpointError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateEndpointError::InternalServer(ref cause) => cause,
+            UpdateEndpointError::InvalidRequest(ref cause) => cause,
+            UpdateEndpointError::ResourceInUse(ref cause) => cause,
+            UpdateEndpointError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateEndpointError::ResourceNotFound(ref cause) => cause,
+            UpdateEndpointError::ResourceUnavailable(ref cause) => cause,
+            UpdateEndpointError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 #[async_trait]
 pub trait Comprehend {
@@ -4941,11 +5515,23 @@ pub trait Comprehend {
         input: BatchDetectSyntaxRequest,
     ) -> Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>>;
 
+    /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
+    async fn classify_document(
+        &self,
+        input: ClassifyDocumentRequest,
+    ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>;
+
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
     ) -> Result<CreateDocumentClassifierResponse, RusotoError<CreateDocumentClassifierError>>;
+
+    /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
+    async fn create_endpoint(
+        &self,
+        input: CreateEndpointRequest,
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>;
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
     async fn create_entity_recognizer(
@@ -4958,6 +5544,12 @@ pub trait Comprehend {
         &self,
         input: DeleteDocumentClassifierRequest,
     ) -> Result<DeleteDocumentClassifierResponse, RusotoError<DeleteDocumentClassifierError>>;
+
+    /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
+    async fn delete_endpoint(
+        &self,
+        input: DeleteEndpointRequest,
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>;
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
     async fn delete_entity_recognizer(
@@ -4988,6 +5580,12 @@ pub trait Comprehend {
         DescribeDominantLanguageDetectionJobResponse,
         RusotoError<DescribeDominantLanguageDetectionJobError>,
     >;
+
+    /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
+    async fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>;
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_entities_detection_job(
@@ -5078,6 +5676,12 @@ pub trait Comprehend {
         ListDominantLanguageDetectionJobsResponse,
         RusotoError<ListDominantLanguageDetectionJobsError>,
     >;
+
+    /// <p>Gets a list of all existing endpoints that you've created.</p>
+    async fn list_endpoints(
+        &self,
+        input: ListEndpointsRequest,
+    ) -> Result<ListEndpointsResponse, RusotoError<ListEndpointsError>>;
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
     async fn list_entities_detection_jobs(
@@ -5210,6 +5814,12 @@ pub trait Comprehend {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates information about the specified endpoint.</p>
+    async fn update_endpoint(
+        &self,
+        input: UpdateEndpointRequest,
+    ) -> Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>>;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -5391,6 +6001,34 @@ impl Comprehend for ComprehendClient {
         }
     }
 
+    /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
+    async fn classify_document(
+        &self,
+        input: ClassifyDocumentRequest,
+    ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ClassifyDocument");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ClassifyDocumentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ClassifyDocumentError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
@@ -5419,6 +6057,33 @@ impl Comprehend for ComprehendClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateDocumentClassifierError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
+    async fn create_endpoint(
+        &self,
+        input: CreateEndpointRequest,
+    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.CreateEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateEndpointError::from_response(response))
         }
     }
 
@@ -5478,6 +6143,33 @@ impl Comprehend for ComprehendClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDocumentClassifierError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
+    async fn delete_endpoint(
+        &self,
+        input: DeleteEndpointRequest,
+    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.DeleteEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteEndpointError::from_response(response))
         }
     }
 
@@ -5610,6 +6302,34 @@ impl Comprehend for ComprehendClient {
             Err(DescribeDominantLanguageDetectionJobError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
+    async fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.DescribeEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeEndpointError::from_response(response))
         }
     }
 
@@ -6011,6 +6731,33 @@ impl Comprehend for ComprehendClient {
             Err(ListDominantLanguageDetectionJobsError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Gets a list of all existing endpoints that you've created.</p>
+    async fn list_endpoints(
+        &self,
+        input: ListEndpointsRequest,
+    ) -> Result<ListEndpointsResponse, RusotoError<ListEndpointsError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ListEndpoints");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListEndpointsError::from_response(response))
         }
     }
 
@@ -6642,6 +7389,33 @@ impl Comprehend for ComprehendClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates information about the specified endpoint.</p>
+    async fn update_endpoint(
+        &self,
+        input: UpdateEndpointRequest,
+    ) -> Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.UpdateEndpoint");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateEndpointError::from_response(response))
         }
     }
 }

@@ -92,7 +92,9 @@ pub trait GenerateErrorTypes {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types in the RusotoError enum.
                 // Cloudsearch needs this, look into why.
-                if error.idiomatic_error_name() != "Validation" || service.service_id() == Some("CloudSearch") {
+                if error.idiomatic_error_name() != "Validation"
+                    || service.service_id() == Some("CloudSearch")
+                {
                     enum_types.push(format!(
                         "\n{}\n{}(String)",
                         crate::doco::Item(
@@ -124,7 +126,9 @@ pub trait GenerateErrorTypes {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below.
                 // Cloudsearch needs this, look into why.
-                if error.idiomatic_error_name() != "Validation" || service.service_id() == Some("CloudSearch") {
+                if error.idiomatic_error_name() != "Validation"
+                    || service.service_id() == Some("CloudSearch")
+                {
                     type_matchers.push(format!(
                         "{error_type}::{error_shape}(ref cause) => cause",
                         error_type = error_type_name(service, operation_name),
@@ -282,7 +286,8 @@ impl JsonErrorTypes {
                 }
             }
         }
-        type_matchers.push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
+        type_matchers
+            .push("\"ValidationException\" => return RusotoError::Validation(err.msg)".to_string());
         type_matchers.push("_ => {}".to_string());
         type_matchers.join(",\n")
     }

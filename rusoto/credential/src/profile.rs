@@ -702,5 +702,4 @@ mod tests {
             ProfileProvider::default_profile_location()
         );
     }
-
 }

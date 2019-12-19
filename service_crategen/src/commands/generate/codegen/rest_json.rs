@@ -12,7 +12,11 @@ use crate::Service;
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let input_type = match &operation.input {
                 Some(_) => operation.input_shape(),
@@ -161,7 +165,7 @@ fn generate_default_headers(service: &Service<'_>) -> String {
         .to_string();
     }
     if service.full_name() == "Amazon WorkLink" {
-        return "request.set_content_type(\"application/json\".to_owned());".to_string()
+        return "request.set_content_type(\"application/json\".to_owned());".to_string();
     }
     "request.set_content_type(\"application/x-amz-json-1.1\".to_owned());".to_string()
 }
@@ -226,11 +230,15 @@ fn generate_payload(service: &Service<'_>, input_shape: Option<&Shape>) -> Optio
 
     match declare_payload {
         Some(value) => Some(value + "request.set_payload(encoded);"),
-        _ => None
+        _ => None,
     }
 }
 
-fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service<'_>) -> String {
+fn declared_payload(
+    input_shape: &Shape,
+    payload_member_name: &str,
+    service: &Service<'_>,
+) -> String {
     let payload_member_shape = &input_shape.members.as_ref().unwrap()[payload_member_name].shape;
     let payload_shape = &service
         .get_shape(payload_member_shape)
@@ -351,9 +359,7 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
                 .expect("Shape missing from service definition");
             // is the shape required?
             let payload_shape_required = match output_shape.required {
-                Some(ref s) => {
-                    !s.is_empty()
-                }
+                Some(ref s) => !s.is_empty(),
                 None => false,
             };
             match payload_shape.shape_type {

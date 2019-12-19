@@ -198,6 +198,9 @@ pub struct CreateRateBasedRuleRequest {
     /// <p>The maximum number of requests, which have an identical value in the field that is specified by <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>
     #[serde(rename = "RateLimit")]
     pub rate_limit: i64,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -270,6 +273,9 @@ pub struct CreateRuleGroupRequest {
     /// <p>A friendly name or description of the <a>RuleGroup</a>. You can't change <code>Name</code> after you create a <code>RuleGroup</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -296,6 +302,9 @@ pub struct CreateRuleRequest {
     /// <p>A friendly name or description of the <a>Rule</a>. You can't change the name of a <code>Rule</code> after you create it.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -373,6 +382,9 @@ pub struct CreateWebACLRequest {
     /// <p>A friendly name or description of the <a>WebACL</a>. You can't change <code>Name</code> after you create the <code>WebACL</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1094,7 +1106,7 @@ pub struct HTTPRequest {
     pub uri: Option<String>,
 }
 
-/// <p>Contains one or more IP addresses or blocks of IP addresses specified in Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports IPv4 address ranges: /8 and any range between /16 through /32. AWS WAF supports IPv6 address ranges: /24, /32, /48, /56, /64, and /128.</p> <p>To specify an individual IP address, you specify the four-part IP address followed by a <code>/32</code>, for example, 192.0.2.0/31. To block a range of IP addresses, you can specify /8 or any range between /16 through /32 (for IPv4) or /24, /32, /48, /56, /64, or /128 (for IPv6). For more information about CIDR notation, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p>
+/// <p>Contains one or more IP addresses or blocks of IP addresses specified in Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports IPv4 address ranges: /8 and any range between /16 through /32. AWS WAF supports IPv6 address ranges: /24, /32, /48, /56, /64, and /128.</p> <p>To specify an individual IP address, you specify the four-part IP address followed by a <code>/32</code>, for example, 192.0.2.0/32. To block a range of IP addresses, you can specify /8 or any range between /16 through /32 (for IPv4) or /24, /32, /48, /56, /64, or /128 (for IPv6). For more information about CIDR notation, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IPSet {
@@ -1229,7 +1241,7 @@ pub struct ListIPSetsRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>If you specify a value for <code>Limit</code> and you have more <code>IPSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>IPSets</code>. For the second and subsequent <code>ListIPSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>IPSets</code>.</p>
+    /// <p>AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>IPSets</code>. For the second and subsequent <code>ListIPSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>IPSets</code>.</p>
     #[serde(rename = "NextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
@@ -1242,7 +1254,7 @@ pub struct ListIPSetsResponse {
     #[serde(rename = "IPSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_sets: Option<Vec<IPSetSummary>>,
-    /// <p>If you have more <code>IPSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>IPSet</code> objects, submit another <code>ListIPSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    /// <p>To list more <code>IPSet</code> objects, submit another <code>ListIPSets</code> request, and in the next request use the <code>NextMarker</code> response value as the <code>NextMarker</code> value.</p>
     #[serde(rename = "NextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
@@ -1476,6 +1488,29 @@ pub struct ListSubscribedRuleGroupsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    #[serde(rename = "TagInfoForResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_info_for_resource: Option<TagInfoForResource>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListWebACLsRequest {
     /// <p>Specifies the number of <code>WebACL</code> objects that you want AWS WAF to return for this request. If you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>WebACL</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -1558,7 +1593,7 @@ pub struct Predicate {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLoggingConfigurationRequest {
-    /// <p>The Amazon Kinesis Data Firehose that contains the inspected traffic information, the redacted fields details, and the Amazon Resource Name (ARN) of the web ACL to monitor.</p>
+    /// <p><p>The Amazon Kinesis Data Firehose that contains the inspected traffic information, the redacted fields details, and the Amazon Resource Name (ARN) of the web ACL to monitor.</p> <note> <p>When specifying <code>Type</code> in <code>RedactedFields</code>, you must use one of the following values: <code>URI</code>, <code>QUERY_STRING</code>, <code>HEADER</code>, or <code>METHOD</code>.</p> </note></p>
     #[serde(rename = "LoggingConfiguration")]
     pub logging_configuration: LoggingConfiguration,
 }
@@ -1934,6 +1969,39 @@ pub struct SubscribedRuleGroupSummary {
     pub rule_group_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagInfoForResource {
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>In a <a>GetSampledRequests</a> request, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which you want AWS WAF to return a sample of web requests.</p> <p>In a <a>GetSampledRequests</a> response, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which AWS WAF actually returned a sample of web requests. AWS WAF gets the specified number of requests from among the first 5,000 requests that your AWS resource receives during the specified time period. If your resource receives more than 5,000 requests during that period, AWS WAF stops sampling after the 5,000th request. In that case, <code>EndTime</code> is the time that AWS WAF received the 5,000th request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeWindow {
@@ -1944,6 +2012,18 @@ pub struct TimeWindow {
     #[serde(rename = "StartTime")]
     pub start_time: f64,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateByteMatchSetRequest {
@@ -2539,6 +2619,7 @@ impl Error for CreateIPSetError {
 /// Errors returned by CreateRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRateBasedRuleError {
+    WAFBadRequest(String),
     /// <p>The name specified is invalid.</p>
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
@@ -2549,12 +2630,19 @@ pub enum CreateRateBasedRuleError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl CreateRateBasedRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRateBasedRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFBadRequest(err.msg))
+                }
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFDisallowedName(
                         err.msg,
@@ -2578,6 +2666,14 @@ impl CreateRateBasedRuleError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRateBasedRuleError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(
+                        CreateRateBasedRuleError::WAFTagOperationInternalError(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2593,11 +2689,14 @@ impl fmt::Display for CreateRateBasedRuleError {
 impl Error for CreateRateBasedRuleError {
     fn description(&self) -> &str {
         match *self {
+            CreateRateBasedRuleError::WAFBadRequest(ref cause) => cause,
             CreateRateBasedRuleError::WAFDisallowedName(ref cause) => cause,
             CreateRateBasedRuleError::WAFInternalError(ref cause) => cause,
             CreateRateBasedRuleError::WAFInvalidParameter(ref cause) => cause,
             CreateRateBasedRuleError::WAFLimitsExceeded(ref cause) => cause,
             CreateRateBasedRuleError::WAFStaleData(ref cause) => cause,
+            CreateRateBasedRuleError::WAFTagOperation(ref cause) => cause,
+            CreateRateBasedRuleError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -2718,6 +2817,7 @@ impl Error for CreateRegexPatternSetError {
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
+    WAFBadRequest(String),
     /// <p>The name specified is invalid.</p>
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
@@ -2728,12 +2828,19 @@ pub enum CreateRuleError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl CreateRuleError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(CreateRuleError::WAFBadRequest(err.msg))
+                }
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRuleError::WAFDisallowedName(err.msg))
                 }
@@ -2748,6 +2855,14 @@ impl CreateRuleError {
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRuleError::WAFStaleData(err.msg))
+                }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(CreateRuleError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(CreateRuleError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2764,17 +2879,21 @@ impl fmt::Display for CreateRuleError {
 impl Error for CreateRuleError {
     fn description(&self) -> &str {
         match *self {
+            CreateRuleError::WAFBadRequest(ref cause) => cause,
             CreateRuleError::WAFDisallowedName(ref cause) => cause,
             CreateRuleError::WAFInternalError(ref cause) => cause,
             CreateRuleError::WAFInvalidParameter(ref cause) => cause,
             CreateRuleError::WAFLimitsExceeded(ref cause) => cause,
             CreateRuleError::WAFStaleData(ref cause) => cause,
+            CreateRuleError::WAFTagOperation(ref cause) => cause,
+            CreateRuleError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
 /// Errors returned by CreateRuleGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleGroupError {
+    WAFBadRequest(String),
     /// <p>The name specified is invalid.</p>
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
@@ -2783,12 +2902,19 @@ pub enum CreateRuleGroupError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl CreateRuleGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleGroupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(CreateRuleGroupError::WAFBadRequest(err.msg))
+                }
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFDisallowedName(err.msg))
                 }
@@ -2800,6 +2926,14 @@ impl CreateRuleGroupError {
                 }
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateRuleGroupError::WAFStaleData(err.msg))
+                }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(CreateRuleGroupError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(
+                        CreateRuleGroupError::WAFTagOperationInternalError(err.msg),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2816,10 +2950,13 @@ impl fmt::Display for CreateRuleGroupError {
 impl Error for CreateRuleGroupError {
     fn description(&self) -> &str {
         match *self {
+            CreateRuleGroupError::WAFBadRequest(ref cause) => cause,
             CreateRuleGroupError::WAFDisallowedName(ref cause) => cause,
             CreateRuleGroupError::WAFInternalError(ref cause) => cause,
             CreateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
             CreateRuleGroupError::WAFStaleData(ref cause) => cause,
+            CreateRuleGroupError::WAFTagOperation(ref cause) => cause,
+            CreateRuleGroupError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -2978,6 +3115,7 @@ impl Error for CreateSqlInjectionMatchSetError {
 /// Errors returned by CreateWebACL
 #[derive(Debug, PartialEq)]
 pub enum CreateWebACLError {
+    WAFBadRequest(String),
     /// <p>The name specified is invalid.</p>
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
@@ -2990,12 +3128,19 @@ pub enum CreateWebACLError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl CreateWebACLError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebACLError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(CreateWebACLError::WAFBadRequest(err.msg))
+                }
                 "WAFDisallowedNameException" => {
                     return RusotoError::Service(CreateWebACLError::WAFDisallowedName(err.msg))
                 }
@@ -3014,6 +3159,14 @@ impl CreateWebACLError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(CreateWebACLError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(CreateWebACLError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(CreateWebACLError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3029,12 +3182,15 @@ impl fmt::Display for CreateWebACLError {
 impl Error for CreateWebACLError {
     fn description(&self) -> &str {
         match *self {
+            CreateWebACLError::WAFBadRequest(ref cause) => cause,
             CreateWebACLError::WAFDisallowedName(ref cause) => cause,
             CreateWebACLError::WAFInternalError(ref cause) => cause,
             CreateWebACLError::WAFInvalidAccount(ref cause) => cause,
             CreateWebACLError::WAFInvalidParameter(ref cause) => cause,
             CreateWebACLError::WAFLimitsExceeded(ref cause) => cause,
             CreateWebACLError::WAFStaleData(ref cause) => cause,
+            CreateWebACLError::WAFTagOperation(ref cause) => cause,
+            CreateWebACLError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -3419,6 +3575,10 @@ pub enum DeleteRateBasedRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl DeleteRateBasedRuleError {
@@ -3453,6 +3613,14 @@ impl DeleteRateBasedRuleError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRateBasedRuleError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(
+                        DeleteRateBasedRuleError::WAFTagOperationInternalError(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3474,6 +3642,8 @@ impl Error for DeleteRateBasedRuleError {
             DeleteRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
             DeleteRateBasedRuleError::WAFReferencedItem(ref cause) => cause,
             DeleteRateBasedRuleError::WAFStaleData(ref cause) => cause,
+            DeleteRateBasedRuleError::WAFTagOperation(ref cause) => cause,
+            DeleteRateBasedRuleError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -3638,6 +3808,10 @@ pub enum DeleteRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl DeleteRuleError {
@@ -3662,6 +3836,14 @@ impl DeleteRuleError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRuleError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(DeleteRuleError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(DeleteRuleError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3683,6 +3865,8 @@ impl Error for DeleteRuleError {
             DeleteRuleError::WAFNonexistentItem(ref cause) => cause,
             DeleteRuleError::WAFReferencedItem(ref cause) => cause,
             DeleteRuleError::WAFStaleData(ref cause) => cause,
+            DeleteRuleError::WAFTagOperation(ref cause) => cause,
+            DeleteRuleError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -3701,6 +3885,10 @@ pub enum DeleteRuleGroupError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl DeleteRuleGroupError {
@@ -3725,6 +3913,14 @@ impl DeleteRuleGroupError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteRuleGroupError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(DeleteRuleGroupError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(
+                        DeleteRuleGroupError::WAFTagOperationInternalError(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3746,6 +3942,8 @@ impl Error for DeleteRuleGroupError {
             DeleteRuleGroupError::WAFNonexistentItem(ref cause) => cause,
             DeleteRuleGroupError::WAFReferencedItem(ref cause) => cause,
             DeleteRuleGroupError::WAFStaleData(ref cause) => cause,
+            DeleteRuleGroupError::WAFTagOperation(ref cause) => cause,
+            DeleteRuleGroupError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -3916,6 +4114,10 @@ pub enum DeleteWebACLError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
 }
 
 impl DeleteWebACLError {
@@ -3940,6 +4142,14 @@ impl DeleteWebACLError {
                 "WAFStaleDataException" => {
                     return RusotoError::Service(DeleteWebACLError::WAFStaleData(err.msg))
                 }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(DeleteWebACLError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(DeleteWebACLError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3961,6 +4171,8 @@ impl Error for DeleteWebACLError {
             DeleteWebACLError::WAFNonexistentItem(ref cause) => cause,
             DeleteWebACLError::WAFReferencedItem(ref cause) => cause,
             DeleteWebACLError::WAFStaleData(ref cause) => cause,
+            DeleteWebACLError::WAFTagOperation(ref cause) => cause,
+            DeleteWebACLError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -5390,6 +5602,76 @@ impl Error for ListSubscribedRuleGroupsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    WAFBadRequest(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::WAFBadRequest(err.msg))
+                }
+                "WAFInternalErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::WAFInternalError(
+                        err.msg,
+                    ))
+                }
+                "WAFInvalidParameterException" => {
+                    return RusotoError::Service(ListTagsForResourceError::WAFInvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "WAFNonexistentItemException" => {
+                    return RusotoError::Service(ListTagsForResourceError::WAFNonexistentItem(
+                        err.msg,
+                    ))
+                }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(ListTagsForResourceError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(
+                        ListTagsForResourceError::WAFTagOperationInternalError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::WAFBadRequest(ref cause) => cause,
+            ListTagsForResourceError::WAFInternalError(ref cause) => cause,
+            ListTagsForResourceError::WAFInvalidParameter(ref cause) => cause,
+            ListTagsForResourceError::WAFNonexistentItem(ref cause) => cause,
+            ListTagsForResourceError::WAFTagOperation(ref cause) => cause,
+            ListTagsForResourceError::WAFTagOperationInternalError(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListWebACLs
 #[derive(Debug, PartialEq)]
 pub enum ListWebACLsError {
@@ -5581,6 +5863,140 @@ impl Error for PutPermissionPolicyError {
             PutPermissionPolicyError::WAFInvalidPermissionPolicy(ref cause) => cause,
             PutPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
             PutPermissionPolicyError::WAFStaleData(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    WAFBadRequest(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(TagResourceError::WAFBadRequest(err.msg))
+                }
+                "WAFInternalErrorException" => {
+                    return RusotoError::Service(TagResourceError::WAFInternalError(err.msg))
+                }
+                "WAFInvalidParameterException" => {
+                    return RusotoError::Service(TagResourceError::WAFInvalidParameter(err.msg))
+                }
+                "WAFLimitsExceededException" => {
+                    return RusotoError::Service(TagResourceError::WAFLimitsExceeded(err.msg))
+                }
+                "WAFNonexistentItemException" => {
+                    return RusotoError::Service(TagResourceError::WAFNonexistentItem(err.msg))
+                }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(TagResourceError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(TagResourceError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::WAFBadRequest(ref cause) => cause,
+            TagResourceError::WAFInternalError(ref cause) => cause,
+            TagResourceError::WAFInvalidParameter(ref cause) => cause,
+            TagResourceError::WAFLimitsExceeded(ref cause) => cause,
+            TagResourceError::WAFNonexistentItem(ref cause) => cause,
+            TagResourceError::WAFTagOperation(ref cause) => cause,
+            TagResourceError::WAFTagOperationInternalError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    WAFBadRequest(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+
+    WAFTagOperation(String),
+
+    WAFTagOperationInternalError(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "WAFBadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::WAFBadRequest(err.msg))
+                }
+                "WAFInternalErrorException" => {
+                    return RusotoError::Service(UntagResourceError::WAFInternalError(err.msg))
+                }
+                "WAFInvalidParameterException" => {
+                    return RusotoError::Service(UntagResourceError::WAFInvalidParameter(err.msg))
+                }
+                "WAFNonexistentItemException" => {
+                    return RusotoError::Service(UntagResourceError::WAFNonexistentItem(err.msg))
+                }
+                "WAFTagOperationException" => {
+                    return RusotoError::Service(UntagResourceError::WAFTagOperation(err.msg))
+                }
+                "WAFTagOperationInternalErrorException" => {
+                    return RusotoError::Service(UntagResourceError::WAFTagOperationInternalError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::WAFBadRequest(ref cause) => cause,
+            UntagResourceError::WAFInternalError(ref cause) => cause,
+            UntagResourceError::WAFInvalidParameter(ref cause) => cause,
+            UntagResourceError::WAFNonexistentItem(ref cause) => cause,
+            UntagResourceError::WAFTagOperation(ref cause) => cause,
+            UntagResourceError::WAFTagOperationInternalError(ref cause) => cause,
         }
     }
 }
@@ -6981,6 +7397,11 @@ pub trait Waf {
         input: ListSubscribedRuleGroupsRequest,
     ) -> Result<ListSubscribedRuleGroupsResponse, RusotoError<ListSubscribedRuleGroupsError>>;
 
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Returns an array of <a>WebACLSummary</a> objects in the response.</p>
     async fn list_web_ac_ls(
         &self,
@@ -6993,7 +7414,7 @@ pub trait Waf {
         input: ListXssMatchSetsRequest,
     ) -> Result<ListXssMatchSetsResponse, RusotoError<ListXssMatchSetsError>>;
 
-    /// <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose . </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    /// <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose. </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>
     async fn put_logging_configuration(
         &self,
         input: PutLoggingConfigurationRequest,
@@ -7004,6 +7425,16 @@ pub trait Waf {
         &self,
         input: PutPermissionPolicyRequest,
     ) -> Result<PutPermissionPolicyResponse, RusotoError<PutPermissionPolicyError>>;
+
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Inserts or deletes <a>ByteMatchTuple</a> objects (filters) in a <a>ByteMatchSet</a>. For each <code>ByteMatchTuple</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>ByteMatchSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to look for. For more information, including how you specify the values for the AWS WAF API and the AWS CLI or SDKs, see <code>TargetString</code> in the <a>ByteMatchTuple</a> data type. </p> </li> <li> <p>Where to look, such as at the beginning or the end of a query string.</p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul> <p>For example, you can add a <code>ByteMatchSetUpdate</code> object that matches web requests in which <code>User-Agent</code> headers contain the string <code>BadBot</code>. You can then configure AWS WAF to block those requests.</p> <p>To create and configure a <code>ByteMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>ByteMatchSet.</code> For more information, see <a>CreateByteMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateByteMatchSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateByteMatchSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     async fn update_byte_match_set(
@@ -8703,6 +9134,33 @@ impl Waf for WafClient {
         }
     }
 
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Returns an array of <a>WebACLSummary</a> objects in the response.</p>
     async fn list_web_ac_ls(
         &self,
@@ -8758,7 +9216,7 @@ impl Waf for WafClient {
         }
     }
 
-    /// <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose . </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    /// <p>Associates a <a>LoggingConfiguration</a> with a specified web ACL.</p> <p>You can access information about all traffic that AWS WAF inspects using the following steps:</p> <ol> <li> <p>Create an Amazon Kinesis Data Firehose. </p> <p>Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia). </p> <note> <p>Do not create the data firehose using a <code>Kinesis stream</code> as your source.</p> </note> </li> <li> <p>Associate that firehose to your web ACL using a <code>PutLoggingConfiguration</code> request.</p> </li> </ol> <p>When you successfully enable logging using a <code>PutLoggingConfiguration</code> request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/logging.html">Logging Web ACL Traffic Information</a> in the <i>AWS WAF Developer Guide</i>.</p>
     async fn put_logging_configuration(
         &self,
         input: PutLoggingConfigurationRequest,
@@ -8811,6 +9269,58 @@ impl Waf for WafClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutPermissionPolicyError::from_response(response))
+        }
+    }
+
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

@@ -13,7 +13,11 @@ use super::{
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(
                 writer,
@@ -81,7 +85,12 @@ impl GenerateProtocol for QueryGenerator {
             ")
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service<'_>) -> Option<String> {
+    fn generate_serializer(
+        &self,
+        name: &str,
+        shape: &Shape,
+        service: &Service<'_>,
+    ) -> Option<String> {
         if shape.is_primitive() {
             return None;
         }
@@ -215,7 +224,7 @@ fn list_member_format(service: &Service<'_>, flattened: bool) -> String {
 fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
-     let prefix_snip = if service.service_id() == Some("SNS")
+    let prefix_snip = if service.service_id() == Some("SNS")
         && shape.value.is_some()
         && (shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
             || shape.value.as_ref().unwrap().shape == "AttributeValue")
@@ -241,13 +250,9 @@ fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
 
     if primitive_value {
         if service.service_id() == Some("SNS") {
-            parts.push(
-                "params.put(&format!(\"{}.{}\", prefix, \"value\"), &value);".to_string()
-            );
+            parts.push("params.put(&format!(\"{}.{}\", prefix, \"value\"), &value);".to_string());
         } else {
-            parts.push(
-                "params.put(&format!(\"{}.{}\", prefix, \"Value\"), &value);".to_string()
-            );
+            parts.push("params.put(&format!(\"{}.{}\", prefix, \"Value\"), &value);".to_string());
         }
     } else {
         parts.push(format!(

@@ -122,7 +122,7 @@ pub struct CancelJobRequest {
     /// <p>The AWS Batch job ID of the job to cancel.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs. </p>
+    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs.</p>
     #[serde(rename = "reason")]
     pub reason: String,
 }
@@ -135,24 +135,24 @@ pub struct CancelJobResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ComputeEnvironmentDetail {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
     #[serde(rename = "computeEnvironmentArn")]
     pub compute_environment_arn: String,
-    /// <p>The name of the compute environment. </p>
+    /// <p>The name of the compute environment.</p>
     #[serde(rename = "computeEnvironmentName")]
     pub compute_environment_name: String,
-    /// <p>The compute resources defined for the compute environment. </p>
+    /// <p>The compute resources defined for the compute environment.</p>
     #[serde(rename = "computeResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_resources: Option<ComputeResource>,
-    /// <p>The Amazon Resource Name (ARN) of the underlying Amazon ECS cluster used by the compute environment. </p>
+    /// <p>The Amazon Resource Name (ARN) of the underlying Amazon ECS cluster used by the compute environment.</p>
     #[serde(rename = "ecsClusterArn")]
     pub ecs_cluster_arn: String,
     /// <p>The service role associated with the compute environment that allows AWS Batch to make calls to AWS API operations on your behalf.</p>
     #[serde(rename = "serviceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>. </p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler does not attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state do not scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
+    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>.</p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler does not attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state do not scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -184,15 +184,19 @@ pub struct ComputeEnvironmentOrder {
 /// <p>An object representing an AWS Batch compute resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeResource {
-    /// <p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p>
+    /// <p>The allocation strategy to use for the compute resource in case not enough instances of the best fitting instance type can be allocated. This could be due to availability of the instance type in the region or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html">Amazon EC2 service limits</a>. If this is not specified, the default is <code>BEST_FIT</code>, which will use only the best fitting instance type, waiting for additional capacity if it's not available. This allocation strategy keeps costs lower but can limit scaling. <code>BEST_FIT_PROGRESSIVE</code> will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type with a lower cost. <code>SPOT_CAPACITY_OPTIMIZED</code> is only available for Spot Instance compute resources and will select an additional instance type that is large enough to meet the requirements of the jobs in the queue, with a preference for an instance type that is less likely to be interrupted.</p>
+    #[serde(rename = "allocationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocation_strategy: Option<String>,
+    /// <p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that Amazon EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p>
     #[serde(rename = "bidPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_percentage: Option<i64>,
-    /// <p>The desired number of EC2 vCPUS in the compute environment. </p>
+    /// <p>The desired number of Amazon EC2 vCPUS in the compute environment.</p>
     #[serde(rename = "desiredvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desiredv_cpus: Option<i64>,
-    /// <p>The EC2 key pair that is used for instances launched in the compute environment.</p>
+    /// <p>The Amazon EC2 key pair that is used for instances launched in the compute environment.</p>
     #[serde(rename = "ec2KeyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_key_pair: Option<String>,
@@ -203,24 +207,24 @@ pub struct ComputeResource {
     /// <p>The Amazon ECS instance profile applied to Amazon EC2 instances in a compute environment. You can specify the short name or full Amazon Resource Name (ARN) of an instance profile. For example, <code> <i>ecsInstanceRole</i> </code> or <code>arn:aws:iam::<i>&lt;aws_account_id&gt;</i>:instance-profile/<i>ecsInstanceRole</i> </code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/instance_IAM_role.html">Amazon ECS Instance Role</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "instanceRole")]
     pub instance_role: String,
-    /// <p>The instances types that may be launched. You can specify instance families to launch any instance type within those families (for example, <code>c4</code> or <code>p3</code>), or you can specify specific sizes within a family (such as <code>c4.8xlarge</code>). You can also choose <code>optimal</code> to pick instance types (from the C, M, and R instance families) on the fly that match the demand of your job queues.</p>
+    /// <p>The instances types that may be launched. You can specify instance families to launch any instance type within those families (for example, <code>c5</code> or <code>p3</code>), or you can specify specific sizes within a family (such as <code>c5.8xlarge</code>). You can also choose <code>optimal</code> to pick instance types (from the C, M, and R instance families) on the fly that match the demand of your job queues.</p>
     #[serde(rename = "instanceTypes")]
     pub instance_types: Vec<String>,
     /// <p>The launch template to use for your compute resources. Any other compute resource parameters that you specify in a <a>CreateComputeEnvironment</a> API operation override the same parameters in the launch template. You must specify either the launch template ID or launch template name in the request, but not both. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/launch-templates.html">Launch Template Support</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "launchTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The maximum number of EC2 vCPUs that an environment can reach. </p>
+    /// <p>The maximum number of Amazon EC2 vCPUs that an environment can reach.</p>
     #[serde(rename = "maxvCpus")]
     pub maxv_cpus: i64,
-    /// <p>The minimum number of EC2 vCPUs that an environment should maintain (even if the compute environment is <code>DISABLED</code>). </p>
+    /// <p>The minimum number of Amazon EC2 vCPUs that an environment should maintain (even if the compute environment is <code>DISABLED</code>).</p>
     #[serde(rename = "minvCpus")]
     pub minv_cpus: i64,
     /// <p>The Amazon EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to your compute environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     #[serde(rename = "placementGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_group: Option<String>,
-    /// <p>The EC2 security group that is associated with instances launched in the compute environment. </p>
+    /// <p>The Amazon EC2 security groups associated with instances launched in the compute environment. One or more security groups must be specified, either in <code>securityGroupIds</code> or using a launch template referenced in <code>launchTemplate</code>. If security groups are specified using both <code>securityGroupIds</code> and <code>launchTemplate</code>, the values in <code>securityGroupIds</code> will be used.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
@@ -228,14 +232,14 @@ pub struct ComputeResource {
     #[serde(rename = "spotIamFleetRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spot_iam_fleet_role: Option<String>,
-    /// <p>The VPC subnets into which the compute resources are launched. </p>
+    /// <p>The VPC subnets into which the compute resources are launched. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">VPCs and Subnets</a> in the <i>Amazon VPC User Guide</i>.</p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>Key-value pair tags to be applied to resources that are launched in the compute environment. For AWS Batch, these take the form of "String1": "String2", where String1 is the tag key and String2 is the tag value—for example, { "Name": "AWS Batch Instance - C4OnDemand" }.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of compute environment: EC2 or SPOT.</p>
+    /// <p>The type of compute environment: <code>EC2</code> or <code>SPOT</code>.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -243,15 +247,15 @@ pub struct ComputeResource {
 /// <p>An object representing the attributes of a compute environment that can be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComputeResourceUpdate {
-    /// <p>The desired number of EC2 vCPUS in the compute environment.</p>
+    /// <p>The desired number of Amazon EC2 vCPUS in the compute environment.</p>
     #[serde(rename = "desiredvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desiredv_cpus: Option<i64>,
-    /// <p>The maximum number of EC2 vCPUs that an environment can reach.</p>
+    /// <p>The maximum number of Amazon EC2 vCPUs that an environment can reach.</p>
     #[serde(rename = "maxvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maxv_cpus: Option<i64>,
-    /// <p>The minimum number of EC2 vCPUs that an environment should maintain.</p>
+    /// <p>The minimum number of Amazon EC2 vCPUs that an environment should maintain.</p>
     #[serde(rename = "minvCpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minv_cpus: Option<i64>,
@@ -261,7 +265,7 @@ pub struct ComputeResourceUpdate {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ContainerDetail {
-    /// <p>The command that is passed to the container. </p>
+    /// <p>The command that is passed to the container.</p>
     #[serde(rename = "command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<Vec<String>>,
@@ -285,10 +289,14 @@ pub struct ContainerDetail {
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) associated with the job upon execution. </p>
+    /// <p>The Amazon Resource Name (ARN) associated with the job upon execution.</p>
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
+    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+    #[serde(rename = "linuxParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linux_parameters: Option<LinuxParameters>,
     /// <p>The name of the CloudWatch Logs log stream associated with the container. The log group for AWS Batch jobs is <code>/aws/batch/job</code>. Each container attempt receives a log stream name when they reach the <code>RUNNING</code> status.</p>
     #[serde(rename = "logStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,7 +341,7 @@ pub struct ContainerDetail {
     #[serde(rename = "user")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
-    /// <p>The number of VCPUs allocated for the job. </p>
+    /// <p>The number of VCPUs allocated for the job.</p>
     #[serde(rename = "vcpus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vcpus: Option<i64>,
@@ -395,6 +403,10 @@ pub struct ContainerProperties {
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
+    /// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+    #[serde(rename = "linuxParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linux_parameters: Option<LinuxParameters>,
     /// <p><p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. You must specify at least 4 MiB of memory for a job.</p> <note> <p>If you are trying to maximize your resource utilization by providing your jobs as much memory as possible for a particular instance type, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/memory-management.html">Memory Management</a> in the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -471,7 +483,7 @@ pub struct CreateComputeEnvironmentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateComputeEnvironmentResponse {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
     #[serde(rename = "computeEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_arn: Option<String>,
@@ -511,7 +523,7 @@ pub struct CreateJobQueueResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteComputeEnvironmentRequest {
-    /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete. </p>
+    /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete.</p>
     #[serde(rename = "computeEnvironment")]
     pub compute_environment: String,
 }
@@ -522,7 +534,7 @@ pub struct DeleteComputeEnvironmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobQueueRequest {
-    /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete. </p>
+    /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete.</p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
 }
@@ -533,7 +545,7 @@ pub struct DeleteJobQueueResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterJobDefinitionRequest {
-    /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister. </p>
+    /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister.</p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
 }
@@ -544,7 +556,7 @@ pub struct DeregisterJobDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeComputeEnvironmentsRequest {
-    /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>
+    /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries.</p>
     #[serde(rename = "computeEnvironments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environments: Option<Vec<String>>,
@@ -598,7 +610,7 @@ pub struct DescribeJobDefinitionsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobDefinitionsResponse {
-    /// <p>The list of job definitions. </p>
+    /// <p>The list of job definitions.</p>
     #[serde(rename = "jobDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_definitions: Option<Vec<JobDefinition>>,
@@ -627,7 +639,7 @@ pub struct DescribeJobQueuesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobQueuesResponse {
-    /// <p>The list of job queues. </p>
+    /// <p>The list of job queues.</p>
     #[serde(rename = "jobQueues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_queues: Option<Vec<JobQueueDetail>>,
@@ -647,10 +659,26 @@ pub struct DescribeJobsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobsResponse {
-    /// <p>The list of jobs. </p>
+    /// <p>The list of jobs.</p>
     #[serde(rename = "jobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<JobDetail>>,
+}
+
+/// <p>An object representing a container instance host device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Device {
+    /// <p>The path inside the container at which to expose the host device. By default the <code>hostPath</code> value is used.</p>
+    #[serde(rename = "containerPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_path: Option<String>,
+    /// <p>The path for the device on the host container instance.</p>
+    #[serde(rename = "hostPath")]
+    pub host_path: String,
+    /// <p>The explicit permissions to provide to the container for the device. By default, the container has permissions for <code>read</code>, <code>write</code>, and <code>mknod</code> for the device.</p>
+    #[serde(rename = "permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<String>>,
 }
 
 /// <p>Determine whether your data volume persists on the host container instance and where it is stored. If this parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>
@@ -666,14 +694,14 @@ pub struct Host {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobDefinition {
-    /// <p>An object with various properties specific to container-based jobs. </p>
+    /// <p>An object with various properties specific to container-based jobs.</p>
     #[serde(rename = "containerProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_properties: Option<ContainerProperties>,
-    /// <p>The Amazon Resource Name (ARN) for the job definition. </p>
+    /// <p>The Amazon Resource Name (ARN) for the job definition.</p>
     #[serde(rename = "jobDefinitionArn")]
     pub job_definition_arn: String,
-    /// <p>The name of the job definition. </p>
+    /// <p>The name of the job definition.</p>
     #[serde(rename = "jobDefinitionName")]
     pub job_definition_name: String,
     /// <p>An object with various properties specific to multi-node parallel jobs.</p>
@@ -761,7 +789,7 @@ pub struct JobDetail {
     #[serde(rename = "nodeProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_properties: Option<NodeProperties>,
-    /// <p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition. </p>
+    /// <p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -772,10 +800,10 @@ pub struct JobDetail {
     /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     pub started_at: i64,
-    /// <p><p>The current status for the job. </p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in <code>RUNNABLE</code> Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
+    /// <p><p>The current status for the job.</p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in RUNNABLE Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
-    /// <p>A short, human-readable string to provide additional details about the current status of the job. </p>
+    /// <p>A short, human-readable string to provide additional details about the current status of the job.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
@@ -783,7 +811,7 @@ pub struct JobDetail {
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_at: Option<i64>,
-    /// <p>The timeout configuration for the job. </p>
+    /// <p>The timeout configuration for the job.</p>
     #[serde(rename = "timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<JobTimeout>,
@@ -802,7 +830,7 @@ pub struct JobQueueDetail {
     /// <p>The name of the job queue.</p>
     #[serde(rename = "jobQueueName")]
     pub job_queue_name: String,
-    /// <p>The priority of the job queue. </p>
+    /// <p>The priority of the job queue.</p>
     #[serde(rename = "priority")]
     pub priority: i64,
     /// <p>Describes the ability of the queue to accept new jobs.</p>
@@ -884,7 +912,7 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
-/// <p>An object representing a launch template associated with a compute resource. You must specify either the launch template ID or launch template name in the request, but not both. </p>
+/// <p>An object representing a launch template associated with a compute resource. You must specify either the launch template ID or launch template name in the request, but not both.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LaunchTemplateSpecification {
     /// <p>The ID of the launch template.</p>
@@ -899,6 +927,15 @@ pub struct LaunchTemplateSpecification {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Linux-specific modifications that are applied to the container, such as details for device mappings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LinuxParameters {
+    /// <p>Any host devices to expose to the container. This parameter maps to <code>Devices</code> in the <a href="https://docs.docker.com/engine/api/v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.23/">Docker Remote API</a> and the <code>--device</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p>
+    #[serde(rename = "devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub devices: Option<Vec<Device>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1054,7 +1091,7 @@ pub struct NodeRangeProperty {
     #[serde(rename = "container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<ContainerProperties>,
-    /// <p>The range of nodes, using node index values. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range. Your accumulative node ranges must account for all nodes (0:n). You may nest node ranges, for example 0:10 and 4:5, in which case the 4:5 range properties override the 0:10 properties. </p>
+    /// <p>The range of nodes, using node index values. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range. Your accumulative node ranges must account for all nodes (0:n). You may nest node ranges, for example 0:10 and 4:5, in which case the 4:5 range properties override the 0:10 properties.</p>
     #[serde(rename = "targetNodes")]
     pub target_nodes: String,
 }
@@ -1076,7 +1113,7 @@ pub struct RegisterJobDefinitionRequest {
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The retry strategy to use for failed jobs that are submitted with this job definition. Any retry strategy that is specified during a <a>SubmitJob</a> operation overrides the retry strategy defined here. If a job is terminated due to a timeout, it is not retried. </p>
+    /// <p>The retry strategy to use for failed jobs that are submitted with this job definition. Any retry strategy that is specified during a <a>SubmitJob</a> operation overrides the retry strategy defined here. If a job is terminated due to a timeout, it is not retried.</p>
     #[serde(rename = "retryStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
@@ -1092,7 +1129,7 @@ pub struct RegisterJobDefinitionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterJobDefinitionResponse {
-    /// <p>The Amazon Resource Name (ARN) of the job definition. </p>
+    /// <p>The Amazon Resource Name (ARN) of the job definition.</p>
     #[serde(rename = "jobDefinitionArn")]
     pub job_definition_arn: String,
     /// <p>The name of the job definition.</p>
@@ -1140,10 +1177,10 @@ pub struct SubmitJobRequest {
     /// <p>The job definition used by this job. This value can be either a <code>name:revision</code> or the Amazon Resource Name (ARN) for the job definition.</p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
-    /// <p>The name of the job. The first character must be alphanumeric, and up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. </p>
+    /// <p>The name of the job. The first character must be alphanumeric, and up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "jobName")]
     pub job_name: String,
-    /// <p>The job queue into which the job is submitted. You can specify either the name or the Amazon Resource Name (ARN) of the queue. </p>
+    /// <p>The job queue into which the job is submitted. You can specify either the name or the Amazon Resource Name (ARN) of the queue.</p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
     /// <p>A list of node overrides in JSON format that specify the node range to target and the container overrides for that node range.</p>
@@ -1170,7 +1207,7 @@ pub struct SubmitJobResponse {
     /// <p>The unique identifier for the job.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>The name of the job. </p>
+    /// <p>The name of the job.</p>
     #[serde(rename = "jobName")]
     pub job_name: String,
 }
@@ -1180,7 +1217,7 @@ pub struct TerminateJobRequest {
     /// <p>The AWS Batch job ID of the job to terminate.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs. </p>
+    /// <p>A message to attach to the job that explains the reason for canceling it. This message is returned by future <a>DescribeJobs</a> operations on the job. This message is also recorded in the AWS Batch activity logs.</p>
     #[serde(rename = "reason")]
     pub reason: String,
 }
@@ -1225,7 +1262,7 @@ pub struct UpdateComputeEnvironmentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateComputeEnvironmentResponse {
-    /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
+    /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
     #[serde(rename = "computeEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_arn: Option<String>,
@@ -1237,7 +1274,7 @@ pub struct UpdateComputeEnvironmentResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobQueueRequest {
-    /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>
+    /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job.</p>
     #[serde(rename = "computeEnvironmentOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_order: Option<Vec<ComputeEnvironmentOrder>>,
@@ -1283,7 +1320,7 @@ pub struct Volume {
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1318,7 +1355,7 @@ impl Error for CancelJobError {
 /// Errors returned by CreateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1357,7 +1394,7 @@ impl Error for CreateComputeEnvironmentError {
 /// Errors returned by CreateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum CreateJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1396,7 +1433,7 @@ impl Error for CreateJobQueueError {
 /// Errors returned by DeleteComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum DeleteComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1435,7 +1472,7 @@ impl Error for DeleteComputeEnvironmentError {
 /// Errors returned by DeleteJobQueue
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1474,7 +1511,7 @@ impl Error for DeleteJobQueueError {
 /// Errors returned by DeregisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeregisterJobDefinitionError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1513,7 +1550,7 @@ impl Error for DeregisterJobDefinitionError {
 /// Errors returned by DescribeComputeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum DescribeComputeEnvironmentsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1554,7 +1591,7 @@ impl Error for DescribeComputeEnvironmentsError {
 /// Errors returned by DescribeJobDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobDefinitionsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1593,7 +1630,7 @@ impl Error for DescribeJobDefinitionsError {
 /// Errors returned by DescribeJobQueues
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobQueuesError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1632,7 +1669,7 @@ impl Error for DescribeJobQueuesError {
 /// Errors returned by DescribeJobs
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1671,7 +1708,7 @@ impl Error for DescribeJobsError {
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1706,7 +1743,7 @@ impl Error for ListJobsError {
 /// Errors returned by RegisterJobDefinition
 #[derive(Debug, PartialEq)]
 pub enum RegisterJobDefinitionError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1745,7 +1782,7 @@ impl Error for RegisterJobDefinitionError {
 /// Errors returned by SubmitJob
 #[derive(Debug, PartialEq)]
 pub enum SubmitJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1780,7 +1817,7 @@ impl Error for SubmitJobError {
 /// Errors returned by TerminateJob
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1819,7 +1856,7 @@ impl Error for TerminateJobError {
 /// Errors returned by UpdateComputeEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateComputeEnvironmentError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1858,7 +1895,7 @@ impl Error for UpdateComputeEnvironmentError {
 /// Errors returned by UpdateJobQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobQueueError {
-    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid. </p>
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
@@ -1921,7 +1958,7 @@ pub trait Batch {
         input: DeleteComputeEnvironmentRequest,
     ) -> Result<DeleteComputeEnvironmentResponse, RusotoError<DeleteComputeEnvironmentError>>;
 
-    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
+    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request.</p>
     async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
@@ -1963,13 +2000,13 @@ pub trait Batch {
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
-    /// <p>Registers an AWS Batch job definition. </p>
+    /// <p>Registers an AWS Batch job definition.</p>
     async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
     ) -> Result<RegisterJobDefinitionResponse, RusotoError<RegisterJobDefinitionError>>;
 
-    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
+    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition.</p>
     async fn submit_job(
         &self,
         input: SubmitJobRequest,
@@ -2149,7 +2186,7 @@ impl Batch for BatchClient {
         }
     }
 
-    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request. </p>
+    /// <p>Deletes the specified job queue. You must first disable submissions for a queue with the <a>UpdateJobQueue</a> operation. All jobs in the queue are terminated when you delete a job queue.</p> <p>It is not necessary to disassociate compute environments from a queue before submitting a <code>DeleteJobQueue</code> request.</p>
     async fn delete_job_queue(
         &self,
         input: DeleteJobQueueRequest,
@@ -2360,7 +2397,7 @@ impl Batch for BatchClient {
         }
     }
 
-    /// <p>Registers an AWS Batch job definition. </p>
+    /// <p>Registers an AWS Batch job definition.</p>
     async fn register_job_definition(
         &self,
         input: RegisterJobDefinitionRequest,
@@ -2390,7 +2427,7 @@ impl Batch for BatchClient {
         }
     }
 
-    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition. </p>
+    /// <p>Submits an AWS Batch job from a job definition. Parameters specified during <a>SubmitJob</a> override parameters defined in the job definition.</p>
     async fn submit_job(
         &self,
         input: SubmitJobRequest,

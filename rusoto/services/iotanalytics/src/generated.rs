@@ -119,7 +119,7 @@ pub struct Channel {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Where channel data is stored.</p>
+    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<ChannelStorage>,
@@ -150,14 +150,14 @@ pub struct ChannelStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
-/// <p>Where channel data is stored.</p>
+/// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChannelStorage {
-    /// <p>Use this to store channel data in an S3 bucket that you manage.</p>
+    /// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedChannelS3Storage>,
-    /// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    /// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedChannelS3Storage>,
@@ -226,11 +226,11 @@ pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>Where channel data is stored.</p>
+    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
     #[serde(rename = "channelStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_storage: Option<ChannelStorage>,
-    /// <p>How long, in days, message data is kept for the channel.</p>
+    /// <p>How long, in days, message data is kept for the channel. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -325,11 +325,11 @@ pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>Where data store data is stored.</p>
+    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_storage: Option<DatastoreStorage>,
-    /// <p>How long, in days, message data is kept for the data store.</p>
+    /// <p>How long, in days, message data is kept for the data store. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -383,13 +383,13 @@ pub struct CreatePipelineResponse {
     pub pipeline_name: Option<String>,
 }
 
-/// <p>Use this to store channel data in an S3 bucket that you manage.</p>
+/// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomerManagedChannelS3Storage {
     /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
     #[serde(rename = "bucket")]
     pub bucket: String,
-    /// <p>The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    /// <p>[Optional] The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
@@ -406,7 +406,7 @@ pub struct CustomerManagedChannelS3StorageSummary {
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    /// <p>[Optional] The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
@@ -416,13 +416,13 @@ pub struct CustomerManagedChannelS3StorageSummary {
     pub role_arn: Option<String>,
 }
 
-/// <p>Use this to store data store data in an S3 bucket that you manage.</p>
+/// <p>Use this to store data store data in an S3 bucket that you manage. When customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomerManagedDatastoreS3Storage {
     /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
     #[serde(rename = "bucket")]
     pub bucket: String,
-    /// <p>The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    /// <p>[Optional] The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
@@ -439,7 +439,7 @@ pub struct CustomerManagedDatastoreS3StorageSummary {
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    /// <p>[Optional] The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
@@ -569,6 +569,10 @@ pub struct DatasetContentStatus {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DatasetContentSummary {
+    /// <p>The time the dataset content status was updated to SUCCEEDED or FAILED.</p>
+    #[serde(rename = "completionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_time: Option<f64>,
     /// <p>The actual time the creation of the data set contents was started.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -672,7 +676,7 @@ pub struct Datastore {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>How long, in days, message data is kept for the data store.</p>
+    /// <p>How long, in days, message data is kept for the data store. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -680,7 +684,7 @@ pub struct Datastore {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Where data store data is stored.</p>
+    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<DatastoreStorage>,
@@ -707,14 +711,14 @@ pub struct DatastoreStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
-/// <p>Where data store data is stored.</p>
+/// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DatastoreStorage {
-    /// <p>Use this to store data store data in an S3 bucket that you manage.</p>
+    /// <p>Use this to store data store data in an S3 bucket that you manage. When customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedDatastoreS3Storage>,
-    /// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    /// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedDatastoreS3Storage>,
@@ -815,7 +819,7 @@ pub struct DescribeChannelRequest {
     /// <p>The name of the channel whose information is retrieved.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>If true, additional statistical information about the channel is included in the response.</p>
+    /// <p>If true, additional statistical information about the channel is included in the response. This feature cannot be used with a channel whose S3 storage is customer-managed.</p>
     #[serde(rename = "includeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_statistics: Option<bool>,
@@ -855,7 +859,7 @@ pub struct DescribeDatastoreRequest {
     /// <p>The name of the data store</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>If true, additional statistical information about the datastore is included in the response.</p>
+    /// <p>If true, additional statistical information about the data store is included in the response. This feature cannot be used with a data store whose S3 storage is customer-managed.</p>
     #[serde(rename = "includeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_statistics: Option<bool>,
@@ -1462,7 +1466,7 @@ pub struct S3DestinationConfiguration {
     #[serde(rename = "glueConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub glue_configuration: Option<GlueConfiguration>,
-    /// <p>The key of the data set contents object. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    /// <p>The key of the data set contents object. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). To produce a unique key, you can use "!{iotanalytics:scheduledTime}" to insert the time of the scheduled SQL query run, or "!{iotanalytics:versioned} to insert a unique hash identifying the data set, for example: "/DataSet/!{iotanalytics:scheduledTime}/!{iotanalytics:versioned}.csv".</p>
     #[serde(rename = "key")]
     pub key: String,
     /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.</p>
@@ -1527,7 +1531,7 @@ pub struct SelectAttributesActivity {
     pub next: Option<String>,
 }
 
-/// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+/// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceManagedChannelS3Storage {}
 
@@ -1536,7 +1540,7 @@ pub struct ServiceManagedChannelS3Storage {}
 #[cfg_attr(test, derive(Serialize))]
 pub struct ServiceManagedChannelS3StorageSummary {}
 
-/// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+/// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceManagedDatastoreS3Storage {}
 
@@ -1633,11 +1637,11 @@ pub struct UpdateChannelRequest {
     /// <p>The name of the channel to be updated.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>Where channel data is stored.</p>
+    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
     #[serde(rename = "channelStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_storage: Option<ChannelStorage>,
-    /// <p>How long, in days, message data is kept for the channel.</p>
+    /// <p>How long, in days, message data is kept for the channel. The retention period cannot be updated if the channel's S3 storage is customer-managed.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -1674,11 +1678,11 @@ pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>Where data store data is stored.</p>
+    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_storage: Option<DatastoreStorage>,
-    /// <p>How long, in days, message data is kept for the data store.</p>
+    /// <p>How long, in days, message data is kept for the data store. The retention period cannot be updated if the data store's S3 storage is customer-managed.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -3792,7 +3796,7 @@ pub trait IotAnalytics {
         input: CreateDatastoreRequest,
     ) -> Result<CreateDatastoreResponse, RusotoError<CreateDatastoreError>>;
 
-    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    /// <p>Creates a pipeline. A pipeline consumes messages from a channel and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     async fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
@@ -4177,7 +4181,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    /// <p>Creates a pipeline. A pipeline consumes messages from a channel and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     async fn create_pipeline(
         &self,
         input: CreatePipelineRequest,

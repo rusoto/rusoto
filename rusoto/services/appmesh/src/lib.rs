@@ -30,17 +30,10 @@
 //!
 //! If you're using the service, you're probably looking for [AppMeshClient](struct.AppMeshClient.html) and [AppMesh](trait.AppMesh.html).
 
-extern crate bytes;
-extern crate futures;
-extern crate rusoto_core;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
 
 mod generated;
 mod custom;
 
-pub use crate::generated::*;
-pub use crate::custom::*;
+pub use generated::*;
+pub use custom::*;
             

@@ -1,8 +1,8 @@
 //! The Credentials Provider for an AWS Resource's IAM Role.
 
-use std::time::Duration;
 use async_trait::async_trait;
 use hyper::Uri;
+use std::time::Duration;
 
 use crate::request::HttpClient;
 use crate::{
@@ -73,9 +73,13 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             Err(e) => return Err(CredentialsError::new(e)),
         };
 
-        let role_name = self.client.get(uri, self.timeout).await.map_err(|err| {
-            CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
-        })?;
+        let role_name =
+            self.client
+                .get(uri, self.timeout)
+                .await
+                .map_err(|err| CredentialsError {
+                    message: format!("Could not get credentials from iam: {}", err.to_string()),
+                })?;
 
         let credentials_provider_url = format!(
             "http://{}/{}/{}",
@@ -87,9 +91,13 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             Err(e) => return Err(CredentialsError::new(e)),
         };
 
-        let cred_str = self.client.get(uri, self.timeout).await.map_err(|err| {
-            CredentialsError { message: format!("Could not get credentials from iam: {}", err.to_string()) }
-        })?;
+        let cred_str =
+            self.client
+                .get(uri, self.timeout)
+                .await
+                .map_err(|err| CredentialsError {
+                    message: format!("Could not get credentials from iam: {}", err.to_string()),
+                })?;
         parse_credentials_from_aws_service(&cred_str)
     }
 }

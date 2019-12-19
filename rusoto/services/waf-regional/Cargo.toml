@@ -16,8 +16,8 @@ exclude = ["test_resources/*"]
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.4"
-serde_json = "1.0.1"
+bytes = "0.5"
+serde_json = "1.0"
 
 [dependencies.futures]
 version = "0.3"

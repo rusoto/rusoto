@@ -118,7 +118,7 @@ impl<'b> Service<'b> {
             "async-trait".to_owned(),
             cargo::Dependency::Simple("0.1".into()),
         );
-        dependencies.insert("bytes".to_owned(), cargo::Dependency::Simple("0.4".into()));
+        dependencies.insert("bytes".to_owned(), cargo::Dependency::Simple("0.5".into()));
         dependencies.insert(
             "futures".to_owned(),
             cargo::Dependency::Extended {
@@ -154,7 +154,7 @@ impl<'b> Service<'b> {
                 );
                 dependencies.insert(
                     "serde_json".to_owned(),
-                    cargo::Dependency::Simple("1.0.1".into()),
+                    cargo::Dependency::Simple("1.0".into()),
                 );
             }
             "query" | "ec2" => {
@@ -180,7 +180,7 @@ impl<'b> Service<'b> {
                 if self.needs_serde_json_crate() {
                     dependencies.insert(
                         "serde_json".to_owned(),
-                        cargo::Dependency::Simple("1.0.1".into()),
+                        cargo::Dependency::Simple("1.0".into()),
                     );
                 }
             }
@@ -210,7 +210,7 @@ impl<'b> Service<'b> {
 
         dev_dependencies.insert(
             "tokio".to_owned(),
-            cargo::Dependency::Simple("0.2.0-alpha.6".to_owned()),
+            cargo::Dependency::Simple("0.2".to_owned()),
         );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {

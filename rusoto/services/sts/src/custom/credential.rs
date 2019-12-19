@@ -5,7 +5,6 @@ use chrono::Duration;
 use rusoto_core;
 use rusoto_core::RusotoError;
 
-use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use crate::{
     AssumeRoleError, AssumeRoleRequest, AssumeRoleResponse, AssumeRoleWithSAMLError,
     AssumeRoleWithSAMLRequest, AssumeRoleWithSAMLResponse, AssumeRoleWithWebIdentityError,
@@ -16,6 +15,7 @@ use crate::{
     GetFederationTokenResponse, GetSessionTokenError, GetSessionTokenRequest,
     GetSessionTokenResponse, Sts, StsClient,
 };
+use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
 pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
@@ -24,15 +24,21 @@ pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
 pub trait NewAwsCredsForStsCreds {
     /// Creates an [AwsCredentials](../rusoto_credential/struct.AwsCredentials.html) from a [Credentials](struct.Credentials.html)
     /// Returns a [CredentialsError](../rusoto_credential/struct.CredentialsError.html) in case of an error.
-    fn new_for_credentials(sts_creds: crate::generated::Credentials) -> Result<AwsCredentials, CredentialsError>;
+    fn new_for_credentials(
+        sts_creds: crate::generated::Credentials,
+    ) -> Result<AwsCredentials, CredentialsError>;
 }
 
 impl NewAwsCredsForStsCreds for AwsCredentials {
-    fn new_for_credentials(sts_creds: crate::generated::Credentials) -> Result<AwsCredentials, CredentialsError> {
-        let expires_at = Some(sts_creds
-            .expiration
-            .parse::<DateTime<Utc>>()
-            .map_err(CredentialsError::from)?);
+    fn new_for_credentials(
+        sts_creds: crate::generated::Credentials,
+    ) -> Result<AwsCredentials, CredentialsError> {
+        let expires_at = Some(
+            sts_creds
+                .expiration
+                .parse::<DateTime<Utc>>()
+                .map_err(CredentialsError::from)?,
+        );
 
         Ok(AwsCredentials::new(
             sts_creds.access_key_id,
@@ -105,14 +111,16 @@ where
     async fn assume_role_with_web_identity(
         &self,
         input: AssumeRoleWithWebIdentityRequest,
-    ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>> {
+    ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>>
+    {
         T::assume_role_with_web_identity(self, input).await
     }
 
     async fn decode_authorization_message(
         &self,
         input: DecodeAuthorizationMessageRequest,
-    ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>> {
+    ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>>
+    {
         T::decode_authorization_message(self, input).await
     }
 
@@ -186,7 +194,9 @@ impl StsSessionCredentialsProvider {
 
     /// Calls `GetSessionToken` to get a session token from the STS Api.
     /// Optionally uses MFA if the MFA serial number and code are set.
-    pub async fn get_session_token(&self) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
+    pub async fn get_session_token(
+        &self,
+    ) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
         let request = GetSessionTokenRequest {
             serial_number: self.mfa_serial.clone(),
             token_code: self.mfa_code.clone(),
@@ -200,11 +210,9 @@ impl StsSessionCredentialsProvider {
 #[async_trait]
 impl ProvideAwsCredentials for StsSessionCredentialsProvider {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        let resp = self.get_session_token().await
-            .map_err(|err| CredentialsError::new(format!(
-                "StsProvider get_session_token error: {:?}",
-                err
-            )))?;
+        let resp = self.get_session_token().await.map_err(|err| {
+            CredentialsError::new(format!("StsProvider get_session_token error: {:?}", err))
+        })?;
         let creds = resp
             .credentials
             .ok_or_else(|| CredentialsError::new("no credentials in response"))?;
@@ -294,20 +302,16 @@ impl StsAssumeRoleSessionCredentialsProvider {
             .credentials
             .ok_or(CredentialsError::new("no credentials in response"))?;
 
-        Ok(AwsCredentials::new_for_credentials(
-            creds
-        )?)
+        Ok(AwsCredentials::new_for_credentials(creds)?)
     }
 }
 
 #[async_trait]
 impl ProvideAwsCredentials for StsAssumeRoleSessionCredentialsProvider {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        self.assume_role().await
-            .map_err(|err| CredentialsError::new(format!(
-                "StsProvider get_session_token error: {:?}",
-                err
-            )))
+        self.assume_role().await.map_err(|err| {
+            CredentialsError::new(format!("StsProvider get_session_token error: {:?}", err))
+        })
     }
 }
 
@@ -369,7 +373,10 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
             ..Default::default()
         };
 
-        let resp = self.sts_client.assume_role_with_web_identity(request).await?;
+        let resp = self
+            .sts_client
+            .assume_role_with_web_identity(request)
+            .await?;
 
         let creds = resp
             .credentials

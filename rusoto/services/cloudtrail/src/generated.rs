@@ -60,7 +60,7 @@ pub struct CreateTrailRequest {
     #[serde(rename = "IncludeGlobalServiceEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_service_events: Option<bool>,
-    /// <p>Specifies whether the trail is created in the current region or in all regions. The default is false.</p>
+    /// <p>Specifies whether the trail is created in the current region or in all regions. The default is false, which creates a trail only in the region where you are signed in. As a best practice, consider creating trails that log events in all regions.</p>
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
@@ -75,10 +75,10 @@ pub struct CreateTrailRequest {
     /// <p><p>Specifies the name of the trail. The name must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
+    /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
     #[serde(rename = "S3BucketName")]
     pub s3_bucket_name: String,
-    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>. The maximum length is 200 characters.</p>
+    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>. The maximum length is 200 characters.</p>
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
@@ -86,6 +86,9 @@ pub struct CreateTrailRequest {
     #[serde(rename = "SnsTopicName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_name: Option<String>,
+    #[serde(rename = "TagsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags_list: Option<Vec<Tag>>,
 }
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
@@ -128,7 +131,7 @@ pub struct CreateTrailResponse {
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
-    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.</p>
+    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.</p>
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
@@ -142,14 +145,14 @@ pub struct CreateTrailResponse {
     pub trail_arn: Option<String>,
 }
 
-/// <p><p>The Amazon S3 buckets or AWS Lambda functions that you specify in your event selectors for your trail to log data events. Data events provide insight into the resource operations performed on or within a resource itself. These are also known as data plane operations. You can specify up to 250 data resources for a trail.</p> <note> <p>The total number of allowed data resources is 250. This number can be distributed between 1 and 5 event selectors, but the total cannot exceed 250 across all selectors.</p> </note> <p>The following example demonstrates how logging works when you configure logging of all data events for an S3 bucket named <code>bucket-1</code>. In this example, the CloudTrail user spcified an empty prefix, and the option to log both <code>Read</code> and <code>Write</code> data events.</p> <ol> <li> <p>A user uploads an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation is an Amazon S3 object-level API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified an S3 bucket with an empty prefix, events that occur on any object in that bucket are logged. The trail processes and logs the event.</p> </li> <li> <p>A user uploads an object to an Amazon S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurred for an object in an S3 bucket that the CloudTrail user didn&#39;t specify for the trail. The trail doesn’t log the event.</p> </li> </ol> <p>The following example demonstrates how logging works when you configure logging of AWS Lambda data events for a Lambda function named <i>MyLambdaFunction</i>, but not for all AWS Lambda functions.</p> <ol> <li> <p>A user runs a script that includes a call to the <i>MyLambdaFunction</i> function and the <i>MyOtherLambdaFunction</i> function.</p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyLambdaFunction</i> is an AWS Lambda API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified logging data events for <i>MyLambdaFunction</i>, any invocations of that function are logged. The trail processes and logs the event. </p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyOtherLambdaFunction</i> is an AWS Lambda API. Because the CloudTrail user did not specify logging data events for all Lambda functions, the <code>Invoke</code> operation for <i>MyOtherLambdaFunction</i> does not match the function specified for the trail. The trail doesn’t log the event. </p> </li> </ol></p>
+/// <p><p>The Amazon S3 buckets or AWS Lambda functions that you specify in your event selectors for your trail to log data events. Data events provide information about the resource operations performed on or within a resource itself. These are also known as data plane operations. You can specify up to 250 data resources for a trail.</p> <note> <p>The total number of allowed data resources is 250. This number can be distributed between 1 and 5 event selectors, but the total cannot exceed 250 across all selectors.</p> </note> <p>The following example demonstrates how logging works when you configure logging of all data events for an S3 bucket named <code>bucket-1</code>. In this example, the CloudTrail user specified an empty prefix, and the option to log both <code>Read</code> and <code>Write</code> data events.</p> <ol> <li> <p>A user uploads an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation is an Amazon S3 object-level API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified an S3 bucket with an empty prefix, events that occur on any object in that bucket are logged. The trail processes and logs the event.</p> </li> <li> <p>A user uploads an object to an Amazon S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurred for an object in an S3 bucket that the CloudTrail user didn&#39;t specify for the trail. The trail doesn’t log the event.</p> </li> </ol> <p>The following example demonstrates how logging works when you configure logging of AWS Lambda data events for a Lambda function named <i>MyLambdaFunction</i>, but not for all AWS Lambda functions.</p> <ol> <li> <p>A user runs a script that includes a call to the <i>MyLambdaFunction</i> function and the <i>MyOtherLambdaFunction</i> function.</p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyLambdaFunction</i> is an AWS Lambda API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified logging data events for <i>MyLambdaFunction</i>, any invocations of that function are logged. The trail processes and logs the event. </p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyOtherLambdaFunction</i> is an AWS Lambda API. Because the CloudTrail user did not specify logging data events for all Lambda functions, the <code>Invoke</code> operation for <i>MyOtherLambdaFunction</i> does not match the function specified for the trail. The trail doesn’t log the event. </p> </li> </ol></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataResource {
     /// <p>The resource type in which you want to log data events. You can specify <code>AWS::S3::Object</code> or <code>AWS::Lambda::Function</code> resources.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p><p>An array of Amazon Resource Name (ARN) strings or partial ARN strings for the specified objects.</p> <ul> <li> <p>To log data events for all objects in all S3 buckets in your AWS account, specify the prefix as <code>arn:aws:s3:::</code>. </p> <note> <p>This will also enable logging of data event activity performed by any user or role in your AWS account, even if that activity is performed on a bucket that belongs to another AWS account. </p> </note> </li> <li> <p>To log data events for all objects in all S3 buckets that include <i>my-bucket</i> in their names, specify the prefix as <code>aws:s3:::my-bucket</code>. The trail logs data events for all objects in all buckets whose name contains a match for <i>my-bucket</i>. </p> </li> <li> <p>To log data events for all objects in an S3 bucket, specify the bucket and an empty object prefix such as <code>arn:aws:s3:::bucket-1/</code>. The trail logs data events for all objects in this S3 bucket.</p> </li> <li> <p>To log data events for specific objects, specify the S3 bucket and object prefix such as <code>arn:aws:s3:::bucket-1/example-images</code>. The trail logs data events for objects in this S3 bucket that match the prefix.</p> </li> <li> <p>To log data events for all functions in your AWS account, specify the prefix as <code>arn:aws:lambda</code>.</p> <note> <p>This will also enable logging of <code>Invoke</code> activity performed by any user or role in your AWS account, even if that activity is performed on a function that belongs to another AWS account. </p> </note> </li> <li> <p>To log data eents for a specific Lambda function, specify the function ARN.</p> <note> <p>Lambda function ARNs are exact. Unlike S3, you cannot use matching. For example, if you specify a function ARN <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>, data events will only be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>. They will not be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld2</i>.</p> </note> </li> </ul></p>
+    /// <p><p>An array of Amazon Resource Name (ARN) strings or partial ARN strings for the specified objects.</p> <ul> <li> <p>To log data events for all objects in all S3 buckets in your AWS account, specify the prefix as <code>arn:aws:s3:::</code>. </p> <note> <p>This will also enable logging of data event activity performed by any user or role in your AWS account, even if that activity is performed on a bucket that belongs to another AWS account. </p> </note> </li> <li> <p>To log data events for all objects in an S3 bucket, specify the bucket and an empty object prefix such as <code>arn:aws:s3:::bucket-1/</code>. The trail logs data events for all objects in this S3 bucket.</p> </li> <li> <p>To log data events for specific objects, specify the S3 bucket and object prefix such as <code>arn:aws:s3:::bucket-1/example-images</code>. The trail logs data events for objects in this S3 bucket that match the prefix.</p> </li> <li> <p>To log data events for all functions in your AWS account, specify the prefix as <code>arn:aws:lambda</code>.</p> <note> <p>This will also enable logging of <code>Invoke</code> activity performed by any user or role in your AWS account, even if that activity is performed on a function that belongs to another AWS account. </p> </note> </li> <li> <p>To log data events for a specific Lambda function, specify the function ARN.</p> <note> <p>Lambda function ARNs are exact. For example, if you specify a function ARN <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>, data events will only be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>. They will not be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld2</i>.</p> </note> </li> </ul></p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -185,7 +188,7 @@ pub struct DescribeTrailsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTrailsResponse {
-    /// <p>The list of trail objects.</p>
+    /// <p>The list of trail objects. Trail objects with string values are only returned if values for the objects exist in a trail's configuration. For example, <code>SNSTopicName</code> and <code>SNSTopicARN</code> are only returned in results if a trail is configured to send SNS notifications. Similarly, <code>KMSKeyId</code> only appears in results if a trail's log files are encrypted with AWS KMS-managed keys.</p>
     #[serde(rename = "trailList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_list: Option<Vec<Trail>>,
@@ -236,11 +239,15 @@ pub struct Event {
 /// <p>Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event.</p> <p>You can configure up to five event selectors for a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EventSelector {
-    /// <p>CloudTrail supports data event logging for Amazon S3 objects and AWS Lambda functions. You can specify up to 250 resources for an individual event selector, but the total number of data resources cannot exceed 250 across all event selectors in a trail. This limit does not apply if you configure resource logging for all data events. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-data-events">Data Events</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>CloudTrail supports data event logging for Amazon S3 objects and AWS Lambda functions. You can specify up to 250 resources for an individual event selector, but the total number of data resources cannot exceed 250 across all event selectors in a trail. This limit does not apply if you configure resource logging for all data events. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-data-events">Data Events</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     #[serde(rename = "DataResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_resources: Option<Vec<DataResource>>,
-    /// <p>Specify if you want your event selector to include management events for your trail.</p> <p> For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-management-events">Management Events</a> in the <i>AWS CloudTrail User Guide</i>.</p> <p>By default, the value is <code>true</code>.</p>
+    /// <p>An optional list of service event sources from which you do not want management events to be logged on your trail. In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service events by containing <code>"kms.amazonaws.com"</code>. By default, <code>ExcludeManagementEventSources</code> is empty, and AWS KMS events are included in events that are logged to your trail. </p>
+    #[serde(rename = "ExcludeManagementEventSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_management_event_sources: Option<Vec<String>>,
+    /// <p>Specify if you want your event selector to include management events for your trail.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-management-events">Management Events</a> in the <i>AWS CloudTrail User Guide</i>.</p> <p>By default, the value is <code>true</code>.</p>
     #[serde(rename = "IncludeManagementEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_management_events: Option<bool>,
@@ -270,6 +277,41 @@ pub struct GetEventSelectorsResponse {
     pub trail_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetInsightSelectorsRequest {
+    /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are not valid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
+    #[serde(rename = "TrailName")]
+    pub trail_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetInsightSelectorsResponse {
+    /// <p>A JSON string that contains the insight types you want to log on a trail. In this release, only <code>ApiCallRateInsight</code> is supported as an insight type.</p>
+    #[serde(rename = "InsightSelectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_selectors: Option<Vec<InsightSelector>>,
+    /// <p>The Amazon Resource Name (ARN) of a trail for which you want to get Insights selectors.</p>
+    #[serde(rename = "TrailARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trail_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTrailRequest {
+    /// <p>The name or the Amazon Resource Name (ARN) of the trail for which you want to retrieve settings information.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetTrailResponse {
+    #[serde(rename = "Trail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trail: Option<Trail>,
+}
+
 /// <p>The name of a trail about which you want the current status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTrailStatusRequest {
@@ -294,15 +336,15 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "LatestCloudWatchLogsDeliveryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_cloud_watch_logs_delivery_time: Option<f64>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "LatestDeliveryAttemptSucceeded")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_attempt_succeeded: Option<String>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "LatestDeliveryAttemptTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_attempt_time: Option<String>,
-    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver log files to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
+    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver log files to the designated bucket. For more information see the topic <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
     #[serde(rename = "LatestDeliveryError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_error: Option<String>,
@@ -310,7 +352,7 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "LatestDeliveryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_time: Option<f64>,
-    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver a digest file to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
+    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver a digest file to the designated bucket. For more information see the topic <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
     #[serde(rename = "LatestDigestDeliveryError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_digest_delivery_error: Option<String>,
@@ -318,15 +360,15 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "LatestDigestDeliveryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_digest_delivery_time: Option<f64>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "LatestNotificationAttemptSucceeded")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_notification_attempt_succeeded: Option<String>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "LatestNotificationAttemptTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_notification_attempt_time: Option<String>,
-    /// <p>Displays any Amazon SNS error that CloudTrail encountered when attempting to send a notification. For more information about Amazon SNS errors, see the <a href="http://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon SNS Developer Guide</a>. </p>
+    /// <p>Displays any Amazon SNS error that CloudTrail encountered when attempting to send a notification. For more information about Amazon SNS errors, see the <a href="https://docs.aws.amazon.com/sns/latest/dg/welcome.html">Amazon SNS Developer Guide</a>. </p>
     #[serde(rename = "LatestNotificationError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_notification_error: Option<String>,
@@ -342,14 +384,23 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "StopLoggingTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_logging_time: Option<f64>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "TimeLoggingStarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_logging_started: Option<String>,
-    /// <p>This field is deprecated.</p>
+    /// <p>This field is no longer in use.</p>
     #[serde(rename = "TimeLoggingStopped")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_logging_stopped: Option<String>,
+}
+
+/// <p>A JSON string that contains a list of insight types that are logged on a trail.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InsightSelector {
+    /// <p>The type of insights to log on a trail. In this release, only <code>ApiCallRateInsight</code> is supported as an insight type.</p>
+    #[serde(rename = "InsightType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_type: Option<String>,
 }
 
 /// <p>Requests the public keys for a specified time range.</p>
@@ -409,6 +460,27 @@ pub struct ListTagsResponse {
     pub resource_tag_list: Option<Vec<ResourceTag>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTrailsRequest {
+    /// <p>The token to use to get the next page of results after a previous API call. This token must be passed in with the same parameters that were specified in the the original call. For example, if the original call specified an AttributeKey of 'Username' with a value of 'root', the call with NextToken should include those same parameters.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTrailsResponse {
+    /// <p>The token to use to get the next page of results after a previous API call. If the token does not appear, there are no more results to return. The token must be passed in with the same parameters as the previous call. For example, if the original call specified an AttributeKey of 'Username' with a value of 'root', the call with NextToken should include those same parameters.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns the name, ARN, and home region of trails in the current account.</p>
+    #[serde(rename = "Trails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trails: Option<Vec<TrailInfo>>,
+}
+
 /// <p>Specifies an attribute and value that filter the events returned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LookupAttribute {
@@ -427,6 +499,10 @@ pub struct LookupEventsRequest {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p>Specifies the event category. If you do not specify an event category, events of the category are not returned in the response. For example, if you do not specify <code>insight</code> as the value of <code>EventCategory</code>, no Insights events are returned.</p>
+    #[serde(rename = "EventCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_category: Option<String>,
     /// <p>Contains a list of lookup attributes. Currently the list can contain only one item.</p>
     #[serde(rename = "LookupAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -509,6 +585,29 @@ pub struct PutEventSelectorsResponse {
     pub trail_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutInsightSelectorsRequest {
+    /// <p>A JSON string that contains the insight types you want to log on a trail. In this release, only <code>ApiCallRateInsight</code> is supported as an insight type.</p>
+    #[serde(rename = "InsightSelectors")]
+    pub insight_selectors: Vec<InsightSelector>,
+    /// <p>The name of the CloudTrail trail for which you want to change or add Insights selectors.</p>
+    #[serde(rename = "TrailName")]
+    pub trail_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutInsightSelectorsResponse {
+    /// <p>A JSON string that contains the insight types you want to log on a trail. In this release, only <code>ApiCallRateInsight</code> is supported as an insight type.</p>
+    #[serde(rename = "InsightSelectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insight_selectors: Option<Vec<InsightSelector>>,
+    /// <p>The Amazon Resource Name (ARN) of a trail for which you want to change or add Insights selectors.</p>
+    #[serde(rename = "TrailARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trail_arn: Option<String>,
+}
+
 /// <p>Specifies the tags to remove from a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsRequest {
@@ -534,7 +633,7 @@ pub struct Resource {
     #[serde(rename = "ResourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
-    /// <p>The type of a resource referenced by the event returned. When the resource type cannot be determined, null is returned. Some examples of resource types are: <b>Instance</b> for EC2, <b>Trail</b> for CloudTrail, <b>DBInstance</b> for RDS, and <b>AccessKey</b> for IAM. For a list of resource types supported for event lookup, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/lookup_supported_resourcetypes.html">Resource Types Supported for Event Lookup</a>.</p>
+    /// <p>The type of a resource referenced by the event returned. When the resource type cannot be determined, null is returned. Some examples of resource types are: <b>Instance</b> for EC2, <b>Trail</b> for CloudTrail, <b>DBInstance</b> for RDS, and <b>AccessKey</b> for IAM. To learn more about how to look up and filter events by the resource types supported for a service, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events-console.html#filtering-cloudtrail-events">Filtering CloudTrail Events</a>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -608,6 +707,10 @@ pub struct Trail {
     #[serde(rename = "HasCustomEventSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_custom_event_selectors: Option<bool>,
+    /// <p>Specifies whether a trail has insight types specified in an <code>InsightSelector</code> list.</p>
+    #[serde(rename = "HasInsightSelectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_insight_selectors: Option<bool>,
     /// <p>The region in which the trail was created.</p>
     #[serde(rename = "HomeRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -616,7 +719,7 @@ pub struct Trail {
     #[serde(rename = "IncludeGlobalServiceEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_service_events: Option<bool>,
-    /// <p>Specifies whether the trail belongs only to one region or exists in all regions.</p>
+    /// <p>Specifies whether the trail exists only in one region or exists in all regions.</p>
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
@@ -636,11 +739,11 @@ pub struct Trail {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Name of the Amazon S3 bucket into which CloudTrail delivers your trail files. See <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
+    /// <p>Name of the Amazon S3 bucket into which CloudTrail delivers your trail files. See <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
-    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.The maximum length is 200 characters.</p>
+    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.The maximum length is 200 characters.</p>
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
@@ -649,6 +752,24 @@ pub struct Trail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
     /// <p>Specifies the ARN of the trail. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
+    #[serde(rename = "TrailARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trail_arn: Option<String>,
+}
+
+/// <p>Information about a CloudTrail trail, including the trail's name, home region, and Amazon Resource Name (ARN).</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrailInfo {
+    /// <p>The AWS region in which a trail was created.</p>
+    #[serde(rename = "HomeRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_region: Option<String>,
+    /// <p>The name of a trail.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ARN of a trail.</p>
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
@@ -673,7 +794,7 @@ pub struct UpdateTrailRequest {
     #[serde(rename = "IncludeGlobalServiceEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_service_events: Option<bool>,
-    /// <p>Specifies whether the trail applies only to the current region or to all regions. The default is false. If the trail exists only in the current region and this value is set to true, shadow trails (replications of the trail) will be created in the other regions. If the trail exists in all regions and this value is set to false, the trail will remain in the region where it was created, and its shadow trails in other regions will be deleted.</p>
+    /// <p>Specifies whether the trail applies only to the current region or to all regions. The default is false. If the trail exists only in the current region and this value is set to true, shadow trails (replications of the trail) will be created in the other regions. If the trail exists in all regions and this value is set to false, the trail will remain in the region where it was created, and its shadow trails in other regions will be deleted. As a best practice, consider using trails that log events in all regions.</p>
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
@@ -688,11 +809,11 @@ pub struct UpdateTrailRequest {
     /// <p>Specifies the name of the trail or trail ARN. If <code>Name</code> is a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If <code>Name</code> is a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
+    /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
-    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>. The maximum length is 200 characters.</p>
+    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>. The maximum length is 200 characters.</p>
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
@@ -742,7 +863,7 @@ pub struct UpdateTrailResponse {
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
-    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.</p>
+    /// <p>Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-find-log-files.html">Finding Your CloudTrail Log Files</a>.</p>
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
@@ -761,7 +882,7 @@ pub struct UpdateTrailResponse {
 pub enum AddTagsError {
     /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
-    /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+    /// <p>This exception is thrown when the specified tag key or values are not valid. It can also occur if there are duplicate tags or too many tags on the resource.</p>
     InvalidTagParameter(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
@@ -868,11 +989,13 @@ pub enum CreateTrailError {
     InvalidS3Prefix(String),
     /// <p>This exception is thrown when the provided SNS topic name is not valid.</p>
     InvalidSnsTopicName(String),
+    /// <p>This exception is thrown when the specified tag key or values are not valid. It can also occur if there are duplicate tags or too many tags on the resource.</p>
+    InvalidTagParameter(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
     /// <p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
     Kms(String),
-    /// <p>This exception is deprecated.</p>
+    /// <p>This exception is no longer in use.</p>
     KmsKeyDisabled(String),
     /// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
     KmsKeyNotFound(String),
@@ -890,7 +1013,7 @@ pub enum CreateTrailError {
     S3BucketDoesNotExist(String),
     /// <p>This exception is thrown when the specified trail already exists.</p>
     TrailAlreadyExists(String),
-    /// <p>This exception is deprecated.</p>
+    /// <p>This exception is no longer in use.</p>
     TrailNotProvided(String),
     /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
@@ -956,6 +1079,9 @@ impl CreateTrailError {
                 }
                 "InvalidSnsTopicNameException" => {
                     return RusotoError::Service(CreateTrailError::InvalidSnsTopicName(err.msg))
+                }
+                "InvalidTagParameterException" => {
+                    return RusotoError::Service(CreateTrailError::InvalidTagParameter(err.msg))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(CreateTrailError::InvalidTrailName(err.msg))
@@ -1028,6 +1154,7 @@ impl Error for CreateTrailError {
             CreateTrailError::InvalidS3BucketName(ref cause) => cause,
             CreateTrailError::InvalidS3Prefix(ref cause) => cause,
             CreateTrailError::InvalidSnsTopicName(ref cause) => cause,
+            CreateTrailError::InvalidTagParameter(ref cause) => cause,
             CreateTrailError::InvalidTrailName(ref cause) => cause,
             CreateTrailError::Kms(ref cause) => cause,
             CreateTrailError::KmsKeyDisabled(ref cause) => cause,
@@ -1120,6 +1247,8 @@ impl Error for DeleteTrailError {
 /// Errors returned by DescribeTrails
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrailsError {
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
+    InvalidTrailName(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
     /// <p>This exception is thrown when the requested operation is not supported.</p>
@@ -1130,6 +1259,9 @@ impl DescribeTrailsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrailsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidTrailNameException" => {
+                    return RusotoError::Service(DescribeTrailsError::InvalidTrailName(err.msg))
+                }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DescribeTrailsError::OperationNotPermitted(
                         err.msg,
@@ -1153,6 +1285,7 @@ impl fmt::Display for DescribeTrailsError {
 impl Error for DescribeTrailsError {
     fn description(&self) -> &str {
         match *self {
+            DescribeTrailsError::InvalidTrailName(ref cause) => cause,
             DescribeTrailsError::OperationNotPermitted(ref cause) => cause,
             DescribeTrailsError::UnsupportedOperation(ref cause) => cause,
         }
@@ -1213,13 +1346,133 @@ impl Error for GetEventSelectorsError {
         }
     }
 }
+/// Errors returned by GetInsightSelectors
+#[derive(Debug, PartialEq)]
+pub enum GetInsightSelectorsError {
+    /// <p>If you run <code>GetInsightSelectors</code> on a trail that does not have Insights events enabled, the operation throws the exception <code>InsightNotEnabledException</code>.</p>
+    InsightNotEnabled(String),
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
+    InvalidTrailName(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
+    TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl GetInsightSelectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInsightSelectorsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InsightNotEnabledException" => {
+                    return RusotoError::Service(GetInsightSelectorsError::InsightNotEnabled(
+                        err.msg,
+                    ))
+                }
+                "InvalidTrailNameException" => {
+                    return RusotoError::Service(GetInsightSelectorsError::InvalidTrailName(
+                        err.msg,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(GetInsightSelectorsError::OperationNotPermitted(
+                        err.msg,
+                    ))
+                }
+                "TrailNotFoundException" => {
+                    return RusotoError::Service(GetInsightSelectorsError::TrailNotFound(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(GetInsightSelectorsError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetInsightSelectorsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetInsightSelectorsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetInsightSelectorsError::InsightNotEnabled(ref cause) => cause,
+            GetInsightSelectorsError::InvalidTrailName(ref cause) => cause,
+            GetInsightSelectorsError::OperationNotPermitted(ref cause) => cause,
+            GetInsightSelectorsError::TrailNotFound(ref cause) => cause,
+            GetInsightSelectorsError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetTrail
+#[derive(Debug, PartialEq)]
+pub enum GetTrailError {
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
+    InvalidTrailName(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
+    TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl GetTrailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrailError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidTrailNameException" => {
+                    return RusotoError::Service(GetTrailError::InvalidTrailName(err.msg))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(GetTrailError::OperationNotPermitted(err.msg))
+                }
+                "TrailNotFoundException" => {
+                    return RusotoError::Service(GetTrailError::TrailNotFound(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(GetTrailError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTrailError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTrailError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTrailError::InvalidTrailName(ref cause) => cause,
+            GetTrailError::OperationNotPermitted(ref cause) => cause,
+            GetTrailError::TrailNotFound(ref cause) => cause,
+            GetTrailError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTrailStatus
 #[derive(Debug, PartialEq)]
 pub enum GetTrailStatusError {
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
 }
 
 impl GetTrailStatusError {
@@ -1229,8 +1482,16 @@ impl GetTrailStatusError {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetTrailStatusError::InvalidTrailName(err.msg))
                 }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(GetTrailStatusError::OperationNotPermitted(
+                        err.msg,
+                    ))
+                }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(GetTrailStatusError::TrailNotFound(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(GetTrailStatusError::UnsupportedOperation(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1248,7 +1509,9 @@ impl Error for GetTrailStatusError {
     fn description(&self) -> &str {
         match *self {
             GetTrailStatusError::InvalidTrailName(ref cause) => cause,
+            GetTrailStatusError::OperationNotPermitted(ref cause) => cause,
             GetTrailStatusError::TrailNotFound(ref cause) => cause,
+            GetTrailStatusError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -1374,9 +1637,50 @@ impl Error for ListTagsError {
         }
     }
 }
+/// Errors returned by ListTrails
+#[derive(Debug, PartialEq)]
+pub enum ListTrailsError {
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl ListTrailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(ListTrailsError::OperationNotPermitted(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(ListTrailsError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTrailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTrailsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTrailsError::OperationNotPermitted(ref cause) => cause,
+            ListTrailsError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by LookupEvents
 #[derive(Debug, PartialEq)]
 pub enum LookupEventsError {
+    /// <p>Occurs if an event category that is not valid is specified as a value of <code>EventCategory</code>.</p>
+    InvalidEventCategory(String),
     /// <p>Occurs when an invalid lookup attribute is specified.</p>
     InvalidLookupAttributes(String),
     /// <p>This exception is thrown if the limit specified is invalid.</p>
@@ -1385,12 +1689,19 @@ pub enum LookupEventsError {
     InvalidNextToken(String),
     /// <p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
     InvalidTimeRange(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
 }
 
 impl LookupEventsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupEventsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidEventCategoryException" => {
+                    return RusotoError::Service(LookupEventsError::InvalidEventCategory(err.msg))
+                }
                 "InvalidLookupAttributesException" => {
                     return RusotoError::Service(LookupEventsError::InvalidLookupAttributes(
                         err.msg,
@@ -1404,6 +1715,12 @@ impl LookupEventsError {
                 }
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(LookupEventsError::InvalidTimeRange(err.msg))
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(LookupEventsError::OperationNotPermitted(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(LookupEventsError::UnsupportedOperation(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1420,10 +1737,13 @@ impl fmt::Display for LookupEventsError {
 impl Error for LookupEventsError {
     fn description(&self) -> &str {
         match *self {
+            LookupEventsError::InvalidEventCategory(ref cause) => cause,
             LookupEventsError::InvalidLookupAttributes(ref cause) => cause,
             LookupEventsError::InvalidMaxResults(ref cause) => cause,
             LookupEventsError::InvalidNextToken(ref cause) => cause,
             LookupEventsError::InvalidTimeRange(ref cause) => cause,
+            LookupEventsError::OperationNotPermitted(ref cause) => cause,
+            LookupEventsError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -1516,12 +1836,109 @@ impl Error for PutEventSelectorsError {
         }
     }
 }
+/// Errors returned by PutInsightSelectors
+#[derive(Debug, PartialEq)]
+pub enum PutInsightSelectorsError {
+    /// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
+    InsufficientEncryptionPolicy(String),
+    /// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
+    InsufficientS3BucketPolicy(String),
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    InvalidHomeRegion(String),
+    /// <p>The formatting or syntax of the <code>InsightSelectors</code> JSON statement in your <code>PutInsightSelectors</code> or <code>GetInsightSelectors</code> request is not valid, or the specified insight type in the <code>InsightSelectors</code> statement is not a valid insight type.</p>
+    InvalidInsightSelectors(String),
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
+    InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
+    TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
+}
+
+impl PutInsightSelectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInsightSelectorsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InsufficientEncryptionPolicyException" => {
+                    return RusotoError::Service(
+                        PutInsightSelectorsError::InsufficientEncryptionPolicy(err.msg),
+                    )
+                }
+                "InsufficientS3BucketPolicyException" => {
+                    return RusotoError::Service(
+                        PutInsightSelectorsError::InsufficientS3BucketPolicy(err.msg),
+                    )
+                }
+                "InvalidHomeRegionException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::InvalidHomeRegion(
+                        err.msg,
+                    ))
+                }
+                "InvalidInsightSelectorsException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::InvalidInsightSelectors(
+                        err.msg,
+                    ))
+                }
+                "InvalidTrailNameException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::InvalidTrailName(
+                        err.msg,
+                    ))
+                }
+                "NotOrganizationMasterAccountException" => {
+                    return RusotoError::Service(
+                        PutInsightSelectorsError::NotOrganizationMasterAccount(err.msg),
+                    )
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::OperationNotPermitted(
+                        err.msg,
+                    ))
+                }
+                "TrailNotFoundException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::TrailNotFound(err.msg))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(PutInsightSelectorsError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutInsightSelectorsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutInsightSelectorsError {
+    fn description(&self) -> &str {
+        match *self {
+            PutInsightSelectorsError::InsufficientEncryptionPolicy(ref cause) => cause,
+            PutInsightSelectorsError::InsufficientS3BucketPolicy(ref cause) => cause,
+            PutInsightSelectorsError::InvalidHomeRegion(ref cause) => cause,
+            PutInsightSelectorsError::InvalidInsightSelectors(ref cause) => cause,
+            PutInsightSelectorsError::InvalidTrailName(ref cause) => cause,
+            PutInsightSelectorsError::NotOrganizationMasterAccount(ref cause) => cause,
+            PutInsightSelectorsError::OperationNotPermitted(ref cause) => cause,
+            PutInsightSelectorsError::TrailNotFound(ref cause) => cause,
+            PutInsightSelectorsError::UnsupportedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
     /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
-    /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+    /// <p>This exception is thrown when the specified tag key or values are not valid. It can also occur if there are duplicate tags or too many tags on the resource.</p>
     InvalidTagParameter(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
@@ -1758,6 +2175,8 @@ pub enum UpdateTrailError {
     InvalidCloudWatchLogsLogGroupArn(String),
     /// <p>This exception is thrown when the provided role is not valid.</p>
     InvalidCloudWatchLogsRoleArn(String),
+    /// <p><p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with a number of event selectors or data resources that is not valid. The combination of event selectors and data resources is not valid. A trail can have up to 5 event selectors. A trail is limited to 250 data resources. These data resources can be distributed across event selectors, but the overall total cannot exceed 250.</p> <p>You can:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector. The limit of number of resources on an individual event selector is configurable up to 250. However, this upper limit is allowed only if the total number of data resources does not exceed 250 across all event selectors for a trail.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul></p>
+    InvalidEventSelectors(String),
     /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
     /// <p>This exception is thrown when the KMS key ARN is invalid.</p>
@@ -1774,7 +2193,7 @@ pub enum UpdateTrailError {
     InvalidTrailName(String),
     /// <p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
     Kms(String),
-    /// <p>This exception is deprecated.</p>
+    /// <p>This exception is no longer in use.</p>
     KmsKeyDisabled(String),
     /// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
     KmsKeyNotFound(String),
@@ -1790,7 +2209,7 @@ pub enum UpdateTrailError {
     S3BucketDoesNotExist(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
-    /// <p>This exception is deprecated.</p>
+    /// <p>This exception is no longer in use.</p>
     TrailNotProvided(String),
     /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
@@ -1839,6 +2258,9 @@ impl UpdateTrailError {
                     return RusotoError::Service(UpdateTrailError::InvalidCloudWatchLogsRoleArn(
                         err.msg,
                     ))
+                }
+                "InvalidEventSelectorsException" => {
+                    return RusotoError::Service(UpdateTrailError::InvalidEventSelectors(err.msg))
                 }
                 "InvalidHomeRegionException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidHomeRegion(err.msg))
@@ -1921,6 +2343,7 @@ impl Error for UpdateTrailError {
             UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
             UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,
             UpdateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,
+            UpdateTrailError::InvalidEventSelectors(ref cause) => cause,
             UpdateTrailError::InvalidHomeRegion(ref cause) => cause,
             UpdateTrailError::InvalidKmsKeyId(ref cause) => cause,
             UpdateTrailError::InvalidParameterCombination(ref cause) => cause,
@@ -1945,13 +2368,13 @@ impl Error for UpdateTrailError {
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
 #[async_trait]
 pub trait CloudTrail {
-    /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
+    /// <p>Adds one or more tags to a trail, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique for a trail; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all AWS Regions only from the Region in which the trail was created (also known as its home region).</p>
     async fn add_tags(
         &self,
         input: AddTagsRequest,
     ) -> Result<AddTagsResponse, RusotoError<AddTagsError>>;
 
-    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
+    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. </p>
     async fn create_trail(
         &self,
         input: CreateTrailRequest,
@@ -1963,17 +2386,29 @@ pub trait CloudTrail {
         input: DeleteTrailRequest,
     ) -> Result<DeleteTrailResponse, RusotoError<DeleteTrailError>>;
 
-    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
+    /// <p>Retrieves settings for one or more trails associated with the current region for your account.</p>
     async fn describe_trails(
         &self,
         input: DescribeTrailsRequest,
     ) -> Result<DescribeTrailsResponse, RusotoError<DescribeTrailsError>>;
 
-    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     async fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
     ) -> Result<GetEventSelectorsResponse, RusotoError<GetEventSelectorsError>>;
+
+    /// <p>Describes the settings for the Insights event selectors that you configured for your trail. <code>GetInsightSelectors</code> shows if CloudTrail Insights event logging is enabled on the trail, and if it is, which insight types are enabled. If you run <code>GetInsightSelectors</code> on a trail that does not have Insights events enabled, the operation throws the exception <code>InsightNotEnabledException</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html">Logging CloudTrail Insights Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    async fn get_insight_selectors(
+        &self,
+        input: GetInsightSelectorsRequest,
+    ) -> Result<GetInsightSelectorsResponse, RusotoError<GetInsightSelectorsError>>;
+
+    /// <p>Returns settings information for a specified trail.</p>
+    async fn get_trail(
+        &self,
+        input: GetTrailRequest,
+    ) -> Result<GetTrailResponse, RusotoError<GetTrailError>>;
 
     /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
     async fn get_trail_status(
@@ -1993,17 +2428,29 @@ pub trait CloudTrail {
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
-    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
+    /// <p>Lists trails that are in the current account.</p>
+    async fn list_trails(
+        &self,
+        input: ListTrailsRequest,
+    ) -> Result<ListTrailsResponse, RusotoError<ListTrailsError>>;
+
+    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> or <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events">CloudTrail Insights events</a> that are captured by CloudTrail. You can look up events that occurred in a region within the last 90 days. Lookup supports the following attributes for management events:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>Lookup supports the following attributes for Insights events:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to two per second per account. If this limit is exceeded, a throttling error occurs.</p> </important></p>
     async fn lookup_events(
         &self,
         input: LookupEventsRequest,
     ) -> Result<LookupEventsResponse, RusotoError<LookupEventsError>>;
 
-    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     async fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
     ) -> Result<PutEventSelectorsResponse, RusotoError<PutEventSelectorsError>>;
+
+    /// <p>Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail. You also use <code>PutInsightSelectors</code> to turn off Insights event logging, by passing an empty list of insight types. In this release, only <code>ApiCallRateInsight</code> is supported as an Insights selector.</p>
+    async fn put_insight_selectors(
+        &self,
+        input: PutInsightSelectorsRequest,
+    ) -> Result<PutInsightSelectorsResponse, RusotoError<PutInsightSelectorsError>>;
 
     /// <p>Removes the specified tags from a trail.</p>
     async fn remove_tags(
@@ -2065,7 +2512,7 @@ impl CloudTrailClient {
 
 #[async_trait]
 impl CloudTrail for CloudTrailClient {
-    /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
+    /// <p>Adds one or more tags to a trail, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique for a trail; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all AWS Regions only from the Region in which the trail was created (also known as its home region).</p>
     async fn add_tags(
         &self,
         input: AddTagsRequest,
@@ -2095,7 +2542,7 @@ impl CloudTrail for CloudTrailClient {
         }
     }
 
-    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
+    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. </p>
     async fn create_trail(
         &self,
         input: CreateTrailRequest,
@@ -2155,7 +2602,7 @@ impl CloudTrail for CloudTrailClient {
         }
     }
 
-    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
+    /// <p>Retrieves settings for one or more trails associated with the current region for your account.</p>
     async fn describe_trails(
         &self,
         input: DescribeTrailsRequest,
@@ -2185,7 +2632,7 @@ impl CloudTrail for CloudTrailClient {
         }
     }
 
-    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     async fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
@@ -2213,6 +2660,67 @@ impl CloudTrail for CloudTrailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetEventSelectorsError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the settings for the Insights event selectors that you configured for your trail. <code>GetInsightSelectors</code> shows if CloudTrail Insights event logging is enabled on the trail, and if it is, which insight types are enabled. If you run <code>GetInsightSelectors</code> on a trail that does not have Insights events enabled, the operation throws the exception <code>InsightNotEnabledException</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html">Logging CloudTrail Insights Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    async fn get_insight_selectors(
+        &self,
+        input: GetInsightSelectorsRequest,
+    ) -> Result<GetInsightSelectorsResponse, RusotoError<GetInsightSelectorsError>> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetInsightSelectors",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetInsightSelectorsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetInsightSelectorsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns settings information for a specified trail.</p>
+    async fn get_trail(
+        &self,
+        input: GetTrailRequest,
+    ) -> Result<GetTrailResponse, RusotoError<GetTrailError>> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetTrail",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTrailResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTrailError::from_response(response))
         }
     }
 
@@ -2306,7 +2814,37 @@ impl CloudTrail for CloudTrailClient {
         }
     }
 
-    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
+    /// <p>Lists trails that are in the current account.</p>
+    async fn list_trails(
+        &self,
+        input: ListTrailsRequest,
+    ) -> Result<ListTrailsResponse, RusotoError<ListTrailsError>> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.ListTrails",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTrailsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTrailsError::from_response(response))
+        }
+    }
+
+    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> or <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events">CloudTrail Insights events</a> that are captured by CloudTrail. You can look up events that occurred in a region within the last 90 days. Lookup supports the following attributes for management events:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>Lookup supports the following attributes for Insights events:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to two per second per account. If this limit is exceeded, a throttling error occurs.</p> </important></p>
     async fn lookup_events(
         &self,
         input: LookupEventsRequest,
@@ -2336,7 +2874,7 @@ impl CloudTrail for CloudTrailClient {
         }
     }
 
-    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     async fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
@@ -2364,6 +2902,37 @@ impl CloudTrail for CloudTrailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutEventSelectorsError::from_response(response))
+        }
+    }
+
+    /// <p>Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail. You also use <code>PutInsightSelectors</code> to turn off Insights event logging, by passing an empty list of insight types. In this release, only <code>ApiCallRateInsight</code> is supported as an Insights selector.</p>
+    async fn put_insight_selectors(
+        &self,
+        input: PutInsightSelectorsRequest,
+    ) -> Result<PutInsightSelectorsResponse, RusotoError<PutInsightSelectorsError>> {
+        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.PutInsightSelectors",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutInsightSelectorsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutInsightSelectorsError::from_response(response))
         }
     }
 

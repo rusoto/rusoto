@@ -16,8 +16,8 @@ exclude = ["test_resources/*"]
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.4"
-xml-rs = "0.7"
+bytes = "0.5"
+xml-rs = "0.8"
 
 [dependencies.futures]
 version = "0.3"
@@ -33,8 +33,10 @@ tokio = "0.2"
 [dev-dependencies.rusoto_mock]
 version = "0.42.0"
 path = "../../../mock"
+default-features = false
 
 [features]
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

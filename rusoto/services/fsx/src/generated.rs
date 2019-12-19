@@ -24,6 +24,20 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The Microsoft AD attributes of the Amazon FSx for Windows File Server file system.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ActiveDirectoryBackupAttributes {
+    /// <p>The ID of the AWS Managed Microsoft Active Directory instance to which the file system is joined.</p>
+    #[serde(rename = "ActiveDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_directory_id: Option<String>,
+    /// <p>The fully qualified domain name of the self-managed AD directory.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+}
+
 /// <p>A backup of an Amazon FSx for Windows File Server file system. You can create a new file system from a backup to protect against data loss.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -34,6 +48,10 @@ pub struct Backup {
     /// <p>The time when a particular backup was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
+    /// <p>The configuration of the self-managed Microsoft Active Directory (AD) to which the Windows File Server instance is joined.</p>
+    #[serde(rename = "DirectoryInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_information: Option<ActiveDirectoryBackupAttributes>,
     /// <p>Details explaining any failures that occur when creating a backup.</p>
     #[serde(rename = "FailureDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,7 +154,7 @@ pub struct CreateFileSystemFromBackupResponse {
     pub file_system: Option<FileSystem>,
 }
 
-/// <p>The configuration object for Lustre file systems used in the <code>CreateFileSystem</code> operation.</p>
+/// <p>The Lustre configuration for the file system being created. This value is required if <code>FileSystemType</code> is set to <code>LUSTRE</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFileSystemLustreConfiguration {
     /// <p>(Optional) The path in Amazon S3 where the root of your Amazon FSx file system is exported. The path must use the same Amazon S3 bucket as specified in ImportPath. You can provide an optional prefix to which new and changed data is to be exported from your Amazon FSx for Lustre file system. If an <code>ExportPath</code> value is not provided, Amazon FSx sets a default export path, <code>s3://import-bucket/FSxLustre[creation-timestamp]</code>. The timestamp is in UTC format, for example <code>s3://import-bucket/FSxLustre20181105T222312Z</code>.</p> <p>The Amazon S3 export bucket must be the same as the import bucket specified by <code>ImportPath</code>. If you only specify a bucket name, such as <code>s3://import-bucket</code>, you get a 1:1 mapping of file system objects to S3 bucket objects. This mapping means that the input data in S3 is overwritten on export. If you provide a custom prefix in the export path, such as <code>s3://import-bucket/[custom-optional-prefix]</code>, Amazon FSx exports the contents of your file system to that export prefix in the Amazon S3 bucket.</p>
@@ -157,14 +175,14 @@ pub struct CreateFileSystemLustreConfiguration {
     pub weekly_maintenance_start_time: Option<String>,
 }
 
-/// <p>The request object for the <code>CreateFileSystem</code> operation.</p>
+/// <p>The request object used to create a new Amazon FSx file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFileSystemRequest {
     /// <p>(Optional) A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent creation. This string is automatically filled on your behalf when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>The type of file system.</p>
+    /// <p>The type of Amazon FSx file system to create.</p>
     #[serde(rename = "FileSystemType")]
     pub file_system_type: String,
     #[serde(rename = "KmsKeyId")]
@@ -173,31 +191,31 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<CreateFileSystemLustreConfiguration>,
-    /// <p>A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups will apply to all network interfaces. This list isn't returned in later describe requests.</p>
+    /// <p>A list of IDs specifying the security groups to apply to all network interfaces created for file system access. This list isn't returned in later requests to describe the file system.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The storage capacity of the file system.</p> <p>For Windows file systems, the storage capacity has a minimum of 300 GiB, and a maximum of 65,536 GiB.</p> <p>For Lustre file systems, the storage capacity has a minimum of 3,600 GiB. Storage capacity is provisioned in increments of 3,600 GiB.</p>
+    /// <p>The storage capacity of the file system being created.</p> <p>For Windows file systems, valid values are 32 GiB - 65,536 GiB.</p> <p>For Lustre file systems, valid values are 1,200, 2,400, 3,600, then continuing in increments of 3600 GiB.</p>
     #[serde(rename = "StorageCapacity")]
     pub storage_capacity: i64,
-    /// <p>A list of IDs for the subnets that the file system will be accessible from. File systems support only one subnet. The file server is also launched in that subnet's Availability Zone.</p>
+    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standy file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
-    /// <p>The tags to be applied to the file system at file system creation. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
+    /// <p>The tags to apply to the file system being created. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The configuration for this Microsoft Windows file system.</p>
+    /// <p>The Microsoft Windows configuration for the file system being created. This value is required if <code>FileSystemType</code> is set to <code>WINDOWS</code>.</p>
     #[serde(rename = "WindowsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub windows_configuration: Option<CreateFileSystemWindowsConfiguration>,
 }
 
-/// <p>The response object for the <code>CreateFileSystem</code> operation.</p>
+/// <p>The response object returned after the file system is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateFileSystemResponse {
-    /// <p>A description of the file system.</p>
+    /// <p>The configuration of the file system that was created.</p>
     #[serde(rename = "FileSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system: Option<FileSystem>,
@@ -206,7 +224,7 @@ pub struct CreateFileSystemResponse {
 /// <p>The configuration object for the Microsoft Windows file system used in <code>CreateFileSystem</code> and <code>CreateFileSystemFromBackup</code> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFileSystemWindowsConfiguration {
-    /// <p>The ID for an existing Microsoft Active Directory instance that the file system should join when it's created.</p>
+    /// <p>The ID for an existing AWS Managed Microsoft Active Directory (AD) instance that the file system should join when it's created.</p>
     #[serde(rename = "ActiveDirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_directory_id: Option<String>,
@@ -214,18 +232,30 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
-    /// <p>A boolean flag indicating whether tags on the file system should be copied to backups. This value defaults to false. If it's set to true, all tags on the file system are copied to all automatic backups and any user-initiated backups where the user doesn't specify any tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups.</p>
+    /// <p>A boolean flag indicating whether tags for the file system should be copied to backups. This value defaults to false. If it's set to true, all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups.</p>
     #[serde(rename = "CopyTagsToBackups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_tags_to_backups: Option<bool>,
-    /// <p>The preferred time to take daily automatic backups, in the UTC time zone.</p>
+    /// <p>The preferred time to take daily automatic backups, formatted HH:MM in the UTC time zone.</p>
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
-    /// <p>The throughput of an Amazon FSx file system, measured in megabytes per second.</p>
+    /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p>MULTI_AZ_1 - Deploys a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability. You can only deploy a Multi-AZ file system in AWS Regions that have a minimum of three Availability Zones.</p> </li> <li> <p>SINGLE_AZ_1 - (Default) Choose to deploy a file system that is configured for single AZ redundancy.</p> </li> </ul> <p>To learn more about high availability Multi-AZ file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> High Availability for Amazon FSx for Windows File Server</a>.</p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
+    /// <p>Required when <code>DeploymentType</code> is set to <code>MULTI_AZ_1</code>. This specifies the subnet in which you want the preferred file server to be located. For in-AWS applications, we recommend that you launch your clients in the same Availability Zone (AZ) as your preferred file server to reduce cross-AZ data transfer costs and minimize latency. </p>
+    #[serde(rename = "PreferredSubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_subnet_id: Option<String>,
+    #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_active_directory_configuration:
+        Option<SelfManagedActiveDirectoryConfiguration>,
+    /// <p>The throughput of an Amazon FSx file system, measured in megabytes per second, in 2 to the <i>n</i>th increments, between 2^3 (8) and 2^11 (2048).</p>
     #[serde(rename = "ThroughputCapacity")]
     pub throughput_capacity: i64,
-    /// <p>The preferred start time to perform weekly maintenance, in the UTC time zone.</p>
+    /// <p>The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weekly_maintenance_start_time: Option<String>,
@@ -415,11 +445,11 @@ pub struct FileSystem {
     #[serde(rename = "FailureDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_details: Option<FileSystemFailureDetails>,
-    /// <p>The eight-digit ID of the file system that was automatically assigned by Amazon FSx.</p>
+    /// <p>The system-generated, unique 17-digit ID of the file system.</p>
     #[serde(rename = "FileSystemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_id: Option<String>,
-    /// <p>Type of file system. Currently the only supported type is WINDOWS.</p>
+    /// <p>The type of Amazon FSx file system, either <code>LUSTRE</code> or <code>WINDOWS</code>.</p>
     #[serde(rename = "FileSystemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_type: Option<String>,
@@ -427,30 +457,30 @@ pub struct FileSystem {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>The lifecycle status of the file system.</p>
+    /// <p><p>The lifecycle status of the file system, following are the possible values and what they mean:</p> <ul> <li> <p> <code>AVAILABLE</code> - The file system is in a healthy state, and is reachable and available for use.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the new file system.</p> </li> <li> <p> <code>DELETING</code> - Amazon FSx is deleting an existing file system.</p> </li> <li> <p> <code>FAILED</code> - An existing file system has experienced an unrecoverable failure. When creating a new file system, Amazon FSx was unable to create the file system.</p> </li> <li> <p> <code>MISCONFIGURED</code> indicates that the file system is in a failed but recoverable state.</p> </li> <li> <p> <code>UPDATING</code> indicates that the file system is undergoing a customer initiated update.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<String>,
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<LustreFileSystemConfiguration>,
-    /// <p>The IDs of the elastic network interface from which a specific file system is accessible. The elastic network interface is automatically created in the same VPC that the Amazon FSx file system was created in. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html">Elastic Network Interfaces</a> in the <i>Amazon EC2 User Guide.</i> </p> <p>For an Amazon FSx for Windows File Server file system, you can have one network interface Id. For an Amazon FSx for Lustre file system, you can have more than one.</p>
+    /// <p>The IDs of the elastic network interface from which a specific file system is accessible. The elastic network interface is automatically created in the same VPC that the Amazon FSx file system was created in. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html">Elastic Network Interfaces</a> in the <i>Amazon EC2 User Guide.</i> </p> <p>For an Amazon FSx for Windows File Server file system, you can have one network interface ID. For an Amazon FSx for Lustre file system, you can have more than one.</p>
     #[serde(rename = "NetworkInterfaceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_interface_ids: Option<Vec<String>>,
-    /// <p>The AWS account that created the file system. If the file system was created by an IAM user, the AWS account to which the IAM user belongs is the owner.</p>
+    /// <p>The AWS account that created the file system. If the file system was created by an AWS Identity and Access Management (IAM) user, the AWS account to which the IAM user belongs is the owner.</p>
     #[serde(rename = "OwnerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_id: Option<String>,
-    /// <p>The resource ARN of the file system.</p>
+    /// <p>The Amazon Resource Name (ARN) for the file system resource.</p>
     #[serde(rename = "ResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The storage capacity of the file system in gigabytes.</p>
+    /// <p>The storage capacity of the file system in gigabytes (GB).</p>
     #[serde(rename = "StorageCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_capacity: Option<i64>,
-    /// <p>The IDs of the subnets to contain the endpoint for the file system. One and only one is supported. The file system is launched in the Availability Zone associated with this subnet.</p>
+    /// <p>The ID of the subnet to contain the endpoint for the file system. One and only one is supported. The file system is launched in the Availability Zone associated with this subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -468,11 +498,11 @@ pub struct FileSystem {
     pub windows_configuration: Option<WindowsFileSystemConfiguration>,
 }
 
-/// <p>Structure providing details of any failures that occur when creating the file system has failed.</p>
+/// <p>A structure providing details of any failures that occur when creating the file system has failed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FileSystemFailureDetails {
-    /// <p>Message describing the failures that occurred during file system creation.</p>
+    /// <p>A message describing any failures that occurred during file system creation.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -532,6 +562,74 @@ pub struct LustreFileSystemConfiguration {
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weekly_maintenance_start_time: Option<String>,
+}
+
+/// <p>The configuration of the self-managed Microsoft Active Directory (AD) directory to which the Windows File Server instance is joined.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SelfManagedActiveDirectoryAttributes {
+    /// <p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory.</p>
+    #[serde(rename = "DnsIps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_ips: Option<Vec<String>>,
+    /// <p>The fully qualified domain name of the self-managed AD directory.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The name of the domain group whose members have administrative privileges for the FSx file system.</p>
+    #[serde(rename = "FileSystemAdministratorsGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_administrators_group: Option<String>,
+    /// <p>The fully qualified distinguished name of the organizational unit within the self-managed AD directory to which the Windows File Server instance is joined.</p>
+    #[serde(rename = "OrganizationalUnitDistinguishedName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organizational_unit_distinguished_name: Option<String>,
+    /// <p>The user name for the service account on your self-managed AD domain that FSx uses to join to your AD domain.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_name: Option<String>,
+}
+
+/// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to your self-managed (including on-premises) Microsoft Active Directory (AD) directory.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SelfManagedActiveDirectoryConfiguration {
+    /// <p><p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory. The IP addresses need to be either in the same VPC CIDR range as the one in which your Amazon FSx file system is being created, or in the private IP version 4 (Iv4) address ranges, as specified in <a href="http://www.faqs.org/rfcs/rfc1918.html">RFC 1918</a>:</p> <ul> <li> <p>10.0.0.0 - 10.255.255.255 (10/8 prefix)</p> </li> <li> <p>172.16.0.0 - 172.31.255.255 (172.16/12 prefix)</p> </li> <li> <p>192.168.0.0 - 192.168.255.255 (192.168/16 prefix)</p> </li> </ul></p>
+    #[serde(rename = "DnsIps")]
+    pub dns_ips: Vec<String>,
+    /// <p>The fully qualified domain name of the self-managed AD directory, such as <code>corp.example.com</code>.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>(Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.</p>
+    #[serde(rename = "FileSystemAdministratorsGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_administrators_group: Option<String>,
+    /// <p><p>(Optional) The fully qualified distinguished name of the organizational unit within your self-managed AD directory that the Windows File Server instance will join. Amazon FSx only accepts OU as the direct parent of the file system. An example is <code>OU=FSx,DC=yourdomain,DC=corp,DC=com</code>. To learn more, see <a href="https://tools.ietf.org/html/rfc2253">RFC 2253</a>. If none is provided, the FSx file system is created in the default location of your self-managed AD directory. </p> <important> <p>Only Organizational Unit (OU) objects can be the direct parent of the file system that you&#39;re creating.</p> </important></p>
+    #[serde(rename = "OrganizationalUnitDistinguishedName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organizational_unit_distinguished_name: Option<String>,
+    /// <p>The password for the service account on your self-managed AD domain that Amazon FSx will use to join to your AD domain.</p>
+    #[serde(rename = "Password")]
+    pub password: String,
+    /// <p>The user name for the service account on your self-managed AD domain that Amazon FSx will use to join to your AD domain. This account must have the permission to join computers to the domain in the organizational unit provided in <code>OrganizationalUnitDistinguishedName</code>, or in the default location of your AD domain.</p>
+    #[serde(rename = "UserName")]
+    pub user_name: String,
+}
+
+/// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to the self-managed Microsoft Active Directory (AD) directory.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SelfManagedActiveDirectoryConfigurationUpdates {
+    /// <p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory.</p>
+    #[serde(rename = "DnsIps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_ips: Option<Vec<String>>,
+    /// <p>The password for the service account on your self-managed AD domain that Amazon FSx will use to join to your AD domain.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password: Option<String>,
+    /// <p>The user name for the service account on your self-managed AD domain that Amazon FSx will use to join to your AD domain. This account must have the permission to join computers to the domain in the organizational unit provided in <code>OrganizationalUnitDistinguishedName</code>.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_name: Option<String>,
 }
 
 /// <p>Specifies a key-value pair for a resource tag.</p>
@@ -600,7 +698,7 @@ pub struct UpdateFileSystemRequest {
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<UpdateFileSystemLustreConfiguration>,
-    /// <p>The configuration for this Microsoft Windows file system. The only supported options are for backup and maintenance.</p>
+    /// <p>The configuration update for this Microsoft Windows file system. The only supported options are for backup and maintenance and for self-managed Active Directory configuration.</p>
     #[serde(rename = "WindowsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub windows_configuration: Option<UpdateFileSystemWindowsConfiguration>,
@@ -610,13 +708,13 @@ pub struct UpdateFileSystemRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFileSystemResponse {
-    /// <p>A description of the file system.</p>
+    /// <p>A description of the file system that was updated.</p>
     #[serde(rename = "FileSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system: Option<FileSystem>,
 }
 
-/// <p>The configuration object for the Microsoft Windows file system used in the <code>UpdateFileSystem</code> operation.</p>
+/// <p>Updates the Microsoft Windows configuration for an existing Amazon FSx for Windows File Server file system. Amazon FSx overwrites existing properties with non-null values provided in the request. If you don't specify a non-null value for a property, that property is not updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFileSystemWindowsConfiguration {
     /// <p>The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 35 days.</p>
@@ -627,6 +725,11 @@ pub struct UpdateFileSystemWindowsConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p>The configuration Amazon FSx uses to join the Windows File Server instance to the self-managed Microsoft AD directory.</p>
+    #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_active_directory_configuration:
+        Option<SelfManagedActiveDirectoryConfigurationUpdates>,
     /// <p>The preferred time to perform weekly maintenance, in the UTC time zone.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,10 +756,29 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p><p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI<em>AZ</em>1</code> - Specifies a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability.</p> </li> <li> <p> <code>SINGLE<em>AZ</em>1</code> - (Default) Specifies a file system that is configured for single AZ redundancy.</p> </li> </ul></p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
     /// <p>The list of maintenance operations in progress for this file system.</p>
     #[serde(rename = "MaintenanceOperationsInProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintenance_operations_in_progress: Option<Vec<String>>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, the IP address of the primary, or preferred, file server.</p> <p>Use this IP address when mounting the file system on Linux SMB clients or Windows SMB clients that are not joined to a Microsoft Active Directory. Applicable for both <code>SINGLE_AZ_1</code> and <code>MULTI_AZ_1</code> deployment types. This IP address is temporarily unavailable when the file system is undergoing maintenance. For Linux and Windows SMB clients that are joined to an Active Directory, use the file system's DNSName instead. For more information and instruction on mapping and mounting file shares, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html">https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html</a>.</p>
+    #[serde(rename = "PreferredFileServerIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_file_server_ip: Option<String>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this value is the same as that for <code>SubnetIDs</code>.</p>
+    #[serde(rename = "PreferredSubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_subnet_id: Option<String>,
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, use this endpoint when performing administrative tasks on the file system using Amazon FSx Remote PowerShell.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this is the DNS name of the file system.</p> <p>This endpoint is temporarily unavailable when the file system is undergoing maintenance.</p>
+    #[serde(rename = "RemoteAdministrationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_administration_endpoint: Option<String>,
+    #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub self_managed_active_directory_configuration: Option<SelfManagedActiveDirectoryAttributes>,
     /// <p>The throughput of an Amazon FSx file system, measured in megabytes per second.</p>
     #[serde(rename = "ThroughputCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -682,6 +804,8 @@ pub enum CreateBackupError {
     InternalServerError(String),
     /// <p>An error indicating that a particular service limit was exceeded. You can increase some service limits by contacting AWS Support. </p>
     ServiceLimitExceeded(String),
+    /// <p>An error occured.</p>
+    UnsupportedOperation(String),
 }
 
 impl CreateBackupError {
@@ -708,6 +832,9 @@ impl CreateBackupError {
                 "ServiceLimitExceeded" => {
                     return RusotoError::Service(CreateBackupError::ServiceLimitExceeded(err.msg))
                 }
+                "UnsupportedOperation" => {
+                    return RusotoError::Service(CreateBackupError::UnsupportedOperation(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -729,6 +856,7 @@ impl Error for CreateBackupError {
             CreateBackupError::IncompatibleParameterError(ref cause) => cause,
             CreateBackupError::InternalServerError(ref cause) => cause,
             CreateBackupError::ServiceLimitExceeded(ref cause) => cause,
+            CreateBackupError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -1342,6 +1470,8 @@ pub enum UpdateFileSystemError {
     InternalServerError(String),
     /// <p>File system configuration is required for this operation.</p>
     MissingFileSystemConfiguration(String),
+    /// <p>An error occured.</p>
+    UnsupportedOperation(String),
 }
 
 impl UpdateFileSystemError {
@@ -1369,6 +1499,11 @@ impl UpdateFileSystemError {
                         UpdateFileSystemError::MissingFileSystemConfiguration(err.msg),
                     )
                 }
+                "UnsupportedOperation" => {
+                    return RusotoError::Service(UpdateFileSystemError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1389,6 +1524,7 @@ impl Error for UpdateFileSystemError {
             UpdateFileSystemError::IncompatibleParameterError(ref cause) => cause,
             UpdateFileSystemError::InternalServerError(ref cause) => cause,
             UpdateFileSystemError::MissingFileSystemConfiguration(ref cause) => cause,
+            UpdateFileSystemError::UnsupportedOperation(ref cause) => cause,
         }
     }
 }
@@ -1407,7 +1543,7 @@ pub trait Fsx {
         input: CreateFileSystemRequest,
     ) -> Result<CreateFileSystemResponse, RusotoError<CreateFileSystemError>>;
 
-    /// <p><p>Creates a new Amazon FSx file system from an existing Amazon FSx for Windows File Server backup.</p> <p>If a file system with the specified client request token exists and the parameters match, this call returns the description of the existing file system. If a client request token specified by the file system exists and the parameters don&#39;t match, this call returns <code>IncompatibleParameterError</code>. If a file system with the specified client request token doesn&#39;t exist, this operation does the following:</p> <ul> <li> <p>Creates a new Amazon FSx file system from backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the file system.</p> </li> </ul> <p>Parameters like Active Directory, default share name, automatic backup, and backup settings default to the parameters of the file system that was backed up, unless overridden. You can explicitly supply other settings.</p> <p>By using the idempotent operation, you can retry a <code>CreateFileSystemFromBackup</code> call without the risk of creating an extra file system. This approach can be useful when an initial call fails in a way that makes it unclear whether a file system was created. Examples are if a transport level timeout occurred, or your connection was reset. If you use the same client request token and the initial call created a file system, the client receives success as long as the parameters are the same.</p> <note> <p>The <code>CreateFileSystemFromBackup</code> call returns while the file system&#39;s lifecycle state is still <code>CREATING</code>. You can check the file-system creation status by calling the <a>DescribeFileSystems</a> operation, which returns the file system state along with other information.</p> </note></p>
+    /// <p><p>Creates a new Amazon FSx file system from an existing Amazon FSx for Windows File Server backup.</p> <p>If a file system with the specified client request token exists and the parameters match, this operation returns the description of the file system. If a client request token specified by the file system exists and the parameters don&#39;t match, this call returns <code>IncompatibleParameterError</code>. If a file system with the specified client request token doesn&#39;t exist, this operation does the following:</p> <ul> <li> <p>Creates a new Amazon FSx file system from backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the file system.</p> </li> </ul> <p>Parameters like Active Directory, default share name, automatic backup, and backup settings default to the parameters of the file system that was backed up, unless overridden. You can explicitly supply other settings.</p> <p>By using the idempotent operation, you can retry a <code>CreateFileSystemFromBackup</code> call without the risk of creating an extra file system. This approach can be useful when an initial call fails in a way that makes it unclear whether a file system was created. Examples are if a transport level timeout occurred, or your connection was reset. If you use the same client request token and the initial call created a file system, the client receives success as long as the parameters are the same.</p> <note> <p>The <code>CreateFileSystemFromBackup</code> call returns while the file system&#39;s lifecycle state is still <code>CREATING</code>. You can check the file-system creation status by calling the <a>DescribeFileSystems</a> operation, which returns the file system state along with other information.</p> </note></p>
     async fn create_file_system_from_backup(
         &self,
         input: CreateFileSystemFromBackupRequest,
@@ -1555,7 +1691,7 @@ impl Fsx for FsxClient {
         }
     }
 
-    /// <p><p>Creates a new Amazon FSx file system from an existing Amazon FSx for Windows File Server backup.</p> <p>If a file system with the specified client request token exists and the parameters match, this call returns the description of the existing file system. If a client request token specified by the file system exists and the parameters don&#39;t match, this call returns <code>IncompatibleParameterError</code>. If a file system with the specified client request token doesn&#39;t exist, this operation does the following:</p> <ul> <li> <p>Creates a new Amazon FSx file system from backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the file system.</p> </li> </ul> <p>Parameters like Active Directory, default share name, automatic backup, and backup settings default to the parameters of the file system that was backed up, unless overridden. You can explicitly supply other settings.</p> <p>By using the idempotent operation, you can retry a <code>CreateFileSystemFromBackup</code> call without the risk of creating an extra file system. This approach can be useful when an initial call fails in a way that makes it unclear whether a file system was created. Examples are if a transport level timeout occurred, or your connection was reset. If you use the same client request token and the initial call created a file system, the client receives success as long as the parameters are the same.</p> <note> <p>The <code>CreateFileSystemFromBackup</code> call returns while the file system&#39;s lifecycle state is still <code>CREATING</code>. You can check the file-system creation status by calling the <a>DescribeFileSystems</a> operation, which returns the file system state along with other information.</p> </note></p>
+    /// <p><p>Creates a new Amazon FSx file system from an existing Amazon FSx for Windows File Server backup.</p> <p>If a file system with the specified client request token exists and the parameters match, this operation returns the description of the file system. If a client request token specified by the file system exists and the parameters don&#39;t match, this call returns <code>IncompatibleParameterError</code>. If a file system with the specified client request token doesn&#39;t exist, this operation does the following:</p> <ul> <li> <p>Creates a new Amazon FSx file system from backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the file system.</p> </li> </ul> <p>Parameters like Active Directory, default share name, automatic backup, and backup settings default to the parameters of the file system that was backed up, unless overridden. You can explicitly supply other settings.</p> <p>By using the idempotent operation, you can retry a <code>CreateFileSystemFromBackup</code> call without the risk of creating an extra file system. This approach can be useful when an initial call fails in a way that makes it unclear whether a file system was created. Examples are if a transport level timeout occurred, or your connection was reset. If you use the same client request token and the initial call created a file system, the client receives success as long as the parameters are the same.</p> <note> <p>The <code>CreateFileSystemFromBackup</code> call returns while the file system&#39;s lifecycle state is still <code>CREATING</code>. You can check the file-system creation status by calling the <a>DescribeFileSystems</a> operation, which returns the file system state along with other information.</p> </note></p>
     async fn create_file_system_from_backup(
         &self,
         input: CreateFileSystemFromBackupRequest,

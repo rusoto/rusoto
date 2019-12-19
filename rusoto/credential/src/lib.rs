@@ -248,7 +248,9 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
 }
 
 #[async_trait]
-impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for AutoRefreshingProvider<P> {
+impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials
+    for AutoRefreshingProvider<P>
+{
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         loop {
             let mut guard = self.current_credentials.lock().await;
@@ -257,12 +259,10 @@ impl<P: ProvideAwsCredentials + Send + Sync + 'static> ProvideAwsCredentials for
                 None => {
                     let res = self.credentials_provider.credentials().await;
                     *guard = Some(res);
-                },
-                Some(Err(e)) => {
-                    return Err(e.clone())
                 }
+                Some(Err(e)) => return Err(e.clone()),
                 Some(Ok(creds)) => {
-                    if creds.credentials_are_expired(){
+                    if creds.credentials_are_expired() {
                         *guard = None;
                     } else {
                         return Ok(creds.clone());
@@ -361,7 +361,9 @@ impl ChainProvider {
     }
 }
 
-async fn chain_provider_credentials(provider: ChainProvider) -> Result<AwsCredentials, CredentialsError> {
+async fn chain_provider_credentials(
+    provider: ChainProvider,
+) -> Result<AwsCredentials, CredentialsError> {
     if let Ok(creds) = provider.environment_provider.credentials().await {
         return Ok(creds);
     }

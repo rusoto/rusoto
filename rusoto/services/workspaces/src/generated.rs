@@ -24,7 +24,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>Describes a modification to the configuration of bring your own license (BYOL) for the specified account. </p>
+/// <p>Describes a modification to the configuration of Bring Your Own License (BYOL) for the specified account. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AccountModification {
@@ -116,6 +116,36 @@ pub struct ComputeType {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CopyWorkspaceImageRequest {
+    /// <p>A description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The identifier of the source image.</p>
+    #[serde(rename = "SourceImageId")]
+    pub source_image_id: String,
+    /// <p>The identifier of the source Region.</p>
+    #[serde(rename = "SourceRegion")]
+    pub source_region: String,
+    /// <p>The tags for the image.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CopyWorkspaceImageResult {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIpGroupRequest {
     /// <p>The description of the group.</p>
     #[serde(rename = "GroupDesc")]
@@ -177,7 +207,7 @@ pub struct CreateWorkspacesResult {
     pub pending_requests: Option<Vec<Workspace>>,
 }
 
-/// <p>Describes the default values used to create a WorkSpace.</p>
+/// <p>Describes the default values that are used to create WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
@@ -189,15 +219,19 @@ pub struct DefaultWorkspaceCreationProperties {
     #[serde(rename = "DefaultOu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_ou: Option<String>,
-    /// <p>The public IP address to attach to all WorkSpaces that are created or rebuilt.</p>
+    /// <p>Specifies whether to automatically assign an Elastic public IP address to WorkSpaces in this directory by default. If enabled, the Elastic public IP address allows outbound internet access from your WorkSpaces when you’re using an internet gateway in the Amazon VPC in which your WorkSpaces are located. If you're using a Network Address Translation (NAT) gateway for outbound internet access from your VPC, or if your WorkSpaces are in public subnets and you manually assign them Elastic IP addresses, you should disable this setting. This setting applies to new WorkSpaces that you launch or to existing WorkSpaces that you rebuild. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces-vpc.html"> Configure a VPC for Amazon WorkSpaces</a>.</p>
     #[serde(rename = "EnableInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_internet_access: Option<bool>,
+    /// <p>Specifies whether maintenance mode is enabled for WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspace-maintenance.html">WorkSpace Maintenance</a>.</p>
+    #[serde(rename = "EnableMaintenanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_maintenance_mode: Option<bool>,
     /// <p>Specifies whether the directory is enabled for Amazon WorkDocs.</p>
     #[serde(rename = "EnableWorkDocs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_work_docs: Option<bool>,
-    /// <p>Specifies whether the WorkSpace user is an administrator on the WorkSpace.</p>
+    /// <p>Specifies whether WorkSpace users are local administrators on their WorkSpaces.</p>
     #[serde(rename = "UserEnabledAsLocalAdministrator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_enabled_as_local_administrator: Option<bool>,
@@ -238,6 +272,17 @@ pub struct DeleteWorkspaceImageRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteWorkspaceImageResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeregisterWorkspaceDirectoryRequest {
+    /// <p>The identifier of the directory. If any WorkSpaces are registered to this directory, you must remove them before you deregister the directory, or you will receive an OperationNotSupportedException error.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterWorkspaceDirectoryResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAccountModificationsRequest {
@@ -372,6 +417,10 @@ pub struct DescribeWorkspaceDirectoriesRequest {
     #[serde(rename = "DirectoryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_ids: Option<Vec<String>>,
+    /// <p>The maximum number of directories to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -418,6 +467,26 @@ pub struct DescribeWorkspaceImagesResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeWorkspaceSnapshotsRequest {
+    /// <p>The identifier of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    pub workspace_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeWorkspaceSnapshotsResult {
+    /// <p>Information about the snapshots that can be used to rebuild a WorkSpace. These snapshots include the user volume.</p>
+    #[serde(rename = "RebuildSnapshots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rebuild_snapshots: Option<Vec<Snapshot>>,
+    /// <p>Information about the snapshots that can be used to restore a WorkSpace. These snapshots include both the root volume and the user volume.</p>
+    #[serde(rename = "RestoreSnapshots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_snapshots: Option<Vec<Snapshot>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -518,7 +587,7 @@ pub struct FailedCreateWorkspaceRequest {
     pub workspace_request: Option<WorkspaceRequest>,
 }
 
-/// <p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
+/// <p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), restored (<a>RestoreWorkspace</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FailedWorkspaceChangeRequest {
@@ -651,6 +720,48 @@ pub struct ModifyClientPropertiesRequest {
 pub struct ModifyClientPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifySelfservicePermissionsRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The permissions to enable or disable self-service capabilities.</p>
+    #[serde(rename = "SelfservicePermissions")]
+    pub selfservice_permissions: SelfservicePermissions,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifySelfservicePermissionsResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyWorkspaceAccessPropertiesRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The device types and operating systems to enable or disable for access.</p>
+    #[serde(rename = "WorkspaceAccessProperties")]
+    pub workspace_access_properties: WorkspaceAccessProperties,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyWorkspaceAccessPropertiesResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyWorkspaceCreationPropertiesRequest {
+    /// <p>The identifier of the directory.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The default properties for creating WorkSpaces.</p>
+    #[serde(rename = "WorkspaceCreationProperties")]
+    pub workspace_creation_properties: WorkspaceCreationProperties,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyWorkspaceCreationPropertiesResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyWorkspacePropertiesRequest {
     /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
@@ -722,10 +833,6 @@ pub struct RebuildRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    /// <p>Reserved.</p>
-    #[serde(rename = "AdditionalInfo")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_info: Option<String>,
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
@@ -739,6 +846,47 @@ pub struct RebuildWorkspacesResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RegisterWorkspaceDirectoryRequest {
+    /// <p>The identifier of the directory. You cannot register a directory if it does not have a status of Active. If the directory does not have a status of Active, you will receive an InvalidResourceStateException error. If you have already registered the maximum number of directories that you can register with Amazon WorkSpaces, you will receive a ResourceLimitExceededException error. Deregister directories that you are not using for WorkSpaces, and try again.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>Indicates whether self-service capabilities are enabled or disabled.</p>
+    #[serde(rename = "EnableSelfService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_self_service: Option<bool>,
+    /// <p>Indicates whether Amazon WorkDocs is enabled or disabled. If you have enabled this parameter and WorkDocs is not available in the Region, you will receive an OperationNotSupportedException error. Set <code>EnableWorkDocs</code> to disabled, and try again.</p>
+    #[serde(rename = "EnableWorkDocs")]
+    pub enable_work_docs: bool,
+    /// <p>The identifiers of the subnets for your virtual private cloud (VPC). Make sure that the subnets are in supported Availability Zones. The subnets must also be in separate Availability Zones. If these conditions are not met, you will receive an OperationNotSupportedException error.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The tags associated with the directory.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Indicates whether your WorkSpace directory is dedicated or shared. To use Bring Your Own License (BYOL) images, this value must be set to <code>DEDICATED</code> and your AWS account must be enabled for BYOL. If your account has not been enabled for BYOL, you will receive an InvalidParameterValuesException error. For more information about BYOL images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
+    #[serde(rename = "Tenancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tenancy: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterWorkspaceDirectoryResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RestoreWorkspaceRequest {
+    /// <p>The identifier of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    pub workspace_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RestoreWorkspaceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RevokeIpRulesRequest {
@@ -762,6 +910,41 @@ pub struct RootStorage {
     #[serde(rename = "Capacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity: Option<String>,
+}
+
+/// <p>Describes the self-service permissions for a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SelfservicePermissions {
+    /// <p>Specifies whether users can change the compute type (bundle) for their WorkSpace.</p>
+    #[serde(rename = "ChangeComputeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_compute_type: Option<String>,
+    /// <p>Specifies whether users can increase the volume size of the drives on their WorkSpace.</p>
+    #[serde(rename = "IncreaseVolumeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub increase_volume_size: Option<String>,
+    /// <p>Specifies whether users can rebuild the operating system of a WorkSpace to its original state.</p>
+    #[serde(rename = "RebuildWorkspace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rebuild_workspace: Option<String>,
+    /// <p>Specifies whether users can restart their WorkSpace.</p>
+    #[serde(rename = "RestartWorkspace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restart_workspace: Option<String>,
+    /// <p>Specifies whether users can switch the running mode of their WorkSpace.</p>
+    #[serde(rename = "SwitchRunningMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub switch_running_mode: Option<String>,
+}
+
+/// <p>Describes a snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Snapshot {
+    /// <p>The time when the snapshot was created.</p>
+    #[serde(rename = "SnapshotTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_time: Option<f64>,
 }
 
 /// <p>Information used to start a WorkSpace.</p>
@@ -940,6 +1123,39 @@ pub struct Workspace {
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
+/// <p>The device types and operating systems that can be used to access a WorkSpace. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-network-requirements.html">Amazon WorkSpaces Client Network Requirements</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WorkspaceAccessProperties {
+    /// <p>Indicates whether users can use Android devices to access their WorkSpaces.</p>
+    #[serde(rename = "DeviceTypeAndroid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_android: Option<String>,
+    /// <p>Indicates whether users can use Chromebooks to access their WorkSpaces.</p>
+    #[serde(rename = "DeviceTypeChromeOs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_chrome_os: Option<String>,
+    /// <p>Indicates whether users can use iOS devices to access their WorkSpaces.</p>
+    #[serde(rename = "DeviceTypeIos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_ios: Option<String>,
+    /// <p>Indicates whether users can use macOS clients to access their WorkSpaces. To restrict WorkSpaces access to trusted devices (also known as managed devices) with valid certificates, specify a value of <code>TRUST</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/trusted-devices.html">Restrict WorkSpaces Access to Trusted Devices</a>. </p>
+    #[serde(rename = "DeviceTypeOsx")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_osx: Option<String>,
+    /// <p>Indicates whether users can access their WorkSpaces through a web browser.</p>
+    #[serde(rename = "DeviceTypeWeb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_web: Option<String>,
+    /// <p>Indicates whether users can use Windows clients to access their WorkSpaces. To restrict WorkSpaces access to trusted devices (also known as managed devices) with valid certificates, specify a value of <code>TRUST</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/trusted-devices.html">Restrict WorkSpaces Access to Trusted Devices</a>. </p>
+    #[serde(rename = "DeviceTypeWindows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_windows: Option<String>,
+    /// <p>Indicates whether users can use zero client devices to access their WorkSpaces.</p>
+    #[serde(rename = "DeviceTypeZeroClient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_zero_client: Option<String>,
+}
+
 /// <p>Describes a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -956,6 +1172,14 @@ pub struct WorkspaceBundle {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The image identifier of the bundle.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+    /// <p>The last time that the bundle was updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
     /// <p>The name of the bundle.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -996,7 +1220,32 @@ pub struct WorkspaceConnectionStatus {
     pub workspace_id: Option<String>,
 }
 
-/// <p>Describes an AWS Directory Service directory that is used with Amazon WorkSpaces.</p>
+/// <p>Describes the default properties that are used for creating WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct WorkspaceCreationProperties {
+    /// <p>The identifier of your custom security group.</p>
+    #[serde(rename = "CustomSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_security_group_id: Option<String>,
+    /// <p>The default organizational unit (OU) for your WorkSpace directories.</p>
+    #[serde(rename = "DefaultOu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_ou: Option<String>,
+    /// <p>Indicates whether internet access is enabled for your WorkSpaces.</p>
+    #[serde(rename = "EnableInternetAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_internet_access: Option<bool>,
+    /// <p>Indicates whether maintenance mode is enabled for your WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspace-maintenance.html">WorkSpace Maintenance</a>. </p>
+    #[serde(rename = "EnableMaintenanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_maintenance_mode: Option<bool>,
+    /// <p>Indicates whether users are local administrators of their WorkSpaces.</p>
+    #[serde(rename = "UserEnabledAsLocalAdministrator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_enabled_as_local_administrator: Option<bool>,
+}
+
+/// <p>Describes a directory that is used with Amazon WorkSpaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceDirectory {
@@ -1032,7 +1281,11 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "RegistrationCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_code: Option<String>,
-    /// <p>The state of the directory's registration with Amazon WorkSpaces</p>
+    /// <p>The default self-service permissions for WorkSpaces in the directory.</p>
+    #[serde(rename = "SelfservicePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selfservice_permissions: Option<SelfservicePermissions>,
+    /// <p>The state of the directory's registration with Amazon WorkSpaces.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -1040,6 +1293,14 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>Specifies whether the directory is dedicated or shared. To use Bring Your Own License (BYOL), this value must be set to <code>DEDICATED</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
+    #[serde(rename = "Tenancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tenancy: Option<String>,
+    /// <p>The devices and operating systems that users can use to access Workspaces.</p>
+    #[serde(rename = "WorkspaceAccessProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workspace_access_properties: Option<WorkspaceAccessProperties>,
     /// <p>The default creation properties for all WorkSpaces in the directory.</p>
     #[serde(rename = "WorkspaceCreationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1082,7 +1343,7 @@ pub struct WorkspaceImage {
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<OperatingSystem>,
-    /// <p>Specifies whether the image is running on dedicated hardware. When bring your own license (BYOL) is enabled, this value is set to DEDICATED. </p>
+    /// <p>Specifies whether the image is running on dedicated hardware. When Bring Your Own License (BYOL) is enabled, this value is set to <code>DEDICATED</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html">Bring Your Own Windows Desktop Images</a>.</p>
     #[serde(rename = "RequiredTenancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required_tenancy: Option<String>,
@@ -1107,7 +1368,7 @@ pub struct WorkspaceProperties {
     #[serde(rename = "RunningMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode: Option<String>,
-    /// <p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60 minute intervals.</p>
+    /// <p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60-minute intervals.</p>
     #[serde(rename = "RunningModeAutoStopTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode_auto_stop_timeout_in_minutes: Option<i64>,
@@ -1134,7 +1395,7 @@ pub struct WorkspaceRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The username of the user for the WorkSpace. This username must exist in the AWS Directory Service directory for the WorkSpace.</p>
+    /// <p>The user name of the user for the WorkSpace. This user name must exist in the AWS Directory Service directory for the WorkSpace.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
     /// <p>Indicates whether the data stored on the user volume is encrypted.</p>
@@ -1304,6 +1565,85 @@ impl Error for AuthorizeIpRulesError {
             AuthorizeIpRulesError::InvalidResourceState(ref cause) => cause,
             AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => cause,
             AuthorizeIpRulesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CopyWorkspaceImage
+#[derive(Debug, PartialEq)]
+pub enum CopyWorkspaceImageError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl CopyWorkspaceImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyWorkspaceImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::InvalidParameterValues(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CopyWorkspaceImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyWorkspaceImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyWorkspaceImageError::AccessDenied(ref cause) => cause,
+            CopyWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
+            CopyWorkspaceImageError::OperationNotSupported(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceNotFound(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceUnavailable(ref cause) => cause,
         }
     }
 }
@@ -1594,6 +1934,75 @@ impl Error for DeleteWorkspaceImageError {
             DeleteWorkspaceImageError::AccessDenied(ref cause) => cause,
             DeleteWorkspaceImageError::InvalidResourceState(ref cause) => cause,
             DeleteWorkspaceImageError::ResourceAssociated(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeregisterWorkspaceDirectory
+#[derive(Debug, PartialEq)]
+pub enum DeregisterWorkspaceDirectoryError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeregisterWorkspaceDirectoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeregisterWorkspaceDirectoryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeregisterWorkspaceDirectoryError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DeregisterWorkspaceDirectoryError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        DeregisterWorkspaceDirectoryError::InvalidResourceState(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        DeregisterWorkspaceDirectoryError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeregisterWorkspaceDirectoryError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeregisterWorkspaceDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeregisterWorkspaceDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            DeregisterWorkspaceDirectoryError::AccessDenied(ref cause) => cause,
+            DeregisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => cause,
+            DeregisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => cause,
+            DeregisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => cause,
+            DeregisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -1896,6 +2305,59 @@ impl Error for DescribeWorkspaceImagesError {
     fn description(&self) -> &str {
         match *self {
             DescribeWorkspaceImagesError::AccessDenied(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeWorkspaceSnapshots
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorkspaceSnapshotsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeWorkspaceSnapshotsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeWorkspaceSnapshotsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeWorkspaceSnapshotsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DescribeWorkspaceSnapshotsError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeWorkspaceSnapshotsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeWorkspaceSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeWorkspaceSnapshotsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeWorkspaceSnapshotsError::AccessDenied(ref cause) => cause,
+            DescribeWorkspaceSnapshotsError::InvalidParameterValues(ref cause) => cause,
+            DescribeWorkspaceSnapshotsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -2262,6 +2724,157 @@ impl Error for ModifyClientPropertiesError {
         }
     }
 }
+/// Errors returned by ModifySelfservicePermissions
+#[derive(Debug, PartialEq)]
+pub enum ModifySelfservicePermissionsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ModifySelfservicePermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifySelfservicePermissionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ModifySelfservicePermissionsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        ModifySelfservicePermissionsError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ModifySelfservicePermissionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifySelfservicePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifySelfservicePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifySelfservicePermissionsError::AccessDenied(ref cause) => cause,
+            ModifySelfservicePermissionsError::InvalidParameterValues(ref cause) => cause,
+            ModifySelfservicePermissionsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyWorkspaceAccessProperties
+#[derive(Debug, PartialEq)]
+pub enum ModifyWorkspaceAccessPropertiesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ModifyWorkspaceAccessPropertiesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyWorkspaceAccessPropertiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceAccessPropertiesError::AccessDenied(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceAccessPropertiesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifyWorkspaceAccessPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyWorkspaceAccessPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyWorkspaceAccessPropertiesError::AccessDenied(ref cause) => cause,
+            ModifyWorkspaceAccessPropertiesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyWorkspaceCreationProperties
+#[derive(Debug, PartialEq)]
+pub enum ModifyWorkspaceCreationPropertiesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ModifyWorkspaceCreationPropertiesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyWorkspaceCreationPropertiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceCreationPropertiesError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ModifyWorkspaceCreationPropertiesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ModifyWorkspaceCreationPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyWorkspaceCreationPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyWorkspaceCreationPropertiesError::AccessDenied(ref cause) => cause,
+            ModifyWorkspaceCreationPropertiesError::InvalidParameterValues(ref cause) => cause,
+            ModifyWorkspaceCreationPropertiesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyWorkspaceProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspacePropertiesError {
@@ -2277,7 +2890,7 @@ pub enum ModifyWorkspacePropertiesError {
     ResourceNotFound(String),
     /// <p>The specified resource is not available.</p>
     ResourceUnavailable(String),
-    /// <p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
+    /// <p>The configuration of this WorkSpace is not supported for this operation. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/required-service-components.html">Required Configuration and Service Components for WorkSpaces </a>.</p>
     UnsupportedWorkspaceConfiguration(String),
 }
 
@@ -2444,6 +3057,146 @@ impl fmt::Display for RebuildWorkspacesError {
 impl Error for RebuildWorkspacesError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by RegisterWorkspaceDirectory
+#[derive(Debug, PartialEq)]
+pub enum RegisterWorkspaceDirectoryError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The configuration of this network is not supported for this operation, or your network configuration conflicts with the Amazon WorkSpaces management network IP range. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces-vpc.html"> Configure a VPC for Amazon WorkSpaces</a>.</p>
+    UnsupportedNetworkConfiguration(String),
+    /// <p>The workspaces_DefaultRole role could not be found. If this is the first time you are registering a directory, you will need to create the workspaces_DefaultRole role before you can register a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-access-control.html#create-default-role">Creating the workspaces_DefaultRole Role</a>.</p>
+    WorkspacesDefaultRoleNotFound(String),
+}
+
+impl RegisterWorkspaceDirectoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterWorkspaceDirectoryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RegisterWorkspaceDirectoryError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::InvalidResourceState(err.msg),
+                    )
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::OperationNotSupported(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RegisterWorkspaceDirectoryError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedNetworkConfigurationException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::UnsupportedNetworkConfiguration(err.msg),
+                    )
+                }
+                "WorkspacesDefaultRoleNotFoundException" => {
+                    return RusotoError::Service(
+                        RegisterWorkspaceDirectoryError::WorkspacesDefaultRoleNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for RegisterWorkspaceDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterWorkspaceDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterWorkspaceDirectoryError::AccessDenied(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::InvalidParameterValues(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::InvalidResourceState(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::OperationNotSupported(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::ResourceLimitExceeded(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::ResourceNotFound(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::UnsupportedNetworkConfiguration(ref cause) => cause,
+            RegisterWorkspaceDirectoryError::WorkspacesDefaultRoleNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RestoreWorkspace
+#[derive(Debug, PartialEq)]
+pub enum RestoreWorkspaceError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl RestoreWorkspaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreWorkspaceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(RestoreWorkspaceError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(RestoreWorkspaceError::InvalidParameterValues(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RestoreWorkspaceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for RestoreWorkspaceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RestoreWorkspaceError {
+    fn description(&self) -> &str {
+        match *self {
+            RestoreWorkspaceError::AccessDenied(ref cause) => cause,
+            RestoreWorkspaceError::InvalidParameterValues(ref cause) => cause,
+            RestoreWorkspaceError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by RevokeIpRules
@@ -2654,6 +3407,12 @@ pub trait Workspaces {
         input: AuthorizeIpRulesRequest,
     ) -> Result<AuthorizeIpRulesResult, RusotoError<AuthorizeIpRulesError>>;
 
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    async fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> Result<CopyWorkspaceImageResult, RusotoError<CopyWorkspaceImageError>>;
+
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
     async fn create_ip_group(
         &self,
@@ -2684,18 +3443,24 @@ pub trait Workspaces {
         input: DeleteTagsRequest,
     ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>>;
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
     ) -> Result<DeleteWorkspaceImageResult, RusotoError<DeleteWorkspaceImageError>>;
 
-    /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p>
+    async fn deregister_workspace_directory(
+        &self,
+        input: DeregisterWorkspaceDirectoryRequest,
+    ) -> Result<DeregisterWorkspaceDirectoryResult, RusotoError<DeregisterWorkspaceDirectoryError>>;
+
+    /// <p>Retrieves a list that describes the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn describe_account(
         &self,
     ) -> Result<DescribeAccountResult, RusotoError<DescribeAccountError>>;
 
-    /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Retrieves a list that describes modifications to the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn describe_account_modifications(
         &self,
         input: DescribeAccountModificationsRequest,
@@ -2725,7 +3490,7 @@ pub trait Workspaces {
         input: DescribeWorkspaceBundlesRequest,
     ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>>;
 
-    /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
+    /// <p>Describes the available directories that are registered with Amazon WorkSpaces.</p>
     async fn describe_workspace_directories(
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
@@ -2736,6 +3501,12 @@ pub trait Workspaces {
         &self,
         input: DescribeWorkspaceImagesRequest,
     ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>>;
+
+    /// <p>Describes the snapshots for the specified WorkSpace.</p>
+    async fn describe_workspace_snapshots(
+        &self,
+        input: DescribeWorkspaceSnapshotsRequest,
+    ) -> Result<DescribeWorkspaceSnapshotsResult, RusotoError<DescribeWorkspaceSnapshotsError>>;
 
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
     async fn describe_workspaces(
@@ -2758,13 +3529,13 @@ pub trait Workspaces {
         input: DisassociateIpGroupsRequest,
     ) -> Result<DisassociateIpGroupsResult, RusotoError<DisassociateIpGroupsError>>;
 
-    /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    /// <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
     async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
     ) -> Result<ImportWorkspaceImageResult, RusotoError<ImportWorkspaceImageError>>;
 
-    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
     async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
@@ -2773,7 +3544,7 @@ pub trait Workspaces {
         RusotoError<ListAvailableManagementCidrRangesError>,
     >;
 
-    /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Modifies the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn modify_account(
         &self,
         input: ModifyAccountRequest,
@@ -2785,13 +3556,37 @@ pub trait Workspaces {
         input: ModifyClientPropertiesRequest,
     ) -> Result<ModifyClientPropertiesResult, RusotoError<ModifyClientPropertiesError>>;
 
+    /// <p>Modifies the self-service WorkSpace management capabilities for your users. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
+    async fn modify_selfservice_permissions(
+        &self,
+        input: ModifySelfservicePermissionsRequest,
+    ) -> Result<ModifySelfservicePermissionsResult, RusotoError<ModifySelfservicePermissionsError>>;
+
+    /// <p>Specifies which devices and operating systems users can use to access their Workspaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
+    async fn modify_workspace_access_properties(
+        &self,
+        input: ModifyWorkspaceAccessPropertiesRequest,
+    ) -> Result<
+        ModifyWorkspaceAccessPropertiesResult,
+        RusotoError<ModifyWorkspaceAccessPropertiesError>,
+    >;
+
+    /// <p>Modify the default properties used to create WorkSpaces.</p>
+    async fn modify_workspace_creation_properties(
+        &self,
+        input: ModifyWorkspaceCreationPropertiesRequest,
+    ) -> Result<
+        ModifyWorkspaceCreationPropertiesResult,
+        RusotoError<ModifyWorkspaceCreationPropertiesError>,
+    >;
+
     /// <p>Modifies the specified WorkSpace properties.</p>
     async fn modify_workspace_properties(
         &self,
         input: ModifyWorkspacePropertiesRequest,
     ) -> Result<ModifyWorkspacePropertiesResult, RusotoError<ModifyWorkspacePropertiesError>>;
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     async fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
@@ -2808,6 +3603,18 @@ pub trait Workspaces {
         &self,
         input: RebuildWorkspacesRequest,
     ) -> Result<RebuildWorkspacesResult, RusotoError<RebuildWorkspacesError>>;
+
+    /// <p>Registers the specified directory. This operation is asynchronous and returns before the WorkSpace directory is registered. If this is the first time you are registering a directory, you will need to create the workspaces_DefaultRole role before you can register a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-access-control.html#create-default-role"> Creating the workspaces_DefaultRole Role</a>.</p>
+    async fn register_workspace_directory(
+        &self,
+        input: RegisterWorkspaceDirectoryRequest,
+    ) -> Result<RegisterWorkspaceDirectoryResult, RusotoError<RegisterWorkspaceDirectoryError>>;
+
+    /// <p>Restores the specified WorkSpace to its last known healthy state.</p> <p>You cannot restore a WorkSpace unless its state is <code> AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Restoring a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/restore-workspace.html">Restore a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpace is completely restored.</p>
+    async fn restore_workspace(
+        &self,
+        input: RestoreWorkspaceRequest,
+    ) -> Result<RestoreWorkspaceResult, RusotoError<RestoreWorkspaceError>>;
 
     /// <p>Removes one or more rules from the specified IP access control group.</p>
     async fn revoke_ip_rules(
@@ -2926,6 +3733,34 @@ impl Workspaces for WorkspacesClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(AuthorizeIpRulesError::from_response(response))
+        }
+    }
+
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    async fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> Result<CopyWorkspaceImageResult, RusotoError<CopyWorkspaceImageError>> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.CopyWorkspaceImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CopyWorkspaceImageResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CopyWorkspaceImageError::from_response(response))
         }
     }
 
@@ -3064,7 +3899,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     async fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -3092,7 +3927,39 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p>
+    async fn deregister_workspace_directory(
+        &self,
+        input: DeregisterWorkspaceDirectoryRequest,
+    ) -> Result<DeregisterWorkspaceDirectoryResult, RusotoError<DeregisterWorkspaceDirectoryError>>
+    {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DeregisterWorkspaceDirectory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeregisterWorkspaceDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeregisterWorkspaceDirectoryError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves a list that describes the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn describe_account(
         &self,
     ) -> Result<DescribeAccountResult, RusotoError<DescribeAccountError>> {
@@ -3117,7 +3984,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Retrieves a list that describes modifications to the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn describe_account_modifications(
         &self,
         input: DescribeAccountModificationsRequest,
@@ -3259,7 +4126,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
+    /// <p>Describes the available directories that are registered with Amazon WorkSpaces.</p>
     async fn describe_workspace_directories(
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
@@ -3316,6 +4183,38 @@ impl Workspaces for WorkspacesClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeWorkspaceImagesError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the snapshots for the specified WorkSpace.</p>
+    async fn describe_workspace_snapshots(
+        &self,
+        input: DescribeWorkspaceSnapshotsRequest,
+    ) -> Result<DescribeWorkspaceSnapshotsResult, RusotoError<DescribeWorkspaceSnapshotsError>>
+    {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeWorkspaceSnapshots",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorkspaceSnapshotsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorkspaceSnapshotsError::from_response(response))
         }
     }
 
@@ -3411,7 +4310,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    /// <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
     async fn import_workspace_image(
         &self,
         input: ImportWorkspaceImageRequest,
@@ -3439,7 +4338,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
     async fn list_available_management_cidr_ranges(
         &self,
         input: ListAvailableManagementCidrRangesRequest,
@@ -3475,7 +4374,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
+    /// <p>Modifies the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn modify_account(
         &self,
         input: ModifyAccountRequest,
@@ -3530,6 +4429,110 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
+    /// <p>Modifies the self-service WorkSpace management capabilities for your users. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
+    async fn modify_selfservice_permissions(
+        &self,
+        input: ModifySelfservicePermissionsRequest,
+    ) -> Result<ModifySelfservicePermissionsResult, RusotoError<ModifySelfservicePermissionsError>>
+    {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.ModifySelfservicePermissions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifySelfservicePermissionsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifySelfservicePermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Specifies which devices and operating systems users can use to access their Workspaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
+    async fn modify_workspace_access_properties(
+        &self,
+        input: ModifyWorkspaceAccessPropertiesRequest,
+    ) -> Result<
+        ModifyWorkspaceAccessPropertiesResult,
+        RusotoError<ModifyWorkspaceAccessPropertiesError>,
+    > {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.ModifyWorkspaceAccessProperties",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyWorkspaceAccessPropertiesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyWorkspaceAccessPropertiesError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Modify the default properties used to create WorkSpaces.</p>
+    async fn modify_workspace_creation_properties(
+        &self,
+        input: ModifyWorkspaceCreationPropertiesRequest,
+    ) -> Result<
+        ModifyWorkspaceCreationPropertiesResult,
+        RusotoError<ModifyWorkspaceCreationPropertiesError>,
+    > {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.ModifyWorkspaceCreationProperties",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ModifyWorkspaceCreationPropertiesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ModifyWorkspaceCreationPropertiesError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Modifies the specified WorkSpace properties.</p>
     async fn modify_workspace_properties(
         &self,
@@ -3561,7 +4564,7 @@ impl Workspaces for WorkspacesClient {
         }
     }
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     async fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
@@ -3640,6 +4643,65 @@ impl Workspaces for WorkspacesClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(RebuildWorkspacesError::from_response(response))
+        }
+    }
+
+    /// <p>Registers the specified directory. This operation is asynchronous and returns before the WorkSpace directory is registered. If this is the first time you are registering a directory, you will need to create the workspaces_DefaultRole role before you can register a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-access-control.html#create-default-role"> Creating the workspaces_DefaultRole Role</a>.</p>
+    async fn register_workspace_directory(
+        &self,
+        input: RegisterWorkspaceDirectoryRequest,
+    ) -> Result<RegisterWorkspaceDirectoryResult, RusotoError<RegisterWorkspaceDirectoryError>>
+    {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.RegisterWorkspaceDirectory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterWorkspaceDirectoryResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterWorkspaceDirectoryError::from_response(response))
+        }
+    }
+
+    /// <p>Restores the specified WorkSpace to its last known healthy state.</p> <p>You cannot restore a WorkSpace unless its state is <code> AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Restoring a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/restore-workspace.html">Restore a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpace is completely restored.</p>
+    async fn restore_workspace(
+        &self,
+        input: RestoreWorkspaceRequest,
+    ) -> Result<RestoreWorkspaceResult, RusotoError<RestoreWorkspaceError>> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.RestoreWorkspace");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<RestoreWorkspaceResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RestoreWorkspaceError::from_response(response))
         }
     }
 

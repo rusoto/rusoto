@@ -148,6 +148,71 @@ pub struct CreateChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Configuration parameters used to create a new HarvestJob.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateHarvestJobRequest {
+    /// <p>The end of the time-window which will be harvested</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: String,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    pub origin_endpoint_id: String,
+    #[serde(rename = "S3Destination")]
+    pub s3_destination: S3Destination,
+    /// <p>The start of the time-window which will be harvested</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateHarvestJobResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOriginEndpointRequest {
@@ -179,6 +244,12 @@ pub struct CreateOriginEndpointRequest {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -233,6 +304,12 @@ pub struct CreateOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -270,6 +347,12 @@ pub struct DashEncryption {
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashPackage {
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
@@ -371,6 +454,57 @@ pub struct DescribeChannelResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeHarvestJobRequest {
+    /// <p>The ID of the HarvestJob.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeHarvestJobResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint.</p>
     #[serde(rename = "Id")]
@@ -412,6 +546,12 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -433,6 +573,51 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "Whitelist")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist: Option<Vec<String>>,
+}
+
+/// <p>A HarvestJob resource configuration</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct HarvestJob {
+    /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the Channel that the HarvestJob will harvest from.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+    /// <p>The time the HarvestJob was submitted</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The end of the time-window which will be harvested.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// <p>The ID of the HarvestJob. The ID must be unique within the region
+    /// and it cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The ID of the OriginEndpoint that the HarvestJob will harvest from.
+    /// This cannot be changed after the HarvestJob is submitted.</p>
+    #[serde(rename = "OriginEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_endpoint_id: Option<String>,
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination: Option<S3Destination>,
+    /// <p>The start of the time-window which will be harvested.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The current status of the HarvestJob. Consider setting up a CloudWatch Event to listen for
+    /// HarvestJobs as they succeed or fail. In the event of failure, the CloudWatch Event will
+    /// include an explanation of why the HarvestJob failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
@@ -533,6 +718,12 @@ pub struct HlsManifestCreateOrUpdateParameters {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -580,6 +771,12 @@ pub struct HlsPackage {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryption>,
@@ -664,6 +861,39 @@ pub struct ListChannelsResponse {
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<Channel>>,
+    /// <p>A token that can be used to resume pagination from the end of the collection.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListHarvestJobsRequest {
+    /// <p>When specified, the request will return only HarvestJobs associated with the given Channel ID.</p>
+    #[serde(rename = "IncludeChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_channel_id: Option<String>,
+    /// <p>When specified, the request will return only HarvestJobs in the given status.</p>
+    #[serde(rename = "IncludeStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_status: Option<String>,
+    /// <p>The upper bound on the number of records to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token used to resume pagination from the end of a previous request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListHarvestJobsResponse {
+    /// <p>A list of HarvestJob records.</p>
+    #[serde(rename = "HarvestJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub harvest_jobs: Option<Vec<HarvestJob>>,
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -775,6 +1005,12 @@ pub struct OriginEndpoint {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -859,6 +1095,20 @@ pub struct RotateIngestEndpointCredentialsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Configuration parameters for where in an S3 bucket to place the harvested content</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3Destination {
+    /// <p>The name of an S3 bucket within which harvested content will be exported</p>
+    #[serde(rename = "BucketName")]
+    pub bucket_name: String,
+    /// <p>The key in the specified S3 bucket where the harvested top-level manifest will be placed.</p>
+    #[serde(rename = "ManifestKey")]
+    pub manifest_key: String,
+    /// <p>The IAM role used to write to the specified S3 bucket</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
@@ -980,6 +1230,12 @@ pub struct UpdateOriginEndpointRequest {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (in seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1031,6 +1287,12 @@ pub struct UpdateOriginEndpointResponse {
     #[serde(rename = "MssPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mss_package: Option<MssPackage>,
+    /// <p>Control whether origination of video is allowed for this OriginEndpoint. If set to ALLOW, the OriginEndpoint
+    /// may by requested, pursuant to any other form of access control. If set to DENY, the OriginEndpoint may not be
+    /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
+    #[serde(rename = "Origination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origination: Option<String>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1114,6 +1376,73 @@ impl Error for CreateChannelError {
             CreateChannelError::ServiceUnavailable(ref cause) => cause,
             CreateChannelError::TooManyRequests(ref cause) => cause,
             CreateChannelError::UnprocessableEntity(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateHarvestJob
+#[derive(Debug, PartialEq)]
+pub enum CreateHarvestJobError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl CreateHarvestJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHarvestJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateHarvestJobError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateHarvestJobError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateHarvestJobError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateHarvestJobError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateHarvestJobError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(CreateHarvestJobError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateHarvestJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateHarvestJobError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateHarvestJobError::Forbidden(ref cause) => cause,
+            CreateHarvestJobError::InternalServerError(ref cause) => cause,
+            CreateHarvestJobError::NotFound(ref cause) => cause,
+            CreateHarvestJobError::ServiceUnavailable(ref cause) => cause,
+            CreateHarvestJobError::TooManyRequests(ref cause) => cause,
+            CreateHarvestJobError::UnprocessableEntity(ref cause) => cause,
         }
     }
 }
@@ -1385,6 +1714,75 @@ impl Error for DescribeChannelError {
         }
     }
 }
+/// Errors returned by DescribeHarvestJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeHarvestJobError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl DescribeHarvestJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHarvestJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(DescribeHarvestJobError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeHarvestJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeHarvestJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeHarvestJobError::Forbidden(ref cause) => cause,
+            DescribeHarvestJobError::InternalServerError(ref cause) => cause,
+            DescribeHarvestJobError::NotFound(ref cause) => cause,
+            DescribeHarvestJobError::ServiceUnavailable(ref cause) => cause,
+            DescribeHarvestJobError::TooManyRequests(ref cause) => cause,
+            DescribeHarvestJobError::UnprocessableEntity(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeOriginEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeOriginEndpointError {
@@ -1516,6 +1914,69 @@ impl Error for ListChannelsError {
             ListChannelsError::ServiceUnavailable(ref cause) => cause,
             ListChannelsError::TooManyRequests(ref cause) => cause,
             ListChannelsError::UnprocessableEntity(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListHarvestJobs
+#[derive(Debug, PartialEq)]
+pub enum ListHarvestJobsError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl ListHarvestJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHarvestJobsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListHarvestJobsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListHarvestJobsError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListHarvestJobsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListHarvestJobsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListHarvestJobsError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(ListHarvestJobsError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListHarvestJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListHarvestJobsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListHarvestJobsError::Forbidden(ref cause) => cause,
+            ListHarvestJobsError::InternalServerError(ref cause) => cause,
+            ListHarvestJobsError::NotFound(ref cause) => cause,
+            ListHarvestJobsError::ServiceUnavailable(ref cause) => cause,
+            ListHarvestJobsError::TooManyRequests(ref cause) => cause,
+            ListHarvestJobsError::UnprocessableEntity(ref cause) => cause,
         }
     }
 }
@@ -1954,6 +2415,12 @@ pub trait MediaPackage {
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
 
+    /// <p>Creates a new HarvestJob record.</p>
+    async fn create_harvest_job(
+        &self,
+        input: CreateHarvestJobRequest,
+    ) -> Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>>;
+
     /// <p>Creates a new OriginEndpoint record.</p>
     async fn create_origin_endpoint(
         &self,
@@ -1978,6 +2445,12 @@ pub trait MediaPackage {
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
 
+    /// <p>Gets details about an existing HarvestJob.</p>
+    async fn describe_harvest_job(
+        &self,
+        input: DescribeHarvestJobRequest,
+    ) -> Result<DescribeHarvestJobResponse, RusotoError<DescribeHarvestJobError>>;
+
     /// <p>Gets details about an existing OriginEndpoint.</p>
     async fn describe_origin_endpoint(
         &self,
@@ -1989,6 +2462,12 @@ pub trait MediaPackage {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
+
+    /// <p>Returns a collection of HarvestJob records.</p>
+    async fn list_harvest_jobs(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>;
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
     async fn list_origin_endpoints(
@@ -2104,6 +2583,36 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    /// <p>Creates a new HarvestJob record.</p>
+    async fn create_harvest_job(
+        &self,
+        input: CreateHarvestJobRequest,
+    ) -> Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>> {
+        let request_uri = "/harvest_jobs";
+
+        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateHarvestJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateHarvestJobError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new OriginEndpoint record.</p>
     async fn create_origin_endpoint(
         &self,
@@ -2215,6 +2724,33 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    /// <p>Gets details about an existing HarvestJob.</p>
+    async fn describe_harvest_job(
+        &self,
+        input: DescribeHarvestJobRequest,
+    ) -> Result<DescribeHarvestJobResponse, RusotoError<DescribeHarvestJobError>> {
+        let request_uri = format!("/harvest_jobs/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeHarvestJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeHarvestJobError::from_response(response))
+        }
+    }
+
     /// <p>Gets details about an existing OriginEndpoint.</p>
     async fn describe_origin_endpoint(
         &self,
@@ -2275,6 +2811,48 @@ impl MediaPackage for MediaPackageClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListChannelsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a collection of HarvestJob records.</p>
+    async fn list_harvest_jobs(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>> {
+        let request_uri = "/harvest_jobs";
+
+        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.include_channel_id {
+            params.put("includeChannelId", x);
+        }
+        if let Some(ref x) = input.include_status {
+            params.put("includeStatus", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListHarvestJobsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListHarvestJobsError::from_response(response))
         }
     }
 

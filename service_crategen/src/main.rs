@@ -10,7 +10,7 @@ mod util;
 
 use std::path::Path;
 
-use clap::{App, Arg, SubCommand, crate_authors, crate_description, crate_version};
+use clap::{crate_authors, crate_description, crate_version, App, Arg, SubCommand};
 
 use crate::botocore::ServiceDefinition;
 use crate::config::ServiceConfig;

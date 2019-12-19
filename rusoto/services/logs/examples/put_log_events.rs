@@ -3,15 +3,14 @@
 //! The following code shows a simple example of using Rusoto's CloudWatchLogs
 //! API to send a single log event to the 'testing' log stream in the 'testing'
 //! log group.
-use chrono::{Utc};
+use chrono::Utc;
 
-use std::default::Default;
 use rusoto_core::Region;
-use rusoto_logs::{CloudWatchLogs,
-  CloudWatchLogsClient,
-  DescribeLogStreamsRequest,
-  InputLogEvent,
-  PutLogEventsRequest};
+use rusoto_logs::{
+    CloudWatchLogs, CloudWatchLogsClient, DescribeLogStreamsRequest, InputLogEvent,
+    PutLogEventsRequest,
+};
+use std::default::Default;
 
 #[tokio::main]
 async fn main() {
@@ -31,9 +30,9 @@ async fn main() {
     let streams_resp = client.describe_log_streams(desc_streams_req).await;
     let log_streams = streams_resp.unwrap().log_streams.unwrap();
     let stream = &log_streams
-      .iter()
-      .find(|s| s.log_stream_name == Some(LOG_STREAM_NAME.to_string()))
-      .unwrap();
+        .iter()
+        .find(|s| s.log_stream_name == Some(LOG_STREAM_NAME.to_string()))
+        .unwrap();
     let sequence_token = stream.upload_sequence_token.clone();
 
     let put_log_events_request = PutLogEventsRequest {

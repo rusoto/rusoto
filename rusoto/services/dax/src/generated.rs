@@ -100,7 +100,7 @@ pub struct Cluster {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClusterRequest {
-    /// <p>The Availability Zones (AZs) in which the cluster nodes will be created. All nodes belonging to the cluster are placed in these Availability Zones. Use this parameter if you want to distribute the nodes across multiple AZs.</p>
+    /// <p>The Availability Zones (AZs) in which the cluster nodes will reside after the cluster has been created or updated. If provided, the length of this list must equal the <code>ReplicationFactor</code> parameter. If you omit this parameter, DAX will spread the nodes across Availability Zones for the highest availability.</p>
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
@@ -129,7 +129,7 @@ pub struct CreateClusterRequest {
     #[serde(rename = "PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_maintenance_window: Option<String>,
-    /// <p><p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <i>ReplicationFactor</i> to 2 or more.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note></p>
+    /// <p><p>The number of nodes in the DAX cluster. A replication factor of 1 will create a single-node cluster, without any read replicas. For additional fault tolerance, you can create a multiple node cluster with one or more read replicas. To do this, set <code>ReplicationFactor</code> to a number between 3 (one primary and two read replicas) and 10 (one primary and nine read replicas). <code>If the AvailabilityZones</code> parameter is provided, its length must equal the <code>ReplicationFactor</code>.</p> <note> <p>AWS recommends that you have at least two read replicas per cluster.</p> </note></p>
     #[serde(rename = "ReplicationFactor")]
     pub replication_factor: i64,
     /// <p>Represents the settings used to enable server-side encryption on the cluster.</p>
@@ -753,7 +753,7 @@ pub struct SecurityGroupMembership {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Subnet {
-    /// <p>The Availability Zone (AZ) for subnet subnet.</p>
+    /// <p>The Availability Zone (AZ) for the subnet.</p>
     #[serde(rename = "SubnetAvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_availability_zone: Option<String>,
@@ -944,7 +944,7 @@ pub enum CreateClusterError {
     NodeQuotaForCustomerExceededFault(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
@@ -1069,7 +1069,7 @@ pub enum CreateParameterGroupError {
     ParameterGroupAlreadyExistsFault(String),
     /// <p>You have attempted to exceed the maximum number of parameter groups.</p>
     ParameterGroupQuotaExceededFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1136,7 +1136,7 @@ impl Error for CreateParameterGroupError {
 pub enum CreateSubnetGroupError {
     /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The specified subnet group already exists.</p>
     SubnetGroupAlreadyExistsFault(String),
@@ -1209,7 +1209,7 @@ pub enum DecreaseReplicationFactorError {
     InvalidParameterValue(String),
     /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1282,7 +1282,7 @@ pub enum DeleteClusterError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1345,7 +1345,7 @@ pub enum DeleteParameterGroupError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1404,6 +1404,7 @@ impl Error for DeleteParameterGroupError {
 /// Errors returned by DeleteSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubnetGroupError {
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The specified subnet group is currently in use.</p>
     SubnetGroupInUseFault(String),
@@ -1460,7 +1461,7 @@ pub enum DescribeClustersError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1517,7 +1518,7 @@ pub enum DescribeDefaultParametersError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1568,7 +1569,7 @@ pub enum DescribeEventsError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1621,7 +1622,7 @@ pub enum DescribeParameterGroupsError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1680,7 +1681,7 @@ pub enum DescribeParametersError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1733,6 +1734,7 @@ impl Error for DescribeParametersError {
 /// Errors returned by DescribeSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubnetGroupsError {
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
@@ -1791,7 +1793,7 @@ pub enum IncreaseReplicationFactorError {
     NodeQuotaForClusterExceededFault(String),
     /// <p>You have attempted to exceed the maximum number of nodes for your AWS account.</p>
     NodeQuotaForCustomerExceededFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1884,7 +1886,7 @@ pub enum ListTagsError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -1951,7 +1953,7 @@ pub enum RebootNodeError {
     InvalidParameterValue(String),
     /// <p>None of the nodes in the cluster have the given node ID.</p>
     NodeNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -2018,7 +2020,7 @@ pub enum TagResourceError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
@@ -2095,7 +2097,7 @@ pub enum UntagResourceError {
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The tag does not exist.</p>
     TagNotFoundFault(String),
@@ -2172,7 +2174,7 @@ pub enum UpdateClusterError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -2247,7 +2249,7 @@ pub enum UpdateParameterGroupError {
     InvalidParameterValue(String),
     /// <p>The specified parameter group does not exist.</p>
     ParameterGroupNotFoundFault(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
 }
 
@@ -2308,7 +2310,7 @@ impl Error for UpdateParameterGroupError {
 pub enum UpdateSubnetGroupError {
     /// <p>An invalid subnet identifier was specified.</p>
     InvalidSubnet(String),
-
+    /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
@@ -2423,7 +2425,7 @@ pub trait DynamodbAccelerator {
         input: DescribeDefaultParametersRequest,
     ) -> Result<DescribeDefaultParametersResponse, RusotoError<DescribeDefaultParametersError>>;
 
-    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
+    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last 24 hours are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsRequest,
@@ -2459,7 +2461,7 @@ pub trait DynamodbAccelerator {
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
-    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
+    /// <p><p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p> <note> <p> <code>RebootNode</code> restarts the DAX engine process and does not remove the contents of the cache. </p> </note></p>
     async fn reboot_node(
         &self,
         input: RebootNodeRequest,
@@ -2783,7 +2785,7 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         }
     }
 
-    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
+    /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last 24 hours are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsRequest,
@@ -2950,7 +2952,7 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         }
     }
 
-    /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
+    /// <p><p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p> <note> <p> <code>RebootNode</code> restarts the DAX engine process and does not remove the contents of the cache. </p> </note></p>
     async fn reboot_node(
         &self,
         input: RebootNodeRequest,

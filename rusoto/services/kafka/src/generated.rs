@@ -43,7 +43,8 @@ pub struct BrokerEBSVolumeInfo {
 /// </code></pre>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BrokerNodeGroupInfo {
-    /// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones. This is an optional parameter. If you don&#39;t specify it, Amazon MSK gives it the value DEFAULT. You can also explicitly set this parameter to the value DEFAULT. No other values are currently allowed.&lt;/p&gt;
+    /// &lt;p&gt;Amazon MSK distributes the broker nodes evenly across the Availability Zones that correspond to the subnets you provide when you create the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "BrokerAZDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1022,6 +1023,37 @@ pub struct UntagResourceRequest {
     /// </code></pre>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateBrokerCountRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The version of cluster to update from. A successful operation will then generate a new version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;The number of broker nodes that you want the cluster to have after this operation completes successfully.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetNumberOfBrokerNodes")]
+    pub target_number_of_broker_nodes: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateBrokerCountResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2137,6 +2169,72 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateBrokerCount
+#[derive(Debug, PartialEq)]
+pub enum UpdateBrokerCountError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateBrokerCountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerCountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateBrokerCountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateBrokerCountError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateBrokerCountError::BadRequest(ref cause) => cause,
+            UpdateBrokerCountError::Forbidden(ref cause) => cause,
+            UpdateBrokerCountError::InternalServerError(ref cause) => cause,
+            UpdateBrokerCountError::ServiceUnavailable(ref cause) => cause,
+            UpdateBrokerCountError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateBrokerStorage
 #[derive(Debug, PartialEq)]
 pub enum UpdateBrokerStorageError {
@@ -2401,6 +2499,13 @@ pub trait Kafka {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
+
+    /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_broker_count(
+        &self,
+        input: UpdateBrokerCountRequest,
+    ) -> Result<UpdateBrokerCountResponse, RusotoError<UpdateBrokerCountError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
@@ -2990,6 +3095,40 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_broker_count(
+        &self,
+        input: UpdateBrokerCountRequest,
+    ) -> Result<UpdateBrokerCountResponse, RusotoError<UpdateBrokerCountError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/nodes/count",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBrokerCountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBrokerCountError::from_response(response))
         }
     }
 

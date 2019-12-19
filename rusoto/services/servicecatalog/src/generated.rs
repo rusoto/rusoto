@@ -494,7 +494,7 @@ pub struct CreateProvisionedProductPlanInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
-    /// <p>One or more tags.</p>
+    /// <p>One or more tags.</p> <p>If the plan is for an existing provisioned product, the product must have a <code>RESOURCE_UPDATE</code> constraint with <code>TagUpdatesOnProvisionedProduct</code> set to <code>ALLOWED</code> to allow tag updates.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1130,6 +1130,25 @@ pub struct DescribeRecordOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeServiceActionExecutionParametersInput {
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    #[serde(rename = "ProvisionedProductId")]
+    pub provisioned_product_id: String,
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeServiceActionExecutionParametersOutput {
+    #[serde(rename = "ServiceActionParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_parameters: Option<Vec<ExecutionParameter>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeServiceActionInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1296,6 +1315,9 @@ pub struct ExecuteProvisionedProductServiceActionInput {
     /// <p>An idempotency token that uniquely identifies the execute request.</p>
     #[serde(rename = "ExecuteToken")]
     pub execute_token: String,
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductId")]
     pub provisioned_product_id: String,
@@ -1311,6 +1333,20 @@ pub struct ExecuteProvisionedProductServiceActionOutput {
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExecutionParameter {
+    #[serde(rename = "DefaultValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_values: Option<Vec<String>>,
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>An object containing information about the error, along with identifying information about the self-service action and its associations.</p>
@@ -2401,6 +2437,10 @@ pub struct ProvisioningArtifact {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>
+    #[serde(rename = "Guidance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guidance: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2427,6 +2467,10 @@ pub struct ProvisioningArtifactDetail {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>
+    #[serde(rename = "Guidance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guidance: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3410,6 +3454,10 @@ pub struct UpdateProvisioningArtifactInput {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p> <p>The <code>DEFAULT</code> value indicates that the product version is active.</p> <p>The administrator can set the guidance to <code>DEPRECATED</code> to inform users that the product version is deprecated. Users are able to make updates to a provisioned product of a deprecated version but cannot launch new provisioned products using a deprecated version.</p>
+    #[serde(rename = "Guidance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guidance: Option<String>,
     /// <p>The updated name of the provisioning artifact.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4135,6 +4183,8 @@ impl Error for CreatePortfolioError {
 pub enum CreatePortfolioShareError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
     /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The operation is not supported.</p>
@@ -4151,6 +4201,9 @@ impl CreatePortfolioShareError {
                     return RusotoError::Service(CreatePortfolioShareError::InvalidParameters(
                         err.msg,
                     ))
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(CreatePortfolioShareError::InvalidState(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePortfolioShareError::LimitExceeded(err.msg))
@@ -4181,6 +4234,7 @@ impl Error for CreatePortfolioShareError {
     fn description(&self) -> &str {
         match *self {
             CreatePortfolioShareError::InvalidParameters(ref cause) => cause,
+            CreatePortfolioShareError::InvalidState(ref cause) => cause,
             CreatePortfolioShareError::LimitExceeded(ref cause) => cause,
             CreatePortfolioShareError::OperationNotSupported(ref cause) => cause,
             CreatePortfolioShareError::ResourceNotFound(ref cause) => cause,
@@ -4523,6 +4577,8 @@ impl Error for DeletePortfolioError {
 pub enum DeletePortfolioShareError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
     /// <p>The operation is not supported.</p>
     OperationNotSupported(String),
     /// <p>The specified resource was not found.</p>
@@ -4537,6 +4593,9 @@ impl DeletePortfolioShareError {
                     return RusotoError::Service(DeletePortfolioShareError::InvalidParameters(
                         err.msg,
                     ))
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(DeletePortfolioShareError::InvalidState(err.msg))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(DeletePortfolioShareError::OperationNotSupported(
@@ -4564,6 +4623,7 @@ impl Error for DeletePortfolioShareError {
     fn description(&self) -> &str {
         match *self {
             DeletePortfolioShareError::InvalidParameters(ref cause) => cause,
+            DeletePortfolioShareError::InvalidState(ref cause) => cause,
             DeletePortfolioShareError::OperationNotSupported(ref cause) => cause,
             DeletePortfolioShareError::ResourceNotFound(ref cause) => cause,
         }
@@ -5306,6 +5366,51 @@ impl Error for DescribeServiceActionError {
     fn description(&self) -> &str {
         match *self {
             DescribeServiceActionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeServiceActionExecutionParameters
+#[derive(Debug, PartialEq)]
+pub enum DescribeServiceActionExecutionParametersError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeServiceActionExecutionParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeServiceActionExecutionParametersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        DescribeServiceActionExecutionParametersError::InvalidParameters(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeServiceActionExecutionParametersError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeServiceActionExecutionParametersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeServiceActionExecutionParametersError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeServiceActionExecutionParametersError::InvalidParameters(ref cause) => cause,
+            DescribeServiceActionExecutionParametersError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -7479,6 +7584,14 @@ pub trait ServiceCatalog {
         input: DescribeServiceActionInput,
     ) -> Result<DescribeServiceActionOutput, RusotoError<DescribeServiceActionError>>;
 
+    async fn describe_service_action_execution_parameters(
+        &self,
+        input: DescribeServiceActionExecutionParametersInput,
+    ) -> Result<
+        DescribeServiceActionExecutionParametersOutput,
+        RusotoError<DescribeServiceActionExecutionParametersError>,
+    >;
+
     /// <p>Gets information about the specified TagOption.</p>
     async fn describe_tag_option(
         &self,
@@ -8999,6 +9112,39 @@ impl ServiceCatalog for ServiceCatalogClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeServiceActionError::from_response(response))
+        }
+    }
+
+    async fn describe_service_action_execution_parameters(
+        &self,
+        input: DescribeServiceActionExecutionParametersInput,
+    ) -> Result<
+        DescribeServiceActionExecutionParametersOutput,
+        RusotoError<DescribeServiceActionExecutionParametersError>,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeServiceActionExecutionParameters",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeServiceActionExecutionParametersOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeServiceActionExecutionParametersError::from_response(response))
         }
     }
 

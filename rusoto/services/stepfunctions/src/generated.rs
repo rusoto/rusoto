@@ -48,7 +48,7 @@ pub struct ActivityListItem {
     /// <p>The date the activity is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -122,12 +122,21 @@ pub struct ActivityTimedOutEventDetails {
     pub error: Option<String>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudWatchLogsLogGroup {
+    /// <p>The ARN of the the CloudWatch log group to which you want your logs emitted to. The ARN must end with <code>:*</code> </p>
+    #[serde(rename = "logGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_arn: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivityInput {
-    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The list of tags to add to a resource.</p>
+    /// <p>The list of tags to add to a resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -149,16 +158,24 @@ pub struct CreateStateMachineInput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
-    /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p>Defines what execution history events are logged and where they are logged.</p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
+    /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
-    /// <p>Tags to be added when creating a state machine.</p>
+    /// <p>Tags to be added when creating a state machine.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>Determines whether a Standard or Express state machine is created. If not set, Standard is created.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -210,7 +227,7 @@ pub struct DescribeActivityOutput {
     /// <p>The date the activity is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -231,7 +248,7 @@ pub struct DescribeExecutionOutput {
     /// <p>The string that contains the JSON input data of the execution.</p>
     #[serde(rename = "input")]
     pub input: String,
-    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -297,7 +314,11 @@ pub struct DescribeStateMachineOutput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
-    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p/></p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
+    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM role used when creating this state machine. (The IAM role maintains security by granting Step Functions access to AWS resources.)</p>
@@ -310,6 +331,9 @@ pub struct DescribeStateMachineOutput {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 /// <p>Contains details about an abort of an execution.</p>
@@ -347,7 +371,7 @@ pub struct ExecutionListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The date the execution started.</p>
@@ -520,6 +544,26 @@ pub struct HistoryEvent {
     #[serde(rename = "lambdaFunctionTimedOutEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_timed_out_event_details: Option<LambdaFunctionTimedOutEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that was aborted.</p>
+    #[serde(rename = "mapIterationAbortedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_aborted_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that failed.</p>
+    #[serde(rename = "mapIterationFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_failed_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that was started.</p>
+    #[serde(rename = "mapIterationStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_started_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about an iteration of a Map state that succeeded.</p>
+    #[serde(rename = "mapIterationSucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_iteration_succeeded_event_details: Option<MapIterationEventDetails>,
+    /// <p>Contains details about Map state that was started.</p>
+    #[serde(rename = "mapStateStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub map_state_started_event_details: Option<MapStateStartedEventDetails>,
     /// <p>The id of the previous event.</p>
     #[serde(rename = "previousEventId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -747,6 +791,56 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LogDestination {
+    /// <p>An object describing a CloudWatch log group. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html">AWS::Logs::LogGroup</a> in the AWS CloudFormation User Guide.</p>
+    #[serde(rename = "cloudWatchLogsLogGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logs_log_group: Option<CloudWatchLogsLogGroup>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LoggingConfiguration {
+    /// <p>An object that describes where your execution history events will be logged. Limited to size 1. Required, if your log level is not set to <code>OFF</code>.</p>
+    #[serde(rename = "destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<LogDestination>>,
+    /// <p>Determines whether execution history data is included in your log. When set to <code>FALSE</code>, data is excluded.</p>
+    #[serde(rename = "includeExecutionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_execution_data: Option<bool>,
+    /// <p>Defines which category of execution history events are logged.</p>
+    #[serde(rename = "level")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub level: Option<String>,
+}
+
+/// <p>Contains details about an iteration of a Map state.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MapIterationEventDetails {
+    /// <p>The index of the array belonging to the Map state iteration.</p>
+    #[serde(rename = "index")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<i64>,
+    /// <p>The name of the iteration’s parent Map state.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Details about a Map state that was started.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MapStateStartedEventDetails {
+    /// <p>The size of the array for Map state iterations.</p>
+    #[serde(rename = "length")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub length: Option<i64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskFailureInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
@@ -757,7 +851,7 @@ pub struct SendTaskFailureInput {
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
@@ -768,7 +862,7 @@ pub struct SendTaskFailureOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskHeartbeatInput {
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
@@ -782,7 +876,7 @@ pub struct SendTaskSuccessInput {
     /// <p>The JSON output of the task.</p>
     #[serde(rename = "output")]
     pub output: String,
-    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see <a>GetActivityTaskOutput$taskToken</a>).</p>
+    /// <p>The token that represents this task. Task tokens are generated by Step Functions when tasks are assigned to a worker, or in the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/input-output-contextobject.html">context object</a> when a workflow enters a task state. See <a>GetActivityTaskOutput$taskToken</a>.</p>
     #[serde(rename = "taskToken")]
     pub task_token: String,
 }
@@ -797,7 +891,7 @@ pub struct StartExecutionInput {
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p><p>The name of the execution. This name must be unique for your AWS account, region, and state machine for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution. This name must be unique for your AWS account, region, and state machine for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -834,7 +928,7 @@ pub struct StateEnteredEventDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StateExitedEventDetails {
-    /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The JSON output data of the state.</p>
@@ -850,12 +944,15 @@ pub struct StateMachineListItem {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) that identifies the state machine.</p>
     #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
+    /// <p><p/></p>
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -881,7 +978,7 @@ pub struct StopExecutionOutput {
     pub stop_date: f64,
 }
 
-/// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p>
+/// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of a tag.</p>
@@ -899,7 +996,7 @@ pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The list of tags to add to a resource.</p> <p>Tags may only contain unicode letters, digits, whitespace, or these symbols: <code>_ . : / = + - @</code>.</p>
+    /// <p>The list of tags to add to a resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
@@ -1074,6 +1171,10 @@ pub struct UpdateStateMachineInput {
     #[serde(rename = "definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "loggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_configuration: Option<LoggingConfiguration>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role of the state machine.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1145,6 +1246,8 @@ pub enum CreateStateMachineError {
     InvalidArn(String),
     /// <p>The provided Amazon States Language definition is invalid.</p>
     InvalidDefinition(String),
+    /// <p><p/></p>
+    InvalidLoggingConfiguration(String),
     /// <p>The provided name is invalid.</p>
     InvalidName(String),
     /// <p>A state machine with the same name but a different definition or role ARN already exists.</p>
@@ -1153,6 +1256,8 @@ pub enum CreateStateMachineError {
     StateMachineDeleting(String),
     /// <p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
     StateMachineLimitExceeded(String),
+    /// <p><p/></p>
+    StateMachineTypeNotSupported(String),
     /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
     TooManyTags(String),
 }
@@ -1168,6 +1273,11 @@ impl CreateStateMachineError {
                     return RusotoError::Service(CreateStateMachineError::InvalidDefinition(
                         err.msg,
                     ))
+                }
+                "InvalidLoggingConfiguration" => {
+                    return RusotoError::Service(
+                        CreateStateMachineError::InvalidLoggingConfiguration(err.msg),
+                    )
                 }
                 "InvalidName" => {
                     return RusotoError::Service(CreateStateMachineError::InvalidName(err.msg))
@@ -1185,6 +1295,11 @@ impl CreateStateMachineError {
                 "StateMachineLimitExceeded" => {
                     return RusotoError::Service(
                         CreateStateMachineError::StateMachineLimitExceeded(err.msg),
+                    )
+                }
+                "StateMachineTypeNotSupported" => {
+                    return RusotoError::Service(
+                        CreateStateMachineError::StateMachineTypeNotSupported(err.msg),
                     )
                 }
                 "TooManyTags" => {
@@ -1207,10 +1322,12 @@ impl Error for CreateStateMachineError {
         match *self {
             CreateStateMachineError::InvalidArn(ref cause) => cause,
             CreateStateMachineError::InvalidDefinition(ref cause) => cause,
+            CreateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
             CreateStateMachineError::InvalidName(ref cause) => cause,
             CreateStateMachineError::StateMachineAlreadyExists(ref cause) => cause,
             CreateStateMachineError::StateMachineDeleting(ref cause) => cause,
             CreateStateMachineError::StateMachineLimitExceeded(ref cause) => cause,
+            CreateStateMachineError::StateMachineTypeNotSupported(ref cause) => cause,
             CreateStateMachineError::TooManyTags(ref cause) => cause,
         }
     }
@@ -1587,6 +1704,8 @@ pub enum ListExecutionsError {
     InvalidToken(String),
     /// <p>The specified state machine does not exist.</p>
     StateMachineDoesNotExist(String),
+    /// <p><p/></p>
+    StateMachineTypeNotSupported(String),
 }
 
 impl ListExecutionsError {
@@ -1601,6 +1720,11 @@ impl ListExecutionsError {
                 }
                 "StateMachineDoesNotExist" => {
                     return RusotoError::Service(ListExecutionsError::StateMachineDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "StateMachineTypeNotSupported" => {
+                    return RusotoError::Service(ListExecutionsError::StateMachineTypeNotSupported(
                         err.msg,
                     ))
                 }
@@ -1622,6 +1746,7 @@ impl Error for ListExecutionsError {
             ListExecutionsError::InvalidArn(ref cause) => cause,
             ListExecutionsError::InvalidToken(ref cause) => cause,
             ListExecutionsError::StateMachineDoesNotExist(ref cause) => cause,
+            ListExecutionsError::StateMachineTypeNotSupported(ref cause) => cause,
         }
     }
 }
@@ -1663,7 +1788,7 @@ impl Error for ListStateMachinesError {
 pub enum ListTagsForResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
 }
 
@@ -1961,7 +2086,7 @@ impl Error for StopExecutionError {
 pub enum TagResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
     /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
     TooManyTags(String),
@@ -2004,7 +2129,7 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    /// <p>Could not find the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
 }
 
@@ -2045,6 +2170,8 @@ pub enum UpdateStateMachineError {
     InvalidArn(String),
     /// <p>The provided Amazon States Language definition is invalid.</p>
     InvalidDefinition(String),
+    /// <p><p/></p>
+    InvalidLoggingConfiguration(String),
     /// <p>Request is missing a required parameter. This error occurs if both <code>definition</code> and <code>roleArn</code> are not specified.</p>
     MissingRequiredParameter(String),
     /// <p>The specified state machine is being deleted.</p>
@@ -2064,6 +2191,11 @@ impl UpdateStateMachineError {
                     return RusotoError::Service(UpdateStateMachineError::InvalidDefinition(
                         err.msg,
                     ))
+                }
+                "InvalidLoggingConfiguration" => {
+                    return RusotoError::Service(
+                        UpdateStateMachineError::InvalidLoggingConfiguration(err.msg),
+                    )
                 }
                 "MissingRequiredParameter" => {
                     return RusotoError::Service(UpdateStateMachineError::MissingRequiredParameter(
@@ -2097,6 +2229,7 @@ impl Error for UpdateStateMachineError {
         match *self {
             UpdateStateMachineError::InvalidArn(ref cause) => cause,
             UpdateStateMachineError::InvalidDefinition(ref cause) => cause,
+            UpdateStateMachineError::InvalidLoggingConfiguration(ref cause) => cause,
             UpdateStateMachineError::MissingRequiredParameter(ref cause) => cause,
             UpdateStateMachineError::StateMachineDeleting(ref cause) => cause,
             UpdateStateMachineError::StateMachineDoesNotExist(ref cause) => cause,
@@ -2106,13 +2239,13 @@ impl Error for UpdateStateMachineError {
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 #[async_trait]
 pub trait StepFunctions {
-    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_activity(
         &self,
         input: CreateActivityInput,
     ) -> Result<CreateActivityOutput, RusotoError<CreateActivityError>>;
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2187,25 +2320,25 @@ pub trait StepFunctions {
         input: ListStateMachinesInput,
     ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>;
 
-    /// <p>List tags for a given resource.</p>
+    /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
     async fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
     ) -> Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>>;
 
-    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
     async fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
     ) -> Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>>;
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     async fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
@@ -2223,7 +2356,7 @@ pub trait StepFunctions {
         input: StopExecutionInput,
     ) -> Result<StopExecutionOutput, RusotoError<StopExecutionError>>;
 
-    /// <p>Add a tag to a Step Functions resource.</p>
+    /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -2277,7 +2410,7 @@ impl StepFunctionsClient {
 
 #[async_trait]
 impl StepFunctions for StepFunctionsClient {
-    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_activity(
         &self,
         input: CreateActivityInput,
@@ -2304,7 +2437,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
     async fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2641,7 +2774,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>List tags for a given resource.</p>
+    /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -2669,7 +2802,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
     async fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
@@ -2696,7 +2829,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
     async fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
@@ -2723,7 +2856,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     async fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
@@ -2804,7 +2937,7 @@ impl StepFunctions for StepFunctionsClient {
         }
     }
 
-    /// <p>Add a tag to a Step Functions resource.</p>
+    /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,

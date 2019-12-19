@@ -195,6 +195,9 @@ pub struct DescribeSecretResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "OwningService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owning_service: Option<String>,
     /// <p>Specifies whether automatic rotation is enabled for this secret.</p> <p>To enable rotation, use <a>RotateSecret</a> with <code>AutomaticallyRotateAfterDays</code> set to a value greater than 0. To disable rotation, use <a>CancelRotateSecret</a>.</p>
     #[serde(rename = "RotationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -577,6 +580,9 @@ pub struct SecretListEntry {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "OwningService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owning_service: Option<String>,
     /// <p>Indicated whether automatic, scheduled rotation is enabled for this secret.</p>
     #[serde(rename = "RotationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
