@@ -2032,6 +2032,10 @@ impl AcmPcaClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AcmPcaClient {
+        AcmPcaClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -5853,6 +5853,10 @@ impl ComprehendClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ComprehendClient {
+        ComprehendClient { client, region }
+    }
 }
 
 #[async_trait]

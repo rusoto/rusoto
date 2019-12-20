@@ -1,7 +1,5 @@
 #![cfg(feature = "sts")]
 
-use std::future::Future;
-
 use rusoto_core::request::HttpClient;
 use rusoto_core::{credential::ProvideAwsCredentials, Region, RusotoError};
 use rusoto_ec2::Ec2Client;

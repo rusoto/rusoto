@@ -839,6 +839,13 @@ impl ResourceGroupsTaggingApiClient {
             region,
         }
     }
+
+    pub fn new_with_client(
+        client: Client,
+        region: region::Region,
+    ) -> ResourceGroupsTaggingApiClient {
+        ResourceGroupsTaggingApiClient { client, region }
+    }
 }
 
 #[async_trait]

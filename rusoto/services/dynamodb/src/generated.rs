@@ -5450,6 +5450,10 @@ impl DynamoDbClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DynamoDbClient {
+        DynamoDbClient { client, region }
+    }
 }
 
 #[async_trait]

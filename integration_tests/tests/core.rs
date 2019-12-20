@@ -1,13 +1,6 @@
 #![cfg(feature = "core")]
 
-extern crate futures;
-extern crate reqwest;
-extern crate rusoto_core;
-
-use futures::future::ok;
-use futures::Future;
 use rusoto_core::request::{HttpClient, HttpResponse};
-
 use rusoto_core::credential::{DefaultCredentialsProvider, ProvideAwsCredentials};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;

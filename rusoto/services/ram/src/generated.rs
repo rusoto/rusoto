@@ -3097,6 +3097,10 @@ impl RamClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> RamClient {
+        RamClient { client, region }
+    }
 }
 
 #[async_trait]

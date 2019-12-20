@@ -4758,6 +4758,10 @@ impl DirectConnectClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DirectConnectClient {
+        DirectConnectClient { client, region }
+    }
 }
 
 #[async_trait]

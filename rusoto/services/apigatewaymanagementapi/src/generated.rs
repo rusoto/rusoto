@@ -269,6 +269,13 @@ impl ApiGatewayManagementApiClient {
             region,
         }
     }
+
+    pub fn new_with_client(
+        client: Client,
+        region: region::Region,
+    ) -> ApiGatewayManagementApiClient {
+        ApiGatewayManagementApiClient { client, region }
+    }
 }
 
 #[async_trait]

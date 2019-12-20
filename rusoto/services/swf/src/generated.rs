@@ -4920,6 +4920,10 @@ impl SwfClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SwfClient {
+        SwfClient { client, region }
+    }
 }
 
 #[async_trait]

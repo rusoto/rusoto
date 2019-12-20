@@ -20881,6 +20881,10 @@ impl IamClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IamClient {
+        IamClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -1984,6 +1984,10 @@ impl MigrationHubClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MigrationHubClient {
+        MigrationHubClient { client, region }
+    }
 }
 
 #[async_trait]

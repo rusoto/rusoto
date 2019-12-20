@@ -6408,6 +6408,10 @@ impl EcsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> EcsClient {
+        EcsClient { client, region }
+    }
 }
 
 #[async_trait]

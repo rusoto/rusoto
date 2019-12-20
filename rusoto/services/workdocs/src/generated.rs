@@ -4924,6 +4924,10 @@ impl WorkdocsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> WorkdocsClient {
+        WorkdocsClient { client, region }
+    }
 }
 
 #[async_trait]

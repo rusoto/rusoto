@@ -1000,6 +1000,10 @@ impl MobileClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MobileClient {
+        MobileClient { client, region }
+    }
 }
 
 #[async_trait]

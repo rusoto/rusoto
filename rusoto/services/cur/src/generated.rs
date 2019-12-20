@@ -337,6 +337,10 @@ impl CostAndUsageReportClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CostAndUsageReportClient {
+        CostAndUsageReportClient { client, region }
+    }
 }
 
 #[async_trait]

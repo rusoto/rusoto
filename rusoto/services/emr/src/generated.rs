@@ -3868,6 +3868,10 @@ impl EmrClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> EmrClient {
+        EmrClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -10046,6 +10046,10 @@ impl ChimeClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ChimeClient {
+        ChimeClient { client, region }
+    }
 }
 
 #[async_trait]

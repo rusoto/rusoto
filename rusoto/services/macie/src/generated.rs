@@ -640,6 +640,10 @@ impl MacieClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MacieClient {
+        MacieClient { client, region }
+    }
 }
 
 #[async_trait]

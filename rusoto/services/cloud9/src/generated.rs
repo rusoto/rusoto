@@ -1201,6 +1201,10 @@ impl Cloud9Client {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Cloud9Client {
+        Cloud9Client { client, region }
+    }
 }
 
 #[async_trait]

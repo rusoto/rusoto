@@ -5079,6 +5079,10 @@ impl SnsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SnsClient {
+        SnsClient { client, region }
+    }
 }
 
 #[async_trait]

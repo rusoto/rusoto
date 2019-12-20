@@ -12747,6 +12747,13 @@ impl CognitoIdentityProviderClient {
             region,
         }
     }
+
+    pub fn new_with_client(
+        client: Client,
+        region: region::Region,
+    ) -> CognitoIdentityProviderClient {
+        CognitoIdentityProviderClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -1633,6 +1633,10 @@ impl ShieldClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ShieldClient {
+        ShieldClient { client, region }
+    }
 }
 
 #[async_trait]

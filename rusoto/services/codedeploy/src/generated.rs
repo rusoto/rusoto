@@ -6363,6 +6363,10 @@ impl CodeDeployClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeDeployClient {
+        CodeDeployClient { client, region }
+    }
 }
 
 #[async_trait]

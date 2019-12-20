@@ -11991,6 +11991,10 @@ impl CloudFormationClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudFormationClient {
+        CloudFormationClient { client, region }
+    }
 }
 
 #[async_trait]

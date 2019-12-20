@@ -1929,6 +1929,10 @@ impl ServerlessRepoClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ServerlessRepoClient {
+        ServerlessRepoClient { client, region }
+    }
 }
 
 #[async_trait]

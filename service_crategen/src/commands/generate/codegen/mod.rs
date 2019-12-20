@@ -203,6 +203,14 @@ where
                     region
                 }}
             }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
+                {type_name} {{
+                    client,
+                    region
+                }}
+            }}
         }}
 
         #[async_trait]

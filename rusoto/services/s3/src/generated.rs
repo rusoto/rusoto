@@ -19351,6 +19351,10 @@ impl S3Client {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> S3Client {
+        S3Client { client, region }
+    }
 }
 
 #[async_trait]

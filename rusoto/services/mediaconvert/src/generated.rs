@@ -6215,6 +6215,10 @@ impl MediaConvertClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaConvertClient {
+        MediaConvertClient { client, region }
+    }
 }
 
 #[async_trait]

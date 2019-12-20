@@ -1015,6 +1015,10 @@ impl TranscribeClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> TranscribeClient {
+        TranscribeClient { client, region }
+    }
 }
 
 #[async_trait]

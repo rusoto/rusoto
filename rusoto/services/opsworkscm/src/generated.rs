@@ -1667,6 +1667,10 @@ impl OpsWorksCMClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> OpsWorksCMClient {
+        OpsWorksCMClient { client, region }
+    }
 }
 
 #[async_trait]

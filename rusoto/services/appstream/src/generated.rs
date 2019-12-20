@@ -4488,6 +4488,10 @@ impl AppStreamClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AppStreamClient {
+        AppStreamClient { client, region }
+    }
 }
 
 #[async_trait]

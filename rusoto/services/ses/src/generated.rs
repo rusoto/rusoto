@@ -11032,6 +11032,10 @@ impl SesClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SesClient {
+        SesClient { client, region }
+    }
 }
 
 #[async_trait]

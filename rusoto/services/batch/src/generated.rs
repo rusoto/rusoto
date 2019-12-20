@@ -2062,6 +2062,10 @@ impl BatchClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> BatchClient {
+        BatchClient { client, region }
+    }
 }
 
 #[async_trait]

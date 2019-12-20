@@ -1,8 +1,8 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-// #![cfg_attr(feature = "nightly-testing", feature(plugin))]
-// #![cfg_attr(not(feature = "unstable"), deny(warnings))]
+#![cfg_attr(feature = "nightly-testing", feature(plugin))]
+#![cfg_attr(not(feature = "unstable"), deny(warnings))]
 #![deny(missing_docs)]
 
 //! Types for loading and managing AWS access credentials for API requests.
@@ -39,7 +39,7 @@ use tokio::sync::Mutex;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, Default)]
 pub struct AwsCredentials {
     #[serde(rename = "AccessKeyId")]
     key: String,

@@ -621,6 +621,13 @@ impl KinesisVideoArchivedMediaClient {
             region,
         }
     }
+
+    pub fn new_with_client(
+        client: Client,
+        region: region::Region,
+    ) -> KinesisVideoArchivedMediaClient {
+        KinesisVideoArchivedMediaClient { client, region }
+    }
 }
 
 #[async_trait]

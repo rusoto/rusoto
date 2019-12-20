@@ -3244,6 +3244,10 @@ impl ConnectClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ConnectClient {
+        ConnectClient { client, region }
+    }
 }
 
 #[async_trait]

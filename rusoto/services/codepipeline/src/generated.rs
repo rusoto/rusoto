@@ -3819,6 +3819,10 @@ impl CodePipelineClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodePipelineClient {
+        CodePipelineClient { client, region }
+    }
 }
 
 #[async_trait]

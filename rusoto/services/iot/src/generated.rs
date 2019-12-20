@@ -22232,6 +22232,10 @@ impl IotClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotClient {
+        IotClient { client, region }
+    }
 }
 
 #[async_trait]

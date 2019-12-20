@@ -3102,6 +3102,10 @@ impl EcrClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> EcrClient {
+        EcrClient { client, region }
+    }
 }
 
 #[async_trait]

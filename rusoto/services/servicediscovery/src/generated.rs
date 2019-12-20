@@ -2010,6 +2010,10 @@ impl ServiceDiscoveryClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ServiceDiscoveryClient {
+        ServiceDiscoveryClient { client, region }
+    }
 }
 
 #[async_trait]

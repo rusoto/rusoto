@@ -4192,6 +4192,10 @@ impl AppSyncClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AppSyncClient {
+        AppSyncClient { client, region }
+    }
 }
 
 #[async_trait]

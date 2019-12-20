@@ -1193,6 +1193,10 @@ impl QldbClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> QldbClient {
+        QldbClient { client, region }
+    }
 }
 
 #[async_trait]

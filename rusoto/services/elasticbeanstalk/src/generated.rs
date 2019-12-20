@@ -9951,6 +9951,10 @@ impl ElasticBeanstalkClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ElasticBeanstalkClient {
+        ElasticBeanstalkClient { client, region }
+    }
 }
 
 #[async_trait]

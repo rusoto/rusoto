@@ -2207,6 +2207,10 @@ impl KinesisFirehoseClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KinesisFirehoseClient {
+        KinesisFirehoseClient { client, region }
+    }
 }
 
 #[async_trait]

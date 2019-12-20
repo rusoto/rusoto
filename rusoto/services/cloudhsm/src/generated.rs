@@ -1642,6 +1642,10 @@ impl CloudHsmClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudHsmClient {
+        CloudHsmClient { client, region }
+    }
 }
 
 #[async_trait]

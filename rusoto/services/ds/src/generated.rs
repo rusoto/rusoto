@@ -5971,6 +5971,10 @@ impl DirectoryServiceClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DirectoryServiceClient {
+        DirectoryServiceClient { client, region }
+    }
 }
 
 #[async_trait]

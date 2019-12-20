@@ -49,7 +49,7 @@ impl TestEtsClient {
     }
 
     async fn create_bucket(&mut self) -> String {
-        let bucket_name = generate_unique_name("ets-bucket-1");
+        let bucket_name = generate_unique_name("ets-bucket-1").await;
 
         let create_bucket_req = CreateBucketRequest {
             bucket: bucket_name.to_owned(),
@@ -88,31 +88,34 @@ impl DerefMut for TestEtsClient {
 impl Drop for TestEtsClient {
     fn drop(&mut self) {
         let mut rt = tokio::runtime::Runtime::new().unwrap();
-        rt.block_on(async move { self.s3_client.take().map(|s3_client| {
-            self.input_bucket.take().map(|bucket| {
-                let delete_bucket_req = DeleteBucketRequest {
-                    bucket: bucket.to_owned(),
-                    ..Default::default()
-                };
+        let s3_client = self.s3_client.take().unwrap();
+        let input_bucket = self.input_bucket.take().unwrap();
 
-                match rt.block_on(async {s3_client.delete_bucket(delete_bucket_req).await}) {
-                    Ok(_) => info!("Deleted S3 bucket: {}", bucket),
+        let delete_bucket_req = DeleteBucketRequest {
+            bucket: input_bucket.to_owned(),
+            ..Default::default()
+        };
+
+        rt.block_on(async {
+                match s3_client.delete_bucket(delete_bucket_req).await {
+                    Ok(_) => info!("Deleted S3 bucket: {}", input_bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
             });
-            self.output_bucket.take().map(|bucket| {
-                let delete_bucket_req = DeleteBucketRequest {
-                    bucket: bucket.to_owned(),
-                    ..Default::default()
-                };
 
-                match rt.block_on(async {s3_client.delete_bucket(delete_bucket_req).await}) {
-                    Ok(_) => info!("Deleted S3 bucket: {}", bucket),
+        let output_bucket = self.output_bucket.take().unwrap();
+        let delete_bucket_req = DeleteBucketRequest {
+            bucket: output_bucket.to_owned(),
+            ..Default::default()
+        };
+
+
+        rt.block_on(async {
+                match s3_client.delete_bucket(delete_bucket_req).await {
+                    Ok(_) => info!("Deleted S3 bucket: {}", output_bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
             });
-        });
-    });
     }
 }
 
@@ -148,7 +151,7 @@ async fn generate_unique_name(prefix: &str) -> String {
 async fn create_pipeline_without_arn() {
     use rusoto_elastictranscoder::CreatePipelineRequest;
 
-    initialize();
+    initialize().await;
 
     let mut client = create_client().await;
     client.create_s3_client();
@@ -171,11 +174,11 @@ async fn create_preset() {
         AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
     };
 
-    initialize();
+    initialize().await;
 
     let client = create_client().await;
 
-    let name = generate_unique_name("ets-preset-1");
+    let name = generate_unique_name("ets-preset-1").await;
     let request = CreatePresetRequest {
         audio: Some(AudioParameters {
             channels: Some("2".to_owned()),
@@ -189,7 +192,7 @@ async fn create_preset() {
         }),
         container: "flac".to_owned(),
         description: Some("This is an example FLAC preset".to_owned()),
-        name: name.await.clone(),
+        name: name.clone(),
         ..CreatePresetRequest::default()
     };
     let response = client.create_preset(request).await;
@@ -226,9 +229,9 @@ async fn delete_preset() {
         AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
     };
 
-    initialize();
+    initialize().await;
 
-    let client = create_client();
+    let client = create_client().await;
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -244,7 +247,7 @@ async fn delete_preset() {
         }),
         container: "flac".to_owned(),
         description: Some("This is an example FLAC preset".to_owned()),
-        name: name.clone(),
+        name: name.await.clone(),
         ..CreatePresetRequest::default()
     };
     let response = client.create_preset(request).await.unwrap();
@@ -262,9 +265,9 @@ async fn delete_preset() {
 async fn list_jobs_by_status() {
     use rusoto_elastictranscoder::ListJobsByStatusRequest;
 
-    initialize();
+    initialize().await;
 
-    let client = create_client();
+    let client = create_client().await;
 
     let status = "Submitted".to_owned();
     let request = ListJobsByStatusRequest {
@@ -287,9 +290,9 @@ async fn list_jobs_by_status() {
 async fn list_pipelines() {
     use rusoto_elastictranscoder::ListPipelinesRequest;
 
-    initialize();
+    initialize().await;
 
-    let client = create_client();
+    let client = create_client().await;
 
     let request = ListPipelinesRequest::default();
     let response = client.list_pipelines(request).await;
@@ -305,8 +308,8 @@ async fn list_pipelines() {
 async fn list_presets() {
     use rusoto_elastictranscoder::ListPresetsRequest;
 
-    initialize();
-    let client = create_client();
+    initialize().await;
+    let client = create_client().await;
 
     let request = ListPresetsRequest::default();
     let response = client.list_presets(request).await;
@@ -354,9 +357,9 @@ async fn list_presets() {
 async fn read_preset() {
     use rusoto_elastictranscoder::ReadPresetRequest;
 
-    initialize();
+    initialize().await;
 
-    let client = create_client();
+    let client = create_client().await;
 
     let request = ReadPresetRequest {
         id: AWS_ETS_WEB_PRESET_ID.to_owned(),

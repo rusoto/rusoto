@@ -4199,6 +4199,10 @@ impl SecurityHubClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SecurityHubClient {
+        SecurityHubClient { client, region }
+    }
 }
 
 #[async_trait]

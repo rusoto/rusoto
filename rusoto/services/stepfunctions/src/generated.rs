@@ -2406,6 +2406,10 @@ impl StepFunctionsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> StepFunctionsClient {
+        StepFunctionsClient { client, region }
+    }
 }
 
 #[async_trait]

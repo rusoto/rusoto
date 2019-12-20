@@ -2521,6 +2521,10 @@ impl MQClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MQClient {
+        MQClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -1363,6 +1363,10 @@ impl MediaStoreClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaStoreClient {
+        MediaStoreClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -3204,6 +3204,10 @@ impl SqsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SqsClient {
+        SqsClient { client, region }
+    }
 }
 
 #[async_trait]

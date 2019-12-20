@@ -1673,6 +1673,10 @@ impl SimpleDbClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SimpleDbClient {
+        SimpleDbClient { client, region }
+    }
 }
 
 #[async_trait]

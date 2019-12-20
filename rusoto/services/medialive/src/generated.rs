@@ -9069,6 +9069,10 @@ impl MediaLiveClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaLiveClient {
+        MediaLiveClient { client, region }
+    }
 }
 
 #[async_trait]

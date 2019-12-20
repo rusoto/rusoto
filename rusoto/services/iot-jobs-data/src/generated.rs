@@ -575,6 +575,10 @@ impl IotJobsDataClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotJobsDataClient {
+        IotJobsDataClient { client, region }
+    }
 }
 
 #[async_trait]

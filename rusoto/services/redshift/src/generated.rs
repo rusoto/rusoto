@@ -17962,6 +17962,10 @@ impl RedshiftClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> RedshiftClient {
+        RedshiftClient { client, region }
+    }
 }
 
 #[async_trait]

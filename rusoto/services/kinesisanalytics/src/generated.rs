@@ -2656,6 +2656,10 @@ impl KinesisAnalyticsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KinesisAnalyticsClient {
+        KinesisAnalyticsClient { client, region }
+    }
 }
 
 #[async_trait]

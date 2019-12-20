@@ -2394,6 +2394,10 @@ impl EksClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> EksClient {
+        EksClient { client, region }
+    }
 }
 
 #[async_trait]

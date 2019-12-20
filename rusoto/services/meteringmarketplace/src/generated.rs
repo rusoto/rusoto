@@ -511,6 +511,10 @@ impl MarketplaceMeteringClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MarketplaceMeteringClient {
+        MarketplaceMeteringClient { client, region }
+    }
 }
 
 #[async_trait]

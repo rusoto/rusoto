@@ -1096,6 +1096,10 @@ impl TextractClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> TextractClient {
+        TextractClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -3364,6 +3364,10 @@ impl GlacierClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> GlacierClient {
+        GlacierClient { client, region }
+    }
 }
 
 #[async_trait]

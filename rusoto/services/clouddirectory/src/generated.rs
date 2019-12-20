@@ -8723,6 +8723,10 @@ impl CloudDirectoryClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudDirectoryClient {
+        CloudDirectoryClient { client, region }
+    }
 }
 
 #[async_trait]

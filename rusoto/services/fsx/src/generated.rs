@@ -1629,6 +1629,10 @@ impl FsxClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> FsxClient {
+        FsxClient { client, region }
+    }
 }
 
 #[async_trait]

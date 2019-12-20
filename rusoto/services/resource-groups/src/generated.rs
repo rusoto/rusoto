@@ -1262,6 +1262,10 @@ impl ResourceGroupsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ResourceGroupsClient {
+        ResourceGroupsClient { client, region }
+    }
 }
 
 #[async_trait]

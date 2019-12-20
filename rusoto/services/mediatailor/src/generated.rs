@@ -669,6 +669,10 @@ impl MediaTailorClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaTailorClient {
+        MediaTailorClient { client, region }
+    }
 }
 
 #[async_trait]

@@ -2549,6 +2549,10 @@ impl MediaPackageClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaPackageClient {
+        MediaPackageClient { client, region }
+    }
 }
 
 #[async_trait]

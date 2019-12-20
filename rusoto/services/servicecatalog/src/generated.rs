@@ -7921,6 +7921,10 @@ impl ServiceCatalogClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ServiceCatalogClient {
+        ServiceCatalogClient { client, region }
+    }
 }
 
 #[async_trait]

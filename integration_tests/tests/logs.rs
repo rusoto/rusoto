@@ -157,7 +157,7 @@ async fn should_put_log_events() {
     let creds_provider =
         DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
     let client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
-    rusoto_logs_test_executor(client, "should_put_log_events", "should_put_log_events");
+    rusoto_logs_test_executor(client, "should_put_log_events", "should_put_log_events").await;
 }
 
 #[tokio::test]
@@ -175,5 +175,5 @@ async fn should_put_log_events_with_gzip_encoding() {
         client,
         "should_put_log_events_with_encoding",
         "should_put_log_events_with_encoding",
-    );
+    ).await;
 }

@@ -3436,6 +3436,10 @@ impl CodeBuildClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeBuildClient {
+        CodeBuildClient { client, region }
+    }
 }
 
 #[async_trait]

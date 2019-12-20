@@ -4877,6 +4877,10 @@ impl KmsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KmsClient {
+        KmsClient { client, region }
+    }
 }
 
 #[async_trait]

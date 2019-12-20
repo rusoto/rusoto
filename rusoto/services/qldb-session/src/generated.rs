@@ -354,6 +354,10 @@ impl QldbSessionClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> QldbSessionClient {
+        QldbSessionClient { client, region }
+    }
 }
 
 #[async_trait]

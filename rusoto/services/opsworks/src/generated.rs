@@ -6184,6 +6184,10 @@ impl OpsWorksClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> OpsWorksClient {
+        OpsWorksClient { client, region }
+    }
 }
 
 #[async_trait]

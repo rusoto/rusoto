@@ -13455,6 +13455,10 @@ impl SageMakerClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SageMakerClient {
+        SageMakerClient { client, region }
+    }
 }
 
 #[async_trait]

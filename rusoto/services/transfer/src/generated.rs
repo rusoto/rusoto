@@ -1788,6 +1788,10 @@ impl TransferClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> TransferClient {
+        TransferClient { client, region }
+    }
 }
 
 #[async_trait]

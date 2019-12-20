@@ -3487,6 +3487,10 @@ impl CloudWatchLogsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudWatchLogsClient {
+        CloudWatchLogsClient { client, region }
+    }
 }
 
 #[async_trait]

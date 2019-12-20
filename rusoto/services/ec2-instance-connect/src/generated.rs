@@ -153,6 +153,10 @@ impl Ec2InstanceConnectClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Ec2InstanceConnectClient {
+        Ec2InstanceConnectClient { client, region }
+    }
 }
 
 #[async_trait]

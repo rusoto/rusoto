@@ -4002,6 +4002,10 @@ impl AppMeshClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AppMeshClient {
+        AppMeshClient { client, region }
+    }
 }
 
 #[async_trait]

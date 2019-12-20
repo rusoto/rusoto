@@ -3995,6 +3995,10 @@ impl IotAnalyticsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> IotAnalyticsClient {
+        IotAnalyticsClient { client, region }
+    }
 }
 
 #[async_trait]

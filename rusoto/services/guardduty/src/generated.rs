@@ -4264,6 +4264,10 @@ impl GuardDutyClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> GuardDutyClient {
+        GuardDutyClient { client, region }
+    }
 }
 
 #[async_trait]
