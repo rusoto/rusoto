@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,15 +11,15 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>AWS Device Farm is a service that enables mobile app developers to test Android, iOS, and Fire OS apps on physical phones, tablets, and other devices in the cloud.</p>
 //!
 //! If you're using the service, you're probably looking for [DeviceFarmClient](struct.DeviceFarmClient.html) and [DeviceFarm](trait.DeviceFarm.html).
 
-mod custom;
-mod generated;
 
-pub use custom::*;
+mod generated;
+mod custom;
+
 pub use generated::*;
+pub use custom::*;
+            

@@ -1,8 +1,8 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-#![cfg_attr(feature = "nightly-testing", feature(plugin))]
-#![cfg_attr(not(feature = "unstable"), deny(warnings))]
+// #![cfg_attr(feature = "nightly-testing", feature(plugin))]
+// #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 #![deny(missing_docs)]
 
 //! Types for loading and managing AWS access credentials for API requests.

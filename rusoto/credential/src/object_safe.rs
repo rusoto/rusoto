@@ -1,5 +1,5 @@
 use super::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
-use futures::Future;
+use std::future::Future;
 use std::rc::Rc;
 use std::sync::Arc;
 

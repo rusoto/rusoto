@@ -728,7 +728,7 @@ pub struct CreateMembersResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 /// <p>A date filter for querying findings.</p>
@@ -774,7 +774,7 @@ pub struct DeclineInvitationsResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -820,7 +820,7 @@ pub struct DeleteInvitationsResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that invitations weren't deleted for.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -837,7 +837,7 @@ pub struct DeleteMembersResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that weren't deleted.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1123,7 +1123,7 @@ pub struct GetMembersResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 /// <p>Includes details of the list of the findings that can't be imported.</p>
@@ -1222,7 +1222,7 @@ pub struct InviteMembersResponse {
     /// <p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unprocessed_accounts: Option<Vec<Result>>,
+    pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
 /// <p>The IP filter for querying findings.</p>
@@ -1650,7 +1650,7 @@ pub struct ResourceDetails {
 /// <p>Details about the account that wasn't processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct Result {
+pub struct SecurityHubResult {
     /// <p>An AWS account ID of the account that wasn't be processed.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]

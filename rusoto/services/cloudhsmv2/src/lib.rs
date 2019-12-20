@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,15 +11,15 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>For more information about AWS CloudHSM, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a> and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>.</p>
 //!
 //! If you're using the service, you're probably looking for [CloudHsmv2Client](struct.CloudHsmv2Client.html) and [CloudHsmv2](trait.CloudHsmv2.html).
 
-mod custom;
-mod generated;
 
-pub use custom::*;
+mod generated;
+mod custom;
+
 pub use generated::*;
+pub use custom::*;
+            

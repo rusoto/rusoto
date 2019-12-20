@@ -22,7 +22,7 @@ use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
-use http::{HttpTryFrom, Method, Request};
+use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
@@ -514,7 +514,7 @@ impl TryInto<Request<Body>> for SignedRequest {
     type Error = http::Error;
 
     fn try_into(self) -> Result<Request<Body>, Self::Error> {
-        let method = Method::try_from(self.method.as_str())?;
+        let method = Method::from_bytes(self.method.as_bytes())?;
 
         let headers = self
             .headers()
@@ -559,9 +559,7 @@ impl TryInto<Request<Body>> for SignedRequest {
             }
         }
 
-        let mut builder = Request::builder();
-        builder.method(method);
-        builder.uri(final_uri);
+        let builder = Request::builder().method(method).uri(final_uri);
 
         let body = if let Some(payload) = self.payload {
             match payload {

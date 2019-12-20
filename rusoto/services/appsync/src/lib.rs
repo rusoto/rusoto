@@ -1,3 +1,4 @@
+
 // =================================================================
 //
 //                           * WARNING *
@@ -10,15 +11,15 @@
 //
 // =================================================================
 
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
-)]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>AWS AppSync provides API actions for creating and interacting with data sources using GraphQL from your application.</p>
 //!
 //! If you're using the service, you're probably looking for [AppSyncClient](struct.AppSyncClient.html) and [AppSync](trait.AppSync.html).
 
-mod custom;
-mod generated;
 
-pub use custom::*;
+mod generated;
+mod custom;
+
 pub use generated::*;
+pub use custom::*;
+            
