@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,7 +10,9 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p>The AWS Serverless Application Repository makes it easy for developers and enterprises to quickly find
 //! and deploy serverless applications in the AWS Cloud. For more information about serverless applications,
 //! see Serverless Computing and Applications on the AWS website.</p><p>The AWS Serverless Application Repository is deeply integrated with the AWS Lambda console, so that developers of
@@ -36,10 +37,8 @@
 //!
 //! If you're using the service, you're probably looking for [ServerlessRepoClient](struct.ServerlessRepoClient.html) and [ServerlessRepo](trait.ServerlessRepo.html).
 
-
-mod generated;
 mod custom;
+mod generated;
 
-pub use generated::*;
 pub use custom::*;
-            
+pub use generated::*;
