@@ -6,8 +6,8 @@ extern crate rusoto_ecr;
 use rusoto_core::Region;
 use rusoto_ecr::{DescribeRepositoriesRequest, Ecr, EcrClient};
 
-#[test]
-fn should_describe_repositories() {
+#[tokio::test]
+async fn should_describe_repositories() {
     let client = EcrClient::new(Region::UsEast1);
     let request = DescribeRepositoriesRequest::default();
 

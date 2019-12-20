@@ -10,9 +10,9 @@ use rusoto_sdb::{
 
 // See https://github.com/rusoto/rusoto/issues/978 for details on why these tests are ignored.
 
-#[test]
+#[tokio::test]
 #[ignore]
-fn should_list_domains() {
+async fn should_list_domains() {
     let client = SimpleDbClient::new(Region::UsEast1);
     let _ = env_logger::try_init();
     let request = ListDomainsRequest::default();
@@ -21,9 +21,9 @@ fn should_list_domains() {
     println!("{:#?}", result);
 }
 
-#[test]
+#[tokio::test]
 #[ignore]
-fn roundtrip_test() {
+async fn roundtrip_test() {
     let _ = env_logger::try_init();
     let client = SimpleDbClient::new(Region::UsEast1);
     let test_domain = "rusoto_domain".to_string();

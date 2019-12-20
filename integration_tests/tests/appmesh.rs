@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_appmesh::{AppMesh, AppMeshClient, ListMeshesInput};
 use rusoto_core::Region;
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     let appmesh = AppMeshClient::new(Region::UsEast1);
 
     match appmesh.list_meshes(ListMeshesInput::default()).await {

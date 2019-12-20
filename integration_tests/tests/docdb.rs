@@ -6,8 +6,8 @@ extern crate rusoto_docdb;
 use rusoto_core::Region;
 use rusoto_docdb::{DescribeDBClustersMessage, Docdb, DocdbClient};
 
-#[test]
-fn should_describe_tags() {
+#[tokio::test]
+async fn should_describe_tags() {
     let client = DocdbClient::new(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 

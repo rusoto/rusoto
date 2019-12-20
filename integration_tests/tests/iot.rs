@@ -7,8 +7,8 @@ extern crate rusoto_iot;
 use rusoto_core::Region;
 use rusoto_iot::{Iot, IotClient, ListThingsRequest};
 
-#[test]
-fn should_list_things() {
+#[tokio::test]
+async fn should_list_things() {
     let _ = env_logger::try_init();
     let client = IotClient::new(Region::UsEast1);
     let request = ListThingsRequest::default();

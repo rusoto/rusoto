@@ -6,8 +6,8 @@ extern crate rusoto_redshift;
 use rusoto_core::Region;
 use rusoto_redshift::{DescribeClustersMessage, Redshift, RedshiftClient};
 
-#[test]
-fn should_describe_clusters() {
+#[tokio::test]
+async fn should_describe_clusters() {
     let _ = env_logger::try_init();
     let client = RedshiftClient::new(Region::UsEast1);
     let request = DescribeClustersMessage::default();

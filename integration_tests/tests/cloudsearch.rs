@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_cloudsearch::{CloudSearch, CloudSearchClient, DescribeDomainsRequest};
 use rusoto_core::Region;
 
-#[test]
-fn should_describe_domains() {
+#[tokio::test]
+async fn should_describe_domains() {
     let client = CloudSearchClient::new(Region::UsEast1);
     let request = DescribeDomainsRequest::default();
 

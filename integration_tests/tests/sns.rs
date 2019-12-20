@@ -6,8 +6,8 @@ extern crate rusoto_sns;
 use rusoto_core::Region;
 use rusoto_sns::{ListTopicsInput, Sns, SnsClient};
 
-#[test]
-fn should_list_topics() {
+#[tokio::test]
+async fn should_list_topics() {
     let client = SnsClient::new(Region::UsEast1);
     let request = ListTopicsInput::default();
 

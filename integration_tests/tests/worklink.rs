@@ -6,8 +6,8 @@ extern crate rusoto_worklink;
 use rusoto_core::Region;
 use rusoto_worklink::{ListFleetsRequest, Worklink, WorklinkClient};
 
-#[test]
-fn should_list_fleets() {
+#[tokio::test]
+async fn should_list_fleets() {
     let client = WorklinkClient::new(Region::UsEast1);
 
     let request = ListFleetsRequest::default();

@@ -148,13 +148,13 @@ impl Drop for TestS3Client {
 }
 
 // inititializes logging
-fn init_logging() {
+async fn init_logging() {
     let _ = env_logger::try_init();
 }
 
-#[test]
+#[tokio::test]
 // creates a bucket and test listing buckets and items in bucket
-fn test_bucket_creation_deletion() {
+async fn test_bucket_creation_deletion() {
     init_logging();
 
     let bucket_name = format!("s3-test-bucket-{}", get_time().sec);
@@ -200,9 +200,9 @@ fn test_bucket_creation_deletion() {
     test_client.bucket_deleted = true;
 }
 
-#[test]
+#[tokio::test]
 // test against normal files
-fn test_puts_gets_deletes() {
+async fn test_puts_gets_deletes() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
@@ -283,9 +283,9 @@ fn test_puts_gets_deletes() {
     }
 }
 
-#[test]
+#[tokio::test]
 // test against utf8 files
-fn test_puts_gets_deletes_utf8() {
+async fn test_puts_gets_deletes_utf8() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), get_time().sec);
@@ -305,9 +305,9 @@ fn test_puts_gets_deletes_utf8() {
     test_delete_object(&test_client.s3, &test_client.bucket_name, &utf8_filename);
 }
 
-#[test]
+#[tokio::test]
 // test against binary files
-fn test_puts_gets_deletes_binary() {
+async fn test_puts_gets_deletes_binary() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), get_time().sec);
@@ -328,9 +328,9 @@ fn test_puts_gets_deletes_binary() {
     test_delete_object(&test_client.s3, &test_client.bucket_name, &binary_filename);
 }
 
-#[test]
+#[tokio::test]
 // test metadata ops
-fn test_puts_gets_deletes_metadata() {
+async fn test_puts_gets_deletes_metadata() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), get_time().sec);
@@ -372,9 +372,9 @@ fn test_puts_gets_deletes_metadata() {
     );
 }
 
-#[test]
+#[tokio::test]
 // test object ops using presigned urls
-fn test_puts_gets_deletes_presigned_url() {
+async fn test_puts_gets_deletes_presigned_url() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), get_time().sec);
@@ -457,8 +457,8 @@ fn test_puts_gets_deletes_presigned_url() {
     );
 }
 
-#[test]
-fn test_multipart_stream_uploads() {
+#[tokio::test]
+async fn test_multipart_stream_uploads() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), get_time().sec);
@@ -503,8 +503,8 @@ fn test_multipart_stream_uploads() {
     )
 }
 
-#[test]
-fn test_list_objects_encoding() {
+#[tokio::test]
+async fn test_list_objects_encoding() {
     init_logging();
 
     let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), get_time().sec);
@@ -578,8 +578,8 @@ fn test_list_objects_encoding() {
     test_delete_object(&test_client.s3, &bucket_name, &key);
 }
 
-#[test]
-fn test_name_space_truncate() {
+#[tokio::test]
+async fn test_name_space_truncate() {
     init_logging();
 
     let bucket_name = format!("test-name-space-{}", get_time().sec);
@@ -610,7 +610,7 @@ fn test_name_space_truncate() {
     test_delete_object(&test_client.s3, &bucket_name, &filename_spaces);
 }
 
-fn test_multipart_upload(
+async fn test_multipart_upload(
     client: &S3Client,
     region: &Region,
     credentials: &AwsCredentials,
@@ -774,7 +774,7 @@ fn test_multipart_upload(
     println!("{:#?}", response2);
 }
 
-fn test_delete_bucket(client: &S3Client, bucket: &str) {
+async fn test_delete_bucket(client: &S3Client, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest {
         bucket: bucket.to_owned(),
         ..Default::default()
@@ -794,7 +794,7 @@ fn test_delete_bucket(client: &S3Client, bucket: &str) {
     }
 }
 
-fn test_put_object_with_filename(
+async fn test_put_object_with_filename(
     client: &S3Client,
     bucket: &str,
     dest_filename: &str,
@@ -817,7 +817,7 @@ fn test_put_object_with_filename(
     }
 }
 
-fn test_put_object_with_filename_and_acl(
+async fn test_put_object_with_filename_and_acl(
     client: &S3Client,
     bucket: &str,
     dest_filename: &str,
@@ -842,7 +842,7 @@ fn test_put_object_with_filename_and_acl(
     }
 }
 
-fn test_put_object_stream_with_filename(
+async fn test_put_object_stream_with_filename(
     client: &S3Client,
     bucket: &str,
     dest_filename: &str,
@@ -862,7 +862,7 @@ fn test_put_object_stream_with_filename(
     println!("{:#?}", result);
 }
 
-fn try_head_object(
+async fn try_head_object(
     client: &S3Client,
     bucket: &str,
     filename: &str,
@@ -876,12 +876,12 @@ fn try_head_object(
     client.head_object(head_req).await
 }
 
-fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
     let result = try_head_object(client, bucket, filename).expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
-fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -900,7 +900,7 @@ fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
     assert!(body.len() > 0);
 }
 
-fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -920,7 +920,7 @@ fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str
     assert!(body.len() > 0);
 }
 
-fn test_get_object_no_such_object(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_get_object_no_such_object(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -933,7 +933,7 @@ fn test_get_object_no_such_object(client: &S3Client, bucket: &str, filename: &st
     };
 }
 
-fn test_get_object_range(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_get_object_range(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -949,7 +949,7 @@ fn test_get_object_range(client: &S3Client, bucket: &str, filename: &str) {
     assert_eq!(result.content_length.unwrap(), 2);
 }
 
-fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
     let req = CopyObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -967,7 +967,7 @@ fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
     println!("{:#?}", result);
 }
 
-fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) {
     let req = CopyObjectRequest {
         bucket: bucket.to_owned(),
         key: format!("{}", filename.to_owned()),
@@ -985,7 +985,7 @@ fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) {
     println!("{:#?}", result);
 }
 
-fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
+async fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
     let del_req = DeleteObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -999,7 +999,7 @@ fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
     println!("{:#?}", result);
 }
 
-fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
+async fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
     let mut list_request = ListObjectsRequest {
         delimiter: Some("/".to_owned()),
         bucket: bucket.to_owned(),
@@ -1029,7 +1029,7 @@ fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
 }
 
 // Assuming there's already more than three item in our test bucket:
-fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
+async fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
     let mut list_obj_req = ListObjectsV2Request {
         bucket: bucket.to_owned(),
         max_keys: Some(1),
@@ -1056,7 +1056,7 @@ fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
     );
 }
 
-fn test_put_bucket_cors(client: &S3Client, bucket: &str) {
+async fn test_put_bucket_cors(client: &S3Client, bucket: &str) {
     let cors_rules = vec![CORSRule {
         allowed_methods: vec!["PUT".to_owned(), "POST".to_owned(), "DELETE".to_owned()],
         allowed_origins: vec!["http://www.example.com".to_owned()],
@@ -1083,7 +1083,7 @@ fn test_put_bucket_cors(client: &S3Client, bucket: &str) {
     println!("{:#?}", result);
 }
 
-fn test_put_object_with_metadata(
+async fn test_put_object_with_metadata(
     client: &S3Client,
     bucket: &str,
     dest_filename: &str,
@@ -1108,7 +1108,7 @@ fn test_put_object_with_metadata(
     }
 }
 
-fn test_head_object_with_metadata(
+async fn test_head_object_with_metadata(
     client: &S3Client,
     bucket: &str,
     filename: &str,
@@ -1130,7 +1130,7 @@ fn test_head_object_with_metadata(
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_get_object_with_metadata(
+async fn test_get_object_with_metadata(
     client: &S3Client,
     bucket: &str,
     filename: &str,
@@ -1152,7 +1152,7 @@ fn test_get_object_with_metadata(
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_get_object_with_presigned_url(
+async fn test_get_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -1174,7 +1174,7 @@ fn test_get_object_with_presigned_url(
     assert!(buf.len() > 0);
 }
 
-fn test_get_object_with_expired_presigned_url(
+async fn test_get_object_with_expired_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -1195,7 +1195,7 @@ fn test_get_object_with_expired_presigned_url(
     assert_eq!(res.status(), http::StatusCode::FORBIDDEN);
 }
 
-fn test_put_object_with_presigned_url(
+async fn test_put_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -1219,7 +1219,7 @@ fn test_put_object_with_presigned_url(
     assert_eq!(res.status(), http::StatusCode::OK);
 }
 
-fn test_delete_object_with_presigned_url(
+async fn test_delete_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,

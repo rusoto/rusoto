@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_cloudwatch::{CloudWatch, CloudWatchClient, Dimension, MetricDatum, PutMetricDataInput};
 use rusoto_core::Region;
 
-#[test]
-fn should_put_metric_data() {
+#[tokio::test]
+async fn should_put_metric_data() {
     let client = CloudWatchClient::new(Region::UsEast1);
 
     let metric_data = vec![MetricDatum {

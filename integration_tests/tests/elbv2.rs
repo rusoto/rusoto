@@ -6,8 +6,8 @@ extern crate rusoto_elbv2;
 use rusoto_core::Region;
 use rusoto_elbv2::{DescribeLoadBalancersInput, Elb, ElbClient};
 
-#[test]
-fn should_describe_load_balancers() {
+#[tokio::test]
+async fn should_describe_load_balancers() {
     let _ = env_logger::try_init();
     let client = ElbClient::new(Region::UsEast1);
     let request = DescribeLoadBalancersInput::default();

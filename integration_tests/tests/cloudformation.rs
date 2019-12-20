@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
 use rusoto_core::Region;
 
-#[test]
-fn should_list_stacks() {
+#[tokio::test]
+async fn should_list_stacks() {
     let client = CloudFormationClient::new(Region::UsEast1);
     let request = ListStacksInput::default();
 
@@ -15,8 +15,8 @@ fn should_list_stacks() {
     println!("{:#?}", result);
 }
 
-#[test]
-fn should_list_stacks_with_status_filter() {
+#[tokio::test]
+async fn should_list_stacks_with_status_filter() {
     let client = CloudFormationClient::new(Region::UsEast1);
 
     let filters = vec!["CREATE_COMPLETE".to_owned()];

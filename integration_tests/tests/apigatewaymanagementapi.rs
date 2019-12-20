@@ -8,8 +8,8 @@ use rusoto_apigatewaymanagementapi::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_work() {
+#[tokio::test]
+async fn should_work() {
     // post_to_connection is a bit like invoke using the following method
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html
     // except this is intended for websocket connection postings over rest

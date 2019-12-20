@@ -6,8 +6,8 @@ extern crate rusoto_core;
 use rusoto_clouddirectory::{CloudDirectory, CloudDirectoryClient, ListDirectoriesRequest};
 use rusoto_core::Region;
 
-#[test]
-fn should_list_directories() {
+#[tokio::test]
+async fn should_list_directories() {
     let client = CloudDirectoryClient::new(Region::UsEast1);
     let request = ListDirectoriesRequest::default();
 

@@ -6,8 +6,8 @@ extern crate rusoto_datapipeline;
 use rusoto_core::Region;
 use rusoto_datapipeline::{DataPipeline, DataPipelineClient, ListPipelinesInput};
 
-#[test]
-fn should_list_pipelines() {
+#[tokio::test]
+async fn should_list_pipelines() {
     let client = DataPipelineClient::new(Region::UsEast1);
     let request = ListPipelinesInput::default();
 

@@ -6,8 +6,8 @@ extern crate rusoto_stepfunctions;
 use rusoto_core::Region;
 use rusoto_stepfunctions::{ListStateMachinesInput, StepFunctions, StepFunctionsClient};
 
-#[test]
-fn should_list_state_machines() {
+#[tokio::test]
+async fn should_list_state_machines() {
     let client = StepFunctionsClient::new(Region::UsEast1);
     let request = ListStateMachinesInput::default();
 

@@ -19,7 +19,7 @@ use std::fs;
 use std::time::SystemTime;
 use std::{thread, time};
 
-fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_stream: &str) {
+async fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_stream: &str) {
     let _ = env_logger::try_init();
 
     // First, create the log group
@@ -151,8 +151,8 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
         .unwrap_or_else(|e| panic!("Failed to delete log group:/n{}", e));
 }
 
-#[test]
-fn should_put_log_events() {
+#[tokio::test]
+async fn should_put_log_events() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
     let creds_provider =
         DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
@@ -160,8 +160,8 @@ fn should_put_log_events() {
     rusoto_logs_test_executor(client, "should_put_log_events", "should_put_log_events");
 }
 
-#[test]
-fn should_put_log_events_with_gzip_encoding() {
+#[tokio::test]
+async fn should_put_log_events_with_gzip_encoding() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
     let creds_provider =
         DefaultCredentialsProvider::new().expect("failed to create default credentials provider");

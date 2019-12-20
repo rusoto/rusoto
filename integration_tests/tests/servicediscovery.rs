@@ -6,8 +6,8 @@ extern crate rusoto_servicediscovery;
 use rusoto_core::Region;
 use rusoto_servicediscovery::{ListServicesRequest, ServiceDiscovery, ServiceDiscoveryClient};
 
-#[test]
-fn should_list_services() {
+#[tokio::test]
+async fn should_list_services() {
     let client = ServiceDiscoveryClient::new(Region::UsEast1);
     let request = ListServicesRequest::default();
 

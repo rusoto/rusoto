@@ -14,8 +14,8 @@ use rusoto_sts::{AssumeRoleRequest, GetSessionTokenRequest};
 use rusoto_sts::{Sts, StsClient};
 use rusoto_sts::{StsAssumeRoleSessionCredentialsProvider, StsSessionCredentialsProvider};
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     let sts = StsClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html

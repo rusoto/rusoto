@@ -13,8 +13,8 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{Client, Region};
 
-#[test]
-fn get_caller_identity_presigned() {
+#[tokio::test]
+async fn get_caller_identity_presigned() {
     let provider = DefaultCredentialsProvider::new().unwrap();
     let credentials = provider.credentials().wait().unwrap();
 
@@ -39,8 +39,8 @@ fn get_caller_identity_presigned() {
     );
 }
 
-#[test]
-fn with_signature() {
+#[tokio::test]
+async fn with_signature() {
     let client = Client::shared();
     let mut request = SignedRequest::new("GET", "sts", &Region::UsEast1, "/");
     let mut params = Params::new();
@@ -55,8 +55,8 @@ fn with_signature() {
     assert!(response.status == 200, format!("Signed request should succeed with status code 200. Got status code: {:?}, headers {:?}", response.status, response.headers));
 }
 
-#[test]
-fn without_signature() {
+#[tokio::test]
+async fn without_signature() {
     let client =
         Client::new_not_signing(HttpClient::new().expect("failed to create request dispatcher"));
     let mut request = SignedRequest::new("GET", "sts", &Region::UsEast1, "/");

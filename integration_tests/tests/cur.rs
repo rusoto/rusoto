@@ -6,8 +6,8 @@ extern crate rusoto_cur;
 use rusoto_core::Region;
 use rusoto_cur::{CostAndUsageReport, CostAndUsageReportClient, DescribeReportDefinitionsRequest};
 
-#[test]
-fn should_describe_report_definitions() {
+#[tokio::test]
+async fn should_describe_report_definitions() {
     let client = CostAndUsageReportClient::new(Region::UsEast1);
     let request = DescribeReportDefinitionsRequest::default();
 

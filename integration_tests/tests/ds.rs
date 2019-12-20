@@ -8,24 +8,24 @@ use rusoto_ds::{
     DescribeDirectoriesRequest, DescribeTrustsRequest, DirectoryService, DirectoryServiceClient, DescribeEventTopicsRequest, DescribeConditionalForwardersRequest, DescribeDomainControllersRequest, DescribeConditionalForwardersError, DescribeDomainControllersError,
 };
 
-#[test]
-fn should_describe_trusts() {
+#[tokio::test]
+async fn should_describe_trusts() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeTrustsRequest::default();
 
     client.describe_trusts(request).await.unwrap();
 }
 
-#[test]
-fn should_describe_directories() {
+#[tokio::test]
+async fn should_describe_directories() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeDirectoriesRequest::default();
 
     client.describe_directories(request).await.unwrap();
 }
 
-#[test]
-fn should_conditional_forwarders() {
+#[tokio::test]
+async fn should_conditional_forwarders() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let mut request = DescribeConditionalForwardersRequest::default();
     request.directory_id = "d-11111aaaaa".to_string();
@@ -38,8 +38,8 @@ fn should_conditional_forwarders() {
     }
 }
 
-#[test]
-fn should_describe_domain_controllers() {
+#[tokio::test]
+async fn should_describe_domain_controllers() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let mut request = DescribeDomainControllersRequest::default();
     request.directory_id = "d-11111aaaaa".to_string();
@@ -52,8 +52,8 @@ fn should_describe_domain_controllers() {
     }
 }
 
-#[test]
-fn should_describe_event_topics() {
+#[tokio::test]
+async fn should_describe_event_topics() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeEventTopicsRequest::default();
 

@@ -117,18 +117,18 @@ impl Drop for TestEtsClient {
 // TODO: once Rust has proper support for testing frameworks, this code will
 // need to be refactored so that it is only called once, instead of per test
 // case.
-fn initialize() {
+async fn initialize() {
     let _ = env_logger::try_init();
 }
 
-fn create_client() -> TestEtsClient {
+async fn create_client() -> TestEtsClient {
     TestEtsClient::new(AWS_REGION)
 }
 
 /// Generates a random name for an AWS service by appending a random sequence of
 /// ASCII characters to the specified prefix.
 /// Keeps it lower case to work with S3 requirements as of 3/1/2018.
-fn generate_unique_name(prefix: &str) -> String {
+async fn generate_unique_name(prefix: &str) -> String {
     let mut rng = rand::thread_rng();
     format!(
         "{}-{}",
@@ -141,9 +141,9 @@ fn generate_unique_name(prefix: &str) -> String {
     .to_lowercase()
 }
 
-#[test]
+#[tokio::test]
 #[should_panic(expected = "Role cannot be blank")]
-fn create_pipeline_without_arn() {
+async fn create_pipeline_without_arn() {
     use rusoto_elastictranscoder::CreatePipelineRequest;
 
     initialize();
@@ -163,8 +163,8 @@ fn create_pipeline_without_arn() {
     response.unwrap();
 }
 
-#[test]
-fn create_preset() {
+#[tokio::test]
+async fn create_preset() {
     use rusoto_elastictranscoder::{
         AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
     };
@@ -218,8 +218,8 @@ fn create_preset() {
     client.delete_preset(request).await.ok();
 }
 
-#[test]
-fn delete_preset() {
+#[tokio::test]
+async fn delete_preset() {
     use rusoto_elastictranscoder::{
         AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
     };
@@ -256,8 +256,8 @@ fn delete_preset() {
     info!("Deleted preset with id: {:?}", &id);
 }
 
-#[test]
-fn list_jobs_by_status() {
+#[tokio::test]
+async fn list_jobs_by_status() {
     use rusoto_elastictranscoder::ListJobsByStatusRequest;
 
     initialize();
@@ -281,8 +281,8 @@ fn list_jobs_by_status() {
     );
 }
 
-#[test]
-fn list_pipelines() {
+#[tokio::test]
+async fn list_pipelines() {
     use rusoto_elastictranscoder::ListPipelinesRequest;
 
     initialize();
@@ -299,8 +299,8 @@ fn list_pipelines() {
     info!("Got list of pipelines: {:?}", response.pipelines);
 }
 
-#[test]
-fn list_presets() {
+#[tokio::test]
+async fn list_presets() {
     use rusoto_elastictranscoder::ListPresetsRequest;
 
     initialize();
@@ -348,8 +348,8 @@ fn list_presets() {
     assert_eq!(found_preset.name, Some(AWS_ETS_WEB_PRESET_NAME.to_owned()));
 }
 
-#[test]
-fn read_preset() {
+#[tokio::test]
+async fn read_preset() {
     use rusoto_elastictranscoder::ReadPresetRequest;
 
     initialize();

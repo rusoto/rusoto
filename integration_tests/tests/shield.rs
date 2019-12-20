@@ -5,8 +5,8 @@ extern crate rusoto_shield;
 use rusoto_core::Region;
 use rusoto_shield::{ListAttacksRequest, Shield, ShieldClient};
 
-#[test]
-fn should_list_attacks() {
+#[tokio::test]
+async fn should_list_attacks() {
     let client = ShieldClient::new(Region::UsEast1);
     let request = ListAttacksRequest::default();
 

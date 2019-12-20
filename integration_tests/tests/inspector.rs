@@ -6,8 +6,8 @@ extern crate rusoto_inspector;
 use rusoto_core::Region;
 use rusoto_inspector::{Inspector, InspectorClient, ListAssessmentRunsRequest};
 
-#[test]
-fn should_list_assessment_runs() {
+#[tokio::test]
+async fn should_list_assessment_runs() {
     let client = InspectorClient::new(Region::UsEast1);
     let request = ListAssessmentRunsRequest::default();
 

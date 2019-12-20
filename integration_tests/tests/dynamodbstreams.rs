@@ -6,8 +6,8 @@ extern crate rusoto_dynamodbstreams;
 use rusoto_core::Region;
 use rusoto_dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
 
-#[test]
-fn should_list_streams() {
+#[tokio::test]
+async fn should_list_streams() {
     let client = DynamoDbStreamsClient::new(Region::UsEast1);
     let request = ListStreamsInput::default();
 

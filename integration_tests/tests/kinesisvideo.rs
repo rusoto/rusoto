@@ -6,8 +6,8 @@ extern crate rusoto_kinesisvideo;
 use rusoto_core::Region;
 use rusoto_kinesisvideo::{KinesisVideo, KinesisVideoClient, ListStreamsInput};
 
-#[test]
-fn should_list_streams() {
+#[tokio::test]
+async fn should_list_streams() {
     let client = KinesisVideoClient::new(Region::UsEast1);
     let request = ListStreamsInput::default();
 

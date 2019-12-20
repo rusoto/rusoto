@@ -6,8 +6,8 @@ extern crate rusoto_lambda;
 use rusoto_core::{Region, RusotoError};
 use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
 
-#[test]
-fn should_list_functions() {
+#[tokio::test]
+async fn should_list_functions() {
     let client = LambdaClient::new(Region::UsEast1);
     let request = ListFunctionsRequest::default();
 
@@ -15,8 +15,8 @@ fn should_list_functions() {
     println!("{:#?}", result);
 }
 
-#[test]
-fn should_function_not_found() {
+#[tokio::test]
+async fn should_function_not_found() {
     let client = LambdaClient::new(Region::UsEast1);
     {
         let request = InvocationRequest {

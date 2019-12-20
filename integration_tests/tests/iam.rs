@@ -7,8 +7,8 @@ use rusoto_core::Region;
 use rusoto_iam::{GetUserRequest, ListUsersRequest};
 use rusoto_iam::{Iam, IamClient};
 
-#[test]
-fn get_user() {
+#[tokio::test]
+async fn get_user() {
     let iam = IamClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
@@ -18,8 +18,8 @@ fn get_user() {
     iam.get_user(request).await.unwrap();
 }
 
-#[test]
-fn list_users() {
+#[tokio::test]
+async fn list_users() {
     let iam = IamClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html

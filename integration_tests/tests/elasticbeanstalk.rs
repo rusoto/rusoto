@@ -8,8 +8,8 @@ use rusoto_elasticbeanstalk::{
     DescribeApplicationsMessage, ElasticBeanstalk, ElasticBeanstalkClient,
 };
 
-#[test]
-fn should_describe_applications() {
+#[tokio::test]
+async fn should_describe_applications() {
     let client = ElasticBeanstalkClient::new(Region::UsEast1);
     let request = DescribeApplicationsMessage::default();
 

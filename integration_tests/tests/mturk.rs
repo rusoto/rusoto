@@ -8,8 +8,8 @@ use rusoto_mturk::{ListHITsError, ListHITsRequest, MechanicalTurk, MechanicalTur
 
 use std::str;
 
-#[test]
-fn should_list_hits() {
+#[tokio::test]
+async fn should_list_hits() {
     let client = MechanicalTurkClient::new(Region::UsEast1);
     let request = ListHITsRequest::default();
 

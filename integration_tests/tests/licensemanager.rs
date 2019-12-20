@@ -6,8 +6,8 @@ extern crate rusoto_license_manager;
 use rusoto_core::{Region, RusotoError};
 use rusoto_license_manager::{LicenseManager, LicenseManagerClient};
 
-#[test]
-fn should_list_domains() {
+#[tokio::test]
+async fn should_list_domains() {
     let client = LicenseManagerClient::new(Region::UsEast1);
 
     let result = client.get_service_settings().await;

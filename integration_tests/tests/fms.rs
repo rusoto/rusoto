@@ -8,8 +8,8 @@ use rusoto_fms::{Fms, FmsClient, ListPoliciesRequest};
 
 use std::str;
 
-#[test]
-fn should_list_policies() {
+#[tokio::test]
+async fn should_list_policies() {
     let client = FmsClient::new(Region::UsEast1);
     let request = ListPoliciesRequest {
         max_results: Some(1),

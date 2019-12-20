@@ -9,8 +9,8 @@ use rusoto_ec2::{CreateTagsRequest, Tag};
 
 use std::str;
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     let ec2 = Ec2Client::new(Region::UsEast1);
 
     let mut req = DescribeInstancesRequest::default();
@@ -33,12 +33,12 @@ fn main() {
 }
 
 // Issue 383
-#[test]
+#[tokio::test]
 #[ignore]
 #[should_panic(
     expected = "<Message>Request would have succeeded, but DryRun flag is set.</Message>"
 )]
-fn dry_run() {
+async fn dry_run() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
@@ -49,10 +49,10 @@ fn dry_run() {
 }
 
 // Issue 387
-#[test]
+#[tokio::test]
 #[ignore]
 #[should_panic(expected = "<Code>InvalidID</Code>")]
-fn query_serialization_name() {
+async fn query_serialization_name() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateTagsRequest {
         dry_run: None,

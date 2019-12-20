@@ -8,8 +8,8 @@ use rusoto_ec2_instance_connect::{
     Ec2InstanceConnect, Ec2InstanceConnectClient, SendSSHPublicKeyError, SendSSHPublicKeyRequest,
 };
 
-#[test]
-fn send_ssh_public_key_correctly_errors_for_unknown_instance() {
+#[tokio::test]
+async fn send_ssh_public_key_correctly_errors_for_unknown_instance() {
     let client = Ec2InstanceConnectClient::new(Region::UsEast1);
     let request = SendSSHPublicKeyRequest {
         availability_zone: "us-east-1a".into(),

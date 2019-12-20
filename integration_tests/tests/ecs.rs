@@ -7,8 +7,8 @@ use rusoto_core::request::{HttpClient, HttpConfig};
 use rusoto_core::{DefaultCredentialsProvider, Region, RusotoError};
 use rusoto_ecs::{Ecs, EcsClient, ListClustersError, ListClustersRequest};
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     // EcsClient configuration demonstrates setting the hyper read_buf_size option
     // to 2MB:
     let cred_provider = DefaultCredentialsProvider::new().unwrap();

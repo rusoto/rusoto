@@ -6,8 +6,8 @@ extern crate rusoto_mediastore;
 use rusoto_core::Region;
 use rusoto_mediastore::{ListContainersInput, MediaStore, MediaStoreClient};
 
-#[test]
-fn should_list_containers() {
+#[tokio::test]
+async fn should_list_containers() {
     let client = MediaStoreClient::new(Region::UsEast1);
     let request = ListContainersInput::default();
 

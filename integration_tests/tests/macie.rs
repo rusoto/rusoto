@@ -6,8 +6,8 @@ extern crate rusoto_macie;
 use rusoto_core::Region;
 use rusoto_macie::{ListS3ResourcesRequest, Macie, MacieClient};
 
-#[test]
-fn should_list_s3_resources() {
+#[tokio::test]
+async fn should_list_s3_resources() {
     let client = MacieClient::new(Region::UsEast1);
     let request = ListS3ResourcesRequest::default();
 

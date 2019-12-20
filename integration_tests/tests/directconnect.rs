@@ -8,16 +8,16 @@ use rusoto_directconnect::{
     DescribeConnectionsError, DescribeConnectionsRequest, DirectConnect, DirectConnectClient,
 };
 
-#[test]
-fn should_describe_connections() {
+#[tokio::test]
+async fn should_describe_connections() {
     let client = DirectConnectClient::new(Region::UsEast1);
     let request = DescribeConnectionsRequest::default();
 
     client.describe_connections(request).await.unwrap();
 }
 
-#[test]
-fn should_fail_gracefully() {
+#[tokio::test]
+async fn should_fail_gracefully() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
     let request = DescribeConnectionsRequest {
@@ -32,15 +32,15 @@ fn should_fail_gracefully() {
     };
 }
 
-#[test]
-fn should_describe_locations() {
+#[tokio::test]
+async fn should_describe_locations() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
     client.describe_locations().await.unwrap();
 }
 
-#[test]
-fn should_describe_virtual_gateways() {
+#[tokio::test]
+async fn should_describe_virtual_gateways() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
     client.describe_virtual_gateways().await.unwrap();

@@ -6,8 +6,8 @@ extern crate rusoto_eks;
 use rusoto_core::Region;
 use rusoto_eks::{Eks, EksClient, ListClustersRequest};
 
-#[test]
-fn should_list_clusters() {
+#[tokio::test]
+async fn should_list_clusters() {
     let client = EksClient::new(Region::UsEast1);
     let request = ListClustersRequest::default();
 

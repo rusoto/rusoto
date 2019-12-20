@@ -6,8 +6,8 @@ extern crate rusoto_mediapackage;
 use rusoto_core::Region;
 use rusoto_mediapackage::{ListOriginEndpointsRequest, MediaPackage, MediaPackageClient};
 
-#[test]
-fn should_list_origin_endpoints() {
+#[tokio::test]
+async fn should_list_origin_endpoints() {
     let client = MediaPackageClient::new(Region::UsEast1);
     let request = ListOriginEndpointsRequest::default();
 

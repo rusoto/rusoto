@@ -20,8 +20,8 @@ use rusoto_sqs::{
 };
 use rusoto_sqs::{Sqs, SqsClient};
 
-#[test]
-fn list_queues() {
+#[tokio::test]
+async fn list_queues() {
     let sqs = SqsClient::new(Region::UsEast1);
 
     let request = ListQueuesRequest {
@@ -32,8 +32,8 @@ fn list_queues() {
     println!("{:#?}", result);
 }
 
-#[test]
-fn sqs_roundtrip_tests() {
+#[tokio::test]
+async fn sqs_roundtrip_tests() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 
@@ -152,8 +152,8 @@ fn sqs_roundtrip_tests() {
     println!("Queue {} deleted", queue_url.clone());
 }
 
-#[test]
-fn sqs_timeout_test() {
+#[tokio::test]
+async fn sqs_timeout_test() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 
@@ -192,8 +192,8 @@ fn sqs_timeout_test() {
         .expect("delete queue failed");
 }
 
-#[test]
-fn sqs_bulk_roundtrip_tests() {
+#[tokio::test]
+async fn sqs_bulk_roundtrip_tests() {
     let _ = env_logger::try_init();
     let sqs = SqsClient::new(Region::UsEast1);
 

@@ -7,8 +7,8 @@ extern crate rusoto_glacier;
 use rusoto_core::Region;
 use rusoto_glacier::{Glacier, GlacierClient, ListVaultsInput};
 
-#[test]
-fn should_list_vaults() {
+#[tokio::test]
+async fn should_list_vaults() {
     let _ = env_logger::try_init();
     let client = GlacierClient::new(Region::UsWest2);
     // account id can be provided or use the account that signed the request with `-`.

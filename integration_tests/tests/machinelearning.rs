@@ -12,8 +12,8 @@ use rusoto_machinelearning::{
 // This service isn't available for new customers, but existing ones
 // should still pass in this test.
 
-#[test]
-fn should_describe_batch_predictions() {
+#[tokio::test]
+async fn should_describe_batch_predictions() {
     let client = MachineLearningClient::new(Region::UsEast1);
     let request = DescribeBatchPredictionsInput::default();
 
@@ -24,8 +24,8 @@ fn should_describe_batch_predictions() {
             .contains("AmazonML is no longer available to new customers")),
     };
 }
-#[test]
-fn should_describe_data_sources() {
+#[tokio::test]
+async fn should_describe_data_sources() {
     let client = MachineLearningClient::new(Region::UsEast1);
     let request = DescribeDataSourcesInput::default();
 
@@ -36,8 +36,8 @@ fn should_describe_data_sources() {
             .contains("AmazonML is no longer available to new customers")),
     };
 }
-#[test]
-fn should_describe_evaluations() {
+#[tokio::test]
+async fn should_describe_evaluations() {
     let client = MachineLearningClient::new(Region::UsEast1);
     let request = DescribeEvaluationsInput::default();
 

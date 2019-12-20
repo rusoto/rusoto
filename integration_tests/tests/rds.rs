@@ -9,8 +9,8 @@ use rusoto_rds::{
     Tag,
 };
 
-#[test]
-fn should_describe_db_clusters() {
+#[tokio::test]
+async fn should_describe_db_clusters() {
     let _ = env_logger::try_init();
     let client = RdsClient::new(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
@@ -20,8 +20,8 @@ fn should_describe_db_clusters() {
     assert!(result.is_ok());
 }
 
-#[test]
-fn should_create_destroy_options_group() {
+#[tokio::test]
+async fn should_create_destroy_options_group() {
     let _ = env_logger::try_init();
     let client = RdsClient::new(Region::UsEast1);
 

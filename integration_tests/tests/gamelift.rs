@@ -6,8 +6,8 @@ extern crate rusoto_gamelift;
 use rusoto_core::Region;
 use rusoto_gamelift::{GameLift, GameLiftClient, ListFleetsInput};
 
-#[test]
-fn should_list_fleets() {
+#[tokio::test]
+async fn should_list_fleets() {
     let client = GameLiftClient::new(Region::UsWest2);
     let request = ListFleetsInput::default();
 

@@ -6,8 +6,8 @@ extern crate rusoto_pricing;
 use rusoto_core::Region;
 use rusoto_pricing::{DescribeServicesRequest, Pricing, PricingClient};
 
-#[test]
-fn should_describe_services() {
+#[tokio::test]
+async fn should_describe_services() {
     let client = PricingClient::new(Region::UsEast1);
     let request = DescribeServicesRequest::default();
 
