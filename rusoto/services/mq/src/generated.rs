@@ -83,6 +83,14 @@ pub struct BrokerInstanceOption {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p>The list of supported deployment modes.</p>
+    #[serde(rename = "SupportedDeploymentModes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_deployment_modes: Option<Vec<String>>,
     /// <p>The list of supported engine versions.</p>
     #[serde(rename = "SupportedEngineVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,10 +273,14 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    /// <p>The list of security groups (1 minimum, 5 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -472,6 +484,10 @@ pub struct DescribeBrokerInstanceOptionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Filter response by storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -577,10 +593,14 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    /// <p>The list of security groups (1 minimum, 5 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -981,7 +1001,7 @@ pub struct UpdateBrokerRequest {
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs: Option<Logs>,
-    /// <p>The list of security groups (1 minimum, 5 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
@@ -1014,7 +1034,7 @@ pub struct UpdateBrokerResponse {
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs: Option<Logs>,
-    /// <p>The list of security groups (1 minimum, 5 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
@@ -2810,6 +2830,9 @@ impl MQ for MQClient {
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.storage_type {
+            params.put("storageType", x);
         }
         request.set_params(params);
 

@@ -25,7 +25,7 @@ fn main() {
             role_session_name: "rusoto_test_session".to_owned(),
             ..Default::default()
         })
-        .sync();
+        .await;
     match assume_role_res {
         Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();
@@ -43,7 +43,7 @@ fn main() {
             serial_number: Some("123456789".to_owned()),
             ..Default::default()
         })
-        .sync();
+        .await;
     match get_session_token_res {
         Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();

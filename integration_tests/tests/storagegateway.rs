@@ -11,5 +11,5 @@ fn should_list_gateways() {
     let client = StorageGatewayClient::new(Region::UsEast1);
     let request = ListGatewaysInput::default();
 
-    client.list_gateways(request).sync().unwrap();
+    client.list_gateways(request).await.unwrap();
 }

@@ -13,6 +13,6 @@ fn should_list_jobs() {
     let client = ImportExportClient::new(Region::UsEast1);
     let request = ListJobsInput::default();
 
-    let result = client.list_jobs(request).sync().unwrap();
+    let result = client.list_jobs(request).await.unwrap();
     println!("{:#?}", result);
 }

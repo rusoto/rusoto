@@ -158,7 +158,7 @@ impl ImplBlockingRead {
 
 impl io::Read for ImplBlockingRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let mut rt = tokio::runtime::Runtime::new().unwrap();
+        let mut rt = tokio::runtime::Runtime::new()?;
         rt.block_on(future::poll_fn(|cx| {
             tokio::io::AsyncRead::poll_read(Pin::new(&mut self.inner), cx, buf)
         }))

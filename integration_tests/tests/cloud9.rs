@@ -11,6 +11,6 @@ fn should_list_environments() {
     let client = Cloud9Client::new(Region::UsEast1);
     let request = ListEnvironmentsRequest::default();
 
-    let result = client.list_environments(request).sync().unwrap();
+    let result = client.list_environments(request).await.unwrap();
     println!("{:#?}", result);
 }

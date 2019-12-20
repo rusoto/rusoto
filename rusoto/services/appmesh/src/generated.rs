@@ -528,7 +528,7 @@ pub struct GrpcRoute {
     pub action: GrpcRouteAction,
     /// <p>An object that represents the criteria for determining a request match.</p>
     #[serde(rename = "match")]
-    pub route_match: GrpcRouteMatch,
+    pub route_match: Option<GrpcRouteMatch>,
     /// <p>An object that represents a retry policy.</p>
     #[serde(rename = "retryPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -570,7 +570,7 @@ pub struct GrpcRouteMetadata {
     /// <p>An object that represents the data to match from the request.</p>
     #[serde(rename = "match")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_match: GrpcRouteMetadataMatchMethod,
+    pub route_match: Option<GrpcRouteMetadataMatchMethod>,
     /// <p>The name of the route.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -710,7 +710,7 @@ pub struct HttpRoute {
     pub action: HttpRouteAction,
     /// <p>An object that represents the criteria for determining a request match.</p>
     #[serde(rename = "match")]
-    pub route_match: HttpRouteMatch,
+    pub route_match: Option<HttpRouteMatch>,
     /// <p>An object that represents a retry policy.</p>
     #[serde(rename = "retryPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -735,7 +735,7 @@ pub struct HttpRouteHeader {
     /// <p>The <code>HeaderMatchMethod</code> object.</p>
     #[serde(rename = "match")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_match: HeaderMatchMethod,
+    pub route_match: Option<HeaderMatchMethod>,
     /// <p>A name for the HTTP header in the client request that will be matched on.</p>
     #[serde(rename = "name")]
     pub name: String,

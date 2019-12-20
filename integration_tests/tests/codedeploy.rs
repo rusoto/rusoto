@@ -11,5 +11,5 @@ fn should_list_applications() {
     let client = CodeDeployClient::new(Region::UsEast1);
     let request = ListApplicationsInput::default();
 
-    client.list_applications(request).sync().unwrap();
+    client.list_applications(request).await.unwrap();
 }

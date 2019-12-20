@@ -13,7 +13,7 @@ fn should_describe_connections() {
     let client = DirectConnectClient::new(Region::UsEast1);
     let request = DescribeConnectionsRequest::default();
 
-    client.describe_connections(request).sync().unwrap();
+    client.describe_connections(request).await.unwrap();
 }
 
 #[test]
@@ -24,7 +24,7 @@ fn should_fail_gracefully() {
         connection_id: Some("invalid".to_string()),
     };
 
-    match client.describe_connections(request).sync() {
+    match client.describe_connections(request).await {
         Err(RusotoError::Service(DescribeConnectionsError::DirectConnectClient(msg))) => {
             assert!(msg.contains("Connection ID"))
         }
@@ -36,12 +36,12 @@ fn should_fail_gracefully() {
 fn should_describe_locations() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
-    client.describe_locations().sync().unwrap();
+    client.describe_locations().await.unwrap();
 }
 
 #[test]
 fn should_describe_virtual_gateways() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
-    client.describe_virtual_gateways().sync().unwrap();
+    client.describe_virtual_gateways().await.unwrap();
 }

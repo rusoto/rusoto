@@ -11,5 +11,5 @@ fn should_list_vocabs() {
     let client = TranscribeClient::new(Region::UsEast1);
     let request = ListVocabulariesRequest::default();
 
-    println!("{:?}", client.list_vocabularies(request).sync().unwrap());
+    println!("{:?}", client.list_vocabularies(request).await.unwrap());
 }

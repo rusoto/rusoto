@@ -12,7 +12,7 @@ fn should_list_fleets() {
 
     let request = ListFleetsRequest::default();
 
-    let result = client.list_fleets(request).sync();
+    let result = client.list_fleets(request).await;
     println!("{:#?}", result);
     result.unwrap();
 }

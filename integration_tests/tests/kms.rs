@@ -11,5 +11,5 @@ fn should_list_keys() {
     let client = KmsClient::new(Region::UsEast1);
     let request = ListKeysRequest::default();
 
-    client.list_keys(request).sync().unwrap();
+    client.list_keys(request).await.unwrap();
 }

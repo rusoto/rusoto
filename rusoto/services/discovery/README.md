@@ -23,7 +23,7 @@ To use `rusoto_discovery` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_discovery = "0.42.0"
+rusoto_discovery = "0.43.0"
 ```
 
 ## Crate Features

@@ -12,7 +12,7 @@ fn should_get_servers() {
 
     let response = client
         .get_servers(GetServersRequest::default())
-        .sync()
+        .await
         .unwrap();
     println!("{:#?}", response);
 }

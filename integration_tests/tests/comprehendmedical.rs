@@ -15,7 +15,7 @@ fn should_detect_phi() {
         ..Default::default()
     };
 
-    match client.detect_phi(request).sync() {
+    match client.detect_phi(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert_eq!(1, response.entities.len());

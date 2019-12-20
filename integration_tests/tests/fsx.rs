@@ -11,6 +11,6 @@ fn should_describe_filesystems() {
     let client = FsxClient::new(Region::UsEast1);
     let request = DescribeFileSystemsRequest::default();
 
-    let res = client.describe_file_systems(request).sync().unwrap();
+    let res = client.describe_file_systems(request).await.unwrap();
     println!("res is {:?}", res);
 }

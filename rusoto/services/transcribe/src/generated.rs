@@ -133,6 +133,19 @@ pub struct GetVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// <p>Provides information about when a transcription job should be executed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JobExecutionSettings {
+    /// <p>Indicates whether a job should be queued by Amazon Transcribe when the concurrent execution limit is exceeded. When the <code>AllowDeferredExecution</code> field is true, jobs are queued and will be executed when the number of executing jobs falls below the concurrent execution limit. If the field is false, Amazon Transcribe returns a <code>LimitExceededException</code> exception.</p> <p>If you specify the <code>AllowDeferredExecution</code> field, you must specify the <code>DataAccessRoleArn</code> field.</p>
+    #[serde(rename = "AllowDeferredExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_deferred_execution: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of a role that has access to the S3 bucket that contains the input files. Amazon Transcribe will assume this role to read queued media files. If you have specified an output S3 bucket for the transcription results, this role should have access to the output bucket as well.</p> <p>If you specify the <code>AllowDeferredExecution</code> field, you must specify the <code>DataAccessRoleArn</code> field.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTranscriptionJobsRequest {
     /// <p>When specified, the jobs returned in the list are limited to jobs whose name contains the specified string.</p>
@@ -247,6 +260,10 @@ pub struct Settings {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartTranscriptionJobRequest {
+    /// <p>Provides information about how a transcription job is executed. Use this field to indicate that the job can be queued for deferred execution if the concurrency limit is reached and there are no slots available to immediately run the job.</p>
+    #[serde(rename = "JobExecutionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_settings: Option<JobExecutionSettings>,
     /// <p>The language code for the language used in the input media file.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
@@ -313,6 +330,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>Provides information about how a transcription job is executed.</p>
+    #[serde(rename = "JobExecutionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_settings: Option<JobExecutionSettings>,
     /// <p>The language code for the input speech.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,6 +354,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<Settings>,
+    /// <p>A timestamp that shows with the job was started processing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
     /// <p>An object that describes the output of the transcription job.</p>
     #[serde(rename = "Transcript")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -371,6 +396,10 @@ pub struct TranscriptionJobSummary {
     #[serde(rename = "OutputLocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location_type: Option<String>,
+    /// <p>A timestamp that shows when the job started processing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
     /// <p>The name of the transcription job.</p>
     #[serde(rename = "TranscriptionJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -43,9 +43,9 @@ For example, to include only S3 and SQS:
 
 ```toml
 [dependencies]
-rusoto_core = "0.42.0"
-rusoto_sqs = "0.42.0"
-rusoto_s3 = "0.42.0"
+rusoto_core = "0.43.0"
+rusoto_sqs = "0.43.0"
+rusoto_s3 = "0.43.0"
 ```
 
 ## Migration notes
@@ -72,7 +72,7 @@ fn main() {
     let client = DynamoDbClient::new(Region::UsEast1);
     let list_tables_input: ListTablesInput = Default::default();
 
-    match client.list_tables(list_tables_input).sync() {
+    match client.list_tables(list_tables_input).await {
         Ok(output) => {
             match output.table_names {
                 Some(table_name_list) => {

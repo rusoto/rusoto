@@ -16,7 +16,7 @@ fn should_parse_error_type() {
         ..Default::default()
     };
 
-    let response = client.list_tables(request).sync();
+    let response = client.list_tables(request).await;
     match response {
         Err(RusotoError::Validation(msg)) => {
             // local dynamodb gives a different error, this matches both:
@@ -31,5 +31,5 @@ fn should_list_tables() {
     let client = DynamoDbClient::new(Region::UsEast1);
     let request = ListTablesInput::default();
 
-    client.list_tables(request).sync().unwrap();
+    client.list_tables(request).await.unwrap();
 }

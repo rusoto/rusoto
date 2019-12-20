@@ -13,7 +13,7 @@ fn should_describe_trusts() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeTrustsRequest::default();
 
-    client.describe_trusts(request).sync().unwrap();
+    client.describe_trusts(request).await.unwrap();
 }
 
 #[test]
@@ -21,7 +21,7 @@ fn should_describe_directories() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeDirectoriesRequest::default();
 
-    client.describe_directories(request).sync().unwrap();
+    client.describe_directories(request).await.unwrap();
 }
 
 #[test]
@@ -30,7 +30,7 @@ fn should_conditional_forwarders() {
     let mut request = DescribeConditionalForwardersRequest::default();
     request.directory_id = "d-11111aaaaa".to_string();
 
-    match client.describe_conditional_forwarders(request).sync() {
+    match client.describe_conditional_forwarders(request).await {
         Err(RusotoError::Service(DescribeConditionalForwardersError::EntityDoesNotExist(msg))) => {
             assert!(msg.contains("does not exist."))
         }
@@ -44,7 +44,7 @@ fn should_describe_domain_controllers() {
     let mut request = DescribeDomainControllersRequest::default();
     request.directory_id = "d-11111aaaaa".to_string();
 
-    match client.describe_domain_controllers(request).sync() {
+    match client.describe_domain_controllers(request).await {
         Err(RusotoError::Service(DescribeDomainControllersError::EntityDoesNotExist(msg))) => {
             assert!(msg.contains("does not exist."))
         }
@@ -57,5 +57,5 @@ fn should_describe_event_topics() {
     let client = DirectoryServiceClient::new(Region::UsWest2);
     let request = DescribeEventTopicsRequest::default();
 
-    client.describe_event_topics(request).sync().unwrap();
+    client.describe_event_topics(request).await.unwrap();
 }

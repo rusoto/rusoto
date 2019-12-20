@@ -11,5 +11,5 @@ fn should_list_containers() {
     let client = MediaStoreClient::new(Region::UsEast1);
     let request = ListContainersInput::default();
 
-    println!("{:?}", client.list_containers(request).sync().unwrap());
+    println!("{:?}", client.list_containers(request).await.unwrap());
 }

@@ -11,5 +11,5 @@ fn should_describe_workspaces() {
     let client = WorkspacesClient::new(Region::UsEast1);
     let request = DescribeWorkspacesRequest::default();
 
-    client.describe_workspaces(request).sync().unwrap();
+    client.describe_workspaces(request).await.unwrap();
 }

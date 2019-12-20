@@ -13,7 +13,7 @@ fn should_list_hapgs() {
     let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListHapgsRequest::default();
 
-    match client.list_hapgs(request).sync() {
+    match client.list_hapgs(request).await {
         Ok(_) => (),
         Err(e) => {
             if e.to_string().contains("This service is unavailable.") {
@@ -30,7 +30,7 @@ fn should_list_hsms() {
     let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListHsmsRequest::default();
 
-    match client.list_hsms(request).sync() {
+    match client.list_hsms(request).await {
         Ok(_) => (),
         Err(e) => {
             if e.to_string().contains("This service is unavailable.") {
@@ -46,7 +46,7 @@ fn should_list_luna_clients() {
     let client = CloudHsmClient::new(Region::UsEast1);
     let request = ListLunaClientsRequest::default();
 
-    match client.list_luna_clients(request).sync() {
+    match client.list_luna_clients(request).await {
         Ok(_) => (),
         Err(e) => {
             if e.to_string().contains("This service is unavailable.") {

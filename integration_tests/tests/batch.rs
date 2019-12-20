@@ -11,5 +11,5 @@ fn should_get_rest_apis() {
     let client = BatchClient::new(Region::UsEast1);
     let request = DescribeJobDefinitionsRequest::default();
 
-    client.describe_job_definitions(request).sync().unwrap();
+    client.describe_job_definitions(request).await.unwrap();
 }

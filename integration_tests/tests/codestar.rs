@@ -11,6 +11,6 @@ fn should_list_projects() {
     let client = CodeStarClient::new(Region::UsEast1);
     let request = ListProjectsRequest::default();
 
-    let result = client.list_projects(request).sync().unwrap();
+    let result = client.list_projects(request).await.unwrap();
     println!("Result is {:?}", result);
 }

@@ -15,7 +15,7 @@ fn get_user() {
     let request = GetUserRequest {
         ..Default::default()
     };
-    iam.get_user(request).sync().unwrap();
+    iam.get_user(request).await.unwrap();
 }
 
 #[test]
@@ -26,5 +26,5 @@ fn list_users() {
     let request = ListUsersRequest {
         ..Default::default()
     };
-    iam.list_users(request).sync().unwrap();
+    iam.list_users(request).await.unwrap();
 }

@@ -11,5 +11,5 @@ fn should_list_servers() {
     let client = TransferClient::new(Region::UsEast1);
     let request = ListServersRequest::default();
 
-    println!("{:?}", client.list_servers(request).sync().unwrap());
+    println!("{:?}", client.list_servers(request).await.unwrap());
 }

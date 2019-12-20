@@ -11,7 +11,7 @@ fn should_list_groups() {
     let client = ResourceGroupsClient::new(Region::UsEast1);
     let request = ListGroupsInput::default();
 
-    let result = client.list_groups(request).sync().unwrap();
+    let result = client.list_groups(request).await.unwrap();
     println!("{:#?}", result);
     assert!(result.group_identifiers.is_some());
 }

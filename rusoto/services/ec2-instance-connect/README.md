@@ -23,7 +23,7 @@ To use `rusoto_ec2_instance_connect` in your application, add it as a dependency
 
 ```toml
 [dependencies]
-rusoto_ec2_instance_connect = "0.42.0"
+rusoto_ec2_instance_connect = "0.43.0"
 ```
 
 ## Crate Features

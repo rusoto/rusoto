@@ -11,6 +11,6 @@ fn should_describe_tags() {
     let client = DocdbClient::new(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
-    let result = client.describe_db_clusters(request).sync().unwrap();
+    let result = client.describe_db_clusters(request).await.unwrap();
     println!("{:#?}", result);
 }

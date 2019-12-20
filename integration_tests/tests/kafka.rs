@@ -11,6 +11,6 @@ fn should_list_clusters() {
     let client = KafkaClient::new(Region::UsEast1);
     let request = ListClustersRequest::default();
 
-    let response = client.list_clusters(request).sync().unwrap();
+    let response = client.list_clusters(request).await.unwrap();
     println!("Got response: {:?}", response);
 }

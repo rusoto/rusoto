@@ -303,6 +303,9 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
+        // SecurityHub has a conveniently named "Result" type
+        "Result" => "SecurityHubResult".to_owned(),
+
         // Discovery has a BatchDeleteImportDataError struct, avoid collision with our error enum
         "BatchDeleteImportDataError" => "DiscoveryBatchDeleteImportDataError".to_owned(),
 
@@ -598,7 +601,7 @@ fn generate_struct_fields<P: GenerateProtocol>(
             } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
                 lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
             } else if name == "match" {
-                lines.push(format!("pub route_{}: {},", name, rs_type))
+                lines.push(format!("pub route_{}: Option<{}>,", name, rs_type))
             } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
             } else if name == "type" {

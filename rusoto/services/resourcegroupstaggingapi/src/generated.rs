@@ -32,11 +32,11 @@ pub struct ComplianceDetails {
     #[serde(rename = "ComplianceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_status: Option<bool>,
-    /// <p>The tag value is noncompliant with the effective tag policy.</p>
+    /// <p>These are keys defined in the effective policy that are on the resource with either incorrect case treatment or noncompliant values. </p>
     #[serde(rename = "KeysWithNoncompliantValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keys_with_noncompliant_values: Option<Vec<String>>,
-    /// <p>The tag key is noncompliant with the effective tag policy.</p>
+    /// <p>These tag keys on the resource are noncompliant with the effective tag policy.</p>
     #[serde(rename = "NoncompliantKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub noncompliant_keys: Option<Vec<String>>,

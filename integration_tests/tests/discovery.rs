@@ -22,7 +22,7 @@ fn should_describe_tags() {
     let client = DiscoveryClient::new(Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    match client.describe_tags(request).sync() {
+    match client.describe_tags(request).await {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => {
             println!("Got expected error of {}", e);
@@ -48,7 +48,7 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    match client.list_configurations(request).sync() {
+    match client.list_configurations(request).await {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => match e {
             RusotoError::Unknown(ref e) => {

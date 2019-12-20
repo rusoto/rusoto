@@ -41,6 +41,10 @@ pub struct BotAliasMetadata {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>Settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -178,6 +182,31 @@ pub struct CodeHook {
     /// <p>The Amazon Resource Name (ARN) of the Lambda function.</p>
     #[serde(rename = "uri")]
     pub uri: String,
+}
+
+/// <p>Provides the settings needed for conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ConversationLogsRequest {
+    /// <p>The Amazon Resource Name (ARN) of an IAM role with permission to write to your CloudWatch Logs for text logs and your S3 bucket for audio logs. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/conversation-logs.html">Creating Conversation Logs</a>.</p>
+    #[serde(rename = "iamRoleArn")]
+    pub iam_role_arn: String,
+    /// <p>The settings for your conversation logs. You can log the conversation text, conversation audio, or both.</p>
+    #[serde(rename = "logSettings")]
+    pub log_settings: Vec<LogSettingsRequest>,
+}
+
+/// <p>Contains information about conversation log settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConversationLogsResponse {
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used to write your logs to CloudWatch Logs or an S3 bucket.</p>
+    #[serde(rename = "iamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
+    /// <p>The settings for your conversation logs.</p>
+    #[serde(rename = "logSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_settings: Option<Vec<LogSettingsResponse>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -528,6 +557,10 @@ pub struct GetBotAliasResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>The settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1281,6 +1314,50 @@ pub struct IntentMetadata {
     pub version: Option<String>,
 }
 
+/// <p>Settings used to configure conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct LogSettingsRequest {
+    /// <p>Where the logs will be delivered. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
+    #[serde(rename = "destination")]
+    pub destination: String,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS customer managed key for encrypting audio logs delivered to an S3 bucket. The key does not apply to CloudWatch Logs and is optional for S3 buckets.</p>
+    #[serde(rename = "kmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The type of logging to enable. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
+    #[serde(rename = "logType")]
+    pub log_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs should be delivered.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+/// <p>The settings for conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LogSettingsResponse {
+    /// <p>The destination where logs are delivered.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the key used to encrypt audio logs in an S3 bucket.</p>
+    #[serde(rename = "kmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The type of logging that is enabled.</p>
+    #[serde(rename = "logType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs are delivered.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>The resource prefix of the S3 object or CloudWatch Logs log entry where logs are delivered. For both S3 and CloudWatch Logs, the prefix is:</p> <p> <code>aws/lex/bot-name/bot-alias/bot-version</code> </p>
+    #[serde(rename = "resourcePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_prefix: Option<String>,
+}
+
 /// <p>The message object that provides the message text and its type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Message {
@@ -1323,6 +1400,10 @@ pub struct PutBotAliasRequest {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>Settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsRequest>,
     /// <p>A description of the alias.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1347,6 +1428,10 @@ pub struct PutBotAliasResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>The settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1702,6 +1787,10 @@ pub struct Slot {
     /// <p>The name of the slot.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>Determines whether a slot is obfuscated in conversation logs and stored utterances. When you obfuscate a slot, the value is replaced by the slot name in curly braces ({}). For example, if the slot name is "full_name", obfuscated values are replaced with "{full_name}". For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-obfuscate.html"> Slot Obfuscation </a>. </p>
+    #[serde(rename = "obfuscationSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub obfuscation_setting: Option<String>,
     /// <p> Directs Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Lex elicits values is arbitrary.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]

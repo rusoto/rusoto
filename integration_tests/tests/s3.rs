@@ -85,7 +85,7 @@ impl TestS3Client {
         };
         self.s3
             .create_bucket(create_bucket_req)
-            .sync()
+            .await
             .expect("Failed to create test bucket");
     }
 
@@ -97,7 +97,7 @@ impl TestS3Client {
         };
         self.s3
             .create_bucket(create_bucket_req)
-            .sync()
+            .await
             .expect("Failed to create test bucket");
     }
 
@@ -110,7 +110,7 @@ impl TestS3Client {
 
         self.s3
             .delete_object(delete_object_req)
-            .sync()
+            .await
             .expect("Couldn't delete object");
     }
 
@@ -125,7 +125,7 @@ impl TestS3Client {
 
         self.s3
             .put_object(put_request)
-            .sync()
+            .await
             .expect("Failed to put test object");
     }
 }
@@ -140,7 +140,7 @@ impl Drop for TestS3Client {
             ..Default::default()
         };
 
-        match self.s3.delete_bucket(delete_bucket_req).sync() {
+        match self.s3.delete_bucket(delete_bucket_req).await {
             Ok(_) => println!("Deleted S3 bucket: {}", self.bucket_name),
             Err(e) => println!("Failed to delete S3 bucket: {}", e),
         }
@@ -166,7 +166,7 @@ fn test_bucket_creation_deletion() {
     };
 
     // first create a bucket
-    let create_bucket_resp = test_client.s3.create_bucket(create_bucket_req).sync();
+    let create_bucket_resp = test_client.s3.create_bucket(create_bucket_req).await;
     assert!(create_bucket_resp.is_ok());
     println!(
         "Bucket {} created, resp: {:#?}",
@@ -175,7 +175,7 @@ fn test_bucket_creation_deletion() {
     );
 
     // now lets check for our bucket and list items in the one we created
-    let resp = test_client.s3.list_buckets().sync();
+    let resp = test_client.s3.list_buckets().await;
     assert!(resp.is_ok());
 
     let resp = resp.unwrap();
@@ -193,7 +193,7 @@ fn test_bucket_creation_deletion() {
         start_after: Some("foo".to_owned()),
         ..Default::default()
     };
-    let result = test_client.s3.list_objects_v2(list_obj_req).sync();
+    let result = test_client.s3.list_objects_v2(list_obj_req).await;
     assert!(result.is_ok());
 
     test_delete_bucket(&test_client.s3, &bucket_name);
@@ -525,7 +525,7 @@ fn test_list_objects_encoding() {
     let resp_v1 = test_client
         .s3
         .list_objects(list_obj_req_v1)
-        .sync()
+        .await
         .expect("failed to list objects v1");
 
     assert!(&resp_v1.contents.is_some());
@@ -544,7 +544,7 @@ fn test_list_objects_encoding() {
         key: key.clone(),
         ..Default::default()
     };
-    assert!(test_client.s3.get_object(get_obj_req).sync().is_ok());
+    assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
 
     let list_obj_req_v2 = ListObjectsV2Request {
         bucket: bucket_name.clone(),
@@ -554,7 +554,7 @@ fn test_list_objects_encoding() {
     let resp_v2 = &test_client
         .s3
         .list_objects_v2(list_obj_req_v2)
-        .sync()
+        .await
         .expect("failed to list objects v2");
 
     assert!(&resp_v2.contents.is_some());
@@ -573,7 +573,7 @@ fn test_list_objects_encoding() {
         key: key.clone(),
         ..Default::default()
     };
-    assert!(test_client.s3.get_object(get_obj_req).sync().is_ok());
+    assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
 
     test_delete_object(&test_client.s3, &bucket_name, &key);
 }
@@ -598,7 +598,7 @@ fn test_name_space_truncate() {
     let key = &test_client
         .s3
         .list_objects_v2(req)
-        .sync()
+        .await
         .unwrap()
         .contents
         .unwrap()[0]
@@ -626,7 +626,7 @@ fn test_multipart_upload(
     // start the multipart upload and note the upload_id generated
     let response = client
         .create_multipart_upload(create_multipart_req)
-        .sync()
+        .await
         .expect("Couldn't create multipart upload");
     println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
@@ -653,7 +653,7 @@ fn test_multipart_upload(
         let part_number = part_req1.part_number;
         let response = client
             .upload_part(part_req1)
-            .sync()
+            .await
             .expect("Couldn't upload a file part");
         println!("{:#?}", response);
         completed_parts.push(CompletedPart {
@@ -697,7 +697,7 @@ fn test_multipart_upload(
 
     let response = client
         .complete_multipart_upload(complete_req)
-        .sync()
+        .await
         .expect("Couldn't complete multipart upload");
     println!("{:#?}", response);
 
@@ -710,7 +710,7 @@ fn test_multipart_upload(
     };
     let upload_multi_response = client
         .create_multipart_upload(create_multipart_req2)
-        .sync()
+        .await
         .expect("Couldn't create multipart upload2");
     println!("{:#?}", upload_multi_response);
     let upload_id2 = upload_multi_response.upload_id.unwrap();
@@ -724,7 +724,7 @@ fn test_multipart_upload(
     };
     let copy_response = client
         .upload_part_copy(upload_part_copy_req)
-        .sync()
+        .await
         .expect("Should have had copy part work");
     println!("copy response: {:#?}", copy_response);
 
@@ -738,7 +738,7 @@ fn test_multipart_upload(
     };
     let copy_response2 = client
         .upload_part_copy(upload_part_copy_req2)
-        .sync()
+        .await
         .expect("Should have had copy part work");
     println!("copy response2: {:#?}", copy_response2);
 
@@ -769,7 +769,7 @@ fn test_multipart_upload(
 
     let response2 = client
         .complete_multipart_upload(complete_req2)
-        .sync()
+        .await
         .expect("Couldn't complete multipart upload2");
     println!("{:#?}", response2);
 }
@@ -780,7 +780,7 @@ fn test_delete_bucket(client: &S3Client, bucket: &str) {
         ..Default::default()
     };
 
-    let result = client.delete_bucket(delete_bucket_req).sync();
+    let result = client.delete_bucket(delete_bucket_req).await;
     println!("{:#?}", result);
     match result {
         Err(e) => match e {
@@ -811,7 +811,7 @@ fn test_put_object_with_filename(
                 body: Some(contents.into()),
                 ..Default::default()
             };
-            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
@@ -836,7 +836,7 @@ fn test_put_object_with_filename_and_acl(
                 acl,
                 ..Default::default()
             };
-            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
@@ -858,7 +858,7 @@ fn test_put_object_stream_with_filename(
         body: Some(StreamingBody::new(read_stream)),
         ..Default::default()
     };
-    let result = client.put_object(req).sync().expect("Couldn't PUT object");
+    let result = client.put_object(req).await.expect("Couldn't PUT object");
     println!("{:#?}", result);
 }
 
@@ -873,7 +873,7 @@ fn try_head_object(
         ..Default::default()
     };
 
-    client.head_object(head_req).sync()
+    client.head_object(head_req).await
 }
 
 fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
@@ -890,7 +890,7 @@ fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
@@ -909,7 +909,7 @@ fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
@@ -927,7 +927,7 @@ fn test_get_object_no_such_object(client: &S3Client, bucket: &str, filename: &st
         ..Default::default()
     };
 
-    match client.get_object(get_req).sync() {
+    match client.get_object(get_req).await {
         Err(RusotoError::Service(GetObjectError::NoSuchKey(_))) => (),
         r => panic!("unexpected response {:?}", r),
     };
@@ -943,7 +943,7 @@ fn test_get_object_range(client: &S3Client, bucket: &str, filename: &str) {
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object (range)");
     println!("\nget object range result: {:#?}", result);
     assert_eq!(result.content_length.unwrap(), 2);
@@ -962,7 +962,7 @@ fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
 
     let result = client
         .copy_object(req)
-        .sync()
+        .await
         .expect("Couldn't copy object");
     println!("{:#?}", result);
 }
@@ -980,7 +980,7 @@ fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) {
 
     let result = client
         .copy_object(req)
-        .sync()
+        .await
         .expect("Couldn't copy object (utf8)");
     println!("{:#?}", result);
 }
@@ -994,7 +994,7 @@ fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
 
     let result = client
         .delete_object(del_req)
-        .sync()
+        .await
         .expect("Couldn't delete object");
     println!("{:#?}", result);
 }
@@ -1009,7 +1009,7 @@ fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
 
     let response1 = client
         .list_objects(list_request.clone())
-        .sync()
+        .await
         .expect("list objects failed");
     println!("Items in bucket, page 1: {:#?}", response1);
     let contents1 = response1.contents.unwrap();
@@ -1020,7 +1020,7 @@ fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
     list_request.max_keys = Some(1000);
     let response2 = client
         .list_objects(list_request)
-        .sync()
+        .await
         .expect("list objects failed");
     println!("Items in buckut, page 2: {:#?}", response2);
     let contents2 = response2.contents.unwrap();
@@ -1037,7 +1037,7 @@ fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
     };
     let result1 = client
         .list_objects_v2(list_obj_req.clone())
-        .sync()
+        .await
         .expect("list objects v2 failed");
     println!("Items in bucket, page 1: {:#?}", result1);
     assert!(result1.next_continuation_token.is_some());
@@ -1045,7 +1045,7 @@ fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
     list_obj_req.continuation_token = result1.next_continuation_token;
     let result2 = client
         .list_objects_v2(list_obj_req)
-        .sync()
+        .await
         .expect("list objects v2 paging failed");
     println!("Items in bucket, page 2: {:#?}", result2);
     // For the second call it the token is in `continuation_token` not `next_continuation_token`
@@ -1078,7 +1078,7 @@ fn test_put_bucket_cors(client: &S3Client, bucket: &str) {
 
     let result = client
         .put_bucket_cors(req)
-        .sync()
+        .await
         .expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
 }
@@ -1102,7 +1102,7 @@ fn test_put_object_with_metadata(
                 metadata: Some(metadata.clone()),
                 ..Default::default()
             };
-            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
@@ -1122,7 +1122,7 @@ fn test_head_object_with_metadata(
 
     let result = client
         .head_object(head_req)
-        .sync()
+        .await
         .expect("Couldn't HEAD object");
     println!("{:#?}", result);
 
@@ -1144,7 +1144,7 @@ fn test_get_object_with_metadata(
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 

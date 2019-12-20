@@ -17,7 +17,7 @@ fn should_list_policies() {
     };
 
     // If our account doesn't have access, assume everything is fine:
-    match client.list_policies(request).sync() {
+    match client.list_policies(request).await {
         Err(e) => match e {
             RusotoError::Unknown(ref e) => assert!(
                 str::from_utf8(&e.body)

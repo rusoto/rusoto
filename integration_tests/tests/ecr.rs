@@ -11,5 +11,5 @@ fn should_describe_repositories() {
     let client = EcrClient::new(Region::UsEast1);
     let request = DescribeRepositoriesRequest::default();
 
-    client.describe_repositories(request).sync().unwrap();
+    client.describe_repositories(request).await.unwrap();
 }

@@ -20,7 +20,7 @@
 ///
 /// let output = Ec2Client::new(Region::default())
 ///     .describe_availability_zones(input)
-///     .sync()?;
+///     .await?;
 /// #
 /// #     Ok(())
 /// # }

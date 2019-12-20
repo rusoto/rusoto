@@ -11,6 +11,6 @@ fn should_list_services() {
     let client = ServiceDiscoveryClient::new(Region::UsEast1);
     let request = ListServicesRequest::default();
 
-    let res = client.list_services(request).sync().unwrap();
+    let res = client.list_services(request).await.unwrap();
     println!("Res: {:?}", res);
 }

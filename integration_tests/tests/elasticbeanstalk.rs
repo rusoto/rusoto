@@ -13,6 +13,6 @@ fn should_describe_applications() {
     let client = ElasticBeanstalkClient::new(Region::UsEast1);
     let request = DescribeApplicationsMessage::default();
 
-    let result = client.describe_applications(request).sync().unwrap();
+    let result = client.describe_applications(request).await.unwrap();
     println!("{:#?}", result);
 }

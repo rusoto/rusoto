@@ -11,7 +11,7 @@ fn should_work() {
     let client = ApiGatewayV2Client::new(Region::UsEast1);
     let response = client
         .get_apis(Default::default())
-        .sync()
+        .await
         .expect("expected an ok response");
     println!("response is {:#?}", response);
 }

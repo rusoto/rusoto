@@ -11,6 +11,6 @@ fn should_describe_clusters() {
     let client = CloudHsmv2Client::new(Region::UsEast1);
     let request = DescribeClustersRequest::default();
 
-    let response = client.describe_clusters(request).sync().unwrap();
+    let response = client.describe_clusters(request).await.unwrap();
     println!("response is {:?}", response);
 }

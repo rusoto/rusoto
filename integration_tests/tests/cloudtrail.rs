@@ -11,5 +11,5 @@ fn should_describe_trails() {
     let client = CloudTrailClient::new(Region::UsEast1);
     let request = DescribeTrailsRequest::default();
 
-    client.describe_trails(request).sync().unwrap();
+    client.describe_trails(request).await.unwrap();
 }

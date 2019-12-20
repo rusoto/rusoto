@@ -715,6 +715,15 @@ pub struct AwsJobExecutionsRolloutConfig {
     pub maximum_per_minute: Option<i64>,
 }
 
+/// <p>Configuration information for pre-signed URLs. Valid when <code>protocols</code> contains HTTP.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsJobPresignedUrlConfig {
+    /// <p>How long (in seconds) pre-signed URLs are valid. Valid values are 60 - 3600, the default value is 1800 seconds. Pre-signed URLs are generated when a request for the job document is received.</p>
+    #[serde(rename = "expiresInSec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_in_sec: Option<i64>,
+}
+
 /// <p>A Device Defender security profile behavior.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Behavior {
@@ -1475,6 +1484,10 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "awsJobExecutionsRolloutConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_job_executions_rollout_config: Option<AwsJobExecutionsRolloutConfig>,
+    /// <p>Configuration information for pre-signed URLs.</p>
+    #[serde(rename = "awsJobPresignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_presigned_url_config: Option<AwsJobPresignedUrlConfig>,
     /// <p>The description of the OTA update.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1485,6 +1498,10 @@ pub struct CreateOTAUpdateRequest {
     /// <p>The ID of the OTA update to be created.</p>
     #[serde(rename = "otaUpdateId")]
     pub ota_update_id: String,
+    /// <p>The protocol used to transfer the OTA update image. Valid values are [HTTP], [MQTT], [HTTP, MQTT]. When both HTTP and MQTT are specified, the target device can choose the protocol.</p>
+    #[serde(rename = "protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
     /// <p>The IAM role that allows access to the AWS IoT Jobs service.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
@@ -5904,6 +5921,10 @@ pub struct OTAUpdateInfo {
     #[serde(rename = "awsJobExecutionsRolloutConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_job_executions_rollout_config: Option<AwsJobExecutionsRolloutConfig>,
+    /// <p>Configuration information for pre-signed URLs. Valid when <code>protocols</code> contains HTTP.</p>
+    #[serde(rename = "awsJobPresignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_presigned_url_config: Option<AwsJobPresignedUrlConfig>,
     /// <p>The date when the OTA update was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5936,6 +5957,10 @@ pub struct OTAUpdateInfo {
     #[serde(rename = "otaUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ota_update_status: Option<String>,
+    /// <p>The protocol used to transfer the OTA update image. Valid values are [HTTP], [MQTT], [HTTP, MQTT]. When both HTTP and MQTT are specified, the target device can choose the protocol.</p>
+    #[serde(rename = "protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
     /// <p>Specifies whether the OTA update will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the OTA update (SNAPSHOT). If continuous, the OTA update may also be run on a thing when a change is detected in a target. For example, an OTA update will run on a thing when the thing is added to a target group, even after the OTA update was completed by all things originally in the group. </p>
     #[serde(rename = "targetSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6125,7 +6150,7 @@ pub struct PublishFindingToSnsParams {
 /// <p>An asset property value entry containing the following information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutAssetPropertyValueEntry {
-    /// <p>The ID of the AWS IoT SiteWise asset. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
+    /// <p>The ID of the AWS IoT SiteWise asset. You must specify either a <code>propertyAlias</code> or both an <code>aliasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
     #[serde(rename = "assetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
@@ -6137,7 +6162,7 @@ pub struct PutAssetPropertyValueEntry {
     #[serde(rename = "propertyAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub property_alias: Option<String>,
-    /// <p>The ID of the asset's property. You must specify either a <code>propertyAlias</code> or both an <code>analiasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
+    /// <p>The ID of the asset's property. You must specify either a <code>propertyAlias</code> or both an <code>aliasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
     #[serde(rename = "propertyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub property_id: Option<String>,
@@ -7132,7 +7157,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[serde(rename = "httpContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_context: Option<HttpContext>,
-    /// <p>Specifies a test MQTT authorization request.&gt;</p>
+    /// <p>Specifies a test MQTT authorization request.</p>
     #[serde(rename = "mqttContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mqtt_context: Option<MqttContext>,

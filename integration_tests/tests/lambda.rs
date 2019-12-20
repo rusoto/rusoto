@@ -11,7 +11,7 @@ fn should_list_functions() {
     let client = LambdaClient::new(Region::UsEast1);
     let request = ListFunctionsRequest::default();
 
-    let result = client.list_functions(request).sync().unwrap();
+    let result = client.list_functions(request).await.unwrap();
     println!("{:#?}", result);
 }
 
@@ -25,7 +25,7 @@ fn should_function_not_found() {
             ..Default::default()
         };
 
-        let result = client.invoke(request).sync();
+        let result = client.invoke(request).await;
 
         assert!(result.is_err());
         if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {
@@ -47,7 +47,7 @@ fn should_function_not_found() {
             ..Default::default()
         };
 
-        let result = client.invoke(request).sync();
+        let result = client.invoke(request).await;
 
         assert!(result.is_err());
         if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {

@@ -12,7 +12,7 @@ fn should_describe_clusters() {
     let client = RedshiftClient::new(Region::UsEast1);
     let request = DescribeClustersMessage::default();
 
-    let result = client.describe_clusters(request).sync();
+    let result = client.describe_clusters(request).await;
     println!("{:#?}", result);
     assert!(result.is_ok());
 }

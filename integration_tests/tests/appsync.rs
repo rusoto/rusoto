@@ -13,6 +13,6 @@ fn should_list_graphql_apis() {
     let client = AppSyncClient::new(Region::UsEast1);
     let request = ListGraphqlApisRequest::default();
 
-    let result = client.list_graphql_apis(request).sync().unwrap();
+    let result = client.list_graphql_apis(request).await.unwrap();
     println!("{:#?}", result);
 }

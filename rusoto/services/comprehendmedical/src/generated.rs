@@ -32,7 +32,7 @@ pub struct Attribute {
     #[serde(rename = "BeginOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub begin_offset: Option<i64>,
-    /// <p> The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string. </p>
+    /// <p> The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
     #[serde(rename = "EndOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_offset: Option<i64>,
@@ -231,7 +231,7 @@ pub struct DetectEntitiesV2Response {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetectPHIRequest {
-    /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters. </p>
+    /// <p> A UTF-8 text string containing the clinical content being examined for PHI entities. Each string must contain fewer than 20,000 bytes of characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
 }
@@ -283,14 +283,176 @@ pub struct Entity {
     #[serde(rename = "Text")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
-    /// <p>Contextual information for the entity</p>
+    /// <p>Contextual information for the entity.</p>
     #[serde(rename = "Traits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traits: Option<Vec<Trait>>,
-    /// <p> Describes the specific type of entity with category of entities. </p>
+    /// <p> Describes the specific type of entity with category of entities.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The detected attributes that relate to an entity. This includes an extracted segment of the text that is an attribute of an entity, or otherwise related to an entity. InferICD10CM detects the following attributes: <code>Direction</code>, <code>System, Organ or Site</code>, and <code>Acuity</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ICD10CMAttribute {
+    /// <p>The 0-based character offset in the input text that shows where the attribute begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for this attribute. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that this attribute is correctly related to this entity.</p>
+    #[serde(rename = "RelationshipScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_score: Option<f32>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as an attribute.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text which contains the detected attribute.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>The contextual information for the attribute. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION</code>.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<ICD10CMTrait>>,
+    /// <p>The type of attribute. InferICD10CM detects entities of the type <code>DX_NAME</code>. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p> The ICD-10-CM concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ICD10CMConcept {
+    /// <p>The ICD-10-CM code that identifies the concept found in the knowledge base from the Centers for Disease Control.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The long description of the ICD-10-CM code in the ontology.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the entity is accurately linked to an ICD-10-CM concept.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+/// <p>The collection of medical entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Amazon Comprehend Medical has in the detection and analysis. Attributes and traits of the entity are also returned. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ICD10CMEntity {
+    /// <p>The detected attributes that relate to the entity. An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the nature of a medical condition.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<ICD10CMAttribute>>,
+    /// <p>The 0-based character offset in the input text that shows where the entity begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p> The category of the entity. InferICD10CM detects entities in the <code>MEDICAL_CONDITION</code> category. </p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    /// <p>The 0-based character offset in the input text that shows where the entity ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The ICD-10-CM concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+    #[serde(rename = "ICD10CMConcepts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icd10cm_concepts: Option<Vec<ICD10CMConcept>>,
+    /// <p>The numeric identifier for the entity. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detection.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text that is matched to the detected entity.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>Provides Contextual information for the entity. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION.</code> </p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<ICD10CMTrait>>,
+    /// <p>Describes the specific type of entity with category of entities. InferICD10CM detects entities of the type <code>DX_NAME</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Contextual information for the entity. The traits recognized by InferICD10CM are <code>DIAGNOSIS</code>, <code>SIGN</code>, <code>SYMPTOM</code>, and <code>NEGATION</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ICD10CMTrait {
+    /// <p>Provides a name or contextual description about the trait.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as a trait.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InferICD10CMRequest {
+    /// <p>The input text used for analysis. The input for InferICD10CM is a string from 1 to 10000 characters.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InferICD10CMResponse {
+    /// <p>The medical conditions detected in the text linked to ICD-10-CM concepts. If the action is successful, the service sends back an HTTP 200 response, as well as the entities detected.</p>
+    #[serde(rename = "Entities")]
+    pub entities: Vec<ICD10CMEntity>,
+    /// <p>The version of the model used to analyze the documents, in the format <i>n</i>.<i>n</i>.<i>n</i> You can use this information to track the model used for a particular batch of documents.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>If the result of the previous request to <code>InferICD10CM</code> was truncated, include the <code>PaginationToken</code> to fetch the next page of medical condition entities. </p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InferRxNormRequest {
+    /// <p>The input text used for analysis. The input for InferRxNorm is a string from 1 to 10000 characters.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InferRxNormResponse {
+    /// <p>The medication entities detected in the text linked to RxNorm concepts. If the action is successful, the service sends back an HTTP 200 response, as well as the entities detected.</p>
+    #[serde(rename = "Entities")]
+    pub entities: Vec<RxNormEntity>,
+    /// <p>The version of the model used to analyze the documents, in the format <i>n</i>.<i>n</i>.<i>n</i> You can use this information to track the model used for a particular batch of documents.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>If the result of the previous request to <code>InferRxNorm</code> was truncated, include the <code>PaginationToken</code> to fetch the next page of medication entities.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagination_token: Option<String>,
 }
 
 /// <p>The input properties for an entities detection job</p>
@@ -375,6 +537,122 @@ pub struct OutputDataConfig {
     #[serde(rename = "S3Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key: Option<String>,
+}
+
+/// <p>The extracted attributes that relate to this entity. The attributes recognized by InferRxNorm are <code>DOSAGE</code>, <code>DURATION</code>, <code>FORM</code>, <code>FREQUENCY</code>, <code>RATE</code>, <code>ROUTE_OR_MODE</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RxNormAttribute {
+    /// <p>The 0-based character offset in the input text that shows where the attribute begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for this attribute. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the attribute is accurately linked to an entity.</p>
+    #[serde(rename = "RelationshipScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_score: Option<f32>,
+    /// <p>The level of confidence that Comprehend Medical has that the segment of text is correctly recognized as an attribute.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text which corresponds to the detected attribute.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p>Contextual information for the attribute. InferRxNorm recognizes the trait <code>NEGATION</code> for attributes, i.e. that the patient is not taking a specific dose or form of a medication.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<RxNormTrait>>,
+    /// <p>The type of attribute. The types of attributes recognized by InferRxNorm are <code>BRAND_NAME</code> and <code>GENERIC_NAME</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The RxNorm concept that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RxNormConcept {
+    /// <p>RxNorm concept ID, also known as the RxCUI.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The description of the RxNorm concept.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has that the entity is accurately linked to the reported RxNorm concept.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+}
+
+/// <p>The collection of medical entities extracted from the input text and their associated information. For each entity, the response provides the entity text, the entity category, where the entity text begins and ends, and the level of confidence that Amazon Comprehend Medical has in the detection and analysis. Attributes and traits of the entity are also returned. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RxNormEntity {
+    /// <p>The extracted attributes that relate to the entity. The attributes recognized by InferRxNorm are <code>DOSAGE</code>, <code>DURATION</code>, <code>FORM</code>, <code>FREQUENCY</code>, <code>RATE</code>, <code>ROUTE_OR_MODE</code>, and <code>STRENGTH</code>.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<RxNormAttribute>>,
+    /// <p>The 0-based character offset in the input text that shows where the entity begins. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The category of the entity. The recognized categories are <code>GENERIC</code> or <code>BRAND_NAME</code>.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    /// <p>The 0-based character offset in the input text that shows where the entity ends. The offset returns the UTF-8 code point in the string.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+    /// <p>The numeric identifier for the entity. This is a monotonically increasing id unique within this response rather than a global unique identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// <p> The RxNorm concepts that the entity could refer to, along with a score indicating the likelihood of the match.</p>
+    #[serde(rename = "RxNormConcepts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rx_norm_concepts: Option<Vec<RxNormConcept>>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detected entity.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
+    /// <p>The segment of input text extracted from which the entity was detected.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// <p> Contextual information for the entity.</p>
+    #[serde(rename = "Traits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traits: Option<Vec<RxNormTrait>>,
+    /// <p> Describes the specific type of entity. For InferRxNorm, the recognized entity type is <code>MEDICATION</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The contextual information for the entity. InferRxNorm recognizes the trait <code>NEGATION</code>, which is any indication that the patient is not taking a medication. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RxNormTrait {
+    /// <p>Provides a name or contextual description about the trait.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend Medical has in the accuracy of the detected trait.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -824,6 +1102,132 @@ impl Error for DetectPHIError {
         }
     }
 }
+/// Errors returned by InferICD10CM
+#[derive(Debug, PartialEq)]
+pub enum InferICD10CMError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The input text was not in valid UTF-8 character encoding. Check your text then retry your request.</p>
+    InvalidEncoding(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> The Amazon Comprehend Medical service is temporarily unavailable. Please wait and then retry your request. </p>
+    ServiceUnavailable(String),
+    /// <p> The size of the text you submitted exceeds the size limit. Reduce the size of the text or use a smaller document and then retry your request. </p>
+    TextSizeLimitExceeded(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl InferICD10CMError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferICD10CMError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(InferICD10CMError::InternalServer(err.msg))
+                }
+                "InvalidEncodingException" => {
+                    return RusotoError::Service(InferICD10CMError::InvalidEncoding(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(InferICD10CMError::InvalidRequest(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(InferICD10CMError::ServiceUnavailable(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(InferICD10CMError::TextSizeLimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(InferICD10CMError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for InferICD10CMError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for InferICD10CMError {
+    fn description(&self) -> &str {
+        match *self {
+            InferICD10CMError::InternalServer(ref cause) => cause,
+            InferICD10CMError::InvalidEncoding(ref cause) => cause,
+            InferICD10CMError::InvalidRequest(ref cause) => cause,
+            InferICD10CMError::ServiceUnavailable(ref cause) => cause,
+            InferICD10CMError::TextSizeLimitExceeded(ref cause) => cause,
+            InferICD10CMError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by InferRxNorm
+#[derive(Debug, PartialEq)]
+pub enum InferRxNormError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The input text was not in valid UTF-8 character encoding. Check your text then retry your request.</p>
+    InvalidEncoding(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> The Amazon Comprehend Medical service is temporarily unavailable. Please wait and then retry your request. </p>
+    ServiceUnavailable(String),
+    /// <p> The size of the text you submitted exceeds the size limit. Reduce the size of the text or use a smaller document and then retry your request. </p>
+    TextSizeLimitExceeded(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl InferRxNormError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InferRxNormError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(InferRxNormError::InternalServer(err.msg))
+                }
+                "InvalidEncodingException" => {
+                    return RusotoError::Service(InferRxNormError::InvalidEncoding(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(InferRxNormError::InvalidRequest(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(InferRxNormError::ServiceUnavailable(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(InferRxNormError::TextSizeLimitExceeded(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(InferRxNormError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for InferRxNormError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for InferRxNormError {
+    fn description(&self) -> &str {
+        match *self {
+            InferRxNormError::InternalServer(ref cause) => cause,
+            InferRxNormError::InvalidEncoding(ref cause) => cause,
+            InferRxNormError::InvalidRequest(ref cause) => cause,
+            InferRxNormError::ServiceUnavailable(ref cause) => cause,
+            InferRxNormError::TextSizeLimitExceeded(ref cause) => cause,
+            InferRxNormError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListEntitiesDetectionV2Jobs
 #[derive(Debug, PartialEq)]
 pub enum ListEntitiesDetectionV2JobsError {
@@ -1164,7 +1568,7 @@ pub trait ComprehendMedical {
         input: DetectEntitiesRequest,
     ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. It does not return the <code>Quality</code> or <code>Quantity</code> entities.</p>
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
     async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
@@ -1175,6 +1579,18 @@ pub trait ComprehendMedical {
         &self,
         input: DetectPHIRequest,
     ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
+
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    async fn infer_icd10cm(
+        &self,
+        input: InferICD10CMRequest,
+    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>;
+
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    async fn infer_rx_norm(
+        &self,
+        input: InferRxNormRequest,
+    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>>;
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
     async fn list_entities_detection_v2_jobs(
@@ -1340,7 +1756,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. It does not return the <code>Quality</code> or <code>Quantity</code> entities.</p>
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
     async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
@@ -1395,6 +1811,60 @@ impl ComprehendMedical for ComprehendMedicalClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DetectPHIError::from_response(response))
+        }
+    }
+
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    async fn infer_icd10cm(
+        &self,
+        input: InferICD10CMRequest,
+    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ComprehendMedical_20181030.InferICD10CM");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(InferICD10CMError::from_response(response))
+        }
+    }
+
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    async fn infer_rx_norm(
+        &self,
+        input: InferRxNormRequest,
+    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ComprehendMedical_20181030.InferRxNorm");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(InferRxNormError::from_response(response))
         }
     }
 

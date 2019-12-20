@@ -51,7 +51,7 @@ fn main() {
     let client = Ec2Client::new_with(HttpClient::new().unwrap(), provider, Region::UsEast1);
 
     let sir_input = DescribeSpotInstanceRequestsRequest::default();
-    let x = client.describe_spot_instance_requests(sir_input).sync();
+    let x = client.describe_spot_instance_requests(sir_input).await;
 
     println!("{:?}", x);
 }

@@ -203,19 +203,19 @@ fn rusoto_future_is_send() {
     is_send::<RusotoFuture<(), ()>>();
 }
 
-#[test]
-fn rusoto_future_from_ok() {
+#[tokio::test]
+async fn rusoto_future_from_ok() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(Ok(42));
-    assert_eq!(fut.sync().unwrap(), 42);
+    assert_eq!(fut.await.unwrap(), 42);
 }
 
-#[test]
-fn rusoto_future_from_err() {
+#[tokio::test]
+async fn rusoto_future_from_err() {
     use std::error::Error;
     let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(
         "ab".parse::<i32>()
             .map_err(|e| RusotoError::Service(e.into())),
     );
-    assert!(fut.sync().is_err());
+    assert!(fut.await.is_err());
 }

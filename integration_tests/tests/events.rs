@@ -11,5 +11,5 @@ fn should_list_rules() {
     let client = EventBridgeClient::new(Region::UsEast1);
     let request = ListRulesRequest::default();
 
-    client.list_rules(request).sync().unwrap();
+    client.list_rules(request).await.unwrap();
 }

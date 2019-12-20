@@ -13,6 +13,6 @@ fn should_describe_fleets() {
     let client = AppStreamClient::new(Region::UsEast1);
     let request = DescribeFleetsRequest::default();
 
-    let result = client.describe_fleets(request).sync().unwrap();
+    let result = client.describe_fleets(request).await.unwrap();
     println!("{:#?}", result);
 }

@@ -15,7 +15,7 @@ fn should_list_identity_pools() {
     let mut request = ListIdentityPoolsInput::default();
     request.max_results = 10;
 
-    client.list_identity_pools(request).sync().unwrap();
+    client.list_identity_pools(request).await.unwrap();
 }
 
 #[test]
@@ -26,7 +26,7 @@ fn should_handle_validation_errors_gracefully() {
     request.max_results = 10;
     request.identity_pool_id = "invalid".to_string();
 
-    match client.list_identities(request).sync() {
+    match client.list_identities(request).await {
         Err(RusotoError::Validation(msg)) => assert!(msg.contains("identityPoolId")),
         err @ _ => panic!("Expected Validation error - got {:#?}", err),
     };

@@ -27,7 +27,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
     create_log_group_req.log_group_name = log_group.to_string();
     client
         .create_log_group(create_log_group_req)
-        .sync()
+        .await
         .unwrap_or_else(|e| {
             match e {
                 RusotoError::Service(CreateLogGroupError::ResourceAlreadyExists(err)) => {
@@ -47,7 +47,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
     };
     client
         .create_log_stream(create_log_stream_req)
-        .sync()
+        .await
         .unwrap_or_else(|e| {
             match e {
                 RusotoError::Service(CreateLogStreamError::ResourceAlreadyExists(err)) => {
@@ -64,7 +64,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
     let mut desc_streams_req: DescribeLogStreamsRequest = Default::default();
     desc_streams_req.log_group_name = log_group.to_owned();
     desc_streams_req.log_stream_name_prefix = Some(log_stream.to_owned());
-    let streams_resp = client.describe_log_streams(desc_streams_req).sync();
+    let streams_resp = client.describe_log_streams(desc_streams_req).await;
     let log_streams = streams_resp.unwrap().log_streams.unwrap();
     let stream = &log_streams
         .iter()
@@ -94,7 +94,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
     };
     client
         .put_log_events(put_log_req.clone())
-        .sync()
+        .await
         .unwrap_or_else(|e| panic!("Failed on put log events: {:?}", e));
 
     // Get log events back to verify if it successfully reached
@@ -118,7 +118,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
         );
         let get_log_resp = client
             .get_log_events(get_log_req.clone())
-            .sync()
+            .await
             .unwrap_or_else(|e| panic!("Failed on get log events: {}", e));
         if (get_log_resp.events).as_ref().unwrap().len() != 0_usize {
             break Some(get_log_resp);
@@ -147,7 +147,7 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
     };
     client
         .delete_log_group(del_log_group_req)
-        .sync()
+        .await
         .unwrap_or_else(|e| panic!("Failed to delete log group:/n{}", e));
 }
 

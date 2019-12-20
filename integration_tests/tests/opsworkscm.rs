@@ -11,6 +11,6 @@ fn should_describe_servers() {
     let client = OpsWorksCMClient::new(Region::UsEast1);
     let request = DescribeServersRequest::default();
 
-    let result = client.describe_servers(request).sync().unwrap();
+    let result = client.describe_servers(request).await.unwrap();
     println!("{:#?}", result);
 }

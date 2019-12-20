@@ -14,7 +14,7 @@ fn should_describe_scaling_plans() {
 
     let request = DescribeScalingPlansRequest::default();
 
-    let res = client.describe_scaling_plans(request).sync();
+    let res = client.describe_scaling_plans(request).await;
 
     match res {
         Err(e) => panic!("Error getting scaling plans: {:?}", e),

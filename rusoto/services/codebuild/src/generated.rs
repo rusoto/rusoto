@@ -66,7 +66,7 @@ pub struct BatchGetBuildsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetProjectsInput {
-    /// <p>The names of the build projects.</p>
+    /// <p>The names or ARNs of the build projects. To get information about a project shared with your AWS account, its ARN must be specified. You cannot specify a shared project using its name.</p>
     #[serde(rename = "names")]
     pub names: Vec<String>,
 }
@@ -496,6 +496,17 @@ pub struct DeleteReportInput {
 pub struct DeleteReportOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteResourcePolicyInput {
+    /// <p> The ARN of the resource that is associated with the resource policy. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteResourcePolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSourceCredentialsInput {
     /// <p> The Amazon Resource Name (ARN) of the token.</p>
     #[serde(rename = "arn")]
@@ -627,6 +638,22 @@ pub struct ExportedEnvironmentVariable {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetResourcePolicyInput {
+    /// <p> The ARN of the resource that is associated with the resource policy. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetResourcePolicyOutput {
+    /// <p> The resource policy for the resource identified by the input ARN parameter. </p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
 }
 
 /// <p> Information about the Git submodules configuration for an AWS CodeBuild build project. </p>
@@ -872,6 +899,72 @@ pub struct ListReportsOutput {
     #[serde(rename = "reports")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reports: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSharedProjectsInput {
+    /// <p> The maximum number of paginated shared build projects returned per response. Use <code>nextToken</code> to iterate pages in the list of returned <code>Project</code> objects. The default value is 100. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> During a previous call, the maximum number of items that can be returned is the value specified in <code>maxResults</code>. If there more items in the list, then a unique string called a <i>nextToken</i> is returned. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p> The criterion to be used to list build projects shared with the current AWS account or user. Valid values include: </p> <ul> <li> <p> <code>ARN</code>: List based on the ARN. </p> </li> <li> <p> <code>MODIFIED_TIME</code>: List based on when information about the shared project was last changed. </p> </li> </ul></p>
+    #[serde(rename = "sortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p><p>The order in which to list shared build projects. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List in ascending order.</p> </li> <li> <p> <code>DESCENDING</code>: List in descending order.</p> </li> </ul></p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListSharedProjectsOutput {
+    /// <p> During a previous call, the maximum number of items that can be returned is the value specified in <code>maxResults</code>. If there more items in the list, then a unique string called a <i>nextToken</i> is returned. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The list of ARNs for the build projects shared with the current AWS account or user. </p>
+    #[serde(rename = "projects")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projects: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSharedReportGroupsInput {
+    /// <p> The maximum number of paginated shared report groups per response. Use <code>nextToken</code> to iterate pages in the list of returned <code>ReportGroup</code> objects. The default value is 100. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> During a previous call, the maximum number of items that can be returned is the value specified in <code>maxResults</code>. If there more items in the list, then a unique string called a <i>nextToken</i> is returned. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p> The criterion to be used to list report groups shared with the current AWS account or user. Valid values include: </p> <ul> <li> <p> <code>ARN</code>: List based on the ARN. </p> </li> <li> <p> <code>MODIFIED_TIME</code>: List based on when information about the shared report group was last changed. </p> </li> </ul></p>
+    #[serde(rename = "sortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p><p>The order in which to list shared report groups. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List in ascending order.</p> </li> <li> <p> <code>DESCENDING</code>: List in descending order.</p> </li> </ul></p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListSharedReportGroupsOutput {
+    /// <p> During a previous call, the maximum number of items that can be returned is the value specified in <code>maxResults</code>. If there more items in the list, then a unique string called a <i>nextToken</i> is returned. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The list of ARNs for the report groups shared with the current AWS account or user. </p>
+    #[serde(rename = "reportGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_groups: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1212,6 +1305,25 @@ pub struct ProjectSourceVersion {
     /// <p>The source version for the corresponding source identifier. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID, branch, or Git tag to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example, <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object that represents the build input ZIP file to use.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     pub source_version: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutResourcePolicyInput {
+    /// <p> A JSON-formatted resource policy. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/project-sharing.html#project-sharing-share">Sharing a Project</a> and <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/report-groups-sharing.html#report-groups-sharing-share">Sharing a Report Group</a> in the <i>AWS CodeBuild User Guide</i>. </p>
+    #[serde(rename = "policy")]
+    pub policy: String,
+    /// <p> The ARN of the <code>Project</code> or <code>ReportGroup</code> resource you want to associate with a resource policy. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutResourcePolicyOutput {
+    /// <p> The ARN of the <code>Project</code> or <code>ReportGroup</code> resource that is associated with a resource policy. </p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
 }
 
 /// <p> Information about credentials that provide access to a private Docker registry. When this is set: </p> <ul> <li> <p> <code>imagePullCredentialsType</code> must be set to <code>SERVICE_ROLE</code>. </p> </li> <li> <p> images cannot be curated or an Amazon ECR image.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-private-registry.html">Private Registry with AWS Secrets Manager Sample for AWS CodeBuild</a>. </p>
@@ -2216,6 +2328,39 @@ impl Error for DeleteReportGroupError {
         }
     }
 }
+/// Errors returned by DeleteResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourcePolicyError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl DeleteResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteResourcePolicyError::InvalidInput(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteSourceCredentials
 #[derive(Debug, PartialEq)]
 pub enum DeleteSourceCredentialsError {
@@ -2340,6 +2485,45 @@ impl Error for DescribeTestCasesError {
         match *self {
             DescribeTestCasesError::InvalidInput(ref cause) => cause,
             DescribeTestCasesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetResourcePolicyError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetResourcePolicyError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            GetResourcePolicyError::InvalidInput(ref cause) => cause,
+            GetResourcePolicyError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -2678,6 +2862,72 @@ impl Error for ListReportsForReportGroupError {
         }
     }
 }
+/// Errors returned by ListSharedProjects
+#[derive(Debug, PartialEq)]
+pub enum ListSharedProjectsError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListSharedProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSharedProjectsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListSharedProjectsError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListSharedProjectsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSharedProjectsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSharedProjectsError::InvalidInput(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListSharedReportGroups
+#[derive(Debug, PartialEq)]
+pub enum ListSharedReportGroupsError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+}
+
+impl ListSharedReportGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSharedReportGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListSharedReportGroupsError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListSharedReportGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSharedReportGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSharedReportGroupsError::InvalidInput(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListSourceCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListSourceCredentialsError {}
@@ -2701,6 +2951,45 @@ impl fmt::Display for ListSourceCredentialsError {
 impl Error for ListSourceCredentialsError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by PutResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutResourcePolicyError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl PutResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutResourcePolicyError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutResourcePolicyError::InvalidInput(ref cause) => cause,
+            PutResourcePolicyError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by StartBuild
@@ -2979,6 +3268,12 @@ pub trait CodeBuild {
         input: DeleteReportGroupInput,
     ) -> Result<DeleteReportGroupOutput, RusotoError<DeleteReportGroupError>>;
 
+    /// <p> Deletes a resource policy that is identified by its resource ARN. </p>
+    async fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyInput,
+    ) -> Result<DeleteResourcePolicyOutput, RusotoError<DeleteResourcePolicyError>>;
+
     /// <p> Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials. </p>
     async fn delete_source_credentials(
         &self,
@@ -2996,6 +3291,12 @@ pub trait CodeBuild {
         &self,
         input: DescribeTestCasesInput,
     ) -> Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>;
+
+    /// <p> Gets a resource policy that is identified by its resource ARN. </p>
+    async fn get_resource_policy(
+        &self,
+        input: GetResourcePolicyInput,
+    ) -> Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>>;
 
     /// <p> Imports the source repository credentials for an AWS CodeBuild project that has its source code stored in a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
     async fn import_source_credentials(
@@ -3050,10 +3351,28 @@ pub trait CodeBuild {
         input: ListReportsForReportGroupInput,
     ) -> Result<ListReportsForReportGroupOutput, RusotoError<ListReportsForReportGroupError>>;
 
+    /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
+    async fn list_shared_projects(
+        &self,
+        input: ListSharedProjectsInput,
+    ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>;
+
+    /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
+    async fn list_shared_report_groups(
+        &self,
+        input: ListSharedReportGroupsInput,
+    ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>>;
+
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>
     async fn list_source_credentials(
         &self,
     ) -> Result<ListSourceCredentialsOutput, RusotoError<ListSourceCredentialsError>>;
+
+    /// <p> Stores a resource policy for the ARN of a <code>Project</code> or <code>ReportGroup</code> object. </p>
+    async fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyInput,
+    ) -> Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>>;
 
     /// <p>Starts running a build.</p>
     async fn start_build(
@@ -3419,6 +3738,34 @@ impl CodeBuild for CodeBuildClient {
         }
     }
 
+    /// <p> Deletes a resource policy that is identified by its resource ARN. </p>
+    async fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyInput,
+    ) -> Result<DeleteResourcePolicyOutput, RusotoError<DeleteResourcePolicyError>> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.DeleteResourcePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteResourcePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourcePolicyError::from_response(response))
+        }
+    }
+
     /// <p> Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials. </p>
     async fn delete_source_credentials(
         &self,
@@ -3498,6 +3845,33 @@ impl CodeBuild for CodeBuildClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeTestCasesError::from_response(response))
+        }
+    }
+
+    /// <p> Gets a resource policy that is identified by its resource ARN. </p>
+    async fn get_resource_policy(
+        &self,
+        input: GetResourcePolicyInput,
+    ) -> Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.GetResourcePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourcePolicyError::from_response(response))
         }
     }
 
@@ -3754,6 +4128,62 @@ impl CodeBuild for CodeBuildClient {
         }
     }
 
+    /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
+    async fn list_shared_projects(
+        &self,
+        input: ListSharedProjectsInput,
+    ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.ListSharedProjects");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSharedProjectsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSharedProjectsError::from_response(response))
+        }
+    }
+
+    /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
+    async fn list_shared_report_groups(
+        &self,
+        input: ListSharedReportGroupsInput,
+    ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.ListSharedReportGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSharedReportGroupsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSharedReportGroupsError::from_response(response))
+        }
+    }
+
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>
     async fn list_source_credentials(
         &self,
@@ -3777,6 +4207,33 @@ impl CodeBuild for CodeBuildClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListSourceCredentialsError::from_response(response))
+        }
+    }
+
+    /// <p> Stores a resource policy for the ARN of a <code>Project</code> or <code>ReportGroup</code> object. </p>
+    async fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyInput,
+    ) -> Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.PutResourcePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutResourcePolicyError::from_response(response))
         }
     }
 

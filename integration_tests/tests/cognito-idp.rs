@@ -16,6 +16,6 @@ fn should_list_user_pools() {
         ..Default::default()
     };
 
-    let result = client.list_user_pools(request).sync().unwrap();
+    let result = client.list_user_pools(request).await.unwrap();
     println!("{:#?}", result);
 }

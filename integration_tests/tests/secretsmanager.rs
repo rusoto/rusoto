@@ -15,6 +15,6 @@ fn should_list_invitations() {
         ..Default::default()
     };
 
-    let result = client.list_secrets(request).sync();
+    let result = client.list_secrets(request).await;
     assert!(result.is_ok());
 }

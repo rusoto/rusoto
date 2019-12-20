@@ -23,7 +23,7 @@ To use `rusoto_textract` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_textract = "0.42.0"
+rusoto_textract = "0.43.0"
 ```
 
 ## Crate Features

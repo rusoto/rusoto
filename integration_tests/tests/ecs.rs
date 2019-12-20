@@ -19,7 +19,7 @@ fn main() {
     let ecs = EcsClient::new_with(http_provider, cred_provider, Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
-    match ecs.list_clusters(ListClustersRequest::default()).sync() {
+    match ecs.list_clusters(ListClustersRequest::default()).await {
         Ok(clusters) => {
             for arn in clusters.cluster_arns.unwrap_or(vec![]) {
                 println!("arn -> {:?}", arn);
@@ -35,7 +35,7 @@ fn main() {
             next_token: Some("bogus".to_owned()),
             ..Default::default()
         })
-        .sync()
+        .await
     {
         Err(RusotoError::Service(ListClustersError::InvalidParameter(msg))) => {
             assert!(msg.contains("Invalid token bogus"))

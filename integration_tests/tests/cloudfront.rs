@@ -13,7 +13,7 @@ fn should_list_distributions() {
     let client = CloudFrontClient::new(Region::UsEast1);
     let request = ListDistributionsRequest::default();
 
-    let result = client.list_distributions(request).sync();
+    let result = client.list_distributions(request).await;
     println!("{:#?}", result);
     assert!(result.is_ok());
 }

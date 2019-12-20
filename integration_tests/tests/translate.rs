@@ -16,6 +16,6 @@ fn should_translate_to_german() {
         ..Default::default()
     };
 
-    let result = client.translate_text(request).sync().unwrap();
+    let result = client.translate_text(request).await.unwrap();
     assert_eq!("guten tag", result.translated_text.to_lowercase());
 }

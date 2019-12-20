@@ -11,6 +11,6 @@ fn should_get_bots() {
     let client = LexModelsClient::new(Region::UsEast1);
     let request = GetBotsRequest::default();
 
-    let result = client.get_bots(request).sync().unwrap();
+    let result = client.get_bots(request).await.unwrap();
     println!("{:#?}", result);
 }

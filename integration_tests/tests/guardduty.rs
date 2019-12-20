@@ -15,7 +15,7 @@ fn should_list_invitations() {
         ..Default::default()
     };
 
-    let result = client.list_invitations(request).sync();
+    let result = client.list_invitations(request).await;
     println!("{:#?}", result);
     assert!(result.is_ok());
 }

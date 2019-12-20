@@ -23,7 +23,7 @@ To use `rusoto_waf_regional` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_waf_regional = "0.42.0"
+rusoto_waf_regional = "0.43.0"
 ```
 
 ## Crate Features

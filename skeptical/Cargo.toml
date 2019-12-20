@@ -6,11 +6,11 @@ build = "build.rs"
 edition = "2018"
 
 [dependencies]
-rusoto_core = "0.42"
-rusoto_dynamodb = "0.42"
-rusoto_s3 = "0.42"
-rusoto_ec2 = "0.42"
-rusoto_sts = "0.42"
+rusoto_core = "0.43"
+rusoto_dynamodb = "0.43"
+rusoto_s3 = "0.43"
+rusoto_ec2 = "0.43"
+rusoto_sts = "0.43"
 env_logger = "0.5"
 
 [build-dependencies]

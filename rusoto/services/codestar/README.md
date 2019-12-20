@@ -23,7 +23,7 @@ To use `rusoto_codestar` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_codestar = "0.42.0"
+rusoto_codestar = "0.43.0"
 ```
 
 ## Crate Features

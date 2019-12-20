@@ -10,6 +10,6 @@ use rusoto_ses::{Ses, SesClient};
 fn should_list_verified_email_addresses() {
     let client = SesClient::new(Region::UsEast1);
 
-    let result = client.list_verified_email_addresses().sync().unwrap();
+    let result = client.list_verified_email_addresses().await.unwrap();
     println!("{:#?}", result);
 }

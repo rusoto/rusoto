@@ -11,5 +11,5 @@ fn should_describe_voices() {
     let client = PollyClient::new(Region::UsEast1);
     let request = DescribeVoicesInput::default();
 
-    println!("{:?}", client.describe_voices(request).sync().unwrap());
+    println!("{:?}", client.describe_voices(request).await.unwrap());
 }

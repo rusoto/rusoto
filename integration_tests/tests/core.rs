@@ -49,7 +49,7 @@ fn with_signature() {
     request.set_params(params);
     let response = client
         .sign_and_dispatch::<HttpResponse, ()>(request, |r| Box::new(ok(r)))
-        .sync();
+        .await;
     assert!(response.is_ok(), response.err());
     let response: HttpResponse = response.unwrap();
     assert!(response.status == 200, format!("Signed request should succeed with status code 200. Got status code: {:?}, headers {:?}", response.status, response.headers));
@@ -66,7 +66,7 @@ fn without_signature() {
     request.set_params(params);
     let response = client
         .sign_and_dispatch::<HttpResponse, ()>(request, |r| Box::new(ok(r)))
-        .sync();
+        .await;
     assert!(response.is_ok(), response.err());
     let response: HttpResponse = response.unwrap();
     assert!(response.status == 403, format!("Unsigned API request must fail with status request 403. Got status code: {:?}, headers {:?}", response.status, response.headers));

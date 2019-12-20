@@ -15,7 +15,7 @@ fn main() {
 
     let mut req = DescribeInstancesRequest::default();
     req.instance_ids = Some(vec!["i-00000000".into(), "i-00000001".into()]);
-    match ec2.describe_instances(req).sync() {
+    match ec2.describe_instances(req).await {
         Ok(_) => {
             panic!("DescribeInstances should fail");
         }
@@ -45,7 +45,7 @@ fn dry_run() {
         dry_run: Some(true),
         ..Default::default()
     };
-    let _ = ec2.create_snapshot(req).sync().unwrap();
+    let _ = ec2.create_snapshot(req).await.unwrap();
 }
 
 // Issue 387
@@ -62,5 +62,5 @@ fn query_serialization_name() {
             value: Some("val".into()),
         }],
     };
-    let _ = ec2.create_tags(req).sync().unwrap();
+    let _ = ec2.create_tags(req).await.unwrap();
 }

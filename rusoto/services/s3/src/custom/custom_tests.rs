@@ -3,6 +3,7 @@ extern crate rusoto_mock;
 use crate::generated::*;
 
 use self::rusoto_mock::*;
+use bytes::BytesMut;
 use futures::TryStreamExt;
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{Region, RusotoError};
@@ -467,7 +468,11 @@ async fn can_construct_streaming_body() {
         .to_owned()
         .into())));
     let streaming_body = StreamingBody::new(test_body);
-    let bytes = streaming_body.try_concat().await.unwrap();
+    let bytes: BytesMut = streaming_body
+        .map_ok(|b| BytesMut::from(&b[..]))
+        .try_concat()
+        .await
+        .unwrap();
     let read_string = std::str::from_utf8(bytes.as_ref()).unwrap();
     assert_eq!("Simple Body Test", read_string);
 }

@@ -38,7 +38,7 @@ use std::time::Duration;
 
 use async_trait::async_trait;
 use futures::FutureExt;
-use http::{header::HeaderName, HeaderMap, HttpTryFrom, StatusCode};
+use http::{header::HeaderName, HeaderMap, StatusCode};
 use rusoto_core::credential::{AwsCredentials, ProvideAwsCredentials};
 use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
@@ -90,7 +90,7 @@ impl MockRequestDispatcher {
     /// be returned from AWS
     pub fn with_status(status: u16) -> MockRequestDispatcher {
         MockRequestDispatcher {
-            outcome: RequestOutcome::Performed(StatusCode::try_from(status).unwrap()),
+            outcome: RequestOutcome::Performed(StatusCode::from_u16(status).unwrap()),
             ..MockRequestDispatcher::default()
         }
     }

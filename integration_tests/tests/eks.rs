@@ -11,6 +11,6 @@ fn should_list_clusters() {
     let client = EksClient::new(Region::UsEast1);
     let request = ListClustersRequest::default();
 
-    let result = client.list_clusters(request).sync().unwrap();
+    let result = client.list_clusters(request).await.unwrap();
     println!("{:#?}", result);
 }

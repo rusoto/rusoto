@@ -16,7 +16,7 @@ fn should_detect_sentiment() {
         ..Default::default()
     };
 
-    match client.detect_sentiment(request).sync() {
+    match client.detect_sentiment(request).await {
         Ok(response) => {
             println!("{:#?}", response);
             assert_eq!(

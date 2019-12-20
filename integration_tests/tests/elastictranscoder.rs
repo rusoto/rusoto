@@ -61,7 +61,7 @@ impl TestEtsClient {
             .as_ref()
             .unwrap()
             .create_bucket(create_bucket_req)
-            .sync();
+            .await;
 
         let mut location = result.unwrap().location.unwrap();
         // A `Location` is identical to a `BucketName` except that it has a
@@ -94,7 +94,7 @@ impl Drop for TestEtsClient {
                     ..Default::default()
                 };
 
-                match s3_client.delete_bucket(delete_bucket_req).sync() {
+                match s3_client.delete_bucket(delete_bucket_req).await {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
@@ -105,7 +105,7 @@ impl Drop for TestEtsClient {
                     ..Default::default()
                 };
 
-                match s3_client.delete_bucket(delete_bucket_req).sync() {
+                match s3_client.delete_bucket(delete_bucket_req).await {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
@@ -158,7 +158,7 @@ fn create_pipeline_without_arn() {
         output_bucket: client.output_bucket.as_ref().cloned(),
         ..CreatePipelineRequest::default()
     };
-    let response = client.create_pipeline(request).sync();
+    let response = client.create_pipeline(request).await;
 
     response.unwrap();
 }
@@ -190,7 +190,7 @@ fn create_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = client.create_preset(request).sync();
+    let response = client.create_preset(request).await;
 
     assert!(response.is_ok());
 
@@ -215,7 +215,7 @@ fn create_preset() {
     // Cleanup
 
     let request = DeletePresetRequest { id: id };
-    client.delete_preset(request).sync().ok();
+    client.delete_preset(request).await.ok();
 }
 
 #[test]
@@ -245,12 +245,12 @@ fn delete_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = client.create_preset(request).sync().unwrap();
+    let response = client.create_preset(request).await.unwrap();
     let preset = response.preset.unwrap();
     let id = preset.id.unwrap();
 
     let request = DeletePresetRequest { id: id.clone() };
-    let response = client.delete_preset(request).sync();
+    let response = client.delete_preset(request).await;
 
     assert!(response.is_ok());
     info!("Deleted preset with id: {:?}", &id);
@@ -269,7 +269,7 @@ fn list_jobs_by_status() {
         status: status.clone(),
         ..ListJobsByStatusRequest::default()
     };
-    let response = client.list_jobs_by_status(request).sync();
+    let response = client.list_jobs_by_status(request).await;
 
     assert!(response.is_ok());
 
@@ -290,7 +290,7 @@ fn list_pipelines() {
     let client = create_client();
 
     let request = ListPipelinesRequest::default();
-    let response = client.list_pipelines(request).sync();
+    let response = client.list_pipelines(request).await;
 
     assert!(response.is_ok());
 
@@ -307,7 +307,7 @@ fn list_presets() {
     let client = create_client();
 
     let request = ListPresetsRequest::default();
-    let response = client.list_presets(request).sync();
+    let response = client.list_presets(request).await;
     assert!(response.is_ok());
 
     let response = response.unwrap();
@@ -334,7 +334,7 @@ fn list_presets() {
                 ..Default::default()
             };
 
-            let page_two_response = client.list_presets(page_two_request).sync().unwrap();
+            let page_two_response = client.list_presets(page_two_request).await.unwrap();
             let presets_pg_2 = page_two_response.presets.unwrap();
             let web_preset = presets_pg_2
                 .iter()
@@ -359,7 +359,7 @@ fn read_preset() {
     let request = ReadPresetRequest {
         id: AWS_ETS_WEB_PRESET_ID.to_owned(),
     };
-    let response = client.read_preset(request).sync();
+    let response = client.read_preset(request).await;
 
     assert!(response.is_ok());
 

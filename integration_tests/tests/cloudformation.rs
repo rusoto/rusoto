@@ -11,7 +11,7 @@ fn should_list_stacks() {
     let client = CloudFormationClient::new(Region::UsEast1);
     let request = ListStacksInput::default();
 
-    let result = client.list_stacks(request).sync().unwrap();
+    let result = client.list_stacks(request).await.unwrap();
     println!("{:#?}", result);
 }
 
@@ -25,6 +25,6 @@ fn should_list_stacks_with_status_filter() {
         ..Default::default()
     };
 
-    let result = client.list_stacks(request).sync().unwrap();
+    let result = client.list_stacks(request).await.unwrap();
     println!("{:#?}", result);
 }

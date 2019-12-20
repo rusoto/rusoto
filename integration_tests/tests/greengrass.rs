@@ -14,6 +14,6 @@ fn should_list_groups() {
 
     let request = ListGroupsRequest::default();
 
-    let result = client.list_groups(request).sync().unwrap();
+    let result = client.list_groups(request).await.unwrap();
     println!("{:#?}", result);
 }

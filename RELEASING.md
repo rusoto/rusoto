@@ -23,7 +23,7 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 ### Publishing walkthrough:
 
 1. Ensure all PRs included in the release are reflected in [the CHANGELOG](https://github.com/rusoto/rusoto/blob/master/CHANGELOG.md). If in doubt, add an entry so it's recorded. Can be a separate PR or part of the one below.
-2. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential`, `rusoto_signature` and `rusoto_mock`.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project. Make sure the root Rusoto README example gets updated with the new version. Also verify all uses of `rusoto_credential` get updated, as they often use `0.42` instead of `0.42.0` and can be missed while using `grep`.
+2. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential`, `rusoto_signature` and `rusoto_mock`.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project. Make sure the root Rusoto README example gets updated with the new version. Also verify all uses of `rusoto_credential` get updated, as they often use `0.42` instead of `0.43.0` and can be missed while using `grep`.
 3. Run integration tests on the release branch: `make integration_test`.
 4. Merge release PR. See below for [release checklist](https://github.com/rusoto/rusoto/blob/update-releasing-doc/RELEASING.md#publishing-pr-checklist).
 5. Publish new version of `rusoto_credential`.
@@ -52,10 +52,10 @@ Due to multiple crates being in the repo, releases for each crate will be in the
 
 Examples:
 
-* `rusoto-v0.42.0`
-* `credentials-v0.42.0`
-* `signature-v0.42.0`
-* `mock-v0.42.0`
+* `rusoto-v0.43.0`
+* `credentials-v0.43.0`
+* `signature-v0.43.0`
+* `mock-v0.43.0`
 
 When bug fixes for a crate are published, all crates get a new release.
 

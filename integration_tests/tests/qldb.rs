@@ -11,7 +11,7 @@ fn should_list_ledgers() {
     let client = QldbClient::new(Region::UsEast1);
     let response = client
         .list_ledgers(ListLedgersRequest::default())
-        .sync()
+        .await
         .expect("expected an ok response");
     println!("response is {:#?}", response);
 }

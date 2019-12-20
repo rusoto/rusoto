@@ -10,8 +10,8 @@ use rusoto_core::signature::SignedRequest;
 use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::Region;
 
-#[test]
-fn should_serialize_map_parameters_in_create_platform_application_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_create_platform_application_request_body() {
     let mock =
         MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
@@ -57,14 +57,11 @@ fn should_serialize_map_parameters_in_create_platform_application_request_body()
         platform: "GCM".to_string(),
         attributes: sns_input_attrib,
     };
-    client
-        .create_platform_application(sns_input)
-        .sync()
-        .unwrap();
+    client.create_platform_application(sns_input).await.unwrap();
 }
 
-#[test]
-fn should_serialize_map_parameters_in_create_platform_endpoint_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_create_platform_endpoint_request_body() {
     let mock =
         MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
@@ -94,11 +91,11 @@ fn should_serialize_map_parameters_in_create_platform_endpoint_request_body() {
         custom_user_data: None,
         attributes: Some(sns_input_attrib),
     };
-    client.create_platform_endpoint(sns_input).sync().unwrap();
+    client.create_platform_endpoint(sns_input).await.unwrap();
 }
 
-#[test]
-fn should_serialize_map_parameters_in_set_platform_application_attributes_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_set_platform_application_attributes_request_body() {
     let mock =
         MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
@@ -131,12 +128,12 @@ fn should_serialize_map_parameters_in_set_platform_application_attributes_reques
     };
     client
         .set_platform_application_attributes(sns_input)
-        .sync()
+        .await
         .unwrap();
 }
 
-#[test]
-fn should_serialize_map_parameters_in_set_endpoint_attributes_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_set_endpoint_attributes_request_body() {
     let mock =
         MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
@@ -164,11 +161,11 @@ fn should_serialize_map_parameters_in_set_endpoint_attributes_request_body() {
         endpoint_arn: "ARN/GCM/example_platform_name/ID".to_string(),
         attributes: sns_input_attrib,
     };
-    client.set_endpoint_attributes(sns_input).sync().unwrap();
+    client.set_endpoint_attributes(sns_input).await.unwrap();
 }
 
-#[test]
-fn should_serialize_map_parameters_in_get_sms_attributes_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_get_sms_attributes_request_body() {
     let mock = MockRequestDispatcher::with_status(200).with_body(
         r#"<GetSMSAttributesResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
               <GetSMSAttributesResult>
@@ -189,7 +186,7 @@ fn should_serialize_map_parameters_in_get_sms_attributes_request_body() {
     let sns_input = GetSMSAttributesInput {
         attributes: Some(vec!["DefaultSMSType".to_string()]),
     };
-    let _ = match client.get_sms_attributes(sns_input).sync() {
+    let _ = match client.get_sms_attributes(sns_input).await {
         Ok(output) => assert_eq!(
             output.attributes.unwrap().get("DefaultSMSType"),
             Some(&("Promotional".to_string()))
@@ -198,8 +195,8 @@ fn should_serialize_map_parameters_in_get_sms_attributes_request_body() {
     };
 }
 
-#[test]
-fn should_serialize_map_parameters_in_set_sms_attributes_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_set_sms_attributes_request_body() {
     let mock =
         MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
@@ -225,11 +222,11 @@ fn should_serialize_map_parameters_in_set_sms_attributes_request_body() {
     let sns_input = SetSMSAttributesInput {
         attributes: sns_input_attrib,
     };
-    client.set_sms_attributes(sns_input).sync().unwrap();
+    client.set_sms_attributes(sns_input).await.unwrap();
 }
 
-#[test]
-fn should_serialize_map_parameters_in_get_subscription_attributes_request_body() {
+#[tokio::test]
+async fn should_serialize_map_parameters_in_get_subscription_attributes_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(
             r#"<GetSubscriptionAttributesResponse xmlns="https://sns.amazonaws.com/doc/2010-03-31/">
@@ -259,7 +256,7 @@ fn should_serialize_map_parameters_in_get_subscription_attributes_request_body()
     let sns_input = GetSubscriptionAttributesInput {
         subscription_arn: "ARN:SUBSCRIPTION_ID".to_string(),
     };
-    let _ = match client.get_subscription_attributes(sns_input).sync() {
+    let _ = match client.get_subscription_attributes(sns_input).await {
         Ok(output) => {
             assert_eq!(
                 output.clone().attributes.unwrap().get("Owner").unwrap(),

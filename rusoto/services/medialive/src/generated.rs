@@ -280,6 +280,10 @@ pub struct AudioOnlyHlsSettings {
     #[serde(rename = "AudioTrackType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_track_type: Option<String>,
+    /// <p>Specifies the segment type.</p>
+    #[serde(rename = "SegmentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_type: Option<String>,
 }
 
 /// <p>Audio Pid Selection</p>
@@ -2003,6 +2007,15 @@ pub struct FixedModeScheduleActionStartSettings {
     pub time: String,
 }
 
+/// <p>Fmp4 Hls Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Fmp4HlsSettings {
+    /// <p>List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by &#39;,&#39;.</p>
+    #[serde(rename = "AudioRenditionSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_rendition_sets: Option<String>,
+}
+
 /// <p>Settings to specify if an action follows another.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FollowModeScheduleActionStartSettings {
@@ -2037,6 +2050,10 @@ pub struct FrameCaptureSettings {
     /// <p>The frequency at which to capture frames for inclusion in the output. May be specified in either seconds or milliseconds, as specified by captureIntervalUnits.</p>
     #[serde(rename = "CaptureInterval")]
     pub capture_interval: i64,
+    /// <p>Unit for the frame capture interval.</p>
+    #[serde(rename = "CaptureIntervalUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capture_interval_units: Option<String>,
 }
 
 /// <p>Global Configuration</p>
@@ -2217,6 +2234,10 @@ pub struct H264Settings {
     ///
     /// <p>CBR: Quality varies, depending on the video complexity. Recommended only if you distribute
     /// your assets to devices that cannot handle variable bitrates.</p>
+    ///
+    /// <p>Multiplex: This rate control mode is only supported (and is required) when the video is being
+    /// delivered to a MediaLive Multiplex in which case the rate control configuration is controlled
+    /// by the properties within the Multiplex Program.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -2511,10 +2532,22 @@ pub struct HlsGroupSettings {
     #[serde(rename = "BaseUrlContent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_url_content: Option<String>,
+    /// <p>Optional. One value per output group.</p>
+    ///
+    /// <p>This field is required only if you are completing Base URL content A, and the downstream system has notified you that the media files for pipeline 1 of all outputs are in a location different from the media files for pipeline 0.</p>
+    #[serde(rename = "BaseUrlContent1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_url_content_1: Option<String>,
     /// <p>A partial URI prefix that will be prepended to each output in the media .m3u8 file. Can be used if base manifest is delivered from a different URL than the main .m3u8 file.</p>
     #[serde(rename = "BaseUrlManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_url_manifest: Option<String>,
+    /// <p>Optional. One value per output group.</p>
+    ///
+    /// <p>Complete this field only if you are completing Base URL manifest A, and the downstream system has notified you that the child manifest files for pipeline 1 of all outputs are in a location different from the child manifest files for pipeline 0.</p>
+    #[serde(rename = "BaseUrlManifest1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_url_manifest_1: Option<String>,
     /// <p>Mapping of up to 4 caption channels to caption languages.  Is only meaningful if captionLanguageSetting is set to &quot;insert&quot;.</p>
     #[serde(rename = "CaptionLanguageMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2553,6 +2586,10 @@ pub struct HlsGroupSettings {
     #[serde(rename = "HlsCdnSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_cdn_settings: Option<HlsCdnSettings>,
+    /// <p>State of HLS ID3 Segment Tagging</p>
+    #[serde(rename = "HlsId3SegmentTagging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_id_3_segment_tagging: Option<String>,
     /// <p>DISABLED: Do not create an I-frame-only manifest, but do create the master and media manifests (according to the Output Selection field).</p>
     ///
     /// <p>STANDARD: Create an I-frame-only manifest for each output that contains video, as well as the other manifests (according to the Output Selection field). The I-frame manifest contains a #EXT-X-I-FRAMES-ONLY tag to indicate it is I-frame only, and one or more #EXT-X-BYTERANGE entries identifying the I-frame position. For example, #EXT-X-BYTERANGE:160364@1461888&quot;</p>
@@ -2667,6 +2704,14 @@ pub struct HlsGroupSettings {
     pub ts_file_mode: Option<String>,
 }
 
+/// <p>Settings for the action to insert a user-defined ID3 tag in each HLS segment</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HlsId3SegmentTaggingScheduleActionSettings {
+    /// <p>ID3 tag to insert into each segment. Supports special keyword identifiers to substitute in segment-related values.\nSupported keyword identifiers: https://docs.aws.amazon.com/medialive/latest/ug/variable-data-identifiers.html</p>
+    #[serde(rename = "Tag")]
+    pub tag: String,
+}
+
 /// <p>Hls Input Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsInputSettings {
@@ -2716,6 +2761,11 @@ pub struct HlsMediaStoreSettings {
 /// <p>Hls Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsOutputSettings {
+    /// <p>Only applicable when this output is referencing an H.265 video description.
+    /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
+    #[serde(rename = "H265PackagingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub h265_packaging_type: Option<String>,
     /// <p>Settings regarding the underlying stream. These settings are different for audio-only outputs.</p>
     #[serde(rename = "HlsSettings")]
     pub hls_settings: HlsSettings,
@@ -2735,6 +2785,9 @@ pub struct HlsSettings {
     #[serde(rename = "AudioOnlyHlsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_only_hls_settings: Option<AudioOnlyHlsSettings>,
+    #[serde(rename = "Fmp4HlsSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fmp_4_hls_settings: Option<Fmp4HlsSettings>,
     #[serde(rename = "StandardHlsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_hls_settings: Option<StandardHlsSettings>,
@@ -4138,15 +4191,6 @@ pub struct MultiplexSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for MultiplexValidationError</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct MultiplexValidationError {
-    /// <p>Path to the source of the error.</p>
-    pub element_path: Option<String>,
-    /// <p>The error message.</p>
-    pub error_message: Option<String>,
-}
-
 /// <p>The video configuration for each program in a multiplex.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MultiplexVideoSettings {
@@ -4674,6 +4718,10 @@ pub struct ScheduleAction {
 /// <p>Holds the settings for a single schedule action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScheduleActionSettings {
+    /// <p>Action to insert HLS ID3 segment tagging</p>
+    #[serde(rename = "HlsId3SegmentTaggingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_id_3_segment_tagging_settings: Option<HlsId3SegmentTaggingScheduleActionSettings>,
     /// <p>Action to insert HLS metadata</p>
     #[serde(rename = "HlsTimedMetadataSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5550,6 +5598,13 @@ pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservation: Option<Reservation>,
+}
+
+/// <p>Placeholder documentation for ValidationError</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidationError {
+    pub element_path: Option<String>,
+    pub error_message: Option<String>,
 }
 
 /// <p>Video Codec Settings</p>

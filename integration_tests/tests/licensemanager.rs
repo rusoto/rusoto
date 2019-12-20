@@ -10,7 +10,7 @@ use rusoto_license_manager::{LicenseManager, LicenseManagerClient};
 fn should_list_domains() {
     let client = LicenseManagerClient::new(Region::UsEast1);
 
-    let result = client.get_service_settings().sync();
+    let result = client.get_service_settings().await;
     println!("{:#?}", result);
     match result {
         Ok(_) => (),

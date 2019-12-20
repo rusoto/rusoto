@@ -14,7 +14,7 @@ fn should_list_hits() {
     let request = ListHITsRequest::default();
 
     // If your AWS account isn't linked to a Mechanical Turk account, AWS returns an error
-    match client.list_hi_ts(request).sync() {
+    match client.list_hi_ts(request).await {
         Err(e) => {
             match e {
                 RusotoError::Unknown(ref e) => assert!(
