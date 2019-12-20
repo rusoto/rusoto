@@ -48,7 +48,7 @@ impl TestEtsClient {
         self.s3_client = Some(S3Client::new(self.region.clone()));
     }
 
-    fn create_bucket(&mut self) -> String {
+    async fn create_bucket(&mut self) -> String {
         let bucket_name = generate_unique_name("ets-bucket-1");
 
         let create_bucket_req = CreateBucketRequest {
@@ -87,14 +87,15 @@ impl DerefMut for TestEtsClient {
 
 impl Drop for TestEtsClient {
     fn drop(&mut self) {
-        self.s3_client.take().map(|s3_client| {
+        let mut rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(async move { self.s3_client.take().map(|s3_client| {
             self.input_bucket.take().map(|bucket| {
                 let delete_bucket_req = DeleteBucketRequest {
                     bucket: bucket.to_owned(),
                     ..Default::default()
                 };
 
-                match s3_client.delete_bucket(delete_bucket_req).await {
+                match rt.block_on(async {s3_client.delete_bucket(delete_bucket_req).await}) {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
@@ -105,12 +106,13 @@ impl Drop for TestEtsClient {
                     ..Default::default()
                 };
 
-                match s3_client.delete_bucket(delete_bucket_req).await {
+                match rt.block_on(async {s3_client.delete_bucket(delete_bucket_req).await}) {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
                     Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
             });
         });
+    });
     }
 }
 
@@ -148,10 +150,10 @@ async fn create_pipeline_without_arn() {
 
     initialize();
 
-    let mut client = create_client();
+    let mut client = create_client().await;
     client.create_s3_client();
-    client.input_bucket = Some(client.create_bucket());
-    client.output_bucket = Some(client.create_bucket());
+    client.input_bucket = Some(client.create_bucket().await);
+    client.output_bucket = Some(client.create_bucket().await);
 
     let request = CreatePipelineRequest {
         input_bucket: client.input_bucket.as_ref().cloned().unwrap(),
@@ -171,7 +173,7 @@ async fn create_preset() {
 
     initialize();
 
-    let client = create_client();
+    let client = create_client().await;
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -187,7 +189,7 @@ async fn create_preset() {
         }),
         container: "flac".to_owned(),
         description: Some("This is an example FLAC preset".to_owned()),
-        name: name.clone(),
+        name: name.await.clone(),
         ..CreatePresetRequest::default()
     };
     let response = client.create_preset(request).await;

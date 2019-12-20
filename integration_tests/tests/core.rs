@@ -16,7 +16,7 @@ use rusoto_core::{Client, Region};
 #[tokio::test]
 async fn get_caller_identity_presigned() {
     let provider = DefaultCredentialsProvider::new().unwrap();
-    let credentials = provider.credentials().wait().unwrap();
+    let credentials = provider.credentials().await.unwrap();
 
     let mut request = SignedRequest::new("GET", "sts", &Region::UsEast1, "/");
     let mut params = Params::new();
@@ -32,6 +32,7 @@ async fn get_caller_identity_presigned() {
         .get(&url)
         .header("x-test-header", "foobar")
         .send()
+        .await
         .expect("to succeed");
     assert!(
         response.status().is_success(),
@@ -48,7 +49,7 @@ async fn with_signature() {
     params.put("Version", "2011-06-15");
     request.set_params(params);
     let response = client
-        .sign_and_dispatch::<HttpResponse, ()>(request, |r| Box::new(ok(r)))
+        .sign_and_dispatch(request)
         .await;
     assert!(response.is_ok(), response.err());
     let response: HttpResponse = response.unwrap();
@@ -65,7 +66,7 @@ async fn without_signature() {
     params.put("Version", "2011-06-15");
     request.set_params(params);
     let response = client
-        .sign_and_dispatch::<HttpResponse, ()>(request, |r| Box::new(ok(r)))
+        .sign_and_dispatch(request)
         .await;
     assert!(response.is_ok(), response.err());
     let response: HttpResponse = response.unwrap();

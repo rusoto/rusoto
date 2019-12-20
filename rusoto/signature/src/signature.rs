@@ -51,6 +51,16 @@ pub enum SignedRequestPayload {
     Stream(ByteStream),
 }
 
+impl SignedRequestPayload {
+    /// Convert `SignedRequestPayload` into a hyper `Body`
+    pub fn into_body(self) -> Body {
+        match self {
+            SignedRequestPayload::Buffer(bytes) => Body::from(bytes),
+            SignedRequestPayload::Stream(stream) => Body::wrap_stream(stream),
+        }
+    }
+}
+
 impl fmt::Debug for SignedRequestPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {

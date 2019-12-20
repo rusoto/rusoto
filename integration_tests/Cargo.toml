@@ -1,7 +1,8 @@
 [package]
 name = "rusoto_tests"
 description = "AWS SDK for Rust - Integration Tests"
-version = "0.25.0"
+version = "0.26.0"
+edition = "2018"
 authors = [
     "Anthony DiMarco <ocramida@gmail.com>",
     "Jimmy Cuadra <jimmy@jimmycuadra.com>",
@@ -171,6 +172,9 @@ path = "../rusoto/services/config"
 [dependencies.rusoto_connect]
 optional = true
 path = "../rusoto/services/connect"
+
+[dependencies.rusoto_credential]
+path = "../rusoto/credential"
 
 [dependencies.rusoto_cur]
 optional = true
@@ -650,8 +654,9 @@ futures = "0.3"
 log = "0.4.1"
 rand = "^0.7.2"
 time = "0.1.37"
-reqwest = "0.10.0-alpha.2"
+reqwest = { git = "https://github.com/seanmonstar/reqwest.git", branch = "master" }
 http = "0.2"
+tokio = { version = "0.2", features = ["time", "rt-core", "fs"] }
 
 [features]
 all = [

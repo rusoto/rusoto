@@ -1,14 +1,9 @@
 #![cfg(feature = "sts")]
 
-extern crate futures;
-extern crate rusoto_core;
-extern crate rusoto_ec2;
-extern crate rusoto_sts;
-
-use futures::Future;
+use std::future::Future;
 
 use rusoto_core::request::HttpClient;
-use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
+use rusoto_core::{credential::ProvideAwsCredentials, Region, RusotoError};
 use rusoto_ec2::Ec2Client;
 use rusoto_sts::{AssumeRoleRequest, GetSessionTokenRequest};
 use rusoto_sts::{Sts, StsClient};
@@ -59,7 +54,7 @@ async fn main() {
 
     let sts_creds_provider = StsSessionCredentialsProvider::new(sts, None, None);
 
-    match sts_creds_provider.credentials().wait() {
+    match sts_creds_provider.credentials().await {
         Err(e) => panic!("sts credentials provider error: {:?}", e),
         Ok(r) => println!("sts credentials provider result: {:?}", r),
     }

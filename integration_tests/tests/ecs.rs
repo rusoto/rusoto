@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_ecs;
 
 use rusoto_core::request::{HttpClient, HttpConfig};
-use rusoto_core::{DefaultCredentialsProvider, Region, RusotoError};
+use rusoto_core::{credential::DefaultCredentialsProvider, Region, RusotoError};
 use rusoto_ecs::{Ecs, EcsClient, ListClustersError, ListClustersRequest};
 
 #[tokio::test]

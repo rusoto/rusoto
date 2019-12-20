@@ -1,14 +1,4 @@
 #![cfg(feature = "s3")]
-extern crate env_logger;
-extern crate futures;
-extern crate futures_fs;
-extern crate http;
-extern crate log;
-extern crate reqwest;
-extern crate rusoto_core;
-extern crate rusoto_s3;
-extern crate time;
-
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
@@ -16,11 +6,13 @@ use std::io::Read;
 use std::str;
 use std::time::Duration;
 use time::get_time;
+use std::future::Future;
 
-use futures::{Future, Stream};
-use futures_fs::FsPool;
+use futures::{Stream};
+use tokio::fs;
+use rusoto_credential::ProvideAwsCredentials;
 use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider, StaticProvider};
-use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
+use rusoto_core::{Region, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
     CORSConfiguration, CORSRule, CompleteMultipartUploadRequest, CompletedMultipartUpload,
@@ -64,7 +56,7 @@ impl TestS3Client {
     }
 
     // construct an anonymous client for testing acls
-    fn create_anonymous_client(&self) -> S3Client {
+    async fn create_anonymous_client(&self) -> S3Client {
         if cfg!(feature = "disable_minio_unsupported") {
             // Minio does not support setting acls, so to make tests pass, return a client that has
             // the credentials of the bucket owner.
@@ -78,7 +70,7 @@ impl TestS3Client {
         }
     }
 
-    fn create_test_bucket(&self, name: String) {
+    async fn create_test_bucket(&self, name: String) {
         let create_bucket_req = CreateBucketRequest {
             bucket: name.clone(),
             ..Default::default()
@@ -89,7 +81,7 @@ impl TestS3Client {
             .expect("Failed to create test bucket");
     }
 
-    fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
+    async fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
         let create_bucket_req = CreateBucketRequest {
             bucket: name.clone(),
             acl,
@@ -101,7 +93,7 @@ impl TestS3Client {
             .expect("Failed to create test bucket");
     }
 
-    fn delete_object(&self, key: String) {
+    async fn delete_object(&self, key: String) {
         let delete_object_req = DeleteObjectRequest {
             bucket: self.bucket_name.to_owned(),
             key: key.to_owned(),
@@ -114,7 +106,7 @@ impl TestS3Client {
             .expect("Couldn't delete object");
     }
 
-    fn put_test_object(&self, filename: String) {
+    async fn put_test_object(&self, filename: String) {
         let contents: Vec<u8> = Vec::new();
         let put_request = PutObjectRequest {
             bucket: self.bucket_name.to_owned(),
@@ -140,10 +132,13 @@ impl Drop for TestS3Client {
             ..Default::default()
         };
 
+        let mut rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(async move { 
         match self.s3.delete_bucket(delete_bucket_req).await {
             Ok(_) => println!("Deleted S3 bucket: {}", self.bucket_name),
             Err(e) => println!("Failed to delete S3 bucket: {}", e),
         }
+    })
     }
 }
 
@@ -240,7 +235,7 @@ async fn test_puts_gets_deletes() {
     );
 
     // create an anonymous reader to test the acls
-    let ro_s3client = test_client.create_anonymous_client();
+    let ro_s3client = test_client.create_anonymous_client().await;
 
     // HEAD the object that was PUT
     test_head_object(&ro_s3client, &test_client.bucket_name, &filename);
@@ -393,7 +388,7 @@ async fn test_puts_gets_deletes_presigned_url() {
     let credentials = DefaultCredentialsProvider::new()
         .unwrap()
         .credentials()
-        .wait()
+        .await
         .unwrap();
 
     // generate a presigned url
@@ -469,7 +464,7 @@ async fn test_multipart_stream_uploads() {
     let credentials = DefaultCredentialsProvider::new()
         .unwrap()
         .credentials()
-        .wait()
+        .await
         .unwrap();
 
     // test put via multipart upload
@@ -673,6 +668,7 @@ async fn test_multipart_upload(
             .put(&presigned_multipart_put)
             .body(String::from("foo"))
             .send()
+            .await
             .expect("Multipart put with presigned url failed");
         assert_eq!(res.status(), http::StatusCode::OK);
         let e_tag = res.headers().get("ETAG").unwrap().to_str().unwrap();
@@ -849,13 +845,12 @@ async fn test_put_object_stream_with_filename(
     local_filename: &str,
 ) {
     let meta = ::std::fs::metadata(local_filename).unwrap();
-    let fs = FsPool::default();
-    let read_stream = fs.read(local_filename.to_owned());
+    let read_stream = fs::read(local_filename.to_owned());
     let req = PutObjectRequest {
         bucket: bucket.to_owned(),
         key: dest_filename.to_owned(),
         content_length: Some(meta.len() as i64),
-        body: Some(StreamingBody::new(read_stream)),
+        body: Some(StreamingBody::new(read_stream.await.unwrap())),
         ..Default::default()
     };
     let result = client.put_object(req).await.expect("Couldn't PUT object");
@@ -877,7 +872,7 @@ async fn try_head_object(
 }
 
 async fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
-    let result = try_head_object(client, bucket, filename).expect("Couldn't HEAD object");
+    let result = try_head_object(client, bucket, filename).await.expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
@@ -895,7 +890,7 @@ async fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
     println!("get object result: {:#?}", result);
 
     let stream = result.body.unwrap();
-    let body = stream.concat2().wait().unwrap();
+    let body = stream.concat2().await.unwrap();
 
     assert!(body.len() > 0);
 }
@@ -1191,7 +1186,7 @@ async fn test_get_object_with_expired_presigned_url(
     let presigned_url = req.get_presigned_url(region, credentials, &opt);
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).expect("Presigned url failure");
+    let res = reqwest::get(&presigned_url).await.expect("Presigned url failure");
     assert_eq!(res.status(), http::StatusCode::FORBIDDEN);
 }
 

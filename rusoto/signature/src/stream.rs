@@ -3,7 +3,7 @@ use std::io;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use bytes::Bytes;
+use bytes::{BufMut, Bytes, BytesMut};
 use futures::{future, stream, Stream, StreamExt};
 use pin_project::pin_project;
 use tokio::io::AsyncRead;
@@ -69,76 +69,40 @@ impl Stream for ByteStream {
 
 #[pin_project]
 struct ImplAsyncRead {
-    buffer: io::Cursor<Bytes>,
+    buffer: BytesMut,
     #[pin]
-    stream: stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>>,
+    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>>,
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
         ImplAsyncRead {
-            buffer: io::Cursor::new(Bytes::new()),
+            buffer: BytesMut::new(),
             stream: stream.fuse(),
         }
     }
 }
 
-// impl io::Read for ImplAsyncRead {
-// fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-//     if buf.is_empty() {
-//         return Ok(0);
-//     }
-//     let waker = futures::task::noop_waker();
-//     let mut cx = Context::from_waker(&waker);
-//     loop {
-//         let n = self.buffer.read(buf)?;
-//         if n > 0 {
-//             return Ok(n);
-//         }
-//         match self.stream.poll_next_unpin(&mut cx)? {
-//             Poll::Pending => {
-//                 return Err(io::ErrorKind::WouldBlock.into());
-//             }
-//             Poll::Ready(Some(buffer)) => {
-//                 self.buffer = io::Cursor::new(buffer);
-//                 continue;
-//             }
-//             Poll::Ready(None) => {
-//                 return Ok(0);
-//             }
-//         }
-//     }
-// }
-// }
-
-impl tokio::io::AsyncRead for ImplAsyncRead {
+impl AsyncRead for ImplAsyncRead {
     fn poll_read(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
         buf: &mut [u8],
     ) -> Poll<io::Result<usize>> {
-        let mut this = self.get_mut();
-        if buf.is_empty() {
-            return Poll::Ready(Ok(0));
-        }
-        loop {
-            let n = std::io::Read::read(&mut this.buffer, buf)?;
-            if n > 0 {
-                return Poll::Ready(Ok(n));
-            }
-            match Pin::new(&mut this.stream).poll_next(cx)? {
-                Poll::Pending => {
-                    return Poll::Pending;
-                }
-                Poll::Ready(Some(buffer)) => {
-                    this.buffer = io::Cursor::new(buffer);
-                    continue;
-                }
-                Poll::Ready(None) => {
-                    return Poll::Ready(Ok(0));
+        let this = self.project();
+        if this.buffer.is_empty() {
+            match futures::ready!(this.stream.poll_next(cx)) {
+                None => return Poll::Ready(Ok(0)),
+                Some(Err(e)) => return Poll::Ready(Err(e)),
+                Some(Ok(bytes)) => {
+                    this.buffer.put(bytes);
                 }
             }
         }
+        let available = std::cmp::min(buf.len(), this.buffer.len());
+        let mut bytes = this.buffer.split_to(available);
+        buf.copy_from_slice(bytes.as_mut());
+        Poll::Ready(Ok(available))
     }
 }
 
