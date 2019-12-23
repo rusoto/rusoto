@@ -15,6 +15,8 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make unit_test
       displayName: 'Run unit tests'
     - script: make check_integration_test
@@ -35,6 +37,8 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
 
