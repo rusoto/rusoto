@@ -14,7 +14,11 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
     - script: rustc --version
       displayName: 'print rust version'
     - script: make unit_test
@@ -36,7 +40,11 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
     - script: rustc --version
       displayName: 'print rust version'
     - script: make rustls_unit_test
@@ -309,7 +317,11 @@ jobs:
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      displayName: 'Install Rust'
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
     - script: rustc --version
       displayName: 'print rust version'
     - script: make skeptical
