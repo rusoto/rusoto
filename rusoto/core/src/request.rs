@@ -154,42 +154,46 @@ impl HttpResponse {
 
 #[derive(Clone, Debug, PartialEq)]
 /// An error produced when sending the request, such as a timeout error.
-pub struct HttpDispatchError {
-    message: String,
-}
-
-impl HttpDispatchError {
-    /// Construct a new HttpDispatchError for testing purposes
-    pub fn new(message: String) -> HttpDispatchError {
-        HttpDispatchError { message }
-    }
+pub enum HttpDispatchError {
+    /// Request timed out
+    Timeout,
+    /// Error from client future
+    ClientFutureError (String),
+    /// Internal error in deadline implementation.
+    DeadlineError (String),
+    /// Error from hyper
+    HyperError (String),
+    /// Io error
+    IoError (String),
 }
 
 impl Error for HttpDispatchError {
     fn description(&self) -> &str {
-        &self.message
+        match self {
+            Self::Timeout => "Request timed out",
+            Self::ClientFutureError(s)
+            | Self::DeadlineError(s)
+            | Self::HyperError (s)
+            | Self::IoError (s) => &s,
+        }
     }
 }
 
 impl fmt::Display for HttpDispatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
+        write!(f, "{}", self.description())
     }
 }
 
 impl From<HyperError> for HttpDispatchError {
     fn from(err: HyperError) -> HttpDispatchError {
-        HttpDispatchError {
-            message: err.to_string(),
-        }
+        HttpDispatchError::HyperError (err.to_string())
     }
 }
 
 impl From<IoError> for HttpDispatchError {
     fn from(err: IoError) -> HttpDispatchError {
-        HttpDispatchError {
-            message: err.to_string(),
-        }
+        HttpDispatchError::IoError (err.to_string())
     }
 }
 
@@ -230,9 +234,7 @@ impl Future for HttpClientFuture {
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.0 {
-            ClientFutureInner::Error(ref message) => Err(HttpDispatchError {
-                message: message.clone(),
-            }),
+            ClientFutureInner::Error(ref message) => Err(HttpDispatchError::ClientFutureError (message.clone())),
             ClientFutureInner::Hyper(ref mut hyper_future) => {
                 Ok(hyper_future.poll()?.map(HttpResponse::from_hyper))
             }
@@ -240,15 +242,11 @@ impl Future for HttpClientFuture {
                 match deadline_future.poll() {
                     Err(deadline_err) => {
                         if deadline_err.is_elapsed() {
-                            Err(HttpDispatchError {
-                                message: "Request timed out".into(),
-                            })
+                            Err(HttpDispatchError::Timeout)
                         } else if deadline_err.is_inner() {
                             Err(deadline_err.into_inner().unwrap().into())
                         } else {
-                            Err(HttpDispatchError {
-                                message: format!("deadline error: {}", deadline_err),
-                            })
+                            Err(HttpDispatchError::DeadlineError (deadline_err.to_string()))
                         }
                     }
                     Ok(Async::NotReady) => Ok(Async::NotReady),
