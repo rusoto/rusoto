@@ -3126,6 +3126,10 @@ impl MachineLearningClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MachineLearningClient {
+        MachineLearningClient { client, region }
+    }
 }
 
 #[async_trait]

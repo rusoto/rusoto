@@ -32,8 +32,7 @@ pub struct AccessLogSettings {
     #[serde(rename = "DestinationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
-    /// <p>A single line format of the access logs of data, as specified by selected $context
-    /// variables. The format must include at least $context.requestId.</p>
+    /// <p>A single line format of the access logs of data, as specified by selected $context variables. The format must include at least $context.requestId.</p>
     #[serde(rename = "Format")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
@@ -43,9 +42,7 @@ pub struct AccessLogSettings {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Api {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
-    /// stage name is typically appended to this URI to form a complete path to a deployed
-    /// API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -53,10 +50,14 @@ pub struct Api {
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_id: Option<String>,
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
     /// <p>The timestamp when the API was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -65,25 +66,32 @@ pub struct Api {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
+    /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     pub protocol_type: String,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     pub route_selection_expression: String,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during
-    /// API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
@@ -113,10 +121,7 @@ pub struct ApiMapping {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Authorizer {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -124,71 +129,72 @@ pub struct Authorizer {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
-    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI).
-    /// ForREQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth
-    /// header and a Name query string parameters are defined as identity
-    /// sources, this value is method.request.header.Auth,
-    /// method.request.querystring.Name. These parameters will be used to
-    /// derive the authorization caching key and to perform runtime validation of the
-    /// REQUEST authorizer by verifying all of the identity-related request
-    /// parameters are present, not null, and non-empty. Only when this is true does the
-    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
-    /// Unauthorized response without calling the Lambda function. The valid value
-    /// is a string of comma-separated mapping expressions of the specified request
-    /// parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
+/// <p>Represents a CORS configuration. Supported only for HTTP APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html">Configuring CORS</a> for more information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Cors {
+    /// <p>Specifies whether credentials are included in the CORS request. Supported only for HTTP APIs.</p>
+    #[serde(rename = "AllowCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_credentials: Option<bool>,
+    /// <p>Represents a collection of allowed headers. Supported only for HTTP APIs.</p>
+    #[serde(rename = "AllowHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_headers: Option<Vec<String>>,
+    /// <p>Represents a collection of allowed HTTP methods. Supported only for HTTP APIs.</p>
+    #[serde(rename = "AllowMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_methods: Option<Vec<String>>,
+    /// <p>Represents a collection of allowed origins. Supported only for HTTP APIs.</p>
+    #[serde(rename = "AllowOrigins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_origins: Option<Vec<String>>,
+    /// <p>Represents a collection of exposed headers. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ExposeHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expose_headers: Option<Vec<String>>,
+    /// <p>The number of seconds that the browser should cache preflight request results. Supported only for HTTP APIs.</p>
+    #[serde(rename = "MaxAge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_age: Option<i64>,
+}
+
+/// <p>Creates a new ApiMapping resource to represent an API mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApiMappingRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-
+    /// <p>The API mapping key.</p>
     #[serde(rename = "ApiMappingKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_mapping_key: Option<String>,
@@ -221,29 +227,51 @@ pub struct CreateApiMappingResponse {
     pub stage: Option<String>,
 }
 
+/// <p>Creates a new Api resource to represent an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApiRequest {
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html">Configuring CORS</a> for more information.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
+    /// <p>This property is part of quick create. It specifies the credentials required for the integration, if any. For a Lambda integration, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null. Currently, this property is not used for HTTP integrations. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CredentialsArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials_arn: Option<String>,
     /// <p>The description of the API.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
+    /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     pub protocol_type: String,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>This property is part of quick create. If you don't specify a routeKey, a default route of $default is created. The $default route acts as a catch-all for any request made to your API, for a particular stage. The $default route key can't be modified. You can add routes after creating the API, and you can update the route keys of additional routes. Supported only for HTTP APIs.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
-    pub route_selection_expression: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_selection_expression: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>This property is part of quick create. Quick create produces an API with an integration, a default catch-all route, and a default stage which is configured to automatically deploy changes. For HTTP integrations, specify a fully qualified URL. For Lambda integrations, specify a function ARN. The type of the integration will be HTTP_PROXY or AWS_PROXY, respectively. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -253,9 +281,7 @@ pub struct CreateApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
-    /// stage name is typically appended to this URI to form a complete path to a deployed
-    /// API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -263,10 +289,14 @@ pub struct CreateApiResponse {
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_id: Option<String>,
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
     /// <p>The timestamp when the API was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -275,108 +305,82 @@ pub struct CreateApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
+    /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during
-    /// API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
 }
 
+/// <p>Creates a new Authorizer resource to represent an authorizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
-    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     pub authorizer_type: String,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For
-    /// REQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
-    pub authorizer_uri: String,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth
-    /// header and a Name query string parameters are defined as identity
-    /// sources, this value is method.request.header.Auth,
-    /// method.request.querystring.Name. These parameters will be used to
-    /// derive the authorization caching key and to perform runtime validation of the
-    /// REQUEST authorizer by verifying all of the identity-related request
-    /// parameters are present, not null, and non-empty. Only when this is true does the
-    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
-    /// Unauthorized response without calling the Lambda function. The valid value
-    /// is a string of comma-separated mapping expressions of the specified request
-    /// parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_uri: Option<String>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT )from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     pub identity_source: Vec<String>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>This parameter is not used.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -384,66 +388,38 @@ pub struct CreateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
-    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI).
-    /// ForREQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth
-    /// header and a Name query string parameters are defined as identity
-    /// sources, this value is method.request.header.Auth,
-    /// method.request.querystring.Name. These parameters will be used to
-    /// derive the authorization caching key and to perform runtime validation of the
-    /// REQUEST authorizer by verifying all of the identity-related request
-    /// parameters are present, not null, and non-empty. Only when this is true does the
-    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
-    /// Unauthorized response without calling the Lambda function. The valid value
-    /// is a string of comma-separated mapping expressions of the specified request
-    /// parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
+/// <p>Creates a new Deployment resource to represent a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -453,8 +429,7 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the Stage resource for the Deployment
-    /// resource to create.</p>
+    /// <p>The name of the Stage resource for the Deployment resource to create.</p>
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
@@ -463,6 +438,10 @@ pub struct CreateDeploymentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeploymentResponse {
+    /// <p>Specifies whether a deployment was automatically released.</p>
+    #[serde(rename = "AutoDeployed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deployed: Option<bool>,
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -471,8 +450,7 @@ pub struct CreateDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or
-    /// SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -486,6 +464,7 @@ pub struct CreateDeploymentResponse {
     pub description: Option<String>,
 }
 
+/// <p>Creates a new DomainName resource to represent a domain name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDomainNameRequest {
     /// <p>The domain name.</p>
@@ -495,6 +474,10 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The collection of tags associated with a domain name.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -512,8 +495,13 @@ pub struct CreateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The collection of tags associated with a domain name.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Creates a new Integration resource to represent an integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -523,30 +511,15 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -558,63 +531,31 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     pub integration_type: String,
     /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
     /// , where
-    /// {location}
+    /// <replaceable>{location}</replaceable>
     /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -622,44 +563,91 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
+/// <p>Creates a new IntegrationResponse resource to represent an integration response.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateIntegrationResponseRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration ID.</p>
+    #[serde(rename = "IntegrationId")]
+    pub integration_id: String,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    pub integration_response_key: String,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where {name} is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where {name} is a valid and unique response header name and {JSON-expression} is a valid JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateIntegrationResponse {
+pub struct CreateIntegrationResponseResponse {
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_id: Option<String>,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expressions for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateIntegrationResult {
+    /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -675,27 +663,11 @@ pub struct CreateIntegrationResponse {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
+    /// <p>The integration response selection expression for the integration. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as the HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -703,150 +675,38 @@ pub struct CreateIntegrationResponse {
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
     /// , where
-    /// {location}
+    /// <replaceable>{location}</replaceable>
     /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration.</p>
+    /// <p>The template selection expression for the integration. Supported only for WebSocket APIs.</p>
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateIntegrationResponseRequest {
-    /// <p>The API identifier.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration ID.</p>
-    #[serde(rename = "IntegrationId")]
-    pub integration_id: String,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    pub integration_response_key: String,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of method.response.header.{name},
-    /// where {name} is a valid and unique header name. The mapped non-static
-    /// value must match the pattern of integration.response.header.{name} or
-    /// integration.response.body.{JSON-expression}, where
-    /// {name} is a valid and unique response header name and
-    /// {JSON-expression} is a valid JSON expression without the $
-    /// prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct CreateIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_id: Option<String>,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of method.response.header.{name}, where name is a
-    /// valid and unique header name. The mapped non-static value must match the pattern of
-    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
-    /// where name is a valid and unique response header name and JSON-expression is a valid
-    /// JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expressions for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
+/// <p>Creates a new Model.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateModelRequest {
     /// <p>The API identifier.</p>
@@ -863,8 +723,7 @@ pub struct CreateModelRequest {
     /// <p>The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     pub schema: String,
 }
@@ -888,42 +747,35 @@ pub struct CreateModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
 }
 
+/// <p>Creates a new Route resource to represent a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies whether an API key is required for the route.</p>
+    /// <p>Specifies whether an API key is required for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this
-    /// route.</p>
+    /// <p>The authorization scopes supported by this route.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -931,18 +783,18 @@ pub struct CreateRouteRequest {
     #[serde(rename = "OperationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
     /// <p>The route key for the route.</p>
     #[serde(rename = "RouteKey")]
     pub route_key: String,
-    /// <p>The route response selection expression for the route.</p>
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RouteResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_response_selection_expression: Option<String>,
@@ -952,77 +804,13 @@ pub struct CreateRouteRequest {
     pub target: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct CreateRouteResponse {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
-    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
-    /// works by matching the route scopes against the scopes parsed from the access token in
-    /// the incoming request. The method invocation is authorized if any route scope matches
-    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
-    /// When the route scope is configured, the client must provide an access token instead
-    /// of an identity token for authorization purposes.</p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
-}
-
+/// <p>Creates a new RouteResponse resource to represent a route response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The model selection expression for the route response.</p>
+    /// <p>The model selection expression for the route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -1045,7 +833,7 @@ pub struct CreateRouteResponseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateRouteResponseResponse {
-    /// <p>Represents the model selection expression of a route response.</p>
+    /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -1067,6 +855,64 @@ pub struct CreateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRouteResult {
+    /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether an API key is required for this route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a JWT authorizer to authorize the method invocation. The authorization works by matching the route scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any route scope matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the route scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// <p>Creates a new Stage resource to represent a stage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
@@ -1076,7 +922,11 @@ pub struct CreateStageRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The identifier of a client certificate for a Stage.</p>
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>The identifier of a client certificate for a Stage. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_certificate_id: Option<String>,
@@ -1092,19 +942,21 @@ pub struct CreateStageRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Route settings for the stage.</p>
+    /// <p>Route settings for the stage, by routeKey.</p>
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names
-    /// can have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1114,7 +966,15 @@ pub struct CreateStageResponse {
     #[serde(rename = "AccessLogSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_log_settings: Option<AccessLogSettings>,
-    /// <p>The identifier of a client certificate for a Stage.</p>
+    /// <p>Specifies whether a stage is managed by API Gateway. If you created an API using quick create, the $default stage is managed by API Gateway. You can't modify the $default stage.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>The identifier of a client certificate for a Stage. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_certificate_id: Option<String>,
@@ -1126,8 +986,7 @@ pub struct CreateStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is
-    /// associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is associated with. Can't be updated if autoDeploy is enabled.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -1135,11 +994,15 @@ pub struct CreateStageResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Describes the status of the last deployment of a stage. Supported only for stages with autoDeploy enabled.</p>
+    #[serde(rename = "LastDeploymentStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_status_message: Option<String>,
     /// <p>The timestamp when the stage was last updated.</p>
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>Route settings for the stage.</p>
+    /// <p>Route settings for the stage, by routeKey.</p>
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
@@ -1147,12 +1010,14 @@ pub struct CreateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can
-    /// have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1180,6 +1045,13 @@ pub struct DeleteAuthorizerRequest {
     /// <p>The authorizer identifier.</p>
     #[serde(rename = "AuthorizerId")]
     pub authorizer_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteCorsConfigurationRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1256,21 +1128,36 @@ pub struct DeleteRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteStageRequest {
+pub struct DeleteRouteSettingsRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The stage name.</p>
+    /// <p>The route key.</p>
+    #[serde(rename = "RouteKey")]
+    pub route_key: String,
+    /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
 }
 
-/// <p>An immutable representation of an API that can be called by users. A
-/// Deployment must be associated with a Stage for it to be
-/// callable over the internet.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteStageRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
+    #[serde(rename = "StageName")]
+    pub stage_name: String,
+}
+
+/// <p>An immutable representation of an API that can be called by users. A Deployment must be associated with a Stage for it to be callable over the internet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Deployment {
+    /// <p>Specifies whether a deployment was automatically released.</p>
+    #[serde(rename = "AutoDeployed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deployed: Option<bool>,
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1279,8 +1166,7 @@ pub struct Deployment {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or
-    /// SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1309,30 +1195,39 @@ pub struct DomainName {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The collection of tags associated with a domain name.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The domain name configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomainNameConfiguration {
-    /// <p>A domain name for the WebSocket API.</p>
+    /// <p>A domain name for the API.</p>
     #[serde(rename = "ApiGatewayDomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_domain_name: Option<String>,
-    /// <p>An AWS-managed certificate that will be used by the edge-optimized endpoint for
-    /// this domain name. AWS Certificate Manager is the only supported source.</p>
+    /// <p>An AWS-managed certificate that will be used by the edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The user-friendly name of the certificate that will be used by the edge-optimized
-    /// endpoint for this domain name.</p>
+    /// <p>The user-friendly name of the certificate that will be used by the edge-optimized endpoint for this domain name.</p>
     #[serde(rename = "CertificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_name: Option<String>,
-    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for
-    /// this domain name was uploaded.</p>
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
     #[serde(rename = "CertificateUploadDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_upload_date: Option<f64>,
+    /// <p>The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.</p>
+    #[serde(rename = "DomainNameStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status: Option<String>,
+    /// <p>An optional text message containing detailed information about status of the domain name migration.</p>
+    #[serde(rename = "DomainNameStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status_message: Option<String>,
     /// <p>The endpoint type.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1341,6 +1236,10 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "HostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hosted_zone_id: Option<String>,
+    /// <p>The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.</p>
+    #[serde(rename = "SecurityPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1383,8 +1282,7 @@ pub struct GetApiMappingsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1397,8 +1295,7 @@ pub struct GetApiMappingsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<ApiMapping>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1414,9 +1311,7 @@ pub struct GetApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
-    /// stage name is typically appended to this URI to form a complete path to a deployed
-    /// API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -1424,10 +1319,14 @@ pub struct GetApiResponse {
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_id: Option<String>,
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
     /// <p>The timestamp when the API was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1436,28 +1335,35 @@ pub struct GetApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
+    /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during
-    /// API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
@@ -1469,8 +1375,7 @@ pub struct GetApisRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1483,8 +1388,7 @@ pub struct GetApisResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Api>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1503,10 +1407,7 @@ pub struct GetAuthorizerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -1514,64 +1415,35 @@ pub struct GetAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
-    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI).
-    /// ForREQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth
-    /// header and a Name query string parameters are defined as identity
-    /// sources, this value is method.request.header.Auth,
-    /// method.request.querystring.Name. These parameters will be used to
-    /// derive the authorization caching key and to perform runtime validation of the
-    /// REQUEST authorizer by verifying all of the identity-related request
-    /// parameters are present, not null, and non-empty. Only when this is true does the
-    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
-    /// Unauthorized response without calling the Lambda function. The valid value
-    /// is a string of comma-separated mapping expressions of the specified request
-    /// parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1583,8 +1455,7 @@ pub struct GetAuthorizersRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1597,8 +1468,7 @@ pub struct GetAuthorizersResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Authorizer>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1617,6 +1487,10 @@ pub struct GetDeploymentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDeploymentResponse {
+    /// <p>Specifies whether a deployment was automatically released.</p>
+    #[serde(rename = "AutoDeployed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deployed: Option<bool>,
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1625,8 +1499,7 @@ pub struct GetDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or
-    /// SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1649,8 +1522,7 @@ pub struct GetDeploymentsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1663,8 +1535,7 @@ pub struct GetDeploymentsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Deployment>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1692,6 +1563,10 @@ pub struct GetDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The collection of tags associated with a domain name.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1700,8 +1575,7 @@ pub struct GetDomainNamesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1714,8 +1588,7 @@ pub struct GetDomainNamesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<DomainName>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1729,128 +1602,6 @@ pub struct GetIntegrationRequest {
     /// <p>The integration ID.</p>
     #[serde(rename = "IntegrationId")]
     pub integration_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GetIntegrationResponse {
-    /// <p>The connection ID.</p>
-    #[serde(rename = "ConnectionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
-    #[serde(rename = "ConnectionType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
-    #[serde(rename = "CredentialsArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub credentials_arn: Option<String>,
-    /// <p>Represents the description of an integration.</p>
-    #[serde(rename = "Description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>Represents the identifier of an integration.</p>
-    #[serde(rename = "IntegrationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_id: Option<String>,
-    /// <p>Specifies the integration's HTTP method type.</p>
-    #[serde(rename = "IntegrationMethod")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_method: Option<String>,
-    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
-    #[serde(rename = "IntegrationResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as the HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
-    #[serde(rename = "IntegrationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
-    #[serde(rename = "IntegrationUri")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
-    #[serde(rename = "PassthroughBehavior")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
-    /// , where
-    /// {location}
-    /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
-    #[serde(rename = "RequestTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
-    #[serde(rename = "TimeoutInMillis")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timeout_in_millis: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1869,15 +1620,7 @@ pub struct GetIntegrationResponseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
@@ -1889,21 +1632,11 @@ pub struct GetIntegrationResponseResponse {
     #[serde(rename = "IntegrationResponseKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of method.response.header.{name}, where name is a
-    /// valid and unique header name. The mapped non-static value must match the pattern of
-    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
-    /// where name is a valid and unique response header name and JSON-expression is a valid
-    /// JSON expression without the $ prefix.</p>
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
     #[serde(rename = "ResponseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
     #[serde(rename = "ResponseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
@@ -1925,8 +1658,7 @@ pub struct GetIntegrationResponsesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1939,11 +1671,88 @@ pub struct GetIntegrationResponsesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<IntegrationResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetIntegrationResult {
+    /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>The connection ID.</p>
+    #[serde(rename = "ConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    #[serde(rename = "ConnectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    #[serde(rename = "CredentialsArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials_arn: Option<String>,
+    /// <p>Represents the description of an integration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Represents the identifier of an integration.</p>
+    #[serde(rename = "IntegrationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_id: Option<String>,
+    /// <p>Specifies the integration's HTTP method type.</p>
+    #[serde(rename = "IntegrationMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_method: Option<String>,
+    /// <p>The integration response selection expression for the integration. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
+    #[serde(rename = "IntegrationResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_selection_expression: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "IntegrationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_type: Option<String>,
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    #[serde(rename = "IntegrationUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_uri: Option<String>,
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    #[serde(rename = "PassthroughBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passthrough_behavior: Option<String>,
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where
+    /// <replaceable>{location}</replaceable>
+    /// is querystring, path, or header; and
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    #[serde(rename = "TimeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1955,8 +1764,7 @@ pub struct GetIntegrationsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1969,8 +1777,7 @@ pub struct GetIntegrationsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Integration>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2005,8 +1812,7 @@ pub struct GetModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -2040,8 +1846,7 @@ pub struct GetModelsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2054,8 +1859,7 @@ pub struct GetModelsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Model>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2069,71 +1873,6 @@ pub struct GetRouteRequest {
     /// <p>The route ID.</p>
     #[serde(rename = "RouteId")]
     pub route_id: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GetRouteResponse {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
-    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
-    /// works by matching the route scopes against the scopes parsed from the access token in
-    /// the incoming request. The method invocation is authorized if any route scope matches
-    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
-    /// When the route scope is configured, the client must provide an access token instead
-    /// of an identity token for authorization purposes.</p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2152,7 +1891,7 @@ pub struct GetRouteResponseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetRouteResponseResponse {
-    /// <p>Represents the model selection expression of a route response.</p>
+    /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -2183,8 +1922,7 @@ pub struct GetRouteResponsesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2200,11 +1938,67 @@ pub struct GetRouteResponsesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<RouteResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRouteResult {
+    /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether an API key is required for this route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a JWT authorizer to authorize the method invocation. The authorization works by matching the route scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any route scope matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the route scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2216,8 +2010,7 @@ pub struct GetRoutesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2230,8 +2023,7 @@ pub struct GetRoutesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Route>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2242,7 +2034,7 @@ pub struct GetStageRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The stage name.</p>
+    /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
 }
@@ -2254,7 +2046,15 @@ pub struct GetStageResponse {
     #[serde(rename = "AccessLogSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_log_settings: Option<AccessLogSettings>,
-    /// <p>The identifier of a client certificate for a Stage.</p>
+    /// <p>Specifies whether a stage is managed by API Gateway. If you created an API using quick create, the $default stage is managed by API Gateway. You can't modify the $default stage.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>The identifier of a client certificate for a Stage. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_certificate_id: Option<String>,
@@ -2266,8 +2066,7 @@ pub struct GetStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is
-    /// associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is associated with. Can't be updated if autoDeploy is enabled.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -2275,11 +2074,15 @@ pub struct GetStageResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Describes the status of the last deployment of a stage. Supported only for stages with autoDeploy enabled.</p>
+    #[serde(rename = "LastDeploymentStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_status_message: Option<String>,
     /// <p>The timestamp when the stage was last updated.</p>
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>Route settings for the stage.</p>
+    /// <p>Route settings for the stage, by routeKey.</p>
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
@@ -2287,12 +2090,14 @@ pub struct GetStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can
-    /// have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2304,8 +2109,7 @@ pub struct GetStagesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2318,45 +2122,124 @@ pub struct GetStagesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Stage>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of
-    /// the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTagsRequest {
+    /// <p>The resource ARN for the tag.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetTagsResponse {
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+/// <p></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ImportApiRequest {
+    /// <p>Represents the base path of the imported API. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Basepath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basepath: Option<String>,
+    /// <p>The OpenAPI definition. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Body")]
+    pub body: String,
+    /// <p>Specifies whether to rollback the API creation (true) or not (false) when a warning is encountered. The default value is false.</p>
+    #[serde(rename = "FailOnWarnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fail_on_warnings: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportApiResponse {
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    #[serde(rename = "ApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_endpoint: Option<String>,
+    /// <p>The API ID.</p>
+    #[serde(rename = "ApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_id: Option<String>,
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    #[serde(rename = "ApiKeySelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the API.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "DisableSchemaValidation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
+    /// <p>The name of the API.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The API protocol.</p>
+    #[serde(rename = "ProtocolType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_type: Option<String>,
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
+    #[serde(rename = "RouteSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_selection_expression: Option<String>,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    #[serde(rename = "Warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Represents an integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Integration {
+    /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -2372,27 +2255,11 @@ pub struct Integration {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
+    /// <p>The integration response selection expression for the integration. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as the HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -2400,49 +2267,32 @@ pub struct Integration {
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
     /// , where
-    /// {location}
+    /// <replaceable>{location}</replaceable>
     /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration.</p>
+    /// <p>The template selection expression for the integration. Supported only for WebSocket APIs.</p>
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
@@ -2452,15 +2302,7 @@ pub struct Integration {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IntegrationResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
@@ -2471,21 +2313,11 @@ pub struct IntegrationResponse {
     /// <p>The integration response key.</p>
     #[serde(rename = "IntegrationResponseKey")]
     pub integration_response_key: String,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of method.response.header.{name}, where name is a
-    /// valid and unique header name. The mapped non-static value must match the pattern of
-    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
-    /// where name is a valid and unique response header name and JSON-expression is a valid
-    /// JSON expression without the $ prefix.</p>
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
     #[serde(rename = "ResponseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
     #[serde(rename = "ResponseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
@@ -2495,8 +2327,21 @@ pub struct IntegrationResponse {
     pub template_selection_expression: Option<String>,
 }
 
-/// <p>Represents a data model for an API. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response
-/// Mappings</a>.</p>
+/// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JWTConfiguration {
+    /// <p>A list of the intended recipients of the JWT. A valid JWT must provide an aud that matches at least one entry in this list. See <a href="https://tools.ietf.org/html/rfc7519#section-4.1.3">RFC 7519</a>. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Audience")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audience: Option<Vec<String>>,
+    /// <p>The base domain of the identity provider that issues JSON Web Tokens. For example, an Amazon Cognito user pool has the following format: https://cognito-idp.<replaceable>{region}</replaceable>.amazonaws.com/<replaceable>{userPoolId}</replaceable>
+    /// . Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Issuer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer: Option<String>,
+}
+
+/// <p>Represents a data model for an API. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response Mappings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Model {
@@ -2515,15 +2360,13 @@ pub struct Model {
     /// <p>The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
 }
 
-/// <p>Validation constraints imposed on parameters of a request (path, query string,
-/// headers).</p>
+/// <p>Validation constraints imposed on parameters of a request (path, query string, headers).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ParameterConstraints {
     /// <p>Whether or not the parameter is required.</p>
@@ -2532,39 +2375,111 @@ pub struct ParameterConstraints {
     pub required: Option<bool>,
 }
 
+/// <p></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReimportApiRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>Represents the base path of the imported API. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Basepath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basepath: Option<String>,
+    /// <p>The OpenAPI definition. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Body")]
+    pub body: String,
+    /// <p>Specifies whether to rollback the API creation (true) or not (false) when a warning is encountered. The default value is false.</p>
+    #[serde(rename = "FailOnWarnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fail_on_warnings: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ReimportApiResponse {
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    #[serde(rename = "ApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_endpoint: Option<String>,
+    /// <p>The API ID.</p>
+    #[serde(rename = "ApiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_id: Option<String>,
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    #[serde(rename = "ApiKeySelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
+    /// <p>The timestamp when the API was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The description of the API.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "DisableSchemaValidation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
+    /// <p>The name of the API.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The API protocol.</p>
+    #[serde(rename = "ProtocolType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_type: Option<String>,
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
+    #[serde(rename = "RouteSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_selection_expression: Option<String>,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A version identifier for the API.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    #[serde(rename = "Warnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warnings: Option<Vec<String>>,
+}
+
 /// <p>Represents a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Route {
-    /// <p>Specifies whether an API key is required for this route.</p>
+    /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether an API key is required for this route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
-    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
-    /// works by matching the route scopes against the scopes parsed from the access token in
-    /// the incoming request. The method invocation is authorized if any route scope matches
-    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
-    /// When the route scope is configured, the client must provide an access token instead
-    /// of an identity token for authorization purposes.</p>
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a JWT authorizer to authorize the method invocation. The authorization works by matching the route scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any route scope matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the route scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -2572,11 +2487,11 @@ pub struct Route {
     #[serde(rename = "OperationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
@@ -2587,7 +2502,7 @@ pub struct Route {
     /// <p>The route key for the route.</p>
     #[serde(rename = "RouteKey")]
     pub route_key: String,
-    /// <p>The route response selection expression for the route.</p>
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RouteResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_response_selection_expression: Option<String>,
@@ -2601,7 +2516,7 @@ pub struct Route {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RouteResponse {
-    /// <p>Represents the model selection expression of a route response.</p>
+    /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -2625,9 +2540,7 @@ pub struct RouteResponse {
 /// <p>Represents a collection of route settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RouteSettings {
-    /// <p>Specifies whether (true) or not (false) data trace
-    /// logging is enabled for this route. This property affects the log entries pushed to
-    /// Amazon CloudWatch Logs.</p>
+    /// <p>Specifies whether (true) or not (false) data trace logging is enabled for this route. This property affects the log entries pushed to Amazon CloudWatch Logs. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DataTraceEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_trace_enabled: Option<bool>,
@@ -2635,17 +2548,15 @@ pub struct RouteSettings {
     #[serde(rename = "DetailedMetricsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_metrics_enabled: Option<bool>,
-    /// <p>Specifies the logging level for this route: DEBUG, INFO,
-    /// or WARN. This property affects the log entries pushed to Amazon
-    /// CloudWatch Logs.</p>
+    /// <p>Specifies the logging level for this route: INFO, ERROR, or OFF. This property affects the log entries pushed to Amazon CloudWatch Logs. Supported only for WebSocket APIs.</p>
     #[serde(rename = "LoggingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_level: Option<String>,
-    /// <p>Specifies the throttling burst limit.</p>
+    /// <p>Specifies the throttling burst limit. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ThrottlingBurstLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throttling_burst_limit: Option<i64>,
-    /// <p>Specifies the throttling rate limit.</p>
+    /// <p>Specifies the throttling rate limit. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ThrottlingRateLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throttling_rate_limit: Option<f64>,
@@ -2659,7 +2570,15 @@ pub struct Stage {
     #[serde(rename = "AccessLogSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_log_settings: Option<AccessLogSettings>,
-    /// <p>The identifier of a client certificate for a Stage.</p>
+    /// <p>Specifies whether a stage is managed by API Gateway. If you created an API using quick create, the $default stage is managed by API Gateway. You can't modify the $default stage.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>The identifier of a client certificate for a Stage. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_certificate_id: Option<String>,
@@ -2671,8 +2590,7 @@ pub struct Stage {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is
-    /// associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is associated with. Can't be updated if autoDeploy is enabled.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -2680,25 +2598,59 @@ pub struct Stage {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Describes the status of the last deployment of a stage. Supported only for stages with autoDeploy enabled.</p>
+    #[serde(rename = "LastDeploymentStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_status_message: Option<String>,
     /// <p>The timestamp when the stage was last updated.</p>
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>Route settings for the stage.</p>
+    /// <p>Route settings for the stage, by routeKey.</p>
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can
-    /// have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Creates a new Tag resource to represent a tag.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The resource ARN for the tag.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The resource ARN for the tag.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <pre><code>        &lt;p&gt;The Tag keys to delete.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+/// <p>Updates an ApiMapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApiMappingRequest {
     /// <p>The API identifier.</p>
@@ -2741,20 +2693,29 @@ pub struct UpdateApiMappingResponse {
     pub stage: Option<String>,
 }
 
+/// <p>Updates an Api.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
+    /// <p>This property is part of quick create. It specifies the credentials required for the integration, if any. For a Lambda integration, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null. Currently, this property is not used for HTTP integrations. If provided, this value replaces the credentials associated with the quick create integration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CredentialsArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials_arn: Option<String>,
     /// <p>The description of the API.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
@@ -2762,10 +2723,18 @@ pub struct UpdateApiRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>This property is part of quick create. If not specified, the route created using quick create is kept. Otherwise, this value replaces the route key of the quick create route. Additional routes may still be added after the API is updated. Supported only for HTTP APIs.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>This property is part of quick create. For HTTP integrations, specify a fully qualified URL. For Lambda integrations, specify a function ARN. The type of the integration will be HTTP_PROXY or AWS_PROXY, respectively. The value provided updates the integration URI and integration type. You can update a quick-created target, but you can't remove it from an API. Supported only for HTTP APIs.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2775,9 +2744,7 @@ pub struct UpdateApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
-    /// stage name is typically appended to this URI to form a complete path to a deployed
-    /// API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -2785,10 +2752,14 @@ pub struct UpdateApiResponse {
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_id: Option<String>,
-    /// <p>An API key selection expression. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
+    /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
     #[serde(rename = "ApiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
+    /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
+    #[serde(rename = "CorsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cors_configuration: Option<Cors>,
     /// <p>The timestamp when the API was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2797,114 +2768,88 @@ pub struct UpdateApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Avoid validating models when creating a deployment.</p>
+    /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
+    /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
+    #[serde(rename = "ImportInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_info: Option<Vec<String>>,
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
+    /// <p>The API protocol.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
-    /// <p>The route selection expression for the API.</p>
+    /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>A collection of tags associated with the API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during
-    /// API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
 }
 
+/// <p>Updates an Authorizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
     /// <p>The authorizer identifier.</p>
     #[serde(rename = "AuthorizerId")]
     pub authorizer_id: String,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it is zero,
-    /// authorization caching is disabled. If it is greater than zero, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For
-    /// REQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth header, a
-    /// Name query string parameter are defined as identity sources, this value is
-    /// $method.request.header.Auth, $method.request.querystring.Name. These
-    /// parameters will be used to derive the authorization caching key and to perform
-    /// runtime validation of the REQUEST authorizer by verifying all of the
-    /// identity-related request parameters are present, not null and non-empty. Only when
-    /// this is true does the authorizer invoke the authorizer Lambda function, otherwise, it
-    /// returns a 401 Unauthorized response without calling the Lambda function.
-    /// The valid value is a string of comma-separated mapping expressions of the specified
-    /// request parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>This parameter is not used.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
-    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
-    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
-    /// specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -2912,66 +2857,38 @@ pub struct UpdateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
-    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
-    /// authorizer responses. If this field is not set, the default value is 300. The maximum
-    /// value is 3600, or 1 hour.</p>
+    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
-    /// Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI).
-    /// ForREQUEST authorizers, this must be a
-    /// well-formed Lambda function URI, for example,
-    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
-    /// In general, the URI has this form:
-    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
-    /// , where {region} is the same as the region hosting the Lambda
-    /// function, path indicates that the remaining substring in the URI should be treated as
-    /// the path to the resource, including the initial /. For Lambda functions,
-    /// this is usually of the form
-    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
-    /// caching is enabled. The value is a comma-separated string of one or more mapping
-    /// expressions of the specified request parameters. For example, if an Auth
-    /// header and a Name query string parameters are defined as identity
-    /// sources, this value is method.request.header.Auth,
-    /// method.request.querystring.Name. These parameters will be used to
-    /// derive the authorization caching key and to perform runtime validation of the
-    /// REQUEST authorizer by verifying all of the identity-related request
-    /// parameters are present, not null, and non-empty. Only when this is true does the
-    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
-    /// Unauthorized response without calling the Lambda function. The valid value
-    /// is a string of comma-separated mapping expressions of the specified request
-    /// parameters. When the authorization caching is not enabled, this property is
-    /// optional.</p>
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The
-    /// validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
+    /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
+    #[serde(rename = "JwtConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jwt_configuration: Option<JWTConfiguration>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For
-    /// REQUEST authorizer, this is not
-    /// defined.</p>
-    #[serde(rename = "ProviderArns")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_arns: Option<Vec<String>>,
 }
 
+/// <p>Updates a Deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -2989,6 +2906,10 @@ pub struct UpdateDeploymentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDeploymentResponse {
+    /// <p>Specifies whether a deployment was automatically released.</p>
+    #[serde(rename = "AutoDeployed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deployed: Option<bool>,
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2997,8 +2918,7 @@ pub struct UpdateDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or
-    /// SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -3012,6 +2932,7 @@ pub struct UpdateDeploymentResponse {
     pub description: Option<String>,
 }
 
+/// <p>Updates a DomainName.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDomainNameRequest {
     /// <p>The domain name.</p>
@@ -3038,8 +2959,13 @@ pub struct UpdateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The collection of tags associated with a domain name.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Updates an Integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -3049,30 +2975,15 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -3087,23 +2998,7 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as the HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -3111,40 +3006,24 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
     /// , where
-    /// {location}
+    /// <replaceable>{location}</replaceable>
     /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -3152,44 +3031,102 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
+/// <p>Updates an IntegrationResponses.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateIntegrationResponseRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration ID.</p>
+    #[serde(rename = "IntegrationId")]
+    pub integration_id: String,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    pub integration_response_id: String,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.<replaceable>{name}</replaceable>
+    /// , where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.<replaceable>{name}</replaceable>
+    /// or integration.response.body.<replaceable>{JSON-expression}</replaceable>
+    /// , where
+    /// <replaceable>{name}</replaceable>
+    /// is a valid and unique response header name and
+    /// <replaceable>{JSON-expression}</replaceable>
+    /// is a valid JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateIntegrationResponse {
+pub struct UpdateIntegrationResponseResponse {
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_id: Option<String>,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expressions for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateIntegrationResult {
+    /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only
-    /// valid value is INTERNET, for connections through the public routable
-    /// internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
+    /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS
-    /// integrations, three options are available. To specify an IAM Role for API Gateway to
-    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
-    /// identity be passed through from the request, specify the string
-    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
-    /// AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -3205,27 +3142,11 @@ pub struct UpdateIntegrationResponse {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
+    /// <p>The integration response selection expression for the integration. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p>
-    /// AWS: for integrating the route or method request with an AWS service
-    /// action, including the Lambda function-invoking action. With the Lambda
-    /// function-invoking action, this is referred to as the Lambda custom integration. With
-    /// any other AWS service action, this is known as AWS integration.</p><p>
-    /// AWS_PROXY: for integrating the route or method request with the Lambda
-    /// function-invoking action with the client request passed through as-is. This
-    /// integration is also referred to as Lambda proxy integration.</p><p>
-    /// HTTP: for integrating the route or method request with an HTTP
-    /// endpoint. This
-    /// integration is also referred to as the HTTP custom integration.</p><p>
-    /// HTTP_PROXY: for integrating route or method request with an HTTP
-    /// endpoint, with the client
-    /// request passed through as-is. This is also referred to as HTTP proxy
-    /// integration.</p><p>
-    /// MOCK: for integrating the route or method request with API Gateway as a
-    /// "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -3233,159 +3154,38 @@ pub struct UpdateIntegrationResponse {
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the
-    /// Content-Type header in the request, and the available mapping
-    /// templates specified as the requestTemplates property on the
-    /// Integration resource. There are three valid values:
-    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
-    /// NEVER.</p><p>
-    /// WHEN_NO_MATCH passes the request body for unmapped content types through
-    /// to the integration backend without transformation.</p><p>
-    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
-    /// Media Type response.</p><p>
-    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
-    /// content types mapped to templates. However, if there is at least one content type
-    /// defined, unmapped content types will be rejected with the same HTTP 415
-    /// Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER. Supported only for WebSocket APIs.</p> <p>WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p> <p>NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p> <p>WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method
-    /// request to the backend. The key is an integration request parameter name and the
-    /// associated value is a method request parameter value or static value that must be
-    /// enclosed within single quotes and pre-encoded as required by the backend. The method
-    /// request parameter value must match the pattern of
-    /// method.request.{location}.{name}
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    #[serde(rename = "PayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_format_version: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
     /// , where
-    /// {location}
+    /// <replaceable>{location}</replaceable>
     /// is querystring, path, or header; and
-    /// {name}
-    /// must be a valid and unique method request parameter name.</p>
+    /// <replaceable>{name}</replaceable>
+    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload
-    /// based on the value of the Content-Type header sent by the client. The content type
-    /// value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration.</p>
+    /// <p>The template selection expression for the integration. Supported only for WebSocket APIs.</p>
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
-    /// milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateIntegrationResponseRequest {
-    /// <p>The API identifier.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration ID.</p>
-    #[serde(rename = "IntegrationId")]
-    pub integration_id: String,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    pub integration_response_id: String,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of
-    /// method.response.header.{name}
-    /// , where name is a valid and unique header name. The mapped non-static value
-    /// must match the pattern of
-    /// integration.response.header.{name}
-    /// or
-    /// integration.response.body.{JSON-expression}
-    /// , where
-    /// {name}
-    /// is a valid and unique response header name and
-    /// {JSON-expression}
-    /// is a valid JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported
-    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
-    /// following behaviors:</p><p>
-    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
-    /// string to the corresponding binary blob.</p><p>
-    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
-    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
-    /// the integration response to the route response or method response without
-    /// modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_id: Option<String>,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method
-    /// response from the backend. The key is a method response header parameter name and the
-    /// mapped value is an integration response header value, a static value enclosed within
-    /// a pair of single quotes, or a JSON expression from the integration response body. The
-    /// mapping key must match the pattern of method.response.header.{name}, where name is a
-    /// valid and unique header name. The mapped non-static value must match the pattern of
-    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
-    /// where name is a valid and unique response header name and JSON-expression is a valid
-    /// JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a
-    /// string-to-string map of key-value pairs. Response templates are represented as a
-    /// key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expressions for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
+/// <p>Updates a Model.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateModelRequest {
     /// <p>The API identifier.</p>
@@ -3406,8 +3206,7 @@ pub struct UpdateModelRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -3432,42 +3231,35 @@ pub struct UpdateModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema
-    /// draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
 }
 
+/// <p>Updates a Route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRouteRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies whether an API key is required for the route.</p>
+    /// <p>Specifies whether an API key is required for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this
-    /// route.</p>
+    /// <p>The authorization scopes supported by this route.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -3475,11 +3267,11 @@ pub struct UpdateRouteRequest {
     #[serde(rename = "OperationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
@@ -3490,7 +3282,7 @@ pub struct UpdateRouteRequest {
     #[serde(rename = "RouteKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
     #[serde(rename = "RouteResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_response_selection_expression: Option<String>,
@@ -3500,77 +3292,13 @@ pub struct UpdateRouteRequest {
     pub target: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateRouteResponse {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
-    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
-    /// works by matching the route scopes against the scopes parsed from the access token in
-    /// the incoming request. The method invocation is authorized if any route scope matches
-    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
-    /// When the route scope is configured, the client must provide an access token instead
-    /// of an identity token for authorization purposes.</p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open
-    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
-    /// for using a Lambda
-    /// authorizer</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this
-    /// route, if the authorizationType is CUSTOM
-    /// . The authorizer identifier is generated by API Gateway
-    /// when you created the authorizer.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
-}
-
+/// <p>Updates a RouteResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The model selection expression for the route response.</p>
+    /// <p>The model selection expression for the route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -3597,7 +3325,7 @@ pub struct UpdateRouteResponseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRouteResponseResponse {
-    /// <p>Represents the model selection expression of a route response.</p>
+    /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ModelSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_selection_expression: Option<String>,
@@ -3619,6 +3347,64 @@ pub struct UpdateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRouteResult {
+    /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether an API key is required for this route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a JWT authorizer to authorize the method invocation. The authorization works by matching the route scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any route scope matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the route scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this route. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route. Supported only for WebSocket APIs.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// <p>Updates a Stage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
@@ -3628,6 +3414,10 @@ pub struct UpdateStageRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
     /// <p>The identifier of a client certificate for a Stage.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3636,7 +3426,7 @@ pub struct UpdateStageRequest {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The deployment identifier for the API stage.</p>
+    /// <p>The deployment identifier for the API stage. Can't be updated if autoDeploy is enabled.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -3648,12 +3438,10 @@ pub struct UpdateStageRequest {
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
-    /// <p>The stage name.</p>
+    /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names
-    /// can have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -3666,7 +3454,15 @@ pub struct UpdateStageResponse {
     #[serde(rename = "AccessLogSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_log_settings: Option<AccessLogSettings>,
-    /// <p>The identifier of a client certificate for a Stage.</p>
+    /// <p>Specifies whether a stage is managed by API Gateway. If you created an API using quick create, the $default stage is managed by API Gateway. You can't modify the $default stage.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
+    /// <p>Specifies whether updates to an API automatically trigger a new deployment. The default value is false.</p>
+    #[serde(rename = "AutoDeploy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_deploy: Option<bool>,
+    /// <p>The identifier of a client certificate for a Stage. Supported only for WebSocket APIs.</p>
     #[serde(rename = "ClientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_certificate_id: Option<String>,
@@ -3678,8 +3474,7 @@ pub struct UpdateStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is
-    /// associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is associated with. Can't be updated if autoDeploy is enabled.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -3687,11 +3482,15 @@ pub struct UpdateStageResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Describes the status of the last deployment of a stage. Supported only for stages with autoDeploy enabled.</p>
+    #[serde(rename = "LastDeploymentStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deployment_status_message: Option<String>,
     /// <p>The timestamp when the stage was last updated.</p>
     #[serde(rename = "LastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date: Option<f64>,
-    /// <p>Route settings for the stage.</p>
+    /// <p>Route settings for the stage, by routeKey.</p>
     #[serde(rename = "RouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
@@ -3699,26 +3498,24 @@ pub struct UpdateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can
-    /// have alphanumeric and underscore characters, and the values must match
-    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// Errors returned by CreateApi
 #[derive(Debug, PartialEq)]
 pub enum CreateApiError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3765,15 +3562,11 @@ impl Error for CreateApiError {
 /// Errors returned by CreateApiMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3820,15 +3613,11 @@ impl Error for CreateApiMappingError {
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3875,15 +3664,11 @@ impl Error for CreateAuthorizerError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3930,15 +3715,12 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDomainName
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainNameError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    AccessDenied(String),
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3948,6 +3730,9 @@ impl CreateDomainNameError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainNameError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateDomainNameError::AccessDenied(err.msg))
+                }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDomainNameError::BadRequest(err.msg))
                 }
@@ -3975,6 +3760,7 @@ impl fmt::Display for CreateDomainNameError {
 impl Error for CreateDomainNameError {
     fn description(&self) -> &str {
         match *self {
+            CreateDomainNameError::AccessDenied(ref cause) => cause,
             CreateDomainNameError::BadRequest(ref cause) => cause,
             CreateDomainNameError::Conflict(ref cause) => cause,
             CreateDomainNameError::NotFound(ref cause) => cause,
@@ -3985,15 +3771,11 @@ impl Error for CreateDomainNameError {
 /// Errors returned by CreateIntegration
 #[derive(Debug, PartialEq)]
 pub enum CreateIntegrationError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4040,15 +3822,11 @@ impl Error for CreateIntegrationError {
 /// Errors returned by CreateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum CreateIntegrationResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4099,15 +3877,11 @@ impl Error for CreateIntegrationResponseError {
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4154,15 +3928,11 @@ impl Error for CreateModelError {
 /// Errors returned by CreateRoute
 #[derive(Debug, PartialEq)]
 pub enum CreateRouteError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4209,15 +3979,11 @@ impl Error for CreateRouteError {
 /// Errors returned by CreateRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum CreateRouteResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4264,15 +4030,11 @@ impl Error for CreateRouteResponseError {
 /// Errors returned by CreateStage
 #[derive(Debug, PartialEq)]
 pub enum CreateStageError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4319,8 +4081,7 @@ impl Error for CreateStageError {
 /// Errors returned by DeleteApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4359,11 +4120,9 @@ impl Error for DeleteApiError {
 /// Errors returned by DeleteApiMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4406,8 +4165,7 @@ impl Error for DeleteApiMappingError {
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4443,11 +4201,51 @@ impl Error for DeleteAuthorizerError {
         }
     }
 }
+/// Errors returned by DeleteCorsConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteCorsConfigurationError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteCorsConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCorsConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteCorsConfigurationError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteCorsConfigurationError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteCorsConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteCorsConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteCorsConfigurationError::NotFound(ref cause) => cause,
+            DeleteCorsConfigurationError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteDeployment
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4486,8 +4284,7 @@ impl Error for DeleteDeploymentError {
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4526,8 +4323,7 @@ impl Error for DeleteDomainNameError {
 /// Errors returned by DeleteIntegration
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4566,8 +4362,7 @@ impl Error for DeleteIntegrationError {
 /// Errors returned by DeleteIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationResponseError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4608,8 +4403,7 @@ impl Error for DeleteIntegrationResponseError {
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4648,8 +4442,7 @@ impl Error for DeleteModelError {
 /// Errors returned by DeleteRoute
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4688,8 +4481,7 @@ impl Error for DeleteRouteError {
 /// Errors returned by DeleteRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteResponseError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4725,11 +4517,49 @@ impl Error for DeleteRouteResponseError {
         }
     }
 }
+/// Errors returned by DeleteRouteSettings
+#[derive(Debug, PartialEq)]
+pub enum DeleteRouteSettingsError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteRouteSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRouteSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteRouteSettingsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteRouteSettingsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteRouteSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRouteSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRouteSettingsError::NotFound(ref cause) => cause,
+            DeleteRouteSettingsError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteStage
 #[derive(Debug, PartialEq)]
 pub enum DeleteStageError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4768,8 +4598,7 @@ impl Error for DeleteStageError {
 /// Errors returned by GetApi
 #[derive(Debug, PartialEq)]
 pub enum GetApiError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4806,11 +4635,9 @@ impl Error for GetApiError {
 /// Errors returned by GetApiMapping
 #[derive(Debug, PartialEq)]
 pub enum GetApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4853,11 +4680,9 @@ impl Error for GetApiMappingError {
 /// Errors returned by GetApiMappings
 #[derive(Debug, PartialEq)]
 pub enum GetApiMappingsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4900,11 +4725,9 @@ impl Error for GetApiMappingsError {
 /// Errors returned by GetApis
 #[derive(Debug, PartialEq)]
 pub enum GetApisError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4947,8 +4770,7 @@ impl Error for GetApisError {
 /// Errors returned by GetAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizerError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4987,11 +4809,9 @@ impl Error for GetAuthorizerError {
 /// Errors returned by GetAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizersError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5034,8 +4854,7 @@ impl Error for GetAuthorizersError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5074,11 +4893,9 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeployments
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5121,8 +4938,7 @@ impl Error for GetDeploymentsError {
 /// Errors returned by GetDomainName
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNameError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5161,11 +4977,9 @@ impl Error for GetDomainNameError {
 /// Errors returned by GetDomainNames
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNamesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5208,8 +5022,7 @@ impl Error for GetDomainNamesError {
 /// Errors returned by GetIntegration
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5248,8 +5061,7 @@ impl Error for GetIntegrationError {
 /// Errors returned by GetIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponseError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5290,11 +5102,9 @@ impl Error for GetIntegrationResponseError {
 /// Errors returned by GetIntegrationResponses
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponsesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5339,11 +5149,9 @@ impl Error for GetIntegrationResponsesError {
 /// Errors returned by GetIntegrations
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5386,8 +5194,7 @@ impl Error for GetIntegrationsError {
 /// Errors returned by GetModel
 #[derive(Debug, PartialEq)]
 pub enum GetModelError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5426,8 +5233,7 @@ impl Error for GetModelError {
 /// Errors returned by GetModelTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetModelTemplateError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5466,11 +5272,9 @@ impl Error for GetModelTemplateError {
 /// Errors returned by GetModels
 #[derive(Debug, PartialEq)]
 pub enum GetModelsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5513,8 +5317,7 @@ impl Error for GetModelsError {
 /// Errors returned by GetRoute
 #[derive(Debug, PartialEq)]
 pub enum GetRouteError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5553,8 +5356,7 @@ impl Error for GetRouteError {
 /// Errors returned by GetRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum GetRouteResponseError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5593,11 +5395,9 @@ impl Error for GetRouteResponseError {
 /// Errors returned by GetRouteResponses
 #[derive(Debug, PartialEq)]
 pub enum GetRouteResponsesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5640,11 +5440,9 @@ impl Error for GetRouteResponsesError {
 /// Errors returned by GetRoutes
 #[derive(Debug, PartialEq)]
 pub enum GetRoutesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5687,8 +5485,7 @@ impl Error for GetRoutesError {
 /// Errors returned by GetStage
 #[derive(Debug, PartialEq)]
 pub enum GetStageError {
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5727,11 +5524,9 @@ impl Error for GetStageError {
 /// Errors returned by GetStages
 #[derive(Debug, PartialEq)]
 pub enum GetStagesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5771,18 +5566,269 @@ impl Error for GetStagesError {
         }
     }
 }
+/// Errors returned by GetTags
+#[derive(Debug, PartialEq)]
+pub enum GetTagsError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl GetTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetTagsError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(GetTagsError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetTagsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetTagsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTagsError::BadRequest(ref cause) => cause,
+            GetTagsError::Conflict(ref cause) => cause,
+            GetTagsError::NotFound(ref cause) => cause,
+            GetTagsError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ImportApi
+#[derive(Debug, PartialEq)]
+pub enum ImportApiError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl ImportApiError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportApiError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ImportApiError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(ImportApiError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ImportApiError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ImportApiError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ImportApiError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ImportApiError {
+    fn description(&self) -> &str {
+        match *self {
+            ImportApiError::BadRequest(ref cause) => cause,
+            ImportApiError::Conflict(ref cause) => cause,
+            ImportApiError::NotFound(ref cause) => cause,
+            ImportApiError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ReimportApi
+#[derive(Debug, PartialEq)]
+pub enum ReimportApiError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl ReimportApiError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReimportApiError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ReimportApiError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(ReimportApiError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ReimportApiError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ReimportApiError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ReimportApiError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ReimportApiError {
+    fn description(&self) -> &str {
+        match *self {
+            ReimportApiError::BadRequest(ref cause) => cause,
+            ReimportApiError::Conflict(ref cause) => cause,
+            ReimportApiError::NotFound(ref cause) => cause,
+            ReimportApiError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(TagResourceError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::Conflict(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UntagResourceError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::Conflict(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5829,15 +5875,11 @@ impl Error for UpdateApiError {
 /// Errors returned by UpdateApiMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5884,15 +5926,11 @@ impl Error for UpdateApiMappingError {
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5939,15 +5977,11 @@ impl Error for UpdateAuthorizerError {
 /// Errors returned by UpdateDeployment
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5994,15 +6028,11 @@ impl Error for UpdateDeploymentError {
 /// Errors returned by UpdateDomainName
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6049,15 +6079,11 @@ impl Error for UpdateDomainNameError {
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6104,15 +6130,11 @@ impl Error for UpdateIntegrationError {
 /// Errors returned by UpdateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6163,15 +6185,11 @@ impl Error for UpdateIntegrationResponseError {
 /// Errors returned by UpdateModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateModelError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6218,15 +6236,11 @@ impl Error for UpdateModelError {
 /// Errors returned by UpdateRoute
 #[derive(Debug, PartialEq)]
 pub enum UpdateRouteError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6273,15 +6287,11 @@ impl Error for UpdateRouteError {
 /// Errors returned by UpdateRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateRouteResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6328,15 +6338,11 @@ impl Error for UpdateRouteResponseError {
 /// Errors returned by UpdateStage
 #[derive(Debug, PartialEq)]
 pub enum UpdateStageError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
-    /// the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service
-    /// resource associated with the request. Resolve the conflict before retrying this
-    /// request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message
-    /// field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -6417,7 +6423,7 @@ pub trait ApiGatewayV2 {
     async fn create_integration(
         &self,
         input: CreateIntegrationRequest,
-    ) -> Result<CreateIntegrationResponse, RusotoError<CreateIntegrationError>>;
+    ) -> Result<CreateIntegrationResult, RusotoError<CreateIntegrationError>>;
 
     /// <p>Creates an IntegrationResponses.</p>
     async fn create_integration_response(
@@ -6435,7 +6441,7 @@ pub trait ApiGatewayV2 {
     async fn create_route(
         &self,
         input: CreateRouteRequest,
-    ) -> Result<CreateRouteResponse, RusotoError<CreateRouteError>>;
+    ) -> Result<CreateRouteResult, RusotoError<CreateRouteError>>;
 
     /// <p>Creates a RouteResponse for a Route.</p>
     async fn create_route_response(
@@ -6463,6 +6469,12 @@ pub trait ApiGatewayV2 {
         &self,
         input: DeleteAuthorizerRequest,
     ) -> Result<(), RusotoError<DeleteAuthorizerError>>;
+
+    /// <p>Deletes a CORS configuration.</p>
+    async fn delete_cors_configuration(
+        &self,
+        input: DeleteCorsConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteCorsConfigurationError>>;
 
     /// <p>Deletes a Deployment.</p>
     async fn delete_deployment(
@@ -6506,6 +6518,12 @@ pub trait ApiGatewayV2 {
         input: DeleteRouteResponseRequest,
     ) -> Result<(), RusotoError<DeleteRouteResponseError>>;
 
+    /// <p>Deletes the RouteSettings for a stage.</p>
+    async fn delete_route_settings(
+        &self,
+        input: DeleteRouteSettingsRequest,
+    ) -> Result<(), RusotoError<DeleteRouteSettingsError>>;
+
     /// <p>Deletes a Stage.</p>
     async fn delete_stage(
         &self,
@@ -6518,13 +6536,13 @@ pub trait ApiGatewayV2 {
         input: GetApiRequest,
     ) -> Result<GetApiResponse, RusotoError<GetApiError>>;
 
-    /// <p>The API mapping.</p>
+    /// <p>Gets an API mapping.</p>
     async fn get_api_mapping(
         &self,
         input: GetApiMappingRequest,
     ) -> Result<GetApiMappingResponse, RusotoError<GetApiMappingError>>;
 
-    /// <p>The API mappings.</p>
+    /// <p>Gets API mappings.</p>
     async fn get_api_mappings(
         &self,
         input: GetApiMappingsRequest,
@@ -6576,7 +6594,7 @@ pub trait ApiGatewayV2 {
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> Result<GetIntegrationResponse, RusotoError<GetIntegrationError>>;
+    ) -> Result<GetIntegrationResult, RusotoError<GetIntegrationError>>;
 
     /// <p>Gets an IntegrationResponses.</p>
     async fn get_integration_response(
@@ -6618,7 +6636,7 @@ pub trait ApiGatewayV2 {
     async fn get_route(
         &self,
         input: GetRouteRequest,
-    ) -> Result<GetRouteResponse, RusotoError<GetRouteError>>;
+    ) -> Result<GetRouteResult, RusotoError<GetRouteError>>;
 
     /// <p>Gets a RouteResponse.</p>
     async fn get_route_response(
@@ -6649,6 +6667,36 @@ pub trait ApiGatewayV2 {
         &self,
         input: GetStagesRequest,
     ) -> Result<GetStagesResponse, RusotoError<GetStagesError>>;
+
+    /// <p>Gets a collection of Tag resources.</p>
+    async fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Result<GetTagsResponse, RusotoError<GetTagsError>>;
+
+    /// <p>Imports an API.</p>
+    async fn import_api(
+        &self,
+        input: ImportApiRequest,
+    ) -> Result<ImportApiResponse, RusotoError<ImportApiError>>;
+
+    /// <p>Puts an Api resource.</p>
+    async fn reimport_api(
+        &self,
+        input: ReimportApiRequest,
+    ) -> Result<ReimportApiResponse, RusotoError<ReimportApiError>>;
+
+    /// <p>Creates a new Tag resource to represent a tag.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Deletes a Tag.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates an Api resource.</p>
     async fn update_api(
@@ -6684,7 +6732,7 @@ pub trait ApiGatewayV2 {
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> Result<UpdateIntegrationResponse, RusotoError<UpdateIntegrationError>>;
+    ) -> Result<UpdateIntegrationResult, RusotoError<UpdateIntegrationError>>;
 
     /// <p>Updates an IntegrationResponses.</p>
     async fn update_integration_response(
@@ -6702,7 +6750,7 @@ pub trait ApiGatewayV2 {
     async fn update_route(
         &self,
         input: UpdateRouteRequest,
-    ) -> Result<UpdateRouteResponse, RusotoError<UpdateRouteError>>;
+    ) -> Result<UpdateRouteResult, RusotoError<UpdateRouteError>>;
 
     /// <p>Updates a RouteResponse.</p>
     async fn update_route_response(
@@ -6747,6 +6795,10 @@ impl ApiGatewayV2Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ApiGatewayV2Client {
+        ApiGatewayV2Client { client, region }
     }
 }
 
@@ -6909,7 +6961,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn create_integration(
         &self,
         input: CreateIntegrationRequest,
-    ) -> Result<CreateIntegrationResponse, RusotoError<CreateIntegrationError>> {
+    ) -> Result<CreateIntegrationResult, RusotoError<CreateIntegrationError>> {
         let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -6926,7 +6978,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIntegrationResponse, _>()?;
+                .deserialize::<CreateIntegrationResult, _>()?;
 
             Ok(result)
         } else {
@@ -7004,7 +7056,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn create_route(
         &self,
         input: CreateRouteRequest,
-    ) -> Result<CreateRouteResponse, RusotoError<CreateRouteError>> {
+    ) -> Result<CreateRouteResult, RusotoError<CreateRouteError>> {
         let request_uri = format!("/v2/apis/{api_id}/routes", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -7021,7 +7073,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         if response.status.as_u16() == 201 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRouteResponse, _>()?;
+                .deserialize::<CreateRouteResult, _>()?;
 
             Ok(result)
         } else {
@@ -7174,6 +7226,32 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAuthorizerError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a CORS configuration.</p>
+    async fn delete_cors_configuration(
+        &self,
+        input: DeleteCorsConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteCorsConfigurationError>> {
+        let request_uri = format!("/v2/apis/{api_id}/cors", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCorsConfigurationError::from_response(response))
         }
     }
 
@@ -7383,6 +7461,37 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    /// <p>Deletes the RouteSettings for a stage.</p>
+    async fn delete_route_settings(
+        &self,
+        input: DeleteRouteSettingsRequest,
+    ) -> Result<(), RusotoError<DeleteRouteSettingsError>> {
+        let request_uri = format!(
+            "/v2/apis/{api_id}/stages/{stage_name}/routesettings/{route_key}",
+            api_id = input.api_id,
+            route_key = input.route_key,
+            stage_name = input.stage_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRouteSettingsError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a Stage.</p>
     async fn delete_stage(
         &self,
@@ -7440,7 +7549,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
-    /// <p>The API mapping.</p>
+    /// <p>Gets an API mapping.</p>
     async fn get_api_mapping(
         &self,
         input: GetApiMappingRequest,
@@ -7471,7 +7580,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
-    /// <p>The API mappings.</p>
+    /// <p>Gets API mappings.</p>
     async fn get_api_mappings(
         &self,
         input: GetApiMappingsRequest,
@@ -7750,7 +7859,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> Result<GetIntegrationResponse, RusotoError<GetIntegrationError>> {
+    ) -> Result<GetIntegrationResult, RusotoError<GetIntegrationError>> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
             api_id = input.api_id,
@@ -7768,7 +7877,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIntegrationResponse, _>()?;
+                .deserialize::<GetIntegrationResult, _>()?;
 
             Ok(result)
         } else {
@@ -7982,7 +8091,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn get_route(
         &self,
         input: GetRouteRequest,
-    ) -> Result<GetRouteResponse, RusotoError<GetRouteError>> {
+    ) -> Result<GetRouteResult, RusotoError<GetRouteError>> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
             api_id = input.api_id,
@@ -7999,8 +8108,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRouteResponse, _>()?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetRouteResult, _>()?;
 
             Ok(result)
         } else {
@@ -8184,6 +8293,173 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    /// <p>Gets a collection of Tag resources.</p>
+    async fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Result<GetTagsResponse, RusotoError<GetTagsError>> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result =
+                proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTagsError::from_response(response))
+        }
+    }
+
+    /// <p>Imports an API.</p>
+    async fn import_api(
+        &self,
+        input: ImportApiRequest,
+    ) -> Result<ImportApiResponse, RusotoError<ImportApiError>> {
+        let request_uri = "/v2/apis";
+
+        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.basepath {
+            params.put("basepath", x);
+        }
+        if let Some(ref x) = input.fail_on_warnings {
+            params.put("failOnWarnings", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ImportApiResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ImportApiError::from_response(response))
+        }
+    }
+
+    /// <p>Puts an Api resource.</p>
+    async fn reimport_api(
+        &self,
+        input: ReimportApiRequest,
+    ) -> Result<ReimportApiResponse, RusotoError<ReimportApiError>> {
+        let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.basepath {
+            params.put("basepath", x);
+        }
+        if let Some(ref x) = input.fail_on_warnings {
+            params.put("failOnWarnings", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ReimportApiResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ReimportApiError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new Tag resource to represent a tag.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a Tag.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
+    }
+
     /// <p>Updates an Api resource.</p>
     async fn update_api(
         &self,
@@ -8353,7 +8629,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> Result<UpdateIntegrationResponse, RusotoError<UpdateIntegrationError>> {
+    ) -> Result<UpdateIntegrationResult, RusotoError<UpdateIntegrationError>> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
             api_id = input.api_id,
@@ -8374,7 +8650,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIntegrationResponse, _>()?;
+                .deserialize::<UpdateIntegrationResult, _>()?;
 
             Ok(result)
         } else {
@@ -8452,7 +8728,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     async fn update_route(
         &self,
         input: UpdateRouteRequest,
-    ) -> Result<UpdateRouteResponse, RusotoError<UpdateRouteError>> {
+    ) -> Result<UpdateRouteResult, RusotoError<UpdateRouteError>> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
             api_id = input.api_id,
@@ -8473,7 +8749,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         if response.status.as_u16() == 200 {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRouteResponse, _>()?;
+                .deserialize::<UpdateRouteResult, _>()?;
 
             Ok(result)
         } else {

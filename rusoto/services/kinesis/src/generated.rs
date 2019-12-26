@@ -2805,6 +2805,10 @@ impl KinesisClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KinesisClient {
+        KinesisClient { client, region }
+    }
 }
 
 #[async_trait]

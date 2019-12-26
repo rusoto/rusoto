@@ -203,6 +203,14 @@ where
                     region
                 }}
             }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
+                {type_name} {{
+                    client,
+                    region
+                }}
+            }}
         }}
 
         #[async_trait]
@@ -303,11 +311,43 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
-        // Discovery has an BatchDeleteImportDataError struct, avoid collision with our error enum
+        // SecurityHub has a conveniently named "Result" type
+        "Result" => "SecurityHubResult".to_owned(),
+
+        // Discovery has a BatchDeleteImportDataError struct, avoid collision with our error enum
         "BatchDeleteImportDataError" => "DiscoveryBatchDeleteImportDataError".to_owned(),
 
-        // EC2 has an CreateFleetError struct, avoid collision with our error enum
+        // EC2 has a CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
+
+        // EC2 has a DeleteQueuedReservedInstancesError struct, avoid collision with our error enum
+        "DeleteQueuedReservedInstancesError" => "EC2DeleteQueuedReservedInstancesError".to_owned(),
+
+        // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
+        "BatchDescribeMergeConflictsError" => {
+            "CodeCommitBatchDescribeMergeConflictsError".to_owned()
+        }
+
+        // codecommit has a BatchGetCommitsError, avoid collision with our error enum
+        "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
+
+        // codecommit has a BatchDisassociateApprovalRuleTemplateFromRepositoriesError, avoid collision with our error enum
+        "BatchDisassociateApprovalRuleTemplateFromRepositoriesError" => {
+            "CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError".to_owned()
+        }
+
+        // codecommit has a BatchAssociateApprovalRuleTemplateWithRepositoriesError, avoid collision with our error enum
+        "BatchAssociateApprovalRuleTemplateWithRepositoriesError" => {
+            "CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError".to_owned()
+        }
+
+        // CloudSearch has a UpdateDomainEndpointOptionsError, avoid collision with our error enum
+        "UpdateDomainEndpointOptionsError" => {
+            "CloudSearchUpdateDomainEndpointOptionsError".to_owned()
+        }
+
+        // Chime has a CreateAttendeeError, avoid collision with our error enum
+        "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
@@ -322,9 +362,8 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
 fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
     let mut shapes_to_generate = BTreeSet::<String>::new();
 
-    let mut visitor = |shape_name: &str, _shape: &Shape| {
-        shapes_to_generate.insert(shape_name.to_owned())
-    };
+    let mut visitor =
+        |shape_name: &str, _shape: &Shape| shapes_to_generate.insert(shape_name.to_owned());
 
     for operation in service.operations().values() {
         if let Some(ref input) = operation.input {
@@ -569,6 +608,8 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // does not mention that the slot values themselves can be null.
             } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
                 lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
+            } else if name == "match" {
+                lines.push(format!("pub route_{}: Option<{}>,", name, rs_type))
             } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
             } else if name == "type" {

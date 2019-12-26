@@ -8,8 +8,8 @@ use rusoto_fms::{Fms, FmsClient, ListPoliciesRequest};
 
 use std::str;
 
-#[test]
-fn should_list_policies() {
+#[tokio::test]
+async fn should_list_policies() {
     let client = FmsClient::new(Region::UsEast1);
     let request = ListPoliciesRequest {
         max_results: Some(1),
@@ -17,7 +17,7 @@ fn should_list_policies() {
     };
 
     // If our account doesn't have access, assume everything is fine:
-    match client.list_policies(request).sync() {
+    match client.list_policies(request).await {
         Err(e) => match e {
             RusotoError::Unknown(ref e) => assert!(
                 str::from_utf8(&e.body)

@@ -1879,6 +1879,10 @@ impl CognitoSyncClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CognitoSyncClient {
+        CognitoSyncClient { client, region }
+    }
 }
 
 #[async_trait]

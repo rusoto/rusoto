@@ -3435,6 +3435,10 @@ impl WorkmailClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> WorkmailClient {
+        WorkmailClient { client, region }
+    }
 }
 
 #[async_trait]

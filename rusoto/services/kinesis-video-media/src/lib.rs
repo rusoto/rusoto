@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,15 +10,15 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <p><p/></p>
 //!
 //! If you're using the service, you're probably looking for [KinesisVideoMediaClient](struct.KinesisVideoMediaClient.html) and [KinesisVideoMedia](trait.KinesisVideoMedia.html).
 
-
-mod generated;
 mod custom;
+mod generated;
 
-pub use generated::*;
 pub use custom::*;
-            
+pub use generated::*;

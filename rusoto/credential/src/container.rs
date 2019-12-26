@@ -83,12 +83,22 @@ impl Default for ContainerProvider {
 #[async_trait]
 impl ProvideAwsCredentials for ContainerProvider {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        let req = request_from_env_vars().map_err(|err| {
-            CredentialsError { message: format!("Could not get request from environment: {}", err.to_string()) }
+        let req = request_from_env_vars().map_err(|err| CredentialsError {
+            message: format!(
+                "Could not get request from environment: {}",
+                err.to_string()
+            ),
         })?;
-        let resp = self.client.request(req, self.timeout).await.map_err(|err| {
-            CredentialsError { message: format!("Could not get credentials from container: {}", err.to_string()) }
-        })?;
+        let resp = self
+            .client
+            .request(req, self.timeout)
+            .await
+            .map_err(|err| CredentialsError {
+                message: format!(
+                    "Could not get credentials from container: {}",
+                    err.to_string()
+                ),
+            })?;
         parse_credentials_from_aws_service(&resp)
     }
 }

@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -11,16 +10,16 @@
 //
 // =================================================================
 
-#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
+)]
 //! <pre><code>           &lt;p&gt;The operations for managing an Amazon MSK cluster.&lt;/p&gt;
 //! </code></pre>
 //!
 //! If you're using the service, you're probably looking for [KafkaClient](struct.KafkaClient.html) and [Kafka](trait.Kafka.html).
 
-
-mod generated;
 mod custom;
+mod generated;
 
-pub use generated::*;
 pub use custom::*;
-            
+pub use generated::*;

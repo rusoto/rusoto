@@ -1,13 +1,16 @@
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
-use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::credential::{
+    CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+};
+use crate::encoding::ContentEncoding;
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
 
 use async_trait::async_trait;
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
+use tokio::time;
 
 lazy_static! {
     static ref SHARED_CLIENT: Mutex<Weak<ClientInner<DefaultCredentialsProvider, HttpClient>>> =
@@ -31,8 +34,9 @@ impl Client {
             DefaultCredentialsProvider::new().expect("failed to create credentials provider");
         let dispatcher = HttpClient::new().expect("failed to create request dispatcher");
         let inner = Arc::new(ClientInner {
-            credentials_provider: Arc::new(credentials_provider),
+            credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
         });
         *lock = Arc::downgrade(&inner);
         Client { inner }
@@ -45,8 +49,50 @@ impl Client {
         D: DispatchSignedRequest + Send + Sync + 'static,
     {
         let inner = ClientInner {
-            credentials_provider: Arc::new(credentials_provider),
+            credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
+        };
+        Client {
+            inner: Arc::new(inner),
+        }
+    }
+
+    /// Create a client from a request dispatcher without a credentials provider. The client will
+    /// neither fetch any default credentials nor sign any requests. A non-signing client can be
+    /// useful for calling APIs like `Sts::assume_role_with_web_identity` and
+    /// `Sts::assume_role_with_saml` which do not require any request signing or when calling
+    /// AWS compatible third party API endpoints which employ different authentication mechanisms.
+    pub fn new_not_signing<D>(dispatcher: D) -> Self
+    where
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        // D::Future: Send,
+    {
+        let inner = ClientInner::<StaticProvider, D> {
+            credentials_provider: None,
+            dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
+        };
+        Client {
+            inner: Arc::new(inner),
+        }
+    }
+
+    #[cfg(feature = "encoding")]
+    /// Create a client with content encoding to compress payload before sending requests
+    pub fn new_with_encoding<P, D>(
+        credentials_provider: P,
+        dispatcher: D,
+        content_encoding: ContentEncoding,
+    ) -> Self
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+    {
+        let inner = ClientInner {
+            credentials_provider: Some(Arc::new(credentials_provider)),
+            dispatcher: Arc::new(dispatcher),
+            content_encoding,
         };
         Client {
             inner: Arc::new(inner),
@@ -57,8 +103,7 @@ impl Client {
     pub async fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Result<HttpResponse, SignAndDispatchError>
-    {
+    ) -> Result<HttpResponse, SignAndDispatchError> {
         self.inner.sign_and_dispatch(request, None).await
     }
 }
@@ -82,8 +127,9 @@ trait SignAndDispatch {
 }
 
 struct ClientInner<P, D> {
-    credentials_provider: Arc<P>,
+    credentials_provider: Option<Arc<P>>,
     dispatcher: Arc<D>,
+    content_encoding: ContentEncoding,
 }
 
 impl<P, D> Clone for ClientInner<P, D> {
@@ -91,6 +137,7 @@ impl<P, D> Clone for ClientInner<P, D> {
         ClientInner {
             credentials_provider: self.credentials_provider.clone(),
             dispatcher: self.dispatcher.clone(),
+            content_encoding: self.content_encoding.clone(),
         }
     }
 }
@@ -98,21 +145,22 @@ impl<P, D> Clone for ClientInner<P, D> {
 async fn sign_and_dispatch<P, D>(
     client: ClientInner<P, D>,
     request: SignedRequest,
-    timeout: Option<Duration>
+    timeout: Option<Duration>,
 ) -> Result<HttpResponse, SignAndDispatchError>
-    where
-        P: ProvideAwsCredentials + Send + Sync + 'static,
-        D: DispatchSignedRequest + Send + Sync + 'static,
+where
+    P: ProvideAwsCredentials + Send + Sync + 'static,
+    D: DispatchSignedRequest + Send + Sync + 'static,
 {
-    let f = client.credentials_provider.credentials();
+    let p = client.credentials_provider.clone().unwrap();
+    let f = p.credentials();
     let credentials = if let Some(to) = timeout {
-        match f.timeout(to).await {
+        match time::timeout(to, f).await {
             Err(_e) => {
                 let err = CredentialsError {
                     message: "Timeout getting credentials".to_owned(),
                 };
                 return Err(SignAndDispatchError::Credentials(err));
-            },
+            }
             Ok(try_creds) => try_creds,
         }
     } else {
@@ -121,7 +169,11 @@ async fn sign_and_dispatch<P, D>(
     let credentials = credentials.map_err(SignAndDispatchError::Credentials)?;
     let mut request = request;
     request.sign_with_plus(&credentials, true);
-    client.dispatcher.dispatch(request, timeout).await.map_err(SignAndDispatchError::Dispatch)
+    client
+        .dispatcher
+        .dispatch(request, timeout)
+        .await
+        .map_err(SignAndDispatchError::Dispatch)
 }
 
 #[async_trait]
@@ -135,11 +187,7 @@ where
         request: SignedRequest,
         timeout: Option<Duration>,
     ) -> Result<HttpResponse, SignAndDispatchError> {
-        sign_and_dispatch(
-            self.clone(),
-            request,
-            timeout,
-        ).await
+        sign_and_dispatch(self.clone(), request, timeout).await
     }
 }
 

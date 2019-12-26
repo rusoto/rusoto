@@ -42,6 +42,35 @@ pub struct AdditionalAuthenticationProvider {
     pub user_pool_config: Option<CognitoUserPoolConfig>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ApiCache {
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    #[serde(rename = "apiCachingBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_caching_behavior: Option<String>,
+    /// <p>At rest encryption flag for cache. This setting cannot be updated after creation.</p>
+    #[serde(rename = "atRestEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub at_rest_encryption_enabled: Option<bool>,
+    /// <p><p>The cache instance status.</p> <ul> <li> <p> <b>AVAILABLE</b>: The instance is available for use.</p> </li> <li> <p> <b>CREATING</b>: The instance is currently creating.</p> </li> <li> <p> <b>DELETING</b>: The instance is currently deleting.</p> </li> <li> <p> <b>MODIFYING</b>: The instance is currently modifying.</p> </li> <li> <p> <b>FAILED</b>: The instance has failed creation.</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Transit encryption flag when connecting to cache. This setting cannot be updated after creation.</p>
+    #[serde(rename = "transitEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_encryption_enabled: Option<bool>,
+    /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
+    #[serde(rename = "ttl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ttl: Option<i64>,
+    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -85,6 +114,19 @@ pub struct AwsIamConfig {
     pub signing_service_name: Option<String>,
 }
 
+/// <p>The caching configuration for a resolver that has caching enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CachingConfig {
+    /// <p>The caching keys for a resolver that has caching enabled.</p> <p>Valid values are entries from the <code>$context.identity</code> and <code>$context.arguments</code> maps.</p>
+    #[serde(rename = "cachingKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caching_keys: Option<Vec<String>>,
+    /// <p>The TTL in seconds for a resolver that has caching enabled.</p> <p>Valid values are between 1 and 3600 seconds.</p>
+    #[serde(rename = "ttl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ttl: Option<i64>,
+}
+
 /// <p>Describes an Amazon Cognito user pool configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CognitoUserPoolConfig {
@@ -98,6 +140,41 @@ pub struct CognitoUserPoolConfig {
     /// <p>The user pool ID.</p>
     #[serde(rename = "userPoolId")]
     pub user_pool_id: String,
+}
+
+/// <p>Represents the input of a <code>CreateApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateApiCacheRequest {
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    #[serde(rename = "apiCachingBehavior")]
+    pub api_caching_behavior: String,
+    /// <p>The GraphQL API Id.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>At rest encryption flag for cache. This setting cannot be updated after creation.</p>
+    #[serde(rename = "atRestEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub at_rest_encryption_enabled: Option<bool>,
+    /// <p>Transit encryption flag when connecting to cache. This setting cannot be updated after creation.</p>
+    #[serde(rename = "transitEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transit_encryption_enabled: Option<bool>,
+    /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
+    #[serde(rename = "ttl")]
+    pub ttl: i64,
+    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+/// <p>Represents the output of a <code>CreateApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateApiCacheResponse {
+    /// <p>The <code>ApiCache</code> object.</p>
+    #[serde(rename = "apiCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_cache: Option<ApiCache>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -254,6 +331,10 @@ pub struct CreateResolverRequest {
     /// <p>The ID for the GraphQL API for which the resolver is being created.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
+    /// <p>The caching configuration for the resolver.</p>
+    #[serde(rename = "cachingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caching_config: Option<CachingConfig>,
     /// <p>The name of the data source for which the resolver is being created.</p>
     #[serde(rename = "dataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -276,6 +357,10 @@ pub struct CreateResolverRequest {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    /// <p>The <code>SyncConfig</code> for a resolver attached to a versioned datasource.</p>
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
     /// <p>The name of the <code>Type</code>.</p>
     #[serde(rename = "typeName")]
     pub type_name: String,
@@ -357,6 +442,19 @@ pub struct DataSource {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
+
+/// <p>Represents the input of a <code>DeleteApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteApiCacheRequest {
+    /// <p>The API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+}
+
+/// <p>Represents the output of a <code>DeleteApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteApiCacheResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApiKeyRequest {
@@ -442,12 +540,33 @@ pub struct DeleteTypeRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTypeResponse {}
 
+/// <p>Describes a Delta Sync configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeltaSyncConfig {
+    /// <p>The number of minutes an Item is stored in the datasource.</p>
+    #[serde(rename = "baseTableTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_table_ttl: Option<i64>,
+    /// <p>The Delta Sync table name.</p>
+    #[serde(rename = "deltaSyncTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delta_sync_table_name: Option<String>,
+    /// <p>The number of minutes a Delta Sync log entry is stored in the Delta Sync table.</p>
+    #[serde(rename = "deltaSyncTableTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delta_sync_table_ttl: Option<i64>,
+}
+
 /// <p>Describes an Amazon DynamoDB data source configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamodbDataSourceConfig {
     /// <p>The AWS Region.</p>
     #[serde(rename = "awsRegion")]
     pub aws_region: String,
+    /// <p>The <code>DeltaSyncConfig</code> for a versioned datasource.</p>
+    #[serde(rename = "deltaSyncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delta_sync_config: Option<DeltaSyncConfig>,
     /// <p>The table name.</p>
     #[serde(rename = "tableName")]
     pub table_name: String,
@@ -455,6 +574,10 @@ pub struct DynamodbDataSourceConfig {
     #[serde(rename = "useCallerCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_caller_credentials: Option<bool>,
+    /// <p>Set to TRUE to use Conflict Detection and Resolution with this data source.</p>
+    #[serde(rename = "versioned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versioned: Option<bool>,
 }
 
 /// <p>Describes an Elasticsearch data source configuration.</p>
@@ -467,6 +590,19 @@ pub struct ElasticsearchDataSourceConfig {
     #[serde(rename = "endpoint")]
     pub endpoint: String,
 }
+
+/// <p>Represents the input of a <code>FlushApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct FlushApiCacheRequest {
+    /// <p>The API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+}
+
+/// <p>Represents the output of a <code>FlushApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FlushApiCacheResponse {}
 
 /// <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -504,6 +640,23 @@ pub struct FunctionConfiguration {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+}
+
+/// <p>Represents the input of a <code>GetApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetApiCacheRequest {
+    /// <p>The API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+}
+
+/// <p>Represents the output of a <code>GetApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetApiCacheResponse {
+    #[serde(rename = "apiCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_cache: Option<ApiCache>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -701,6 +854,14 @@ pub struct HttpDataSourceConfig {
     #[serde(rename = "endpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LambdaConflictHandlerConfig {
+    /// <p>The Arn for the Lambda function to use as the Conflict Handler.</p>
+    #[serde(rename = "lambdaConflictHandlerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_conflict_handler_arn: Option<String>,
 }
 
 /// <p>Describes an AWS Lambda data source configuration.</p>
@@ -935,6 +1096,10 @@ pub struct LogConfig {
     /// <p>The service role that AWS AppSync will assume to publish to Amazon CloudWatch logs in your account. </p>
     #[serde(rename = "cloudWatchLogsRoleArn")]
     pub cloud_watch_logs_role_arn: String,
+    /// <p>Set to TRUE to exclude sections that contain information such as headers, context, and evaluated mapping templates, regardless of logging level.</p>
+    #[serde(rename = "excludeVerboseContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_verbose_content: Option<bool>,
     /// <p><p>The field logging level. Values can be NONE, ERROR, or ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "fieldLogLevel")]
     pub field_log_level: String,
@@ -1011,6 +1176,10 @@ pub struct RelationalDatabaseDataSourceConfig {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Resolver {
+    /// <p>The caching configuration for the resolver.</p>
+    #[serde(rename = "cachingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caching_config: Option<CachingConfig>,
     /// <p>The resolver data source name.</p>
     #[serde(rename = "dataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1039,6 +1208,10 @@ pub struct Resolver {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    /// <p>The <code>SyncConfig</code> for a resolver attached to a versioned datasource.</p>
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
     /// <p>The resolver type name.</p>
     #[serde(rename = "typeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1067,6 +1240,23 @@ pub struct StartSchemaCreationResponse {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>Describes a Sync configuration for a resolver.</p> <p>Contains information on which Conflict Detection as well as Resolution strategy should be performed when the resolver is invoked.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SyncConfig {
+    /// <p><p>The Conflict Detection strategy to use.</p> <ul> <li> <p> <b>VERSION</b>: Detect conflicts based on object versions for this resolver.</p> </li> <li> <p> <b>NONE</b>: Do not detect conflicts when executing this resolver.</p> </li> </ul></p>
+    #[serde(rename = "conflictDetection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conflict_detection: Option<String>,
+    /// <p><p>The Conflict Resolution strategy to perform in the event of a conflict.</p> <ul> <li> <p> <b>OPTIMISTIC_CONCURRENCY</b>: Resolve conflicts by rejecting mutations when versions do not match the latest version at the server.</p> </li> <li> <p> <b>AUTOMERGE</b>: Resolve conflicts with the Automerge conflict resolution strategy.</p> </li> <li> <p> <b>LAMBDA</b>: Resolve conflicts with a Lambda function supplied in the LambdaConflictHandlerConfig.</p> </li> </ul></p>
+    #[serde(rename = "conflictHandler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conflict_handler: Option<String>,
+    /// <p>The <code>LambdaConflictHandlerConfig</code> when configuring LAMBDA as the Conflict Handler.</p>
+    #[serde(rename = "lambdaConflictHandlerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_conflict_handler_config: Option<LambdaConflictHandlerConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1122,6 +1312,33 @@ pub struct UntagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
+
+/// <p>Represents the input of a <code>UpdateApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateApiCacheRequest {
+    /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resovlers that you specify are cached.</p> </li> </ul></p>
+    #[serde(rename = "apiCachingBehavior")]
+    pub api_caching_behavior: String,
+    /// <p>The GraphQL API Id.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
+    #[serde(rename = "ttl")]
+    pub ttl: i64,
+    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+/// <p>Represents the output of a <code>UpdateApiCache</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateApiCacheResponse {
+    /// <p>The <code>ApiCache</code> object.</p>
+    #[serde(rename = "apiCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_cache: Option<ApiCache>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApiKeyRequest {
@@ -1283,6 +1500,10 @@ pub struct UpdateResolverRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
+    /// <p>The caching configuration for the resolver.</p>
+    #[serde(rename = "cachingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caching_config: Option<CachingConfig>,
     /// <p>The new data source name.</p>
     #[serde(rename = "dataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1305,6 +1526,10 @@ pub struct UpdateResolverRequest {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    /// <p>The <code>SyncConfig</code> for a resolver attached to a versioned datasource.</p>
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
     /// <p>The new type name.</p>
     #[serde(rename = "typeName")]
     pub type_name: String,
@@ -1363,6 +1588,65 @@ pub struct UserPoolConfig {
     pub user_pool_id: String,
 }
 
+/// Errors returned by CreateApiCache
+#[derive(Debug, PartialEq)]
+pub enum CreateApiCacheError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl CreateApiCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApiCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateApiCacheError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreateApiCacheError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateApiCacheError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateApiCacheError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateApiCacheError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateApiCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateApiCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateApiCacheError::BadRequest(ref cause) => cause,
+            CreateApiCacheError::ConcurrentModification(ref cause) => cause,
+            CreateApiCacheError::InternalFailure(ref cause) => cause,
+            CreateApiCacheError::NotFound(ref cause) => cause,
+            CreateApiCacheError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateApiKey
 #[derive(Debug, PartialEq)]
 pub enum CreateApiKeyError {
@@ -1721,6 +2005,65 @@ impl Error for CreateTypeError {
         }
     }
 }
+/// Errors returned by DeleteApiCache
+#[derive(Debug, PartialEq)]
+pub enum DeleteApiCacheError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl DeleteApiCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApiCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteApiCacheError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteApiCacheError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteApiCacheError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteApiCacheError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteApiCacheError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteApiCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteApiCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteApiCacheError::BadRequest(ref cause) => cause,
+            DeleteApiCacheError::ConcurrentModification(ref cause) => cause,
+            DeleteApiCacheError::InternalFailure(ref cause) => cause,
+            DeleteApiCacheError::NotFound(ref cause) => cause,
+            DeleteApiCacheError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
@@ -2056,6 +2399,122 @@ impl Error for DeleteTypeError {
             DeleteTypeError::InternalFailure(ref cause) => cause,
             DeleteTypeError::NotFound(ref cause) => cause,
             DeleteTypeError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by FlushApiCache
+#[derive(Debug, PartialEq)]
+pub enum FlushApiCacheError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl FlushApiCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FlushApiCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(FlushApiCacheError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(FlushApiCacheError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(FlushApiCacheError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(FlushApiCacheError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(FlushApiCacheError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for FlushApiCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for FlushApiCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            FlushApiCacheError::BadRequest(ref cause) => cause,
+            FlushApiCacheError::ConcurrentModification(ref cause) => cause,
+            FlushApiCacheError::InternalFailure(ref cause) => cause,
+            FlushApiCacheError::NotFound(ref cause) => cause,
+            FlushApiCacheError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetApiCache
+#[derive(Debug, PartialEq)]
+pub enum GetApiCacheError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl GetApiCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApiCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetApiCacheError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(GetApiCacheError::ConcurrentModification(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetApiCacheError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetApiCacheError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetApiCacheError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetApiCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetApiCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            GetApiCacheError::BadRequest(ref cause) => cause,
+            GetApiCacheError::ConcurrentModification(ref cause) => cause,
+            GetApiCacheError::InternalFailure(ref cause) => cause,
+            GetApiCacheError::NotFound(ref cause) => cause,
+            GetApiCacheError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -3041,6 +3500,65 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateApiCache
+#[derive(Debug, PartialEq)]
+pub enum UpdateApiCacheError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl UpdateApiCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApiCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateApiCacheError::BadRequest(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateApiCacheError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateApiCacheError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateApiCacheError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateApiCacheError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateApiCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateApiCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateApiCacheError::BadRequest(ref cause) => cause,
+            UpdateApiCacheError::ConcurrentModification(ref cause) => cause,
+            UpdateApiCacheError::InternalFailure(ref cause) => cause,
+            UpdateApiCacheError::NotFound(ref cause) => cause,
+            UpdateApiCacheError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateApiKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiKeyError {
@@ -3396,6 +3914,12 @@ impl Error for UpdateTypeError {
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
 #[async_trait]
 pub trait AppSync {
+    /// <p>Creates a cache for the GraphQL API.</p>
+    async fn create_api_cache(
+        &self,
+        input: CreateApiCacheRequest,
+    ) -> Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>>;
+
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
     async fn create_api_key(
         &self,
@@ -3432,6 +3956,12 @@ pub trait AppSync {
         input: CreateTypeRequest,
     ) -> Result<CreateTypeResponse, RusotoError<CreateTypeError>>;
 
+    /// <p>Deletes an <code>ApiCache</code> object.</p>
+    async fn delete_api_cache(
+        &self,
+        input: DeleteApiCacheRequest,
+    ) -> Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>>;
+
     /// <p>Deletes an API key.</p>
     async fn delete_api_key(
         &self,
@@ -3467,6 +3997,18 @@ pub trait AppSync {
         &self,
         input: DeleteTypeRequest,
     ) -> Result<DeleteTypeResponse, RusotoError<DeleteTypeError>>;
+
+    /// <p>Flushes an <code>ApiCache</code> object.</p>
+    async fn flush_api_cache(
+        &self,
+        input: FlushApiCacheRequest,
+    ) -> Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>>;
+
+    /// <p>Retrieves an <code>ApiCache</code> object.</p>
+    async fn get_api_cache(
+        &self,
+        input: GetApiCacheRequest,
+    ) -> Result<GetApiCacheResponse, RusotoError<GetApiCacheError>>;
 
     /// <p>Retrieves a <code>DataSource</code> object.</p>
     async fn get_data_source(
@@ -3576,6 +4118,12 @@ pub trait AppSync {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
+    /// <p>Updates the cache for the GraphQL API.</p>
+    async fn update_api_cache(
+        &self,
+        input: UpdateApiCacheRequest,
+    ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>>;
+
     /// <p>Updates an API key.</p>
     async fn update_api_key(
         &self,
@@ -3644,10 +4192,44 @@ impl AppSyncClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AppSyncClient {
+        AppSyncClient { client, region }
+    }
 }
 
 #[async_trait]
 impl AppSync for AppSyncClient {
+    /// <p>Creates a cache for the GraphQL API.</p>
+    async fn create_api_cache(
+        &self,
+        input: CreateApiCacheRequest,
+    ) -> Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>> {
+        let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateApiCacheResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateApiCacheError::from_response(response))
+        }
+    }
+
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
     async fn create_api_key(
         &self,
@@ -3832,6 +4414,33 @@ impl AppSync for AppSyncClient {
         }
     }
 
+    /// <p>Deletes an <code>ApiCache</code> object.</p>
+    async fn delete_api_cache(
+        &self,
+        input: DeleteApiCacheRequest,
+    ) -> Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>> {
+        let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteApiCacheResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteApiCacheError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an API key.</p>
     async fn delete_api_key(
         &self,
@@ -4012,6 +4621,60 @@ impl AppSync for AppSyncClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTypeError::from_response(response))
+        }
+    }
+
+    /// <p>Flushes an <code>ApiCache</code> object.</p>
+    async fn flush_api_cache(
+        &self,
+        input: FlushApiCacheRequest,
+    ) -> Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>> {
+        let request_uri = format!("/v1/apis/{api_id}/FlushCache", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<FlushApiCacheResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(FlushApiCacheError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves an <code>ApiCache</code> object.</p>
+    async fn get_api_cache(
+        &self,
+        input: GetApiCacheRequest,
+    ) -> Result<GetApiCacheResponse, RusotoError<GetApiCacheError>> {
+        let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetApiCacheResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetApiCacheError::from_response(response))
         }
     }
 
@@ -4611,6 +5274,36 @@ impl AppSync for AppSyncClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the cache for the GraphQL API.</p>
+    async fn update_api_cache(
+        &self,
+        input: UpdateApiCacheRequest,
+    ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>> {
+        let request_uri = format!("/v1/apis/{api_id}/ApiCaches/update", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateApiCacheResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateApiCacheError::from_response(response))
         }
     }
 

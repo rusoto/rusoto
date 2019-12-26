@@ -10,7 +10,7 @@ use serde_json;
 
 use crate::cargo;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct ServiceConfig {
     pub version: String,
     #[serde(rename = "coreVersion")]

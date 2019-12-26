@@ -27,14 +27,14 @@ use serde_json;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code> object.</p> <p>This is the ARN pattern for a budget: </p> <p> <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Budget {
-    /// <p>The total amount of cost, usage, RI utilization, or RI coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization or coverage budgets. RI utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI utilization or coverage budgets. You can't use <code>BudgetLimit</code> with <code>PlannedBudgetLimits</code> for <code>CreateBudget</code> and <code>UpdateBudget</code> actions. </p>
+    /// <p>The total amount of cost, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI or Savings Plans utilization or coverage budgets. RI and Savings Plans utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI or Savings Plans utilization or coverage budgets. You can't use <code>BudgetLimit</code> with <code>PlannedBudgetLimits</code> for <code>CreateBudget</code> and <code>UpdateBudget</code> actions. </p>
     #[serde(rename = "BudgetLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budget_limit: Option<Spend>,
     /// <p>The name of a budget. The name must be unique within an account. The <code>:</code> and <code>&bsol;</code> characters aren't allowed in <code>BudgetName</code>.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>Whether this budget tracks costs, usage, RI utilization, or RI coverage.</p>
+    /// <p>Whether this budget tracks costs, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage.</p>
     #[serde(rename = "BudgetType")]
     pub budget_type: String,
     /// <p>The actual and forecasted cost or usage that the budget tracks.</p>
@@ -45,7 +45,7 @@ pub struct Budget {
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The types of costs that are included in this <code>COST</code> budget.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, and <code>RI_COVERAGE</code> budgets do not have <code>CostTypes</code>.</p>
+    /// <p>The types of costs that are included in this <code>COST</code> budget.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, <code>RI_COVERAGE</code>, <code>Savings_Plans_Utilization</code>, and <code>Savings_Plans_Coverage</code> budgets do not have <code>CostTypes</code>.</p>
     #[serde(rename = "CostTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_types: Option<CostTypes>,
@@ -61,7 +61,7 @@ pub struct Budget {
     #[serde(rename = "TimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_period: Option<TimePeriod>,
-    /// <p>The length of time until a budget resets the actual and forecasted spend. <code>DAILY</code> is available only for <code>RI_UTILIZATION</code> and <code>RI_COVERAGE</code> budgets.</p>
+    /// <p>The length of time until a budget resets the actual and forecasted spend. <code>DAILY</code> is available only for <code>RI_UTILIZATION</code>, <code>RI_COVERAGE</code>, <code>Savings_Plans_Utilization</code>, and <code>Savings_Plans_Coverage</code> budgets.</p>
     #[serde(rename = "TimeUnit")]
     pub time_unit: String,
 }
@@ -490,7 +490,7 @@ pub struct Spend {
 /// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon SNS topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscriber {
-    /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p> <p>AWS validates the address for a <code>CreateSubscriber</code> request with the <code>.*</code> regex.</p>
+    /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p> <p>When you create a subscriber, the value of <code>Address</code> can't contain line breaks.</p>
     #[serde(rename = "Address")]
     pub address: String,
     /// <p>The type of notification that AWS sends to a subscriber.</p>
@@ -577,6 +577,8 @@ pub struct UpdateSubscriberResponse {}
 /// Errors returned by CreateBudget
 #[derive(Debug, PartialEq)]
 pub enum CreateBudgetError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -591,6 +593,9 @@ impl CreateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateBudgetError::AccessDenied(err.msg))
+                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateBudgetError::CreationLimitExceeded(err.msg))
                 }
@@ -618,6 +623,7 @@ impl fmt::Display for CreateBudgetError {
 impl Error for CreateBudgetError {
     fn description(&self) -> &str {
         match *self {
+            CreateBudgetError::AccessDenied(ref cause) => cause,
             CreateBudgetError::CreationLimitExceeded(ref cause) => cause,
             CreateBudgetError::DuplicateRecord(ref cause) => cause,
             CreateBudgetError::InternalError(ref cause) => cause,
@@ -628,6 +634,8 @@ impl Error for CreateBudgetError {
 /// Errors returned by CreateNotification
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -644,6 +652,9 @@ impl CreateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateNotificationError::AccessDenied(err.msg))
+                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateNotificationError::CreationLimitExceeded(
                         err.msg,
@@ -676,6 +687,7 @@ impl fmt::Display for CreateNotificationError {
 impl Error for CreateNotificationError {
     fn description(&self) -> &str {
         match *self {
+            CreateNotificationError::AccessDenied(ref cause) => cause,
             CreateNotificationError::CreationLimitExceeded(ref cause) => cause,
             CreateNotificationError::DuplicateRecord(ref cause) => cause,
             CreateNotificationError::InternalError(ref cause) => cause,
@@ -687,6 +699,8 @@ impl Error for CreateNotificationError {
 /// Errors returned by CreateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriberError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
@@ -703,6 +717,9 @@ impl CreateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateSubscriberError::AccessDenied(err.msg))
+                }
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateSubscriberError::CreationLimitExceeded(
                         err.msg,
@@ -735,6 +752,7 @@ impl fmt::Display for CreateSubscriberError {
 impl Error for CreateSubscriberError {
     fn description(&self) -> &str {
         match *self {
+            CreateSubscriberError::AccessDenied(ref cause) => cause,
             CreateSubscriberError::CreationLimitExceeded(ref cause) => cause,
             CreateSubscriberError::DuplicateRecord(ref cause) => cause,
             CreateSubscriberError::InternalError(ref cause) => cause,
@@ -746,6 +764,8 @@ impl Error for CreateSubscriberError {
 /// Errors returned by DeleteBudget
 #[derive(Debug, PartialEq)]
 pub enum DeleteBudgetError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -758,6 +778,9 @@ impl DeleteBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteBudgetError::AccessDenied(err.msg))
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteBudgetError::InternalError(err.msg))
                 }
@@ -782,6 +805,7 @@ impl fmt::Display for DeleteBudgetError {
 impl Error for DeleteBudgetError {
     fn description(&self) -> &str {
         match *self {
+            DeleteBudgetError::AccessDenied(ref cause) => cause,
             DeleteBudgetError::InternalError(ref cause) => cause,
             DeleteBudgetError::InvalidParameter(ref cause) => cause,
             DeleteBudgetError::NotFound(ref cause) => cause,
@@ -791,6 +815,8 @@ impl Error for DeleteBudgetError {
 /// Errors returned by DeleteNotification
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -803,6 +829,9 @@ impl DeleteNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteNotificationError::AccessDenied(err.msg))
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteNotificationError::InternalError(err.msg))
                 }
@@ -827,6 +856,7 @@ impl fmt::Display for DeleteNotificationError {
 impl Error for DeleteNotificationError {
     fn description(&self) -> &str {
         match *self {
+            DeleteNotificationError::AccessDenied(ref cause) => cause,
             DeleteNotificationError::InternalError(ref cause) => cause,
             DeleteNotificationError::InvalidParameter(ref cause) => cause,
             DeleteNotificationError::NotFound(ref cause) => cause,
@@ -836,6 +866,8 @@ impl Error for DeleteNotificationError {
 /// Errors returned by DeleteSubscriber
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriberError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -848,6 +880,9 @@ impl DeleteSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteSubscriberError::AccessDenied(err.msg))
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteSubscriberError::InternalError(err.msg))
                 }
@@ -872,6 +907,7 @@ impl fmt::Display for DeleteSubscriberError {
 impl Error for DeleteSubscriberError {
     fn description(&self) -> &str {
         match *self {
+            DeleteSubscriberError::AccessDenied(ref cause) => cause,
             DeleteSubscriberError::InternalError(ref cause) => cause,
             DeleteSubscriberError::InvalidParameter(ref cause) => cause,
             DeleteSubscriberError::NotFound(ref cause) => cause,
@@ -881,6 +917,8 @@ impl Error for DeleteSubscriberError {
 /// Errors returned by DescribeBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -893,6 +931,9 @@ impl DescribeBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeBudgetError::AccessDenied(err.msg))
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeBudgetError::InternalError(err.msg))
                 }
@@ -917,6 +958,7 @@ impl fmt::Display for DescribeBudgetError {
 impl Error for DescribeBudgetError {
     fn description(&self) -> &str {
         match *self {
+            DescribeBudgetError::AccessDenied(ref cause) => cause,
             DescribeBudgetError::InternalError(ref cause) => cause,
             DescribeBudgetError::InvalidParameter(ref cause) => cause,
             DescribeBudgetError::NotFound(ref cause) => cause,
@@ -926,6 +968,8 @@ impl Error for DescribeBudgetError {
 /// Errors returned by DescribeBudgetPerformanceHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetPerformanceHistoryError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -944,6 +988,11 @@ impl DescribeBudgetPerformanceHistoryError {
     ) -> RusotoError<DescribeBudgetPerformanceHistoryError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeBudgetPerformanceHistoryError::AccessDenied(err.msg),
+                    )
+                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeBudgetPerformanceHistoryError::ExpiredNextToken(err.msg),
@@ -984,6 +1033,7 @@ impl fmt::Display for DescribeBudgetPerformanceHistoryError {
 impl Error for DescribeBudgetPerformanceHistoryError {
     fn description(&self) -> &str {
         match *self {
+            DescribeBudgetPerformanceHistoryError::AccessDenied(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::ExpiredNextToken(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::InternalError(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => cause,
@@ -995,6 +1045,8 @@ impl Error for DescribeBudgetPerformanceHistoryError {
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1011,6 +1063,9 @@ impl DescribeBudgetsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetsError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeBudgetsError::AccessDenied(err.msg))
+                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(DescribeBudgetsError::ExpiredNextToken(err.msg))
                 }
@@ -1041,6 +1096,7 @@ impl fmt::Display for DescribeBudgetsError {
 impl Error for DescribeBudgetsError {
     fn description(&self) -> &str {
         match *self {
+            DescribeBudgetsError::AccessDenied(ref cause) => cause,
             DescribeBudgetsError::ExpiredNextToken(ref cause) => cause,
             DescribeBudgetsError::InternalError(ref cause) => cause,
             DescribeBudgetsError::InvalidNextToken(ref cause) => cause,
@@ -1052,6 +1108,8 @@ impl Error for DescribeBudgetsError {
 /// Errors returned by DescribeNotificationsForBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationsForBudgetError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1070,6 +1128,11 @@ impl DescribeNotificationsForBudgetError {
     ) -> RusotoError<DescribeNotificationsForBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeNotificationsForBudgetError::AccessDenied(
+                        err.msg,
+                    ))
+                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeNotificationsForBudgetError::ExpiredNextToken(err.msg),
@@ -1110,6 +1173,7 @@ impl fmt::Display for DescribeNotificationsForBudgetError {
 impl Error for DescribeNotificationsForBudgetError {
     fn description(&self) -> &str {
         match *self {
+            DescribeNotificationsForBudgetError::AccessDenied(ref cause) => cause,
             DescribeNotificationsForBudgetError::ExpiredNextToken(ref cause) => cause,
             DescribeNotificationsForBudgetError::InternalError(ref cause) => cause,
             DescribeNotificationsForBudgetError::InvalidNextToken(ref cause) => cause,
@@ -1121,6 +1185,8 @@ impl Error for DescribeNotificationsForBudgetError {
 /// Errors returned by DescribeSubscribersForNotification
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribersForNotificationError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1139,6 +1205,11 @@ impl DescribeSubscribersForNotificationError {
     ) -> RusotoError<DescribeSubscribersForNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeSubscribersForNotificationError::AccessDenied(err.msg),
+                    )
+                }
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(
                         DescribeSubscribersForNotificationError::ExpiredNextToken(err.msg),
@@ -1179,6 +1250,7 @@ impl fmt::Display for DescribeSubscribersForNotificationError {
 impl Error for DescribeSubscribersForNotificationError {
     fn description(&self) -> &str {
         match *self {
+            DescribeSubscribersForNotificationError::AccessDenied(ref cause) => cause,
             DescribeSubscribersForNotificationError::ExpiredNextToken(ref cause) => cause,
             DescribeSubscribersForNotificationError::InternalError(ref cause) => cause,
             DescribeSubscribersForNotificationError::InvalidNextToken(ref cause) => cause,
@@ -1190,6 +1262,8 @@ impl Error for DescribeSubscribersForNotificationError {
 /// Errors returned by UpdateBudget
 #[derive(Debug, PartialEq)]
 pub enum UpdateBudgetError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
@@ -1202,6 +1276,9 @@ impl UpdateBudgetError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBudgetError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateBudgetError::AccessDenied(err.msg))
+                }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateBudgetError::InternalError(err.msg))
                 }
@@ -1226,6 +1303,7 @@ impl fmt::Display for UpdateBudgetError {
 impl Error for UpdateBudgetError {
     fn description(&self) -> &str {
         match *self {
+            UpdateBudgetError::AccessDenied(ref cause) => cause,
             UpdateBudgetError::InternalError(ref cause) => cause,
             UpdateBudgetError::InvalidParameter(ref cause) => cause,
             UpdateBudgetError::NotFound(ref cause) => cause,
@@ -1235,6 +1313,8 @@ impl Error for UpdateBudgetError {
 /// Errors returned by UpdateNotification
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1249,6 +1329,9 @@ impl UpdateNotificationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotificationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateNotificationError::AccessDenied(err.msg))
+                }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateNotificationError::DuplicateRecord(err.msg))
                 }
@@ -1276,6 +1359,7 @@ impl fmt::Display for UpdateNotificationError {
 impl Error for UpdateNotificationError {
     fn description(&self) -> &str {
         match *self {
+            UpdateNotificationError::AccessDenied(ref cause) => cause,
             UpdateNotificationError::DuplicateRecord(ref cause) => cause,
             UpdateNotificationError::InternalError(ref cause) => cause,
             UpdateNotificationError::InvalidParameter(ref cause) => cause,
@@ -1286,6 +1370,8 @@ impl Error for UpdateNotificationError {
 /// Errors returned by UpdateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriberError {
+    /// <p>You are not authorized to use this operation with the given parameters.</p>
+    AccessDenied(String),
     /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
     /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
@@ -1300,6 +1386,9 @@ impl UpdateSubscriberError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubscriberError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateSubscriberError::AccessDenied(err.msg))
+                }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateSubscriberError::DuplicateRecord(err.msg))
                 }
@@ -1327,6 +1416,7 @@ impl fmt::Display for UpdateSubscriberError {
 impl Error for UpdateSubscriberError {
     fn description(&self) -> &str {
         match *self {
+            UpdateSubscriberError::AccessDenied(ref cause) => cause,
             UpdateSubscriberError::DuplicateRecord(ref cause) => cause,
             UpdateSubscriberError::InternalError(ref cause) => cause,
             UpdateSubscriberError::InvalidParameter(ref cause) => cause,
@@ -1461,6 +1551,10 @@ impl BudgetsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> BudgetsClient {
+        BudgetsClient { client, region }
     }
 }
 

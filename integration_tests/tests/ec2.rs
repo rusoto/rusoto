@@ -4,20 +4,18 @@ extern crate rusoto_core;
 extern crate rusoto_ec2;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_ec2::{
-    CreateSnapshotRequest, DescribeInstancesRequest, Ec2, Ec2Client,
-};
+use rusoto_ec2::{CreateSnapshotRequest, DescribeInstancesRequest, Ec2, Ec2Client};
 use rusoto_ec2::{CreateTagsRequest, Tag};
 
 use std::str;
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     let ec2 = Ec2Client::new(Region::UsEast1);
 
     let mut req = DescribeInstancesRequest::default();
     req.instance_ids = Some(vec!["i-00000000".into(), "i-00000001".into()]);
-    match ec2.describe_instances(req).sync() {
+    match ec2.describe_instances(req).await {
         Ok(_) => {
             panic!("DescribeInstances should fail");
         }
@@ -35,26 +33,26 @@ fn main() {
 }
 
 // Issue 383
-#[test]
+#[tokio::test]
 #[ignore]
 #[should_panic(
     expected = "<Message>Request would have succeeded, but DryRun flag is set.</Message>"
 )]
-fn dry_run() {
+async fn dry_run() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
         dry_run: Some(true),
         ..Default::default()
     };
-    let _ = ec2.create_snapshot(req).sync().unwrap();
+    let _ = ec2.create_snapshot(req).await.unwrap();
 }
 
 // Issue 387
-#[test]
+#[tokio::test]
 #[ignore]
 #[should_panic(expected = "<Code>InvalidID</Code>")]
-fn query_serialization_name() {
+async fn query_serialization_name() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateTagsRequest {
         dry_run: None,
@@ -64,5 +62,5 @@ fn query_serialization_name() {
             value: Some("val".into()),
         }],
     };
-    let _ = ec2.create_tags(req).sync().unwrap();
+    let _ = ec2.create_tags(req).await.unwrap();
 }

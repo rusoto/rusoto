@@ -44,6 +44,10 @@ pub struct CognitoIdentityProvider {
 /// <p>Input to the CreateIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIdentityPoolInput {
+    /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    #[serde(rename = "AllowClassicFlow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_classic_flow: Option<bool>,
     /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
     #[serde(rename = "AllowUnauthenticatedIdentities")]
     pub allow_unauthenticated_identities: bool,
@@ -235,7 +239,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
     /// <p>A set of optional name-value pairs that map provider names to provider tokens. Each name-value pair represents a user from a public provider or developer provider. If the user is from a developer provider, the name-value pair will follow the syntax <code>"developer_provider_name": "developer_user_identifier"</code>. The developer provider is the "domain" by which Cognito will refer to your users; you provided this domain while creating/updating the identity pool. The developer user identifier is an identifier from your backend that uniquely identifies a user. When you create an identity pool, you can specify the supported logins.</p>
     #[serde(rename = "Logins")]
     pub logins: ::std::collections::HashMap<String, String>,
-    /// <p>The expiration time of the token, in seconds. You can specify a custom expiration time for the token so that you can cache it. If you don't provide an expiration time, the token is valid for 15 minutes. You can exchange the token with Amazon STS for temporary AWS credentials, which are valid for a maximum of one hour. The maximum token duration you can set is 24 hours. You should take care in setting the expiration time for a token, as there are significant security implications: an attacker could use a leaked token to access your AWS resources for the token's duration.</p>
+    /// <p><p>The expiration time of the token, in seconds. You can specify a custom expiration time for the token so that you can cache it. If you don&#39;t provide an expiration time, the token is valid for 15 minutes. You can exchange the token with Amazon STS for temporary AWS credentials, which are valid for a maximum of one hour. The maximum token duration you can set is 24 hours. You should take care in setting the expiration time for a token, as there are significant security implications: an attacker could use a leaked token to access your AWS resources for the token&#39;s duration.</p> <note> <p>Please provide for a small grace period, usually no more than 5 minutes, to account for clock skew.</p> </note></p>
     #[serde(rename = "TokenDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token_duration: Option<i64>,
@@ -306,6 +310,10 @@ pub struct IdentityDescription {
 /// <p>An object representing an Amazon Cognito identity pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IdentityPool {
+    /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    #[serde(rename = "AllowClassicFlow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_classic_flow: Option<bool>,
     /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
     #[serde(rename = "AllowUnauthenticatedIdentities")]
     pub allow_unauthenticated_identities: bool,
@@ -566,8 +574,7 @@ pub struct TagResourceInput {
     pub resource_arn: String,
     /// <p>The tags to assign to the identity pool.</p>
     #[serde(rename = "Tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<::std::collections::HashMap<String, String>>,
+    pub tags: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -626,8 +633,7 @@ pub struct UntagResourceInput {
     pub resource_arn: String,
     /// <p>The keys of the tags to remove from the user pool.</p>
     #[serde(rename = "TagKeys")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag_keys: Option<Vec<String>>,
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2056,7 +2062,7 @@ impl Error for UpdateIdentityPoolError {
 /// Trait representing the capabilities of the Amazon Cognito Identity API. Amazon Cognito Identity clients implement this trait.
 #[async_trait]
 pub trait CognitoIdentity {
-    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
+    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     async fn create_identity_pool(
         &self,
         input: CreateIdentityPoolInput,
@@ -2214,11 +2220,15 @@ impl CognitoIdentityClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CognitoIdentityClient {
+        CognitoIdentityClient { client, region }
+    }
 }
 
 #[async_trait]
 impl CognitoIdentity for CognitoIdentityClient {
-    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
+    /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     async fn create_identity_pool(
         &self,
         input: CreateIdentityPoolInput,

@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_ecr"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.40.0"
+version = "0.43.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -16,14 +16,14 @@ exclude = ["test_resources/*"]
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.4"
-serde_json = "1.0.1"
+bytes = "0.5"
+serde_json = "1.0"
 
-[dependencies.futures-preview]
-version = "0.3.0-alpha.19"
+[dependencies.futures]
+version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.40.0"
+version = "0.43.0"
 path = "../../core"
 default-features = false
 
@@ -32,13 +32,15 @@ version = "1.0"
 features = ["derive"]
 
 [dev-dependencies]
-tokio = "0.2.0-alpha.6"
+tokio = "0.2"
 
 [dev-dependencies.rusoto_mock]
-version = "0.40.0"
+version = "0.43.0"
 path = "../../../mock"
+default-features = false
 
 [features]
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

@@ -23,8 +23,15 @@ To use `rusoto_sagemaker_runtime` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_sagemaker_runtime = "0.40.0"
+rusoto_sagemaker_runtime = "0.43.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

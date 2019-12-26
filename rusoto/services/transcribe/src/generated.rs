@@ -25,6 +25,41 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateVocabularyFilterRequest {
+    /// <p>The language code of the words in the vocabulary filter. All words in the filter must be in the same language. The vocabulary filter can only be used with transcription jobs in the specified language.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>The Amazon S3 location of a text file used as input to create the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>The specified file must be less than 50 KB of UTF-8 characters.</p> <p>If you provide the location of a list of words in the <code>VocabularyFilterFileUri</code> parameter, you can't use the <code>Words</code> parameter.</p>
+    #[serde(rename = "VocabularyFilterFileUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_file_uri: Option<String>,
+    /// <p>The vocabulary filter name. The name must be unique within the account that contains it.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    pub vocabulary_filter_name: String,
+    /// <p>The words to use in the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>If you provide a list of words in the <code>Words</code> parameter, you can't use the <code>VocabularyFilterFileUri</code> parameter.</p>
+    #[serde(rename = "Words")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub words: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateVocabularyFilterResponse {
+    /// <p>The language code of the words in the collection.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The date and time that the vocabulary filter was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the vocabulary filter.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
@@ -33,7 +68,7 @@ pub struct CreateVocabularyRequest {
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phrases: Option<Vec<String>>,
-    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
+    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
@@ -75,6 +110,13 @@ pub struct DeleteTranscriptionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteVocabularyFilterRequest {
+    /// <p>The name of the vocabulary filter to remove.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    pub vocabulary_filter_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVocabularyRequest {
     /// <p>The name of the vocabulary to delete. </p>
     #[serde(rename = "VocabularyName")]
@@ -95,6 +137,34 @@ pub struct GetTranscriptionJobResponse {
     #[serde(rename = "TranscriptionJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transcription_job: Option<TranscriptionJob>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetVocabularyFilterRequest {
+    /// <p>The name of the vocabulary filter for which to return information.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    pub vocabulary_filter_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetVocabularyFilterResponse {
+    /// <p>The URI of the list of words in the vocabulary filter. You can use this URI to get the list of words.</p>
+    #[serde(rename = "DownloadUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub download_uri: Option<String>,
+    /// <p>The language code of the words in the vocabulary filter.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The date and time that the contents of the vocabulary filter were updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the vocabulary filter.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -131,6 +201,19 @@ pub struct GetVocabularyResponse {
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_state: Option<String>,
+}
+
+/// <p>Provides information about when a transcription job should be executed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JobExecutionSettings {
+    /// <p>Indicates whether a job should be queued by Amazon Transcribe when the concurrent execution limit is exceeded. When the <code>AllowDeferredExecution</code> field is true, jobs are queued and will be executed when the number of executing jobs falls below the concurrent execution limit. If the field is false, Amazon Transcribe returns a <code>LimitExceededException</code> exception.</p> <p>If you specify the <code>AllowDeferredExecution</code> field, you must specify the <code>DataAccessRoleArn</code> field.</p>
+    #[serde(rename = "AllowDeferredExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_deferred_execution: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of a role that has access to the S3 bucket that contains the input files. Amazon Transcribe will assume this role to read queued media files. If you have specified an output S3 bucket for the transcription results, this role should have access to the output bucket as well.</p> <p>If you specify the <code>AllowDeferredExecution</code> field, you must specify the <code>DataAccessRoleArn</code> field.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -207,10 +290,39 @@ pub struct ListVocabulariesResponse {
     pub vocabularies: Option<Vec<VocabularyInfo>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListVocabularyFiltersRequest {
+    /// <p>The maximum number of filters to return in the response. If there are fewer results in the list, this response contains only the actual results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filters the response so that it only contains vocabulary filters whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous request to <code>ListVocabularyFilters</code> was truncated, include the <code>NextToken</code> to fetch the next set of collections.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListVocabularyFiltersResponse {
+    /// <p>The <code>ListVocabularyFilters</code> operation returns a page of collections at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListVocabularyFilters</code> operation to return in the next page of jobs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of vocabulary filters. It will contain at most <code>MaxResults</code> number of filters. If there are more filters, call the <code>ListVocabularyFilters</code> operation again with the <code>NextToken</code> parameter in the request set to the value of the <code>NextToken</code> field in the response.</p>
+    #[serde(rename = "VocabularyFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filters: Option<Vec<VocabularyFilterInfo>>,
+}
+
 /// <p>Describes the input media file in a transcription request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Media {
-    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     #[serde(rename = "MediaFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_file_uri: Option<String>,
@@ -223,14 +335,30 @@ pub struct Settings {
     #[serde(rename = "ChannelIdentification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_identification: Option<bool>,
+    /// <p>The number of alternative transcriptions that the service should return. If you specify the <code>MaxAlternatives</code> field, you must set the <code>ShowAlternatives</code> field to true.</p>
+    #[serde(rename = "MaxAlternatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_alternatives: Option<i64>,
     /// <p>The maximum number of speakers to identify in the input audio. If there are more speakers in the audio than this number, multiple speakers will be identified as a single speaker. If you specify the <code>MaxSpeakerLabels</code> field, you must set the <code>ShowSpeakerLabels</code> field to true.</p>
     #[serde(rename = "MaxSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_speaker_labels: Option<i64>,
+    /// <p>Determines whether the transcription contains alternative transcriptions. If you set the <code>ShowAlternatives</code> field to true, you must also set the maximum number of alternatives to return in the <code>MaxAlternatives</code> field.</p>
+    #[serde(rename = "ShowAlternatives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub show_alternatives: Option<bool>,
     /// <p>Determines whether the transcription job uses speaker recognition to identify different speakers in the input audio. Speaker recognition labels individual speakers in the audio file. If you set the <code>ShowSpeakerLabels</code> field to true, you must also set the maximum number of speaker labels <code>MaxSpeakerLabels</code> field.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code>.</p>
     #[serde(rename = "ShowSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub show_speaker_labels: Option<bool>,
+    /// <p>Set to <code>mask</code> to remove filtered text from the transcript and replace it with three asterisks ("***") as placeholder text. Set to <code>remove</code> to remove filtered text from the transcript without using placeholder text.</p>
+    #[serde(rename = "VocabularyFilterMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_method: Option<String>,
+    /// <p>The name of the vocabulary filter to use when transcribing the audio. The filter that you specify must have the same language code as the transcription job.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_name: Option<String>,
     /// <p>The name of a vocabulary to use when processing the transcription job.</p>
     #[serde(rename = "VocabularyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -239,6 +367,10 @@ pub struct Settings {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartTranscriptionJobRequest {
+    /// <p>Provides information about how a transcription job is executed. Use this field to indicate that the job can be queued for deferred execution if the concurrency limit is reached and there are no slots available to immediately run the job.</p>
+    #[serde(rename = "JobExecutionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_settings: Option<JobExecutionSettings>,
     /// <p>The language code for the language used in the input media file.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
@@ -247,15 +379,20 @@ pub struct StartTranscriptionJobRequest {
     pub media: Media,
     /// <p>The format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
-    pub media_format: String,
-    /// <p>The sample rate, in Hertz, of the audio track in the input media file. </p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_format: Option<String>,
+    /// <p>The sample rate, in Hertz, of the audio track in the input media file. </p> <p>If you do not specify the media sample rate, Amazon Transcribe determines the sample rate. If you specify the sample rate, it must match the sample rate detected by Amazon Transcribe. In most cases, you should leave the <code>MediaSampleRateHertz</code> field blank and let Amazon Transcribe determine the sample rate.</p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_sample_rate_hertz: Option<i64>,
-    /// <p>The location where the transcription is stored.</p> <p>If you set the <code>OutputBucketName</code>, Amazon Transcribe puts the transcription in the specified S3 bucket. When you call the <a>GetTranscriptionJob</a> operation, the operation returns this location in the <code>TranscriptFileUri</code> field. The S3 bucket must have permissions that allow Amazon Transcribe to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/access-control-managing-permissions.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>Amazon Transcribe uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket. You can't specify your own encryption key.</p> <p>If you don't set the <code>OutputBucketName</code>, Amazon Transcribe generates a pre-signed URL, a shareable URL that provides secure access to your transcription, and returns it in the <code>TranscriptFileUri</code> field. Use this URL to download the transcription.</p>
+    /// <p>The location where the transcription is stored.</p> <p>If you set the <code>OutputBucketName</code>, Amazon Transcribe puts the transcription in the specified S3 bucket. When you call the <a>GetTranscriptionJob</a> operation, the operation returns this location in the <code>TranscriptFileUri</code> field. The S3 bucket must have permissions that allow Amazon Transcribe to put files in the bucket. For more information, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/security_iam_id-based-policy-examples.html#auth-role-iam-user">Permissions Required for IAM User Roles</a>.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the output of your transcription using the <code>OutputEncryptionKMSKeyId</code> parameter. If you don't specify a KMS key, Amazon Transcribe uses the default Amazon S3 key for server-side encryption of transcripts that are placed in your S3 bucket.</p> <p>If you don't set the <code>OutputBucketName</code>, Amazon Transcribe generates a pre-signed URL, a shareable URL that provides secure access to your transcription, and returns it in the <code>TranscriptFileUri</code> field. Use this URL to download the transcription.</p>
     #[serde(rename = "OutputBucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_bucket_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (KMS) key used to encrypt the output of the transcription job. The user calling the <code>StartTranscriptionJob</code> operation must have permission to use the specified KMS key.</p> <p>You can use either of the following to identify a KMS key in the current account:</p> <ul> <li> <p>KMS Key ID: "1234abcd-12ab-34cd-56ef-1234567890ab"</p> </li> <li> <p>KMS Key Alias: "alias/ExampleAlias"</p> </li> </ul> <p>You can use either of the following to identify a KMS key in the current account or another account:</p> <ul> <li> <p>Amazon Resource Name (ARN) of a KMS Key: "arn:aws:kms:region:account ID:key/1234abcd-12ab-34cd-56ef-1234567890ab"</p> </li> <li> <p>ARN of a KMS Key Alias: "arn:aws:kms:region:account ID:alias/ExampleAlias"</p> </li> </ul> <p>If you don't specify an encryption key, the output of the transcription job is encrypted with the default Amazon S3 key (SSE-S3). </p> <p>If you specify a KMS key to encrypt your output, you must also specify an output location in the <code>OutputBucketName</code> parameter.</p>
+    #[serde(rename = "OutputEncryptionKMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_encryption_kms_key_id: Option<String>,
     /// <p>A <code>Settings</code> object that provides optional settings for a transcription job.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -300,6 +437,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>Provides information about how a transcription job is executed.</p>
+    #[serde(rename = "JobExecutionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_settings: Option<JobExecutionSettings>,
     /// <p>The language code for the input speech.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -320,6 +461,10 @@ pub struct TranscriptionJob {
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<Settings>,
+    /// <p>A timestamp that shows with the job was started processing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
     /// <p>An object that describes the output of the transcription job.</p>
     #[serde(rename = "Transcript")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -334,7 +479,7 @@ pub struct TranscriptionJob {
     pub transcription_job_status: Option<String>,
 }
 
-/// <p>Provides a summary of information about a transcription job. .</p>
+/// <p>Provides a summary of information about a transcription job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TranscriptionJobSummary {
@@ -358,6 +503,10 @@ pub struct TranscriptionJobSummary {
     #[serde(rename = "OutputLocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location_type: Option<String>,
+    /// <p>A timestamp that shows when the job started processing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
     /// <p>The name of the transcription job.</p>
     #[serde(rename = "TranscriptionJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -369,6 +518,38 @@ pub struct TranscriptionJobSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateVocabularyFilterRequest {
+    /// <p>The Amazon S3 location of a text file used as input to create the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>The specified file must be less than 50 KB of UTF-8 characters.</p> <p>If you provide the location of a list of words in the <code>VocabularyFilterFileUri</code> parameter, you can't use the <code>Words</code> parameter.</p>
+    #[serde(rename = "VocabularyFilterFileUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_file_uri: Option<String>,
+    /// <p>The name of the vocabulary filter to update.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    pub vocabulary_filter_name: String,
+    /// <p>The words to use in the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>If you provide a list of words in the <code>Words</code> parameter, you can't use the <code>VocabularyFilterFileUri</code> parameter.</p>
+    #[serde(rename = "Words")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub words: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateVocabularyFilterResponse {
+    /// <p>The language code of the words in the vocabulary filter.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The date and time that the vocabulary filter was updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the updated vocabulary filter.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
@@ -377,7 +558,7 @@ pub struct UpdateVocabularyRequest {
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phrases: Option<Vec<String>>,
-    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
+    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/examplebucket/vocab.txt</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
@@ -407,6 +588,24 @@ pub struct UpdateVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
+/// <p>Provides information about a vocabulary filter.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct VocabularyFilterInfo {
+    /// <p>The language code of the words in the vocabulary filter.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>The date and time that the vocabulary was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the vocabulary filter. The name must be unique in the account that holds the filter.</p>
+    #[serde(rename = "VocabularyFilterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vocabulary_filter_name: Option<String>,
+}
+
 /// <p>Provides information about a custom vocabulary. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -434,7 +633,7 @@ pub struct VocabularyInfo {
 pub enum CreateVocabularyError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -477,6 +676,61 @@ impl Error for CreateVocabularyError {
             CreateVocabularyError::Conflict(ref cause) => cause,
             CreateVocabularyError::InternalFailure(ref cause) => cause,
             CreateVocabularyError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateVocabularyFilter
+#[derive(Debug, PartialEq)]
+pub enum CreateVocabularyFilterError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    Conflict(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+}
+
+impl CreateVocabularyFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVocabularyFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateVocabularyFilterError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateVocabularyFilterError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateVocabularyFilterError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateVocabularyFilterError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateVocabularyFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVocabularyFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVocabularyFilterError::BadRequest(ref cause) => cause,
+            CreateVocabularyFilterError::Conflict(ref cause) => cause,
+            CreateVocabularyFilterError::InternalFailure(ref cause) => cause,
+            CreateVocabularyFilterError::LimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -577,6 +831,61 @@ impl Error for DeleteVocabularyError {
             DeleteVocabularyError::InternalFailure(ref cause) => cause,
             DeleteVocabularyError::LimitExceeded(ref cause) => cause,
             DeleteVocabularyError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVocabularyFilter
+#[derive(Debug, PartialEq)]
+pub enum DeleteVocabularyFilterError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+    /// <p>We can't find the requested resource. Check the name and try your request again.</p>
+    NotFound(String),
+}
+
+impl DeleteVocabularyFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVocabularyFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteVocabularyFilterError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteVocabularyFilterError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteVocabularyFilterError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteVocabularyFilterError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteVocabularyFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVocabularyFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVocabularyFilterError::BadRequest(ref cause) => cause,
+            DeleteVocabularyFilterError::InternalFailure(ref cause) => cause,
+            DeleteVocabularyFilterError::LimitExceeded(ref cause) => cause,
+            DeleteVocabularyFilterError::NotFound(ref cause) => cause,
         }
     }
 }
@@ -682,6 +991,57 @@ impl Error for GetVocabularyError {
         }
     }
 }
+/// Errors returned by GetVocabularyFilter
+#[derive(Debug, PartialEq)]
+pub enum GetVocabularyFilterError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+    /// <p>We can't find the requested resource. Check the name and try your request again.</p>
+    NotFound(String),
+}
+
+impl GetVocabularyFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVocabularyFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetVocabularyFilterError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetVocabularyFilterError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetVocabularyFilterError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetVocabularyFilterError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetVocabularyFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetVocabularyFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            GetVocabularyFilterError::BadRequest(ref cause) => cause,
+            GetVocabularyFilterError::InternalFailure(ref cause) => cause,
+            GetVocabularyFilterError::LimitExceeded(ref cause) => cause,
+            GetVocabularyFilterError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTranscriptionJobsError {
@@ -774,12 +1134,59 @@ impl Error for ListVocabulariesError {
         }
     }
 }
+/// Errors returned by ListVocabularyFilters
+#[derive(Debug, PartialEq)]
+pub enum ListVocabularyFiltersError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+}
+
+impl ListVocabularyFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVocabularyFiltersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListVocabularyFiltersError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListVocabularyFiltersError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListVocabularyFiltersError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListVocabularyFiltersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListVocabularyFiltersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListVocabularyFiltersError::BadRequest(ref cause) => cause,
+            ListVocabularyFiltersError::InternalFailure(ref cause) => cause,
+            ListVocabularyFiltersError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTranscriptionJobError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -832,7 +1239,7 @@ impl Error for StartTranscriptionJobError {
 pub enum UpdateVocabularyError {
     /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
-    /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
+    /// <p>When you are using the <code>CreateVocabulary</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -884,6 +1291,61 @@ impl Error for UpdateVocabularyError {
         }
     }
 }
+/// Errors returned by UpdateVocabularyFilter
+#[derive(Debug, PartialEq)]
+pub enum UpdateVocabularyFilterError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+    /// <p>We can't find the requested resource. Check the name and try your request again.</p>
+    NotFound(String),
+}
+
+impl UpdateVocabularyFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVocabularyFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateVocabularyFilterError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateVocabularyFilterError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateVocabularyFilterError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateVocabularyFilterError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateVocabularyFilterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateVocabularyFilterError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateVocabularyFilterError::BadRequest(ref cause) => cause,
+            UpdateVocabularyFilterError::InternalFailure(ref cause) => cause,
+            UpdateVocabularyFilterError::LimitExceeded(ref cause) => cause,
+            UpdateVocabularyFilterError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 #[async_trait]
 pub trait Transcribe {
@@ -892,6 +1354,12 @@ pub trait Transcribe {
         &self,
         input: CreateVocabularyRequest,
     ) -> Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>>;
+
+    /// <p>Creates a new vocabulary filter that you can use to filter words, such as profane words, from the output of a transcription job.</p>
+    async fn create_vocabulary_filter(
+        &self,
+        input: CreateVocabularyFilterRequest,
+    ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>>;
 
     /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
     async fn delete_transcription_job(
@@ -905,6 +1373,12 @@ pub trait Transcribe {
         input: DeleteVocabularyRequest,
     ) -> Result<(), RusotoError<DeleteVocabularyError>>;
 
+    /// <p>Removes a vocabulary filter.</p>
+    async fn delete_vocabulary_filter(
+        &self,
+        input: DeleteVocabularyFilterRequest,
+    ) -> Result<(), RusotoError<DeleteVocabularyFilterError>>;
+
     /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>
     async fn get_transcription_job(
         &self,
@@ -916,6 +1390,12 @@ pub trait Transcribe {
         &self,
         input: GetVocabularyRequest,
     ) -> Result<GetVocabularyResponse, RusotoError<GetVocabularyError>>;
+
+    /// <p>Returns information about a vocabulary filter.</p>
+    async fn get_vocabulary_filter(
+        &self,
+        input: GetVocabularyFilterRequest,
+    ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>>;
 
     /// <p>Lists transcription jobs with the specified status.</p>
     async fn list_transcription_jobs(
@@ -929,6 +1409,12 @@ pub trait Transcribe {
         input: ListVocabulariesRequest,
     ) -> Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>>;
 
+    /// <p>Gets information about vocabulary filters.</p>
+    async fn list_vocabulary_filters(
+        &self,
+        input: ListVocabularyFiltersRequest,
+    ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>>;
+
     /// <p>Starts an asynchronous job to transcribe speech to text. </p>
     async fn start_transcription_job(
         &self,
@@ -940,6 +1426,12 @@ pub trait Transcribe {
         &self,
         input: UpdateVocabularyRequest,
     ) -> Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>>;
+
+    /// <p>Updates a vocabulary filter with a new list of filtered words.</p>
+    async fn update_vocabulary_filter(
+        &self,
+        input: UpdateVocabularyFilterRequest,
+    ) -> Result<UpdateVocabularyFilterResponse, RusotoError<UpdateVocabularyFilterError>>;
 }
 /// A client for the Amazon Transcribe Service API.
 #[derive(Clone)]
@@ -973,6 +1465,10 @@ impl TranscribeClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> TranscribeClient {
+        TranscribeClient { client, region }
+    }
 }
 
 #[async_trait]
@@ -1002,6 +1498,34 @@ impl Transcribe for TranscribeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateVocabularyError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new vocabulary filter that you can use to filter words, such as profane words, from the output of a transcription job.</p>
+    async fn create_vocabulary_filter(
+        &self,
+        input: CreateVocabularyFilterRequest,
+    ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.CreateVocabularyFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVocabularyFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateVocabularyFilterError::from_response(response))
         }
     }
 
@@ -1057,6 +1581,32 @@ impl Transcribe for TranscribeClient {
         }
     }
 
+    /// <p>Removes a vocabulary filter.</p>
+    async fn delete_vocabulary_filter(
+        &self,
+        input: DeleteVocabularyFilterRequest,
+    ) -> Result<(), RusotoError<DeleteVocabularyFilterError>> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.DeleteVocabularyFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVocabularyFilterError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>
     async fn get_transcription_job(
         &self,
@@ -1109,6 +1659,34 @@ impl Transcribe for TranscribeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetVocabularyError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about a vocabulary filter.</p>
+    async fn get_vocabulary_filter(
+        &self,
+        input: GetVocabularyFilterRequest,
+    ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.GetVocabularyFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVocabularyFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVocabularyFilterError::from_response(response))
         }
     }
 
@@ -1168,6 +1746,34 @@ impl Transcribe for TranscribeClient {
         }
     }
 
+    /// <p>Gets information about vocabulary filters.</p>
+    async fn list_vocabulary_filters(
+        &self,
+        input: ListVocabularyFiltersRequest,
+    ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.ListVocabularyFilters");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVocabularyFiltersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVocabularyFiltersError::from_response(response))
+        }
+    }
+
     /// <p>Starts an asynchronous job to transcribe speech to text. </p>
     async fn start_transcription_job(
         &self,
@@ -1221,6 +1827,34 @@ impl Transcribe for TranscribeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateVocabularyError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a vocabulary filter with a new list of filtered words.</p>
+    async fn update_vocabulary_filter(
+        &self,
+        input: UpdateVocabularyFilterRequest,
+    ) -> Result<UpdateVocabularyFilterResponse, RusotoError<UpdateVocabularyFilterError>> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.UpdateVocabularyFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVocabularyFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVocabularyFilterError::from_response(response))
         }
     }
 }

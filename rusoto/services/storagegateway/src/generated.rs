@@ -33,7 +33,7 @@ pub struct ActivateGatewayInput {
     /// <p>The name you configured for your gateway.</p>
     #[serde(rename = "GatewayName")]
     pub gateway_name: String,
-    /// <p>A value that indicates the region where you want to store your data. The gateway region specified must be the same region as the region in your <code>Host</code> header in the request. For more information about available regions and endpoints for AWS Storage Gateway, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: See <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">AWS Storage Gateway Regions and Endpoints</a> in the AWS General Reference. </p>
+    /// <p>A value that indicates the AWS Region where you want to store your data. The gateway AWS Region specified must be the same AWS Region as the AWS Region in your <code>Host</code> header in the request. For more information about available AWS Regions and endpoints for AWS Storage Gateway, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: See <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region">AWS Storage Gateway Regions and Endpoints</a> in the AWS General Reference. </p>
     #[serde(rename = "GatewayRegion")]
     pub gateway_region: String,
     /// <p>A value that indicates the time zone you want to set for the gateway. The time zone is of the format "GMT-hr:mm" or "GMT+hr:mm". For example, GMT-4:00 indicates the time is 4 hours behind GMT. GMT+2:00 indicates the time is 2 hours ahead of GMT. The time zone is used, for example, for scheduling snapshots and your gateway's maintenance schedule.</p>
@@ -47,7 +47,7 @@ pub struct ActivateGatewayInput {
     #[serde(rename = "MediumChangerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub medium_changer_type: Option<String>,
-    /// <p><p>A list of up to 50 tags that can be assigned to the gateway. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
+    /// <p><p>A list of up to 50 tags that you can assign to the gateway. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers that can be represented in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256 characters.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -57,7 +57,7 @@ pub struct ActivateGatewayInput {
     pub tape_drive_type: Option<String>,
 }
 
-/// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
+/// <p><p>AWS Storage Gateway returns the Amazon Resource Name (ARN) of the activated gateway. It is a string made of information such as your account, gateway name, and AWS Region. This ARN is used to reference the gateway in other API operations as well as resource-based authorization.</p> <note> <p>For gateways activated prior to September 02, 2015, the gateway ARN contains the gateway name rather than the gateway ID. Changing the name of the gateway has no effect on the gateway ARN.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActivateGatewayOutput {
@@ -340,7 +340,7 @@ pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename = "SourceVolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_volume_arn: Option<String>,
-    /// <p><p>A list of up to 50 tags that can be assigned to a cached volume. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
+    /// <p><p>A list of up to 50 tags that you can assign to a cached volume. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers that you can represent in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256 characters.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -439,7 +439,7 @@ pub struct CreateNFSFileShareOutput {
 /// <p>CreateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSMBFileShareInput {
-    /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    /// <p><p>A list of users in the Active Directory that will be granted administrator privileges on the file share. These users can do all file operations as the super-user. </p> <important> <p>Use this option very carefully, because any user in this list can do anything they like on the file share, regardless of file permissions.</p> </important></p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
@@ -520,6 +520,10 @@ pub struct CreateSnapshotFromVolumeRecoveryPointInput {
     /// <p>Textual description of the snapshot that appears in the Amazon EC2 console, Elastic Block Store snapshots panel in the <b>Description</b> field, and in the AWS Storage Gateway snapshot <b>Details</b> pane, <b>Description</b> field</p>
     #[serde(rename = "SnapshotDescription")]
     pub snapshot_description: String,
+    /// <p><p>A list of up to 50 tags that can be assigned to a snapshot. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>
     #[serde(rename = "VolumeARN")]
     pub volume_arn: String,
@@ -627,7 +631,7 @@ pub struct CreateStorediSCSIVolumeOutput {
 /// <p>CreateTapeWithBarcodeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTapeWithBarcodeInput {
-    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tape with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
@@ -670,7 +674,7 @@ pub struct CreateTapesInput {
     /// <p><p>A unique identifier that you use to retry a request. If you retry a request, use the same <code>ClientToken</code> you specified in the initial request.</p> <note> <p>Using the same <code>ClientToken</code> prevents creating the tape multiple times.</p> </note></p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
-    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tapes with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) that represents the gateway to associate the virtual tapes with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>
@@ -829,7 +833,7 @@ pub struct DeleteTapeArchiveOutput {
 /// <p>DeleteTapeInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTapeInput {
-    /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
+    /// <p>The unique Amazon Resource Name (ARN) of the gateway that the virtual tape to delete is associated with. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape to delete.</p>
@@ -863,6 +867,28 @@ pub struct DeleteVolumeOutput {
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAvailabilityMonitorTestInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAvailabilityMonitorTestOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>The time the High Availability monitoring test was started. If a test hasn't been performed, the value of this field is null.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The status of the High Availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>A JSON object containing the of the gateway.</p>
@@ -973,6 +999,10 @@ pub struct DescribeGatewayInformationInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeGatewayInformationOutput {
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch Log Group that is used to monitor events in the gateway.</p>
+    #[serde(rename = "CloudWatchLogGroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_log_group_arn: Option<String>,
     /// <p>The ID of the Amazon EC2 instance that was used to launch the gateway.</p>
     #[serde(rename = "Ec2InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1008,6 +1038,10 @@ pub struct DescribeGatewayInformationOutput {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
+    /// <p>The type of hypervisor environment used by the host.</p>
+    #[serde(rename = "HostEnvironment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_environment: Option<String>,
     /// <p>The date on which the last software update was applied to the gateway. If the gateway has never been updated, this field does not return a value in the response.</p>
     #[serde(rename = "LastSoftwareUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1107,6 +1141,10 @@ pub struct DescribeSMBSettingsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSMBSettingsOutput {
+    /// <p><p>Indicates the status of a gateway that is a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
+    #[serde(rename = "ActiveDirectoryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_directory_status: Option<String>,
     /// <p>The name of the domain that the gateway is joined to.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1118,7 +1156,7 @@ pub struct DescribeSMBSettingsOutput {
     #[serde(rename = "SMBGuestPasswordSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smb_guest_password_set: Option<bool>,
-    /// <p>The type of security strategy that was specified for file gateway.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
+    /// <p>The type of security strategy that was specified for file gateway.</p> <p>ClientSpecified: if you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment. </p> <p>MandatorySigning: if you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer. </p> <p>MandatoryEncryption: if you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer. </p>
     #[serde(rename = "SMBSecurityStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub smb_security_strategy: Option<String>,
@@ -1147,6 +1185,10 @@ pub struct DescribeSnapshotScheduleOutput {
     #[serde(rename = "StartAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_at: Option<i64>,
+    /// <p>A list of up to 50 tags assigned to the snapshot schedule, sorted alphabetically by key name. Each tag is a key-value pair. For a gateway with more than 10 tags assigned, you can view all tags using the <code>ListTagsForResource</code> API operation.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>A value that indicates the time zone of the gateway.</p>
     #[serde(rename = "Timezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1490,7 +1532,7 @@ pub struct GatewayInfo {
     #[serde(rename = "Ec2InstanceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_instance_region: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1522,17 +1564,21 @@ pub struct JoinDomainInput {
     /// <p>The name of the domain that you want the gateway to join.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
-    /// <p>The organizational unit (OU) is a container with an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>
+    /// <p>The organizational unit (OU) is a container in an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>
     #[serde(rename = "OrganizationalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit: Option<String>,
     /// <p>Sets the password of the user who has permission to add the gateway to the Active Directory domain.</p>
     #[serde(rename = "Password")]
     pub password: String,
-    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain.</p>
+    /// <p>Specifies the time in seconds, in which the <code>JoinDomain</code> operation must complete. The default is 20 seconds.</p>
+    #[serde(rename = "TimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_seconds: Option<i64>,
+    /// <p>Sets the user name of user who has permission to add the gateway to the Active Directory domain. The domain user account should be enabled to join computers to the domain. For example, you can use the domain administrator account or an account with delegated permissions to join computers to the domain.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -1541,6 +1587,10 @@ pub struct JoinDomainInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JoinDomainOutput {
+    /// <p><p>Indicates the status of the gateway as a member of the Active Directory domain.</p> <ul> <li> <p>ACCESS<em>DENIED: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p>DETACHED: Indicates that gateway is not joined to a domain.</p> </li> <li> <p>JOINED: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p>JOINING: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p>NETWORK</em>ERROR: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p>TIMEOUT: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p>UNKNOWN_ERROR: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
+    #[serde(rename = "ActiveDirectoryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_directory_status: Option<String>,
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1947,7 +1997,7 @@ pub struct ResetCacheOutput {
 /// <p>RetrieveTapeArchiveInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RetrieveTapeArchiveInput {
-    /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape you want to retrieve from the virtual tape shelf (VTS).</p>
@@ -2110,6 +2160,20 @@ pub struct ShutdownGatewayInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ShutdownGatewayOutput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartAvailabilityMonitorTestInput {
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartAvailabilityMonitorTestOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -2310,7 +2374,7 @@ pub struct TapeArchive {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TapeInfo {
-    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and AWS Region.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -2416,6 +2480,10 @@ pub struct UpdateChapCredentialsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGatewayInformationInput {
+    /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What Is Amazon CloudWatch Logs?</a>.</p>
+    #[serde(rename = "CloudWatchLogGroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_log_group_arn: Option<String>,
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
     #[serde(rename = "GatewayName")]
@@ -2547,7 +2615,7 @@ pub struct UpdateNFSFileShareOutput {
 /// <p>UpdateSMBFileShareInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSMBFileShareInput {
-    /// <p>A list of users or groups in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
+    /// <p>A list of users in the Active Directory that have administrator rights to the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
@@ -2610,7 +2678,7 @@ pub struct UpdateSMBFileShareOutput {
 pub struct UpdateSMBSecurityStrategyInput {
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
-    /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required.</p> <p>MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required.</p> <p>MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.</p>
+    /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: if you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment. </p> <p>MandatorySigning: if you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer. </p> <p>MandatoryEncryption: if you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer. </p>
     #[serde(rename = "SMBSecurityStrategy")]
     pub smb_security_strategy: String,
 }
@@ -3836,6 +3904,51 @@ impl Error for DeleteVolumeError {
         match *self {
             DeleteVolumeError::InternalServerError(ref cause) => cause,
             DeleteVolumeError::InvalidGatewayRequest(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAvailabilityMonitorTest
+#[derive(Debug, PartialEq)]
+pub enum DescribeAvailabilityMonitorTestError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl DescribeAvailabilityMonitorTestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAvailabilityMonitorTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeAvailabilityMonitorTestError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAvailabilityMonitorTestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAvailabilityMonitorTestError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
+            DescribeAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
         }
     }
 }
@@ -5398,6 +5511,51 @@ impl Error for ShutdownGatewayError {
         }
     }
 }
+/// Errors returned by StartAvailabilityMonitorTest
+#[derive(Debug, PartialEq)]
+pub enum StartAvailabilityMonitorTestError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl StartAvailabilityMonitorTestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartAvailabilityMonitorTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        StartAvailabilityMonitorTestError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        StartAvailabilityMonitorTestError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartAvailabilityMonitorTestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartAvailabilityMonitorTestError {
+    fn description(&self) -> &str {
+        match *self {
+            StartAvailabilityMonitorTestError::InternalServerError(ref cause) => cause,
+            StartAvailabilityMonitorTestError::InvalidGatewayRequest(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartGateway
 #[derive(Debug, PartialEq)]
 pub enum StartGatewayError {
@@ -5872,7 +6030,7 @@ impl Error for UpdateVTLDeviceTypeError {
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
 #[async_trait]
 pub trait StorageGateway {
-    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
+    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
     async fn activate_gateway(
         &self,
         input: ActivateGatewayInput,
@@ -5932,7 +6090,7 @@ pub trait StorageGateway {
         input: CreateCachediSCSIVolumeInput,
     ) -> Result<CreateCachediSCSIVolumeOutput, RusotoError<CreateCachediSCSIVolumeError>>;
 
-    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in the AWS Region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
     async fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
@@ -5977,13 +6135,13 @@ pub trait StorageGateway {
         input: CreateTapesInput,
     ) -> Result<CreateTapesOutput, RusotoError<CreateTapesError>>;
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
     async fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
     ) -> Result<DeleteBandwidthRateLimitOutput, RusotoError<DeleteBandwidthRateLimitError>>;
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
     async fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
@@ -6025,7 +6183,16 @@ pub trait StorageGateway {
         input: DeleteVolumeInput,
     ) -> Result<DeleteVolumeOutput, RusotoError<DeleteVolumeError>>;
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    async fn describe_availability_monitor_test(
+        &self,
+        input: DescribeAvailabilityMonitorTestInput,
+    ) -> Result<
+        DescribeAvailabilityMonitorTestOutput,
+        RusotoError<DescribeAvailabilityMonitorTestError>,
+    >;
+
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -6043,7 +6210,7 @@ pub trait StorageGateway {
         input: DescribeCachediSCSIVolumesInput,
     ) -> Result<DescribeCachediSCSIVolumesOutput, RusotoError<DescribeCachediSCSIVolumesError>>;
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
     async fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
@@ -6127,7 +6294,7 @@ pub trait StorageGateway {
         input: DescribeWorkingStorageInput,
     ) -> Result<DescribeWorkingStorageOutput, RusotoError<DescribeWorkingStorageError>>;
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
     async fn detach_volume(
         &self,
         input: DetachVolumeInput,
@@ -6151,7 +6318,7 @@ pub trait StorageGateway {
         input: ListFileSharesInput,
     ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>>;
 
-    /// <p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
+    /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
     async fn list_gateways(
         &self,
         input: ListGatewaysInput,
@@ -6163,7 +6330,7 @@ pub trait StorageGateway {
         input: ListLocalDisksInput,
     ) -> Result<ListLocalDisksOutput, RusotoError<ListLocalDisksError>>;
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -6193,19 +6360,19 @@ pub trait StorageGateway {
         input: ListVolumesInput,
     ) -> Result<ListVolumesOutput, RusotoError<ListVolumesError>>;
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
     async fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
     ) -> Result<NotifyWhenUploadedOutput, RusotoError<NotifyWhenUploadedError>>;
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
     async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
     ) -> Result<RefreshCacheOutput, RusotoError<RefreshCacheError>>;
 
-    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
     async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
@@ -6247,19 +6414,25 @@ pub trait StorageGateway {
         input: ShutdownGatewayInput,
     ) -> Result<ShutdownGatewayOutput, RusotoError<ShutdownGatewayError>>;
 
+    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
+    async fn start_availability_monitor_test(
+        &self,
+        input: StartAvailabilityMonitorTestInput,
+    ) -> Result<StartAvailabilityMonitorTestOutput, RusotoError<StartAvailabilityMonitorTestError>>;
+
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn start_gateway(
         &self,
         input: StartGatewayInput,
     ) -> Result<StartGatewayOutput, RusotoError<StartGatewayError>>;
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
     ) -> Result<UpdateBandwidthRateLimitOutput, RusotoError<UpdateBandwidthRateLimitError>>;
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
     async fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,
@@ -6295,7 +6468,7 @@ pub trait StorageGateway {
         input: UpdateSMBFileShareInput,
     ) -> Result<UpdateSMBFileShareOutput, RusotoError<UpdateSMBFileShareError>>;
 
-    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>
     async fn update_smb_security_strategy(
         &self,
         input: UpdateSMBSecurityStrategyInput,
@@ -6345,11 +6518,15 @@ impl StorageGatewayClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> StorageGatewayClient {
+        StorageGatewayClient { client, region }
+    }
 }
 
 #[async_trait]
 impl StorageGateway for StorageGatewayClient {
-    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
+    /// <p><p>Activates the gateway you previously deployed on your host. In the activation process, you specify information such as the AWS Region that you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note></p>
     async fn activate_gateway(
         &self,
         input: ActivateGatewayInput,
@@ -6623,7 +6800,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
+    /// <p><p>Creates a Network File System (NFS) file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a NFS interface. This operation is only supported for file gateways.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the AWS Region you are creating your file gateway in. If AWS STS is not activated in the AWS Region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important></p>
     async fn create_nfs_file_share(
         &self,
         input: CreateNFSFileShareInput,
@@ -6831,7 +7008,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Deletes the bandwidth rate limits of a gateway. You can delete either the upload and download bandwidth rate limit, or you can delete both. If you delete only one of the limits, the other limit remains unchanged. To specify which gateway to work with, use the Amazon Resource Name (ARN) of the gateway in your request. This operation is supported for the stored volume, cached volume and tape gateway types.</p>
     async fn delete_bandwidth_rate_limit(
         &self,
         input: DeleteBandwidthRateLimitInput,
@@ -6862,7 +7039,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair.</p>
+    /// <p>Deletes Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target and initiator pair. This operation is supported in volume and tape gateway types.</p>
     async fn delete_chap_credentials(
         &self,
         input: DeleteChapCredentialsInput,
@@ -7059,7 +7236,43 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect.</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    async fn describe_availability_monitor_test(
+        &self,
+        input: DescribeAvailabilityMonitorTestInput,
+    ) -> Result<
+        DescribeAvailabilityMonitorTestOutput,
+        RusotoError<DescribeAvailabilityMonitorTestError>,
+    > {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DescribeAvailabilityMonitorTest",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAvailabilityMonitorTestOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAvailabilityMonitorTestError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Returns the bandwidth rate limits of a gateway. By default, these limits are not set, which means no bandwidth rate limiting is in effect. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>This operation only returns a value for a bandwidth rate limit only if the limit is set. If no limits are set for the gateway, then this operation returns only the gateway ARN in the response body. To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn describe_bandwidth_rate_limit(
         &self,
         input: DescribeBandwidthRateLimitInput,
@@ -7150,7 +7363,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair.</p>
+    /// <p>Returns an array of Challenge-Handshake Authentication Protocol (CHAP) credentials information for a specified iSCSI target, one for each target-initiator pair. This operation is supported in the volume and tape gateway types.</p>
     async fn describe_chap_credentials(
         &self,
         input: DescribeChapCredentialsInput,
@@ -7581,7 +7794,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance. This operation is only supported in the volume gateway type.</p>
     async fn detach_volume(
         &self,
         input: DetachVolumeInput,
@@ -7689,7 +7902,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Lists gateways owned by an AWS account in a region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
+    /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
     async fn list_gateways(
         &self,
         input: ListGatewaysInput,
@@ -7743,7 +7956,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway type.</p>
+    /// <p>Lists the tags that have been added to the specified resource. This operation is supported in storage gateways of all types.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -7890,7 +8103,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
+    /// <p>Sends you notification through CloudWatch Events when all files written to your file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>
     async fn notify_when_uploaded(
         &self,
         input: NotifyWhenUploadedInput,
@@ -7918,7 +8131,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes. </p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see "https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification".</p>
     async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
@@ -7945,7 +8158,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>
+    /// <p>Removes one or more tags from the specified resource. This operation is supported in storage gateways of all types.</p>
     async fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceInput,
@@ -8154,6 +8367,38 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
+    /// <p><p>Start a test that verifies that the specified gateway is configured for High Availability monitoring in your host environment. This request only initiates the test and that a successful response only indicates that the test was started. It doesn&#39;t indicate that the test passed. For the status of the test, invoke the <code>DescribeAvailabilityMonitorTest</code> API. </p> <note> <p>Starting this test will cause your gateway to go offline for a brief period.</p> </note></p>
+    async fn start_availability_monitor_test(
+        &self,
+        input: StartAvailabilityMonitorTestInput,
+    ) -> Result<StartAvailabilityMonitorTestOutput, RusotoError<StartAvailabilityMonitorTestError>>
+    {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.StartAvailabilityMonitorTest",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartAvailabilityMonitorTestOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartAvailabilityMonitorTestError::from_response(response))
+        }
+    }
+
     /// <p>Starts a gateway that you previously shut down (see <a>ShutdownGateway</a>). After the gateway starts, you can then make other API calls, your applications can read from or write to the gateway's storage volumes and you will be able to take snapshot backups.</p> <note> <p>When you make a request, you will get a 200 OK success response immediately. However, it might take some time for the gateway to be ready. You should call <a>DescribeGatewayInformation</a> and check the status before making any additional API calls. For more information, see <a>ActivateGateway</a>.</p> </note> <p>To specify which gateway to start, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn start_gateway(
         &self,
@@ -8181,7 +8426,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains.</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
+    /// <p>Updates the bandwidth rate limits of a gateway. You can update both the upload and download bandwidth rate limit or specify only one of the two. If you don't set a bandwidth rate limit, the existing rate limit remains. This operation is supported for the stored volume, cached volume and tape gateway types.'</p> <p>By default, a gateway's bandwidth rate limits are not set. If you don't set any limit, the gateway does not have any limitations on its bandwidth usage and could potentially use the maximum available bandwidth.</p> <p>To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn update_bandwidth_rate_limit(
         &self,
         input: UpdateBandwidthRateLimitInput,
@@ -8212,7 +8457,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
+    /// <p><p>Updates the Challenge-Handshake Authentication Protocol (CHAP) credentials for a specified iSCSI target. By default, a gateway does not have CHAP enabled; however, for added security, you might use it. This operation is supported in the volume and tape gateway types.</p> <important> <p>When you update CHAP credentials, all existing connections on the target are closed and initiators must reconnect with the new credentials.</p> </important></p>
     async fn update_chap_credentials(
         &self,
         input: UpdateChapCredentialsInput,
@@ -8393,7 +8638,7 @@ impl StorageGateway for StorageGatewayClient {
         }
     }
 
-    /// <p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p>
+    /// <p><p>Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.</p> <note> <p>This API is called Security level in the User Guide.</p> <p>A higher security level can affect performance of the gateway.</p> </note></p>
     async fn update_smb_security_strategy(
         &self,
         input: UpdateSMBSecurityStrategyInput,

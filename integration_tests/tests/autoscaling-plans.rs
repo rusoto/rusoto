@@ -8,13 +8,13 @@ use rusoto_autoscaling_plans::{
 };
 use rusoto_core::Region;
 
-#[test]
-fn should_describe_scaling_plans() {
+#[tokio::test]
+async fn should_describe_scaling_plans() {
     let client = AutoscalingPlansClient::new(Region::UsEast1);
 
     let request = DescribeScalingPlansRequest::default();
 
-    let res = client.describe_scaling_plans(request).sync();
+    let res = client.describe_scaling_plans(request).await;
 
     match res {
         Err(e) => panic!("Error getting scaling plans: {:?}", e),

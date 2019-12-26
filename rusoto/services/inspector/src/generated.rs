@@ -3841,6 +3841,10 @@ impl InspectorClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> InspectorClient {
+        InspectorClient { client, region }
+    }
 }
 
 #[async_trait]

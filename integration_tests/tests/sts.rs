@@ -1,21 +1,14 @@
 #![cfg(feature = "sts")]
 
-extern crate futures;
-extern crate rusoto_core;
-extern crate rusoto_ec2;
-extern crate rusoto_sts;
-
-use futures::Future;
-
 use rusoto_core::request::HttpClient;
-use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
+use rusoto_core::{credential::ProvideAwsCredentials, Region, RusotoError};
 use rusoto_ec2::Ec2Client;
 use rusoto_sts::{AssumeRoleRequest, GetSessionTokenRequest};
 use rusoto_sts::{Sts, StsClient};
 use rusoto_sts::{StsAssumeRoleSessionCredentialsProvider, StsSessionCredentialsProvider};
 
-#[test]
-fn main() {
+#[tokio::test]
+async fn main() {
     let sts = StsClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html
@@ -25,7 +18,7 @@ fn main() {
             role_session_name: "rusoto_test_session".to_owned(),
             ..Default::default()
         })
-        .sync();
+        .await;
     match assume_role_res {
         Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();
@@ -43,7 +36,7 @@ fn main() {
             serial_number: Some("123456789".to_owned()),
             ..Default::default()
         })
-        .sync();
+        .await;
     match get_session_token_res {
         Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();
@@ -59,7 +52,7 @@ fn main() {
 
     let sts_creds_provider = StsSessionCredentialsProvider::new(sts, None, None);
 
-    match sts_creds_provider.credentials().wait() {
+    match sts_creds_provider.credentials().await {
         Err(e) => panic!("sts credentials provider error: {:?}", e),
         Ok(r) => println!("sts credentials provider result: {:?}", r),
     }

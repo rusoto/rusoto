@@ -30,21 +30,25 @@ mod future;
 mod stream;
 
 pub mod param;
+#[doc(hidden)]
 pub mod region;
 pub mod request;
+#[doc(hidden)]
 pub mod signature;
 
 #[doc(hidden)]
 pub use crate::client::Client;
+#[doc(hidden)]
+pub mod encoding;
 #[doc(hidden)]
 pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
 
 //pub use rusoto_credential::{AwsCredentials, CredentialsError, DefaultCredentialsProvider, ProfileProvider, ProvideAwsCredentials};
-pub use rusoto_credential as credential;
 pub use crate::error::{RusotoError, RusotoResult};
 pub use crate::future::RusotoFuture;
 pub use crate::region::Region;
 pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
 pub use crate::stream::ByteStream;
+pub use rusoto_credential as credential;

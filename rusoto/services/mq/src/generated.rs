@@ -83,6 +83,14 @@ pub struct BrokerInstanceOption {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p>The list of supported deployment modes.</p>
+    #[serde(rename = "SupportedDeploymentModes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_deployment_modes: Option<Vec<String>>,
     /// <p>The list of supported engine versions.</p>
     #[serde(rename = "SupportedEngineVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,6 +245,10 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_mode: Option<String>,
+    /// <p>Encryption options for the broker.</p>
+    #[serde(rename = "EncryptionOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_options: Option<EncryptionOptions>,
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,10 +273,14 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    /// <p>The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -468,6 +484,10 @@ pub struct DescribeBrokerInstanceOptionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Filter response by storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -533,6 +553,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_mode: Option<String>,
+    /// <p>Encryption options for the broker.</p>
+    #[serde(rename = "EncryptionOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_options: Option<EncryptionOptions>,
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -557,14 +581,26 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "PendingEngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "PendingHostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_host_instance_type: Option<String>,
+    /// <p>The list of pending security groups to authorize connections to brokers.</p>
+    #[serde(rename = "PendingSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_security_groups: Option<Vec<String>>,
     /// <p>Required. Enables connections from applications outside of the VPC that hosts the broker&#39;s subnets.</p>
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publicly_accessible: Option<bool>,
-    /// <p>Required. The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.</p>
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
+    /// <p>The broker&#39;s storage type.</p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -691,6 +727,18 @@ pub struct DescribeUserResponse {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>Encryption options for the broker.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EncryptionOptions {
+    /// <p>The customer master key (CMK) to use for the AWS Key Management Service (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Enables the use of an AWS owned CMK using AWS Key Management Service (KMS).</p>
+    #[serde(rename = "UseAwsOwnedKey")]
+    pub use_aws_owned_key: bool,
 }
 
 /// <p>Id of the engine version.</p>
@@ -945,10 +993,18 @@ pub struct UpdateBrokerRequest {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs: Option<Logs>,
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -970,10 +1026,18 @@ pub struct UpdateBrokerResponse {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
+    /// <p>The host instance type of the broker to upgrade to. For a list of supported instance types, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide//broker.html#broker-instance-types</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
     /// <p>The list of information about logs to be enabled for the specified broker.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs: Option<Logs>,
+    /// <p>The list of security groups (1 minimum, 5 maximum) that authorizes connections to brokers.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
 }
 
 /// <p>Updates the specified configuration.</p>
@@ -2457,6 +2521,10 @@ impl MQClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MQClient {
+        MQClient { client, region }
+    }
 }
 
 #[async_trait]
@@ -2766,6 +2834,9 @@ impl MQ for MQClient {
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.storage_type {
+            params.put("storageType", x);
         }
         request.set_params(params);
 

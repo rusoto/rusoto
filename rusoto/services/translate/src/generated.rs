@@ -599,6 +599,10 @@ impl TranslateClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> TranslateClient {
+        TranslateClient { client, region }
+    }
 }
 
 #[async_trait]

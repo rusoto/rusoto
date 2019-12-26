@@ -822,6 +822,10 @@ impl AutoscalingPlansClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AutoscalingPlansClient {
+        AutoscalingPlansClient { client, region }
+    }
 }
 
 #[async_trait]
@@ -832,7 +836,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         input: CreateScalingPlanRequest,
     ) -> Result<CreateScalingPlanResponse, RusotoError<CreateScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -863,7 +867,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         input: DeleteScalingPlanRequest,
     ) -> Result<DeleteScalingPlanResponse, RusotoError<DeleteScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -895,7 +899,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
     ) -> Result<DescribeScalingPlanResourcesResponse, RusotoError<DescribeScalingPlanResourcesError>>
     {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -926,7 +930,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         input: DescribeScalingPlansRequest,
     ) -> Result<DescribeScalingPlansResponse, RusotoError<DescribeScalingPlansError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -960,7 +964,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         RusotoError<GetScalingPlanResourceForecastDataError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -993,7 +997,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         input: UpdateScalingPlanRequest,
     ) -> Result<UpdateScalingPlanResponse, RusotoError<UpdateScalingPlanError>> {
         let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
-        request.set_endpoint_prefix("autoscaling".to_string());
+
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",

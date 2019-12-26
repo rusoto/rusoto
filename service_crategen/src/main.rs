@@ -10,7 +10,7 @@ mod util;
 
 use std::path::Path;
 
-use clap::{App, Arg, SubCommand, crate_authors, crate_description, crate_version};
+use clap::{crate_authors, crate_description, crate_version, App, Arg, SubCommand};
 
 use crate::botocore::ServiceDefinition;
 use crate::config::ServiceConfig;
@@ -73,6 +73,6 @@ fn main() {
             .values_of("service")
             .map(std::iter::Iterator::collect);
 
-        commands::generate::generate_services(&service_configs, out_dir, &service.as_ref());
+        commands::generate::generate_services(&service_configs, out_dir, service.as_ref());
     }
 }

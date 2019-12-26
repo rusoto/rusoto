@@ -50,6 +50,10 @@ pub struct AlgorithmSpecification {
     #[serde(rename = "AlgorithmName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_name: Option<String>,
+    /// <p><p>To generate and save time-series metrics during training, set to <code>true</code>. The default is <code>false</code> and time-series metrics aren&#39;t generated except in the following cases:</p> <ul> <li> <p>You use one of the Amazon SageMaker built-in algorithms</p> </li> <li> <p>You use one of the following prebuilt Amazon SageMaker Docker images:</p> <ul> <li> <p>Tensorflow</p> </li> <li> <p>MXNet</p> </li> <li> <p>PyTorch</p> </li> </ul> </li> <li> <p>You specify at least one <a>MetricDefinition</a> </p> </li> </ul></p>
+    #[serde(rename = "EnableSageMakerMetricsTimeSeries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_sage_maker_metrics_time_series: Option<bool>,
     /// <p>A list of metric definition objects. Each object specifies the metric name and regular expressions used to parse algorithm logs. Amazon SageMaker publishes each metric to Amazon CloudWatch.</p>
     #[serde(rename = "MetricDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,9 +148,316 @@ pub struct AlgorithmValidationSpecification {
 /// <p>Configures how labels are consolidated across human workers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnnotationConsolidationConfig {
-    /// <p>The Amazon Resource Name (ARN) of a Lambda function implements the logic for annotation consolidation.</p> <p>For the built-in bounding box, image classification, semantic segmentation, and text classification task types, Amazon SageMaker Ground Truth provides the following Lambda functions:</p> <ul> <li> <p> <i>Bounding box</i> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-BoundingBox</code> </p> </li> <li> <p> <i>Image classification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClass</code> </p> </li> <li> <p> <i>Semantic segmentation</i> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as "votes" for the correct label.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-SemanticSegmentation</code> </p> </li> <li> <p> <i>Text classification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClass</code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of a Lambda function implements the logic for annotation consolidation.</p> <p>For the built-in bounding box, image classification, semantic segmentation, and text classification task types, Amazon SageMaker Ground Truth provides the following Lambda functions:</p> <ul> <li> <p> <i>Bounding box</i> - Finds the most similar boxes from different workers based on the Jaccard index of the boxes.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-BoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-BoundingBox</code> </p> </li> <li> <p> <i>Image classification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of an image based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-ImageMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-ImageMultiClass</code> </p> </li> <li> <p> <i>Semantic segmentation</i> - Treats each pixel in an image as a multi-class classification and treats pixel annotations from workers as "votes" for the correct label.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-SemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-SemanticSegmentation</code> </p> </li> <li> <p> <i>Text classification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of text based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-TextMultiClass</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-TextMultiClass</code> </p> </li> <li> <p> <i>Named entity recognition</i> - Groups similar selections and calculates aggregate boundaries, resolving to most-assigned label.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-NamedEntityRecognition</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-NamedEntityRecognition</code> </p> </li> <li> <p> <i>Bounding box verification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for bounding box labels based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationBoundingBox</code> </p> </li> <li> <p> <i>Semantic segmentation verification</i> - Uses a variant of the Expectation Maximization approach to estimate the true class of verification judgement for semantic segmentation labels based on annotations from individual workers.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-VerificationSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <i>Bounding box adjustment</i> - Finds the most similar boxes from different workers based on the Jaccard index of the adjusted annotations.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentBoundingBox</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentBoundingBox</code> </p> </li> <li> <p> <i>Semantic segmentation adjustment</i> - Treats each pixel in an image as a multi-class classification and treats pixel adjusted annotations from workers as "votes" for the correct label.</p> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:ACS-AdjustmentSemanticSegmentation</code> </p> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:ACS-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.</p>
     #[serde(rename = "AnnotationConsolidationLambdaArn")]
     pub annotation_consolidation_lambda_arn: String,
+}
+
+/// <p>The app's details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AppDetails {
+    /// <p>The name of the app.</p>
+    #[serde(rename = "AppName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_name: Option<String>,
+    /// <p>The type of app.</p>
+    #[serde(rename = "AppType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name: Option<String>,
+}
+
+/// <p>Configuration to run a processing job in a specified container image.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AppSpecification {
+    /// <p>The arguments for a container used to run a processing job.</p>
+    #[serde(rename = "ContainerArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_arguments: Option<Vec<String>>,
+    /// <p>The entrypoint for a container used to run a processing job.</p>
+    #[serde(rename = "ContainerEntrypoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_entrypoint: Option<Vec<String>>,
+    /// <p>The container image to be run by the processing job.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateTrialComponentRequest {
+    /// <p>The name of the component to associated with the trial.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+    /// <p>The name of the trial to associate with.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateTrialComponentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+    /// <p>The ARN of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+}
+
+/// <p>An AutoPilot job will return recommendations, or candidates. Each candidate has futher details about the steps involed, and the status.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AutoMLCandidate {
+    /// <p>The candidate name.</p>
+    #[serde(rename = "CandidateName")]
+    pub candidate_name: String,
+    /// <p>The candidate's status.</p>
+    #[serde(rename = "CandidateStatus")]
+    pub candidate_status: String,
+    /// <p>The candidate's steps.</p>
+    #[serde(rename = "CandidateSteps")]
+    pub candidate_steps: Vec<AutoMLCandidateStep>,
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The end time.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The failure reason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    #[serde(rename = "FinalAutoMLJobObjectiveMetric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub final_auto_ml_job_objective_metric: Option<FinalAutoMLJobObjectiveMetric>,
+    /// <p>The inference containers.</p>
+    #[serde(rename = "InferenceContainers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_containers: Option<Vec<AutoMLContainerDefinition>>,
+    /// <p>The last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>The objective status.</p>
+    #[serde(rename = "ObjectiveStatus")]
+    pub objective_status: String,
+}
+
+/// <p>Information about the steps for a Candidate, and what step it is working on.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AutoMLCandidateStep {
+    /// <p>The ARN for the Candidate's step.</p>
+    #[serde(rename = "CandidateStepArn")]
+    pub candidate_step_arn: String,
+    /// <p>The name for the Candidate's step.</p>
+    #[serde(rename = "CandidateStepName")]
+    pub candidate_step_name: String,
+    /// <p>Whether the Candidate is at the transform, training, or processing step.</p>
+    #[serde(rename = "CandidateStepType")]
+    pub candidate_step_type: String,
+}
+
+/// <p>Similar to Channel. A channel is a named input source that training algorithms can consume. Refer to Channel for detailed descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLChannel {
+    /// <p>You can use Gzip or None. The default value is None.</p>
+    #[serde(rename = "CompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compression_type: Option<String>,
+    /// <p>The data source.</p>
+    #[serde(rename = "DataSource")]
+    pub data_source: AutoMLDataSource,
+    /// <p>The name of the target variable in supervised learning, a.k.a. ‘y’.</p>
+    #[serde(rename = "TargetAttributeName")]
+    pub target_attribute_name: String,
+}
+
+/// <p>A list of container definitions that describe the different containers that make up one AutoML candidate. Refer to ContainerDefinition for more details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AutoMLContainerDefinition {
+    /// <p>Environment variables to set in the container. Refer to ContainerDefinition for more details.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ECR path of the container. Refer to ContainerDefinition for more details.</p>
+    #[serde(rename = "Image")]
+    pub image: String,
+    /// <p>The location of the model artifacts. Refer to ContainerDefinition for more details.</p>
+    #[serde(rename = "ModelDataUrl")]
+    pub model_data_url: String,
+}
+
+/// <p>The data source for the AutoPilot job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLDataSource {
+    /// <p>The Amazon S3 location of the data.</p>
+    #[serde(rename = "S3DataSource")]
+    pub s3_data_source: AutoMLS3DataSource,
+}
+
+/// <p>Artifacts that are generation during a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AutoMLJobArtifacts {
+    /// <p>The URL to the notebook location.</p>
+    #[serde(rename = "CandidateDefinitionNotebookLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub candidate_definition_notebook_location: Option<String>,
+    /// <p>The URL to the notebook location.</p>
+    #[serde(rename = "DataExplorationNotebookLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_exploration_notebook_location: Option<String>,
+}
+
+/// <p>How long a job is allowed to run, or how many candidates a job is allowed to generate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLJobCompletionCriteria {
+    /// <p>The maximum time, in seconds, an AutoML job is allowed to wait for a trial to complete. It must be equal to or greater than MaxRuntimePerTrainingJobInSeconds.</p>
+    #[serde(rename = "MaxAutoMLJobRuntimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_auto_ml_job_runtime_in_seconds: Option<i64>,
+    /// <p>The maximum number of times a training job is allowed to run.</p>
+    #[serde(rename = "MaxCandidates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_candidates: Option<i64>,
+    /// <p>The maximum time, in seconds, a job is allowed to run.</p>
+    #[serde(rename = "MaxRuntimePerTrainingJobInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_runtime_per_training_job_in_seconds: Option<i64>,
+}
+
+/// <p>A collection of settings used for a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLJobConfig {
+    /// <p>How long a job is allowed to run, or how many candidates a job is allowed to generate.</p>
+    #[serde(rename = "CompletionCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_criteria: Option<AutoMLJobCompletionCriteria>,
+    /// <p>Security configuration for traffic encryption or Amazon VPC settings.</p>
+    #[serde(rename = "SecurityConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_config: Option<AutoMLSecurityConfig>,
+}
+
+/// <p>Applies a metric to minimize or maximize for the job's objective.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLJobObjective {
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "MetricName")]
+    pub metric_name: String,
+}
+
+/// <p>Provides a summary about a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AutoMLJobSummary {
+    /// <p>The ARN of the job.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    pub auto_ml_job_arn: String,
+    /// <p>The name of the object you are requesting.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
+    /// <p>The job's secondary status.</p>
+    #[serde(rename = "AutoMLJobSecondaryStatus")]
+    pub auto_ml_job_secondary_status: String,
+    /// <p>The job's status.</p>
+    #[serde(rename = "AutoMLJobStatus")]
+    pub auto_ml_job_status: String,
+    /// <p>When the job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The end time.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The failure reason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>When the job was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+}
+
+/// <p>The output data configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLOutputDataConfig {
+    /// <p>The AWS KMS encryption key ID.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The Amazon S3 output path. Must be 128 characters or less.</p>
+    #[serde(rename = "S3OutputPath")]
+    pub s3_output_path: String,
+}
+
+/// <p>The Amazon S3 data source.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLS3DataSource {
+    /// <p>The data type.</p>
+    #[serde(rename = "S3DataType")]
+    pub s3_data_type: String,
+    /// <p>The URL to the Amazon S3 data source.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Security options.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoMLSecurityConfig {
+    /// <p>Whether to use traffic encryption between the container layers.</p>
+    #[serde(rename = "EnableInterContainerTrafficEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>The key used to encrypt stored data.</p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>VPC configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CaptureContentTypeHeader {
+    /// <p><p/></p>
+    #[serde(rename = "CsvContentTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv_content_types: Option<Vec<String>>,
+    /// <p><p/></p>
+    #[serde(rename = "JsonContentTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_content_types: Option<Vec<String>>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CaptureOption {
+    /// <p><p/></p>
+    #[serde(rename = "CaptureMode")]
+    pub capture_mode: String,
 }
 
 /// <p>A list of categorical hyperparameters to tune.</p>
@@ -189,7 +500,7 @@ pub struct Channel {
     #[serde(rename = "InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_mode: Option<String>,
-    /// <p><p/> <p>Specify RecordIO as the value when input data is in raw format but the training algorithm requires the RecordIO format. In this case, Amazon SageMaker wraps each individual S3 object in a RecordIO record. If the input data is already in RecordIO format, you don&#39;t need to set this attribute. For more information, see <a href="https://mxnet.incubator.apache.org/architecture/note_data_loading.html#data-format">Create a Dataset Using RecordIO</a>. </p> <p>In File mode, leave this field unset or set it to None.</p></p>
+    /// <p><p/> <p>Specify RecordIO as the value when input data is in raw format but the training algorithm requires the RecordIO format. In this case, Amazon SageMaker wraps each individual S3 object in a RecordIO record. If the input data is already in RecordIO format, you don&#39;t need to set this attribute. For more information, see <a href="https://mxnet.apache.org/api/architecture/note_data_loading#data-format">Create a Dataset Using RecordIO</a>. </p> <p>In File mode, leave this field unset or set it to None.</p></p>
     #[serde(rename = "RecordWrapperType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_wrapper_type: Option<String>,
@@ -223,6 +534,18 @@ pub struct ChannelSpecification {
     /// <p>The allowed input mode, either FILE or PIPE.</p> <p>In FILE mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode.</p> <p>In PIPE mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
     #[serde(rename = "SupportedInputModes")]
     pub supported_input_modes: Vec<String>,
+}
+
+/// <p>Contains information about the output location for managed spot training checkpoint data. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CheckpointConfig {
+    /// <p>(Optional) The local directory where checkpoints are written. The default directory is <code>/opt/ml/checkpoints/</code>. </p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>Identifies the S3 path where you want Amazon SageMaker to store checkpoints. For example, <code>s3://bucket-name/key-name-prefix</code>.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
 }
 
 /// <p>Specifies summary information about a Git repository.</p>
@@ -261,6 +584,19 @@ pub struct CognitoMemberDefinition {
     pub user_pool: String,
 }
 
+/// <p>Configuration information for tensor collections.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CollectionConfiguration {
+    /// <p>The name of the tensor collection.</p>
+    #[serde(rename = "CollectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection_name: Option<String>,
+    /// <p>Parameter values for the tensor collection. The allowed parameters are <code>"name"</code>, <code>"include_regex"</code>, <code>"reduction_config"</code>, <code>"save_config"</code>, <code>"tensor_names"</code>, and <code>"save_histogram"</code>.</p>
+    #[serde(rename = "CollectionParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection_parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A summary of a model compilation job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -297,7 +633,7 @@ pub struct CompilationJobSummary {
 /// <p>Describes the container, as part of model definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerDefinition {
-    /// <p>This parameter is ignored for models that contain only a <code>PrimaryContainer</code>.</p> <p>When a <code>ContainerDefinition</code> is part of an inference pipeline, the value of ths parameter uniquely identifies the container for the purposes of logging and metrics. For information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipeline-logs-metrics.html">Use Logs and Metrics to Monitor an Inference Pipeline</a>. If you don't specify a value for this parameter for a <code>ContainerDefinition</code> that is part of an inference pipeline, a unique name is automatically assigned based on the position of the <code>ContainerDefinition</code> in the pipeline. If you specify a value for the <code>ContainerHostName</code> for any <code>ContainerDefinition</code> that is part of an inference pipeline, you must specify a value for the <code>ContainerHostName</code> parameter of every <code>ContainerDefinition</code> in that pipeline.</p>
+    /// <p>This parameter is ignored for models that contain only a <code>PrimaryContainer</code>.</p> <p>When a <code>ContainerDefinition</code> is part of an inference pipeline, the value of the parameter uniquely identifies the container for the purposes of logging and metrics. For information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipeline-logs-metrics.html">Use Logs and Metrics to Monitor an Inference Pipeline</a>. If you don't specify a value for this parameter for a <code>ContainerDefinition</code> that is part of an inference pipeline, a unique name is automatically assigned based on the position of the <code>ContainerDefinition</code> in the pipeline. If you specify a value for the <code>ContainerHostName</code> for any <code>ContainerDefinition</code> that is part of an inference pipeline, you must specify a value for the <code>ContainerHostName</code> parameter of every <code>ContainerDefinition</code> in that pipeline.</p>
     #[serde(rename = "ContainerHostname")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_hostname: Option<String>,
@@ -309,11 +645,15 @@ pub struct ContainerDefinition {
     #[serde(rename = "Image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
-    /// <p><p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix). The S3 path is required for Amazon SageMaker built-in algorithms, but not if you use your own algorithms. For more information on built-in algorithms, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Common Parameters</a>. </p> <p>If you provide a value for this parameter, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provide. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <important> <p>If you use a built-in algorithm to create a model, Amazon SageMaker requires that you provide a S3 path to the model artifacts in <code>ModelDataUrl</code>.</p> </important></p>
+    /// <p>Whether the container hosts a single model or multiple models.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p><p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix). The S3 path is required for Amazon SageMaker built-in algorithms, but not if you use your own algorithms. For more information on built-in algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Common Parameters</a>. </p> <p>If you provide a value for this parameter, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provide. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <important> <p>If you use a built-in algorithm to create a model, Amazon SageMaker requires that you provide a S3 path to the model artifacts in <code>ModelDataUrl</code>.</p> </important></p>
     #[serde(rename = "ModelDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_data_url: Option<String>,
-    /// <p>The name of the model package to use to create the model.</p>
+    /// <p>The name or Amazon Resource Name (ARN) of the model package to use to create the model.</p>
     #[serde(rename = "ModelPackageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_name: Option<String>,
@@ -331,7 +671,7 @@ pub struct ContinuousParameterRange {
     /// <p>The name of the continuous hyperparameter to tune.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="http://docs.aws.amazon.com//sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparemeter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> <dt>ReverseLogarithmic</dt> <dd> <p>Hyperparemeter tuning searches the values in the hyperparameter range by using a reverse logarithmic scale.</p> <p>Reverse logarithmic scaling works only for ranges that are entirely within the range 0&lt;=x&lt;1.0.</p> </dd> </dl></p>
+    /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> <dt>ReverseLogarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a reverse logarithmic scale.</p> <p>Reverse logarithmic scaling works only for ranges that are entirely within the range 0&lt;=x&lt;1.0.</p> </dd> </dl></p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_type: Option<String>,
@@ -383,6 +723,83 @@ pub struct CreateAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateAppRequest {
+    /// <p>The name of the app.</p>
+    #[serde(rename = "AppName")]
+    pub app_name: String,
+    /// <p>The type of app.</p>
+    #[serde(rename = "AppType")]
+    pub app_type: String,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The instance type and quantity.</p>
+    #[serde(rename = "ResourceSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_spec: Option<ResourceSpec>,
+    /// <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateAppResponse {
+    /// <p>The app's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "AppArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateAutoMLJobRequest {
+    /// <p>Contains CompletionCriteria and SecurityConfig.</p>
+    #[serde(rename = "AutoMLJobConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_config: Option<AutoMLJobConfig>,
+    /// <p>Identifies an AutoPilot job. Must be unique to your account and is case-insensitive.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
+    /// <p>Defines the job's objective. You provide a MetricName and AutoML will infer minimize or maximize. If this is not provided, the most commonly used ObjectiveMetric for problem type will be selected.</p>
+    #[serde(rename = "AutoMLJobObjective")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_objective: Option<AutoMLJobObjective>,
+    /// <p>This will generate possible candidates without training a model. A candidate is a combination of data preprocessors, algorithms, and algorithm parameter settings.</p>
+    #[serde(rename = "GenerateCandidateDefinitionsOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generate_candidate_definitions_only: Option<bool>,
+    /// <p>Similar to InputDataConfig supported by Tuning. Format(s) supported: CSV.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: Vec<AutoMLChannel>,
+    /// <p>Similar to OutputDataConfig supported by Tuning. Format(s) supported: CSV.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: AutoMLOutputDataConfig,
+    /// <p>Defines the kind of preprocessing and algorithms intended for the candidates. Options include: BinaryClassification, MulticlassClassification, and Regression.</p>
+    #[serde(rename = "ProblemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub problem_type: Option<String>,
+    /// <p>The ARN of the role that will be used to access the data.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateAutoMLJobResponse {
+    /// <p>When a job is created, it is assigned a unique ARN.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    pub auto_ml_job_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCodeRepositoryInput {
     /// <p>The name of the Git repository. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "CodeRepositoryName")]
@@ -414,7 +831,7 @@ pub struct CreateCompilationJobRequest {
     /// <p>The Amazon Resource Name (ARN) of an IAM role that enables Amazon SageMaker to perform tasks on your behalf. </p> <p>During model compilation, Amazon SageMaker needs your permission to:</p> <ul> <li> <p>Read input data from an S3 bucket</p> </li> <li> <p>Write model artifacts to an S3 bucket</p> </li> <li> <p>Write logs to Amazon CloudWatch Logs</p> </li> <li> <p>Publish metrics to Amazon CloudWatch</p> </li> </ul> <p>You grant permissions for all of these tasks to an IAM role. To pass this role to Amazon SageMaker, the caller of this API must have the <code>iam:PassRole</code> permission. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html">Amazon SageMaker Roles.</a> </p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    /// <p>The duration allowed for model compilation.</p>
+    /// <p>Specifies a limit to how long a model compilation job can run. When the job reaches the time limit, Amazon SageMaker ends the compilation job. Use this API to cap model training costs.</p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
 }
@@ -428,11 +845,54 @@ pub struct CreateCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateDomainRequest {
+    /// <p>The mode of authentication that member use to access the domain.</p>
+    #[serde(rename = "AuthMode")]
+    pub auth_mode: String,
+    /// <p>The default user settings.</p>
+    #[serde(rename = "DefaultUserSettings")]
+    pub default_user_settings: UserSettings,
+    /// <p>A name for the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The AWS Key Management Service encryption key ID.</p>
+    #[serde(rename = "HomeEfsFileSystemKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_efs_file_system_kms_key_id: Option<String>,
+    /// <p>Security setting to limit to a set of subnets.</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Security setting to limit the domain's communication to a Amazon Virtual Private Cloud.</p>
+    #[serde(rename = "VpcId")]
+    pub vpc_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDomainResponse {
+    /// <p>The Amazon Resource Name (ARN) of the created domain.</p>
+    #[serde(rename = "DomainArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_arn: Option<String>,
+    /// <p>The URL to the created domain.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEndpointConfigInput {
+    #[serde(rename = "DataCaptureConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_capture_config: Option<DataCaptureConfig>,
     /// <p>The name of the endpoint configuration. You specify this name in a <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> request. </p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
-    /// <p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance that hosts the endpoint.</p>
+    /// <p><p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance that hosts the endpoint.</p> <note> <p>Certain Nitro-based instances include local storage, dependent on the instance type. Local storage volumes are encrypted using a hardware module on the instance. You can&#39;t request a <code>KmsKeyId</code> when using an instance type with local storage. If any of the models that you specify in the <code>ProductionVariants</code> parameter use nitro-based instances with local storage, do not specify a value for the <code>KmsKeyId</code> parameter. If you specify a value for <code>KmsKeyId</code> when using any nitro-based instances with local storage, the call to <code>CreateEndpointConfig</code> fails.</p> <p>For a list of instance types that support local instance storage, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> <p>For more information about local instance storage encryption, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html">SSD Instance Store Volumes</a>.</p> </note></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -476,6 +936,87 @@ pub struct CreateEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateExperimentRequest {
+    /// <p>The description of the experiment.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the experiment as displayed. The name doesn't need to be unique. If you don't specify <code>DisplayName</code>, the value in <code>ExperimentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the experiment. The name must be unique in your AWS account and is not case-sensitive.</p>
+    #[serde(rename = "ExperimentName")]
+    pub experiment_name: String,
+    /// <p>A list of tags to associate with the experiment. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateExperimentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the experiment.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateFlowDefinitionRequest {
+    /// <p>The name of your flow definition.</p>
+    #[serde(rename = "FlowDefinitionName")]
+    pub flow_definition_name: String,
+    /// <p>An object containing information about the events that trigger a human workflow.</p>
+    #[serde(rename = "HumanLoopActivationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_activation_config: Option<HumanLoopActivationConfig>,
+    /// <p>An object containing information about the tasks the human reviewers will perform.</p>
+    #[serde(rename = "HumanLoopConfig")]
+    pub human_loop_config: HumanLoopConfig,
+    /// <p>An object containing information about where the human review results will be uploaded.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: FlowDefinitionOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) of the role needed to call other services on your behalf. For example, <code>arn:aws:iam::1234567890:role/service-role/AmazonSageMaker-ExecutionRole-20180111T151298</code>.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>An array of key-value pairs that contain metadata to help you categorize and organize a flow definition. Each tag consists of a key and a value, both of which you define.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateFlowDefinitionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the flow definition you create.</p>
+    #[serde(rename = "FlowDefinitionArn")]
+    pub flow_definition_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateHumanTaskUiRequest {
+    /// <p>The name of the user interface you are creating.</p>
+    #[serde(rename = "HumanTaskUiName")]
+    pub human_task_ui_name: String,
+    /// <p>An array of key-value pairs that contain metadata to help you categorize and organize a human review workflow user interface. Each tag consists of a key and a value, both of which you define.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "UiTemplate")]
+    pub ui_template: UiTemplate,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateHumanTaskUiResponse {
+    /// <p>The Amazon Resource Name (ARN) of the human review workflow user interface you create.</p>
+    #[serde(rename = "HumanTaskUiArn")]
+    pub human_task_ui_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateHyperParameterTuningJobRequest {
     /// <p>The <a>HyperParameterTuningJobConfig</a> object that describes the tuning job, including the search strategy, the objective metric used to evaluate training jobs, ranges of parameters to search, and resource limits for the tuning job. For more information, see <a>automatic-model-tuning</a> </p>
     #[serde(rename = "HyperParameterTuningJobConfig")]
@@ -491,6 +1032,10 @@ pub struct CreateHyperParameterTuningJobRequest {
     #[serde(rename = "TrainingJobDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job_definition: Option<HyperParameterTrainingJobDefinition>,
+    /// <p><p/></p>
+    #[serde(rename = "TrainingJobDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job_definitions: Option<Vec<HyperParameterTrainingJobDefinition>>,
     /// <p><p>Specifies the configuration for starting the hyperparameter tuning job using one or more previous tuning jobs as a starting point. The results of previous tuning jobs are used to inform which combinations of hyperparameters to search over in the new tuning job.</p> <p>All training jobs launched by the new hyperparameter tuning job are evaluated by using the objective metric. If you specify <code>IDENTICAL<em>DATA</em>AND_ALGORITHM</code> as the <code>WarmStartType</code> value for the warm start configuration, the training job that performs the best in the new tuning job is compared to the best training jobs from the parent tuning jobs. From these, the training job that performs the best as measured by the objective metric is returned as the overall best training job.</p> <note> <p>All training jobs launched by parent hyperparameter tuning jobs and the new hyperparameter tuning jobs count against the limit of training jobs for the tuning job.</p> </note></p>
     #[serde(rename = "WarmStartConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -507,7 +1052,7 @@ pub struct CreateHyperParameterTuningJobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLabelingJobRequest {
-    /// <p>Configures the information required for human workers to complete a labeling task.</p>
+    /// <p>Configures the labeling task and how it is presented to workers; including, but not limited to price, keywords, and batch size (task count).</p>
     #[serde(rename = "HumanTaskConfig")]
     pub human_task_config: HumanTaskConfig,
     /// <p>Input data for the labeling job, such as the Amazon S3 location of the data objects and the location of the manifest file that describes the data objects.</p>
@@ -537,7 +1082,7 @@ pub struct CreateLabelingJobRequest {
     #[serde(rename = "StoppingConditions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopping_conditions: Option<LabelingJobStoppingConditions>,
-    /// <p>An array of key/value pairs. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    /// <p>An array of key/value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -625,16 +1170,38 @@ pub struct CreateModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateMonitoringScheduleRequest {
+    /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
+    #[serde(rename = "MonitoringScheduleConfig")]
+    pub monitoring_schedule_config: MonitoringScheduleConfig,
+    /// <p>The name of the monitoring schedule. The name must be unique within an AWS Region within an AWS account.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href=" https://docs-aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateMonitoringScheduleResponse {
+    /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    pub monitoring_schedule_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateNotebookInstanceInput {
-    /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
+    /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accelerator_types: Option<Vec<String>>,
-    /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_code_repositories: Option<Vec<String>>,
-    /// <p>A Git repository to associate with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>A Git repository to associate with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "DefaultCodeRepository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_code_repository: Option<String>,
@@ -645,7 +1212,7 @@ pub struct CreateNotebookInstanceInput {
     /// <p>The type of ML compute instance to launch for the notebook instance.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to your notebook instance. The KMS key you provide must be enabled. For information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys.html">Enabling and Disabling Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to your notebook instance. The KMS key you provide must be enabled. For information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys.html">Enabling and Disabling Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -715,6 +1282,29 @@ pub struct CreateNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreatePresignedDomainUrlRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The session expiration duration in seconds.</p>
+    #[serde(rename = "SessionExpirationDurationInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_expiration_duration_in_seconds: Option<i64>,
+    /// <p>The name of the UserProfile to sign-in as.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreatePresignedDomainUrlResponse {
+    /// <p>The presigned URL.</p>
+    #[serde(rename = "AuthorizedUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorized_url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePresignedNotebookInstanceUrlInput {
     /// <p>The name of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -735,27 +1325,96 @@ pub struct CreatePresignedNotebookInstanceUrlOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateProcessingJobRequest {
+    /// <p>Configures the processing job to run a specified Docker container image.</p>
+    #[serde(rename = "AppSpecification")]
+    pub app_specification: AppSpecification,
+    /// <p>Sets the environment variables in the Docker container.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
+    /// <p>Networking options for a processing job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<NetworkConfig>,
+    /// <p>For each input, data is downloaded from S3 into the processing container before the processing job begins running if "S3InputMode" is set to <code>File</code>.</p>
+    #[serde(rename = "ProcessingInputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_inputs: Option<Vec<ProcessingInput>>,
+    /// <p> The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "ProcessingJobName")]
+    pub processing_job_name: String,
+    /// <p>Output configuration for the processing job.</p>
+    #[serde(rename = "ProcessingOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_output_config: Option<ProcessingOutputConfig>,
+    /// <p>Identifies the resources, ML compute instances, and ML storage volumes to deploy for a processing job. In distributed training, you specify more than one instance.</p>
+    #[serde(rename = "ProcessingResources")]
+    pub processing_resources: ProcessingResources,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>The time limit for how long the processing job is allowed to run.</p>
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<ProcessingStoppingCondition>,
+    /// <p>(Optional) An array of key-value pairs. For more information, see <a href="https://docs-aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-whatURL">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateProcessingJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the processing job.</p>
+    #[serde(rename = "ProcessingJobArn")]
+    pub processing_job_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTrainingJobRequest {
     /// <p>The registry path of the Docker image that contains the training algorithm and algorithm-specific metadata, including the input mode. For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about providing your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
     #[serde(rename = "AlgorithmSpecification")]
     pub algorithm_specification: AlgorithmSpecification,
+    /// <p>Contains information about the output location for managed spot training checkpoint data.</p>
+    #[serde(rename = "CheckpointConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_config: Option<CheckpointConfig>,
+    #[serde(rename = "DebugHookConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_hook_config: Option<DebugHookConfig>,
+    /// <p>Configuration information for debugging rules.</p>
+    #[serde(rename = "DebugRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_rule_configurations: Option<Vec<DebugRuleConfiguration>>,
     /// <p>To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithm in distributed training. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html">Protect Communications Between ML Compute Instances in a Distributed Training Job</a>.</p>
     #[serde(rename = "EnableInterContainerTrafficEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>To train models using managed spot training, choose <code>True</code>. Managed spot training provides a fully managed and scalable infrastructure for training machine learning models. this option is useful when training jobs can be interrupted and when there is flexibility when the training job is run. </p> <p>The complete and intermediate results of jobs are stored in an Amazon S3 bucket, and can be used as a starting point to train models incrementally. Amazon SageMaker provides metrics and logs in CloudWatch. They can be used to see when managed spot training jobs are running, interrupted, resumed, or completed. </p>
+    #[serde(rename = "EnableManagedSpotTraining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_managed_spot_training: Option<bool>,
     /// <p><p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
     /// <p>Algorithm-specific parameters that influence the quality of the model. You set hyperparameters before you start the learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> <p>You can specify a maximum of 100 hyperparameters. Each hyperparameter is a key-value pair. Each key and value is limited to 256 characters, as specified by the <code>Length Constraint</code>. </p>
     #[serde(rename = "HyperParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hyper_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>An array of <code>Channel</code> objects. Each channel is a named input source. <code>InputDataConfig</code> describes the input data and its location. </p> <p>Algorithms can accept input data from one or more channels. For example, an algorithm might have two channels of input data, <code>training_data</code> and <code>validation_data</code>. The configuration for each channel provides the S3 location where the input data is stored. It also provides information about the stored data: the MIME type, compression method, and whether the data is wrapped in RecordIO format. </p> <p>Depending on the input mode that the algorithm supports, Amazon SageMaker either copies input data files from an S3 bucket to a local directory in the Docker container, or makes it available as input streams. </p>
+    /// <p>An array of <code>Channel</code> objects. Each channel is a named input source. <code>InputDataConfig</code> describes the input data and its location. </p> <p>Algorithms can accept input data from one or more channels. For example, an algorithm might have two channels of input data, <code>training_data</code> and <code>validation_data</code>. The configuration for each channel provides the S3, EFS, or FSx location where the input data is stored. It also provides information about the stored data: the MIME type, compression method, and whether the data is wrapped in RecordIO format. </p> <p>Depending on the input mode that the algorithm supports, Amazon SageMaker either copies input data files from an S3 bucket to a local directory in the Docker container, or makes it available as input streams. For example, if you specify an EFS location, input data files will be made available as input streams. They do not need to be downloaded.</p>
     #[serde(rename = "InputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_data_config: Option<Vec<Channel>>,
-    /// <p>Specifies the path to the S3 bucket where you want to store model artifacts. Amazon SageMaker creates subfolders for the artifacts. </p>
+    /// <p>Specifies the path to the S3 location where you want to store model artifacts. Amazon SageMaker creates subfolders for the artifacts. </p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
     /// <p>The resources, including the ML compute instances and ML storage volumes, to use for model training. </p> <p>ML storage volumes store model artifacts and incremental states. Training algorithms might also use ML storage volumes for scratch space. If you want Amazon SageMaker to use the ML storage volume to store the training data, choose <code>File</code> as the <code>TrainingInputMode</code> in the algorithm specification. For distributed training algorithms, specify an instance count greater than 1.</p>
@@ -764,13 +1423,16 @@ pub struct CreateTrainingJobRequest {
     /// <p><p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf. </p> <p>During model training, Amazon SageMaker needs your permission to read input data from an S3 bucket, download a Docker image that contains training code, write model artifacts to an S3 bucket, write logs to Amazon CloudWatch Logs, and publish metrics to Amazon CloudWatch. You grant permissions for all of these tasks to an IAM role. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html">Amazon SageMaker Roles</a>. </p> <note> <p>To be able to pass this role to Amazon SageMaker, the caller of this API must have the <code>iam:PassRole</code> permission.</p> </note></p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    /// <p>Sets a duration for training. Use this parameter to cap model training costs. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts. </p> <p>When Amazon SageMaker terminates a job because the stopping condition has been met, training algorithms provided by Amazon SageMaker save the intermediate results of the job. This intermediate data is a valid model artifact. You can use it to create a model using the <code>CreateModel</code> API. </p>
+    /// <p>Specifies a limit to how long a model training job can run. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost. </p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
     /// <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "TensorBoardOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tensor_board_output_config: Option<TensorBoardOutputConfig>,
     /// <p>The name of the training job. The name must be unique within an AWS Region in an AWS account. </p>
     #[serde(rename = "TrainingJobName")]
     pub training_job_name: String,
@@ -790,15 +1452,22 @@ pub struct CreateTrainingJobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTransformJobRequest {
-    /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set <code>SplitType</code> to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p> <p>To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.</p> <p>To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.</p>
+    /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set the <code>SplitType</code> property of the <a>DataProcessing</a> object to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p> <p>To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.</p> <p>To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_strategy: Option<String>,
+    /// <p>The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.</p>
+    #[serde(rename = "DataProcessing")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_processing: Option<DataProcessing>,
     /// <p>The environment variables to set in the Docker container. We support up to 16 key and values entries in the map.</p>
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The maximum number of parallel requests that can be sent to each instance in a transform job. If <code>MaxConcurrentTransforms</code> is set to <code>0</code> or left unset, Amazon SageMaker checks the optional execution-parameters to determine the optimal settings for your chosen algorithm. If the execution-parameters endpoint is not enabled, the default value is <code>1</code>. For more information on execution-parameters, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-batch-code.html#your-algorithms-batch-code-how-containe-serves-requests">How Containers Serve Requests</a>. For built-in algorithms, you don't need to set a value for <code>MaxConcurrentTransforms</code>.</p>
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
+    /// <p>The maximum number of parallel requests that can be sent to each instance in a transform job. If <code>MaxConcurrentTransforms</code> is set to <code>0</code> or left unset, Amazon SageMaker checks the optional execution-parameters to determine the settings for your chosen algorithm. If the execution-parameters endpoint is not enabled, the default value is <code>1</code>. For more information on execution-parameters, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-batch-code.html#your-algorithms-batch-code-how-containe-serves-requests">How Containers Serve Requests</a>. For built-in algorithms, you don't need to set a value for <code>MaxConcurrentTransforms</code>.</p>
     #[serde(rename = "MaxConcurrentTransforms")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_transforms: Option<i64>,
@@ -836,18 +1505,128 @@ pub struct CreateTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateTrialComponentRequest {
+    /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the component ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input artifacts for the component. Examples of input artifacts are datasets, algorithms, hyperparameters, source code, and instance types.</p>
+    #[serde(rename = "InputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The output artifacts for the component. Examples of output artifacts are metrics, snapshots, logs, and images.</p>
+    #[serde(rename = "OutputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The hyperparameters for the component.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, TrialComponentParameterValue>>,
+    /// <p>When the component started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the component. States include:</p> <ul> <li> <p>InProgress</p> </li> <li> <p>Completed</p> </li> <li> <p>Failed</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<TrialComponentStatus>,
+    /// <p>A list of tags to associate with the component. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The name of the component. The name must be unique in your AWS account and is not case-sensitive.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateTrialComponentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateTrialRequest {
+    /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the experiment to associate the trial with.</p>
+    #[serde(rename = "ExperimentName")]
+    pub experiment_name: String,
+    /// <p>A list of tags to associate with the trial. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The name of the trial. The name must be unique in your AWS account and is not case-sensitive.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateTrialResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateUserProfileRequest {
+    /// <p>The ID of the associated Domain.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>A specifier for the type of value specified in SingleSignOnUserValue. Currently, the only supported value is "UserName". If the Domain's AuthMode is SSO, this field is required. If the Domain's AuthMode is not SSO, this field cannot be specified. </p>
+    #[serde(rename = "SingleSignOnUserIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_sign_on_user_identifier: Option<String>,
+    /// <p>The username of the associated AWS Single Sign-On User for this UserProfile. If the Domain's AuthMode is SSO, this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not SSO, this field cannot be specified. </p>
+    #[serde(rename = "SingleSignOnUserValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_sign_on_user_value: Option<String>,
+    /// <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>A name for the UserProfile.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+    /// <p>A collection of settings.</p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<UserSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateUserProfileResponse {
+    /// <p>The user profile Amazon Resource Name (ARN).</p>
+    #[serde(rename = "UserProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateWorkteamRequest {
     /// <p>A description of the work team.</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the Amazon Cognito user pool that makes up the work team. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.</p> <p>All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values.</p>
+    /// <p>A list of <code>MemberDefinition</code> objects that contains objects that identify the Amazon Cognito user pool that makes up the work team. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html">Amazon Cognito User Pools</a>.</p> <p>All of the <code>CognitoMemberDefinition</code> objects that make up the member definition must have the same <code>ClientId</code> and <code>UserPool</code> values.</p>
     #[serde(rename = "MemberDefinitions")]
     pub member_definitions: Vec<MemberDefinition>,
     /// <p>Configures notification of workers regarding available or expiring work items.</p>
     #[serde(rename = "NotificationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_configuration: Option<NotificationConfiguration>,
-    /// <p><p/></p>
+    /// <p>An array of key-value pairs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html">Resource Tag</a> and <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i> AWS Billing and Cost Management User Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -865,13 +1644,158 @@ pub struct CreateWorkteamResponse {
     pub workteam_arn: Option<String>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DataCaptureConfig {
+    /// <p><p/></p>
+    #[serde(rename = "CaptureContentTypeHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capture_content_type_header: Option<CaptureContentTypeHeader>,
+    /// <p><p/></p>
+    #[serde(rename = "CaptureOptions")]
+    pub capture_options: Vec<CaptureOption>,
+    /// <p><p/></p>
+    #[serde(rename = "DestinationS3Uri")]
+    pub destination_s3_uri: String,
+    /// <p><p/></p>
+    #[serde(rename = "EnableCapture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_capture: Option<bool>,
+    /// <p><p/></p>
+    #[serde(rename = "InitialSamplingPercentage")]
+    pub initial_sampling_percentage: i64,
+    /// <p><p/></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DataCaptureConfigSummary {
+    /// <p><p/></p>
+    #[serde(rename = "CaptureStatus")]
+    pub capture_status: String,
+    /// <p><p/></p>
+    #[serde(rename = "CurrentSamplingPercentage")]
+    pub current_sampling_percentage: i64,
+    /// <p><p/></p>
+    #[serde(rename = "DestinationS3Uri")]
+    pub destination_s3_uri: String,
+    /// <p><p/></p>
+    #[serde(rename = "EnableCapture")]
+    pub enable_capture: bool,
+    /// <p><p/></p>
+    #[serde(rename = "KmsKeyId")]
+    pub kms_key_id: String,
+}
+
+/// <p>The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DataProcessing {
+    /// <p>A <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html#data-processing-operators">JSONPath</a> expression used to select a portion of the input data to pass to the algorithm. Use the <code>InputFilter</code> parameter to exclude fields, such as an ID column, from the input. If you want Amazon SageMaker to pass the entire input dataset to the algorithm, accept the default value <code>$</code>.</p> <p>Examples: <code>"$"</code>, <code>"$[1:]"</code>, <code>"$.features"</code> </p>
+    #[serde(rename = "InputFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_filter: Option<String>,
+    /// <p>Specifies the source of the data to join with the transformed data. The valid values are <code>None</code> and <code>Input</code>. The default value is <code>None</code>, which specifies not to join the input with the transformed data. If you want the batch transform job to join the original input data with the transformed data, set <code>JoinSource</code> to <code>Input</code>. </p> <p>For JSON or JSONLines objects, such as a JSON array, Amazon SageMaker adds the transformed data to the input JSON object in an attribute called <code>SageMakerOutput</code>. The joined result for JSON must be a key-value pair object. If the input is not a key-value pair object, Amazon SageMaker creates a new JSON file. In the new JSON file, and the input data is stored under the <code>SageMakerInput</code> key and the results are stored in <code>SageMakerOutput</code>.</p> <p>For CSV files, Amazon SageMaker combines the transformed data with the input data at the end of the input data and stores it in the output file. The joined data has the joined input data followed by the transformed data and the output is a CSV file. </p>
+    #[serde(rename = "JoinSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub join_source: Option<String>,
+    /// <p>A <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html#data-processing-operators">JSONPath</a> expression used to select a portion of the joined dataset to save in the output file for a batch transform job. If you want Amazon SageMaker to store the entire input dataset in the output file, leave the default value, <code>$</code>. If you specify indexes that aren't within the dimension size of the joined dataset, you get an error.</p> <p>Examples: <code>"$"</code>, <code>"$[0,5:]"</code>, <code>"$['id','SageMakerOutput']"</code> </p>
+    #[serde(rename = "OutputFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_filter: Option<String>,
+}
+
 /// <p>Describes the location of the channel data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataSource {
+    /// <p>The file system that is associated with a channel.</p>
+    #[serde(rename = "FileSystemDataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_data_source: Option<FileSystemDataSource>,
     /// <p>The S3 location of the data source that is associated with a channel.</p>
     #[serde(rename = "S3DataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_data_source: Option<S3DataSource>,
+}
+
+/// <p>Configuration information for the debug hook parameters, collection configuration, and storage paths.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DebugHookConfig {
+    /// <p>Configuration information for tensor collections.</p>
+    #[serde(rename = "CollectionConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection_configurations: Option<Vec<CollectionConfiguration>>,
+    /// <p>Configuration information for the debug hook parameters.</p>
+    #[serde(rename = "HookParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hook_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to local storage location for tensors. Defaults to <code>/opt/ml/output/tensors/</code>.</p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>Path to Amazon S3 storage location for tensors.</p>
+    #[serde(rename = "S3OutputPath")]
+    pub s3_output_path: String,
+}
+
+/// <p>Configuration information for debugging rules.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DebugRuleConfiguration {
+    /// <p>The instance type to deploy for a training job.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
+    /// <p>Path to local storage location for rules. Defaults to <code>/opt/ml/processing/output/rule/</code>.</p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>The name of the rule configuration. It must be unique relative to other rule configuration names.</p>
+    #[serde(rename = "RuleConfigurationName")]
+    pub rule_configuration_name: String,
+    /// <p>The Amazon Elastic Container (ECR) Image for the managed rule evaluation.</p>
+    #[serde(rename = "RuleEvaluatorImage")]
+    pub rule_evaluator_image: String,
+    /// <p> Runtime configuration for rule container.</p>
+    #[serde(rename = "RuleParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Path to Amazon S3 storage location for rules.</p>
+    #[serde(rename = "S3OutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output_path: Option<String>,
+    /// <p>The size, in GB, of the ML storage volume attached to the notebook instance.</p>
+    #[serde(rename = "VolumeSizeInGB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_size_in_gb: Option<i64>,
+}
+
+/// <p>Information about the status of the rule evaluation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DebugRuleEvaluationStatus {
+    /// <p>Timestamp when the rule evaluation status was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the rule configuration</p>
+    #[serde(rename = "RuleConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_configuration_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the rule evaluation job.</p>
+    #[serde(rename = "RuleEvaluationJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_evaluation_job_arn: Option<String>,
+    /// <p>Status of the rule evaluation.</p>
+    #[serde(rename = "RuleEvaluationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_evaluation_status: Option<String>,
+    /// <p>Details from the rule evaluation.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_details: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -882,10 +1806,37 @@ pub struct DeleteAlgorithmInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteAppRequest {
+    /// <p>The name of the app.</p>
+    #[serde(rename = "AppName")]
+    pub app_name: String,
+    /// <p>The type of app.</p>
+    #[serde(rename = "AppType")]
+    pub app_type: String,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCodeRepositoryInput {
     /// <p>The name of the Git repository to delete.</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteDomainRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The retention policy for this domain, which specifies which resources will be retained after the Domain is deleted. By default, all resources are retained (not automatically deleted). </p>
+    #[serde(rename = "RetentionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_policy: Option<RetentionPolicy>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -903,6 +1854,33 @@ pub struct DeleteEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteExperimentRequest {
+    /// <p>The name of the experiment to delete.</p>
+    #[serde(rename = "ExperimentName")]
+    pub experiment_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteExperimentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the experiment that is being deleted.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFlowDefinitionRequest {
+    /// <p>The name of the flow definition you are deleting.</p>
+    #[serde(rename = "FlowDefinitionName")]
+    pub flow_definition_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFlowDefinitionResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteModelInput {
     /// <p>The name of the model to delete.</p>
     #[serde(rename = "ModelName")]
@@ -914,6 +1892,13 @@ pub struct DeleteModelPackageInput {
     /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteMonitoringScheduleRequest {
+    /// <p>The name of the monitoring schedule to delete.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -945,6 +1930,48 @@ pub struct DeleteTagsInput {
 pub struct DeleteTagsOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTrialComponentRequest {
+    /// <p>The name of the component to delete.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteTrialComponentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the component is being deleted.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTrialRequest {
+    /// <p>The name of the trial to delete.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteTrialResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial that is being deleted.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteUserProfileRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteWorkteamRequest {
     /// <p>The name of the work team to delete.</p>
     #[serde(rename = "WorkteamName")]
@@ -959,7 +1986,7 @@ pub struct DeleteWorkteamResponse {
     pub success: bool,
 }
 
-/// <p>Gets the Amazon EC2 Container Registry path of the docker image of the model that is hosted in this <a>ProductionVariant</a>.</p> <p>If you used the <code>registry/repository[:tag]</code> form to specify the image path of the primary container when you created the model hosted in this <code>ProductionVariant</code>, the path resolves to a path of the form <code>registry/repository[@digest]</code>. A digest is a hash value that identifies a specific version of an image. For information about Amazon ECR paths, see <a href="http://docs.aws.amazon.com//AmazonECR/latest/userguide/docker-pull-ecr-image.html">Pulling an Image</a> in the <i>Amazon ECR User Guide</i>.</p>
+/// <p>Gets the Amazon EC2 Container Registry path of the docker image of the model that is hosted in this <a>ProductionVariant</a>.</p> <p>If you used the <code>registry/repository[:tag]</code> form to specify the image path of the primary container when you created the model hosted in this <code>ProductionVariant</code>, the path resolves to a path of the form <code>registry/repository[@digest]</code>. A digest is a hash value that identifies a specific version of an image. For information about Amazon ECR paths, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-pull-ecr-image.html">Pulling an Image</a> in the <i>Amazon ECR User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeployedImage {
@@ -1025,6 +2052,146 @@ pub struct DescribeAlgorithmOutput {
     #[serde(rename = "ValidationSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_specification: Option<AlgorithmValidationSpecification>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAppRequest {
+    /// <p>The name of the app.</p>
+    #[serde(rename = "AppName")]
+    pub app_name: String,
+    /// <p>The type of app.</p>
+    #[serde(rename = "AppType")]
+    pub app_type: String,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAppResponse {
+    /// <p>The app's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "AppArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_arn: Option<String>,
+    /// <p>The name of the app.</p>
+    #[serde(rename = "AppName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_name: Option<String>,
+    /// <p>The type of app.</p>
+    #[serde(rename = "AppType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The failure reason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The timestamp of the last health check.</p>
+    #[serde(rename = "LastHealthCheckTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_health_check_timestamp: Option<f64>,
+    /// <p>The timestamp of the last user's activity.</p>
+    #[serde(rename = "LastUserActivityTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_user_activity_timestamp: Option<f64>,
+    /// <p>The instance type and quantity.</p>
+    #[serde(rename = "ResourceSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_spec: Option<ResourceSpec>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAutoMLJobRequest {
+    /// <p>Request information about a job using that job's unique name.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAutoMLJobResponse {
+    /// <p>Returns the job's ARN.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    pub auto_ml_job_arn: String,
+    /// <p>Returns information on the job's artifacts found in AutoMLJobArtifacts.</p>
+    #[serde(rename = "AutoMLJobArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_artifacts: Option<AutoMLJobArtifacts>,
+    /// <p>Returns the job's config.</p>
+    #[serde(rename = "AutoMLJobConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_config: Option<AutoMLJobConfig>,
+    /// <p>Returns the name of a job.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
+    /// <p>Returns the job's objective.</p>
+    #[serde(rename = "AutoMLJobObjective")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_objective: Option<AutoMLJobObjective>,
+    /// <p>Returns the job's AutoMLJobSecondaryStatus.</p>
+    #[serde(rename = "AutoMLJobSecondaryStatus")]
+    pub auto_ml_job_secondary_status: String,
+    /// <p>Returns the job's AutoMLJobStatus.</p>
+    #[serde(rename = "AutoMLJobStatus")]
+    pub auto_ml_job_status: String,
+    /// <p>Returns the job's BestCandidate.</p>
+    #[serde(rename = "BestCandidate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub best_candidate: Option<AutoMLCandidate>,
+    /// <p>Returns the job's creation time.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>Returns the job's end time.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Returns the job's FailureReason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>Returns the job's output from GenerateCandidateDefinitionsOnly.</p>
+    #[serde(rename = "GenerateCandidateDefinitionsOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generate_candidate_definitions_only: Option<bool>,
+    /// <p>Returns the job's input data config.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: Vec<AutoMLChannel>,
+    /// <p>Returns the job's last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>Returns the job's output data config.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: AutoMLOutputDataConfig,
+    /// <p>Returns the job's problem type.</p>
+    #[serde(rename = "ProblemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub problem_type: Option<String>,
+    /// <p>This contains ProblemType, AutoMLJobObjective and CompletionCriteria. They’re auto-inferred values, if not provided by you. If you do provide them, then they’ll be the same as provided.</p>
+    #[serde(rename = "ResolvedAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_attributes: Option<ResolvedAttributes>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that has read permission to the input data location and write permission to the output data location in Amazon S3.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1103,9 +2270,81 @@ pub struct DescribeCompilationJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the model compilation job.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    /// <p>The duration allowed for model compilation.</p>
+    /// <p>Specifies a limit to how long a model compilation job can run. When the job reaches the time limit, Amazon SageMaker ends the compilation job. Use this API to cap model training costs.</p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeDomainRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeDomainResponse {
+    /// <p>The domain's authentication mode.</p>
+    #[serde(rename = "AuthMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_mode: Option<String>,
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>Settings which are applied to all UserProfile in this domain, if settings are not explicitly specified in a given UserProfile. </p>
+    #[serde(rename = "DefaultUserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_user_settings: Option<UserSettings>,
+    /// <p>The domain's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "DomainArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_arn: Option<String>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The domain name.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The failure reason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ID of the Amazon Elastic File System (EFS) managed by this Domain.</p>
+    #[serde(rename = "HomeEfsFileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_efs_file_system_id: Option<String>,
+    /// <p>The AWS Key Management Service encryption key ID.</p>
+    #[serde(rename = "HomeEfsFileSystemKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_efs_file_system_kms_key_id: Option<String>,
+    /// <p>The last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The SSO managed application instance ID.</p>
+    #[serde(rename = "SingleSignOnManagedApplicationInstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_sign_on_managed_application_instance_id: Option<String>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Security setting to limit to a set of subnets.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The domain's URL.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The ID of the Amazon Virtual Private Cloud.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1121,6 +2360,9 @@ pub struct DescribeEndpointConfigOutput {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
+    #[serde(rename = "DataCaptureConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_capture_config: Option<DataCaptureConfig>,
     /// <p>The Amazon Resource Name (ARN) of the endpoint configuration.</p>
     #[serde(rename = "EndpointConfigArn")]
     pub endpoint_config_arn: String,
@@ -1149,6 +2391,9 @@ pub struct DescribeEndpointOutput {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
+    #[serde(rename = "DataCaptureConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_capture_config: Option<DataCaptureConfigSummary>,
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -1172,6 +2417,118 @@ pub struct DescribeEndpointOutput {
     #[serde(rename = "ProductionVariants")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub production_variants: Option<Vec<ProductionVariantSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeExperimentRequest {
+    /// <p>The name of the experiment to describe.</p>
+    #[serde(rename = "ExperimentName")]
+    pub experiment_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeExperimentResponse {
+    /// <p>Who created the experiment.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the experiment was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the experiment.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the experiment as displayed. If <code>DisplayName</code> isn't specified, <code>ExperimentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the experiment.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+    /// <p>The name of the experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>Who last modified the experiment.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the experiment was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The ARN of the source and, optionally, the type.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ExperimentSource>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeFlowDefinitionRequest {
+    /// <p>The name of the flow definition.</p>
+    #[serde(rename = "FlowDefinitionName")]
+    pub flow_definition_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeFlowDefinitionResponse {
+    /// <p>The timestamp when the flow definition was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p><p/></p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the flow defintion.</p>
+    #[serde(rename = "FlowDefinitionArn")]
+    pub flow_definition_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    #[serde(rename = "FlowDefinitionName")]
+    pub flow_definition_name: String,
+    /// <p>The status of the flow definition. Valid values are listed below.</p>
+    #[serde(rename = "FlowDefinitionStatus")]
+    pub flow_definition_status: String,
+    /// <p>An object containing information about what triggers a human review workflow.</p>
+    #[serde(rename = "HumanLoopActivationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub human_loop_activation_config: Option<HumanLoopActivationConfig>,
+    /// <p>An object containing information about who works on the task, the workforce task price, and other task details.</p>
+    #[serde(rename = "HumanLoopConfig")]
+    pub human_loop_config: HumanLoopConfig,
+    /// <p>An object containing information about the output file.</p>
+    #[serde(rename = "OutputConfig")]
+    pub output_config: FlowDefinitionOutputConfig,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) execution role for the flow definition.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeHumanTaskUiRequest {
+    /// <p>The name of the human task user interface you want information about.</p>
+    #[serde(rename = "HumanTaskUiName")]
+    pub human_task_ui_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeHumanTaskUiResponse {
+    /// <p>The timestamp when the human task user interface was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the human task user interface.</p>
+    #[serde(rename = "HumanTaskUiArn")]
+    pub human_task_ui_arn: String,
+    /// <p>The name of the human task user interface.</p>
+    #[serde(rename = "HumanTaskUiName")]
+    pub human_task_ui_name: String,
+    #[serde(rename = "UiTemplate")]
+    pub ui_template: UiTemplateInfo,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1226,6 +2583,10 @@ pub struct DescribeHyperParameterTuningJobResponse {
     #[serde(rename = "TrainingJobDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job_definition: Option<HyperParameterTrainingJobDefinition>,
+    /// <p><p/></p>
+    #[serde(rename = "TrainingJobDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job_definitions: Option<Vec<HyperParameterTrainingJobDefinition>>,
     /// <p>The <a>TrainingJobStatusCounters</a> object that specifies the number of training jobs, categorized by status, that this tuning job launched.</p>
     #[serde(rename = "TrainingJobStatusCounters")]
     pub training_job_status_counters: TrainingJobStatusCounters,
@@ -1265,7 +2626,7 @@ pub struct DescribeLabelingJobResponse {
     #[serde(rename = "LabelAttributeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label_attribute_name: Option<String>,
-    /// <p>The S3 location of the JSON file that defines the categories used to label data objects.</p> <p>The file is a JSON structure in the following format:</p> <p> <code>{</code> </p> <p> <code> "document-version": "2018-11-28"</code> </p> <p> <code> "labels": [</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label 1</i>"</code> </p> <p> <code> },</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label 2</i>"</code> </p> <p> <code> },</code> </p> <p> <code> ...</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label n</i>"</code> </p> <p> <code> }</code> </p> <p> <code> ]</code> </p> <p> <code>}</code> </p>
+    /// <p>The S3 location of the JSON file that defines the categories used to label data objects. Please note the following label-category limits:</p> <ul> <li> <p>Semantic segmentation labeling jobs using automated labeling: 20 labels</p> </li> <li> <p>Box bounding labeling jobs (all): 10 lables</p> </li> </ul> <p>The file is a JSON structure in the following format:</p> <p> <code>{</code> </p> <p> <code> "document-version": "2018-11-28"</code> </p> <p> <code> "labels": [</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label 1</i>"</code> </p> <p> <code> },</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label 2</i>"</code> </p> <p> <code> },</code> </p> <p> <code> ...</code> </p> <p> <code> {</code> </p> <p> <code> "label": "<i>label n</i>"</code> </p> <p> <code> }</code> </p> <p> <code> ]</code> </p> <p> <code>}</code> </p>
     #[serde(rename = "LabelCategoryConfigS3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label_category_config_s3_uri: Option<String>,
@@ -1302,7 +2663,7 @@ pub struct DescribeLabelingJobResponse {
     #[serde(rename = "StoppingConditions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopping_conditions: Option<LabelingJobStoppingConditions>,
-    /// <p>An array of key/value pairs. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    /// <p>An array of key/value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1396,6 +2757,48 @@ pub struct DescribeModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeMonitoringScheduleRequest {
+    /// <p>Name of a previously created monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeMonitoringScheduleResponse {
+    /// <p>The time at which the monitoring job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p> The name of the endpoint for the monitoring job.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>A string, up to one KB in size, that contains the reason a monitoring job failed, if it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The time at which the monitoring job was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>Describes metadata on the last execution to run, if there was one.</p>
+    #[serde(rename = "LastMonitoringExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_monitoring_execution_summary: Option<MonitoringExecutionSummary>,
+    /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    pub monitoring_schedule_arn: String,
+    /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
+    #[serde(rename = "MonitoringScheduleConfig")]
+    pub monitoring_schedule_config: MonitoringScheduleConfig,
+    /// <p>Name of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+    /// <p>The status of an monitoring job.</p>
+    #[serde(rename = "MonitoringScheduleStatus")]
+    pub monitoring_schedule_status: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeNotebookInstanceInput {
     /// <p>The name of the notebook instance that you want information about.</p>
     #[serde(rename = "NotebookInstanceName")]
@@ -1441,11 +2844,11 @@ pub struct DescribeNotebookInstanceLifecycleConfigOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotebookInstanceOutput {
-    /// <p>A list of the Elastic Inference (EI) instance types associated with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
+    /// <p>A list of the Elastic Inference (EI) instance types associated with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accelerator_types: Option<Vec<String>>,
-    /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_code_repositories: Option<Vec<String>>,
@@ -1453,7 +2856,7 @@ pub struct DescribeNotebookInstanceOutput {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The Git repository associated with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>The Git repository associated with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "DefaultCodeRepository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_code_repository: Option<String>,
@@ -1524,6 +2927,96 @@ pub struct DescribeNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeProcessingJobRequest {
+    /// <p>The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "ProcessingJobName")]
+    pub processing_job_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeProcessingJobResponse {
+    /// <p>Configures the processing job to run a specified container image.</p>
+    #[serde(rename = "AppSpecification")]
+    pub app_specification: AppSpecification,
+    /// <p>The ARN of an AutoML job associated with this processing job.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_arn: Option<String>,
+    /// <p>The time at which the processing job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The environment variables set in the Docker container.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>An optional string, up to one KB in size, that contains metadata from the processing container when the processing job exits.</p>
+    #[serde(rename = "ExitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exit_message: Option<String>,
+    /// <p>The configuration information used to create an experiment.</p>
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
+    /// <p>A string, up to one KB in size, that contains the reason a processing job failed, if it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The time at which the processing job was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The ARN of a monitoring schedule for an endpoint associated with this processing job.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_arn: Option<String>,
+    /// <p>Networking options for a processing job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<NetworkConfig>,
+    /// <p>The time at which the processing job completed.</p>
+    #[serde(rename = "ProcessingEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_end_time: Option<f64>,
+    /// <p>The inputs for a processing job.</p>
+    #[serde(rename = "ProcessingInputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_inputs: Option<Vec<ProcessingInput>>,
+    /// <p>The Amazon Resource Name (ARN) of the processing job.</p>
+    #[serde(rename = "ProcessingJobArn")]
+    pub processing_job_arn: String,
+    /// <p>The name of the processing job. The name must be unique within an AWS Region in the AWS account.</p>
+    #[serde(rename = "ProcessingJobName")]
+    pub processing_job_name: String,
+    /// <p>Provides the status of a processing job.</p>
+    #[serde(rename = "ProcessingJobStatus")]
+    pub processing_job_status: String,
+    /// <p>Output configuration for the processing job.</p>
+    #[serde(rename = "ProcessingOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_output_config: Option<ProcessingOutputConfig>,
+    /// <p>Identifies the resources, ML compute instances, and ML storage volumes to deploy for a processing job. In distributed training, you specify more than one instance.</p>
+    #[serde(rename = "ProcessingResources")]
+    pub processing_resources: ProcessingResources,
+    /// <p>The time at which the processing job started.</p>
+    #[serde(rename = "ProcessingStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_start_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The time limit for how long the processing job is allowed to run.</p>
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<ProcessingStoppingCondition>,
+    /// <p>The ARN of a training job associated with this processing job.</p>
+    #[serde(rename = "TrainingJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSubscribedWorkteamRequest {
     /// <p>The Amazon Resource Name (ARN) of the subscribed work team to describe.</p>
     #[serde(rename = "WorkteamArn")]
@@ -1551,17 +3044,46 @@ pub struct DescribeTrainingJobResponse {
     /// <p>Information about the algorithm used for training, and algorithm metadata. </p>
     #[serde(rename = "AlgorithmSpecification")]
     pub algorithm_specification: AlgorithmSpecification,
+    /// <p><p/></p>
+    #[serde(rename = "AutoMLJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_arn: Option<String>,
+    /// <p>The billable time in seconds.</p> <p>You can calculate the savings from using managed spot training using the formula <code>(1 - BillableTimeInSeconds / TrainingTimeInSeconds) * 100</code>. For example, if <code>BillableTimeInSeconds</code> is 100 and <code>TrainingTimeInSeconds</code> is 500, the savings is 80%.</p>
+    #[serde(rename = "BillableTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billable_time_in_seconds: Option<i64>,
+    #[serde(rename = "CheckpointConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_config: Option<CheckpointConfig>,
     /// <p>A timestamp that indicates when the training job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    /// <p>To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithm in distributed training.</p>
+    #[serde(rename = "DebugHookConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_hook_config: Option<DebugHookConfig>,
+    /// <p>Configuration information for debugging rules.</p>
+    #[serde(rename = "DebugRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_rule_configurations: Option<Vec<DebugRuleConfiguration>>,
+    /// <p>Status about the debug rule evaluation.</p>
+    #[serde(rename = "DebugRuleEvaluationStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_rule_evaluation_statuses: Option<Vec<DebugRuleEvaluationStatus>>,
+    /// <p>To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithms in distributed training.</p>
     #[serde(rename = "EnableInterContainerTrafficEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>A Boolean indicating whether managed spot training is enabled (<code>True</code>) or not (<code>False</code>).</p>
+    #[serde(rename = "EnableManagedSpotTraining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_managed_spot_training: Option<bool>,
     /// <p><p>If you want to allow inbound or outbound network calls, except for calls between peers within a training cluster for distributed training, choose <code>True</code>. If you enable network isolation for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
     /// <p>If the training job failed, the reason it failed. </p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1600,16 +3122,19 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p><p> Provides detailed information about the state of the training job. For detailed information on the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
+    /// <p><p> Provides detailed information about the state of the training job. For detailed information on the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Interrupted</code> - The job stopped because the managed spot training instances were interrupted. </p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>MaxWaitTmeExceeded</code> - The job stopped because it exceeded the maximum allowed wait time.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "SecondaryStatus")]
     pub secondary_status: String,
     /// <p>A history of all of the secondary statuses that the training job has transitioned through.</p>
     #[serde(rename = "SecondaryStatusTransitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_status_transitions: Option<Vec<SecondaryStatusTransition>>,
-    /// <p>The condition under which to stop the training job. </p>
+    /// <p>Specifies a limit to how long a model training job can run. It also specifies the maximum time to wait for a spot instance. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost. </p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
+    #[serde(rename = "TensorBoardOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tensor_board_output_config: Option<TensorBoardOutputConfig>,
     /// <p>Indicates the time when the training job ends on training instances. You are billed for the time interval between the value of <code>TrainingStartTime</code> and this time. For successful jobs and stopped jobs, this is the time after model artifacts are uploaded. For failed jobs, this is the time when Amazon SageMaker detects a job failure.</p>
     #[serde(rename = "TrainingEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1627,6 +3152,10 @@ pub struct DescribeTrainingJobResponse {
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_start_time: Option<f64>,
+    /// <p>The training time in seconds.</p>
+    #[serde(rename = "TrainingTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_time_in_seconds: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the associated hyperparameter tuning job if the training job was launched by a hyperparameter tuning job.</p>
     #[serde(rename = "TuningJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1647,6 +3176,10 @@ pub struct DescribeTransformJobRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTransformJobResponse {
+    /// <p><p/></p>
+    #[serde(rename = "AutoMLJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_arn: Option<String>,
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set <code>SplitType</code> to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1654,11 +3187,17 @@ pub struct DescribeTransformJobResponse {
     /// <p>A timestamp that shows when the transform Job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
+    #[serde(rename = "DataProcessing")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_processing: Option<DataProcessing>,
     /// <p>The environment variables to set in the Docker container. We support up to 16 key and values entries in the map.</p>
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<::std::collections::HashMap<String, String>>,
-    /// <p>If the transform job failed, <code>FailureReason</code> describes why it failed. A transform job creates a log file, which includes error messages, and stores it as an Amazon S3 object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html">Log Amazon SageMaker Events with Amazon CloudWatch</a>.</p>
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
+    /// <p>If the transform job failed, <code>FailureReason</code> describes why it failed. A transform job creates a log file, which includes error messages, and stores it as an Amazon S3 object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html">Log Amazon SageMaker Events with Amazon CloudWatch</a>.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -1707,6 +3246,185 @@ pub struct DescribeTransformJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeTrialComponentRequest {
+    /// <p>The name of the trial component to describe.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeTrialComponentResponse {
+    /// <p>Who created the component.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the component was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the component as displayed. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the component ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input artifacts of the component.</p>
+    #[serde(rename = "InputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>Who last modified the component.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the component was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The metrics for the component.</p>
+    #[serde(rename = "Metrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics: Option<Vec<TrialComponentMetricSummary>>,
+    /// <p>The output artifacts of the component.</p>
+    #[serde(rename = "OutputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The hyperparameters of the component.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, TrialComponentParameterValue>>,
+    /// <p>The Amazon Resource Name (ARN) of the source and, optionally, the job type.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<TrialComponentSource>,
+    /// <p>When the component started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the component. States include:</p> <ul> <li> <p>InProgress</p> </li> <li> <p>Completed</p> </li> <li> <p>Failed</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<TrialComponentStatus>,
+    /// <p>The Amazon Resource Name (ARN) of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+    /// <p>The name of the trial component.</p>
+    #[serde(rename = "TrialComponentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeTrialRequest {
+    /// <p>The name of the trial to describe.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeTrialResponse {
+    /// <p>Who created the trial.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the trial was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the trial as displayed. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the experiment the trial is part of.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>Who last modified the trial.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the trial was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the source and, optionally, the job type.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<TrialSource>,
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+    /// <p>The name of the trial.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeUserProfileRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeUserProfileResponse {
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The failure reason.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The homa Amazon Elastic File System (EFS) Uid.</p>
+    #[serde(rename = "HomeEfsFileSystemUid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_efs_file_system_uid: Option<String>,
+    /// <p>The last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The SSO user identifier.</p>
+    #[serde(rename = "SingleSignOnUserIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_sign_on_user_identifier: Option<String>,
+    /// <p>The SSO user value.</p>
+    #[serde(rename = "SingleSignOnUserValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub single_sign_on_user_value: Option<String>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The user profile Amazon Resource Name (ARN).</p>
+    #[serde(rename = "UserProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_arn: Option<String>,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name: Option<String>,
+    /// <p>A collection of settings.</p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<UserSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkteamRequest {
     /// <p>The name of the work team to return a description of.</p>
     #[serde(rename = "WorkteamName")]
@@ -1737,6 +3455,63 @@ pub struct DesiredWeightAndCapacity {
     pub variant_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateTrialComponentRequest {
+    /// <p>The name of the component to disassociate from the trial.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+    /// <p>The name of the trial to disassociate from.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateTrialComponentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+    /// <p>The ARN of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+}
+
+/// <p>The domain's details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DomainDetails {
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The domain's Amazon Resource Name (ARN).</p>
+    #[serde(rename = "DomainArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_arn: Option<String>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The domain name.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The domain's URL.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
 /// <p>Provides summary information for an endpoint configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1750,6 +3525,25 @@ pub struct EndpointConfigSummary {
     /// <p>The name of the endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
+}
+
+/// <p>Input object for the endpoint</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EndpointInput {
+    /// <p>An endpoint in customer's account which has enabled <code>DataCaptureConfig</code> enabled.</p>
+    #[serde(rename = "EndpointName")]
+    pub endpoint_name: String,
+    /// <p>Path to the filesystem where the endpoint data is available to the container.</p>
+    #[serde(rename = "LocalPath")]
+    pub local_path: String,
+    /// <p>Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to <code>FullyReplicated</code> </p>
+    #[serde(rename = "S3DataDistributionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_data_distribution_type: Option<String>,
+    /// <p>Whether the <code>Pipe</code> or <code>File</code> is used as the input mode for transfering data for the monitoring job. <code>Pipe</code> mode is recommended for large datasets. <code>File</code> mode is useful for small files that fit in memory. Defaults to <code>File</code>.</p>
+    #[serde(rename = "S3InputMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_input_mode: Option<String>,
 }
 
 /// <p>Provides summary information for an endpoint.</p>
@@ -1773,13 +3567,132 @@ pub struct EndpointSummary {
     pub last_modified_time: f64,
 }
 
-/// <p><p>A conditional statement for a search expression that includes a Boolean operator, a resource property, and a value.</p> <p>If you don&#39;t specify an <code>Operator</code> and a <code>Value</code>, the filter searches for only the specified property. For example, defining a <code>Filter</code> for the <code>FailureReason</code> for the <code>TrainingJob</code> <code>Resource</code> searches for training job objects that have a value in the <code>FailureReason</code> field.</p> <p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator as the default.</p> <p>In search, there are several property types:</p> <dl> <dt>Metrics</dt> <dd> <p>To define a metric filter, enter a value using the form <code>&quot;Metrics.&lt;name&gt;&quot;</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>&quot;accuracy&quot;</code> metric greater than <code>&quot;0.9&quot;</code>:</p> <p> <code>{</code> </p> <p> <code>&quot;Name&quot;: &quot;Metrics.accuracy&quot;,</code> </p> <p> <code>&quot;Operator&quot;: &quot;GREATER<em>THAN&quot;,</code> </p> <p> <code>&quot;Value&quot;: &quot;0.9&quot;</code> </p> <p> <code>}</code> </p> </dd> <dt>HyperParameters</dt> <dd> <p>To define a hyperparameter filter, enter a value with the form <code>&quot;HyperParameters.&lt;name&gt;&quot;</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>&quot;learning</em>rate&quot;</code> hyperparameter that is less than <code>&quot;0.5&quot;</code>:</p> <p> <code> {</code> </p> <p> <code> &quot;Name&quot;: &quot;HyperParameters.learning<em>rate&quot;,</code> </p> <p> <code> &quot;Operator&quot;: &quot;LESS</em>THAN&quot;,</code> </p> <p> <code> &quot;Value&quot;: &quot;0.5&quot;</code> </p> <p> <code> }</code> </p> </dd> <dt>Tags</dt> <dd> <p>To define a tag filter, enter a value with the form <code>&quot;Tags.&lt;key&gt;&quot;</code>.</p> </dd> </dl></p>
+/// <p>A summary of the properties of an experiment as returned by the <a>Search</a> API.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Experiment {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the experiment was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the experiment.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the experiment as displayed. If <code>DisplayName</code> isn't specified, <code>ExperimentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the experiment.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+    /// <p>The name of the experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the experiment was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ExperimentSource>,
+    /// <p>The list of tags that are associated with the experiment. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Configuration for the experiment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ExperimentConfig {
+    /// <p>The name of the experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>Display name for the trial component.</p>
+    #[serde(rename = "TrialComponentDisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_display_name: Option<String>,
+    /// <p>The name of the trial.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
+}
+
+/// <p>The source of the experiment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExperimentSource {
+    /// <p>The Amazon Resource Name (ARN) of the source.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+    /// <p>The source type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+/// <p>A summary of the properties of an experiment. To get the complete set of properties, call the <a>DescribeExperiment</a> API and provide the <code>ExperimentName</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExperimentSummary {
+    /// <p>When the experiment was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the experiment as displayed. If <code>DisplayName</code> isn't specified, <code>ExperimentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the experiment.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+    /// <p>The name of the experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    #[serde(rename = "ExperimentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_source: Option<ExperimentSource>,
+    /// <p>When the experiment was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
+
+/// <p>Specifies a file system data source for a channel.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FileSystemDataSource {
+    /// <p>The full path to the directory to associate with the channel.</p>
+    #[serde(rename = "DirectoryPath")]
+    pub directory_path: String,
+    /// <p>The access mode of the mount of the directory associated with the channel. A directory can be mounted either in <code>ro</code> (read-only) or <code>rw</code> (read-write) mode.</p>
+    #[serde(rename = "FileSystemAccessMode")]
+    pub file_system_access_mode: String,
+    /// <p>The file system id.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+    /// <p>The file system type. </p>
+    #[serde(rename = "FileSystemType")]
+    pub file_system_type: String,
+}
+
+/// <p><p>A conditional statement for a search expression that includes a resource property, a Boolean operator, and a value.</p> <p>If you don&#39;t specify an <code>Operator</code> and a <code>Value</code>, the filter searches for only the specified property. For example, defining a <code>Filter</code> for the <code>FailureReason</code> for the <code>TrainingJob</code> <code>Resource</code> searches for training job objects that have a value in the <code>FailureReason</code> field.</p> <p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator as the default.</p> <p>In search, there are several property types:</p> <dl> <dt>Metrics</dt> <dd> <p>To define a metric filter, enter a value using the form <code>&quot;Metrics.&lt;name&gt;&quot;</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>&quot;accuracy&quot;</code> metric greater than <code>&quot;0.9&quot;</code>:</p> <p> <code>{</code> </p> <p> <code>&quot;Name&quot;: &quot;Metrics.accuracy&quot;,</code> </p> <p> <code>&quot;Operator&quot;: &quot;GREATER<em>THAN&quot;,</code> </p> <p> <code>&quot;Value&quot;: &quot;0.9&quot;</code> </p> <p> <code>}</code> </p> </dd> <dt>HyperParameters</dt> <dd> <p>To define a hyperparameter filter, enter a value with the form <code>&quot;HyperParameters.&lt;name&gt;&quot;</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>&quot;learning</em>rate&quot;</code> hyperparameter that is less than <code>&quot;0.5&quot;</code>:</p> <p> <code> {</code> </p> <p> <code> &quot;Name&quot;: &quot;HyperParameters.learning<em>rate&quot;,</code> </p> <p> <code> &quot;Operator&quot;: &quot;LESS</em>THAN&quot;,</code> </p> <p> <code> &quot;Value&quot;: &quot;0.5&quot;</code> </p> <p> <code> }</code> </p> </dd> <dt>Tags</dt> <dd> <p>To define a tag filter, enter a value with the form <code>&quot;Tags.&lt;key&gt;&quot;</code>.</p> </dd> </dl></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Filter {
     /// <p>A property name. For example, <code>TrainingJobName</code>. For the list of valid property names returned in a search result for each supported resource, see <a>TrainingJob</a> properties. You must specify a valid property name for the resource.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A Boolean binary operator that is used to evaluate the filter. The operator field contains one of the following values:</p> <dl> <dt>Equals</dt> <dd> <p>The specified resource in <code>Name</code> equals the specified <code>Value</code>.</p> </dd> <dt>NotEquals</dt> <dd> <p>The specified resource in <code>Name</code> does not equal the specified <code>Value</code>.</p> </dd> <dt>GreaterThan</dt> <dd> <p>The specified resource in <code>Name</code> is greater than the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>GreaterThanOrEqualTo</dt> <dd> <p>The specified resource in <code>Name</code> is greater than or equal to the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>LessThan</dt> <dd> <p>The specified resource in <code>Name</code> is less than the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>LessThanOrEqualTo</dt> <dd> <p>The specified resource in <code>Name</code> is less than or equal to the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>Contains</dt> <dd> <p>Only supported for text-based properties. The word-list of the property contains the specified <code>Value</code>.</p> </dd> </dl> <p>If you have specified a filter <code>Value</code>, the default is <code>Equals</code>.</p>
+    /// <p>A Boolean binary operator that is used to evaluate the filter. The operator field contains one of the following values:</p> <dl> <dt>Equals</dt> <dd> <p>The specified resource in <code>Name</code> equals the specified <code>Value</code>.</p> </dd> <dt>NotEquals</dt> <dd> <p>The specified resource in <code>Name</code> does not equal the specified <code>Value</code>.</p> </dd> <dt>GreaterThan</dt> <dd> <p>The specified resource in <code>Name</code> is greater than the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>GreaterThanOrEqualTo</dt> <dd> <p>The specified resource in <code>Name</code> is greater than or equal to the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>LessThan</dt> <dd> <p>The specified resource in <code>Name</code> is less than the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>LessThanOrEqualTo</dt> <dd> <p>The specified resource in <code>Name</code> is less than or equal to the specified <code>Value</code>. Not supported for text-based properties.</p> </dd> <dt>Contains</dt> <dd> <p>Only supported for text-based properties. The word-list of the property contains the specified <code>Value</code>. A <code>SearchExpression</code> can include only one <code>Contains</code> operator.</p> </dd> </dl> <p>If you have specified a filter <code>Value</code>, the default is <code>Equals</code>.</p>
     #[serde(rename = "Operator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operator: Option<String>,
@@ -1787,6 +3700,22 @@ pub struct Filter {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p>The candidate result from a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FinalAutoMLJobObjectiveMetric {
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "MetricName")]
+    pub metric_name: String,
+    /// <p>The metric type used.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value of the metric.</p>
+    #[serde(rename = "Value")]
+    pub value: f32,
 }
 
 /// <p>Shows the final value for the objective metric for a training job that was launched by a hyperparameter tuning job. You define the objective metric in the <code>HyperParameterTuningJobObjective</code> parameter of <a>HyperParameterTuningJobConfig</a>.</p>
@@ -1803,6 +3732,40 @@ pub struct FinalHyperParameterTuningJobObjectiveMetric {
     /// <p>The value of the objective metric.</p>
     #[serde(rename = "Value")]
     pub value: f32,
+}
+
+/// <p>Contains information about where human output will be stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FlowDefinitionOutputConfig {
+    /// <p>The Amazon Key Management Service (KMS) key ID for server-side encryption.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The Amazon S3 path where the object containing human output will be made available.</p>
+    #[serde(rename = "S3OutputPath")]
+    pub s3_output_path: String,
+}
+
+/// <p>Contains summary information about the flow definition.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FlowDefinitionSummary {
+    /// <p>The timestamp when SageMaker created the flow definition.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The reason why the flow definition creation failed. A failure reason is returned only when the flow definition status is <code>Failed</code>.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    #[serde(rename = "FlowDefinitionArn")]
+    pub flow_definition_arn: String,
+    /// <p>The name of the flow definition.</p>
+    #[serde(rename = "FlowDefinitionName")]
+    pub flow_definition_name: String,
+    /// <p>The status of the flow definition. Valid values:</p>
+    #[serde(rename = "FlowDefinitionStatus")]
+    pub flow_definition_status: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1850,27 +3813,89 @@ pub struct GitConfigForUpdate {
     pub secret_arn: Option<String>,
 }
 
+/// <p>Defines under what conditions SageMaker creates a human loop.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HumanLoopActivationConditionsConfig {
+    /// <p>JSON expressing use-case specific conditions declaratively. If any condition is matched, atomic tasks are created against the configured work team. The set of conditions is different for Rekognition and Textract.</p>
+    #[serde(rename = "HumanLoopActivationConditions")]
+    pub human_loop_activation_conditions: String,
+}
+
+/// <p>Provides information about how and under what conditions SageMaker creates a human loop. If <code>HumanLoopActivationConfig</code> is not given, then all requests go to humans.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HumanLoopActivationConfig {
+    /// <p>Container structure for defining under what conditions SageMaker creates a human loop.</p>
+    #[serde(rename = "HumanLoopActivationConditionsConfig")]
+    pub human_loop_activation_conditions_config: HumanLoopActivationConditionsConfig,
+    /// <p>Container for configuring the source of human task requests.</p>
+    #[serde(rename = "HumanLoopRequestSource")]
+    pub human_loop_request_source: HumanLoopRequestSource,
+}
+
+/// <p>Describes the work to be performed by human workers.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HumanLoopConfig {
+    /// <p>The Amazon Resource Name (ARN) of the human task user interface.</p>
+    #[serde(rename = "HumanTaskUiArn")]
+    pub human_task_ui_arn: String,
+    #[serde(rename = "PublicWorkforceTaskPrice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_workforce_task_price: Option<PublicWorkforceTaskPrice>,
+    /// <p>The length of time that a task remains available for labeling by human workers.</p>
+    #[serde(rename = "TaskAvailabilityLifetimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_availability_lifetime_in_seconds: Option<i64>,
+    /// <p>The number of human tasks.</p>
+    #[serde(rename = "TaskCount")]
+    pub task_count: i64,
+    /// <p>A description for the human worker task.</p>
+    #[serde(rename = "TaskDescription")]
+    pub task_description: String,
+    /// <p>Keywords used to describe the task so that workers can discover the task.</p>
+    #[serde(rename = "TaskKeywords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_keywords: Option<Vec<String>>,
+    /// <p>The amount of time that a worker has to complete a task.</p>
+    #[serde(rename = "TaskTimeLimitInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_time_limit_in_seconds: Option<i64>,
+    /// <p>A title for the human worker task.</p>
+    #[serde(rename = "TaskTitle")]
+    pub task_title: String,
+    /// <p>Amazon Resource Name (ARN) of a team of workers.</p>
+    #[serde(rename = "WorkteamArn")]
+    pub workteam_arn: String,
+}
+
+/// <p>Container for configuring the source of human task requests.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HumanLoopRequestSource {
+    /// <p>Specifies whether Amazon Rekognition or Amazon Textract are used as the integration source. The default field settings and JSON parsing rules are different based on the integration source. Valid values:</p>
+    #[serde(rename = "AwsManagedHumanLoopRequestSource")]
+    pub aws_managed_human_loop_request_source: String,
+}
+
 /// <p>Information required for human workers to complete a labeling task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HumanTaskConfig {
     /// <p>Configures how labels are consolidated across human workers.</p>
     #[serde(rename = "AnnotationConsolidationConfig")]
     pub annotation_consolidation_config: AnnotationConsolidationConfig,
-    /// <p>Defines the maximum number of data objects that can be labeled by human workers at the same time. Each object may have more than one worker at one time.</p>
+    /// <p>Defines the maximum number of data objects that can be labeled by human workers at the same time. Also referred to as batch size. Each object may have more than one worker at one time.</p>
     #[serde(rename = "MaxConcurrentTaskCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_task_count: Option<i64>,
     /// <p>The number of human workers that will label an object. </p>
     #[serde(rename = "NumberOfHumanWorkersPerDataObject")]
     pub number_of_human_workers_per_data_object: i64,
-    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function that is run before a data object is sent to a human worker. Use this function to provide input to a custom labeling job.</p> <p>For the built-in bounding box, image classification, semantic segmentation, and text classification task types, Amazon SageMaker Ground Truth provides the following Lambda functions:</p> <p> <b>US East (Northern Virginia) (us-east-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>US East (Ohio) (us-east-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>US West (Oregon) (us-west-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>EU (Ireland) (eu-west-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>Asia Pacific (Tokyo (ap-northeast-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClass</code> </p> </li> </ul> <p> <b>Asia Pacific (Sydney (ap-southeast-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClass</code> </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of a Lambda function that is run before a data object is sent to a human worker. Use this function to provide input to a custom labeling job.</p> <p>For the built-in bounding box, image classification, semantic segmentation, and text classification task types, Amazon SageMaker Ground Truth provides the following Lambda functions:</p> <p> <b>US East (Northern Virginia) (us-east-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-1:432418664414:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>US East (Ohio) (us-east-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-east-2:266458841044:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>US West (Oregon) (us-west-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:us-west-2:081040173940:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Canada (Central) (ca-central-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ca-central-1:918755190332:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>EU (Ireland) (eu-west-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-1:568282634449:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>EU (London) (eu-west-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-west-2:487402164563:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>EU Frankfurt (eu-central-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:eu-central-1:203001061592:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Asia Pacific (Tokyo) (ap-northeast-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Asia Pacific (Seoul) (ap-northeast-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-northeast-2:845288260483:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Asia Pacific (Mumbai) (ap-south-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-south-1:565803892007:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Asia Pacific (Singapore) (ap-southeast-1):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-1:377565633583:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul> <p> <b>Asia Pacific (Sydney) (ap-southeast-2):</b> </p> <ul> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-BoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-ImageMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-SemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-TextMultiClass</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-NamedEntityRecognition</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VerificationBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-VerificationSemanticSegmentation</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentBoundingBox</code> </p> </li> <li> <p> <code>arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-AdjustmentSemanticSegmentation</code> </p> </li> </ul></p>
     #[serde(rename = "PreHumanTaskLambdaArn")]
     pub pre_human_task_lambda_arn: String,
-    /// <p>The price that you pay for each task performed by a public worker.</p>
+    /// <p>The price that you pay for each task performed by an Amazon Mechanical Turk worker.</p>
     #[serde(rename = "PublicWorkforceTaskPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_workforce_task_price: Option<PublicWorkforceTaskPrice>,
-    /// <p>The length of time that a task remains available for labelling by human workers.</p>
+    /// <p>The length of time that a task remains available for labeling by human workers. <b>If you choose the Amazon Mechanical Turk workforce, the maximum is 12 hours (43200)</b>. For private and vendor workforces, the maximum is as listed.</p>
     #[serde(rename = "TaskAvailabilityLifetimeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_availability_lifetime_in_seconds: Option<i64>,
@@ -1893,6 +3918,21 @@ pub struct HumanTaskConfig {
     /// <p>The Amazon Resource Name (ARN) of the work team assigned to complete the tasks.</p>
     #[serde(rename = "WorkteamArn")]
     pub workteam_arn: String,
+}
+
+/// <p>Container for human task user interface information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct HumanTaskUiSummary {
+    /// <p>A timestamp when SageMaker created the human task user interface.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the human task user interface.</p>
+    #[serde(rename = "HumanTaskUiArn")]
+    pub human_task_ui_arn: String,
+    /// <p>The name of the human task user interface.</p>
+    #[serde(rename = "HumanTaskUiName")]
+    pub human_task_ui_name: String,
 }
 
 /// <p>Specifies which training algorithm to use for training jobs that a hyperparameter tuning job launches and the metrics to monitor.</p>
@@ -1952,14 +3992,28 @@ pub struct HyperParameterTrainingJobDefinition {
     /// <p>The <a>HyperParameterAlgorithmSpecification</a> object that specifies the resource algorithm to use for the training jobs that the tuning job launches.</p>
     #[serde(rename = "AlgorithmSpecification")]
     pub algorithm_specification: HyperParameterAlgorithmSpecification,
+    #[serde(rename = "CheckpointConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_config: Option<CheckpointConfig>,
+    /// <p>The job definition name.</p>
+    #[serde(rename = "DefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition_name: Option<String>,
     /// <p>To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithm in distributed training.</p>
     #[serde(rename = "EnableInterContainerTrafficEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>A Boolean indicating whether managed spot training is enabled (<code>True</code>) or not (<code>False</code>).</p>
+    #[serde(rename = "EnableManagedSpotTraining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_managed_spot_training: Option<bool>,
     /// <p><p>Isolates the training container. No inbound or outbound network calls can be made, except for calls between peers within a training cluster for distributed training. If network isolation is used for training jobs that are configured to use a VPC, Amazon SageMaker downloads and uploads customer data and model artifacts through the specified VPC, but the training container does not have network access.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "HyperParameterRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hyper_parameter_ranges: Option<ParameterRanges>,
     /// <p>An array of <a>Channel</a> objects that specify the input for the training jobs that the tuning job launches.</p>
     #[serde(rename = "InputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1977,9 +4031,12 @@ pub struct HyperParameterTrainingJobDefinition {
     #[serde(rename = "StaticHyperParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_hyper_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Sets a maximum duration for the training jobs that the tuning job launches. Use this parameter to limit model training costs. </p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal. This delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts.</p> <p>When Amazon SageMaker terminates a job because the stopping condition has been met, training algorithms provided by Amazon SageMaker save the intermediate results of the job.</p>
+    /// <p>Specifies a limit to how long a model hyperparameter training job can run. It also specifies how long you are willing to wait for a managed spot training job to complete. When the job reaches the a limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
+    #[serde(rename = "TuningObjective")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tuning_objective: Option<HyperParameterTuningJobObjective>,
     /// <p>The <a>VpcConfig</a> object that specifies the VPC that you want the training jobs that this hyperparameter tuning job launches to connect to. Control access to and from your training container by configuring the VPC. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html">Protect Training Jobs by Using an Amazon Virtual Private Cloud</a>.</p>
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2013,6 +4070,10 @@ pub struct HyperParameterTrainingJobSummary {
     /// <p>The Amazon Resource Name (ARN) of the training job.</p>
     #[serde(rename = "TrainingJobArn")]
     pub training_job_arn: String,
+    /// <p>The training job definition name.</p>
+    #[serde(rename = "TrainingJobDefinitionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job_definition_name: Option<String>,
     /// <p>The name of the training job.</p>
     #[serde(rename = "TrainingJobName")]
     pub training_job_name: String,
@@ -2046,13 +4107,17 @@ pub struct HyperParameterTuningJobConfig {
     /// <p>The <a>ResourceLimits</a> object that specifies the maximum number of training jobs and parallel training jobs for this tuning job.</p>
     #[serde(rename = "ResourceLimits")]
     pub resource_limits: ResourceLimits,
-    /// <p>Specifies how hyperparameter tuning chooses the combinations of hyperparameter values to use for the training job it launches. To use the Bayesian search stategy, set this to <code>Bayesian</code>. To randomly search, set it to <code>Random</code>. For information about search strategies, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html">How Hyperparameter Tuning Works</a>.</p>
+    /// <p>Specifies how hyperparameter tuning chooses the combinations of hyperparameter values to use for the training job it launches. To use the Bayesian search strategy, set this to <code>Bayesian</code>. To randomly search, set it to <code>Random</code>. For information about search strategies, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html">How Hyperparameter Tuning Works</a>.</p>
     #[serde(rename = "Strategy")]
     pub strategy: String,
-    /// <p><p>Specifies whether to use early stopping for training jobs launched by the hyperparameter tuning job. This can be one of the following values (the default value is <code>OFF</code>):</p> <dl> <dt>OFF</dt> <dd> <p>Training jobs launched by the hyperparameter tuning job do not use early stopping.</p> </dd> <dt>AUTO</dt> <dd> <p>Amazon SageMaker stops training jobs launched by the hyperparameter tuning job when they are unlikely to perform better than previously completed training jobs. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html">Stop Training Jobs Early</a>.</p> </dd> </dl></p>
+    /// <p><p>Specifies whether to use early stopping for training jobs launched by the hyperparameter tuning job. This can be one of the following values (the default value is <code>OFF</code>):</p> <dl> <dt>OFF</dt> <dd> <p>Training jobs launched by the hyperparameter tuning job do not use early stopping.</p> </dd> <dt>AUTO</dt> <dd> <p>Amazon SageMaker stops training jobs launched by the hyperparameter tuning job when they are unlikely to perform better than previously completed training jobs. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html">Stop Training Jobs Early</a>.</p> </dd> </dl></p>
     #[serde(rename = "TrainingJobEarlyStoppingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job_early_stopping_type: Option<String>,
+    /// <p>The tuning job's completion criteria.</p>
+    #[serde(rename = "TuningJobCompletionCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tuning_job_completion_criteria: Option<TuningJobCompletionCriteria>,
 }
 
 /// <p>Defines the objective metric for a hyperparameter tuning job. Hyperparameter tuning uses the value of this metric to evaluate the training jobs it launches, and returns the training job that results in either the highest or lowest value for this metric, depending on the value you specify for the <code>Type</code> parameter.</p>
@@ -2108,7 +4173,7 @@ pub struct HyperParameterTuningJobSummary {
 /// <p><p>Specifies the configuration for a hyperparameter tuning job that uses one or more previous hyperparameter tuning jobs as a starting point. The results of previous tuning jobs are used to inform which combinations of hyperparameters to search over in the new tuning job.</p> <p>All training jobs launched by the new hyperparameter tuning job are evaluated by using the objective metric, and the training job that performs the best is compared to the best training jobs from the parent tuning jobs. From these, the training job that performs the best as measured by the objective metric is returned as the overall best training job.</p> <note> <p>All training jobs launched by parent hyperparameter tuning jobs and the new hyperparameter tuning jobs count against the limit of training jobs for the tuning job.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HyperParameterTuningJobWarmStartConfig {
-    /// <p>An array of hyperparameter tuning jobs that are used as the starting point for the new hyperparameter tuning job. For more information about warm starting a hyperparameter tuning job, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html">Using a Previous Hyperparameter Tuning Job as a Starting Point</a>.</p> <p>Hyperparameter tuning jobs created before October 1, 2018 cannot be used as parent jobs for warm start tuning jobs.</p>
+    /// <p>An array of hyperparameter tuning jobs that are used as the starting point for the new hyperparameter tuning job. For more information about warm starting a hyperparameter tuning job, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html">Using a Previous Hyperparameter Tuning Job as a Starting Point</a>.</p> <p>Hyperparameter tuning jobs created before October 1, 2018 cannot be used as parent jobs for warm start tuning jobs.</p>
     #[serde(rename = "ParentHyperParameterTuningJobs")]
     pub parent_hyper_parameter_tuning_jobs: Vec<ParentHyperParameterTuningJob>,
     /// <p><p>Specifies one of the following:</p> <dl> <dt>IDENTICAL<em>DATA</em>AND<em>ALGORITHM</dt> <dd> <p>The new hyperparameter tuning job uses the same input data and training image as the parent tuning jobs. You can change the hyperparameter ranges to search and the maximum number of training jobs that the hyperparameter tuning job launches. You cannot use a new version of the training algorithm, unless the changes in the new version do not affect the algorithm itself. For example, changes that improve logging or adding support for a different data format are allowed. You can also change hyperparameters from tunable to static, and from static to tunable, but the total number of static plus tunable hyperparameters must remain the same as it is in all parent jobs. The objective metric for the new tuning job must be the same as for all parent jobs.</p> </dd> <dt>TRANSFER</em>LEARNING</dt> <dd> <p>The new hyperparameter tuning job can include input data, hyperparameter ranges, maximum number of concurrent training jobs, and maximum number of training jobs that are different than those of its parent hyperparameter tuning jobs. The training image can also be a different version from the version used in the parent hyperparameter tuning job. You can also change hyperparameters from tunable to static, and from static to tunable, but the total number of static plus tunable hyperparameters must remain the same as it is in all parent jobs. The objective metric for the new tuning job must be the same as for all parent jobs.</p> </dd> </dl></p>
@@ -2162,7 +4227,7 @@ pub struct IntegerParameterRange {
     /// <p>The name of the hyperparameter to search.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="http://docs.aws.amazon.com//sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparemeter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> </dl></p>
+    /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> </dl></p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_type: Option<String>,
@@ -2177,6 +4242,24 @@ pub struct IntegerParameterRangeSpecification {
     /// <p>The minimum integer value allowed.</p>
     #[serde(rename = "MinValue")]
     pub min_value: String,
+}
+
+/// <p>Jupyter server's app settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JupyterServerAppSettings {
+    /// <p>The instance type and quantity.</p>
+    #[serde(rename = "DefaultResourceSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_resource_spec: Option<ResourceSpec>,
+}
+
+/// <p>The kernel gateway app settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct KernelGatewayAppSettings {
+    /// <p>The instance type and quantity.</p>
+    #[serde(rename = "DefaultResourceSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_resource_spec: Option<ResourceSpec>,
 }
 
 /// <p>Provides a breakdown of the number of objects labeled.</p>
@@ -2230,7 +4313,7 @@ pub struct LabelingJobAlgorithmsConfig {
     #[serde(rename = "InitialActiveLearningModelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_active_learning_model_arn: Option<String>,
-    /// <p><p>Specifies the Amazon Resource Name (ARN) of the algorithm used for auto-labeling. You must select one of the following ARNs:</p> <ul> <li> <p> <i>Image classification</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/image-classification</code> </p> </li> <li> <p> <i>Text classification</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/text-classification</code> </p> </li> <li> <p> <i>Object detection</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/object-detection</code> </p> </li> </ul></p>
+    /// <p><p>Specifies the Amazon Resource Name (ARN) of the algorithm used for auto-labeling. You must select one of the following ARNs:</p> <ul> <li> <p> <i>Image classification</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/image-classification</code> </p> </li> <li> <p> <i>Text classification</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/text-classification</code> </p> </li> <li> <p> <i>Object detection</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/object-detection</code> </p> </li> <li> <p> <i>Semantic Segmentation</i> </p> <p> <code>arn:aws:sagemaker:<i>region</i>:027400017018:labeling-job-algorithm-specification/semantic-segmentation</code> </p> </li> </ul></p>
     #[serde(rename = "LabelingJobAlgorithmSpecificationArn")]
     pub labeling_job_algorithm_specification_arn: String,
     /// <p>Provides configuration information for a labeling job.</p>
@@ -2311,7 +4394,7 @@ pub struct LabelingJobOutput {
 /// <p>Output configuration information for a labeling job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LabelingJobOutputConfig {
-    /// <p>The AWS Key Management Service ID of the key used to encrypt the output data, if any.</p>
+    /// <p>The AWS Key Management Service ID of the key used to encrypt the output data, if any.</p> <p>If you use a KMS key ID or an alias of your master key, the Amazon SageMaker execution role must include permissions to call <code>kms:Encrypt</code>. If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. Amazon SageMaker uses server-side encryption with KMS-managed keys for <code>LabelingJobOutputConfig</code>. If you use a bucket policy with an <code>s3:PutObject</code> permission that only allows objects with server-side encryption, set the condition key of <code>s3:x-amz-server-side-encryption</code> to <code>"aws:kms"</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <code>CreateLabelingJob</code> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -2323,7 +4406,7 @@ pub struct LabelingJobOutputConfig {
 /// <p>Provides configuration information for labeling jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LabelingJobResourceConfig {
-    /// <p>The AWS Key Management Service key ID for the key used to encrypt the output data, if any.</p>
+    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the training job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_kms_key_id: Option<String>,
@@ -2337,7 +4420,7 @@ pub struct LabelingJobS3DataSource {
     pub manifest_s3_uri: String,
 }
 
-/// <p>A set of conditions for stopping a labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.</p>
+/// <p><p>A set of conditions for stopping a labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.</p> <note> <p>Labeling jobs fail after 30 days with an appropriate client error message.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LabelingJobStoppingConditions {
     /// <p>The maximum number of objects that can be labeled by human workers.</p>
@@ -2354,7 +4437,7 @@ pub struct LabelingJobStoppingConditions {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LabelingJobSummary {
-    /// <p>The Amazon Resource Name (ARN) of the Lambda function used to consolidate the annotations from individual workers into a label for a data object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Lambda function used to consolidate the annotations from individual workers into a label for a data object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.</p>
     #[serde(rename = "AnnotationConsolidationLambdaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotation_consolidation_lambda_arn: Option<String>,
@@ -2435,6 +4518,146 @@ pub struct ListAlgorithmsOutput {
     #[serde(rename = "AlgorithmSummaryList")]
     pub algorithm_summary_list: Vec<AlgorithmSummary>,
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of algorithms, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAppsRequest {
+    /// <p>A parameter to search for the domain ID.</p>
+    #[serde(rename = "DomainIdEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id_equals: Option<String>,
+    /// <p>Returns a list up to a specified limit.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The parameter by which to sort the results. The default is CreationTime.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for the results. The default is Ascending.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A parameter to search by user profile name.</p>
+    #[serde(rename = "UserProfileNameEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAppsResponse {
+    /// <p>The list of apps.</p>
+    #[serde(rename = "Apps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps: Option<Vec<AppDetails>>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAutoMLJobsRequest {
+    /// <p>Request a list of jobs, using a filter for time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>Request a list of jobs, using a filter for time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Request a list of jobs, using a filter for time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>Request a list of jobs, using a filter for time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>Request a list of jobs up to a specified limit.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Request a list of jobs, using a search filter for name.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The parameter by which to sort the results. The default is AutoMLJobName.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for the results. The default is Descending.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>Request a list of jobs, using a filter for status.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAutoMLJobsResponse {
+    /// <p>Returns a summary list of jobs.</p>
+    #[serde(rename = "AutoMLJobSummaries")]
+    pub auto_ml_job_summaries: Vec<AutoMLJobSummary>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListCandidatesForAutoMLJobRequest {
+    /// <p>List the Candidates created for the job by providing the job's name.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
+    /// <p>List the Candidates for the job and filter by candidate name.</p>
+    #[serde(rename = "CandidateNameEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub candidate_name_equals: Option<String>,
+    /// <p>List the job's Candidates up to a specified limit.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The parameter by which to sort the results. The default is Descending.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for the results. The default is Ascending.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>List the Candidates for the job and filter by status.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListCandidatesForAutoMLJobResponse {
+    /// <p>Summaries about the Candidates.</p>
+    #[serde(rename = "Candidates")]
+    pub candidates: Vec<AutoMLCandidate>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2549,6 +4772,31 @@ pub struct ListCompilationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDomainsRequest {
+    /// <p>Returns a list up to a specified limit.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDomainsResponse {
+    /// <p>The list of domains.</p>
+    #[serde(rename = "Domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<DomainDetails>>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListEndpointConfigsInput {
     /// <p>A filter that returns only endpoint configurations with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -2643,6 +4891,119 @@ pub struct ListEndpointsOutput {
     #[serde(rename = "Endpoints")]
     pub endpoints: Vec<EndpointSummary>,
     /// <p> If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of training jobs, use it in the subsequent request. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListExperimentsRequest {
+    /// <p>A filter that returns only experiments created after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only experiments created before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of experiments to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListExperiments</code> didn't return the full set of experiments, the call returns a token for getting the next set of experiments.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListExperimentsResponse {
+    /// <p>A list of the summaries of your experiments.</p>
+    #[serde(rename = "ExperimentSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_summaries: Option<Vec<ExperimentSummary>>,
+    /// <p>A token for getting the next set of experiments, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListFlowDefinitionsRequest {
+    /// <p>A filter that returns only flow definitions with a creation time greater than or equal to the specified timestamp.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only flow definitions that were created before the specified timestamp.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The total number of items to return. If the total number of available items is more than the value specified in <code>MaxResults</code>, then a <code>NextToken</code> will be provided in the output that you can use to resume pagination.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to resume pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An optional value that specifies whether you want the results sorted in <code>Ascending</code> or <code>Descending</code> order.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListFlowDefinitionsResponse {
+    /// <p>An array of objects describing the flow definitions.</p>
+    #[serde(rename = "FlowDefinitionSummaries")]
+    pub flow_definition_summaries: Vec<FlowDefinitionSummary>,
+    /// <p>A token to resume pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListHumanTaskUisRequest {
+    /// <p>A filter that returns only human task user interfaces with a creation time greater than or equal to the specified timestamp.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only human task user interfaces that were created before the specified timestamp.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>The total number of items to return. If the total number of available items is more than the value specified in <code>MaxResults</code>, then a <code>NextToken</code> will be provided in the output that you can use to resume pagination.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to resume pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An optional value that specifies whether you want the results sorted in <code>Ascending</code> or <code>Descending</code> order.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListHumanTaskUisResponse {
+    /// <p>An array of objects describing the human task user interfaces.</p>
+    #[serde(rename = "HumanTaskUiSummaries")]
+    pub human_task_ui_summaries: Vec<HumanTaskUiSummary>,
+    /// <p>A token to resume pagination.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2897,6 +5258,134 @@ pub struct ListModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListMonitoringExecutionsRequest {
+    /// <p>A filter that returns only jobs created after a specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only jobs created before a specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Name of a specific endpoint to fetch jobs for.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>A filter that returns only jobs modified before a specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>A filter that returns only jobs modified after a specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of jobs to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Name of a specific schedule to fetch jobs for.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_schedule_name: Option<String>,
+    /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Filter for jobs scheduled after a specified time.</p>
+    #[serde(rename = "ScheduledTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_time_after: Option<f64>,
+    /// <p>Filter for jobs scheduled before a specified time.</p>
+    #[serde(rename = "ScheduledTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_time_before: Option<f64>,
+    /// <p>Whether to sort results by <code>Status</code>, <code>CreationTime</code>, <code>ScheduledTime</code> field. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that retrieves only jobs with a specific status.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListMonitoringExecutionsResponse {
+    /// <p>A JSON array in which each element is a summary for a monitoring execution.</p>
+    #[serde(rename = "MonitoringExecutionSummaries")]
+    pub monitoring_execution_summaries: Vec<MonitoringExecutionSummary>,
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent reques</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListMonitoringSchedulesRequest {
+    /// <p>A filter that returns only monitoring schedules created after a specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only monitoring schedules created before a specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>Name of a specific endpoint to fetch schedules for.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>A filter that returns only monitoring schedules modified after a specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>A filter that returns only monitoring schedules modified before a specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of jobs to return in the response. The default value is 10.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Filter for monitoring schedules whose name contains a specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Whether to sort results by <code>Status</code>, <code>CreationTime</code>, <code>ScheduledTime</code> field. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only monitoring schedules modified before a specified time.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListMonitoringSchedulesResponse {
+    /// <p>A JSON array in which each element is a summary for a monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleSummaries")]
+    pub monitoring_schedule_summaries: Vec<MonitoringScheduleSummary>,
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of jobs, use it in the subsequent reques</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListNotebookInstanceLifecycleConfigsInput {
     /// <p>A filter that returns only lifecycle configurations that were created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
@@ -3016,6 +5505,62 @@ pub struct ListNotebookInstancesOutput {
     #[serde(rename = "NotebookInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notebook_instances: Option<Vec<NotebookInstanceSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListProcessingJobsRequest {
+    /// <p>A filter that returns only processing jobs created after the specified time.</p>
+    #[serde(rename = "CreationTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_after: Option<f64>,
+    /// <p>A filter that returns only processing jobs created after the specified time.</p>
+    #[serde(rename = "CreationTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time_before: Option<f64>,
+    /// <p>A filter that returns only processing jobs modified after the specified time.</p>
+    #[serde(rename = "LastModifiedTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_after: Option<f64>,
+    /// <p>A filter that returns only processing jobs modified before the specified time.</p>
+    #[serde(rename = "LastModifiedTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time_before: Option<f64>,
+    /// <p>The maximum number of processing jobs to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A string in the processing job name. This filter returns only processing jobs whose name contains the specified string.</p>
+    #[serde(rename = "NameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_contains: Option<String>,
+    /// <p>If the result of the previous <code>ListProcessingJobs</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of processing jobs, use the token in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that retrieves only processing jobs with a specific status.</p>
+    #[serde(rename = "StatusEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_equals: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListProcessingJobsResponse {
+    /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of processing jobs, use it in the subsequent request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>ProcessingJobSummary</code> objects, each listing a processing job.</p>
+    #[serde(rename = "ProcessingJobSummaries")]
+    pub processing_job_summaries: Vec<ProcessingJobSummary>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3226,6 +5771,137 @@ pub struct ListTransformJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTrialComponentsRequest {
+    /// <p>A filter that returns only components created after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only components created before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>The maximum number of components to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListTrialComponents</code> didn't return the full set of components, the call returns a token for getting the next set of components.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A filter that returns only components that have the specified source Amazon Resource Name (ARN).</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTrialComponentsResponse {
+    /// <p>A token for getting the next set of components, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of the summaries of your trial components.</p>
+    #[serde(rename = "TrialComponentSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_summaries: Option<Vec<TrialComponentSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTrialsRequest {
+    /// <p>A filter that returns only trials created after the specified time.</p>
+    #[serde(rename = "CreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_after: Option<f64>,
+    /// <p>A filter that returns only trials created before the specified time.</p>
+    #[serde(rename = "CreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_before: Option<f64>,
+    /// <p>A filter that returns only trials that are part of the specified experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>The maximum number of trials to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous call to <code>ListTrials</code> didn't return the full set of trials, the call returns a token for getting the next set of trials.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. The default value is <code>Descending</code>.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTrialsResponse {
+    /// <p>A token for getting the next set of trials, if there are any.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of the summaries of your trials.</p>
+    #[serde(rename = "TrialSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_summaries: Option<Vec<TrialSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListUserProfilesRequest {
+    /// <p>A parameter by which to filter the results.</p>
+    #[serde(rename = "DomainIdEquals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id_equals: Option<String>,
+    /// <p>Returns a list up to a specified limit.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The parameter by which to sort the results. The default is CreationTime.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order for the results. The default is Ascending.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+    /// <p>A parameter by which to filter the results.</p>
+    #[serde(rename = "UserProfileNameContains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name_contains: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListUserProfilesResponse {
+    /// <p>If the previous response was truncated, you will receive this token. Use it in your next request to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of user profiles.</p>
+    #[serde(rename = "UserProfiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profiles: Option<Vec<UserProfileDetails>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListWorkteamsRequest {
     /// <p>The maximum number of work teams to return in each page of the response.</p>
     #[serde(rename = "MaxResults")]
@@ -3288,7 +5964,7 @@ pub struct MetricData {
     pub value: Option<f32>,
 }
 
-/// <p>Specifies a metric that the training algorithm writes to <code>stderr</code> or <code>stdout</code>. Amazon SageMakerhyperparameter tuning captures all defined metrics. You specify one metric that a hyperparameter tuning job uses as its objective metric to choose the best training job.</p>
+/// <p>Specifies a metric that the training algorithm writes to <code>stderr</code> or <code>stdout</code> . Amazon SageMakerhyperparameter tuning captures all defined metrics. You specify one metric that a hyperparameter tuning job uses as its objective metric to choose the best training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricDefinition {
     /// <p>The name of the metric.</p>
@@ -3420,15 +6096,265 @@ pub struct ModelSummary {
     pub model_name: String,
 }
 
+/// <p>Container image configuration object for the monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringAppSpecification {
+    /// <p>An array of arguments for the container used to run the monitoring job.</p>
+    #[serde(rename = "ContainerArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_arguments: Option<Vec<String>>,
+    /// <p>Specifies the entrypoint for a container used to run the monitoring job.</p>
+    #[serde(rename = "ContainerEntrypoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_entrypoint: Option<Vec<String>>,
+    /// <p>The container image to be run by the monitoring job.</p>
+    #[serde(rename = "ImageUri")]
+    pub image_uri: String,
+    /// <p>An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "PostAnalyticsProcessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub post_analytics_processor_source_uri: Option<String>,
+    /// <p>An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers.</p>
+    #[serde(rename = "RecordPreprocessorSourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_preprocessor_source_uri: Option<String>,
+}
+
+/// <p>Configuration for monitoring constraints and monitoring statistics. These baseline resources are compared against the results of the current job from the series of jobs scheduled to collect data periodically.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringBaselineConfig {
+    /// <p>The baseline constraint file in Amazon S3 that the current monitoring job should validated against.</p>
+    #[serde(rename = "ConstraintsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints_resource: Option<MonitoringConstraintsResource>,
+    /// <p>The baseline statistics file in Amazon S3 that the current monitoring job should be validated against.</p>
+    #[serde(rename = "StatisticsResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics_resource: Option<MonitoringStatisticsResource>,
+}
+
+/// <p>Configuration for the cluster used to run model monitoring jobs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringClusterConfig {
+    /// <p>The number of ML compute instances to use in the model monitoring job. For distributed processing jobs, specify a value greater than 1. The default value is 1.</p>
+    #[serde(rename = "InstanceCount")]
+    pub instance_count: i64,
+    /// <p>The ML compute instance type for the processing job.</p>
+    #[serde(rename = "InstanceType")]
+    pub instance_type: String,
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the model monitoring job.</p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>The size of the ML storage volume, in gigabytes, that you want to provision. You must specify sufficient ML storage for your scenario.</p>
+    #[serde(rename = "VolumeSizeInGB")]
+    pub volume_size_in_gb: i64,
+}
+
+/// <p>The constraints resource for a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringConstraintsResource {
+    /// <p>The Amazon S3 URI for the constraints resource.</p>
+    #[serde(rename = "S3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_uri: Option<String>,
+}
+
+/// <p>Summary of information about the last monitoring job to run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MonitoringExecutionSummary {
+    /// <p>The time at which the monitoring job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The name of teh endpoint used to run the monitoring job.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>Contains the reason a monitoring job failed, if it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>A timestamp that indicates the last time the monitoring job was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>The status of the monitoring job.</p>
+    #[serde(rename = "MonitoringExecutionStatus")]
+    pub monitoring_execution_status: String,
+    /// <p>The name of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the monitoring job.</p>
+    #[serde(rename = "ProcessingJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_job_arn: Option<String>,
+    /// <p>The time the monitoring job was scheduled.</p>
+    #[serde(rename = "ScheduledTime")]
+    pub scheduled_time: f64,
+}
+
+/// <p>The inputs for a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringInput {
+    /// <p>The endpoint for a monitoring job.</p>
+    #[serde(rename = "EndpointInput")]
+    pub endpoint_input: EndpointInput,
+}
+
+/// <p>Defines the monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringJobDefinition {
+    /// <p>Baseline configuration used to validate that the data conforms to the specified constraints and statistics</p>
+    #[serde(rename = "BaselineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baseline_config: Option<MonitoringBaselineConfig>,
+    /// <p>Sets the environment variables in the Docker container.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Configures the monitoring job to run a specified Docker container image.</p>
+    #[serde(rename = "MonitoringAppSpecification")]
+    pub monitoring_app_specification: MonitoringAppSpecification,
+    /// <p>The array of inputs for the monitoring job. Currently we support monitoring an Amazon SageMaker Endpoint.</p>
+    #[serde(rename = "MonitoringInputs")]
+    pub monitoring_inputs: Vec<MonitoringInput>,
+    /// <p>The array of outputs from the monitoring job to be uploaded to Amazon Simple Storage Service (Amazon S3).</p>
+    #[serde(rename = "MonitoringOutputConfig")]
+    pub monitoring_output_config: MonitoringOutputConfig,
+    /// <p>Identifies the resources, ML compute instances, and ML storage volumes to deploy for a monitoring job. In distributed processing, you specify more than one instance.</p>
+    #[serde(rename = "MonitoringResources")]
+    pub monitoring_resources: MonitoringResources,
+    /// <p>Specifies networking options for an monitoring job.</p>
+    #[serde(rename = "NetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_config: Option<NetworkConfig>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>Specifies a time limit for how long the monitoring job is allowed to run.</p>
+    #[serde(rename = "StoppingCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stopping_condition: Option<MonitoringStoppingCondition>,
+}
+
+/// <p>The output object for a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringOutput {
+    /// <p>The Amazon S3 storage location where the results of a monitoring job are saved.</p>
+    #[serde(rename = "S3Output")]
+    pub s3_output: MonitoringS3Output,
+}
+
+/// <p>The output configuration for monitoring jobs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringOutputConfig {
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.</p>
+    #[serde(rename = "MonitoringOutputs")]
+    pub monitoring_outputs: Vec<MonitoringOutput>,
+}
+
+/// <p>Identifies the resources to deploy for a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringResources {
+    /// <p>The configuration for the cluster resources used to run the processing job.</p>
+    #[serde(rename = "ClusterConfig")]
+    pub cluster_config: MonitoringClusterConfig,
+}
+
+/// <p>Information about where and how you want to store the results of a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringS3Output {
+    /// <p>The local path to the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job. LocalPath is an absolute path for the output data.</p>
+    #[serde(rename = "LocalPath")]
+    pub local_path: String,
+    /// <p>Whether to upload the results of the monitoring job continuously or after the job completes.</p>
+    #[serde(rename = "S3UploadMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_upload_mode: Option<String>,
+    /// <p>A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Configures the monitoring schedule and defines the monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringScheduleConfig {
+    /// <p>Defines the monitoring job.</p>
+    #[serde(rename = "MonitoringJobDefinition")]
+    pub monitoring_job_definition: MonitoringJobDefinition,
+    /// <p>Configures the monitoring schedule.</p>
+    #[serde(rename = "ScheduleConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_config: Option<ScheduleConfig>,
+}
+
+/// <p>Summarizes the monitoring schedule.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MonitoringScheduleSummary {
+    /// <p>The creation time of the monitoring schedule.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The name of the endpoint using the monitoring schedule.</p>
+    #[serde(rename = "EndpointName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_name: Option<String>,
+    /// <p>The last time the monitoring schedule was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    pub last_modified_time: f64,
+    /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    pub monitoring_schedule_arn: String,
+    /// <p>The name of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+    /// <p>The status of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleStatus")]
+    pub monitoring_schedule_status: String,
+}
+
+/// <p>The statistics resource for a monitoring job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringStatisticsResource {
+    /// <p>The Amazon S3 URI for the statistics resource.</p>
+    #[serde(rename = "S3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_uri: Option<String>,
+}
+
+/// <p>A time limit for how long the monitoring job is allowed to run before stopping.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MonitoringStoppingCondition {
+    /// <p>The maximum runtime allowed in seconds.</p>
+    #[serde(rename = "MaxRuntimeInSeconds")]
+    pub max_runtime_in_seconds: i64,
+}
+
 /// <p><p>Defines a list of <code>NestedFilters</code> objects. To satisfy the conditions specified in the <code>NestedFilters</code> call, a resource must satisfy the conditions of all of the filters.</p> <p>For example, you could define a <code>NestedFilters</code> using the training job&#39;s <code>InputDataConfig</code> property to filter on <code>Channel</code> objects. </p> <p>A <code>NestedFilters</code> object contains multiple filters. For example, to find all training jobs whose name contains <code>train</code> and that have <code>cat/data</code> in their <code>S3Uri</code> (specified in <code>InputDataConfig</code>), you need to create a <code>NestedFilters</code> object that specifies the <code>InputDataConfig</code> property with the following <code>Filter</code> objects:</p> <ul> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.ChannelName&quot;, &quot;Operator&quot;:&quot;EQUALS&quot;, &quot;Value&quot;:&quot;train&quot;}&#39;,</code> </p> </li> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.DataSource.S3DataSource.S3Uri&quot;, &quot;Operator&quot;:&quot;CONTAINS&quot;, &quot;Value&quot;:&quot;cat/data&quot;}&#39;</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NestedFilters {
     /// <p>A list of filters. Each filter acts on a property. Filters must contain at least one <code>Filters</code> value. For example, a <code>NestedFilters</code> call might include a filter on the <code>PropertyName</code> parameter of the <code>InputDataConfig</code> property: <code>InputDataConfig.DataSource.S3DataSource.S3Uri</code>.</p>
     #[serde(rename = "Filters")]
     pub filters: Vec<Filter>,
-    /// <p>The name of the property to use in the nested filters. The value must match a listed property name, such as <code>InputDataConfig</code>.</p>
+    /// <p>The name of the property to use in the nested filters. The value must match a listed property name, such as <code>InputDataConfig</code> .</p>
     #[serde(rename = "NestedPropertyName")]
     pub nested_property_name: String,
+}
+
+/// <p>Networking options for a job, such as network traffic encryption between containers, whether to allow inbound and outbound network calls to and from containers, and the VPC subnets and security groups to use for VPC-enabled jobs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NetworkConfig {
+    /// <p>Whether to allow inbound and outbound network calls to and from the containers used for the processing job.</p>
+    #[serde(rename = "EnableNetworkIsolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Provides a summary of a notebook instance lifecycle configuration.</p>
@@ -3464,7 +6390,7 @@ pub struct NotebookInstanceLifecycleHook {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NotebookInstanceSummary {
-    /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_code_repositories: Option<Vec<String>>,
@@ -3472,7 +6398,7 @@ pub struct NotebookInstanceSummary {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The Git repository associated with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>The Git repository associated with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "DefaultCodeRepository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_code_repository: Option<String>,
@@ -3545,7 +6471,7 @@ pub struct OutputConfig {
 /// <p>Provides information about how to store model training results (model artifacts).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OutputDataConfig {
-    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>// KMS Key ID</p> <p> <code>"1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// KMS Key Alias</p> <p> <code>"alias/ExampleAlias"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key Alias</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <code>CreateTramsformJob</code> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>// KMS Key ID</p> <p> <code>"1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// KMS Key Alias</p> <p> <code>"alias/ExampleAlias"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key Alias</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"</code> </p> </li> </ul> <p>If you use a KMS key ID or an alias of your master key, the Amazon SageMaker execution role must include permissions to call <code>kms:Encrypt</code>. If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. Amazon SageMaker uses server-side encryption with KMS-managed keys for <code>OutputDataConfig</code>. If you use a bucket policy with an <code>s3:PutObject</code> permission that only allows objects with server-side encryption, set the condition key of <code>s3:x-amz-server-side-encryption</code> to <code>"aws:kms"</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <code>CreateTrainingJob</code>, <code>CreateTransformJob</code>, or <code>CreateHyperParameterTuningJob</code> requests. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -3588,6 +6514,20 @@ pub struct ParameterRanges {
     pub integer_parameter_ranges: Option<Vec<IntegerParameterRange>>,
 }
 
+/// <p>The trial that a trial component is associated with and the experiment the trial is part of. A component might not be associated with a trial. A component can be associated with multiple trials.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Parent {
+    /// <p>The name of the experiment.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    /// <p>The name of the trial.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
+}
+
 /// <p>A previously completed or stopped hyperparameter tuning job to be used as a starting point for a new hyperparameter tuning job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ParentHyperParameterTuningJob {
@@ -3597,10 +6537,151 @@ pub struct ParentHyperParameterTuningJob {
     pub hyper_parameter_tuning_job_name: Option<String>,
 }
 
+/// <p>Configuration for the cluster used to run a processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingClusterConfig {
+    /// <p>The number of ML compute instances to use in the processing job. For distributed processing jobs, specify a value greater than 1. The default value is 1.</p>
+    #[serde(rename = "InstanceCount")]
+    pub instance_count: i64,
+    /// <p>The ML compute instance type for the processing job.</p>
+    #[serde(rename = "InstanceType")]
+    pub instance_type: String,
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the processing job. </p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>The size of the ML storage volume in gigabytes that you want to provision. You must specify sufficient ML storage for your scenario.</p>
+    #[serde(rename = "VolumeSizeInGB")]
+    pub volume_size_in_gb: i64,
+}
+
+/// <p>The inputs for a processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingInput {
+    /// <p>The name of the inputs for the processing job.</p>
+    #[serde(rename = "InputName")]
+    pub input_name: String,
+    /// <p>The S3 inputs for the processing job. </p>
+    #[serde(rename = "S3Input")]
+    pub s3_input: ProcessingS3Input,
+}
+
+/// <p>Summary of information about a processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ProcessingJobSummary {
+    /// <p>The time at which the processing job was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>An optional string, up to one KB in size, that contains metadata from the processing container when the processing job exits.</p>
+    #[serde(rename = "ExitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exit_message: Option<String>,
+    /// <p>A string, up to one KB in size, that contains the reason a processing job failed, if it failed.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>A timestamp that indicates the last time the processing job was modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The time at which the processing job completed.</p>
+    #[serde(rename = "ProcessingEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the processing job..</p>
+    #[serde(rename = "ProcessingJobArn")]
+    pub processing_job_arn: String,
+    /// <p>The name of the processing job.</p>
+    #[serde(rename = "ProcessingJobName")]
+    pub processing_job_name: String,
+    /// <p>The status of the processing job.</p>
+    #[serde(rename = "ProcessingJobStatus")]
+    pub processing_job_status: String,
+}
+
+/// <p>Describes the results of a processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingOutput {
+    /// <p>The name for the processing job output.</p>
+    #[serde(rename = "OutputName")]
+    pub output_name: String,
+    /// <p>Configuration for processing job outputs in Amazon S3.</p>
+    #[serde(rename = "S3Output")]
+    pub s3_output: ProcessingS3Output,
+}
+
+/// <p>The output configuration for the processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingOutputConfig {
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the processing job output. <code>KmsKeyId</code> can be an ID of a KMS key, ARN of a KMS key, alias of a KMS key, or alias of a KMS key. The <code>KmsKeyId</code> is applied to all outputs.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Output configuration information for a processing job.</p>
+    #[serde(rename = "Outputs")]
+    pub outputs: Vec<ProcessingOutput>,
+}
+
+/// <p>Identifies the resources, ML compute instances, and ML storage volumes to deploy for a processing job. In distributed training, you specify more than one instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingResources {
+    /// <p>The configuration for the resources in a cluster used to run the processing job.</p>
+    #[serde(rename = "ClusterConfig")]
+    pub cluster_config: ProcessingClusterConfig,
+}
+
+/// <p>Information about where and how you want to obtain the inputs for an processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingS3Input {
+    /// <p>The local path to the Amazon S3 bucket where you want Amazon SageMaker to download the inputs to run a processing job. <code>LocalPath</code> is an absolute path to the input data.</p>
+    #[serde(rename = "LocalPath")]
+    pub local_path: String,
+    /// <p>Whether to use <code>Gzip</code> compresion for Amazon S3 storage.</p>
+    #[serde(rename = "S3CompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_compression_type: Option<String>,
+    /// <p>Whether the data stored in Amazon S3 is <code>FullyReplicated</code> or <code>ShardedByS3Key</code>.</p>
+    #[serde(rename = "S3DataDistributionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_data_distribution_type: Option<String>,
+    /// <p>Whether you use an <code>S3Prefix</code> or a <code>ManifestFile</code> for the data type. If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for the processing job. If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for the processing job.</p>
+    #[serde(rename = "S3DataType")]
+    pub s3_data_type: String,
+    /// <p>Wether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
+    #[serde(rename = "S3InputMode")]
+    pub s3_input_mode: String,
+    /// <p>The URI for the Amazon S3 storage where you want Amazon SageMaker to download the artifacts needed to run a processing job.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Information about where and how you want to store the results of an processing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingS3Output {
+    /// <p>The local path to the Amazon S3 bucket where you want Amazon SageMaker to save the results of an processing job. <code>LocalPath</code> is an absolute path to the input data.</p>
+    #[serde(rename = "LocalPath")]
+    pub local_path: String,
+    /// <p>Whether to upload the results of the processing job continuously or after the job completes.</p>
+    #[serde(rename = "S3UploadMode")]
+    pub s3_upload_mode: String,
+    /// <p>A URI that identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of a processing job.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Specifies a time limit for how long the processing job is allowed to run.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProcessingStoppingCondition {
+    /// <p>Specifies the maximum runtime in seconds.</p>
+    #[serde(rename = "MaxRuntimeInSeconds")]
+    pub max_runtime_in_seconds: i64,
+}
+
 /// <p>Identifies a model that you want to host and the resources to deploy for hosting it. If you are deploying multiple models, tell Amazon SageMaker how to distribute traffic among the models by specifying variant weights. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProductionVariant {
-    /// <p>The size of the Elastic Inference (EI) instance to use for the production variant. EI instances provide on-demand GPU computing for inference. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
+    /// <p>The size of the Elastic Inference (EI) instance to use for the production variant. EI instances provide on-demand GPU computing for inference. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accelerator_type: Option<String>,
@@ -3669,10 +6750,10 @@ pub struct PropertyNameSuggestion {
     pub property_name: Option<String>,
 }
 
-/// <p><p>Defines the amount of money paid to an Amazon Mechanical Turk worker for each task performed. </p> <p>Use one of the following prices for bounding box tasks. Prices are in US dollars.</p> <ul> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for image classification, text classification, and custom tasks. Prices are in US dollars.</p> <ul> <li> <p>0.012</p> </li> <li> <p>0.024</p> </li> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for semantic segmentation tasks. Prices are in US dollars.</p> <ul> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul></p>
+/// <p><p>Defines the amount of money paid to an Amazon Mechanical Turk worker for each task performed. </p> <p>Use one of the following prices for bounding box tasks. Prices are in US dollars and should be based on the complexity of the task; the longer it takes in your initial testing, the more you should offer.</p> <ul> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for image classification, text classification, and custom tasks. Prices are in US dollars.</p> <ul> <li> <p>0.012</p> </li> <li> <p>0.024</p> </li> <li> <p>0.036</p> </li> <li> <p>0.048</p> </li> <li> <p>0.060</p> </li> <li> <p>0.072</p> </li> <li> <p>0.120</p> </li> <li> <p>0.240</p> </li> <li> <p>0.360</p> </li> <li> <p>0.480</p> </li> <li> <p>0.600</p> </li> <li> <p>0.720</p> </li> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for semantic segmentation tasks. Prices are in US dollars.</p> <ul> <li> <p>0.840</p> </li> <li> <p>0.960</p> </li> <li> <p>1.080</p> </li> <li> <p>1.200</p> </li> </ul> <p>Use one of the following prices for Textract AnalyzeDocument Important Form Key Amazon Augmented AI review tasks. Prices are in US dollars.</p> <ul> <li> <p>2.400 </p> </li> <li> <p>2.280 </p> </li> <li> <p>2.160 </p> </li> <li> <p>2.040 </p> </li> <li> <p>1.920 </p> </li> <li> <p>1.800 </p> </li> <li> <p>1.680 </p> </li> <li> <p>1.560 </p> </li> <li> <p>1.440 </p> </li> <li> <p>1.320 </p> </li> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul> <p>Use one of the following prices for Rekognition DetectModerationLabels Amazon Augmented AI review tasks. Prices are in US dollars.</p> <ul> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul> <p>Use one of the following prices for Amazon Augmented AI custom human review tasks. Prices are in US dollars.</p> <ul> <li> <p>1.200 </p> </li> <li> <p>1.080 </p> </li> <li> <p>0.960 </p> </li> <li> <p>0.840 </p> </li> <li> <p>0.720 </p> </li> <li> <p>0.600 </p> </li> <li> <p>0.480 </p> </li> <li> <p>0.360 </p> </li> <li> <p>0.240 </p> </li> <li> <p>0.120 </p> </li> <li> <p>0.072 </p> </li> <li> <p>0.060 </p> </li> <li> <p>0.048 </p> </li> <li> <p>0.036 </p> </li> <li> <p>0.024 </p> </li> <li> <p>0.012 </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PublicWorkforceTaskPrice {
-    /// <p>Defines the amount of money paid to a worker in United States dollars.</p>
+    /// <p>Defines the amount of money paid to an Amazon Mechanical Turk worker in United States dollars.</p>
     #[serde(rename = "AmountInUsd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount_in_usd: Option<USD>,
@@ -3722,6 +6803,22 @@ pub struct RenderingError {
     pub message: String,
 }
 
+/// <p>The resolved attributes.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResolvedAttributes {
+    #[serde(rename = "AutoMLJobObjective")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_objective: Option<AutoMLJobObjective>,
+    #[serde(rename = "CompletionCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_criteria: Option<AutoMLJobCompletionCriteria>,
+    /// <p>The problem type.</p>
+    #[serde(rename = "ProblemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub problem_type: Option<String>,
+}
+
 /// <p>Describes the resources, including ML compute instances and ML storage volumes, to use for model training. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceConfig {
@@ -3731,11 +6828,11 @@ pub struct ResourceConfig {
     /// <p>The ML compute instance type. </p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the training job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    /// <p><p>The AWS KMS key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the training job.</p> <note> <p>Certain Nitro-based instances include local storage, dependent on the instance type. Local storage volumes are encrypted using a hardware module on the instance. You can&#39;t request a <code>VolumeKmsKeyId</code> when using an instance type with local storage.</p> <p>For a list of instance types that support local instance storage, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> <p>For more information about local instance storage encryption, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html">SSD Instance Store Volumes</a>.</p> </note> <p>The <code>VolumeKmsKeyId</code> can be in any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_kms_key_id: Option<String>,
-    /// <p><p>The size of the ML storage volume that you want to provision. </p> <p>ML storage volumes store model artifacts and incremental states. Training algorithms might also use the ML storage volume for scratch space. If you want to store the training data in the ML storage volume, choose <code>File</code> as the <code>TrainingInputMode</code> in the algorithm specification. </p> <p>You must specify sufficient ML storage for your scenario. </p> <note> <p> Amazon SageMaker supports only the General Purpose SSD (gp2) ML storage volume type. </p> </note></p>
+    /// <p><p>The size of the ML storage volume that you want to provision. </p> <p>ML storage volumes store model artifacts and incremental states. Training algorithms might also use the ML storage volume for scratch space. If you want to store the training data in the ML storage volume, choose <code>File</code> as the <code>TrainingInputMode</code> in the algorithm specification. </p> <p>You must specify sufficient ML storage for your scenario. </p> <note> <p> Amazon SageMaker supports only the General Purpose SSD (gp2) ML storage volume type. </p> </note> <note> <p>Certain Nitro-based instances include local storage with a fixed total size, dependent on the instance type. When using these instances for training, Amazon SageMaker mounts the local instance storage instead of Amazon EBS gp2 storage. You can&#39;t request a <code>VolumeSizeInGB</code> greater than the total size of the local instance storage.</p> <p>For a list of instance types that support local instance storage, including the total size per instance type, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> </note></p>
     #[serde(rename = "VolumeSizeInGB")]
     pub volume_size_in_gb: i64,
 }
@@ -3749,6 +6846,28 @@ pub struct ResourceLimits {
     /// <p>The maximum number of concurrent training jobs that a hyperparameter tuning job can launch.</p>
     #[serde(rename = "MaxParallelTrainingJobs")]
     pub max_parallel_training_jobs: i64,
+}
+
+/// <p>The instance type and quantity.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceSpec {
+    /// <p>The Amazon Resource Name (ARN) of the environment.</p>
+    #[serde(rename = "EnvironmentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_arn: Option<String>,
+    /// <p>The instance type.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
+}
+
+/// <p>The retention policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RetentionPolicy {
+    /// <p>The home Amazon Elastic File System (EFS).</p>
+    #[serde(rename = "HomeEfsFileSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_efs_file_system: Option<String>,
 }
 
 /// <p>Describes the S3 data source.</p>
@@ -3765,12 +6884,20 @@ pub struct S3DataSource {
     /// <p>If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects that match the specified key name prefix for model training. </p> <p>If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for model training. </p> <p>If you choose <code>AugmentedManifestFile</code>, S3Uri identifies an object that is an augmented manifest file in JSON lines format. This file contains the data you want to use for model training. <code>AugmentedManifestFile</code> can only be used if the Channel's input mode is <code>Pipe</code>.</p>
     #[serde(rename = "S3DataType")]
     pub s3_data_type: String,
-    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example: </p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[</code> </p> <p> <code> {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code> &quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code> &quot;relative/path/custdata-2&quot;,</code> </p> <p> <code> ...</code> </p> <p> <code> ]</code> </p> <p> The preceding JSON matches the following <code>s3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer_bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p>The complete set of <code>s3uris</code> in this manifest is the input data for the channel for this datasource. The object that each <code>s3uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf. </p> </li> </ul></p>
+    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example: </p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> The preceding JSON matches the following <code>s3Uris</code>: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code>&quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code>&quot;relative/path/custdata-2&quot;,</code> </p> <p> <code>...</code> </p> <p> <code>&quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> The preceding JSON matches the following <code>s3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p>The complete set of <code>s3uris</code> in this manifest is the input data for the channel for this datasource. The object that each <code>s3uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf. </p> </li> </ul></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
 }
 
-/// <p><p>A multi-expression that searches for the specified resource or resources in a search. All resource objects that satisfy the expression&#39;s condition are included in the search results. You must specify at least one subexpression, filter, or nested filter. A <code>SearchExpression</code> can contain up to twenty elements.</p> <p>A <code>SearchExpression</code> contains the following components:</p> <ul> <li> <p>A list of <code>Filter</code> objects. Each filter defines a simple Boolean expression comprised of a resource property name, Boolean operator, and value.</p> </li> <li> <p>A list of <code>NestedFilter</code> objects. Each nested filter defines a list of Boolean expressions using a list of resource properties. A nested filter is satisfied if a single object in the list satisfies all Boolean expressions.</p> </li> <li> <p>A list of <code>SearchExpression</code> objects. A search expression object can be nested in a list of search expression objects.</p> </li> <li> <p>A Boolean operator: <code>And</code> or <code>Or</code>.</p> </li> </ul></p>
+/// <p>Configuration details about the monitoring schedule.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ScheduleConfig {
+    /// <p><p>A cron expression that describes details about the monitoring schedule.</p> <p>Currently the only supported cron expressions are:</p> <ul> <li> <p>If you want to set the job to start every hour, please use the following:</p> <p> <code>Hourly: cron(0 * ? * * *)</code> </p> </li> <li> <p>If you want to start the job daily:</p> <p> <code>cron(0 [00-23] ? * * *)</code> </p> </li> </ul> <p>For example, the following are valid cron expressions:</p> <ul> <li> <p>Daily at noon UTC: <code>cron(0 12 ? * * *)</code> </p> </li> <li> <p>Daily at midnight UTC: <code>cron(0 0 ? * * *)</code> </p> </li> </ul> <p>To support running every 6, 12 hours, the following are also supported:</p> <p> <code>cron(0 [00-23]/[01-24] ? * * *)</code> </p> <p>For example, the following are valid cron expressions:</p> <ul> <li> <p>Every 12 hours, starting at 5pm UTC: <code>cron(0 17/12 ? * * *)</code> </p> </li> <li> <p>Every two hours starting at midnight: <code>cron(0 0/2 ? * * *)</code> </p> </li> </ul> <note> <ul> <li> <p>Even though the cron expression is set to start at 5PM UTC, note that there could be a delay of 0-20 minutes from the actual requested time to run the execution. </p> </li> <li> <p>We recommend that if you would like a daily schedule, you do not provide this parameter. Amazon SageMaker will pick a time for running every day.</p> </li> </ul> </note></p>
+    #[serde(rename = "ScheduleExpression")]
+    pub schedule_expression: String,
+}
+
+/// <p><p>A multi-expression that searches for the specified resource or resources in a search. All resource objects that satisfy the expression&#39;s condition are included in the search results. You must specify at least one subexpression, filter, or nested filter. A <code>SearchExpression</code> can contain up to twenty elements.</p> <p>A <code>SearchExpression</code> contains the following components:</p> <ul> <li> <p>A list of <code>Filter</code> objects. Each filter defines a simple Boolean expression comprised of a resource property name, Boolean operator, and value. A <code>SearchExpression</code> can include only one <code>Contains</code> operator.</p> </li> <li> <p>A list of <code>NestedFilter</code> objects. Each nested filter defines a list of Boolean expressions using a list of resource properties. A nested filter is satisfied if a single object in the list satisfies all Boolean expressions.</p> </li> <li> <p>A list of <code>SearchExpression</code> objects. A search expression object can be nested in a list of search expression objects.</p> </li> <li> <p>A Boolean operator: <code>And</code> or <code>Or</code>.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchExpression {
     /// <p>A list of filter objects.</p>
@@ -3795,10 +6922,22 @@ pub struct SearchExpression {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SearchRecord {
+    /// <p>A summary of the properties of an experiment.</p>
+    #[serde(rename = "Experiment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment: Option<Experiment>,
     /// <p>A <code>TrainingJob</code> object that is returned as part of a <code>Search</code> request.</p>
     #[serde(rename = "TrainingJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job: Option<TrainingJob>,
+    /// <p>A summary of the properties of a trial.</p>
+    #[serde(rename = "Trial")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial: Option<Trial>,
+    /// <p>A summary of the properties of a trial component.</p>
+    #[serde(rename = "TrialComponent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component: Option<TrialComponent>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3855,10 +6994,27 @@ pub struct SecondaryStatusTransition {
     /// <p><p>Contains a secondary status information from a training job.</p> <p>Status might be one of the following secondary statuses:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p><p>A detailed description of the progress within a secondary status. </p> <p>Amazon SageMaker provides secondary statuses and status messages that apply to each of them:</p> <dl> <dt>Starting</dt> <dd> <ul> <li> <p>Starting the training job.</p> </li> <li> <p>Launching requested ML instances.</p> </li> <li> <p>Insufficient capacity error from EC2 while launching instances, retrying!</p> </li> <li> <p>Launched instance was unhealthy, replacing it!</p> </li> <li> <p>Preparing the instances for training.</p> </li> </ul> </dd> <dt>Training</dt> <dd> <ul> <li> <p>Downloading the training image.</p> </li> <li> <p>Training image download completed. Training in progress.</p> </li> </ul> </dd> </dl> <important> <p>Status messages are subject to change. Therefore, we recommend not including them in code that programmatically initiates actions. For examples, don&#39;t use status messages in if statements.</p> </important> <p>To have an overview of your training job&#39;s progress, view <code>TrainingJobStatus</code> and <code>SecondaryStatus</code> in <a>DescribeTrainingJobResponse</a>, and <code>StatusMessage</code> together. For example, at the start of a training job, you might see the following:</p> <ul> <li> <p> <code>TrainingJobStatus</code> - InProgress</p> </li> <li> <p> <code>SecondaryStatus</code> - Training</p> </li> <li> <p> <code>StatusMessage</code> - Downloading the training image</p> </li> </ul></p>
+    /// <p><p>A detailed description of the progress within a secondary status. </p> <p>Amazon SageMaker provides secondary statuses and status messages that apply to each of them:</p> <dl> <dt>Starting</dt> <dd> <ul> <li> <p>Starting the training job.</p> </li> <li> <p>Launching requested ML instances.</p> </li> <li> <p>Insufficient capacity error from EC2 while launching instances, retrying!</p> </li> <li> <p>Launched instance was unhealthy, replacing it!</p> </li> <li> <p>Preparing the instances for training.</p> </li> </ul> </dd> <dt>Training</dt> <dd> <ul> <li> <p>Downloading the training image.</p> </li> <li> <p>Training image download completed. Training in progress.</p> </li> </ul> </dd> </dl> <important> <p>Status messages are subject to change. Therefore, we recommend not including them in code that programmatically initiates actions. For examples, don&#39;t use status messages in if statements.</p> </important> <p>To have an overview of your training job&#39;s progress, view <code>TrainingJobStatus</code> and <code>SecondaryStatus</code> in <a>DescribeTrainingJob</a>, and <code>StatusMessage</code> together. For example, at the start of a training job, you might see the following:</p> <ul> <li> <p> <code>TrainingJobStatus</code> - InProgress</p> </li> <li> <p> <code>SecondaryStatus</code> - Training</p> </li> <li> <p> <code>StatusMessage</code> - Downloading the training image</p> </li> </ul></p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+/// <p>The sharing settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SharingSettings {
+    /// <p>The notebook output option.</p>
+    #[serde(rename = "NotebookOutputOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_output_option: Option<String>,
+    /// <p>The AWS Key Management Service encryption key ID.</p>
+    #[serde(rename = "S3KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_kms_key_id: Option<String>,
+    /// <p>The Amazon S3 output path.</p>
+    #[serde(rename = "S3OutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output_path: Option<String>,
 }
 
 /// <p>A configuration for a shuffle option for input data in a channel. If you use <code>S3Prefix</code> for <code>S3DataType</code>, the results of the S3 key prefix matches are shuffled. If you use <code>ManifestFile</code>, the order of the S3 object references in the <code>ManifestFile</code> is shuffled. If you use <code>AugmentedManifestFile</code>, the order of the JSON lines in the <code>AugmentedManifestFile</code> is shuffled. The shuffling order is determined using the <code>Seed</code> value.</p> <p>For Pipe input mode, shuffling is done at the start of every epoch. With large datasets, this ensures that the order of the training data is different for each epoch, and it helps reduce bias and possible overfitting. In a multi-node training job when <code>ShuffleConfig</code> is combined with <code>S3DataDistributionType</code> of <code>ShardedByS3Key</code>, the data is shuffled across nodes so that the content sent to a particular node on the first epoch might be sent to a different node on the second epoch.</p>
@@ -3890,10 +7046,24 @@ pub struct SourceAlgorithmSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartMonitoringScheduleRequest {
+    /// <p>The name of the schedule to start.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartNotebookInstanceInput {
     /// <p>The name of the notebook instance to start.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopAutoMLJobRequest {
+    /// <p>The name of the object you are requesting.</p>
+    #[serde(rename = "AutoMLJobName")]
+    pub auto_ml_job_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3918,10 +7088,24 @@ pub struct StopLabelingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopMonitoringScheduleRequest {
+    /// <p>The name of the schedule to stop.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopNotebookInstanceInput {
     /// <p>The name of the notebook instance to terminate.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopProcessingJobRequest {
+    /// <p>The name of the processing job to stop.</p>
+    #[serde(rename = "ProcessingJobName")]
+    pub processing_job_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3938,13 +7122,17 @@ pub struct StopTransformJobRequest {
     pub transform_job_name: String,
 }
 
-/// <p>Specifies how long model training can run. When model training reaches the limit, Amazon SageMaker ends the training job. Use this API to cap model training cost.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of training is not lost. </p> <p>Training algorithms provided by Amazon SageMaker automatically saves the intermediate results of a model training job (it is best effort case, as model might not be ready to save as some stages, for example training just started). This intermediate data is a valid model artifact. You can use it to create a model (<code>CreateModel</code>). </p>
+/// <p><p>Specifies a limit to how long a model training or compilation job can run. It also specifies how long you are willing to wait for a managed spot training job to complete. When the job reaches the time limit, Amazon SageMaker ends the training or compilation job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost. </p> <p>The training algorithms provided by Amazon SageMaker automatically save the intermediate results of a model training job when possible. This attempt to save artifacts is only a best effort case as model might not be in a state from which it can be saved. For example, if training has just started, the model might not be ready to save. When saved, this intermediate data is a valid model artifact. You can use it to create a model with <code>CreateModel</code>.</p> <note> <p>The Neural Topic Model (NTM) currently does not support saving intermediate model artifacts. When training NTMs, make sure that the maximum runtime is sufficient for the training job to complete.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoppingCondition {
-    /// <p>The maximum length of time, in seconds, that the training job can run. If model training does not complete during this time, Amazon SageMaker ends the job. If value is not specified, default value is 1 day. Maximum value is 28 days.</p>
+    /// <p>The maximum length of time, in seconds, that the training or compilation job can run. If job does not complete during this time, Amazon SageMaker ends the job. If value is not specified, default value is 1 day. The maximum value is 28 days.</p>
     #[serde(rename = "MaxRuntimeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_runtime_in_seconds: Option<i64>,
+    /// <p>The maximum length of time, in seconds, how long you are willing to wait for a managed spot training job to complete. It is the amount of time spent waiting for Spot capacity plus the amount of time the training job runs. It must be equal to or greater than <code>MaxRuntimeInSeconds</code>. </p>
+    #[serde(rename = "MaxWaitTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_wait_time_in_seconds: Option<i64>,
 }
 
 /// <p>Describes a work team of a vendor that does the a labelling job.</p>
@@ -3992,6 +7180,27 @@ pub struct Tag {
     pub value: String,
 }
 
+/// <p>The TensorBoard app settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TensorBoardAppSettings {
+    /// <p>The instance type and quantity.</p>
+    #[serde(rename = "DefaultResourceSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_resource_spec: Option<ResourceSpec>,
+}
+
+/// <p>Configuration of storage locations for TensorBoard output.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TensorBoardOutputConfig {
+    /// <p>Path to local storage location for tensorBoard output. Defaults to <code>/opt/ml/output/tensorboard</code>.</p>
+    #[serde(rename = "LocalPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_path: Option<String>,
+    /// <p>Path to Amazon S3 storage location for TensorBoard output.</p>
+    #[serde(rename = "S3OutputPath")]
+    pub s3_output_path: String,
+}
+
 /// <p>Contains information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -4000,18 +7209,47 @@ pub struct TrainingJob {
     #[serde(rename = "AlgorithmSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_specification: Option<AlgorithmSpecification>,
+    /// <p>The Amazon Resource Name (ARN) of the job.</p>
+    #[serde(rename = "AutoMLJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_job_arn: Option<String>,
+    /// <p>The billable time in seconds.</p>
+    #[serde(rename = "BillableTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billable_time_in_seconds: Option<i64>,
+    #[serde(rename = "CheckpointConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub checkpoint_config: Option<CheckpointConfig>,
     /// <p>A timestamp that indicates when the training job was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    #[serde(rename = "DebugHookConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_hook_config: Option<DebugHookConfig>,
+    /// <p>Information about the debug rule configuration.</p>
+    #[serde(rename = "DebugRuleConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_rule_configurations: Option<Vec<DebugRuleConfiguration>>,
+    /// <p>Information about the evaluation status of the rules for the training job.</p>
+    #[serde(rename = "DebugRuleEvaluationStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub debug_rule_evaluation_statuses: Option<Vec<DebugRuleEvaluationStatus>>,
     /// <p>To encrypt all communications between ML compute instances in distributed training, choose <code>True</code>. Encryption provides greater security for distributed training, but training might take longer. How long it takes depends on the amount of communication between compute instances, especially if you use a deep learning algorithm in distributed training.</p>
     #[serde(rename = "EnableInterContainerTrafficEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_inter_container_traffic_encryption: Option<bool>,
+    /// <p>When true, enables managed spot training using Amazon EC2 Spot instances to run training jobs instead of on-demand instances. For more information, see <a>model-managed-spot-training</a>.</p>
+    #[serde(rename = "EnableManagedSpotTraining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_managed_spot_training: Option<bool>,
     /// <p>If the <code>TrainingJob</code> was created with network isolation, the value is set to <code>true</code>. If network isolation is enabled, nodes can't communicate beyond the VPC they run in.</p>
     #[serde(rename = "EnableNetworkIsolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_network_isolation: Option<bool>,
+    #[serde(rename = "ExperimentConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_config: Option<ExperimentConfig>,
     /// <p>If the training job failed, the reason it failed.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4060,7 +7298,7 @@ pub struct TrainingJob {
     #[serde(rename = "SecondaryStatusTransitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_status_transitions: Option<Vec<SecondaryStatusTransition>>,
-    /// <p>The condition under which to stop the training job.</p>
+    /// <p>Specifies a limit to how long a model training job can run. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts, so the results of training are not lost. </p>
     #[serde(rename = "StoppingCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopping_condition: Option<StoppingCondition>,
@@ -4068,6 +7306,9 @@ pub struct TrainingJob {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "TensorBoardOutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tensor_board_output_config: Option<TensorBoardOutputConfig>,
     /// <p>Indicates the time when the training job ends on training instances. You are billed for the time interval between the value of <code>TrainingStartTime</code> and this time. For successful jobs and stopped jobs, this is the time after model artifacts are uploaded. For failed jobs, this is the time when Amazon SageMaker detects a job failure.</p>
     #[serde(rename = "TrainingEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4088,6 +7329,10 @@ pub struct TrainingJob {
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_start_time: Option<f64>,
+    /// <p>The training time in seconds.</p>
+    #[serde(rename = "TrainingTimeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_time_in_seconds: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the associated hyperparameter tuning job if the training job was launched by a hyperparameter tuning job.</p>
     #[serde(rename = "TuningJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4114,7 +7359,7 @@ pub struct TrainingJobDefinition {
     /// <p>The resources, including the ML compute instances and ML storage volumes, to use for model training.</p>
     #[serde(rename = "ResourceConfig")]
     pub resource_config: ResourceConfig,
-    /// <p>Sets a duration for training. Use this parameter to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts.</p>
+    /// <p>Specifies a limit to how long a model training job can run. When the job reaches the time limit, Amazon SageMaker ends the training job. Use this API to cap model training costs.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which delays job termination for 120 seconds. Algorithms can use this 120-second window to save the model artifacts.</p>
     #[serde(rename = "StoppingCondition")]
     pub stopping_condition: StoppingCondition,
     /// <p>The input mode used by the algorithm for the training job. For the input modes that Amazon SageMaker algorithms support, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>.</p> <p>If an algorithm supports the <code>File</code> input mode, Amazon SageMaker downloads the training data from S3 to the provisioned ML storage Volume, and mounts the directory to docker volume for training container. If an algorithm supports the <code>Pipe</code> input mode, Amazon SageMaker streams data directly from S3 to the container.</p>
@@ -4192,7 +7437,7 @@ pub struct TrainingSpecification {
     #[serde(rename = "SupportedTuningJobObjectiveMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_tuning_job_objective_metrics: Option<Vec<HyperParameterTuningJobObjective>>,
-    /// <p>Indicates whether the algorithm supports distributed training. If set to false, buyers can’t request more than one instance during training.</p>
+    /// <p>Indicates whether the algorithm supports distributed training. If set to false, buyers can't request more than one instance during training.</p>
     #[serde(rename = "SupportsDistributedTraining")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supports_distributed_training: Option<bool>,
@@ -4230,7 +7475,7 @@ pub struct TransformInput {
     /// <p>Describes the location of the channel data, which is, the S3 location of the input data that the model can consume.</p>
     #[serde(rename = "DataSource")]
     pub data_source: TransformDataSource,
-    /// <p><p>The method to use to split the transform job&#39;s data files into smaller batches. Splitting is necessary when the total size of each object is too large to fit in a single request. You can also use data splitting to improve performance by processing multiple concurrent mini-batches. The default value for <code>SplitType</code> is <code>None</code>, which indicates that input data files are not split, and request payloads contain the entire contents of an input object. Set the value of this parameter to <code>Line</code> to split records on a newline character boundary. <code>SplitType</code> also supports a number of record-oriented binary data formats.</p> <p>When splitting is enabled, the size of a mini-batch depends on the values of the <code>BatchStrategy</code> and <code>MaxPayloadInMB</code> parameters. When the value of <code>BatchStrategy</code> is <code>MultiRecord</code>, Amazon SageMaker sends the maximum number of records in each request, up to the <code>MaxPayloadInMB</code> limit. If the value of <code>BatchStrategy</code> is <code>SingleRecord</code>, Amazon SageMaker sends individual records in each request.</p> <note> <p>Some data formats represent a record as a binary payload wrapped with extra padding bytes. When splitting is applied to a binary data format, padding is removed if the value of <code>BatchStrategy</code> is set to <code>SingleRecord</code>. Padding is not removed if the value of <code>BatchStrategy</code> is set to <code>MultiRecord</code>.</p> <p>For more information about the RecordIO, see <a href="http://mxnet.io/architecture/note_data_loading.html#data-format">Data Format</a> in the MXNet documentation. For more information about the TFRecord, see <a href="https://www.tensorflow.org/guide/datasets#consuming_tfrecord_data">Consuming TFRecord data</a> in the TensorFlow documentation.</p> </note></p>
+    /// <p><p>The method to use to split the transform job&#39;s data files into smaller batches. Splitting is necessary when the total size of each object is too large to fit in a single request. You can also use data splitting to improve performance by processing multiple concurrent mini-batches. The default value for <code>SplitType</code> is <code>None</code>, which indicates that input data files are not split, and request payloads contain the entire contents of an input object. Set the value of this parameter to <code>Line</code> to split records on a newline character boundary. <code>SplitType</code> also supports a number of record-oriented binary data formats.</p> <p>When splitting is enabled, the size of a mini-batch depends on the values of the <code>BatchStrategy</code> and <code>MaxPayloadInMB</code> parameters. When the value of <code>BatchStrategy</code> is <code>MultiRecord</code>, Amazon SageMaker sends the maximum number of records in each request, up to the <code>MaxPayloadInMB</code> limit. If the value of <code>BatchStrategy</code> is <code>SingleRecord</code>, Amazon SageMaker sends individual records in each request.</p> <note> <p>Some data formats represent a record as a binary payload wrapped with extra padding bytes. When splitting is applied to a binary data format, padding is removed if the value of <code>BatchStrategy</code> is set to <code>SingleRecord</code>. Padding is not removed if the value of <code>BatchStrategy</code> is set to <code>MultiRecord</code>.</p> <p>For more information about <code>RecordIO</code>, see <a href="https://mxnet.apache.org/api/faq/recordio">Create a Dataset Using RecordIO</a> in the MXNet documentation. For more information about <code>TFRecord</code>, see <a href="https://www.tensorflow.org/guide/datasets#consuming_tfrecord_data">Consuming TFRecord data</a> in the TensorFlow documentation.</p> </note></p>
     #[serde(rename = "SplitType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub split_type: Option<String>,
@@ -4307,7 +7552,7 @@ pub struct TransformOutput {
     #[serde(rename = "AssembleWith")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assemble_with: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>// KMS Key ID</p> <p> <code>"1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// KMS Key Alias</p> <p> <code>"alias/ExampleAlias"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key Alias</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <code>CreateTramsformJob</code> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>// KMS Key ID</p> <p> <code>"1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"</code> </p> </li> <li> <p>// KMS Key Alias</p> <p> <code>"alias/ExampleAlias"</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key Alias</p> <p> <code>"arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <a>CreateModel</a> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -4319,13 +7564,13 @@ pub struct TransformOutput {
 /// <p>Describes the resources, including ML instance types and ML instance count, to use for transform job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TransformResources {
-    /// <p>The number of ML compute instances to use in the transform job. For distributed transform, provide a value greater than 1. The default value is <code>1</code>.</p>
+    /// <p>The number of ML compute instances to use in the transform job. For distributed transform jobs, specify a value greater than 1. The default value is <code>1</code>.</p>
     #[serde(rename = "InstanceCount")]
     pub instance_count: i64,
-    /// <p>The ML compute instance type for the transform job. For using built-in algorithms to transform moderately sized datasets, ml.m4.xlarge or <code>ml.m5.large</code> should suffice. There is no default value for <code>InstanceType</code>.</p>
+    /// <p>The ML compute instance type for the transform job. If you are using built-in algorithms to transform moderately sized datasets, we recommend using ml.m4.xlarge or <code>ml.m5.large</code> instance types.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the batch transform job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt model data on the storage volume attached to the ML compute instance(s) that run the batch transform job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_kms_key_id: Option<String>,
@@ -4337,9 +7582,359 @@ pub struct TransformS3DataSource {
     /// <p>If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for batch transform. </p> <p>If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for batch transform. </p> <p>The following values are compatible: <code>ManifestFile</code>, <code>S3Prefix</code> </p> <p>The following value is not compatible: <code>AugmentedManifestFile</code> </p>
     #[serde(rename = "S3DataType")]
     pub s3_data_type: String,
-    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:</p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[</code> </p> <p> <code> {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code> &quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code> &quot;relative/path/custdata-2&quot;,</code> </p> <p> <code> ...</code> </p> <p> <code> ]</code> </p> <p> The preceding JSON matches the following <code>S3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer_bucket/some/prefix/relative/path/custdata-1</code> </p> <p> <code>...</code> </p> <p> The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf.</p> </li> </ul></p>
+    /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:</p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code>&quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code>&quot;relative/path/custdata-2&quot;,</code> </p> <p> <code>...</code> </p> <p> <code>&quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> The preceding JSON matches the following <code>s3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p> The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf.</p> </li> </ul></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+/// <p>A summary of the properties of a trial as returned by the <a>Search</a> API.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Trial {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the trial was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the trial as displayed. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the experiment the trial is part of.</p>
+    #[serde(rename = "ExperimentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_name: Option<String>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>Who last modified the trial.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<TrialSource>,
+    /// <p>The list of tags that are associated with the trial. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+    /// <p>A list of the components associated with the trial. For each component, a summary of the component's properties is included.</p>
+    #[serde(rename = "TrialComponentSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_summaries: Option<Vec<TrialComponentSimpleSummary>>,
+    /// <p>The name of the trial.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
+}
+
+/// <p>A summary of the properties of a trial component as returned by the <a>Search</a> API.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponent {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the component was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the component as displayed. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the component ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input artifacts of the component.</p>
+    #[serde(rename = "InputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the component was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The metrics for the component.</p>
+    #[serde(rename = "Metrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics: Option<Vec<TrialComponentMetricSummary>>,
+    /// <p>The output artifacts of the component.</p>
+    #[serde(rename = "OutputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The hyperparameters of the component.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, TrialComponentParameterValue>>,
+    /// <p>An array of the parents of the component. A parent is a trial the component is associated with and the experiment the trial is part of. A component might not have any parents.</p>
+    #[serde(rename = "Parents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parents: Option<Vec<Parent>>,
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<TrialComponentSource>,
+    /// <p>The source of the trial component.&gt;</p>
+    #[serde(rename = "SourceDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_detail: Option<TrialComponentSourceDetail>,
+    /// <p>When the component started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<TrialComponentStatus>,
+    /// <p>The list of tags that are associated with the component. You can use <a>Search</a> API to search on the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The Amazon Resource Name (ARN) of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+    /// <p>The name of the trial component.</p>
+    #[serde(rename = "TrialComponentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_name: Option<String>,
+}
+
+/// <p>Represents an input or output artifact of a trial component. You specify <code>TrialComponentArtifact</code> as part of the <code>InputArtifacts</code> and <code>OutputArtifacts</code> parameters in the <a>CreateTrialComponent</a> request.</p> <p>Examples of input artifacts are datasets, algorithms, hyperparameters, source code, and instance types. Examples of output artifacts are metrics, snapshots, logs, and images.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrialComponentArtifact {
+    /// <p>The media type of the artifact, which indicates the type of data in the artifact file. The media type consists of a <i>type</i> and a <i>subtype</i> concatenated with a slash (/) character, for example, text/csv, image/jpeg, and s3/uri. The type specifies the category of the media. The subtype specifies the kind of data.</p>
+    #[serde(rename = "MediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_type: Option<String>,
+    /// <p>The location of the artifact.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>A summary of the metrics of a trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponentMetricSummary {
+    /// <p>The average value of the metric.</p>
+    #[serde(rename = "Avg")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avg: Option<f64>,
+    /// <p>The number of samples used to generate the metric.</p>
+    #[serde(rename = "Count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count: Option<i64>,
+    /// <p>The most recent value of the metric.</p>
+    #[serde(rename = "Last")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last: Option<f64>,
+    /// <p>The maximum value of the metric.</p>
+    #[serde(rename = "Max")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max: Option<f64>,
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "MetricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+    /// <p>The minimum value of the metric.</p>
+    #[serde(rename = "Min")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+    /// <p>The standard deviation of the metric.</p>
+    #[serde(rename = "StdDev")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub std_dev: Option<f64>,
+    /// <p>When the metric was last updated.</p>
+    #[serde(rename = "TimeStamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_stamp: Option<f64>,
+}
+
+/// <p>The value of a hyperparameter. Only one of <code>NumberValue</code> or <code>StringValue</code> can be specified.</p> <p>This object is specified in the <a>CreateTrialComponent</a> request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrialComponentParameterValue {
+    /// <p>The numeric value of a numeric hyperparameter. If you specify a value for this parameter, you can't specify the <code>StringValue</code> parameter.</p>
+    #[serde(rename = "NumberValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_value: Option<f64>,
+    /// <p>The string value of a categorical hyperparameter. If you specify a value for this parameter, you can't specify the <code>NumberValue</code> parameter.</p>
+    #[serde(rename = "StringValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_value: Option<String>,
+}
+
+/// <p>A short summary of a trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponentSimpleSummary {
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the component was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+    /// <p>The name of the trial component.</p>
+    #[serde(rename = "TrialComponentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_name: Option<String>,
+    #[serde(rename = "TrialComponentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_source: Option<TrialComponentSource>,
+}
+
+/// <p>The source of the trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponentSource {
+    /// <p>The Amazon Resource Name (ARN) of the source.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+    /// <p>The source job type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+/// <p>Detailed information about the source of a trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponentSourceDetail {
+    /// <p>The Amazon Resource Name (ARN) of the source.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+    #[serde(rename = "TrainingJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_job: Option<TrainingJob>,
+}
+
+/// <p>The status of the trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrialComponentStatus {
+    /// <p>If the component failed, a message describing why.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The status of the trial component.</p>
+    #[serde(rename = "PrimaryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_status: Option<String>,
+}
+
+/// <p>A summary of the properties of a trial component. To get all the properties, call the <a>DescribeTrialComponent</a> API and provide the <code>TrialComponentName</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialComponentSummary {
+    /// <p>Who created the component.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<UserContext>,
+    /// <p>When the component was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the component as displayed. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the component ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Who last modified the component.</p>
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<UserContext>,
+    /// <p>When the component was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>When the component started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>The status of the component. States include:</p> <ul> <li> <p>InProgress</p> </li> <li> <p>Completed</p> </li> <li> <p>Failed</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<TrialComponentStatus>,
+    /// <p>The ARN of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+    /// <p>The name of the trial component.</p>
+    #[serde(rename = "TrialComponentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_name: Option<String>,
+    #[serde(rename = "TrialComponentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_source: Option<TrialComponentSource>,
+}
+
+/// <p>The source of the trial.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialSource {
+    /// <p>The Amazon Resource Name (ARN) of the source.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+    /// <p>The source job type.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+/// <p>A summary of the properties of a trial. To get the complete set of properties, call the <a>DescribeTrial</a> API and provide the <code>TrialName</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TrialSummary {
+    /// <p>When the trial was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The name of the trial as displayed. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the trial was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+    /// <p>The name of the trial.</p>
+    #[serde(rename = "TrialName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_name: Option<String>,
+    #[serde(rename = "TrialSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_source: Option<TrialSource>,
+}
+
+/// <p>The job completion criteria.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TuningJobCompletionCriteria {
+    /// <p>The objective metric's value.</p>
+    #[serde(rename = "TargetObjectiveMetricValue")]
+    pub target_objective_metric_value: f32,
 }
 
 /// <p>Represents an amount of money in United States dollars/</p>
@@ -4362,7 +7957,7 @@ pub struct USD {
 /// <p>Provided configuration information for the worker UI for a labeling job. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UiConfig {
-    /// <p>The Amazon S3 bucket location of the UI template. For more information about the contents of a UI template, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step2.html"> Creating Your Custom Labeling Task Template</a>.</p>
+    /// <p>The Amazon S3 bucket location of the UI template. For more information about the contents of a UI template, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-custom-templates-step2.html"> Creating Your Custom Labeling Task Template</a>.</p>
     #[serde(rename = "UiTemplateS3Uri")]
     pub ui_template_s3_uri: String,
 }
@@ -4373,6 +7968,20 @@ pub struct UiTemplate {
     /// <p>The content of the Liquid template for the worker user interface.</p>
     #[serde(rename = "Content")]
     pub content: String,
+}
+
+/// <p>Container for user interface template information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UiTemplateInfo {
+    /// <p>The SHA 256 hash that you used to create the request signature.</p>
+    #[serde(rename = "ContentSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_sha_256: Option<String>,
+    /// <p>The URL for the user interface template.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4392,6 +8001,26 @@ pub struct UpdateCodeRepositoryOutput {
     /// <p>The ARN of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
     pub code_repository_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateDomainRequest {
+    /// <p>A collection of settings.</p>
+    #[serde(rename = "DefaultUserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_user_settings: Option<UserSettings>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDomainResponse {
+    /// <p>The domain Amazon Resource Name (ARN).</p>
+    #[serde(rename = "DomainArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4431,16 +8060,58 @@ pub struct UpdateEndpointWeightsAndCapacitiesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateExperimentRequest {
+    /// <p>The description of the experiment.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the experiment as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>ExperimentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the experiment to update.</p>
+    #[serde(rename = "ExperimentName")]
+    pub experiment_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateExperimentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the experiment.</p>
+    #[serde(rename = "ExperimentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub experiment_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMonitoringScheduleRequest {
+    /// <p>The configuration object that specifies the monitoring schedule and defines the monitoring job.</p>
+    #[serde(rename = "MonitoringScheduleConfig")]
+    pub monitoring_schedule_config: MonitoringScheduleConfig,
+    /// <p>The name of the monitoring schedule. The name must be unique within an AWS Region within an AWS account.</p>
+    #[serde(rename = "MonitoringScheduleName")]
+    pub monitoring_schedule_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMonitoringScheduleResponse {
+    /// <p>The Amazon Resource Name (ARN) of the monitoring schedule.</p>
+    #[serde(rename = "MonitoringScheduleArn")]
+    pub monitoring_schedule_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNotebookInstanceInput {
-    /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
+    /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accelerator_types: Option<Vec<String>>,
-    /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_code_repositories: Option<Vec<String>>,
-    /// <p>The Git repository to associate with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
+    /// <p>The Git repository to associate with the notebook instance as its default code repository. This can be either the name of a Git repository stored as a resource in your account, or the URL of a Git repository in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. When you open a notebook instance, it opens in the directory that contains this repository. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "DefaultCodeRepository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_code_repository: Option<String>,
@@ -4479,7 +8150,7 @@ pub struct UpdateNotebookInstanceInput {
     #[serde(rename = "RootAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_access: Option<String>,
-    /// <p>The size, in GB, of the ML storage volume to attach to the notebook instance. The default value is 5 GB.</p>
+    /// <p>The size, in GB, of the ML storage volume to attach to the notebook instance. The default value is 5 GB. ML storage volumes are encrypted, so Amazon SageMaker can't determine the amount of available free space on the volume. Because of this, you can increase the volume size when you update a notebook instance, but you can't decrease the volume size. If you want to decrease the size of the ML storage volume in use, create a new notebook instance with the desired size.</p>
     #[serde(rename = "VolumeSizeInGB")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_size_in_gb: Option<i64>,
@@ -4490,11 +8161,11 @@ pub struct UpdateNotebookInstanceLifecycleConfigInput {
     /// <p>The name of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
     pub notebook_instance_lifecycle_config_name: String,
-    /// <p>The shell script that runs only once, when you create a notebook instance</p>
+    /// <p>The shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.</p>
     #[serde(rename = "OnCreate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_create: Option<Vec<NotebookInstanceLifecycleHook>>,
-    /// <p>The shell script that runs every time you start a notebook instance, including when you create the notebook instance.</p>
+    /// <p>The shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.</p>
     #[serde(rename = "OnStart")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
@@ -4507,6 +8178,105 @@ pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNotebookInstanceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateTrialComponentRequest {
+    /// <p>The name of the component as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialComponentName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>When the component ended.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Replaces all of the component's input artifacts with the specified artifacts.</p>
+    #[serde(rename = "InputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The input artifacts to remove from the component.</p>
+    #[serde(rename = "InputArtifactsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts_to_remove: Option<Vec<String>>,
+    /// <p>Replaces all of the component's output artifacts with the specified artifacts.</p>
+    #[serde(rename = "OutputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts: Option<::std::collections::HashMap<String, TrialComponentArtifact>>,
+    /// <p>The output artifacts to remove from the component.</p>
+    #[serde(rename = "OutputArtifactsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts_to_remove: Option<Vec<String>>,
+    /// <p>Replaces all of the component's hyperparameters with the specified hyperparameters.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, TrialComponentParameterValue>>,
+    /// <p>The hyperparameters to remove from the component.</p>
+    #[serde(rename = "ParametersToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters_to_remove: Option<Vec<String>>,
+    /// <p>When the component started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The new status of the component.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<TrialComponentStatus>,
+    /// <p>The name of the component to update.</p>
+    #[serde(rename = "TrialComponentName")]
+    pub trial_component_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateTrialComponentResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial component.</p>
+    #[serde(rename = "TrialComponentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_component_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateTrialRequest {
+    /// <p>The name of the trial as displayed. The name doesn't need to be unique. If <code>DisplayName</code> isn't specified, <code>TrialName</code> is displayed.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the trial to update.</p>
+    #[serde(rename = "TrialName")]
+    pub trial_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateTrialResponse {
+    /// <p>The Amazon Resource Name (ARN) of the trial.</p>
+    #[serde(rename = "TrialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trial_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateUserProfileRequest {
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    pub domain_id: String,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    pub user_profile_name: String,
+    /// <p>A collection of settings.</p>
+    #[serde(rename = "UserSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_settings: Option<UserSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserProfileResponse {
+    /// <p>The user profile Amazon Resource Name (ARN).</p>
+    #[serde(rename = "UserProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_arn: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateWorkteamRequest {
@@ -4533,6 +8303,79 @@ pub struct UpdateWorkteamResponse {
     /// <p>A <code>Workteam</code> object that describes the updated work team.</p>
     #[serde(rename = "Workteam")]
     pub workteam: Workteam,
+}
+
+/// <p>Information about the user who created or modified an experiment, trial, or trial component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UserContext {
+    /// <p>The domain associated with the user.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the user's profile.</p>
+    #[serde(rename = "UserProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_arn: Option<String>,
+    /// <p>The name of the user's profile.</p>
+    #[serde(rename = "UserProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name: Option<String>,
+}
+
+/// <p>The user profile details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UserProfileDetails {
+    /// <p>The creation time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The domain ID.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>The last modified time.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The user profile name.</p>
+    #[serde(rename = "UserProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_profile_name: Option<String>,
+}
+
+/// <p>A collection of settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UserSettings {
+    /// <p>The execution role for the user.</p>
+    #[serde(rename = "ExecutionRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_role: Option<String>,
+    /// <p>The Jupyter server's app settings.</p>
+    #[serde(rename = "JupyterServerAppSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jupyter_server_app_settings: Option<JupyterServerAppSettings>,
+    /// <p>The kernel gateway app settings.</p>
+    #[serde(rename = "KernelGatewayAppSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kernel_gateway_app_settings: Option<KernelGatewayAppSettings>,
+    /// <p>The security groups.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The sharing settings.</p>
+    #[serde(rename = "SharingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sharing_settings: Option<SharingSettings>,
+    /// <p>The TensorBoard app settings.</p>
+    #[serde(rename = "TensorBoardAppSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tensor_board_app_settings: Option<TensorBoardAppSettings>,
 }
 
 /// <p>Specifies a VPC that your training jobs and hosted models have access to. Control access to and from your training and model containers by configuring the VPC. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html">Protect Endpoints by Using an Amazon Virtual Private Cloud</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html">Protect Training Jobs by Using an Amazon Virtual Private Cloud</a>. </p>
@@ -4564,6 +8407,7 @@ pub struct Workteam {
     /// <p>The Amazon Cognito user groups that make up the work team.</p>
     #[serde(rename = "MemberDefinitions")]
     pub member_definitions: Vec<MemberDefinition>,
+    /// <p>Configures SNS notifications of available or expiring work items for work teams.</p>
     #[serde(rename = "NotificationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_configuration: Option<NotificationConfiguration>,
@@ -4608,6 +8452,49 @@ impl Error for AddTagsError {
         match *self {}
     }
 }
+/// Errors returned by AssociateTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum AssociateTrialComponentError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociateTrialComponentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        AssociateTrialComponentError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(AssociateTrialComponentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
+            AssociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateAlgorithm
 #[derive(Debug, PartialEq)]
 pub enum CreateAlgorithmError {}
@@ -4631,6 +8518,86 @@ impl fmt::Display for CreateAlgorithmError {
 impl Error for CreateAlgorithmError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by CreateApp
+#[derive(Debug, PartialEq)]
+pub enum CreateAppError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateAppError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateAppError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateAppError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateAppError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateAppError::ResourceInUse(ref cause) => cause,
+            CreateAppError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateAutoMLJob
+#[derive(Debug, PartialEq)]
+pub enum CreateAutoMLJobError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateAutoMLJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAutoMLJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateAutoMLJobError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateAutoMLJobError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateAutoMLJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateAutoMLJobError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateAutoMLJobError::ResourceInUse(ref cause) => cause,
+            CreateAutoMLJobError::ResourceLimitExceeded(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by CreateCodeRepository
@@ -4696,6 +8663,45 @@ impl Error for CreateCompilationJobError {
         match *self {
             CreateCompilationJobError::ResourceInUse(ref cause) => cause,
             CreateCompilationJobError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDomain
+#[derive(Debug, PartialEq)]
+pub enum CreateDomainError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateDomainError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateDomainError::ResourceLimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDomainError::ResourceInUse(ref cause) => cause,
+            CreateDomainError::ResourceLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -4766,6 +8772,123 @@ impl Error for CreateEndpointConfigError {
     fn description(&self) -> &str {
         match *self {
             CreateEndpointConfigError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateExperiment
+#[derive(Debug, PartialEq)]
+pub enum CreateExperimentError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateExperimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateExperimentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateExperimentError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateExperimentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateExperimentError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateExperimentError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateFlowDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateFlowDefinitionError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateFlowDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFlowDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateFlowDefinitionError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateFlowDefinitionError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateFlowDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateFlowDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateFlowDefinitionError::ResourceInUse(ref cause) => cause,
+            CreateFlowDefinitionError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateHumanTaskUi
+#[derive(Debug, PartialEq)]
+pub enum CreateHumanTaskUiError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateHumanTaskUiError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHumanTaskUiError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateHumanTaskUiError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateHumanTaskUiError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateHumanTaskUiError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateHumanTaskUiError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateHumanTaskUiError::ResourceInUse(ref cause) => cause,
+            CreateHumanTaskUiError::ResourceLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -4913,6 +9036,49 @@ impl Error for CreateModelPackageError {
         match *self {}
     }
 }
+/// Errors returned by CreateMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum CreateMonitoringScheduleError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateMonitoringScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateMonitoringScheduleError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateMonitoringScheduleError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateMonitoringScheduleError::ResourceInUse(ref cause) => cause,
+            CreateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateNotebookInstanceError {
@@ -4985,6 +9151,31 @@ impl Error for CreateNotebookInstanceLifecycleConfigError {
         }
     }
 }
+/// Errors returned by CreatePresignedDomainUrl
+#[derive(Debug, PartialEq)]
+pub enum CreatePresignedDomainUrlError {}
+
+impl CreatePresignedDomainUrlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresignedDomainUrlError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreatePresignedDomainUrlError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreatePresignedDomainUrlError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by CreatePresignedNotebookInstanceUrl
 #[derive(Debug, PartialEq)]
 pub enum CreatePresignedNotebookInstanceUrlError {}
@@ -5012,6 +9203,55 @@ impl Error for CreatePresignedNotebookInstanceUrlError {
         match *self {}
     }
 }
+/// Errors returned by CreateProcessingJob
+#[derive(Debug, PartialEq)]
+pub enum CreateProcessingJobError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateProcessingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProcessingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateProcessingJobError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateProcessingJobError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreateProcessingJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateProcessingJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateProcessingJobError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateProcessingJobError::ResourceInUse(ref cause) => cause,
+            CreateProcessingJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateProcessingJobError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateTrainingJob
 #[derive(Debug, PartialEq)]
 pub enum CreateTrainingJobError {
@@ -5019,6 +9259,8 @@ pub enum CreateTrainingJobError {
     ResourceInUse(String),
     /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
     ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
 }
 
 impl CreateTrainingJobError {
@@ -5032,6 +9274,9 @@ impl CreateTrainingJobError {
                     return RusotoError::Service(CreateTrainingJobError::ResourceLimitExceeded(
                         err.msg,
                     ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreateTrainingJobError::ResourceNotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5050,6 +9295,7 @@ impl Error for CreateTrainingJobError {
         match *self {
             CreateTrainingJobError::ResourceInUse(ref cause) => cause,
             CreateTrainingJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateTrainingJobError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -5060,6 +9306,8 @@ pub enum CreateTransformJobError {
     ResourceInUse(String),
     /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
     ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
 }
 
 impl CreateTransformJobError {
@@ -5073,6 +9321,9 @@ impl CreateTransformJobError {
                     return RusotoError::Service(CreateTransformJobError::ResourceLimitExceeded(
                         err.msg,
                     ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreateTransformJobError::ResourceNotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -5091,6 +9342,122 @@ impl Error for CreateTransformJobError {
         match *self {
             CreateTransformJobError::ResourceInUse(ref cause) => cause,
             CreateTransformJobError::ResourceLimitExceeded(ref cause) => cause,
+            CreateTransformJobError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateTrial
+#[derive(Debug, PartialEq)]
+pub enum CreateTrialError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateTrialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrialError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateTrialError::ResourceLimitExceeded(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(CreateTrialError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateTrialError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrialError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTrialError::ResourceLimitExceeded(ref cause) => cause,
+            CreateTrialError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum CreateTrialComponentError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateTrialComponentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateTrialComponentError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTrialComponentError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateUserProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateUserProfileError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+}
+
+impl CreateUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(CreateUserProfileError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(CreateUserProfileError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateUserProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateUserProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateUserProfileError::ResourceInUse(ref cause) => cause,
+            CreateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
         }
     }
 }
@@ -5160,6 +9527,45 @@ impl Error for DeleteAlgorithmError {
         match *self {}
     }
 }
+/// Errors returned by DeleteApp
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteAppError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteAppError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteAppError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAppError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAppError::ResourceInUse(ref cause) => cause,
+            DeleteAppError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteCodeRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteCodeRepositoryError {}
@@ -5183,6 +9589,45 @@ impl fmt::Display for DeleteCodeRepositoryError {
 impl Error for DeleteCodeRepositoryError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DeleteDomain
+#[derive(Debug, PartialEq)]
+pub enum DeleteDomainError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteDomainError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteDomainError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDomainError::ResourceInUse(ref cause) => cause,
+            DeleteDomainError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DeleteEndpoint
@@ -5235,6 +9680,74 @@ impl Error for DeleteEndpointConfigError {
         match *self {}
     }
 }
+/// Errors returned by DeleteExperiment
+#[derive(Debug, PartialEq)]
+pub enum DeleteExperimentError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteExperimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteExperimentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteExperimentError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteExperimentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteExperimentError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteExperimentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteFlowDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteFlowDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteFlowDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFlowDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteFlowDefinitionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteFlowDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFlowDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {}
@@ -5283,6 +9796,41 @@ impl fmt::Display for DeleteModelPackageError {
 impl Error for DeleteModelPackageError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DeleteMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum DeleteMonitoringScheduleError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteMonitoringScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteMonitoringScheduleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DeleteNotebookInstance
@@ -5362,6 +9910,113 @@ impl Error for DeleteTagsError {
         match *self {}
     }
 }
+/// Errors returned by DeleteTrial
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrialError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteTrialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrialError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteTrialError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteTrialError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrialError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTrialError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum DeleteTrialComponentError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteTrialComponentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteTrialComponentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTrialComponentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteUserProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteUserProfileError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(DeleteUserProfileError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DeleteUserProfileError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteUserProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteUserProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteUserProfileError::ResourceInUse(ref cause) => cause,
+            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkteamError {
@@ -5420,6 +10075,72 @@ impl fmt::Display for DescribeAlgorithmError {
 impl Error for DescribeAlgorithmError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DescribeApp
+#[derive(Debug, PartialEq)]
+pub enum DescribeAppError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeAppError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAppError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAppError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAppError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAutoMLJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeAutoMLJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeAutoMLJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAutoMLJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeAutoMLJobError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeAutoMLJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAutoMLJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAutoMLJobError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DescribeCodeRepository
@@ -5482,6 +10203,39 @@ impl Error for DescribeCompilationJobError {
         }
     }
 }
+/// Errors returned by DescribeDomain
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeDomainError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDomainError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {}
@@ -5530,6 +10284,109 @@ impl fmt::Display for DescribeEndpointConfigError {
 impl Error for DescribeEndpointConfigError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DescribeExperiment
+#[derive(Debug, PartialEq)]
+pub enum DescribeExperimentError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeExperimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExperimentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeExperimentError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeExperimentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeExperimentError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeExperimentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeFlowDefinition
+#[derive(Debug, PartialEq)]
+pub enum DescribeFlowDefinitionError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeFlowDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFlowDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeFlowDefinitionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeFlowDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeFlowDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeFlowDefinitionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeHumanTaskUi
+#[derive(Debug, PartialEq)]
+pub enum DescribeHumanTaskUiError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeHumanTaskUiError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHumanTaskUiError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeHumanTaskUiError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeHumanTaskUiError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeHumanTaskUiError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeHumanTaskUiError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DescribeHyperParameterTuningJob
@@ -5654,6 +10511,43 @@ impl Error for DescribeModelPackageError {
         match *self {}
     }
 }
+/// Errors returned by DescribeMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum DescribeMonitoringScheduleError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeMonitoringScheduleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeMonitoringScheduleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotebookInstanceError {}
@@ -5704,6 +10598,41 @@ impl fmt::Display for DescribeNotebookInstanceLifecycleConfigError {
 impl Error for DescribeNotebookInstanceLifecycleConfigError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DescribeProcessingJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeProcessingJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeProcessingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProcessingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeProcessingJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeProcessingJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeProcessingJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeProcessingJobError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DescribeSubscribedWorkteam
@@ -5803,6 +10732,109 @@ impl Error for DescribeTransformJobError {
         }
     }
 }
+/// Errors returned by DescribeTrial
+#[derive(Debug, PartialEq)]
+pub enum DescribeTrialError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeTrialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrialError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeTrialError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeTrialError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTrialError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeTrialError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum DescribeTrialComponentError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeTrialComponentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeTrialComponentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeTrialComponentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeUserProfile
+#[derive(Debug, PartialEq)]
+pub enum DescribeUserProfileError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DescribeUserProfileError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeUserProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeUserProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeUserProfileError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeWorkteam
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkteamError {}
@@ -5826,6 +10858,43 @@ impl fmt::Display for DescribeWorkteamError {
 impl Error for DescribeWorkteamError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by DisassociateTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum DisassociateTrialComponentError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DisassociateTrialComponentError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(DisassociateTrialComponentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateTrialComponentError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by GetSearchSuggestions
@@ -5878,6 +10947,93 @@ impl Error for ListAlgorithmsError {
         match *self {}
     }
 }
+/// Errors returned by ListApps
+#[derive(Debug, PartialEq)]
+pub enum ListAppsError {}
+
+impl ListAppsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListAppsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAppsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListAutoMLJobs
+#[derive(Debug, PartialEq)]
+pub enum ListAutoMLJobsError {}
+
+impl ListAutoMLJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAutoMLJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListAutoMLJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAutoMLJobsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListCandidatesForAutoMLJob
+#[derive(Debug, PartialEq)]
+pub enum ListCandidatesForAutoMLJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListCandidatesForAutoMLJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCandidatesForAutoMLJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(ListCandidatesForAutoMLJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListCandidatesForAutoMLJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCandidatesForAutoMLJobError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCandidatesForAutoMLJobError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListCodeRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListCodeRepositoriesError {}
@@ -5928,6 +11084,31 @@ impl Error for ListCompilationJobsError {
         match *self {}
     }
 }
+/// Errors returned by ListDomains
+#[derive(Debug, PartialEq)]
+pub enum ListDomainsError {}
+
+impl ListDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListDomainsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDomainsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ListEndpointConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointConfigsError {}
@@ -5974,6 +11155,81 @@ impl fmt::Display for ListEndpointsError {
     }
 }
 impl Error for ListEndpointsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListExperiments
+#[derive(Debug, PartialEq)]
+pub enum ListExperimentsError {}
+
+impl ListExperimentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListExperimentsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListExperimentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListExperimentsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListFlowDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListFlowDefinitionsError {}
+
+impl ListFlowDefinitionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFlowDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListFlowDefinitionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListFlowDefinitionsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListHumanTaskUis
+#[derive(Debug, PartialEq)]
+pub enum ListHumanTaskUisError {}
+
+impl ListHumanTaskUisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHumanTaskUisError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListHumanTaskUisError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListHumanTaskUisError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -6117,6 +11373,56 @@ impl Error for ListModelsError {
         match *self {}
     }
 }
+/// Errors returned by ListMonitoringExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListMonitoringExecutionsError {}
+
+impl ListMonitoringExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMonitoringExecutionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListMonitoringExecutionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListMonitoringExecutionsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListMonitoringSchedules
+#[derive(Debug, PartialEq)]
+pub enum ListMonitoringSchedulesError {}
+
+impl ListMonitoringSchedulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMonitoringSchedulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListMonitoringSchedulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListMonitoringSchedulesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ListNotebookInstanceLifecycleConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListNotebookInstanceLifecycleConfigsError {}
@@ -6165,6 +11471,31 @@ impl fmt::Display for ListNotebookInstancesError {
     }
 }
 impl Error for ListNotebookInstancesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListProcessingJobs
+#[derive(Debug, PartialEq)]
+pub enum ListProcessingJobsError {}
+
+impl ListProcessingJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProcessingJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListProcessingJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListProcessingJobsError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -6306,6 +11637,81 @@ impl Error for ListTransformJobsError {
         match *self {}
     }
 }
+/// Errors returned by ListTrialComponents
+#[derive(Debug, PartialEq)]
+pub enum ListTrialComponentsError {}
+
+impl ListTrialComponentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialComponentsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTrialComponentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTrialComponentsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListTrials
+#[derive(Debug, PartialEq)]
+pub enum ListTrialsError {}
+
+impl ListTrialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrialsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTrialsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTrialsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListUserProfiles
+#[derive(Debug, PartialEq)]
+pub enum ListUserProfilesError {}
+
+impl ListUserProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserProfilesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListUserProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListUserProfilesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ListWorkteams
 #[derive(Debug, PartialEq)]
 pub enum ListWorkteamsError {}
@@ -6381,6 +11787,41 @@ impl Error for SearchError {
         match *self {}
     }
 }
+/// Errors returned by StartMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum StartMonitoringScheduleError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StartMonitoringScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StartMonitoringScheduleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            StartMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StartNotebookInstanceError {
@@ -6413,6 +11854,39 @@ impl Error for StartNotebookInstanceError {
     fn description(&self) -> &str {
         match *self {
             StartNotebookInstanceError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopAutoMLJob
+#[derive(Debug, PartialEq)]
+pub enum StopAutoMLJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopAutoMLJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAutoMLJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StopAutoMLJobError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopAutoMLJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopAutoMLJobError {
+    fn description(&self) -> &str {
+        match *self {
+            StopAutoMLJobError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -6519,6 +11993,41 @@ impl Error for StopLabelingJobError {
         }
     }
 }
+/// Errors returned by StopMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum StopMonitoringScheduleError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopMonitoringScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StopMonitoringScheduleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            StopMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StopNotebookInstance
 #[derive(Debug, PartialEq)]
 pub enum StopNotebookInstanceError {}
@@ -6542,6 +12051,39 @@ impl fmt::Display for StopNotebookInstanceError {
 impl Error for StopNotebookInstanceError {
     fn description(&self) -> &str {
         match *self {}
+    }
+}
+/// Errors returned by StopProcessingJob
+#[derive(Debug, PartialEq)]
+pub enum StopProcessingJobError {
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopProcessingJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopProcessingJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFound" => {
+                    return RusotoError::Service(StopProcessingJobError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopProcessingJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopProcessingJobError {
+    fn description(&self) -> &str {
+        match *self {
+            StopProcessingJobError::ResourceNotFound(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by StopTrainingJob
@@ -6635,6 +12177,51 @@ impl Error for UpdateCodeRepositoryError {
         match *self {}
     }
 }
+/// Errors returned by UpdateDomain
+#[derive(Debug, PartialEq)]
+pub enum UpdateDomainError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(UpdateDomainError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(UpdateDomainError::ResourceLimitExceeded(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateDomainError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDomainError::ResourceInUse(ref cause) => cause,
+            UpdateDomainError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateDomainError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum UpdateEndpointError {
@@ -6704,6 +12291,88 @@ impl Error for UpdateEndpointWeightsAndCapacitiesError {
     fn description(&self) -> &str {
         match *self {
             UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateExperiment
+#[derive(Debug, PartialEq)]
+pub enum UpdateExperimentError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateExperimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateExperimentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateExperimentError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateExperimentError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateExperimentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateExperimentError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateExperimentError::Conflict(ref cause) => cause,
+            UpdateExperimentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateMonitoringSchedule
+#[derive(Debug, PartialEq)]
+pub enum UpdateMonitoringScheduleError {
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateMonitoringScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMonitoringScheduleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(
+                        UpdateMonitoringScheduleError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateMonitoringScheduleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMonitoringScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMonitoringScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMonitoringScheduleError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateMonitoringScheduleError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -6779,6 +12448,133 @@ impl Error for UpdateNotebookInstanceLifecycleConfigError {
         }
     }
 }
+/// Errors returned by UpdateTrial
+#[derive(Debug, PartialEq)]
+pub enum UpdateTrialError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateTrialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrialError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateTrialError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateTrialError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateTrialError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTrialError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTrialError::Conflict(ref cause) => cause,
+            UpdateTrialError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateTrialComponent
+#[derive(Debug, PartialEq)]
+pub enum UpdateTrialComponentError {
+    /// <p>There was a conflict when you attempted to modify an experiment, trial, or trial component.</p>
+    Conflict(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateTrialComponentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTrialComponentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateTrialComponentError::Conflict(err.msg))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateTrialComponentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateTrialComponentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTrialComponentError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTrialComponentError::Conflict(ref cause) => cause,
+            UpdateTrialComponentError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateUserProfile
+#[derive(Debug, PartialEq)]
+pub enum UpdateUserProfileError {
+    /// <p>Resource being accessed is in use.</p>
+    ResourceInUse(String),
+    /// <p> You have exceeded an Amazon SageMaker resource limit. For example, you might have too many training jobs created. </p>
+    ResourceLimitExceeded(String),
+    /// <p>Resource being access is not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceInUse" => {
+                    return RusotoError::Service(UpdateUserProfileError::ResourceInUse(err.msg))
+                }
+                "ResourceLimitExceeded" => {
+                    return RusotoError::Service(UpdateUserProfileError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFound" => {
+                    return RusotoError::Service(UpdateUserProfileError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateUserProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateUserProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateUserProfileError::ResourceInUse(ref cause) => cause,
+            UpdateUserProfileError::ResourceLimitExceeded(ref cause) => cause,
+            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateWorkteam
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkteamError {
@@ -6823,13 +12619,31 @@ pub trait SageMaker {
         input: AddTagsInput,
     ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
 
+    /// <p>Associates a trial component with a trial. A trial component can be associated with multiple trials. To disassociate a trial component from a trial, call the <a>DisassociateTrialComponent</a> API.</p>
+    async fn associate_trial_component(
+        &self,
+        input: AssociateTrialComponentRequest,
+    ) -> Result<AssociateTrialComponentResponse, RusotoError<AssociateTrialComponentError>>;
+
     /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
     async fn create_algorithm(
         &self,
         input: CreateAlgorithmInput,
     ) -> Result<CreateAlgorithmOutput, RusotoError<CreateAlgorithmError>>;
 
-    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
+    /// <p>Creates a running App for the specified UserProfile. Supported Apps are JupyterServer and KernelGateway. This operation is automatically invoked by Amazon SageMaker Amazon SageMaker Studio (Studio) upon access to the associated Studio Domain, and when new kernel configurations are selected by the user. A user may have multiple Apps active simultaneously. Apps will automatically terminate and be deleted when stopped from within Studio, or when the DeleteApp API is manually called. UserProfiles are limited to 5 concurrently running Apps at a time.</p>
+    async fn create_app(
+        &self,
+        input: CreateAppRequest,
+    ) -> Result<CreateAppResponse, RusotoError<CreateAppError>>;
+
+    /// <p>Creates an AutoPilot job.</p>
+    async fn create_auto_ml_job(
+        &self,
+        input: CreateAutoMLJobRequest,
+    ) -> Result<CreateAutoMLJobResponse, RusotoError<CreateAutoMLJobError>>;
+
+    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
     async fn create_code_repository(
         &self,
         input: CreateCodeRepositoryInput,
@@ -6841,7 +12655,13 @@ pub trait SageMaker {
         input: CreateCompilationJobRequest,
     ) -> Result<CreateCompilationJobResponse, RusotoError<CreateCompilationJobError>>;
 
-    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    /// <p>Creates a Domain for Amazon SageMaker Amazon SageMaker Studio (Studio), which can be accessed by end-users in a web browser. A Domain has an associated directory, list of authorized users, and a variety of security, application, policies, and Amazon Virtual Private Cloud configurations. An AWS account is limited to one Domain, per region. Users within a domain can share notebook files and other artifacts with each other. When a Domain is created, an Amazon Elastic File System (EFS) is also created for use by all of the users within the Domain. Each user receives a private home directory within the EFS for notebooks, Git repositories, and data files. </p>
+    async fn create_domain(
+        &self,
+        input: CreateDomainRequest,
+    ) -> Result<CreateDomainResponse, RusotoError<CreateDomainError>>;
+
+    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
     async fn create_endpoint(
         &self,
         input: CreateEndpointInput,
@@ -6853,6 +12673,24 @@ pub trait SageMaker {
         input: CreateEndpointConfigInput,
     ) -> Result<CreateEndpointConfigOutput, RusotoError<CreateEndpointConfigError>>;
 
+    /// <p>Creates an Amazon SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
+    async fn create_experiment(
+        &self,
+        input: CreateExperimentRequest,
+    ) -> Result<CreateExperimentResponse, RusotoError<CreateExperimentError>>;
+
+    /// <p>Creates a flow definition.</p>
+    async fn create_flow_definition(
+        &self,
+        input: CreateFlowDefinitionRequest,
+    ) -> Result<CreateFlowDefinitionResponse, RusotoError<CreateFlowDefinitionError>>;
+
+    /// <p>Defines the settings you will use for the human review workflow user interface. Reviewers will see a three-panel interface with an instruction area, the item to review, and an input area.</p>
+    async fn create_human_task_ui(
+        &self,
+        input: CreateHumanTaskUiRequest,
+    ) -> Result<CreateHumanTaskUiResponse, RusotoError<CreateHumanTaskUiError>>;
+
     /// <p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
     async fn create_hyper_parameter_tuning_job(
         &self,
@@ -6862,7 +12700,7 @@ pub trait SageMaker {
         RusotoError<CreateHyperParameterTuningJobError>,
     >;
 
-    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
+    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
     async fn create_labeling_job(
         &self,
         input: CreateLabelingJobRequest,
@@ -6880,7 +12718,13 @@ pub trait SageMaker {
         input: CreateModelPackageInput,
     ) -> Result<CreateModelPackageOutput, RusotoError<CreateModelPackageError>>;
 
-    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a schedule that regularly starts Amazon SageMaker Processing Jobs to monitor the data captured for an Amazon SageMaker Endoint.</p>
+    async fn create_monitoring_schedule(
+        &self,
+        input: CreateMonitoringScheduleRequest,
+    ) -> Result<CreateMonitoringScheduleResponse, RusotoError<CreateMonitoringScheduleError>>;
+
+    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN). You can't change the name of a notebook instance after you create it.</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_notebook_instance(
         &self,
         input: CreateNotebookInstanceInput,
@@ -6895,7 +12739,13 @@ pub trait SageMaker {
         RusotoError<CreateNotebookInstanceLifecycleConfigError>,
     >;
 
-    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>You can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. To restrict access, attach an IAM policy that denies access to this API unless the call comes from an IP address in the specified list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
+    /// <p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Amazon SageMaker Studio (Studio), and granted access to all of the Apps and files associated with that Amazon Elastic File System (EFS). This operation can only be called when AuthMode equals IAM. </p>
+    async fn create_presigned_domain_url(
+        &self,
+        input: CreatePresignedDomainUrlRequest,
+    ) -> Result<CreatePresignedDomainUrlResponse, RusotoError<CreatePresignedDomainUrlError>>;
+
+    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>IAM authorization policies for this API are also enforced for every HTTP request and WebSocket frame that attempts to connect to the notebook instance.For example, you can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html#nbi-ip-filter">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
     async fn create_presigned_notebook_instance_url(
         &self,
         input: CreatePresignedNotebookInstanceUrlInput,
@@ -6904,17 +12754,41 @@ pub trait SageMaker {
         RusotoError<CreatePresignedNotebookInstanceUrlError>,
     >;
 
-    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a processing job.</p>
+    async fn create_processing_job(
+        &self,
+        input: CreateProcessingJobRequest,
+    ) -> Result<CreateProcessingJobResponse, RusotoError<CreateProcessingJobError>>;
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_training_job(
         &self,
         input: CreateTrainingJobRequest,
     ) -> Result<CreateTrainingJobResponse, RusotoError<CreateTrainingJobError>>;
 
-    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
+    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p>For more information about how batch transformation works, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">Batch Transform</a>.</p>
     async fn create_transform_job(
         &self,
         input: CreateTransformJobRequest,
     ) -> Result<CreateTransformJobResponse, RusotoError<CreateTransformJobError>>;
+
+    /// <p>Creates an Amazon SageMaker <i>trial</i>. A trial is a set of steps called <i>trial components</i> that produce a machine learning model. A trial is part of a single Amazon SageMaker <i>experiment</i>.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial and then use the <a>Search</a> API to search for the tags.</p> <p>To get a list of all your trials, call the <a>ListTrials</a> API. To view a trial's properties, call the <a>DescribeTrial</a> API. To create a trial component, call the <a>CreateTrialComponent</a> API.</p>
+    async fn create_trial(
+        &self,
+        input: CreateTrialRequest,
+    ) -> Result<CreateTrialResponse, RusotoError<CreateTrialError>>;
+
+    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p>You can create a trial component through a direct call to the <code>CreateTrialComponent</code> API. However, you can&#39;t specify the <code>Source</code> property of the component in the request, therefore, the component isn&#39;t associated with an Amazon SageMaker job. You must use Amazon SageMaker Studio, the Amazon SageMaker Python SDK, or the AWS SDK for Python (Boto) to create the component with a valid <code>Source</code> property.</p> </note></p>
+    async fn create_trial_component(
+        &self,
+        input: CreateTrialComponentRequest,
+    ) -> Result<CreateTrialComponentResponse, RusotoError<CreateTrialComponentError>>;
+
+    /// <p>Creates a new user profile. A user profile represents a single user within a Domain, and is the main way to reference a "person" for the purposes of sharing, reporting and other user-oriented features. This entity is created during on-boarding. If an administrator invites a person by email or imports them from SSO, a new UserProfile is automatically created. This entity is the primary holder of settings for an individual user and has a reference to the user's private Amazon Elastic File System (EFS) home directory. </p>
+    async fn create_user_profile(
+        &self,
+        input: CreateUserProfileRequest,
+    ) -> Result<CreateUserProfileResponse, RusotoError<CreateUserProfileError>>;
 
     /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
     async fn create_workteam(
@@ -6928,11 +12802,20 @@ pub trait SageMaker {
         input: DeleteAlgorithmInput,
     ) -> Result<(), RusotoError<DeleteAlgorithmError>>;
 
+    /// <p>Used to stop and delete an app.</p>
+    async fn delete_app(&self, input: DeleteAppRequest) -> Result<(), RusotoError<DeleteAppError>>;
+
     /// <p>Deletes the specified Git repository from your account.</p>
     async fn delete_code_repository(
         &self,
         input: DeleteCodeRepositoryInput,
     ) -> Result<(), RusotoError<DeleteCodeRepositoryError>>;
+
+    /// <p>Used to delete a domain. If you on-boarded with IAM mode, you will need to delete your domain to on-board again using SSO. Use with caution. All of the members of the domain will lose access to their EFS volume, including data, notebooks, and other artifacts. </p>
+    async fn delete_domain(
+        &self,
+        input: DeleteDomainRequest,
+    ) -> Result<(), RusotoError<DeleteDomainError>>;
 
     /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
     async fn delete_endpoint(
@@ -6946,6 +12829,18 @@ pub trait SageMaker {
         input: DeleteEndpointConfigInput,
     ) -> Result<(), RusotoError<DeleteEndpointConfigError>>;
 
+    /// <p>Deletes an Amazon SageMaker experiment. All trials associated with the experiment must be deleted first. Use the <a>ListTrials</a> API to get a list of the trials associated with the experiment.</p>
+    async fn delete_experiment(
+        &self,
+        input: DeleteExperimentRequest,
+    ) -> Result<DeleteExperimentResponse, RusotoError<DeleteExperimentError>>;
+
+    /// <p>Deletes the specified flow definition.</p>
+    async fn delete_flow_definition(
+        &self,
+        input: DeleteFlowDefinitionRequest,
+    ) -> Result<DeleteFlowDefinitionResponse, RusotoError<DeleteFlowDefinitionError>>;
+
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
     async fn delete_model(
         &self,
@@ -6957,6 +12852,12 @@ pub trait SageMaker {
         &self,
         input: DeleteModelPackageInput,
     ) -> Result<(), RusotoError<DeleteModelPackageError>>;
+
+    /// <p>Deletes a monitoring schedule. Also stops the schedule had not already been stopped. This does not delete the job execution history of the monitoring schedule. </p>
+    async fn delete_monitoring_schedule(
+        &self,
+        input: DeleteMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<DeleteMonitoringScheduleError>>;
 
     /// <p><p> Deletes an Amazon SageMaker notebook instance. Before you can delete a notebook instance, you must call the <code>StopNotebookInstance</code> API. </p> <important> <p>When you delete a notebook instance, you lose all of your data. Amazon SageMaker removes the ML compute instance, and deletes the ML storage volume and the network interface associated with the notebook instance. </p> </important></p>
     async fn delete_notebook_instance(
@@ -6976,6 +12877,24 @@ pub trait SageMaker {
         input: DeleteTagsInput,
     ) -> Result<DeleteTagsOutput, RusotoError<DeleteTagsError>>;
 
+    /// <p>Deletes the specified trial. All trial components that make up the trial must be deleted first. Use the <a>DescribeTrialComponent</a> API to get the list of trial components.</p>
+    async fn delete_trial(
+        &self,
+        input: DeleteTrialRequest,
+    ) -> Result<DeleteTrialResponse, RusotoError<DeleteTrialError>>;
+
+    /// <p>Deletes the specified trial component. A trial component must be disassociated from all trials before the trial component can be deleted. To disassociate a trial component from a trial, call the <a>DisassociateTrialComponent</a> API.</p>
+    async fn delete_trial_component(
+        &self,
+        input: DeleteTrialComponentRequest,
+    ) -> Result<DeleteTrialComponentResponse, RusotoError<DeleteTrialComponentError>>;
+
+    /// <p>Deletes a user profile.</p>
+    async fn delete_user_profile(
+        &self,
+        input: DeleteUserProfileRequest,
+    ) -> Result<(), RusotoError<DeleteUserProfileError>>;
+
     /// <p>Deletes an existing work team. This operation can't be undone.</p>
     async fn delete_workteam(
         &self,
@@ -6987,6 +12906,18 @@ pub trait SageMaker {
         &self,
         input: DescribeAlgorithmInput,
     ) -> Result<DescribeAlgorithmOutput, RusotoError<DescribeAlgorithmError>>;
+
+    /// <p>Describes the app.</p>
+    async fn describe_app(
+        &self,
+        input: DescribeAppRequest,
+    ) -> Result<DescribeAppResponse, RusotoError<DescribeAppError>>;
+
+    /// <p>Returns information about an Amazon SageMaker job.</p>
+    async fn describe_auto_ml_job(
+        &self,
+        input: DescribeAutoMLJobRequest,
+    ) -> Result<DescribeAutoMLJobResponse, RusotoError<DescribeAutoMLJobError>>;
 
     /// <p>Gets details about the specified Git repository.</p>
     async fn describe_code_repository(
@@ -7000,6 +12931,12 @@ pub trait SageMaker {
         input: DescribeCompilationJobRequest,
     ) -> Result<DescribeCompilationJobResponse, RusotoError<DescribeCompilationJobError>>;
 
+    /// <p>The desciption of the domain.</p>
+    async fn describe_domain(
+        &self,
+        input: DescribeDomainRequest,
+    ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>>;
+
     /// <p>Returns the description of an endpoint.</p>
     async fn describe_endpoint(
         &self,
@@ -7011,6 +12948,24 @@ pub trait SageMaker {
         &self,
         input: DescribeEndpointConfigInput,
     ) -> Result<DescribeEndpointConfigOutput, RusotoError<DescribeEndpointConfigError>>;
+
+    /// <p>Provides a list of an experiment's properties.</p>
+    async fn describe_experiment(
+        &self,
+        input: DescribeExperimentRequest,
+    ) -> Result<DescribeExperimentResponse, RusotoError<DescribeExperimentError>>;
+
+    /// <p>Returns information about the specified flow definition.</p>
+    async fn describe_flow_definition(
+        &self,
+        input: DescribeFlowDefinitionRequest,
+    ) -> Result<DescribeFlowDefinitionResponse, RusotoError<DescribeFlowDefinitionError>>;
+
+    /// <p>Returns information about the requested human task user interface.</p>
+    async fn describe_human_task_ui(
+        &self,
+        input: DescribeHumanTaskUiRequest,
+    ) -> Result<DescribeHumanTaskUiResponse, RusotoError<DescribeHumanTaskUiError>>;
 
     /// <p>Gets a description of a hyperparameter tuning job.</p>
     async fn describe_hyper_parameter_tuning_job(
@@ -7039,6 +12994,12 @@ pub trait SageMaker {
         input: DescribeModelPackageInput,
     ) -> Result<DescribeModelPackageOutput, RusotoError<DescribeModelPackageError>>;
 
+    /// <p>Describes the schedule for a monitoring job.</p>
+    async fn describe_monitoring_schedule(
+        &self,
+        input: DescribeMonitoringScheduleRequest,
+    ) -> Result<DescribeMonitoringScheduleResponse, RusotoError<DescribeMonitoringScheduleError>>;
+
     /// <p>Returns information about a notebook instance.</p>
     async fn describe_notebook_instance(
         &self,
@@ -7053,6 +13014,12 @@ pub trait SageMaker {
         DescribeNotebookInstanceLifecycleConfigOutput,
         RusotoError<DescribeNotebookInstanceLifecycleConfigError>,
     >;
+
+    /// <p>Returns a description of a processing job.</p>
+    async fn describe_processing_job(
+        &self,
+        input: DescribeProcessingJobRequest,
+    ) -> Result<DescribeProcessingJobResponse, RusotoError<DescribeProcessingJobError>>;
 
     /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
     async fn describe_subscribed_workteam(
@@ -7072,11 +13039,35 @@ pub trait SageMaker {
         input: DescribeTransformJobRequest,
     ) -> Result<DescribeTransformJobResponse, RusotoError<DescribeTransformJobError>>;
 
+    /// <p>Provides a list of a trial's properties.</p>
+    async fn describe_trial(
+        &self,
+        input: DescribeTrialRequest,
+    ) -> Result<DescribeTrialResponse, RusotoError<DescribeTrialError>>;
+
+    /// <p>Provides a list of a trials component's properties.</p>
+    async fn describe_trial_component(
+        &self,
+        input: DescribeTrialComponentRequest,
+    ) -> Result<DescribeTrialComponentResponse, RusotoError<DescribeTrialComponentError>>;
+
+    /// <p>Describes the user profile.</p>
+    async fn describe_user_profile(
+        &self,
+        input: DescribeUserProfileRequest,
+    ) -> Result<DescribeUserProfileResponse, RusotoError<DescribeUserProfileError>>;
+
     /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
     async fn describe_workteam(
         &self,
         input: DescribeWorkteamRequest,
     ) -> Result<DescribeWorkteamResponse, RusotoError<DescribeWorkteamError>>;
+
+    /// <p>Disassociates a trial component from a trial. This doesn't effect other trials the component is associated with. Before you can delete a component, you must disassociate the component from all trials it is associated with. To associate a trial component with a trial, call the <a>AssociateTrialComponent</a> API.</p>
+    async fn disassociate_trial_component(
+        &self,
+        input: DisassociateTrialComponentRequest,
+    ) -> Result<DisassociateTrialComponentResponse, RusotoError<DisassociateTrialComponentError>>;
 
     /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
     async fn get_search_suggestions(
@@ -7090,6 +13081,24 @@ pub trait SageMaker {
         input: ListAlgorithmsInput,
     ) -> Result<ListAlgorithmsOutput, RusotoError<ListAlgorithmsError>>;
 
+    /// <p>Lists apps.</p>
+    async fn list_apps(
+        &self,
+        input: ListAppsRequest,
+    ) -> Result<ListAppsResponse, RusotoError<ListAppsError>>;
+
+    /// <p>Request a list of jobs.</p>
+    async fn list_auto_ml_jobs(
+        &self,
+        input: ListAutoMLJobsRequest,
+    ) -> Result<ListAutoMLJobsResponse, RusotoError<ListAutoMLJobsError>>;
+
+    /// <p>List the Candidates created for the job.</p>
+    async fn list_candidates_for_auto_ml_job(
+        &self,
+        input: ListCandidatesForAutoMLJobRequest,
+    ) -> Result<ListCandidatesForAutoMLJobResponse, RusotoError<ListCandidatesForAutoMLJobError>>;
+
     /// <p>Gets a list of the Git repositories in your account.</p>
     async fn list_code_repositories(
         &self,
@@ -7102,6 +13111,12 @@ pub trait SageMaker {
         input: ListCompilationJobsRequest,
     ) -> Result<ListCompilationJobsResponse, RusotoError<ListCompilationJobsError>>;
 
+    /// <p>Lists the domains.</p>
+    async fn list_domains(
+        &self,
+        input: ListDomainsRequest,
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>>;
+
     /// <p>Lists endpoint configurations.</p>
     async fn list_endpoint_configs(
         &self,
@@ -7113,6 +13128,24 @@ pub trait SageMaker {
         &self,
         input: ListEndpointsInput,
     ) -> Result<ListEndpointsOutput, RusotoError<ListEndpointsError>>;
+
+    /// <p>Lists all the experiments in your account. The list can be filtered to show only experiments that were created in a specific time range. The list can be sorted by experiment name or creation time.</p>
+    async fn list_experiments(
+        &self,
+        input: ListExperimentsRequest,
+    ) -> Result<ListExperimentsResponse, RusotoError<ListExperimentsError>>;
+
+    /// <p>Returns information about the flow definitions in your account.</p>
+    async fn list_flow_definitions(
+        &self,
+        input: ListFlowDefinitionsRequest,
+    ) -> Result<ListFlowDefinitionsResponse, RusotoError<ListFlowDefinitionsError>>;
+
+    /// <p>Returns information about the human task user interfaces in your account.</p>
+    async fn list_human_task_uis(
+        &self,
+        input: ListHumanTaskUisRequest,
+    ) -> Result<ListHumanTaskUisResponse, RusotoError<ListHumanTaskUisError>>;
 
     /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
     async fn list_hyper_parameter_tuning_jobs(
@@ -7144,6 +13177,18 @@ pub trait SageMaker {
         input: ListModelsInput,
     ) -> Result<ListModelsOutput, RusotoError<ListModelsError>>;
 
+    /// <p>Returns list of all monitoring job executions.</p>
+    async fn list_monitoring_executions(
+        &self,
+        input: ListMonitoringExecutionsRequest,
+    ) -> Result<ListMonitoringExecutionsResponse, RusotoError<ListMonitoringExecutionsError>>;
+
+    /// <p>Returns list of all monitoring schedules.</p>
+    async fn list_monitoring_schedules(
+        &self,
+        input: ListMonitoringSchedulesRequest,
+    ) -> Result<ListMonitoringSchedulesResponse, RusotoError<ListMonitoringSchedulesError>>;
+
     /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
     async fn list_notebook_instance_lifecycle_configs(
         &self,
@@ -7158,6 +13203,12 @@ pub trait SageMaker {
         &self,
         input: ListNotebookInstancesInput,
     ) -> Result<ListNotebookInstancesOutput, RusotoError<ListNotebookInstancesError>>;
+
+    /// <p>Lists processing jobs that satisfy various filters.</p>
+    async fn list_processing_jobs(
+        &self,
+        input: ListProcessingJobsRequest,
+    ) -> Result<ListProcessingJobsResponse, RusotoError<ListProcessingJobsError>>;
 
     /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_subscribed_workteams(
@@ -7192,6 +13243,24 @@ pub trait SageMaker {
         input: ListTransformJobsRequest,
     ) -> Result<ListTransformJobsResponse, RusotoError<ListTransformJobsError>>;
 
+    /// <p>Lists the trial components in your account. You can filter the list to show only components that were created in a specific time range. You can sort the list by trial component name or creation time.</p>
+    async fn list_trial_components(
+        &self,
+        input: ListTrialComponentsRequest,
+    ) -> Result<ListTrialComponentsResponse, RusotoError<ListTrialComponentsError>>;
+
+    /// <p>Lists the trials in your account. Specify an experiment name to limit the list to the trials that are part of that experiment. The list can be filtered to show only trials that were created in a specific time range. The list can be sorted by trial name or creation time.</p>
+    async fn list_trials(
+        &self,
+        input: ListTrialsRequest,
+    ) -> Result<ListTrialsResponse, RusotoError<ListTrialsError>>;
+
+    /// <p>Lists user profiles.</p>
+    async fn list_user_profiles(
+        &self,
+        input: ListUserProfilesRequest,
+    ) -> Result<ListUserProfilesResponse, RusotoError<ListUserProfilesError>>;
+
     /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_workteams(
         &self,
@@ -7210,11 +13279,23 @@ pub trait SageMaker {
         input: SearchRequest,
     ) -> Result<SearchResponse, RusotoError<SearchError>>;
 
+    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>New monitoring schedules are immediately started after creation.</p> </note></p>
+    async fn start_monitoring_schedule(
+        &self,
+        input: StartMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<StartMonitoringScheduleError>>;
+
     /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
     async fn start_notebook_instance(
         &self,
         input: StartNotebookInstanceInput,
     ) -> Result<(), RusotoError<StartNotebookInstanceError>>;
+
+    /// <p>A method for forcing the termination of a running job.</p>
+    async fn stop_auto_ml_job(
+        &self,
+        input: StopAutoMLJobRequest,
+    ) -> Result<(), RusotoError<StopAutoMLJobError>>;
 
     /// <p>Stops a model compilation job.</p> <p> To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal. This gracefully shuts the job down. If the job hasn't stopped, it sends the SIGKILL signal.</p> <p>When it receives a <code>StopCompilationJob</code> request, Amazon SageMaker changes the <a>CompilationJobSummary$CompilationJobStatus</a> of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the <a>CompilationJobSummary$CompilationJobStatus</a> to <code>Stopped</code>. </p>
     async fn stop_compilation_job(
@@ -7234,11 +13315,23 @@ pub trait SageMaker {
         input: StopLabelingJobRequest,
     ) -> Result<(), RusotoError<StopLabelingJobError>>;
 
+    /// <p>Stops a previously started monitoring schedule.</p>
+    async fn stop_monitoring_schedule(
+        &self,
+        input: StopMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<StopMonitoringScheduleError>>;
+
     /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. Amazon SageMaker stops charging you for the ML compute instance when you call <code>StopNotebookInstance</code>.</p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
     async fn stop_notebook_instance(
         &self,
         input: StopNotebookInstanceInput,
     ) -> Result<(), RusotoError<StopNotebookInstanceError>>;
+
+    /// <p>Stops a processing job.</p>
+    async fn stop_processing_job(
+        &self,
+        input: StopProcessingJobRequest,
+    ) -> Result<(), RusotoError<StopProcessingJobError>>;
 
     /// <p>Stops a training job. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of the training is not lost. </p> <p>When it receives a <code>StopTrainingJob</code> request, Amazon SageMaker changes the status of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the status to <code>Stopped</code>.</p>
     async fn stop_training_job(
@@ -7258,6 +13351,12 @@ pub trait SageMaker {
         input: UpdateCodeRepositoryInput,
     ) -> Result<UpdateCodeRepositoryOutput, RusotoError<UpdateCodeRepositoryError>>;
 
+    /// <p>Updates a domain. Changes will impact all of the people in the domain.</p>
+    async fn update_domain(
+        &self,
+        input: UpdateDomainRequest,
+    ) -> Result<UpdateDomainResponse, RusotoError<UpdateDomainError>>;
+
     /// <p><p>Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
     async fn update_endpoint(
         &self,
@@ -7273,6 +13372,18 @@ pub trait SageMaker {
         RusotoError<UpdateEndpointWeightsAndCapacitiesError>,
     >;
 
+    /// <p>Adds, updates, or removes the description of an experiment. Updates the display name of an experiment.</p>
+    async fn update_experiment(
+        &self,
+        input: UpdateExperimentRequest,
+    ) -> Result<UpdateExperimentResponse, RusotoError<UpdateExperimentError>>;
+
+    /// <p>Updates a previously created schedule.</p>
+    async fn update_monitoring_schedule(
+        &self,
+        input: UpdateMonitoringScheduleRequest,
+    ) -> Result<UpdateMonitoringScheduleResponse, RusotoError<UpdateMonitoringScheduleError>>;
+
     /// <p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements.</p>
     async fn update_notebook_instance(
         &self,
@@ -7287,6 +13398,24 @@ pub trait SageMaker {
         UpdateNotebookInstanceLifecycleConfigOutput,
         RusotoError<UpdateNotebookInstanceLifecycleConfigError>,
     >;
+
+    /// <p>Updates the display name of a trial.</p>
+    async fn update_trial(
+        &self,
+        input: UpdateTrialRequest,
+    ) -> Result<UpdateTrialResponse, RusotoError<UpdateTrialError>>;
+
+    /// <p>Updates one or more properties of a trial component.</p>
+    async fn update_trial_component(
+        &self,
+        input: UpdateTrialComponentRequest,
+    ) -> Result<UpdateTrialComponentResponse, RusotoError<UpdateTrialComponentError>>;
+
+    /// <p>Updates a user profile.</p>
+    async fn update_user_profile(
+        &self,
+        input: UpdateUserProfileRequest,
+    ) -> Result<UpdateUserProfileResponse, RusotoError<UpdateUserProfileError>>;
 
     /// <p>Updates an existing work team with new member definitions or description.</p>
     async fn update_workteam(
@@ -7326,6 +13455,10 @@ impl SageMakerClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> SageMakerClient {
+        SageMakerClient { client, region }
+    }
 }
 
 #[async_trait]
@@ -7357,6 +13490,34 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Associates a trial component with a trial. A trial component can be associated with multiple trials. To disassociate a trial component from a trial, call the <a>DisassociateTrialComponent</a> API.</p>
+    async fn associate_trial_component(
+        &self,
+        input: AssociateTrialComponentRequest,
+    ) -> Result<AssociateTrialComponentResponse, RusotoError<AssociateTrialComponentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.AssociateTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateTrialComponentError::from_response(response))
+        }
+    }
+
     /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
     async fn create_algorithm(
         &self,
@@ -7384,7 +13545,61 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
+    /// <p>Creates a running App for the specified UserProfile. Supported Apps are JupyterServer and KernelGateway. This operation is automatically invoked by Amazon SageMaker Amazon SageMaker Studio (Studio) upon access to the associated Studio Domain, and when new kernel configurations are selected by the user. A user may have multiple Apps active simultaneously. Apps will automatically terminate and be deleted when stopped from within Studio, or when the DeleteApp API is manually called. UserProfiles are limited to 5 concurrently running Apps at a time.</p>
+    async fn create_app(
+        &self,
+        input: CreateAppRequest,
+    ) -> Result<CreateAppResponse, RusotoError<CreateAppError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateApp");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAppError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an AutoPilot job.</p>
+    async fn create_auto_ml_job(
+        &self,
+        input: CreateAutoMLJobRequest,
+    ) -> Result<CreateAutoMLJobResponse, RusotoError<CreateAutoMLJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateAutoMLJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateAutoMLJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAutoMLJobError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
     async fn create_code_repository(
         &self,
         input: CreateCodeRepositoryInput,
@@ -7440,7 +13655,34 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    /// <p>Creates a Domain for Amazon SageMaker Amazon SageMaker Studio (Studio), which can be accessed by end-users in a web browser. A Domain has an associated directory, list of authorized users, and a variety of security, application, policies, and Amazon Virtual Private Cloud configurations. An AWS account is limited to one Domain, per region. Users within a domain can share notebook files and other artifacts with each other. When a Domain is created, an Amazon Elastic File System (EFS) is also created for use by all of the users within the Domain. Each user receives a private home directory within the EFS for notebooks, Git repositories, and data files. </p>
+    async fn create_domain(
+        &self,
+        input: CreateDomainRequest,
+    ) -> Result<CreateDomainResponse, RusotoError<CreateDomainError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateDomain");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDomainError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
     async fn create_endpoint(
         &self,
         input: CreateEndpointInput,
@@ -7495,6 +13737,90 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Creates an Amazon SageMaker <i>experiment</i>. An experiment is a collection of <i>trials</i> that are observed, compared and evaluated as a group. A trial is a set of steps, called <i>trial components</i>, that produce a machine learning model.</p> <p>The goal of an experiment is to determine the components that produce the best model. Multiple trials are performed, each one isolating and measuring the impact of a change to one or more inputs, while keeping the remaining inputs constant.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to experiments, trials, trial components and then use the <a>Search</a> API to search for the tags.</p> <p>To add a description to an experiment, specify the optional <code>Description</code> parameter. To add a description later, or to change the description, call the <a>UpdateExperiment</a> API.</p> <p>To get a list of all your experiments, call the <a>ListExperiments</a> API. To view an experiment's properties, call the <a>DescribeExperiment</a> API. To get a list of all the trials associated with an experiment, call the <a>ListTrials</a> API. To create a trial call the <a>CreateTrial</a> API.</p>
+    async fn create_experiment(
+        &self,
+        input: CreateExperimentRequest,
+    ) -> Result<CreateExperimentResponse, RusotoError<CreateExperimentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateExperiment");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateExperimentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateExperimentError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a flow definition.</p>
+    async fn create_flow_definition(
+        &self,
+        input: CreateFlowDefinitionRequest,
+    ) -> Result<CreateFlowDefinitionResponse, RusotoError<CreateFlowDefinitionError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateFlowDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFlowDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFlowDefinitionError::from_response(response))
+        }
+    }
+
+    /// <p>Defines the settings you will use for the human review workflow user interface. Reviewers will see a three-panel interface with an instruction area, the item to review, and an input area.</p>
+    async fn create_human_task_ui(
+        &self,
+        input: CreateHumanTaskUiRequest,
+    ) -> Result<CreateHumanTaskUiResponse, RusotoError<CreateHumanTaskUiError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateHumanTaskUi");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateHumanTaskUiResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateHumanTaskUiError::from_response(response))
+        }
+    }
+
     /// <p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
     async fn create_hyper_parameter_tuning_job(
         &self,
@@ -7526,7 +13852,7 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
+    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
     async fn create_labeling_job(
         &self,
         input: CreateLabelingJobRequest,
@@ -7609,7 +13935,35 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a schedule that regularly starts Amazon SageMaker Processing Jobs to monitor the data captured for an Amazon SageMaker Endoint.</p>
+    async fn create_monitoring_schedule(
+        &self,
+        input: CreateMonitoringScheduleRequest,
+    ) -> Result<CreateMonitoringScheduleResponse, RusotoError<CreateMonitoringScheduleError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMonitoringScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMonitoringScheduleError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN). You can't change the name of a notebook instance after you create it.</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_notebook_instance(
         &self,
         input: CreateNotebookInstanceInput,
@@ -7673,7 +14027,35 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>You can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. To restrict access, attach an IAM policy that denies access to this API unless the call comes from an IP address in the specified list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
+    /// <p>Creates a URL for a specified UserProfile in a Domain. When accessed in a web browser, the user will be automatically signed in to Amazon SageMaker Amazon SageMaker Studio (Studio), and granted access to all of the Apps and files associated with that Amazon Elastic File System (EFS). This operation can only be called when AuthMode equals IAM. </p>
+    async fn create_presigned_domain_url(
+        &self,
+        input: CreatePresignedDomainUrlRequest,
+    ) -> Result<CreatePresignedDomainUrlResponse, RusotoError<CreatePresignedDomainUrlError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreatePresignedDomainUrl");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePresignedDomainUrlResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePresignedDomainUrlError::from_response(response))
+        }
+    }
+
+    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>IAM authorization policies for this API are also enforced for every HTTP request and WebSocket frame that attempts to connect to the notebook instance.For example, you can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html#nbi-ip-filter">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
     async fn create_presigned_notebook_instance_url(
         &self,
         input: CreatePresignedNotebookInstanceUrlInput,
@@ -7709,7 +14091,35 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    /// <p>Creates a processing job.</p>
+    async fn create_processing_job(
+        &self,
+        input: CreateProcessingJobRequest,
+    ) -> Result<CreateProcessingJobResponse, RusotoError<CreateProcessingJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateProcessingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProcessingJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProcessingJobError::from_response(response))
+        }
+    }
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to enable the estimation of model parameters during training. Hyperparameters can be tuned to optimize this learning process. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3, EFS, or FSx location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>EnableManagedSpotTraining</code> - Optimize the cost of training machine learning models by up to 80% by using Amazon EC2 Spot instances. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html">Managed Spot Training</a>. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - To help cap training costs, use <code>MaxRuntimeInSeconds</code> to set a time limit for training. Use <code>MaxWaitTimeInSeconds</code> to specify how long you are willing to wait for a managed spot training job to complete. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     async fn create_training_job(
         &self,
         input: CreateTrainingJobRequest,
@@ -7737,7 +14147,7 @@ impl SageMaker for SageMakerClient {
         }
     }
 
-    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
+    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p>For more information about how batch transformation works, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">Batch Transform</a>.</p>
     async fn create_transform_job(
         &self,
         input: CreateTransformJobRequest,
@@ -7762,6 +14172,89 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTransformJobError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an Amazon SageMaker <i>trial</i>. A trial is a set of steps called <i>trial components</i> that produce a machine learning model. A trial is part of a single Amazon SageMaker <i>experiment</i>.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial and then use the <a>Search</a> API to search for the tags.</p> <p>To get a list of all your trials, call the <a>ListTrials</a> API. To view a trial's properties, call the <a>DescribeTrial</a> API. To create a trial component, call the <a>CreateTrialComponent</a> API.</p>
+    async fn create_trial(
+        &self,
+        input: CreateTrialRequest,
+    ) -> Result<CreateTrialResponse, RusotoError<CreateTrialError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateTrial");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateTrialResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTrialError::from_response(response))
+        }
+    }
+
+    /// <p><p>Creates a <i>trial component</i>, which is a stage of a machine learning <i>trial</i>. A trial is composed of one or more trial components. A trial component can be used in multiple trials.</p> <p>Trial components include pre-processing jobs, training jobs, and batch transform jobs.</p> <p>When you use Amazon SageMaker Studio or the Amazon SageMaker Python SDK, all experiments, trials, and trial components are automatically tracked, logged, and indexed. When you use the AWS SDK for Python (Boto), you must use the logging APIs provided by the SDK.</p> <p>You can add tags to a trial component and then use the <a>Search</a> API to search for the tags.</p> <note> <p>You can create a trial component through a direct call to the <code>CreateTrialComponent</code> API. However, you can&#39;t specify the <code>Source</code> property of the component in the request, therefore, the component isn&#39;t associated with an Amazon SageMaker job. You must use Amazon SageMaker Studio, the Amazon SageMaker Python SDK, or the AWS SDK for Python (Boto) to create the component with a valid <code>Source</code> property.</p> </note></p>
+    async fn create_trial_component(
+        &self,
+        input: CreateTrialComponentRequest,
+    ) -> Result<CreateTrialComponentResponse, RusotoError<CreateTrialComponentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateTrialComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new user profile. A user profile represents a single user within a Domain, and is the main way to reference a "person" for the purposes of sharing, reporting and other user-oriented features. This entity is created during on-boarding. If an administrator invites a person by email or imports them from SSO, a new UserProfile is automatically created. This entity is the primary holder of settings for an individual user and has a reference to the user's private Amazon Elastic File System (EFS) home directory. </p>
+    async fn create_user_profile(
+        &self,
+        input: CreateUserProfileRequest,
+    ) -> Result<CreateUserProfileResponse, RusotoError<CreateUserProfileError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.CreateUserProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateUserProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateUserProfileError::from_response(response))
         }
     }
 
@@ -7818,6 +14311,29 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Used to stop and delete an app.</p>
+    async fn delete_app(&self, input: DeleteAppRequest) -> Result<(), RusotoError<DeleteAppError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteApp");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAppError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the specified Git repository from your account.</p>
     async fn delete_code_repository(
         &self,
@@ -7841,6 +14357,32 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCodeRepositoryError::from_response(response))
+        }
+    }
+
+    /// <p>Used to delete a domain. If you on-boarded with IAM mode, you will need to delete your domain to on-board again using SSO. Use with caution. All of the members of the domain will lose access to their EFS volume, including data, notebooks, and other artifacts. </p>
+    async fn delete_domain(
+        &self,
+        input: DeleteDomainRequest,
+    ) -> Result<(), RusotoError<DeleteDomainError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteDomain");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDomainError::from_response(response))
         }
     }
 
@@ -7896,6 +14438,62 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Deletes an Amazon SageMaker experiment. All trials associated with the experiment must be deleted first. Use the <a>ListTrials</a> API to get a list of the trials associated with the experiment.</p>
+    async fn delete_experiment(
+        &self,
+        input: DeleteExperimentRequest,
+    ) -> Result<DeleteExperimentResponse, RusotoError<DeleteExperimentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteExperiment");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteExperimentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteExperimentError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified flow definition.</p>
+    async fn delete_flow_definition(
+        &self,
+        input: DeleteFlowDefinitionRequest,
+    ) -> Result<DeleteFlowDefinitionResponse, RusotoError<DeleteFlowDefinitionError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteFlowDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFlowDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFlowDefinitionError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
     async fn delete_model(
         &self,
@@ -7945,6 +14543,32 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteModelPackageError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a monitoring schedule. Also stops the schedule had not already been stopped. This does not delete the job execution history of the monitoring schedule. </p>
+    async fn delete_monitoring_schedule(
+        &self,
+        input: DeleteMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<DeleteMonitoringScheduleError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMonitoringScheduleError::from_response(response))
         }
     }
 
@@ -8032,6 +14656,87 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Deletes the specified trial. All trial components that make up the trial must be deleted first. Use the <a>DescribeTrialComponent</a> API to get the list of trial components.</p>
+    async fn delete_trial(
+        &self,
+        input: DeleteTrialRequest,
+    ) -> Result<DeleteTrialResponse, RusotoError<DeleteTrialError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteTrial");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTrialResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTrialError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified trial component. A trial component must be disassociated from all trials before the trial component can be deleted. To disassociate a trial component from a trial, call the <a>DisassociateTrialComponent</a> API.</p>
+    async fn delete_trial_component(
+        &self,
+        input: DeleteTrialComponentRequest,
+    ) -> Result<DeleteTrialComponentResponse, RusotoError<DeleteTrialComponentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteTrialComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a user profile.</p>
+    async fn delete_user_profile(
+        &self,
+        input: DeleteUserProfileRequest,
+    ) -> Result<(), RusotoError<DeleteUserProfileError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DeleteUserProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteUserProfileError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an existing work team. This operation can't be undone.</p>
     async fn delete_workteam(
         &self,
@@ -8083,6 +14788,61 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeAlgorithmError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the app.</p>
+    async fn describe_app(
+        &self,
+        input: DescribeAppRequest,
+    ) -> Result<DescribeAppResponse, RusotoError<DescribeAppError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeApp");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAppResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAppError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about an Amazon SageMaker job.</p>
+    async fn describe_auto_ml_job(
+        &self,
+        input: DescribeAutoMLJobRequest,
+    ) -> Result<DescribeAutoMLJobResponse, RusotoError<DescribeAutoMLJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeAutoMLJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAutoMLJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAutoMLJobError::from_response(response))
         }
     }
 
@@ -8142,6 +14902,33 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>The desciption of the domain.</p>
+    async fn describe_domain(
+        &self,
+        input: DescribeDomainRequest,
+    ) -> Result<DescribeDomainResponse, RusotoError<DescribeDomainError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeDomain");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDomainError::from_response(response))
+        }
+    }
+
     /// <p>Returns the description of an endpoint.</p>
     async fn describe_endpoint(
         &self,
@@ -8194,6 +14981,90 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeEndpointConfigError::from_response(response))
+        }
+    }
+
+    /// <p>Provides a list of an experiment's properties.</p>
+    async fn describe_experiment(
+        &self,
+        input: DescribeExperimentRequest,
+    ) -> Result<DescribeExperimentResponse, RusotoError<DescribeExperimentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeExperiment");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeExperimentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeExperimentError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about the specified flow definition.</p>
+    async fn describe_flow_definition(
+        &self,
+        input: DescribeFlowDefinitionRequest,
+    ) -> Result<DescribeFlowDefinitionResponse, RusotoError<DescribeFlowDefinitionError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeFlowDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFlowDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFlowDefinitionError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about the requested human task user interface.</p>
+    async fn describe_human_task_ui(
+        &self,
+        input: DescribeHumanTaskUiRequest,
+    ) -> Result<DescribeHumanTaskUiResponse, RusotoError<DescribeHumanTaskUiError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeHumanTaskUi");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeHumanTaskUiResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeHumanTaskUiError::from_response(response))
         }
     }
 
@@ -8313,6 +15184,35 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Describes the schedule for a monitoring job.</p>
+    async fn describe_monitoring_schedule(
+        &self,
+        input: DescribeMonitoringScheduleRequest,
+    ) -> Result<DescribeMonitoringScheduleResponse, RusotoError<DescribeMonitoringScheduleError>>
+    {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeMonitoringScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeMonitoringScheduleError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about a notebook instance.</p>
     async fn describe_notebook_instance(
         &self,
@@ -8374,6 +15274,34 @@ impl SageMaker for SageMakerClient {
             Err(DescribeNotebookInstanceLifecycleConfigError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Returns a description of a processing job.</p>
+    async fn describe_processing_job(
+        &self,
+        input: DescribeProcessingJobRequest,
+    ) -> Result<DescribeProcessingJobResponse, RusotoError<DescribeProcessingJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeProcessingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeProcessingJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeProcessingJobError::from_response(response))
         }
     }
 
@@ -8462,6 +15390,89 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Provides a list of a trial's properties.</p>
+    async fn describe_trial(
+        &self,
+        input: DescribeTrialRequest,
+    ) -> Result<DescribeTrialResponse, RusotoError<DescribeTrialError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeTrial");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrialResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTrialError::from_response(response))
+        }
+    }
+
+    /// <p>Provides a list of a trials component's properties.</p>
+    async fn describe_trial_component(
+        &self,
+        input: DescribeTrialComponentRequest,
+    ) -> Result<DescribeTrialComponentResponse, RusotoError<DescribeTrialComponentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeTrialComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the user profile.</p>
+    async fn describe_user_profile(
+        &self,
+        input: DescribeUserProfileRequest,
+    ) -> Result<DescribeUserProfileResponse, RusotoError<DescribeUserProfileError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DescribeUserProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeUserProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeUserProfileError::from_response(response))
+        }
+    }
+
     /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
     async fn describe_workteam(
         &self,
@@ -8487,6 +15498,35 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeWorkteamError::from_response(response))
+        }
+    }
+
+    /// <p>Disassociates a trial component from a trial. This doesn't effect other trials the component is associated with. Before you can delete a component, you must disassociate the component from all trials it is associated with. To associate a trial component with a trial, call the <a>AssociateTrialComponent</a> API.</p>
+    async fn disassociate_trial_component(
+        &self,
+        input: DisassociateTrialComponentRequest,
+    ) -> Result<DisassociateTrialComponentResponse, RusotoError<DisassociateTrialComponentError>>
+    {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.DisassociateTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateTrialComponentError::from_response(response))
         }
     }
 
@@ -8542,6 +15582,89 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListAlgorithmsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists apps.</p>
+    async fn list_apps(
+        &self,
+        input: ListAppsRequest,
+    ) -> Result<ListAppsResponse, RusotoError<ListAppsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListApps");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAppsError::from_response(response))
+        }
+    }
+
+    /// <p>Request a list of jobs.</p>
+    async fn list_auto_ml_jobs(
+        &self,
+        input: ListAutoMLJobsRequest,
+    ) -> Result<ListAutoMLJobsResponse, RusotoError<ListAutoMLJobsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListAutoMLJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListAutoMLJobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAutoMLJobsError::from_response(response))
+        }
+    }
+
+    /// <p>List the Candidates created for the job.</p>
+    async fn list_candidates_for_auto_ml_job(
+        &self,
+        input: ListCandidatesForAutoMLJobRequest,
+    ) -> Result<ListCandidatesForAutoMLJobResponse, RusotoError<ListCandidatesForAutoMLJobError>>
+    {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListCandidatesForAutoMLJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListCandidatesForAutoMLJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListCandidatesForAutoMLJobError::from_response(response))
         }
     }
 
@@ -8601,6 +15724,33 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Lists the domains.</p>
+    async fn list_domains(
+        &self,
+        input: ListDomainsRequest,
+    ) -> Result<ListDomainsResponse, RusotoError<ListDomainsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListDomains");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListDomainsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDomainsError::from_response(response))
+        }
+    }
+
     /// <p>Lists endpoint configurations.</p>
     async fn list_endpoint_configs(
         &self,
@@ -8653,6 +15803,89 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListEndpointsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the experiments in your account. The list can be filtered to show only experiments that were created in a specific time range. The list can be sorted by experiment name or creation time.</p>
+    async fn list_experiments(
+        &self,
+        input: ListExperimentsRequest,
+    ) -> Result<ListExperimentsResponse, RusotoError<ListExperimentsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListExperiments");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListExperimentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListExperimentsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about the flow definitions in your account.</p>
+    async fn list_flow_definitions(
+        &self,
+        input: ListFlowDefinitionsRequest,
+    ) -> Result<ListFlowDefinitionsResponse, RusotoError<ListFlowDefinitionsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListFlowDefinitions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFlowDefinitionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFlowDefinitionsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about the human task user interfaces in your account.</p>
+    async fn list_human_task_uis(
+        &self,
+        input: ListHumanTaskUisRequest,
+    ) -> Result<ListHumanTaskUisResponse, RusotoError<ListHumanTaskUisError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListHumanTaskUis");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListHumanTaskUisResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListHumanTaskUisError::from_response(response))
         }
     }
 
@@ -8796,6 +16029,62 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Returns list of all monitoring job executions.</p>
+    async fn list_monitoring_executions(
+        &self,
+        input: ListMonitoringExecutionsRequest,
+    ) -> Result<ListMonitoringExecutionsResponse, RusotoError<ListMonitoringExecutionsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListMonitoringExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMonitoringExecutionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMonitoringExecutionsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns list of all monitoring schedules.</p>
+    async fn list_monitoring_schedules(
+        &self,
+        input: ListMonitoringSchedulesRequest,
+    ) -> Result<ListMonitoringSchedulesResponse, RusotoError<ListMonitoringSchedulesError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListMonitoringSchedules");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMonitoringSchedulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMonitoringSchedulesError::from_response(response))
+        }
+    }
+
     /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
     async fn list_notebook_instance_lifecycle_configs(
         &self,
@@ -8857,6 +16146,34 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListNotebookInstancesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists processing jobs that satisfy various filters.</p>
+    async fn list_processing_jobs(
+        &self,
+        input: ListProcessingJobsRequest,
+    ) -> Result<ListProcessingJobsResponse, RusotoError<ListProcessingJobsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListProcessingJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProcessingJobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProcessingJobsError::from_response(response))
         }
     }
 
@@ -9005,6 +16322,89 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Lists the trial components in your account. You can filter the list to show only components that were created in a specific time range. You can sort the list by trial component name or creation time.</p>
+    async fn list_trial_components(
+        &self,
+        input: ListTrialComponentsRequest,
+    ) -> Result<ListTrialComponentsResponse, RusotoError<ListTrialComponentsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListTrialComponents");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTrialComponentsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTrialComponentsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the trials in your account. Specify an experiment name to limit the list to the trials that are part of that experiment. The list can be filtered to show only trials that were created in a specific time range. The list can be sorted by trial name or creation time.</p>
+    async fn list_trials(
+        &self,
+        input: ListTrialsRequest,
+    ) -> Result<ListTrialsResponse, RusotoError<ListTrialsError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListTrials");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTrialsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTrialsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists user profiles.</p>
+    async fn list_user_profiles(
+        &self,
+        input: ListUserProfilesRequest,
+    ) -> Result<ListUserProfilesResponse, RusotoError<ListUserProfilesError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.ListUserProfiles");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListUserProfilesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListUserProfilesError::from_response(response))
+        }
+    }
+
     /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     async fn list_workteams(
         &self,
@@ -9087,6 +16487,32 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p><p>Starts a previously stopped monitoring schedule.</p> <note> <p>New monitoring schedules are immediately started after creation.</p> </note></p>
+    async fn start_monitoring_schedule(
+        &self,
+        input: StartMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<StartMonitoringScheduleError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.StartMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartMonitoringScheduleError::from_response(response))
+        }
+    }
+
     /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
     async fn start_notebook_instance(
         &self,
@@ -9110,6 +16536,32 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StartNotebookInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>A method for forcing the termination of a running job.</p>
+    async fn stop_auto_ml_job(
+        &self,
+        input: StopAutoMLJobRequest,
+    ) -> Result<(), RusotoError<StopAutoMLJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.StopAutoMLJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopAutoMLJobError::from_response(response))
         }
     }
 
@@ -9191,6 +16643,32 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Stops a previously started monitoring schedule.</p>
+    async fn stop_monitoring_schedule(
+        &self,
+        input: StopMonitoringScheduleRequest,
+    ) -> Result<(), RusotoError<StopMonitoringScheduleError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.StopMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopMonitoringScheduleError::from_response(response))
+        }
+    }
+
     /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. Amazon SageMaker stops charging you for the ML compute instance when you call <code>StopNotebookInstance</code>.</p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
     async fn stop_notebook_instance(
         &self,
@@ -9214,6 +16692,32 @@ impl SageMaker for SageMakerClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StopNotebookInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Stops a processing job.</p>
+    async fn stop_processing_job(
+        &self,
+        input: StopProcessingJobRequest,
+    ) -> Result<(), RusotoError<StopProcessingJobError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.StopProcessingJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            Ok(std::mem::drop(response))
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopProcessingJobError::from_response(response))
         }
     }
 
@@ -9297,6 +16801,33 @@ impl SageMaker for SageMakerClient {
         }
     }
 
+    /// <p>Updates a domain. Changes will impact all of the people in the domain.</p>
+    async fn update_domain(
+        &self,
+        input: UpdateDomainRequest,
+    ) -> Result<UpdateDomainResponse, RusotoError<UpdateDomainError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateDomain");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDomainResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDomainError::from_response(response))
+        }
+    }
+
     /// <p><p>Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
     async fn update_endpoint(
         &self,
@@ -9357,6 +16888,62 @@ impl SageMaker for SageMakerClient {
             Err(UpdateEndpointWeightsAndCapacitiesError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Adds, updates, or removes the description of an experiment. Updates the display name of an experiment.</p>
+    async fn update_experiment(
+        &self,
+        input: UpdateExperimentRequest,
+    ) -> Result<UpdateExperimentResponse, RusotoError<UpdateExperimentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateExperiment");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateExperimentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateExperimentError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a previously created schedule.</p>
+    async fn update_monitoring_schedule(
+        &self,
+        input: UpdateMonitoringScheduleRequest,
+    ) -> Result<UpdateMonitoringScheduleResponse, RusotoError<UpdateMonitoringScheduleError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateMonitoringSchedule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMonitoringScheduleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMonitoringScheduleError::from_response(response))
         }
     }
 
@@ -9421,6 +17008,89 @@ impl SageMaker for SageMakerClient {
             Err(UpdateNotebookInstanceLifecycleConfigError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Updates the display name of a trial.</p>
+    async fn update_trial(
+        &self,
+        input: UpdateTrialRequest,
+    ) -> Result<UpdateTrialResponse, RusotoError<UpdateTrialError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateTrial");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTrialResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTrialError::from_response(response))
+        }
+    }
+
+    /// <p>Updates one or more properties of a trial component.</p>
+    async fn update_trial_component(
+        &self,
+        input: UpdateTrialComponentRequest,
+    ) -> Result<UpdateTrialComponentResponse, RusotoError<UpdateTrialComponentError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateTrialComponent");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateTrialComponentResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateTrialComponentError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a user profile.</p>
+    async fn update_user_profile(
+        &self,
+        input: UpdateUserProfileRequest,
+    ) -> Result<UpdateUserProfileResponse, RusotoError<UpdateUserProfileError>> {
+        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        request.set_endpoint_prefix("api.sagemaker".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "SageMaker.UpdateUserProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateUserProfileResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateUserProfileError::from_response(response))
         }
     }
 

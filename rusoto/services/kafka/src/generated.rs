@@ -43,7 +43,8 @@ pub struct BrokerEBSVolumeInfo {
 /// </code></pre>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BrokerNodeGroupInfo {
-    /// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones. This is an optional parameter. If you don&#39;t specify it, Amazon MSK gives it the value DEFAULT. You can also explicitly set this parameter to the value DEFAULT. No other values are currently allowed.&lt;/p&gt;
+    /// &lt;p&gt;Amazon MSK distributes the broker nodes evenly across the Availability Zones that correspond to the subnets you provide when you create the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "BrokerAZDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,6 +201,11 @@ pub struct ClusterInfo {
     #[serde(rename = "NumberOfBrokerNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_broker_nodes: Option<i64>,
+    /// <pre><code>        &lt;p&gt;Settings for open monitoring using Prometheus.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OpenMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_monitoring: Option<OpenMonitoring>,
     /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "State")]
@@ -377,6 +383,11 @@ pub struct CreateClusterRequest {
     /// </code></pre>
     #[serde(rename = "NumberOfBrokerNodes")]
     pub number_of_broker_nodes: i64,
+    /// <pre><code>        &lt;p&gt;The settings for open monitoring.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OpenMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_monitoring: Option<OpenMonitoringInfo>,
     /// <pre><code>        &lt;p&gt;Create tags when creating the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Tags")]
@@ -712,6 +723,27 @@ pub struct GetBootstrapBrokersResponse {
     pub bootstrap_broker_string_tls: Option<String>,
 }
 
+/// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct JmxExporter {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnabledInBroker")]
+    pub enabled_in_broker: bool,
+}
+
+/// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct JmxExporterInfo {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnabledInBroker")]
+    pub enabled_in_broker: bool,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListClusterOperationsRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -915,11 +947,42 @@ pub struct MutableClusterInfo {
     #[serde(rename = "ConfigurationInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_info: Option<ConfigurationInfo>,
+    /// <pre><code>        &lt;p&gt;Specifies which Apache Kafka metrics Amazon MSK gathers and sends to Amazon CloudWatch for this cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnhancedMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enhanced_monitoring: Option<String>,
     /// <pre><code>        &lt;p&gt;The number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "NumberOfBrokerNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_broker_nodes: Option<i64>,
+    /// <pre><code>        &lt;p&gt;The settings for open monitoring.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OpenMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_monitoring: Option<OpenMonitoring>,
+}
+
+/// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NodeExporter {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnabledInBroker")]
+    pub enabled_in_broker: bool,
+}
+
+/// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct NodeExporterInfo {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnabledInBroker")]
+    pub enabled_in_broker: bool,
 }
 
 /// <pre><code>        &lt;p&gt;The node information object.&lt;/p&gt;
@@ -957,6 +1020,60 @@ pub struct NodeInfo {
     #[serde(rename = "ZookeeperNodeInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zookeeper_node_info: Option<ZookeeperNodeInfo>,
+}
+
+/// <pre><code>        &lt;p&gt;JMX and Node monitoring for the MSK cluster.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OpenMonitoring {
+    /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Prometheus")]
+    pub prometheus: Prometheus,
+}
+
+/// <pre><code>        &lt;p&gt;JMX and Node monitoring for the MSK cluster.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct OpenMonitoringInfo {
+    /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Prometheus")]
+    pub prometheus: PrometheusInfo,
+}
+
+/// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Prometheus {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "JmxExporter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jmx_exporter: Option<JmxExporter>,
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "NodeExporter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_exporter: Option<NodeExporter>,
+}
+
+/// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
+/// </code></pre>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PrometheusInfo {
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "JmxExporter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jmx_exporter: Option<JmxExporterInfo>,
+    /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "NodeExporter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_exporter: Option<NodeExporterInfo>,
 }
 
 /// <pre><code>        &lt;p&gt;Contains information about storage volumes attached to MSK broker nodes.&lt;/p&gt;
@@ -1025,6 +1142,37 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateBrokerCountRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The version of cluster to update from. A successful operation will then generate a new version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;The number of broker nodes that you want the cluster to have after this operation completes successfully.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetNumberOfBrokerNodes")]
+    pub target_number_of_broker_nodes: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateBrokerCountResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBrokerStorageRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
     /// </code></pre>
@@ -1074,6 +1222,44 @@ pub struct UpdateClusterConfigurationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateClusterConfigurationResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
+/// <p>Request body for UpdateMonitoring.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMonitoringRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The version of the MSK cluster to update. Cluster versions aren&#39;t simple numbers. You can describe an MSK cluster to find its version. When this update operation is successful, it generates a new cluster version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;Specifies which Apache Kafka metrics Amazon MSK gathers and sends to Amazon CloudWatch for this cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "EnhancedMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enhanced_monitoring: Option<String>,
+    /// <pre><code>        &lt;p&gt;The settings for open monitoring.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OpenMonitoring")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_monitoring: Option<OpenMonitoringInfo>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMonitoringResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "ClusterArn")]
@@ -2137,6 +2323,72 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateBrokerCount
+#[derive(Debug, PartialEq)]
+pub enum UpdateBrokerCountError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateBrokerCountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerCountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateBrokerCountError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateBrokerCountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateBrokerCountError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateBrokerCountError::BadRequest(ref cause) => cause,
+            UpdateBrokerCountError::Forbidden(ref cause) => cause,
+            UpdateBrokerCountError::InternalServerError(ref cause) => cause,
+            UpdateBrokerCountError::ServiceUnavailable(ref cause) => cause,
+            UpdateBrokerCountError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateBrokerStorage
 #[derive(Debug, PartialEq)]
 pub enum UpdateBrokerStorageError {
@@ -2284,6 +2536,70 @@ impl Error for UpdateClusterConfigurationError {
         }
     }
 }
+/// Errors returned by UpdateMonitoring
+#[derive(Debug, PartialEq)]
+pub enum UpdateMonitoringError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateMonitoringError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMonitoringError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateMonitoringError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateMonitoringError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateMonitoringError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateMonitoringError::ServiceUnavailable(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateMonitoringError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMonitoringError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMonitoringError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMonitoringError::BadRequest(ref cause) => cause,
+            UpdateMonitoringError::Forbidden(ref cause) => cause,
+            UpdateMonitoringError::InternalServerError(ref cause) => cause,
+            UpdateMonitoringError::ServiceUnavailable(ref cause) => cause,
+            UpdateMonitoringError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 #[async_trait]
 pub trait Kafka {
@@ -2402,6 +2718,13 @@ pub trait Kafka {
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
 
+    /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_broker_count(
+        &self,
+        input: UpdateBrokerCountRequest,
+    ) -> Result<UpdateBrokerCountResponse, RusotoError<UpdateBrokerCountError>>;
+
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
     async fn update_broker_storage(
@@ -2415,6 +2738,13 @@ pub trait Kafka {
         &self,
         input: UpdateClusterConfigurationRequest,
     ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>;
+
+    /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_monitoring(
+        &self,
+        input: UpdateMonitoringRequest,
+    ) -> Result<UpdateMonitoringResponse, RusotoError<UpdateMonitoringError>>;
 }
 /// A client for the Kafka API.
 #[derive(Clone)]
@@ -2447,6 +2777,10 @@ impl KafkaClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KafkaClient {
+        KafkaClient { client, region }
     }
 }
 
@@ -2993,6 +3327,40 @@ impl Kafka for KafkaClient {
         }
     }
 
+    /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_broker_count(
+        &self,
+        input: UpdateBrokerCountRequest,
+    ) -> Result<UpdateBrokerCountResponse, RusotoError<UpdateBrokerCountError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/nodes/count",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBrokerCountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBrokerCountError::from_response(response))
+        }
+    }
+
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
     async fn update_broker_storage(
@@ -3059,6 +3427,40 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateClusterConfigurationError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_monitoring(
+        &self,
+        input: UpdateMonitoringRequest,
+    ) -> Result<UpdateMonitoringResponse, RusotoError<UpdateMonitoringError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/monitoring",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMonitoringResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMonitoringError::from_response(response))
         }
     }
 }

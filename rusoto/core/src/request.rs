@@ -13,24 +13,24 @@ use std::rc::Rc;
 use std::sync::Arc;
 use std::time::Duration;
 
-use crate::tls::HttpsConnector;
 use bytes::{Bytes, BytesMut};
 use futures::{FutureExt, StreamExt};
 use http::header::{HeaderName, HeaderValue};
 use http::{HeaderMap, Method, StatusCode};
 use hyper::client::connect::Connect;
+use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
 use hyper::Error as HyperError;
 use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
-use hyper::client::Builder as HyperBuilder;
 use lazy_static::lazy_static;
-use tokio::future::FutureExt as _;
+use tokio::time;
 
-use log::*;
 use log::Level::Debug;
+use log::*;
 
 use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
+use crate::tls::HttpsConnector;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -100,8 +100,8 @@ impl HttpResponse {
     pub async fn buffer(&mut self) -> Result<BufferedHttpResponse, HttpDispatchError> {
         let mut bytes = BytesMut::new();
         for try_chunk in self.body.next().await {
-            let chunk = try_chunk.map_err(|e| {
-                HttpDispatchError { message: format!("Error obtaining body: {}", e) }
+            let chunk = try_chunk.map_err(|e| HttpDispatchError {
+                message: format!("Error obtaining body: {}", e),
             })?;
             bytes.extend(chunk);
         }
@@ -122,14 +122,14 @@ impl HttpResponse {
                 (h.clone(), value_string)
             })
             .collect();
-        let body = hyper_response.into_body()
-            .map(|try_chunk| {
-                try_chunk
-                    .map(|c| c.into_bytes())
-                    .map_err(|e| {
-                    IoError::new(io::ErrorKind::Other, format!("Error obtaining chunk: {}", e))
-                })
-            });
+        let body = hyper_response.into_body().map(|try_chunk| {
+            try_chunk.map(|c| c).map_err(|e| {
+                IoError::new(
+                    io::ErrorKind::Other,
+                    format!("Error obtaining chunk: {}", e),
+                )
+            })
+        });
 
         HttpResponse {
             status,
@@ -181,22 +181,35 @@ impl From<IoError> for HttpDispatchError {
 }
 
 /// Type returned from `dispatch` for a `DispatchSignedRequest` implementor
-pub type DispatchSignedRequestFuture = Pin<Box<dyn Future<Output=Result<HttpResponse, HttpDispatchError>> + Send>>;
+pub type DispatchSignedRequestFuture =
+    Pin<Box<dyn Future<Output = Result<HttpResponse, HttpDispatchError>> + Send>>;
 
 /// Trait for implementing HTTP Request/Response
 pub trait DispatchSignedRequest {
     /// Dispatch Request, and then return a Response
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture;
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        timeout: Option<Duration>,
+    ) -> DispatchSignedRequestFuture;
 }
 
 impl<D: DispatchSignedRequest> DispatchSignedRequest for Rc<D> {
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        timeout: Option<Duration>,
+    ) -> DispatchSignedRequestFuture {
         D::dispatch(&*self, request, timeout)
     }
 }
 
 impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        timeout: Option<Duration>,
+    ) -> DispatchSignedRequestFuture {
         D::dispatch(&*self, request, timeout)
     }
 }
@@ -210,14 +223,15 @@ impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
+        let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
@@ -228,14 +242,15 @@ impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
         #[cfg(feature = "native-tls")]
-        let connector = match HttpsConnector::new() {
-            Ok(connector) => connector,
-            Err(tls_error) => {
-                return Err(TlsError {
-                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-                })
-            }
-        };
+        // let connector = match HttpsConnector::new() {
+        //     Ok(connector) => connector,
+        //     Err(tls_error) => {
+        //         return Err(TlsError {
+        //             message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+        //         })
+        //     }
+        // };
+        let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new();
@@ -246,8 +261,8 @@ impl HttpClient {
 
 impl<C> HttpClient<C>
 where
-    C: Connect,
-    C::Future: 'static
+    C: Connect + Clone + Send + Sync,
+    // C::Future: 'static,
 {
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
@@ -304,10 +319,10 @@ impl Default for HttpConfig {
 async fn http_client_dispatch<C>(
     client: HyperClient<C, Body>,
     request: SignedRequest,
-    timeout: Option<Duration>
+    timeout: Option<Duration>,
 ) -> Result<HttpResponse, HttpDispatchError>
-    where
-        C: Connect + 'static
+where
+    C: Connect + Send + Sync + Clone + 'static,
 {
     let hyper_method = match request.method().as_ref() {
         "POST" => Method::POST,
@@ -317,10 +332,7 @@ async fn http_client_dispatch<C>(
         "HEAD" => Method::HEAD,
         v => {
             return Err(HttpDispatchError {
-                message: format!(
-                    "Unsupported HTTP verb {}",
-                    v
-                )
+                message: format!("Unsupported HTTP verb {}", v),
             });
         }
     };
@@ -332,10 +344,7 @@ async fn http_client_dispatch<C>(
             Ok(name) => name,
             Err(err) => {
                 return Err(HttpDispatchError {
-                    message: format!(
-                        "error parsing header name: {}",
-                        err
-                    )
+                    message: format!("error parsing header name: {}", err),
                 });
             }
         };
@@ -344,10 +353,7 @@ async fn http_client_dispatch<C>(
                 Ok(value) => value,
                 Err(err) => {
                     return Err(HttpDispatchError {
-                        message: format!(
-                            "error parsing header value: {}",
-                            err
-                        )
+                        message: format!("error parsing header value: {}", err),
                     });
                 }
             };
@@ -380,9 +386,7 @@ async fn http_client_dispatch<C>(
         }
     }
 
-    let mut http_request_builder = HyperRequest::builder();
-    http_request_builder.method(hyper_method);
-    http_request_builder.uri(final_uri);
+    let http_request_builder = HyperRequest::builder().method(hyper_method).uri(final_uri);
 
     let try_http_request = if let Some(p) = request.payload {
         http_request_builder.body(p.into_body())
@@ -390,13 +394,8 @@ async fn http_client_dispatch<C>(
         http_request_builder.body(Body::empty())
     };
 
-    let mut http_request = try_http_request.map_err(|err| {
-        HttpDispatchError {
-            message: format!(
-                "error building request: {}",
-                err
-            )
-        }
+    let mut http_request = try_http_request.map_err(|err| HttpDispatchError {
+        message: format!("error building request: {}", err),
     })?;
 
     *http_request.headers_mut() = hyper_headers;
@@ -405,26 +404,30 @@ async fn http_client_dispatch<C>(
 
     let try_resp = match timeout {
         None => f.await,
-        Some(duration) => {
-            match f.timeout(duration).await {
-                Err(_e) => return Err(HttpDispatchError { message: "Timeout while dispatching request".to_owned() }),
-                Ok(try_req) => try_req,
+        Some(duration) => match time::timeout(duration, f).await {
+            Err(_e) => {
+                return Err(HttpDispatchError {
+                    message: "Timeout while dispatching request".to_owned(),
+                })
             }
-        }
+            Ok(try_req) => try_req,
+        },
     };
-    let resp = try_resp.map_err(|e| {
-        HttpDispatchError {
-            message: format!("Error during dispatch: {}", e),
-        }
+    let resp = try_resp.map_err(|e| HttpDispatchError {
+        message: format!("Error during dispatch: {}", e),
     })?;
     Ok(HttpResponse::from_hyper(resp).await)
 }
 
 impl<C> DispatchSignedRequest for HttpClient<C>
 where
-    C: Connect + 'static,
+    C: Connect + Clone + Send + Sync + 'static,
 {
-    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> DispatchSignedRequestFuture {
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        timeout: Option<Duration>,
+    ) -> DispatchSignedRequestFuture {
         http_client_dispatch::<C>(self.inner.clone(), request, timeout).boxed()
     }
 }

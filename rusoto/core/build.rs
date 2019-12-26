@@ -13,7 +13,7 @@ fn generate_user_agent_vars(output_path: &Path) {
     let rust_version = rustc_version::version().expect("Could not retrieve rustc version");
     let mut f = File::create(&output_path.join("user_agent_vars.rs"))
         .expect("Could not create user agent file");
-    f.write_all(format!("static RUST_VERSION: &'static str = \"{}\";", rust_version).as_bytes())
+    f.write_all(format!("static RUST_VERSION: &str = \"{}\";", rust_version).as_bytes())
         .expect("Unable to write user agent");
 }
 

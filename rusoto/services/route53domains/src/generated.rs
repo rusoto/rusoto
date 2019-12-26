@@ -2247,6 +2247,10 @@ impl Route53DomainsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Route53DomainsClient {
+        Route53DomainsClient { client, region }
+    }
 }
 
 #[async_trait]

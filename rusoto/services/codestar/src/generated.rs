@@ -1658,6 +1658,10 @@ impl CodeStarClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeStarClient {
+        CodeStarClient { client, region }
+    }
 }
 
 #[async_trait]

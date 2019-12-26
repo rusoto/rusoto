@@ -302,14 +302,14 @@ pub struct BlueGreenDeploymentConfiguration {
     pub terminate_blue_instances_on_deployment_success: Option<BlueInstanceTerminationOption>,
 }
 
-/// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>
+/// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful. <code>BlueInstanceTerminationOption</code> does not apply to Lambda deployments. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlueInstanceTerminationOption {
     /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment. The maximum setting is 2880 minutes (2 days).</p>
+    /// <p>For an Amazon EC2 deployment, the number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p> <p> For an Amazon ECS deployment, the number of minutes before deleting the original (blue) task set. During an Amazon ECS deployment, CodeDeploy shifts traffic from the original (blue) task set to a replacement (green) task set. </p> <p> The maximum setting is 2880 minutes (2 days). </p>
     #[serde(rename = "terminationWaitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_wait_time_in_minutes: Option<i64>,
@@ -1633,7 +1633,7 @@ pub struct ListDeploymentTargetsInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> A key used to filter the returned targets. </p>
+    /// <p><p> A key used to filter the returned targets. The two valid values are:</p> <ul> <li> <p> <code>TargetStatus</code> - A <code>TargetStatus</code> filter string can be <code>Failed</code>, <code>InProgress</code>, <code>Pending</code>, <code>Ready</code>, <code>Skipped</code>, <code>Succeeded</code>, or <code>Unknown</code>. </p> </li> <li> <p> <code>ServerInstanceLabel</code> - A <code>ServerInstanceLabel</code> filter string can be <code>Blue</code> or <code>Green</code>. </p> </li> </ul></p>
     #[serde(rename = "targetFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
@@ -6362,6 +6362,10 @@ impl CodeDeployClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodeDeployClient {
+        CodeDeployClient { client, region }
     }
 }
 

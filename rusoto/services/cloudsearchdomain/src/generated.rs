@@ -501,6 +501,10 @@ impl CloudSearchDomainClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudSearchDomainClient {
+        CloudSearchDomainClient { client, region }
+    }
 }
 
 #[async_trait]
@@ -558,7 +562,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         if let Some(ref x) = input.stats {
             params.put("stats", x);
         }
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         let mut response = self
@@ -596,7 +601,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             params.put("size", x);
         }
         params.put("suggester", &input.suggester);
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         let mut response = self

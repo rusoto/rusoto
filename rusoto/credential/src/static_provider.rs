@@ -75,6 +75,15 @@ impl ProvideAwsCredentials for StaticProvider {
     }
 }
 
+impl From<AwsCredentials> for StaticProvider {
+    fn from(credentials: AwsCredentials) -> Self {
+        StaticProvider {
+            credentials,
+            valid_for: None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::thread;

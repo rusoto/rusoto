@@ -23,8 +23,15 @@ To use `rusoto_apigateway` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_apigateway = "0.40.0"
+rusoto_apigateway = "0.43.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

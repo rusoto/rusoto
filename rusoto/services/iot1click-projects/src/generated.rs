@@ -1348,6 +1348,10 @@ impl Iot1ClickProjectsClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Iot1ClickProjectsClient {
+        Iot1ClickProjectsClient { client, region }
+    }
 }
 
 #[async_trait]

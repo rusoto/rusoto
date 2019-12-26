@@ -6,8 +6,8 @@ extern crate rusoto_translate;
 use rusoto_core::Region;
 use rusoto_translate::{Translate, TranslateClient, TranslateTextRequest};
 
-#[test]
-fn should_translate_to_german() {
+#[tokio::test]
+async fn should_translate_to_german() {
     let client = TranslateClient::new(Region::UsEast1);
     let request = TranslateTextRequest {
         source_language_code: "en".to_owned(),
@@ -16,6 +16,6 @@ fn should_translate_to_german() {
         ..Default::default()
     };
 
-    let result = client.translate_text(request).sync().unwrap();
+    let result = client.translate_text(request).await.unwrap();
     assert_eq!("guten tag", result.translated_text.to_lowercase());
 }

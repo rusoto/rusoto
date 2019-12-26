@@ -10,7 +10,7 @@ use async_trait::async_trait;
 use dirs::home_dir;
 use regex::Regex;
 use serde::Deserialize;
-use tokio::net::process::Command;
+use tokio::process::Command;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -446,7 +446,7 @@ mod tests {
             super::parse_config_file(Path::new("tests/sample-data/credential_process_config"));
         assert!(result.is_some());
         let profiles = result.unwrap();
-        assert_eq!(profiles.len(), 1);
+        assert_eq!(profiles.len(), 2);
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No Default profile in default_profile_credentials");
@@ -702,5 +702,4 @@ mod tests {
             ProfileProvider::default_profile_location()
         );
     }
-
 }

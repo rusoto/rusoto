@@ -176,6 +176,10 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
+    /// <p>Whether the author of this application has been verified. This means means that AWS has made a good faith review, as a reasonable and prudent service provider, of the information provided by the requester and has confirmed that the requester's identity is as claimed.</p>
+    #[serde(rename = "IsVerifiedAuthor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_verified_author: Option<bool>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -196,6 +200,10 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
+    /// <p>The URL to the public profile of a verified author. This URL is submitted by the author.</p>
+    #[serde(rename = "VerifiedAuthorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verified_author_url: Option<String>,
     /// <p>Version information about the application.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -511,6 +519,10 @@ pub struct GetApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
+    /// <p>Whether the author of this application has been verified. This means means that AWS has made a good faith review, as a reasonable and prudent service provider, of the information provided by the requester and has confirmed that the requester's identity is as claimed.</p>
+    #[serde(rename = "IsVerifiedAuthor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_verified_author: Option<bool>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -531,6 +543,10 @@ pub struct GetApplicationResponse {
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
+    /// <p>The URL to the public profile of a verified author. This URL is submitted by the author.</p>
+    #[serde(rename = "VerifiedAuthorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verified_author_url: Option<String>,
     /// <p>Version information about the application.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -874,6 +890,10 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
+    /// <p>Whether the author of this application has been verified. This means means that AWS has made a good faith review, as a reasonable and prudent service provider, of the information provided by the requester and has confirmed that the requester's identity is as claimed.</p>
+    #[serde(rename = "IsVerifiedAuthor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_verified_author: Option<bool>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -894,6 +914,10 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
+    /// <p>The URL to the public profile of a verified author. This URL is submitted by the author.</p>
+    #[serde(rename = "VerifiedAuthorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verified_author_url: Option<String>,
     /// <p>Version information about the application.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1904,6 +1928,10 @@ impl ServerlessRepoClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ServerlessRepoClient {
+        ServerlessRepoClient { client, region }
     }
 }
 

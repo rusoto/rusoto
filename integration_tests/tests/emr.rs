@@ -6,20 +6,20 @@ extern crate rusoto_emr;
 use rusoto_core::{Region, RusotoError};
 use rusoto_emr::{DescribeJobFlowsInput, Emr, EmrClient, ListClustersInput};
 
-#[test]
-fn should_list_clusters() {
+#[tokio::test]
+async fn should_list_clusters() {
     let client = EmrClient::new(Region::UsEast1);
     let request = ListClustersInput::default();
 
-    client.list_clusters(request).sync().unwrap();
+    client.list_clusters(request).await.unwrap();
 }
 
-#[test]
-fn should_handle_deprecation_gracefully() {
+#[tokio::test]
+async fn should_handle_deprecation_gracefully() {
     let client = EmrClient::new(Region::UsEast1);
     let request = DescribeJobFlowsInput::default();
 
-    match client.describe_job_flows(request).sync() {
+    match client.describe_job_flows(request).await {
         Err(RusotoError::Validation(msg)) => {
             assert!(msg.contains("DescribeJobFlows API is deprecated."))
         }

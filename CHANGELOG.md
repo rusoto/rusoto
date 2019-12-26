@@ -2,14 +2,70 @@
 
 ## [Unreleased]
 
-- Add `HttpClient::from_builder`
-
 (Please put changes here)
+- Updated AWS-CREDENTIALS.md to address https://github.com/rusoto/rusoto/issues/1597
+- Fixed SNS API's attributes and value keyword https://github.com/rusoto/rusoto/pull/1591
+- Adding support for web identity provider, which enables IAM roles for Kubernetes service accounts.
+- Add object-safe AwsCredentialsProvider trait as alternative to the existing generic `ProvideAwsCredentials
+  trait.
+- Introduce `Secret` type to automatically zero-out memory use to stored secret credentials. So far, 
+  only used in the new web identity provider.
+- Introduce `Variable` to abstract over certain credential provider input parameters.
 
+- Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
+- Add Debug trait to generated Clients
+- Add `rusoto_ec2::filter!` macro
+- Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
+
+## [0.42.0] - 2019-11-18
+
+- Use static initializer for AWS profile regex
+- Add QLDB service
+- Add QLDB Session service
+- Update Skeptic tests for Rusoto v0.41
+- Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
+params for s3 `list_objects` methods
+- Add Textract service
+- Update CloudDirectory API definition to `2017-01-11`
+- Add SecurityHub service
+- Add Transfer service
+- Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
+- Make static credentials into a credential provider
+- Add anonymous credentials support
+- Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
+such as an S3 key returned in `list_objects_v2`
+- Region deserialization format matches what Region serializers expect: https://github.com/rusoto/rusoto/pull/1544
+- Fixed regression of `x-amz-content-sha256` header not being signed: https://github.com/rusoto/rusoto/pull/1545
+- Allow `rustls` to be used in `rusoto_mock`: https://github.com/rusoto/rusoto/pull/1557
+- Added opt-in ability for service objects to be serialized: https://github.com/rusoto/rusoto/pull/1560
+- Avoid panicking in credential provider when parsing credentials file: https://github.com/rusoto/rusoto/pull/1573
+
+## [0.41.1] - 2019-10-11
+
+- Fixed regression in `rusoto_credential` session token handling: https://github.com/rusoto/rusoto/pull/1528
+
+## [0.41.0] - 2019-10-07
+
+- Add `HttpClient::from_builder`
+- Upgrade to botocore from `1.12.163` to `1.12.230`
+- The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
 - Deserialize PostTextResponse correctly by allowing null values in the slots field
-- Fix Profile Config Loading should ignore comments with '=' chars
+- Fix Profile Config Loading: should ignore comments with '=' chars
+- Add App Mesh service
+- Fix service_crategen to parse operations with multiple static params
+- Refactor S3 integration tests - about a `#[test]` per behavior
+- Add support for non signing clients
+- Add EC2 Instance Connect service
+- Allow deserialization of regions without an endpoint specified
+- Add ApNortheast3 region
+- Add MeSouth1 region
+- Add x-amz-content-sha256 header to signed and canonical headers
+- Added `Eq` and `Hash` implementations on `Region`
+- Fixed parsing of Athena error messages
+- Fix credential_process behavior when using the non-default profile
+- Correctly read session tokens from credential_process
 
-## [0.40.0] - 2019-06-28
+## [0.42.0] - 2019-06-28
 
 - Only emit types used in service during crate generation
 - Updated CloudFront to use latest API version: `2018-11-05`

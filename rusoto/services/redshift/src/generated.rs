@@ -730,6 +730,8 @@ pub struct Cluster {
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The name of the Availability Zone in which the cluster is located.</p>
     pub availability_zone: Option<String>,
+    /// <p><p>The availability status of the cluster for queries. Possible values are the following:</p> <ul> <li> <p>Available - The cluster is available for queries. </p> </li> <li> <p>Unavailable - The cluster is not available for queries.</p> </li> <li> <p>Maintenance - The cluster is intermittently available for queries due to maintenance activities.</p> </li> <li> <p>Modifying - The cluster is intermittently available for queries due to changes that modify the cluster.</p> </li> <li> <p>Failed - The cluster failed and is not available for queries.</p> </li> </ul></p>
+    pub cluster_availability_status: Option<String>,
     /// <p>The date and time that the cluster was created.</p>
     pub cluster_create_time: Option<String>,
     /// <p>The unique identifier of the cluster.</p>
@@ -768,6 +770,10 @@ pub struct Cluster {
     pub endpoint: Option<Endpoint>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
+    /// <p>The date and time when the next snapshot is expected to be taken for clusters with a valid snapshot schedule and backups enabled. </p>
+    pub expected_next_snapshot_schedule_time: Option<String>,
+    /// <p><p> The status of next expected snapshot for clusters having a valid snapshot schedule and backups enabled. Possible values are the following:</p> <ul> <li> <p>OnTrack - The next snapshot is expected to be taken on time. </p> </li> <li> <p>Pending - The next snapshot is pending to be taken. </p> </li> </ul></p>
+    pub expected_next_snapshot_schedule_time_status: Option<String>,
     /// <p>A value that reports whether the Amazon Redshift cluster has finished applying any hardware security module (HSM) settings changes specified in a modify cluster command.</p> <p>Values: active, applying</p>
     pub hsm_status: Option<HsmStatus>,
     /// <p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p>
@@ -782,6 +788,8 @@ pub struct Cluster {
     pub master_username: Option<String>,
     /// <p>The status of a modify operation, if any, initiated for the cluster.</p>
     pub modify_status: Option<String>,
+    /// <p>The date and time in UTC when system maintenance can begin.</p>
+    pub next_maintenance_window_start_time: Option<String>,
     /// <p>The node type for the nodes in the cluster.</p>
     pub node_type: Option<String>,
     /// <p>The number of compute nodes in the cluster.</p>
@@ -835,6 +843,12 @@ impl ClusterDeserializer {
                 "AvailabilityZone" => {
                     obj.availability_zone =
                         Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
+                }
+                "ClusterAvailabilityStatus" => {
+                    obj.cluster_availability_status = Some(StringDeserializer::deserialize(
+                        "ClusterAvailabilityStatus",
+                        stack,
+                    )?);
                 }
                 "ClusterCreateTime" => {
                     obj.cluster_create_time =
@@ -937,6 +951,18 @@ impl ClusterDeserializer {
                         stack,
                     )?);
                 }
+                "ExpectedNextSnapshotScheduleTime" => {
+                    obj.expected_next_snapshot_schedule_time = Some(
+                        TStampDeserializer::deserialize("ExpectedNextSnapshotScheduleTime", stack)?,
+                    );
+                }
+                "ExpectedNextSnapshotScheduleTimeStatus" => {
+                    obj.expected_next_snapshot_schedule_time_status =
+                        Some(StringDeserializer::deserialize(
+                            "ExpectedNextSnapshotScheduleTimeStatus",
+                            stack,
+                        )?);
+                }
                 "HsmStatus" => {
                     obj.hsm_status = Some(HsmStatusDeserializer::deserialize("HsmStatus", stack)?);
                 }
@@ -967,6 +993,12 @@ impl ClusterDeserializer {
                 "ModifyStatus" => {
                     obj.modify_status =
                         Some(StringDeserializer::deserialize("ModifyStatus", stack)?);
+                }
+                "NextMaintenanceWindowStartTime" => {
+                    obj.next_maintenance_window_start_time = Some(TStampDeserializer::deserialize(
+                        "NextMaintenanceWindowStartTime",
+                        stack,
+                    )?);
                 }
                 "NodeType" => {
                     obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
@@ -2233,7 +2265,7 @@ pub struct CreateClusterMessage {
     pub master_user_password: String,
     /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub master_username: String,
-    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> </p>
+    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: String,
     /// <p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>
     pub number_of_nodes: Option<i64>,
@@ -2925,6 +2957,64 @@ impl CreateHsmConfigurationResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateScheduledActionMessage {
+    /// <p>If true, the schedule is enabled. If false, the scheduled action does not trigger. For more information about <code>state</code> of the scheduled action, see <a>ScheduledAction</a>. </p>
+    pub enable: Option<bool>,
+    /// <p>The end time in UTC of the scheduled action. After this time, the scheduled action does not trigger. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub end_time: Option<String>,
+    /// <p>The IAM role to assume to run the target action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub iam_role: String,
+    /// <p>The schedule in <code>at( )</code> or <code>cron( )</code> format. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub schedule: String,
+    /// <p>The description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action. The name must be unique within an account. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub scheduled_action_name: String,
+    /// <p>The start time in UTC of the scheduled action. Before this time, the scheduled action does not trigger. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub start_time: Option<String>,
+    /// <p>A JSON format string of the Amazon Redshift API operation with input parameters. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub target_action: ScheduledActionType,
+}
+
+/// Serialize `CreateScheduledActionMessage` contents to a `SignedRequest`.
+struct CreateScheduledActionMessageSerializer;
+impl CreateScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enable {
+            params.put(&format!("{}{}", prefix, "Enable"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "IamRole"), &obj.iam_role);
+        params.put(&format!("{}{}", prefix, "Schedule"), &obj.schedule);
+        if let Some(ref field_value) = obj.scheduled_action_description {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
+        );
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        ScheduledActionTypeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TargetAction"),
+            &obj.target_action,
+        );
+    }
+}
+
 /// <p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSnapshotCopyGrantMessage {
@@ -3564,6 +3654,28 @@ impl DeleteHsmConfigurationMessageSerializer {
         params.put(
             &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
             &obj.hsm_configuration_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteScheduledActionMessage {
+    /// <p>The name of the scheduled action to delete. </p>
+    pub scheduled_action_name: String,
+}
+
+/// Serialize `DeleteScheduledActionMessage` contents to a `SignedRequest`.
+struct DeleteScheduledActionMessageSerializer;
+impl DeleteScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
         );
     }
 }
@@ -4416,6 +4528,59 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeNodeConfigurationOptionsMessage {
+    /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. </p>
+    pub action_type: String,
+    /// <p>The identifier of the cluster to evaluate for possible node configurations.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>A set of name, operator, and value items to filter the results.</p>
+    pub filters: Option<Vec<NodeConfigurationOptionsFilter>>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeNodeConfigurationOptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>500</code> </p> <p>Constraints: minimum 100, maximum 500.</p>
+    pub max_records: Option<i64>,
+    /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
+    pub owner_account: Option<String>,
+    /// <p>The identifier of the snapshot to evaluate for possible node configurations.</p>
+    pub snapshot_identifier: Option<String>,
+}
+
+/// Serialize `DescribeNodeConfigurationOptionsMessage` contents to a `SignedRequest`.
+struct DescribeNodeConfigurationOptionsMessageSerializer;
+impl DescribeNodeConfigurationOptionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeNodeConfigurationOptionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "ActionType"), &obj.action_type);
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            NodeConfigurationOptionsFilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "NodeConfigurationOptionsFilter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.owner_account {
+            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+        }
+        if let Some(ref field_value) = obj.snapshot_identifier {
+            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"), &field_value);
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeOrderableClusterOptionsMessage {
@@ -4540,6 +4705,69 @@ impl DescribeResizeMessageSerializer {
             &format!("{}{}", prefix, "ClusterIdentifier"),
             &obj.cluster_identifier,
         );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeScheduledActionsMessage {
+    /// <p>If true, retrieve only active scheduled actions. If false, retrieve only disabled scheduled actions. </p>
+    pub active: Option<bool>,
+    /// <p>The end time in UTC of the scheduled action to retrieve. Only active scheduled actions that have invocations before this time are retrieved.</p>
+    pub end_time: Option<String>,
+    /// <p>List of scheduled action filters. </p>
+    pub filters: Option<Vec<ScheduledActionFilter>>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeScheduledActions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>The name of the scheduled action to retrieve. </p>
+    pub scheduled_action_name: Option<String>,
+    /// <p>The start time in UTC of the scheduled actions to retrieve. Only active scheduled actions that have invocations after this time are retrieved.</p>
+    pub start_time: Option<String>,
+    /// <p>The type of the scheduled actions to retrieve. </p>
+    pub target_action_type: Option<String>,
+}
+
+/// Serialize `DescribeScheduledActionsMessage` contents to a `SignedRequest`.
+struct DescribeScheduledActionsMessageSerializer;
+impl DescribeScheduledActionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.active {
+            params.put(&format!("{}{}", prefix, "Active"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            ScheduledActionFilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ScheduledActionFilter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.scheduled_action_name {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionName"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.target_action_type {
+            params.put(&format!("{}{}", prefix, "TargetActionType"), &field_value);
+        }
     }
 }
 
@@ -6204,6 +6432,17 @@ impl MaintenanceTrackDeserializer {
         })
     }
 }
+struct ModeDeserializer;
+impl ModeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyClusterDbRevisionMessage {
     /// <p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>
@@ -6450,7 +6689,7 @@ pub struct ModifyClusterMessage {
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
     pub new_cluster_identifier: Option<String>,
-    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> </p>
+    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>
     pub number_of_nodes: Option<i64>,
@@ -6883,6 +7122,70 @@ impl ModifyEventSubscriptionResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyScheduledActionMessage {
+    /// <p>A modified enable flag of the scheduled action. If true, the scheduled action is active. If false, the scheduled action is disabled. </p>
+    pub enable: Option<bool>,
+    /// <p>A modified end time of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub end_time: Option<String>,
+    /// <p>A different IAM role to assume to run the target action. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub iam_role: Option<String>,
+    /// <p>A modified schedule in either <code>at( )</code> or <code>cron( )</code> format. For more information about this parameter, see <a>ScheduledAction</a>.</p>
+    pub schedule: Option<String>,
+    /// <p>A modified description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action to modify. </p>
+    pub scheduled_action_name: String,
+    /// <p>A modified start time of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub start_time: Option<String>,
+    /// <p>A modified JSON format of the scheduled action. For more information about this parameter, see <a>ScheduledAction</a>. </p>
+    pub target_action: Option<ScheduledActionType>,
+}
+
+/// Serialize `ModifyScheduledActionMessage` contents to a `SignedRequest`.
+struct ModifyScheduledActionMessageSerializer;
+impl ModifyScheduledActionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyScheduledActionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enable {
+            params.put(&format!("{}{}", prefix, "Enable"), &field_value);
+        }
+        if let Some(ref field_value) = obj.end_time {
+            params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.iam_role {
+            params.put(&format!("{}{}", prefix, "IamRole"), &field_value);
+        }
+        if let Some(ref field_value) = obj.schedule {
+            params.put(&format!("{}{}", prefix, "Schedule"), &field_value);
+        }
+        if let Some(ref field_value) = obj.scheduled_action_description {
+            params.put(
+                &format!("{}{}", prefix, "ScheduledActionDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ScheduledActionName"),
+            &obj.scheduled_action_name,
+        );
+        if let Some(ref field_value) = obj.start_time {
+            params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.target_action {
+            ScheduledActionTypeSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TargetAction"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
@@ -6973,6 +7276,160 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
+/// <p>A list of node configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeConfigurationOption {
+    /// <p>The estimated disk utilizaton percentage.</p>
+    pub estimated_disk_utilization_percent: Option<f64>,
+    /// <p>The category of the node configuration recommendation.</p>
+    pub mode: Option<String>,
+    /// <p>The node type, such as, "ds2.8xlarge".</p>
+    pub node_type: Option<String>,
+    /// <p>The number of nodes.</p>
+    pub number_of_nodes: Option<i64>,
+}
+
+struct NodeConfigurationOptionDeserializer;
+impl NodeConfigurationOptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeConfigurationOption, XmlParseError> {
+        deserialize_elements::<_, NodeConfigurationOption, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EstimatedDiskUtilizationPercent" => {
+                        obj.estimated_disk_utilization_percent =
+                            Some(DoubleOptionalDeserializer::deserialize(
+                                "EstimatedDiskUtilizationPercent",
+                                stack,
+                            )?);
+                    }
+                    "Mode" => {
+                        obj.mode = Some(ModeDeserializer::deserialize("Mode", stack)?);
+                    }
+                    "NodeType" => {
+                        obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
+                    }
+                    "NumberOfNodes" => {
+                        obj.number_of_nodes =
+                            Some(IntegerDeserializer::deserialize("NumberOfNodes", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+struct NodeConfigurationOptionListDeserializer;
+impl NodeConfigurationOptionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<NodeConfigurationOption>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "NodeConfigurationOption" {
+                obj.push(NodeConfigurationOptionDeserializer::deserialize(
+                    "NodeConfigurationOption",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A set of elements to filter the returned node configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeConfigurationOptionsFilter {
+    /// <p>The name of the element to filter.</p>
+    pub name: Option<String>,
+    /// <p>The filter operator. If filter Name is NodeType only the 'in' operator is supported. Provide one value to evaluate for 'eq', 'lt', 'le', 'gt', and 'ge'. Provide two values to evaluate for 'between'. Provide a list of values for 'in'.</p>
+    pub operator: Option<String>,
+    /// <p>List of values. Compare Name using Operator to Values. If filter Name is NumberOfNodes, then values can range from 0 to 200. If filter Name is EstimatedDiskUtilizationPercent, then values can range from 0 to 100. For example, filter NumberOfNodes (name) GT (operator) 3 (values).</p>
+    pub values: Option<Vec<String>>,
+}
+
+/// Serialize `NodeConfigurationOptionsFilter` contents to a `SignedRequest`.
+struct NodeConfigurationOptionsFilterSerializer;
+impl NodeConfigurationOptionsFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &NodeConfigurationOptionsFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.name {
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+        }
+        if let Some(ref field_value) = obj.operator {
+            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+        }
+        if let Some(ref field_value) = obj.values {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "item"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// Serialize `NodeConfigurationOptionsFilterList` contents to a `SignedRequest`.
+struct NodeConfigurationOptionsFilterListSerializer;
+impl NodeConfigurationOptionsFilterListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<NodeConfigurationOptionsFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            NodeConfigurationOptionsFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct NodeConfigurationOptionsMessage {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>A list of valid node configurations.</p>
+    pub node_configuration_option_list: Option<Vec<NodeConfigurationOption>>,
+}
+
+struct NodeConfigurationOptionsMessageDeserializer;
+impl NodeConfigurationOptionsMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NodeConfigurationOptionsMessage, XmlParseError> {
+        deserialize_elements::<_, NodeConfigurationOptionsMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "NodeConfigurationOptionList" => {
+                        obj.node_configuration_option_list
+                            .get_or_insert(vec![])
+                            .extend(NodeConfigurationOptionListDeserializer::deserialize(
+                                "NodeConfigurationOptionList",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes an orderable cluster option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableClusterOption {
@@ -7867,10 +8324,42 @@ pub struct ResizeClusterMessage {
     pub cluster_identifier: String,
     /// <p>The new cluster type for the specified cluster.</p>
     pub cluster_type: Option<String>,
-    /// <p>The new node type for the nodes you are adding.</p>
+    /// <p>The new node type for the nodes you are adding. If not specified, the cluster's current node type is used.</p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes for the cluster.</p>
     pub number_of_nodes: i64,
+}
+
+struct ResizeClusterMessageDeserializer;
+impl ResizeClusterMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResizeClusterMessage, XmlParseError> {
+        deserialize_elements::<_, ResizeClusterMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Classic" => {
+                    obj.classic = Some(BooleanOptionalDeserializer::deserialize("Classic", stack)?);
+                }
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        StringDeserializer::deserialize("ClusterIdentifier", stack)?;
+                }
+                "ClusterType" => {
+                    obj.cluster_type = Some(StringDeserializer::deserialize("ClusterType", stack)?);
+                }
+                "NodeType" => {
+                    obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
+                }
+                "NumberOfNodes" => {
+                    obj.number_of_nodes = IntegerDeserializer::deserialize("NumberOfNodes", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
 }
 
 /// Serialize `ResizeClusterMessage` contents to a `SignedRequest`.
@@ -8155,6 +8644,8 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
+    /// <p>The number of nodes specified when provisioning the restored cluster.</p>
+    pub number_of_nodes: Option<i64>,
     /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
     pub owner_account: Option<String>,
     /// <p>The port number on which the cluster accepts connections.</p> <p>Default: The same port as the original cluster.</p> <p>Constraints: Must be between <code>1115</code> and <code>65535</code>.</p>
@@ -8266,6 +8757,9 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
         }
+        if let Some(ref field_value) = obj.number_of_nodes {
+            params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
+        }
         if let Some(ref field_value) = obj.owner_account {
             params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
         }
@@ -8337,15 +8831,15 @@ impl RestoreFromClusterSnapshotResultDeserializer {
 /// <p>Describes the status of a cluster restore action. Returns null if the cluster was not created by restoring a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreStatus {
-    /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup.</p>
+    /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub current_restore_rate_in_mega_bytes_per_second: Option<f64>,
-    /// <p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish.</p>
+    /// <p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub elapsed_time_in_seconds: Option<i64>,
-    /// <p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore.</p>
+    /// <p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub estimated_time_to_completion_in_seconds: Option<i64>,
-    /// <p>The number of megabytes that have been transferred from snapshot storage.</p>
+    /// <p>The number of megabytes that have been transferred from snapshot storage. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub progress_in_mega_bytes: Option<i64>,
-    /// <p>The size of the set of snapshot data used to restore the cluster.</p>
+    /// <p>The size of the set of snapshot data used to restore the cluster. This field is only updated when you restore to DC2 and DS2 node types. </p>
     pub snapshot_size_in_mega_bytes: Option<i64>,
     /// <p>The status of the restore action. Returns starting, restoring, completed, or failed.</p>
     pub status: Option<String>,
@@ -8779,6 +9273,255 @@ impl ScheduleStateDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+/// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduledAction {
+    /// <p>The end time in UTC when the schedule is no longer active. After this time, the scheduled action does not trigger. </p>
+    pub end_time: Option<String>,
+    /// <p>The IAM role to assume to run the scheduled action. This IAM role must have permission to run the Amazon Redshift API operation in the scheduled action. This IAM role must allow the Amazon Redshift scheduler (Principal scheduler.redshift.amazonaws.com) to assume permissions on your behalf. For more information about the IAM role to use with the Amazon Redshift scheduler, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html">Using Identity-Based Policies for Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    pub iam_role: Option<String>,
+    /// <p>List of times when the scheduled action will run. </p>
+    pub next_invocations: Option<Vec<String>>,
+    /// <p>The schedule for a one-time (at format) or recurring (cron format) scheduled action. Schedule invocations must be separated by at least one hour.</p> <p>Format of at expressions is "<code>at(yyyy-mm-ddThh:mm:ss)</code>". For example, "<code>at(2016-03-04T17:27:00)</code>".</p> <p>Format of cron expressions is "<code>cron(Minutes Hours Day-of-month Month Day-of-week Year)</code>". For example, "<code>cron(0, 10, *, *, MON, *)</code>". For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron Expressions</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    pub schedule: Option<String>,
+    /// <p>The description of the scheduled action. </p>
+    pub scheduled_action_description: Option<String>,
+    /// <p>The name of the scheduled action. </p>
+    pub scheduled_action_name: Option<String>,
+    /// <p>The start time in UTC when the schedule is active. Before this time, the scheduled action does not trigger. </p>
+    pub start_time: Option<String>,
+    /// <p>The state of the scheduled action. For example, <code>DISABLED</code>. </p>
+    pub state: Option<String>,
+    /// <p>A JSON format string of the Amazon Redshift API operation with input parameters. </p> <p>"<code>{\"ResizeCluster\":{\"NodeType\":\"ds2.8xlarge\",\"ClusterIdentifier\":\"my-test-cluster\",\"NumberOfNodes\":3}}</code>". </p>
+    pub target_action: Option<ScheduledActionType>,
+}
+
+struct ScheduledActionDeserializer;
+impl ScheduledActionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledAction, XmlParseError> {
+        deserialize_elements::<_, ScheduledAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndTime" => {
+                    obj.end_time = Some(TStampDeserializer::deserialize("EndTime", stack)?);
+                }
+                "IamRole" => {
+                    obj.iam_role = Some(StringDeserializer::deserialize("IamRole", stack)?);
+                }
+                "NextInvocations" => {
+                    obj.next_invocations.get_or_insert(vec![]).extend(
+                        ScheduledActionTimeListDeserializer::deserialize("NextInvocations", stack)?,
+                    );
+                }
+                "Schedule" => {
+                    obj.schedule = Some(StringDeserializer::deserialize("Schedule", stack)?);
+                }
+                "ScheduledActionDescription" => {
+                    obj.scheduled_action_description = Some(StringDeserializer::deserialize(
+                        "ScheduledActionDescription",
+                        stack,
+                    )?);
+                }
+                "ScheduledActionName" => {
+                    obj.scheduled_action_name = Some(StringDeserializer::deserialize(
+                        "ScheduledActionName",
+                        stack,
+                    )?);
+                }
+                "StartTime" => {
+                    obj.start_time = Some(TStampDeserializer::deserialize("StartTime", stack)?);
+                }
+                "State" => {
+                    obj.state = Some(ScheduledActionStateDeserializer::deserialize(
+                        "State", stack,
+                    )?);
+                }
+                "TargetAction" => {
+                    obj.target_action = Some(ScheduledActionTypeDeserializer::deserialize(
+                        "TargetAction",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A set of elements to filter the returned scheduled actions. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduledActionFilter {
+    /// <p>The type of element to filter. </p>
+    pub name: String,
+    /// <p>List of values. Compare if the value (of type defined by <code>Name</code>) equals an item in the list of scheduled actions. </p>
+    pub values: Vec<String>,
+}
+
+/// Serialize `ScheduledActionFilter` contents to a `SignedRequest`.
+struct ScheduledActionFilterSerializer;
+impl ScheduledActionFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ScheduledActionFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        ValueStringListSerializer::serialize(params, &format!("{}{}", prefix, "item"), &obj.values);
+    }
+}
+
+/// Serialize `ScheduledActionFilterList` contents to a `SignedRequest`.
+struct ScheduledActionFilterListSerializer;
+impl ScheduledActionFilterListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledActionFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            ScheduledActionFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct ScheduledActionListDeserializer;
+impl ScheduledActionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ScheduledAction>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "ScheduledAction" {
+                obj.push(ScheduledActionDeserializer::deserialize(
+                    "ScheduledAction",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+struct ScheduledActionStateDeserializer;
+impl ScheduledActionStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ScheduledActionTimeListDeserializer;
+impl ScheduledActionTimeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "ScheduledActionTime" {
+                obj.push(TStampDeserializer::deserialize(
+                    "ScheduledActionTime",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The action type that specifies an Amazon Redshift API operation that is supported by the Amazon Redshift scheduler. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduledActionType {
+    /// <p>An action that runs a <code>ResizeCluster</code> API operation. </p>
+    pub resize_cluster: Option<ResizeClusterMessage>,
+}
+
+struct ScheduledActionTypeDeserializer;
+impl ScheduledActionTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledActionType, XmlParseError> {
+        deserialize_elements::<_, ScheduledActionType, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ResizeCluster" => {
+                    obj.resize_cluster = Some(ResizeClusterMessageDeserializer::deserialize(
+                        "ResizeCluster",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `ScheduledActionType` contents to a `SignedRequest`.
+struct ScheduledActionTypeSerializer;
+impl ScheduledActionTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ScheduledActionType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.resize_cluster {
+            ResizeClusterMessageSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ResizeCluster"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduledActionsMessage {
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeScheduledActions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>List of retrieved scheduled actions. </p>
+    pub scheduled_actions: Option<Vec<ScheduledAction>>,
+}
+
+struct ScheduledActionsMessageDeserializer;
+impl ScheduledActionsMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledActionsMessage, XmlParseError> {
+        deserialize_elements::<_, ScheduledActionsMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ScheduledActions" => {
+                        obj.scheduled_actions.get_or_insert(vec![]).extend(
+                            ScheduledActionListDeserializer::deserialize(
+                                "ScheduledActions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 struct ScheduledSnapshotTimeListDeserializer;
@@ -10107,6 +10850,17 @@ impl UpdateTargetDeserializer {
             }
             Ok(())
         })
+    }
+}
+
+/// Serialize `ValueStringList` contents to a `SignedRequest`.
+struct ValueStringListSerializer;
+impl ValueStringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
     }
 }
 
@@ -11631,6 +12385,101 @@ impl Error for CreateHsmConfigurationError {
         }
     }
 }
+/// Errors returned by CreateScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum CreateScheduledActionError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>The scheduled action is not valid. </p>
+    InvalidScheduledActionFault(String),
+    /// <p>The scheduled action already exists. </p>
+    ScheduledActionAlreadyExistsFault(String),
+    /// <p>The quota for scheduled actions exceeded. </p>
+    ScheduledActionQuotaExceededFault(String),
+    /// <p>The action type specified for a scheduled action is not supported. </p>
+    ScheduledActionTypeUnsupportedFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl CreateScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::InvalidScheduleFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidScheduledAction" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::InvalidScheduledActionFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionTypeUnsupported" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::ScheduledActionTypeUnsupportedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            CreateScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateScheduledActionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateScheduledActionError::InvalidScheduleFault(ref cause) => cause,
+            CreateScheduledActionError::InvalidScheduledActionFault(ref cause) => cause,
+            CreateScheduledActionError::ScheduledActionAlreadyExistsFault(ref cause) => cause,
+            CreateScheduledActionError::ScheduledActionQuotaExceededFault(ref cause) => cause,
+            CreateScheduledActionError::ScheduledActionTypeUnsupportedFault(ref cause) => cause,
+            CreateScheduledActionError::UnauthorizedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateSnapshotCopyGrant
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotCopyGrantError {
@@ -12393,6 +13242,63 @@ impl Error for DeleteHsmConfigurationError {
         match *self {
             DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(ref cause) => cause,
             DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum DeleteScheduledActionError {
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl DeleteScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            DeleteScheduledActionError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            DeleteScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteScheduledActionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteScheduledActionError::ScheduledActionNotFoundFault(ref cause) => cause,
+            DeleteScheduledActionError::UnauthorizedOperation(ref cause) => cause,
         }
     }
 }
@@ -13458,6 +14364,89 @@ impl Error for DescribeLoggingStatusError {
         }
     }
 }
+/// Errors returned by DescribeNodeConfigurationOptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeNodeConfigurationOptionsError {
+    /// <p>The owner of the specified snapshot has not authorized your account to access the snapshot.</p>
+    AccessToSnapshotDeniedFault(String),
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    ClusterSnapshotNotFoundFault(String),
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    InvalidClusterSnapshotStateFault(String),
+}
+
+impl DescribeNodeConfigurationOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeNodeConfigurationOptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessToSnapshotDenied" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::AccessToSnapshotDeniedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::ClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::ClusterSnapshotNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return RusotoError::Service(
+                            DescribeNodeConfigurationOptionsError::InvalidClusterSnapshotStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeNodeConfigurationOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeNodeConfigurationOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeNodeConfigurationOptionsError::AccessToSnapshotDeniedFault(ref cause) => cause,
+            DescribeNodeConfigurationOptionsError::ClusterNotFoundFault(ref cause) => cause,
+            DescribeNodeConfigurationOptionsError::ClusterSnapshotNotFoundFault(ref cause) => cause,
+            DescribeNodeConfigurationOptionsError::InvalidClusterSnapshotStateFault(ref cause) => {
+                cause
+            }
+        }
+    }
+}
 /// Errors returned by DescribeOrderableClusterOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableClusterOptionsError {}
@@ -13683,6 +14672,65 @@ impl Error for DescribeResizeError {
         match *self {
             DescribeResizeError::ClusterNotFoundFault(ref cause) => cause,
             DescribeResizeError::ResizeNotFoundFault(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeScheduledActions
+#[derive(Debug, PartialEq)]
+pub enum DescribeScheduledActionsError {
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl DescribeScheduledActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            DescribeScheduledActionsError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            DescribeScheduledActionsError::UnauthorizedOperation(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeScheduledActionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeScheduledActionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeScheduledActionsError::ScheduledActionNotFoundFault(ref cause) => cause,
+            DescribeScheduledActionsError::UnauthorizedOperation(ref cause) => cause,
         }
     }
 }
@@ -15233,6 +16281,91 @@ impl Error for ModifyEventSubscriptionError {
         }
     }
 }
+/// Errors returned by ModifyScheduledAction
+#[derive(Debug, PartialEq)]
+pub enum ModifyScheduledActionError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>The scheduled action is not valid. </p>
+    InvalidScheduledActionFault(String),
+    /// <p>The scheduled action cannot be found. </p>
+    ScheduledActionNotFoundFault(String),
+    /// <p>The action type specified for a scheduled action is not supported. </p>
+    ScheduledActionTypeUnsupportedFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl ModifyScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyScheduledActionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::InvalidScheduleFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidScheduledAction" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::InvalidScheduledActionFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionNotFound" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::ScheduledActionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ScheduledActionTypeUnsupported" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::ScheduledActionTypeUnsupportedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            ModifyScheduledActionError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyScheduledActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyScheduledActionError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyScheduledActionError::InvalidScheduleFault(ref cause) => cause,
+            ModifyScheduledActionError::InvalidScheduledActionFault(ref cause) => cause,
+            ModifyScheduledActionError::ScheduledActionNotFoundFault(ref cause) => cause,
+            ModifyScheduledActionError::ScheduledActionTypeUnsupportedFault(ref cause) => cause,
+            ModifyScheduledActionError::UnauthorizedOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifySnapshotCopyRetentionPeriod
 #[derive(Debug, PartialEq)]
 pub enum ModifySnapshotCopyRetentionPeriodError {
@@ -15746,6 +16879,8 @@ pub enum RestoreFromClusterSnapshotError {
     InvalidRestoreFault(String),
     /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
+    /// <p>The tag is invalid.</p>
+    InvalidTagFault(String),
     /// <p>The cluster subnet group does not cover all Availability Zones.</p>
     InvalidVPCNetworkStateFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
@@ -15756,6 +16891,8 @@ pub enum RestoreFromClusterSnapshotError {
     NumberOfNodesQuotaExceededFault(String),
     /// <p>We could not find the specified snapshot schedule. </p>
     SnapshotScheduleNotFoundFault(String),
+    /// <p>You have exceeded the number of tags allowed.</p>
+    TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
 }
@@ -15887,6 +17024,11 @@ impl RestoreFromClusterSnapshotError {
                             RestoreFromClusterSnapshotError::InvalidSubnet(parsed_error.message),
                         )
                     }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidTagFault(parsed_error.message),
+                        )
+                    }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(
@@ -15916,6 +17058,13 @@ impl RestoreFromClusterSnapshotError {
                     "SnapshotScheduleNotFound" => {
                         return RusotoError::Service(
                             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::TagLimitExceededFault(
                                 parsed_error.message,
                             ),
                         )
@@ -15971,6 +17120,7 @@ impl Error for RestoreFromClusterSnapshotError {
             RestoreFromClusterSnapshotError::InvalidElasticIpFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidRestoreFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidSubnet(ref cause) => cause,
+            RestoreFromClusterSnapshotError::InvalidTagFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::LimitExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
@@ -15978,6 +17128,7 @@ impl Error for RestoreFromClusterSnapshotError {
             ) => cause,
             RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => cause,
         }
     }
@@ -16339,6 +17490,12 @@ pub trait Redshift {
         input: CreateHsmConfigurationMessage,
     ) -> Result<CreateHsmConfigurationResult, RusotoError<CreateHsmConfigurationError>>;
 
+    /// <p>Creates a scheduled action. A scheduled action contains a schedule and an Amazon Redshift API action. For example, you can create a schedule of when to run the <code>ResizeCluster</code> API operation. </p>
+    async fn create_scheduled_action(
+        &self,
+        input: CreateScheduledActionMessage,
+    ) -> Result<ScheduledAction, RusotoError<CreateScheduledActionError>>;
+
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn create_snapshot_copy_grant(
         &self,
@@ -16404,6 +17561,12 @@ pub trait Redshift {
         &self,
         input: DeleteHsmConfigurationMessage,
     ) -> Result<(), RusotoError<DeleteHsmConfigurationError>>;
+
+    /// <p>Deletes a scheduled action. </p>
+    async fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionMessage,
+    ) -> Result<(), RusotoError<DeleteScheduledActionError>>;
 
     /// <p>Deletes the specified snapshot copy grant.</p>
     async fn delete_snapshot_copy_grant(
@@ -16528,6 +17691,12 @@ pub trait Redshift {
         input: DescribeLoggingStatusMessage,
     ) -> Result<LoggingStatus, RusotoError<DescribeLoggingStatusError>>;
 
+    /// <p>Returns properties of possible node configurations such as node type, number of nodes, and disk usage for the specified action type.</p>
+    async fn describe_node_configuration_options(
+        &self,
+        input: DescribeNodeConfigurationOptionsMessage,
+    ) -> Result<NodeConfigurationOptionsMessage, RusotoError<DescribeNodeConfigurationOptionsError>>;
+
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_orderable_cluster_options(
         &self,
@@ -16552,6 +17721,12 @@ pub trait Redshift {
         input: DescribeResizeMessage,
     ) -> Result<ResizeProgressMessage, RusotoError<DescribeResizeError>>;
 
+    /// <p>Describes properties of scheduled actions. </p>
+    async fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsMessage,
+    ) -> Result<ScheduledActionsMessage, RusotoError<DescribeScheduledActionsError>>;
+
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn describe_snapshot_copy_grants(
         &self,
@@ -16564,7 +17739,7 @@ pub trait Redshift {
         input: DescribeSnapshotSchedulesMessage,
     ) -> Result<DescribeSnapshotSchedulesOutputMessage, RusotoError<DescribeSnapshotSchedulesError>>;
 
-    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    /// <p>Returns the total amount of snapshot usage and provisioned storage in megabytes.</p>
     async fn describe_storage(
         &self,
     ) -> Result<CustomerStorageMessage, RusotoError<DescribeStorageError>>;
@@ -16674,6 +17849,12 @@ pub trait Redshift {
         input: ModifyEventSubscriptionMessage,
     ) -> Result<ModifyEventSubscriptionResult, RusotoError<ModifyEventSubscriptionError>>;
 
+    /// <p>Modify a scheduled action. </p>
+    async fn modify_scheduled_action(
+        &self,
+        input: ModifyScheduledActionMessage,
+    ) -> Result<ScheduledAction, RusotoError<ModifyScheduledActionError>>;
+
     /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     async fn modify_snapshot_copy_retention_period(
         &self,
@@ -16707,7 +17888,7 @@ pub trait Redshift {
         input: ResetClusterParameterGroupMessage,
     ) -> Result<ClusterParameterGroupNameMessage, RusotoError<ResetClusterParameterGroupError>>;
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,
@@ -16780,6 +17961,10 @@ impl RedshiftClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> RedshiftClient {
+        RedshiftClient { client, region }
     }
 }
 
@@ -17529,6 +18714,55 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Creates a scheduled action. A scheduled action contains a schedule and an Amazon Redshift API action. For example, you can create a schedule of when to run the <code>ResizeCluster</code> API operation. </p>
+    async fn create_scheduled_action(
+        &self,
+        input: CreateScheduledActionMessage,
+    ) -> Result<ScheduledAction, RusotoError<CreateScheduledActionError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateScheduledAction");
+        params.put("Version", "2012-12-01");
+        CreateScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateScheduledActionError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = ScheduledAction::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ScheduledActionDeserializer::deserialize(
+                "CreateScheduledActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn create_snapshot_copy_grant(
         &self,
@@ -17907,6 +19141,33 @@ impl Redshift for RedshiftClient {
         if !response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             return Err(DeleteHsmConfigurationError::from_response(response));
+        }
+
+        Ok(std::mem::drop(response))
+    }
+
+    /// <p>Deletes a scheduled action. </p>
+    async fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionMessage,
+    ) -> Result<(), RusotoError<DeleteScheduledActionError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteScheduledAction");
+        params.put("Version", "2012-12-01");
+        DeleteScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteScheduledActionError::from_response(response));
         }
 
         Ok(std::mem::drop(response))
@@ -18825,6 +20086,58 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Returns properties of possible node configurations such as node type, number of nodes, and disk usage for the specified action type.</p>
+    async fn describe_node_configuration_options(
+        &self,
+        input: DescribeNodeConfigurationOptionsMessage,
+    ) -> Result<NodeConfigurationOptionsMessage, RusotoError<DescribeNodeConfigurationOptionsError>>
+    {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeNodeConfigurationOptions");
+        params.put("Version", "2012-12-01");
+        DescribeNodeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeNodeConfigurationOptionsError::from_response(
+                response,
+            ));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = NodeConfigurationOptionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = NodeConfigurationOptionsMessageDeserializer::deserialize(
+                "DescribeNodeConfigurationOptionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_orderable_cluster_options(
         &self,
@@ -19022,6 +20335,55 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Describes properties of scheduled actions. </p>
+    async fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsMessage,
+    ) -> Result<ScheduledActionsMessage, RusotoError<DescribeScheduledActionsError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeScheduledActions");
+        params.put("Version", "2012-12-01");
+        DescribeScheduledActionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeScheduledActionsError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = ScheduledActionsMessage::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ScheduledActionsMessageDeserializer::deserialize(
+                "DescribeScheduledActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn describe_snapshot_copy_grants(
         &self,
@@ -19121,7 +20483,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    /// <p>Returns the total amount of snapshot usage and provisioned storage in megabytes.</p>
     async fn describe_storage(
         &self,
     ) -> Result<CustomerStorageMessage, RusotoError<DescribeStorageError>> {
@@ -19978,6 +21340,55 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Modify a scheduled action. </p>
+    async fn modify_scheduled_action(
+        &self,
+        input: ModifyScheduledActionMessage,
+    ) -> Result<ScheduledAction, RusotoError<ModifyScheduledActionError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyScheduledAction");
+        params.put("Version", "2012-12-01");
+        ModifyScheduledActionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyScheduledActionError::from_response(response));
+        }
+
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let result;
+
+        if xml_response.body.is_empty() {
+            result = ScheduledAction::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(true),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ScheduledActionDeserializer::deserialize(
+                "ModifyScheduledActionResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     async fn modify_snapshot_copy_retention_period(
         &self,
@@ -20228,7 +21639,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,

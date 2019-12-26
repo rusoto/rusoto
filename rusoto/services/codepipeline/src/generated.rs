@@ -97,7 +97,7 @@ pub struct ActionConfiguration {
 /// <p>Represents information about an action configuration property.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActionConfigurationProperty {
-    /// <p>The description of the action configuration property that will be displayed to users.</p>
+    /// <p>The description of the action configuration property that is displayed to users.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -107,14 +107,14 @@ pub struct ActionConfigurationProperty {
     /// <p>The name of the action configuration property.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>Indicates that the property will be used in conjunction with <code>PollForJobs</code>. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
+    /// <p>Indicates that the property is used with <code>PollForJobs</code>. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to other restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
     #[serde(rename = "queryable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queryable: Option<bool>,
     /// <p>Whether the configuration property is a required value.</p>
     #[serde(rename = "required")]
     pub required: bool,
-    /// <p>Whether the configuration property is secret. Secrets are hidden from all calls except for <code>GetJobDetails</code>, <code>GetThirdPartyJobDetails</code>, <code>PollForJobs</code>, and <code>PollForThirdPartyJobs</code>.</p> <p>When updating a pipeline, passing * * * * * without changing any other values of the action will preserve the prior value of the secret.</p>
+    /// <p>Whether the configuration property is secret. Secrets are hidden from all calls except for <code>GetJobDetails</code>, <code>GetThirdPartyJobDetails</code>, <code>PollForJobs</code>, and <code>PollForThirdPartyJobs</code>.</p> <p>When updating a pipeline, passing * * * * * without changing any other values of the action preserves the previous value of the secret.</p>
     #[serde(rename = "secret")]
     pub secret: bool,
     /// <p>The type of the configuration property.</p>
@@ -123,7 +123,7 @@ pub struct ActionConfigurationProperty {
     pub type_: Option<String>,
 }
 
-/// <p>Represents the context of an action within the stage of a pipeline to a job worker.</p>
+/// <p>Represents the context of an action in the stage of a pipeline to a job worker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActionContext {
@@ -131,7 +131,7 @@ pub struct ActionContext {
     #[serde(rename = "actionExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_execution_id: Option<String>,
-    /// <p>The name of the action within the context of a job.</p>
+    /// <p>The name of the action in the context of a job.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -140,10 +140,10 @@ pub struct ActionContext {
 /// <p>Represents information about an action declaration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActionDeclaration {
-    /// <p>The configuration information for the action type.</p>
+    /// <p>Specifies the action type and the provider of the action.</p>
     #[serde(rename = "actionTypeId")]
     pub action_type_id: ActionTypeId,
-    /// <p>The action declaration's configuration.</p>
+    /// <p>The action's configuration. These are key-value pairs that specify input values for an action. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Action Structure Requirements in CodePipeline</a>. For the list of configuration properties for the AWS CloudFormation action type in CodePipeline, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-action-reference.html">Configuration Properties Reference</a> in the <i>AWS CloudFormation User Guide</i>. For template snippets with examples, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-parameter-override-functions.html">Using Parameter Override Functions with CodePipeline Pipelines</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p>The values can be represented in either JSON or YAML format. For example, the JSON configuration item format is as follows: </p> <p> <i>JSON:</i> </p> <p> <code>"Configuration" : { Key : Value },</code> </p>
     #[serde(rename = "configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<::std::collections::HashMap<String, String>>,
@@ -154,6 +154,10 @@ pub struct ActionDeclaration {
     /// <p>The action declaration's name.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The variable namespace associated with the action. All variables produced as output by this action fall under this namespace.</p>
+    #[serde(rename = "namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
     /// <p>The name or ID of the result of the action declaration, such as a test or build artifact.</p>
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,7 +166,7 @@ pub struct ActionDeclaration {
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    /// <p>The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.</p>
+    /// <p>The ARN of the IAM service role that performs the declared action. This is assumed through the roleArn for the pipeline.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
@@ -184,7 +188,7 @@ pub struct ActionExecution {
     #[serde(rename = "externalExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_execution_id: Option<String>,
-    /// <p>The URL of a resource external to AWS that will be used when running the action, for example an external repository URL.</p>
+    /// <p>The URL of a resource external to AWS that is used when running the action (for example, an external repository URL).</p>
     #[serde(rename = "externalExecutionUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_execution_url: Option<String>,
@@ -208,7 +212,7 @@ pub struct ActionExecution {
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
-    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the <code>GetPipelineState</code> command and is used to validate that the approval request corresponding to this token is still valid.</p>
+    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the <code>GetPipelineState</code> command. It is used to validate that the approval request corresponding to this token is still valid.</p>
     #[serde(rename = "token")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
@@ -284,10 +288,18 @@ pub struct ActionExecutionInput {
     #[serde(rename = "inputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_artifacts: Option<Vec<ArtifactDetail>>,
+    /// <p>The variable namespace associated with the action. All variables produced as output by this action fall under this namespace.</p>
+    #[serde(rename = "namespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
     /// <p>The AWS Region for the action, such as us-east-1.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>Configuration data for an action execution with all variable references replaced with their real values for the execution.</p>
+    #[serde(rename = "resolvedConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_configuration: Option<::std::collections::HashMap<String, String>>,
     /// <p>The ARN of the IAM service role that performs the declared action. This is assumed through the roleArn for the pipeline. </p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -306,6 +318,10 @@ pub struct ActionExecutionOutput {
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<ArtifactDetail>>,
+    /// <p>The outputVariables field shows the key-value pairs that were output as part of that execution.</p>
+    #[serde(rename = "outputVariables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Execution result information, such as the external execution ID.</p>
@@ -332,7 +348,7 @@ pub struct ActionRevision {
     /// <p>The date and time when the most recent version of the action was created, in timestamp format.</p>
     #[serde(rename = "created")]
     pub created: Option<f64>,
-    /// <p>The unique identifier of the change that set the state to this revision, for example a deployment ID or timestamp.</p>
+    /// <p>The unique identifier of the change that set the state to this revision (for example, a deployment ID or timestamp).</p>
     #[serde(rename = "revisionChangeId")]
     pub revision_change_id: Option<String>,
     /// <p>The system-generated unique ID that identifies the revision number of the action.</p>
@@ -392,13 +408,13 @@ pub struct ActionType {
 /// <p>Represents information about an action type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActionTypeId {
-    /// <p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the values below.</p>
+    /// <p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the following values. </p>
     #[serde(rename = "category")]
     pub category: String,
     /// <p>The creator of the action being called.</p>
     #[serde(rename = "owner")]
     pub owner: String,
-    /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. To reference a list of action providers by action type, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
+    /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
     #[serde(rename = "provider")]
     pub provider: String,
     /// <p>A string that describes the action version.</p>
@@ -409,11 +425,11 @@ pub struct ActionTypeId {
 /// <p>Returns information about the settings for an action type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActionTypeSettings {
-    /// <p>The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system, such as the configuration page for an AWS CodeDeploy deployment group. This link is provided as part of the action display within the pipeline.</p>
+    /// <p>The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system, such as the configuration page for an AWS CodeDeploy deployment group. This link is provided as part of the action display in the pipeline.</p>
     #[serde(rename = "entityUrlTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_url_template: Option<String>,
-    /// <p>The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system, such as console page for AWS CodeDeploy. This link is shown on the pipeline view page in the AWS CodePipeline console and provides a link to the execution entity of the external action.</p>
+    /// <p>The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system, such as the console page for AWS CodeDeploy. This link is shown on the pipeline view page in the AWS CodePipeline console and provides a link to the execution entity of the external action.</p>
     #[serde(rename = "executionUrlTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_url_template: Option<String>,
@@ -438,7 +454,7 @@ pub struct ApprovalResult {
     pub summary: String,
 }
 
-/// <p>Represents information about an artifact that will be worked upon by actions in the pipeline.</p>
+/// <p>Represents information about an artifact that is worked on by actions in the pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Artifact {
@@ -503,7 +519,7 @@ pub struct ArtifactRevision {
     #[serde(rename = "created")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    /// <p>The name of an artifact. This name might be system-generated, such as "MyApp", or might be defined by the user when an action is created.</p>
+    /// <p>The name of an artifact. This name might be system-generated, such as "MyApp", or defined by the user when an action is created.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -525,14 +541,14 @@ pub struct ArtifactRevision {
     pub revision_url: Option<String>,
 }
 
-/// <p>The Amazon S3 bucket where artifacts are stored for the pipeline.</p>
+/// <p><p>The Amazon S3 bucket where artifacts for the pipeline are stored.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArtifactStore {
     /// <p>The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If this is undefined, the default key for Amazon S3 is used.</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
-    /// <p>The Amazon S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder within the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any Amazon S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>
+    /// <p>The Amazon S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder in the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any Amazon S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>
     #[serde(rename = "location")]
     pub location: String,
     /// <p>The type of the artifact store, such as S3.</p>
@@ -692,13 +708,13 @@ pub struct DisableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
-    /// <p>The reason given to the user why a stage is disabled, such as waiting for manual approval or manual tests. This message is displayed in the pipeline console UI.</p>
+    /// <p>The reason given to the user that a stage is disabled, such as waiting for manual approval or manual tests. This message is displayed in the pipeline console UI.</p>
     #[serde(rename = "reason")]
     pub reason: String,
     /// <p>The name of the stage where you want to disable the inbound or outbound transition of artifacts.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
-    /// <p>Specifies whether artifacts will be prevented from transitioning into the stage and being processed by the actions in that stage (inbound), or prevented from transitioning from the stage after they have been processed by the actions in that stage (outbound).</p>
+    /// <p>Specifies whether artifacts are prevented from transitioning into the stage and being processed by the actions in that stage (inbound), or prevented from transitioning from the stage after they have been processed by the actions in that stage (outbound).</p>
     #[serde(rename = "transitionType")]
     pub transition_type: String,
 }
@@ -712,7 +728,7 @@ pub struct EnableStageTransitionInput {
     /// <p>The name of the stage where you want to enable the transition of artifacts, either into the stage (inbound) or from that stage to the next stage (outbound).</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
-    /// <p>Specifies whether artifacts will be allowed to enter the stage and be processed by the actions in that stage (inbound) or whether already-processed artifacts will be allowed to transition to the next stage (outbound).</p>
+    /// <p>Specifies whether artifacts are allowed to enter the stage and be processed by the actions in that stage (inbound) or whether already processed artifacts are allowed to transition to the next stage (outbound).</p>
     #[serde(rename = "transitionType")]
     pub transition_type: String,
 }
@@ -720,7 +736,7 @@ pub struct EnableStageTransitionInput {
 /// <p>Represents information about the key used to encrypt data in the artifact store, such as an AWS Key Management Service (AWS KMS) key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncryptionKey {
-    /// <p>The ID used to identify the key. For an AWS KMS key, this is the key ID or key ARN.</p>
+    /// <p><p>The ID used to identify the key. For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN.</p> <note> <p>Aliases are recognized only in the account that created the customer master key (CMK). For cross-account actions, you can only use the key ID or key ARN to identify the key.</p> </note></p>
     #[serde(rename = "id")]
     pub id: String,
     /// <p>The type of encryption key, such as an AWS Key Management Service (AWS KMS) key. When creating or updating a pipeline, the value must be set to 'KMS'.</p>
@@ -732,7 +748,7 @@ pub struct EncryptionKey {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ErrorDetails {
-    /// <p>The system ID or error number code of the error.</p>
+    /// <p>The system ID or number code of the error.</p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -749,7 +765,7 @@ pub struct ExecutionDetails {
     #[serde(rename = "externalExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_execution_id: Option<String>,
-    /// <p>The percentage of work completed on the action, represented on a scale of zero to one hundred percent.</p>
+    /// <p>The percentage of work completed on the action, represented on a scale of 0 to 100 percent.</p>
     #[serde(rename = "percentComplete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub percent_complete: Option<i64>,
@@ -757,6 +773,20 @@ pub struct ExecutionDetails {
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
+}
+
+/// <p>The interaction or event that started a pipeline execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExecutionTrigger {
+    /// <p>Detail related to the event that started a pipeline execution, such as the webhook ARN of the webhook that triggered the pipeline execution or the user ARN for a user-initiated <code>start-pipeline-execution</code> CLI command.</p>
+    #[serde(rename = "triggerDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_detail: Option<String>,
+    /// <p>The type of change-detection method, command, or user interaction that started a pipeline execution.</p>
+    #[serde(rename = "triggerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_type: Option<String>,
 }
 
 /// <p>Represents information about failure details.</p>
@@ -816,10 +846,10 @@ pub struct GetPipelineExecutionOutput {
 /// <p>Represents the input of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPipelineInput {
-    /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>
+    /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an AWS user account.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The version number of the pipeline. If you do not specify a version, defaults to the most current version.</p>
+    /// <p>The version number of the pipeline. If you do not specify a version, defaults to the current version.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -859,7 +889,7 @@ pub struct GetPipelineStateOutput {
     #[serde(rename = "pipelineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_name: Option<String>,
-    /// <p><p>The version number of the pipeline.</p> <note> <p>A newly-created pipeline is always assigned a version number of <code>1</code>.</p> </note></p>
+    /// <p><p>The version number of the pipeline.</p> <note> <p>A newly created pipeline is always assigned a version number of <code>1</code>.</p> </note></p>
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
@@ -897,7 +927,7 @@ pub struct GetThirdPartyJobDetailsOutput {
 /// <p>Represents information about an artifact to be worked on, such as a test or build artifact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputArtifact {
-    /// <p>The name of the artifact to be worked on, for example, "My App".</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p>
+    /// <p>The name of the artifact to be worked on (for example, "My App").</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -910,7 +940,7 @@ pub struct Job {
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>Additional data about a job.</p>
+    /// <p>Other data about a job.</p>
     #[serde(rename = "data")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<JobData>,
@@ -924,7 +954,7 @@ pub struct Job {
     pub nonce: Option<String>,
 }
 
-/// <p>Represents additional information about a job required for a job worker to complete the job.</p>
+/// <p>Represents other information about a job required for a job worker to complete the job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobData {
@@ -940,7 +970,7 @@ pub struct JobData {
     #[serde(rename = "artifactCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
-    /// <p>A system-generated token, such as a AWS CodeDeploy deployment ID, that a job requires in order to continue the job asynchronously.</p>
+    /// <p>A system-generated token, such as a AWS CodeDeploy deployment ID, required by a job to continue the job asynchronously.</p>
     #[serde(rename = "continuationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuation_token: Option<String>,
@@ -956,7 +986,7 @@ pub struct JobData {
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<Artifact>>,
-    /// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>Includes <code>pipelineArn</code> and <code>pipelineExecutionId</code> for Custom jobs.</p> </note></p>
+    /// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>Includes <code>pipelineArn</code> and <code>pipelineExecutionId</code> for custom jobs.</p> </note></p>
     #[serde(rename = "pipelineContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_context: Option<PipelineContext>,
@@ -970,7 +1000,7 @@ pub struct JobDetails {
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>Represents additional information about a job required for a job worker to complete the job. </p>
+    /// <p>Represents other information about a job required for a job worker to complete the job. </p>
     #[serde(rename = "data")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<JobData>,
@@ -1032,7 +1062,7 @@ pub struct ListActionTypesOutput {
     /// <p>Provides details of the action types.</p>
     #[serde(rename = "actionTypes")]
     pub action_types: Vec<ActionType>,
-    /// <p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list action types call to return the next set of action types in the list.</p>
+    /// <p>If the amount of returned information is significantly large, an identifier is also returned. It can be used in a subsequent list action types call to return the next set of action types in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1071,7 +1101,7 @@ pub struct ListPipelineExecutionsOutput {
 /// <p>Represents the input of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPipelinesInput {
-    /// <p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>
+    /// <p>An identifier that was returned from the previous list pipelines call. It can be used to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1081,7 +1111,7 @@ pub struct ListPipelinesInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListPipelinesOutput {
-    /// <p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>
+    /// <p>If the amount of returned information is significantly large, an identifier is also returned. It can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1097,7 +1127,7 @@ pub struct ListTagsForResourceInput {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that was returned from the previous API call, which would be used to return the next page of the list. However, the ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
+    /// <p>The token that was returned from the previous API call, which would be used to return the next page of the list. The ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1109,7 +1139,7 @@ pub struct ListTagsForResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceOutput {
-    /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent API call to return the next page of the list. However, the ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
+    /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent API call to return the next page of the list. The ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1146,7 +1176,7 @@ pub struct ListWebhookItem {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>A unique URL generated by CodePipeline. When a POST request is made to this URL, the defined pipeline is started as long as the body of the post request satisfies the defined authentication and filtering conditions. Deleting and re-creating a webhook will make the old URL invalid and generate a new URL.</p>
+    /// <p>A unique URL generated by CodePipeline. When a POST request is made to this URL, the defined pipeline is started as long as the body of the post request satisfies the defined authentication and filtering conditions. Deleting and re-creating a webhook makes the old URL invalid and generates a new one.</p>
     #[serde(rename = "url")]
     pub url: String,
 }
@@ -1188,7 +1218,7 @@ pub struct OutputArtifact {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PipelineContext {
-    /// <p>The context of an action to a job worker within the stage of a pipeline.</p>
+    /// <p>The context of an action to a job worker in the stage of a pipeline.</p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<ActionContext>,
@@ -1213,11 +1243,11 @@ pub struct PipelineContext {
 /// <p>Represents the structure of actions and stages to be performed in the pipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PipelineDeclaration {
-    /// <p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>
+    /// <p><p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_store: Option<ArtifactStore>,
-    /// <p>A mapping of <code>artifactStore</code> objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either <code>artifactStore</code> or <code>artifactStores</code>, not both.</p> <p>If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p>
+    /// <p><p>A mapping of <code>artifactStore</code> objects and their corresponding AWS Regions. There must be an artifact store for the pipeline Region and for each cross-region action in the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_stores: Option<::std::collections::HashMap<String, ArtifactStore>>,
@@ -1230,7 +1260,7 @@ pub struct PipelineDeclaration {
     /// <p>The stage in which to perform the action.</p>
     #[serde(rename = "stages")]
     pub stages: Vec<StageDeclaration>,
-    /// <p>The version number of the pipeline. A new pipeline always has a version number of 1. This number is automatically incremented when a pipeline is updated.</p>
+    /// <p>The version number of the pipeline. A new pipeline always has a version number of 1. This number is incremented when a pipeline is updated.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -1286,6 +1316,10 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The interaction or event that started a pipeline execution, such as automated change detection or a <code>StartPipelineExecution</code> API call.</p>
+    #[serde(rename = "trigger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger: Option<ExecutionTrigger>,
 }
 
 /// <p>Information about a pipeline.</p>
@@ -1338,7 +1372,7 @@ pub struct PollForJobsInput {
     #[serde(rename = "maxBatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_batch_size: Option<i64>,
-    /// <p>A map of property names and values. For an action type with no queryable properties, this value must be null or an empty map. For an action type with a queryable property, you must supply that property as a key in the map. Only jobs whose action configuration matches the mapped value will be returned.</p>
+    /// <p>A map of property names and values. For an action type with no queryable properties, this value must be null or an empty map. For an action type with a queryable property, you must supply that property as a key in the map. Only jobs whose action configuration matches the mapped value are returned.</p>
     #[serde(rename = "queryParam")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_param: Option<::std::collections::HashMap<String, String>>,
@@ -1379,16 +1413,16 @@ pub struct PollForThirdPartyJobsOutput {
 /// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutActionRevisionInput {
-    /// <p>The name of the action that will process the revision.</p>
+    /// <p>The name of the action that processes the revision.</p>
     #[serde(rename = "actionName")]
     pub action_name: String,
     /// <p>Represents information about the version (or revision) of an action.</p>
     #[serde(rename = "actionRevision")]
     pub action_revision: ActionRevision,
-    /// <p>The name of the pipeline that will start processing the revision to the source.</p>
+    /// <p>The name of the pipeline that starts processing the revision to the source.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
-    /// <p>The name of the stage that contains the action that will act upon the revision.</p>
+    /// <p>The name of the stage that contains the action that acts on the revision.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -1422,7 +1456,7 @@ pub struct PutApprovalResultInput {
     /// <p>The name of the stage that contains the action.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
-    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the <a>GetPipelineState</a> action and is used to validate that the approval request corresponding to this token is still valid.</p>
+    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the <a>GetPipelineState</a> action. It is used to validate that the approval request corresponding to this token is still valid.</p>
     #[serde(rename = "token")]
     pub token: String,
 }
@@ -1451,11 +1485,11 @@ pub struct PutJobFailureResultInput {
 /// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutJobSuccessResultInput {
-    /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
+    /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs use this token to identify the running instance of the action. It can be reused to return more information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
     #[serde(rename = "continuationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuation_token: Option<String>,
-    /// <p>The ID of the current revision of the artifact successfully worked upon by the job.</p>
+    /// <p>The ID of the current revision of the artifact successfully worked on by the job.</p>
     #[serde(rename = "currentRevision")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_revision: Option<CurrentRevision>,
@@ -1466,6 +1500,10 @@ pub struct PutJobSuccessResultInput {
     /// <p>The unique system-generated ID of the job that succeeded. This is the same ID returned from <code>PollForJobs</code>.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p>Key-value pairs produced as output by a job worker that can be made available to a downstream action configuration. <code>outputVariables</code> can be included only when there is no continuation token on the request.</p>
+    #[serde(rename = "outputVariables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
@@ -1488,7 +1526,7 @@ pub struct PutThirdPartyJobSuccessResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a partner action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the partner action. When the action is complete, no continuation token should be supplied.</p>
+    /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a partner action in progress. Future jobs use this token to identify the running instance of the action. It can be reused to return more information about the progress of the partner action. When the action is complete, no continuation token should be supplied.</p>
     #[serde(rename = "continuationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuation_token: Option<String>,
@@ -1511,7 +1549,7 @@ pub struct PutWebhookInput {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The detail provided in an input file to create the webhook, such as the webhook name, the pipeline name, and the action name. Give the webhook a unique name which identifies the webhook being defined. You may choose to name the webhook after the pipeline and action it targets so that you can easily recognize what it's used for later.</p>
+    /// <p>The detail provided in an input file to create the webhook, such as the webhook name, the pipeline name, and the action name. Give the webhook a unique name that helps you identify it. You might name the webhook after the pipeline and action it targets so that you can easily recognize what it's used for later.</p>
     #[serde(rename = "webhook")]
     pub webhook: WebhookDefinition,
 }
@@ -1692,7 +1730,7 @@ pub struct StartPipelineExecutionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
-/// <p>A tag is a key/value pair that is used to manage the resource.</p>
+/// <p>A tag is a key-value pair that is used to manage the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
@@ -1717,7 +1755,7 @@ pub struct TagResourceInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceOutput {}
 
-/// <p>A response to a <code>PollForThirdPartyJobs </code>request returned by AWS CodePipeline when there is a job to be worked upon by a partner action.</p>
+/// <p>A response to a <code>PollForThirdPartyJobs</code> request returned by AWS CodePipeline when there is a job to be worked on by a partner action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ThirdPartyJob {
@@ -1747,7 +1785,7 @@ pub struct ThirdPartyJobData {
     #[serde(rename = "artifactCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
-    /// <p>A system-generated token, such as a AWS CodeDeploy deployment ID, that a job requires in order to continue the job asynchronously.</p>
+    /// <p>A system-generated token, such as a AWS CodeDeploy deployment ID, that a job requires to continue the job asynchronously.</p>
     #[serde(rename = "continuationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuation_token: Option<String>,
@@ -1755,11 +1793,11 @@ pub struct ThirdPartyJobData {
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
-    /// <p>The name of the artifact that will be worked upon by the action, if any. This name might be system-generated, such as "MyApp", or might be defined by the user when the action is created. The input artifact name must match the name of an output artifact generated by an action in an earlier action or stage of the pipeline.</p>
+    /// <p>The name of the artifact that is worked on by the action, if any. This name might be system-generated, such as "MyApp", or it might be defined by the user when the action is created. The input artifact name must match the name of an output artifact generated by an action in an earlier action or stage of the pipeline.</p>
     #[serde(rename = "inputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_artifacts: Option<Vec<Artifact>>,
-    /// <p>The name of the artifact that will be the result of the action, if any. This name might be system-generated, such as "MyBuiltApp", or might be defined by the user when the action is created.</p>
+    /// <p>The name of the artifact that is the result of the action, if any. This name might be system-generated, such as "MyBuiltApp", or it might be defined by the user when the action is created.</p>
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<Artifact>>,
@@ -1844,7 +1882,7 @@ pub struct UpdatePipelineOutput {
 /// <p>The authentication applied to incoming webhook trigger requests.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookAuthConfiguration {
-    /// <p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the <code>AllowedIPRange</code> property must be set, and this property must be set to a valid CIDR range.</p>
+    /// <p>The property used to configure acceptance of webhooks in an IP address range. For IP, only the <code>AllowedIPRange</code> property must be set. This property must be set to a valid CIDR range.</p>
     #[serde(rename = "AllowedIPRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_ip_range: Option<String>,
@@ -1857,7 +1895,7 @@ pub struct WebhookAuthConfiguration {
 /// <p>Represents information about a webhook and its definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookDefinition {
-    /// <p><p>Supported options are GITHUB<em>HMAC, IP and UNAUTHENTICATED.</p> <ul> <li> <p>For information about the authentication scheme implemented by GITHUB</em>HMAC, see <a href="https://developer.github.com/webhooks/securing/">Securing your webhooks</a> on the GitHub Developer website.</p> </li> <li> <p> IP will reject webhooks trigger requests unless they originate from an IP within the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED will accept all webhook trigger requests regardless of origin.</p> </li> </ul></p>
+    /// <p><p>Supported options are GITHUB<em>HMAC, IP, and UNAUTHENTICATED.</p> <ul> <li> <p>For information about the authentication scheme implemented by GITHUB</em>HMAC, see <a href="https://developer.github.com/webhooks/securing/">Securing your webhooks</a> on the GitHub Developer website.</p> </li> <li> <p> IP rejects webhooks trigger requests unless they originate from an IP address in the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED accepts all webhook trigger requests regardless of origin.</p> </li> </ul></p>
     #[serde(rename = "authentication")]
     pub authentication: String,
     /// <p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the <code>SecretToken </code>property must be set. For IP, only the <code>AllowedIPRange </code>property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>
@@ -1880,10 +1918,10 @@ pub struct WebhookDefinition {
 /// <p>The event criteria that specify when a webhook notification is sent to your URL.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookFilterRule {
-    /// <p>A JsonPath expression that will be applied to the body/payload of the webhook. The value selected by the JsonPath expression must match the value specified in the <code>MatchEquals</code> field, otherwise the request will be ignored. For more information about JsonPath expressions, see <a href="https://github.com/json-path/JsonPath">Java JsonPath implementation</a> in GitHub.</p>
+    /// <p>A JsonPath expression that is applied to the body/payload of the webhook. The value selected by the JsonPath expression must match the value specified in the <code>MatchEquals</code> field. Otherwise, the request is ignored. For more information, see <a href="https://github.com/json-path/JsonPath">Java JsonPath implementation</a> in GitHub.</p>
     #[serde(rename = "jsonPath")]
     pub json_path: String,
-    /// <p>The value selected by the <code>JsonPath</code> expression must match what is supplied in the <code>MatchEquals</code> field, otherwise the request will be ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly braces. For example, if the value supplied here is "refs/heads/{Branch}" and the target action has an action configuration property called "Branch" with a value of "master", the <code>MatchEquals</code> value will be evaluated as "refs/heads/master". For a list of action configuration properties for built-in action types, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Pipeline Structure Reference Action Requirements</a>.</p>
+    /// <p>The value selected by the <code>JsonPath</code> expression must match what is supplied in the <code>MatchEquals</code> field. Otherwise, the request is ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly brackets. For example, if the value supplied here is "refs/heads/{Branch}" and the target action has an action configuration property called "Branch" with a value of "master", the <code>MatchEquals</code> value is evaluated as "refs/heads/master". For a list of action configuration properties for built-in action types, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Pipeline Structure Reference Action Requirements</a>.</p>
     #[serde(rename = "matchEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub match_equals: Option<String>,
@@ -1892,9 +1930,9 @@ pub struct WebhookFilterRule {
 /// Errors returned by AcknowledgeJob
 #[derive(Debug, PartialEq)]
 pub enum AcknowledgeJobError {
-    /// <p>The specified nonce was specified in an invalid format.</p>
+    /// <p>The nonce was specified in an invalid format.</p>
     InvalidNonce(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -1933,9 +1971,9 @@ impl Error for AcknowledgeJobError {
 pub enum AcknowledgeThirdPartyJobError {
     /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    /// <p>The specified nonce was specified in an invalid format.</p>
+    /// <p>The nonce was specified in an invalid format.</p>
     InvalidNonce(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -2039,13 +2077,13 @@ impl Error for CreateCustomActionTypeError {
 pub enum CreatePipelineError {
     /// <p>Unable to modify the tag due to a simultaneous update request.</p>
     ConcurrentModification(String),
-    /// <p>The specified action declaration was specified in an invalid format.</p>
+    /// <p>The action declaration was specified in an invalid format.</p>
     InvalidActionDeclaration(String),
     /// <p>Reserved for future use.</p>
     InvalidBlockerDeclaration(String),
-    /// <p>The specified stage declaration was specified in an invalid format.</p>
+    /// <p>The stage declaration was specified in an invalid format.</p>
     InvalidStageDeclaration(String),
-    /// <p>The specified structure was specified in an invalid format.</p>
+    /// <p>The structure was specified in an invalid format.</p>
     InvalidStructure(String),
     /// <p>The specified resource tags are invalid.</p>
     InvalidTags(String),
@@ -2268,9 +2306,9 @@ impl Error for DeregisterWebhookWithThirdPartyError {
 /// Errors returned by DisableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum DisableStageTransitionError {
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
 }
 
@@ -2311,9 +2349,9 @@ impl Error for DisableStageTransitionError {
 /// Errors returned by EnableStageTransition
 #[derive(Debug, PartialEq)]
 pub enum EnableStageTransitionError {
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
 }
 
@@ -2352,7 +2390,7 @@ impl Error for EnableStageTransitionError {
 /// Errors returned by GetJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetJobDetailsError {
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -2385,9 +2423,9 @@ impl Error for GetJobDetailsError {
 /// Errors returned by GetPipeline
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineError {
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified pipeline version was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline version was specified in an invalid format or cannot be found.</p>
     PipelineVersionNotFound(String),
 }
 
@@ -2426,7 +2464,7 @@ impl Error for GetPipelineError {
 pub enum GetPipelineExecutionError {
     /// <p>The pipeline execution was specified in an invalid format or cannot be found, or an execution ID does not belong to the specified pipeline. </p>
     PipelineExecutionNotFound(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
 
@@ -2467,7 +2505,7 @@ impl Error for GetPipelineExecutionError {
 /// Errors returned by GetPipelineState
 #[derive(Debug, PartialEq)]
 pub enum GetPipelineStateError {
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
 
@@ -2502,9 +2540,9 @@ impl Error for GetPipelineStateError {
 pub enum GetThirdPartyJobDetailsError {
     /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     InvalidJob(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -2547,11 +2585,11 @@ impl Error for GetThirdPartyJobDetailsError {
 /// Errors returned by ListActionExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListActionExecutionsError {
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
     /// <p>The pipeline execution was specified in an invalid format or cannot be found, or an execution ID does not belong to the specified pipeline. </p>
     PipelineExecutionNotFound(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
 
@@ -2598,7 +2636,7 @@ impl Error for ListActionExecutionsError {
 /// Errors returned by ListActionTypes
 #[derive(Debug, PartialEq)]
 pub enum ListActionTypesError {
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
 }
 
@@ -2631,9 +2669,9 @@ impl Error for ListActionTypesError {
 /// Errors returned by ListPipelineExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListPipelineExecutionsError {
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
 
@@ -2674,7 +2712,7 @@ impl Error for ListPipelineExecutionsError {
 /// Errors returned by ListPipelines
 #[derive(Debug, PartialEq)]
 pub enum ListPipelinesError {
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
 }
 
@@ -2709,9 +2747,9 @@ impl Error for ListPipelinesError {
 pub enum ListTagsForResourceError {
     /// <p>The specified resource ARN is invalid.</p>
     InvalidArn(String),
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    /// <p>The specified resource was specified in an invalid format.</p>
+    /// <p>The resource was specified in an invalid format.</p>
     ResourceNotFound(String),
 }
 
@@ -2756,7 +2794,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ListWebhooks
 #[derive(Debug, PartialEq)]
 pub enum ListWebhooksError {
-    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provide is the token returned by a previous call.</p>
     InvalidNextToken(String),
 }
 
@@ -2859,9 +2897,9 @@ impl Error for PollForThirdPartyJobsError {
 pub enum PutActionRevisionError {
     /// <p>The specified action cannot be found.</p>
     ActionNotFound(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
 }
 
@@ -2908,9 +2946,9 @@ pub enum PutApprovalResultError {
     ApprovalAlreadyCompleted(String),
     /// <p>The approval request already received a response or has expired.</p>
     InvalidApprovalToken(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
 }
 
@@ -2963,9 +3001,9 @@ impl Error for PutApprovalResultError {
 /// Errors returned by PutJobFailureResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobFailureResultError {
-    /// <p>The specified job state was specified in an invalid format.</p>
+    /// <p>The job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -3002,10 +3040,12 @@ impl Error for PutJobFailureResultError {
 /// Errors returned by PutJobSuccessResult
 #[derive(Debug, PartialEq)]
 pub enum PutJobSuccessResultError {
-    /// <p>The specified job state was specified in an invalid format.</p>
+    /// <p>The job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
+    /// <p>Exceeded the total size limit for all variables in the pipeline.</p>
+    OutputVariablesSizeExceeded(String),
 }
 
 impl PutJobSuccessResultError {
@@ -3017,6 +3057,11 @@ impl PutJobSuccessResultError {
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutJobSuccessResultError::JobNotFound(err.msg))
+                }
+                "OutputVariablesSizeExceededException" => {
+                    return RusotoError::Service(
+                        PutJobSuccessResultError::OutputVariablesSizeExceeded(err.msg),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3035,6 +3080,7 @@ impl Error for PutJobSuccessResultError {
         match *self {
             PutJobSuccessResultError::InvalidJobState(ref cause) => cause,
             PutJobSuccessResultError::JobNotFound(ref cause) => cause,
+            PutJobSuccessResultError::OutputVariablesSizeExceeded(ref cause) => cause,
         }
     }
 }
@@ -3043,9 +3089,9 @@ impl Error for PutJobSuccessResultError {
 pub enum PutThirdPartyJobFailureResultError {
     /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    /// <p>The specified job state was specified in an invalid format.</p>
+    /// <p>The job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -3096,9 +3142,9 @@ impl Error for PutThirdPartyJobFailureResultError {
 pub enum PutThirdPartyJobSuccessResultError {
     /// <p>The client token was specified in an invalid format</p>
     InvalidClientToken(String),
-    /// <p>The specified job state was specified in an invalid format.</p>
+    /// <p>The job state was specified in an invalid format.</p>
     InvalidJobState(String),
-    /// <p>The specified job was specified in an invalid format or cannot be found.</p>
+    /// <p>The job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
 }
 
@@ -3157,7 +3203,7 @@ pub enum PutWebhookError {
     InvalidWebhookFilterPattern(String),
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
     /// <p>The tags limit for a resource has been exceeded.</p>
     TooManyTags(String),
@@ -3259,11 +3305,11 @@ impl Error for RegisterWebhookWithThirdPartyError {
 pub enum RetryStageExecutionError {
     /// <p>The stage has failed in a later run of the pipeline and the pipelineExecutionId associated with the request is out of date.</p>
     NotLatestPipelineExecution(String),
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
+    /// <p>The stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    /// <p>The specified stage can't be retried because the pipeline structure or stage state changed after the stage was not completed; the stage contains no failed actions; one or more actions are still in progress; or another retry attempt is already in progress. </p>
+    /// <p>Unable to retry. The pipeline structure or stage state might have changed while actions awaited retry, or the stage contains no failed actions.</p>
     StageNotRetryable(String),
 }
 
@@ -3314,7 +3360,7 @@ impl Error for RetryStageExecutionError {
 /// Errors returned by StartPipelineExecution
 #[derive(Debug, PartialEq)]
 pub enum StartPipelineExecutionError {
-    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    /// <p>The pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
 }
 
@@ -3355,7 +3401,7 @@ pub enum TagResourceError {
     InvalidArn(String),
     /// <p>The specified resource tags are invalid.</p>
     InvalidTags(String),
-    /// <p>The specified resource was specified in an invalid format.</p>
+    /// <p>The resource was specified in an invalid format.</p>
     ResourceNotFound(String),
     /// <p>The tags limit for a resource has been exceeded.</p>
     TooManyTags(String),
@@ -3412,7 +3458,7 @@ pub enum UntagResourceError {
     InvalidArn(String),
     /// <p>The specified resource tags are invalid.</p>
     InvalidTags(String),
-    /// <p>The specified resource was specified in an invalid format.</p>
+    /// <p>The resource was specified in an invalid format.</p>
     ResourceNotFound(String),
 }
 
@@ -3459,13 +3505,13 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
-    /// <p>The specified action declaration was specified in an invalid format.</p>
+    /// <p>The action declaration was specified in an invalid format.</p>
     InvalidActionDeclaration(String),
     /// <p>Reserved for future use.</p>
     InvalidBlockerDeclaration(String),
-    /// <p>The specified stage declaration was specified in an invalid format.</p>
+    /// <p>The stage declaration was specified in an invalid format.</p>
     InvalidStageDeclaration(String),
-    /// <p>The specified structure was specified in an invalid format.</p>
+    /// <p>The structure was specified in an invalid format.</p>
     InvalidStructure(String),
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
@@ -3522,13 +3568,13 @@ impl Error for UpdatePipelineError {
 /// Trait representing the capabilities of the CodePipeline API. CodePipeline clients implement this trait.
 #[async_trait]
 pub trait CodePipeline {
-    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
+    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
     async fn acknowledge_job(
         &self,
         input: AcknowledgeJobInput,
     ) -> Result<AcknowledgeJobOutput, RusotoError<AcknowledgeJobError>>;
 
-    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
+    /// <p>Confirms a job worker has received the specified job. Used for partner actions only.</p>
     async fn acknowledge_third_party_job(
         &self,
         input: AcknowledgeThirdPartyJobInput,
@@ -3540,13 +3586,13 @@ pub trait CodePipeline {
         input: CreateCustomActionTypeInput,
     ) -> Result<CreateCustomActionTypeOutput, RusotoError<CreateCustomActionTypeError>>;
 
-    /// <p>Creates a pipeline.</p>
+    /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     async fn create_pipeline(
         &self,
         input: CreatePipelineInput,
     ) -> Result<CreatePipelineOutput, RusotoError<CreatePipelineError>>;
 
-    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action fails after the action is marked for deletion. Used for custom actions only.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
     async fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
@@ -3558,13 +3604,13 @@ pub trait CodePipeline {
         input: DeletePipelineInput,
     ) -> Result<(), RusotoError<DeletePipelineError>>;
 
-    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
+    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API returns successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
     async fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
     ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>;
 
-    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
+    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently supported only for webhooks that target an action type of GitHub.</p>
     async fn deregister_webhook_with_third_party(
         &self,
         input: DeregisterWebhookWithThirdPartyInput,
@@ -3585,7 +3631,7 @@ pub trait CodePipeline {
         input: EnableStageTransitionInput,
     ) -> Result<(), RusotoError<EnableStageTransitionError>>;
 
-    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
@@ -3609,7 +3655,7 @@ pub trait CodePipeline {
         input: GetPipelineStateInput,
     ) -> Result<GetPipelineStateOutput, RusotoError<GetPipelineStateError>>;
 
-    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
@@ -3639,25 +3685,25 @@ pub trait CodePipeline {
         input: ListPipelinesInput,
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>>;
 
-    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
+    /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
+    /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
     async fn list_webhooks(
         &self,
         input: ListWebhooksInput,
     ) -> Result<ListWebhooksOutput, RusotoError<ListWebhooksError>>;
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
     ) -> Result<PollForJobsOutput, RusotoError<PollForJobsError>>;
 
-    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
@@ -3675,25 +3721,25 @@ pub trait CodePipeline {
         input: PutApprovalResultInput,
     ) -> Result<PutApprovalResultOutput, RusotoError<PutApprovalResultError>>;
 
-    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
     async fn put_job_failure_result(
         &self,
         input: PutJobFailureResultInput,
     ) -> Result<(), RusotoError<PutJobFailureResultError>>;
 
-    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
     async fn put_job_success_result(
         &self,
         input: PutJobSuccessResultInput,
     ) -> Result<(), RusotoError<PutJobSuccessResultError>>;
 
-    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
     async fn put_third_party_job_failure_result(
         &self,
         input: PutThirdPartyJobFailureResultInput,
     ) -> Result<(), RusotoError<PutThirdPartyJobFailureResultError>>;
 
-    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
     async fn put_third_party_job_success_result(
         &self,
         input: PutThirdPartyJobSuccessResultInput,
@@ -3711,7 +3757,7 @@ pub trait CodePipeline {
         input: RegisterWebhookWithThirdPartyInput,
     ) -> Result<RegisterWebhookWithThirdPartyOutput, RusotoError<RegisterWebhookWithThirdPartyError>>;
 
-    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage. You can retry a stage immediately if any of the actions in the stage fail. When you retry, all actions that are still in progress continue working, and failed actions are triggered again.</p>
     async fn retry_stage_execution(
         &self,
         input: RetryStageExecutionInput,
@@ -3735,7 +3781,7 @@ pub trait CodePipeline {
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 
-    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     async fn update_pipeline(
         &self,
         input: UpdatePipelineInput,
@@ -3773,11 +3819,15 @@ impl CodePipelineClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CodePipelineClient {
+        CodePipelineClient { client, region }
+    }
 }
 
 #[async_trait]
 impl CodePipeline for CodePipelineClient {
-    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
+    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Used for custom actions only.</p>
     async fn acknowledge_job(
         &self,
         input: AcknowledgeJobInput,
@@ -3804,7 +3854,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
+    /// <p>Confirms a job worker has received the specified job. Used for partner actions only.</p>
     async fn acknowledge_third_party_job(
         &self,
         input: AcknowledgeThirdPartyJobInput,
@@ -3866,7 +3916,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Creates a pipeline.</p>
+    /// <p><p>Creates a pipeline.</p> <note> <p>In the pipeline structure, you must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     async fn create_pipeline(
         &self,
         input: CreatePipelineInput,
@@ -3893,7 +3943,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action fails after the action is marked for deletion. Used for custom actions only.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
     async fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
@@ -3948,7 +3998,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
+    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API returns successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
     async fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
@@ -3975,7 +4025,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
+    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently supported only for webhooks that target an action type of GitHub.</p>
     async fn deregister_webhook_with_third_party(
         &self,
         input: DeregisterWebhookWithThirdPartyInput,
@@ -4069,7 +4119,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_job_details(
         &self,
         input: GetJobDetailsInput,
@@ -4178,7 +4228,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Requests the details of a job for a third party action. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_third_party_job_details(
         &self,
         input: GetThirdPartyJobDetailsInput,
@@ -4322,7 +4372,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
+    /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -4350,7 +4400,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
+    /// <p>Gets a listing of all the webhooks in this AWS Region for this account. The output lists all webhooks and includes the webhook URL and ARN and the configuration for each webhook.</p>
     async fn list_webhooks(
         &self,
         input: ListWebhooksInput,
@@ -4377,7 +4427,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act on. <code>PollForJobs</code> is valid only for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
@@ -4404,7 +4454,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Used for partner actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     async fn poll_for_third_party_jobs(
         &self,
         input: PollForThirdPartyJobsInput,
@@ -4489,7 +4539,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
     async fn put_job_failure_result(
         &self,
         input: PutJobFailureResultInput,
@@ -4515,7 +4565,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Used for custom actions only.</p>
     async fn put_job_success_result(
         &self,
         input: PutJobSuccessResultInput,
@@ -4541,7 +4591,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
     async fn put_third_party_job_failure_result(
         &self,
         input: PutThirdPartyJobFailureResultInput,
@@ -4570,7 +4620,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Used for partner actions only.</p>
     async fn put_third_party_job_success_result(
         &self,
         input: PutThirdPartyJobSuccessResultInput,
@@ -4658,7 +4708,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage. You can retry a stage immediately if any of the actions in the stage fail. When you retry, all actions that are still in progress continue working, and failed actions are triggered again.</p>
     async fn retry_stage_execution(
         &self,
         input: RetryStageExecutionInput,
@@ -4771,7 +4821,7 @@ impl CodePipeline for CodePipelineClient {
         }
     }
 
-    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     async fn update_pipeline(
         &self,
         input: UpdatePipelineInput,

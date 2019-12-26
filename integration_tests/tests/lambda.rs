@@ -6,17 +6,17 @@ extern crate rusoto_lambda;
 use rusoto_core::{Region, RusotoError};
 use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
 
-#[test]
-fn should_list_functions() {
+#[tokio::test]
+async fn should_list_functions() {
     let client = LambdaClient::new(Region::UsEast1);
     let request = ListFunctionsRequest::default();
 
-    let result = client.list_functions(request).sync().unwrap();
+    let result = client.list_functions(request).await.unwrap();
     println!("{:#?}", result);
 }
 
-#[test]
-fn should_function_not_found() {
+#[tokio::test]
+async fn should_function_not_found() {
     let client = LambdaClient::new(Region::UsEast1);
     {
         let request = InvocationRequest {
@@ -25,7 +25,7 @@ fn should_function_not_found() {
             ..Default::default()
         };
 
-        let result = client.invoke(request).sync();
+        let result = client.invoke(request).await;
 
         assert!(result.is_err());
         if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {
@@ -47,7 +47,7 @@ fn should_function_not_found() {
             ..Default::default()
         };
 
-        let result = client.invoke(request).sync();
+        let result = client.invoke(request).await;
 
         assert!(result.is_err());
         if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {

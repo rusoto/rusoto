@@ -2479,6 +2479,10 @@ impl XRayClient {
             region,
         }
     }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> XRayClient {
+        XRayClient { client, region }
+    }
 }
 
 #[async_trait]

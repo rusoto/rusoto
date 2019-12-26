@@ -13,7 +13,11 @@ use crate::Service;
 pub struct RestXmlGenerator;
 
 impl GenerateProtocol for RestXmlGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(
                 writer,
@@ -98,7 +102,12 @@ impl GenerateProtocol for RestXmlGenerator {
         writeln!(writer, "{}", imports)
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service<'_>) -> Option<String> {
+    fn generate_serializer(
+        &self,
+        name: &str,
+        shape: &Shape,
+        service: &Service<'_>,
+    ) -> Option<String> {
         if name != "RestoreRequest" && name.ends_with("Request") {
             if used_as_request_payload(shape) {
                 return Some(generate_request_payload_serializer(name, shape));
@@ -153,14 +162,10 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
     };
 
     // Specialized docs for services:
-    match service.name().to_ascii_lowercase().as_ref() {
-        "route 53" => {
-            if operation.name == "ChangeResourceRecordSets" {
-                docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
-            }
-            ()
+    if let "route 53" = service.name().to_ascii_lowercase().as_ref() {
+        if operation.name == "ChangeResourceRecordSets" {
+            docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
         }
-        _ => (),
     }
 
     docs
@@ -177,7 +182,7 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
-        parts.push(generate_payload_member_serialization(service,input_shape));
+        parts.push(generate_payload_member_serialization(service, input_shape));
         parts.push(
             generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
         );
@@ -218,7 +223,7 @@ fn generate_service_specific_code(service: &Service<'_>, operation: &Operation) 
     }
 }
 
-fn generate_payload_member_serialization(service: &Service,shape: &Shape) -> String {
+fn generate_payload_member_serialization(service: &Service, shape: &Shape) -> String {
     let payload_field = shape.payload.as_ref().unwrap();
     let payload_member = shape.members.as_ref().unwrap().get(payload_field).unwrap();
 
@@ -234,8 +239,10 @@ fn generate_payload_member_serialization(service: &Service,shape: &Shape) -> Str
     // s3 is a special case where the policy member should not be xml serialized but rather passed
     // as a string literal
     else if service.service_type_name().eq("S3") && payload_field.eq("Policy") {
-        format!("request.set_payload(Some(input.{payload_field}.into_bytes()));",
-                payload_field = payload_field.to_snake_case())
+        format!(
+            "request.set_payload(Some(input.{payload_field}.into_bytes()));",
+            payload_field = payload_field.to_snake_case()
+        )
     }
     // otherwise serialize the object to XML and use that as the payload
     else if shape.required(payload_field) {

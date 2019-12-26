@@ -41,6 +41,10 @@ pub struct BotAliasMetadata {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>Settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -180,6 +184,31 @@ pub struct CodeHook {
     pub uri: String,
 }
 
+/// <p>Provides the settings needed for conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ConversationLogsRequest {
+    /// <p>The Amazon Resource Name (ARN) of an IAM role with permission to write to your CloudWatch Logs for text logs and your S3 bucket for audio logs. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/conversation-logs.html">Creating Conversation Logs</a>.</p>
+    #[serde(rename = "iamRoleArn")]
+    pub iam_role_arn: String,
+    /// <p>The settings for your conversation logs. You can log the conversation text, conversation audio, or both.</p>
+    #[serde(rename = "logSettings")]
+    pub log_settings: Vec<LogSettingsRequest>,
+}
+
+/// <p>Contains information about conversation log settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConversationLogsResponse {
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used to write your logs to CloudWatch Logs or an S3 bucket.</p>
+    #[serde(rename = "iamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
+    /// <p>The settings for your conversation logs.</p>
+    #[serde(rename = "logSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_settings: Option<Vec<LogSettingsResponse>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBotVersionRequest {
     /// <p>Identifies a specific revision of the <code>$LATEST</code> version of the bot. If you specify a checksum and the <code>$LATEST</code> version of the bot has a different checksum, a <code>PreconditionFailedException</code> exception is returned and Amazon Lex doesn't publish a new version. If you don't specify a checksum, Amazon Lex publishes the <code>$LATEST</code> version.</p>
@@ -218,6 +247,10 @@ pub struct CreateBotVersionResponse {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Indicates whether utterances entered by the user should be sent to Amazon Comprehend for sentiment analysis.</p>
+    #[serde(rename = "detectSentiment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detect_sentiment: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -524,6 +557,10 @@ pub struct GetBotAliasResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>The settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -700,6 +737,10 @@ pub struct GetBotResponse {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Indicates whether user utterances should be sent to Amazon Comprehend for sentiment analysis.</p>
+    #[serde(rename = "detectSentiment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detect_sentiment: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex explains why it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -724,7 +765,7 @@ pub struct GetBotResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The status of the bot. If the bot is ready to run, the status is <code>READY</code>. If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> explains why the bot did not build. If the bot was saved but not built, the status is <code>NOT BUILT</code>.</p>
+    /// <p>The status of the bot. </p> <p>When the status is <code>BUILDING</code> Amazon Lex is building the bot for testing and use.</p> <p>If the status of the bot is <code>READY_BASIC_TESTING</code>, you can test the bot using the exact utterances specified in the bot's intents. When the bot is ready for full testing or to run, the status is <code>READY</code>.</p> <p>If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> field explains why the bot did not build.</p> <p>If the bot was saved but not built, the status is <code>NOT_BUILT</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1218,7 +1259,7 @@ pub struct GetUtterancesViewRequest {
     /// <p>An array of bot versions for which utterance information should be returned. The limit is 5 versions per request.</p>
     #[serde(rename = "botVersions")]
     pub bot_versions: Vec<String>,
-    /// <p>To return utterances that were recognized and handled, use<code>Detected</code>. To return utterances that were not recognized, use <code>Missed</code>.</p>
+    /// <p>To return utterances that were recognized and handled, use <code>Detected</code>. To return utterances that were not recognized, use <code>Missed</code>.</p>
     #[serde(rename = "statusType")]
     pub status_type: String,
 }
@@ -1230,7 +1271,7 @@ pub struct GetUtterancesViewResponse {
     #[serde(rename = "botName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bot_name: Option<String>,
-    /// <p>An array of <a>UtteranceList</a> objects, each containing a list of <a>UtteranceData</a> objects describing the utterances that were processed by your bot. The response contains a maximum of 100 <code>UtteranceData</code> objects for each version.</p>
+    /// <p>An array of <a>UtteranceList</a> objects, each containing a list of <a>UtteranceData</a> objects describing the utterances that were processed by your bot. The response contains a maximum of 100 <code>UtteranceData</code> objects for each version. Amazon Lex returns the most frequent utterances received by the bot in the last 15 days.</p>
     #[serde(rename = "utterances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub utterances: Option<Vec<UtteranceList>>,
@@ -1271,6 +1312,50 @@ pub struct IntentMetadata {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Settings used to configure conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct LogSettingsRequest {
+    /// <p>Where the logs will be delivered. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
+    #[serde(rename = "destination")]
+    pub destination: String,
+    /// <p>The Amazon Resource Name (ARN) of the AWS KMS customer managed key for encrypting audio logs delivered to an S3 bucket. The key does not apply to CloudWatch Logs and is optional for S3 buckets.</p>
+    #[serde(rename = "kmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The type of logging to enable. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
+    #[serde(rename = "logType")]
+    pub log_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs should be delivered.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+/// <p>The settings for conversation logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LogSettingsResponse {
+    /// <p>The destination where logs are delivered.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the key used to encrypt audio logs in an S3 bucket.</p>
+    #[serde(rename = "kmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The type of logging that is enabled.</p>
+    #[serde(rename = "logType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs are delivered.</p>
+    #[serde(rename = "resourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>The resource prefix of the S3 object or CloudWatch Logs log entry where logs are delivered. For both S3 and CloudWatch Logs, the prefix is:</p> <p> <code>aws/lex/bot-name/bot-alias/bot-version</code> </p>
+    #[serde(rename = "resourcePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_prefix: Option<String>,
 }
 
 /// <p>The message object that provides the message text and its type.</p>
@@ -1315,6 +1400,10 @@ pub struct PutBotAliasRequest {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>Settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsRequest>,
     /// <p>A description of the alias.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1339,6 +1428,10 @@ pub struct PutBotAliasResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>The settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    #[serde(rename = "conversationLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_logs: Option<ConversationLogsResponse>,
     /// <p>The date that the bot alias was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1359,7 +1452,7 @@ pub struct PutBotAliasResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutBotRequest {
-    /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p>
+    /// <p>When Amazon Lex can't understand the user's input in context, it tries to elicit the information a few times. After that, Amazon Lex sends the message defined in <code>abortStatement</code> to the user, and then aborts the conversation. To set the number of retries, use the <code>valueElicitationPrompt</code> field for the slot type. </p> <p>For example, in a pizza ordering bot, Amazon Lex might ask a user "What type of crust would you like?" If the user's response is not one of the expected responses (for example, "thin crust, "deep dish," etc.), Amazon Lex tries to elicit a correct response a few more times. </p> <p>For example, in a pizza ordering application, <code>OrderPizza</code> might be one of the intents. This intent might require the <code>CrustType</code> slot. You specify the <code>valueElicitationPrompt</code> field when you create the <code>CrustType</code> slot.</p> <p>If you have defined a fallback intent the abort statement will not be sent to the user, the fallback intent is used instead. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/built-in-intent-fallback.html"> AMAZON.FallbackIntent</a>.</p>
     #[serde(rename = "abortStatement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub abort_statement: Option<Statement>,
@@ -1370,10 +1463,11 @@ pub struct PutBotRequest {
     /// <p>For each Amazon Lex bot created with the Amazon Lex Model Building Service, you must specify whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to the Children's Online Privacy Protection Act (COPPA) by specifying <code>true</code> or <code>false</code> in the <code>childDirected</code> field. By specifying <code>true</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. By specifying <code>false</code> in the <code>childDirected</code> field, you confirm that your use of Amazon Lex <b>is not</b> related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA. You may not specify a default value for the <code>childDirected</code> field that does not accurately reflect whether your use of Amazon Lex is related to a website, program, or other application that is directed or targeted, in whole or in part, to children under age 13 and subject to COPPA.</p> <p>If your use of Amazon Lex relates to a website, program, or other application that is directed in whole or in part, to children under age 13, you must obtain any required verifiable parental consent under COPPA. For information regarding the use of Amazon Lex in connection with websites, programs, or other applications that are directed or targeted, in whole or in part, to children under age 13, see the <a href="https://aws.amazon.com/lex/faqs#data-security">Amazon Lex FAQ.</a> </p>
     #[serde(rename = "childDirected")]
     pub child_directed: bool,
-    /// <p>When Amazon Lex doesn't understand the user's intent, it uses this message to get clarification. To specify how many times Amazon Lex should repeate the clarification prompt, use the <code>maxAttempts</code> field. If Amazon Lex still doesn't understand, it sends the message in the <code>abortStatement</code> field. </p> <p>When you create a clarification prompt, make sure that it suggests the correct response from the user. for example, for a bot that orders pizza and drinks, you might create this clarification prompt: "What would you like to do? You can say 'Order a pizza' or 'Order a drink.'"</p>
+    /// <p><p>When Amazon Lex doesn&#39;t understand the user&#39;s intent, it uses this message to get clarification. To specify how many times Amazon Lex should repeat the clarification prompt, use the <code>maxAttempts</code> field. If Amazon Lex still doesn&#39;t understand, it sends the message in the <code>abortStatement</code> field. </p> <p>When you create a clarification prompt, make sure that it suggests the correct response from the user. for example, for a bot that orders pizza and drinks, you might create this clarification prompt: &quot;What would you like to do? You can say &#39;Order a pizza&#39; or &#39;Order a drink.&#39;&quot;</p> <p>If you have defined a fallback intent, it will be invoked if the clarification prompt is repeated the number of times defined in the <code>maxAttempts</code> field. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/built-in-intent-fallback.html"> AMAZON.FallbackIntent</a>.</p> <p>If you don&#39;t define a clarification prompt, at runtime Amazon Lex will return a 400 Bad Request exception in three cases: </p> <ul> <li> <p>Follow-up prompt - When the user responds to a follow-up prompt but does not provide an intent. For example, in response to a follow-up prompt that says &quot;Would you like anything else today?&quot; the user says &quot;Yes.&quot; Amazon Lex will return a 400 Bad Request exception because it does not have a clarification prompt to send to the user to get an intent.</p> </li> <li> <p>Lambda function - When using a Lambda function, you return an <code>ElicitIntent</code> dialog type. Since Amazon Lex does not have a clarification prompt to get an intent from the user, it returns a 400 Bad Request exception.</p> </li> <li> <p>PutSession operation - When using the <code>PutSession</code> operation, you send an <code>ElicitIntent</code> dialog type. Since Amazon Lex does not have a clarification prompt to get an intent from the user, it returns a 400 Bad Request exception.</p> </li> </ul></p>
     #[serde(rename = "clarificationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
+    /// <p>When set to <code>true</code> a new numbered version of the bot is created. This is the same as calling the <code>CreateBotVersion</code> operation. If you don't specify <code>createVersion</code>, the default is <code>false</code>.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1381,6 +1475,10 @@ pub struct PutBotRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>When set to <code>true</code> user utterances are sent to Amazon Comprehend for sentiment analysis. If you don't specify <code>detectSentiment</code>, the default is <code>false</code>.</p>
+    #[serde(rename = "detectSentiment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detect_sentiment: Option<bool>,
     /// <p>The maximum time in seconds that Amazon Lex retains the data gathered in a conversation.</p> <p>A user interaction session remains active for the amount of time specified. If no conversation occurs during this time, the session expires and Amazon Lex deletes any data provided before the timeout.</p> <p>For example, suppose that a user chooses the OrderPizza intent, but gets sidetracked halfway through placing an order. If the user doesn't complete the order within the specified time, Amazon Lex discards the slot information that it gathered, and the user must start over.</p> <p>If you don't include the <code>idleSessionTTLInSeconds</code> element in a <code>PutBot</code> operation request, Amazon Lex uses the default value. This is also true if the request replaces an existing bot.</p> <p>The default is 300 seconds (5 minutes).</p>
     #[serde(rename = "idleSessionTTLInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1399,7 +1497,7 @@ pub struct PutBotRequest {
     #[serde(rename = "processBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub process_behavior: Option<String>,
-    /// <p>The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/voicelist.html">Available Voices</a> in the <i>Amazon Polly Developer Guide</i>.</p>
+    /// <p>The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/voicelist.html">Voices in Amazon Polly</a> in the <i>Amazon Polly Developer Guide</i>.</p>
     #[serde(rename = "voiceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_id: Option<String>,
@@ -1424,6 +1522,7 @@ pub struct PutBotResponse {
     #[serde(rename = "clarificationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
+    /// <p> <code>True</code> if a new version of the bot was created. If the <code>createVersion</code> field was not specified in the request, the <code>createVersion</code> field is set to false in the response.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1435,6 +1534,10 @@ pub struct PutBotResponse {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> <code>true</code> if the bot is configured to send user utterances to Amazon Comprehend for sentiment analysis. If the <code>detectSentiment</code> field was not specified in the request, the <code>detectSentiment</code> field is <code>false</code> in the response.</p>
+    #[serde(rename = "detectSentiment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detect_sentiment: Option<bool>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to build the bot.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1459,7 +1562,7 @@ pub struct PutBotResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code>to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p>
+    /// <p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>.</p> <p>In the <code>READY_BASIC_TESTING</code> state you can test the bot with user inputs that exactly match the utterances configured for the bot's intents and values in the slot types.</p> <p>If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code> to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p> <p>When the bot is in the <code>READY</code> state you can test and publish the bot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1487,6 +1590,7 @@ pub struct PutIntentRequest {
     #[serde(rename = "confirmationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
+    /// <p>When set to <code>true</code> a new numbered version of the intent is created. This is the same as calling the <code>CreateIntentVersion</code> operation. If you do not specify <code>createVersion</code>, the default is <code>false</code>.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1542,6 +1646,7 @@ pub struct PutIntentResponse {
     #[serde(rename = "confirmationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
+    /// <p> <code>True</code> if a new version of the intent was created. If the <code>createVersion</code> field was not specified in the request, the <code>createVersion</code> field is set to false in the response.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1601,6 +1706,7 @@ pub struct PutSlotTypeRequest {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p>When set to <code>true</code> a new numbered version of the slot type is created. This is the same as calling the <code>CreateSlotTypeVersion</code> operation. If you do not specify <code>createVersion</code>, the default is <code>false</code>.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1628,6 +1734,7 @@ pub struct PutSlotTypeResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    /// <p> <code>True</code> if a new version of the slot type was created. If the <code>createVersion</code> field was not specified in the request, the <code>createVersion</code> field is set to false in the response.</p>
     #[serde(rename = "createVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_version: Option<bool>,
@@ -1680,6 +1787,10 @@ pub struct Slot {
     /// <p>The name of the slot.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>Determines whether a slot is obfuscated in conversation logs and stored utterances. When you obfuscate a slot, the value is replaced by the slot name in curly braces ({}). For example, if the slot name is "full_name", obfuscated values are replaced with "{full_name}". For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-obfuscate.html"> Slot Obfuscation </a>. </p>
+    #[serde(rename = "obfuscationSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub obfuscation_setting: Option<String>,
     /// <p> Directs Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Lex elicits values is arbitrary.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3831,7 +3942,7 @@ pub trait LexModels {
         input: CreateSlotTypeVersionRequest,
     ) -> Result<CreateSlotTypeVersionResponse, RusotoError<CreateSlotTypeVersionError>>;
 
-    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
+    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation. The <code>DeleteBot</code> operation doesn't immediately remove the bot schema. Instead, it is marked for deletion and removed later.</p> <p>Amazon Lex stores utterances indefinitely for improving the ability of your bot to respond to user inputs. These utterances are not removed when the bot is deleted. To remove the utterances, use the <a>DeleteUtterances</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
     async fn delete_bot(&self, input: DeleteBotRequest) -> Result<(), RusotoError<DeleteBotError>>;
 
     /// <p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>
@@ -3876,7 +3987,7 @@ pub trait LexModels {
         input: DeleteSlotTypeVersionRequest,
     ) -> Result<(), RusotoError<DeleteSlotTypeVersionError>>;
 
-    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
+    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteUtterances</code> operation to manually delete stored utterances for a specific user. When you use the <code>DeleteUtterances</code> operation, utterances stored for improving your bot's ability to respond to user input are deleted immediately. Utterances stored for use with the <code>GetUtterancesView</code> operation are deleted after 15 days.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
     async fn delete_utterances(
         &self,
         input: DeleteUtterancesRequest,
@@ -3990,13 +4101,13 @@ pub trait LexModels {
         input: GetSlotTypesRequest,
     ) -> Result<GetSlotTypesResponse, RusotoError<GetSlotTypesError>>;
 
-    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
+    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions of your bot in each request. Amazon Lex returns the most frequent utterances received by the bot in the last 15 days. The response contains information about a maximum of 100 utterances for each version.</p> <p>If you set <code>childDirected</code> field to true when you created your bot, or if you opted out of participating in improving Amazon Lex, utterances are not available.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     async fn get_utterances_view(
         &self,
         input: GetUtterancesViewRequest,
     ) -> Result<GetUtterancesViewResponse, RusotoError<GetUtterancesViewError>>;
 
-    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
+    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>security-iam</a>.</p>
     async fn put_bot(
         &self,
         input: PutBotRequest,
@@ -4057,6 +4168,10 @@ impl LexModelsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
         }
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> LexModelsClient {
+        LexModelsClient { client, region }
     }
 }
 
@@ -4155,7 +4270,7 @@ impl LexModels for LexModelsClient {
         }
     }
 
-    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
+    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation. The <code>DeleteBot</code> operation doesn't immediately remove the bot schema. Instead, it is marked for deletion and removed later.</p> <p>Amazon Lex stores utterances indefinitely for improving the ability of your bot to respond to user inputs. These utterances are not removed when the bot is deleted. To remove the utterances, use the <a>DeleteUtterances</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
     async fn delete_bot(&self, input: DeleteBotRequest) -> Result<(), RusotoError<DeleteBotError>> {
         let request_uri = format!("/bots/{name}", name = input.name);
 
@@ -4397,7 +4512,7 @@ impl LexModels for LexModelsClient {
         }
     }
 
-    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
+    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteUtterances</code> operation to manually delete stored utterances for a specific user. When you use the <code>DeleteUtterances</code> operation, utterances stored for improving your bot's ability to respond to user input are deleted immediately. Utterances stored for use with the <code>GetUtterancesView</code> operation are deleted after 15 days.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
     async fn delete_utterances(
         &self,
         input: DeleteUtterancesRequest,
@@ -5101,7 +5216,7 @@ impl LexModels for LexModelsClient {
         }
     }
 
-    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
+    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions of your bot in each request. Amazon Lex returns the most frequent utterances received by the bot in the last 15 days. The response contains information about a maximum of 100 utterances for each version.</p> <p>If you set <code>childDirected</code> field to true when you created your bot, or if you opted out of participating in improving Amazon Lex, utterances are not available.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     async fn get_utterances_view(
         &self,
         input: GetUtterancesViewRequest,
@@ -5138,7 +5253,7 @@ impl LexModels for LexModelsClient {
         }
     }
 
-    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
+    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>security-iam</a>.</p>
     async fn put_bot(
         &self,
         input: PutBotRequest,

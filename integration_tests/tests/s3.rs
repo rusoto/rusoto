@@ -1,143 +1,340 @@
 #![cfg(feature = "s3")]
-extern crate env_logger;
-extern crate futures;
-extern crate futures_fs;
-extern crate log;
-extern crate reqwest;
-extern crate http;
-extern crate rusoto_core;
-extern crate rusoto_s3;
-extern crate time;
-
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::str;
 use std::time::Duration;
-use time::get_time;
 
-use futures::{Future, Stream};
-use futures_fs::FsPool;
-use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
-use rusoto_core::{Region, ProvideAwsCredentials, RusotoError};
+use bytes::Bytes;
+use time::get_time;
+use tokio::fs;
+use futures::{TryStreamExt, FutureExt};
+
+use rusoto_credential::ProvideAwsCredentials;
+use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider, StaticProvider};
+use rusoto_core::{Region, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
     CORSConfiguration, CORSRule, CompleteMultipartUploadRequest, CompletedMultipartUpload,
     CompletedPart, CopyObjectRequest, CreateBucketRequest, CreateMultipartUploadRequest,
-    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest,
-    HeadObjectRequest, ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest,
-    PutObjectRequest, S3Client, StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
+    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
+    ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
+    StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
 };
 
-type TestClient = S3Client;
+struct TestS3Client {
+    region: Region,
+    s3: S3Client,
+    bucket_name: String,
+    // This flag signifies whether this bucket was already deleted as part of a test
+    bucket_deleted: bool,
+}
 
-// Rust is in bad need of an integration test harness
-// This creates the S3 resources needed for a suite of tests,
-// executes those tests, and then destroys the resources
-#[test]
-fn test_all_the_things() {
-    let _ = env_logger::try_init();
-
-    let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
-        let region = Region::Custom {
-            name: "us-east-1".to_owned(),
-            endpoint: endpoint.to_owned(),
-        };
-        println!(
-            "picked up non-standard endpoint {:?} from S3_ENDPOINT env. variable",
+impl TestS3Client {
+    // construct S3 testing client
+    fn new(bucket_name: String) -> TestS3Client {
+        let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
+            let region = Region::Custom {
+                name: "us-east-1".to_owned(),
+                endpoint: endpoint.to_owned(),
+            };
+            println!(
+                "picked up non-standard endpoint {:?} from S3_ENDPOINT env. variable",
+                region
+            );
             region
-        );
-        region
-    } else {
-        Region::UsEast1
+        } else {
+            Region::UsEast1
+        };
+
+        TestS3Client {
+            region: region.to_owned(),
+            s3: S3Client::new(region),
+            bucket_name: bucket_name.to_owned(),
+            bucket_deleted: false,
+        }
+    }
+
+    // construct an anonymous client for testing acls
+    async fn create_anonymous_client(&self) -> S3Client {
+        if cfg!(feature = "disable_minio_unsupported") {
+            // Minio does not support setting acls, so to make tests pass, return a client that has
+            // the credentials of the bucket owner.
+            self.s3.clone()
+        } else {
+            S3Client::new_with(
+                rusoto_core::request::HttpClient::new().expect("Failed to creat HTTP client"),
+                StaticProvider::from(AwsCredentials::default()),
+                self.region.clone(),
+            )
+        }
+    }
+
+    async fn create_test_bucket(&self, name: String) {
+        let create_bucket_req = CreateBucketRequest {
+            bucket: name.clone(),
+            ..Default::default()
+        };
+        self.s3
+            .create_bucket(create_bucket_req)
+            .await
+            .expect("Failed to create test bucket");
+    }
+
+    async fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
+        let create_bucket_req = CreateBucketRequest {
+            bucket: name.clone(),
+            acl,
+            ..Default::default()
+        };
+        self.s3
+            .create_bucket(create_bucket_req)
+            .await
+            .expect("Failed to create test bucket");
+    }
+
+    async fn delete_object(&self, key: String) {
+        let delete_object_req = DeleteObjectRequest {
+            bucket: self.bucket_name.to_owned(),
+            key: key.to_owned(),
+            ..Default::default()
+        };
+
+        self.s3
+            .delete_object(delete_object_req)
+            .await
+            .expect("Couldn't delete object");
+    }
+
+    async fn put_test_object(&self, filename: String) {
+        let contents: Vec<u8> = Vec::new();
+        let put_request = PutObjectRequest {
+            bucket: self.bucket_name.to_owned(),
+            key: filename.to_owned(),
+            body: Some(contents.into()),
+            ..Default::default()
+        };
+
+        self.s3
+            .put_object(put_request)
+            .await
+            .expect("Failed to put test object");
+    }
+}
+
+// impl Drop for TestS3Client {
+//     fn drop(&mut self) {
+//         if self.bucket_deleted {
+//             return;
+//         }
+//         let delete_bucket_req = DeleteBucketRequest {
+//             bucket: self.bucket_name.clone(),
+//             ..Default::default()
+//         };
+
+//         let s3 = self.s3.clone();
+//         let bucket_name = self.bucket_name.clone();
+//         futures::executor::block_on(async move { 
+//             match s3.delete_bucket(delete_bucket_req).await {
+//                 Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
+//                 Err(e) => println!("Failed to delete S3 bucket: {}", e),
+//             }
+//         });
+//     }
+// }
+
+// inititializes logging
+fn init_logging() {
+    let _ = env_logger::try_init();
+}
+
+#[tokio::test]
+// creates a bucket and test listing buckets and items in bucket
+async fn test_bucket_creation_deletion() {
+    init_logging();
+
+    let bucket_name = format!("s3-test-bucket-{}", get_time().sec);
+    let mut test_client = TestS3Client::new(bucket_name.clone());
+
+    let create_bucket_req = CreateBucketRequest {
+        bucket: bucket_name.clone(),
+        ..Default::default()
     };
 
-    let client = S3Client::new(region.clone());
-    let credentials = DefaultCredentialsProvider::new()
-        .unwrap()
-        .credentials()
-        .wait()
-        .unwrap();
+    // first create a bucket
+    let create_bucket_resp = test_client.s3.create_bucket(create_bucket_req).await;
+    assert!(create_bucket_resp.is_ok());
+    println!(
+        "Bucket {} created, resp: {:#?}",
+        bucket_name.clone(),
+        create_bucket_resp.unwrap()
+    );
 
-    let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
-    let filename = format!("test_file_{}", get_time().sec);
-    let utf8_filename = format!("test[über]file@{}", get_time().sec);
-    let binary_filename = format!("test_file_b{}", get_time().sec);
-    let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
-    let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
+    // now lets check for our bucket and list items in the one we created
+    let resp = test_client.s3.list_buckets().await;
+    assert!(resp.is_ok());
 
-    // get a list of list_buckets
-    test_list_buckets(&client);
+    let resp = resp.unwrap();
+    let mut bucket_found = false;
+    for bucket in resp.buckets.unwrap().iter() {
+        if bucket.name == Some(bucket_name.clone()) {
+            bucket_found = true;
+            break;
+        }
+    }
+    assert!(bucket_found);
 
-    // create a bucket for these tests
-    test_create_bucket(&client, &test_bucket);
+    let list_obj_req = ListObjectsV2Request {
+        bucket: bucket_name.to_owned(),
+        start_after: Some("foo".to_owned()),
+        ..Default::default()
+    };
+    let result = test_client.s3.list_objects_v2(list_obj_req).await;
+    assert!(result.is_ok());
 
-    // list items v2
-    list_items_in_bucket(&client, &test_bucket);
+    test_delete_bucket(&test_client.s3, &bucket_name).await;
+    test_client.bucket_deleted = true;
+}
 
-    // do a multipart upload
-    test_multipart_upload(&client, &region, &credentials, &test_bucket, &multipart_filename);
+#[tokio::test]
+// test against normal files
+async fn test_puts_gets_deletes() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket_with_acl(bucket_name.clone(), Some("public-read".to_owned())).await;
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
         // Minio support: CORS is not implemented by Minio
-        test_put_bucket_cors(&client, &test_bucket);
+        test_put_bucket_cors(&test_client.s3, &test_client.bucket_name).await;
     }
 
+    // file used for testing puts/gets
+    let filename = format!("test_file_{}", get_time().sec);
+    let filename2 = format!("test_file_2_{}", get_time().sec);
+
+    // test failure responses on empty bucket
+    test_get_object_no_such_object(&test_client.s3, &test_client.bucket_name, &filename).await;
+
     // PUT an object via buffer (no_credentials is an arbitrary choice)
-    test_put_object_with_filename(
-        &client,
-        &test_bucket,
+    test_put_object_with_filename_and_acl(
+        &test_client.s3,
+        &test_client.bucket_name,
         &filename,
         &"tests/sample-data/no_credentials",
-    );
+        Some("public-read".to_owned()),
+    ).await;
+
+    // PUT a second copy of the object with tighter acls
+    test_put_object_with_filename(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &filename2,
+        &"tests/sample-data/no_credentials",
+    ).await;
+
+    // create an anonymous reader to test the acls
+    let ro_s3client = test_client.create_anonymous_client().await;
 
     // HEAD the object that was PUT
-    test_head_object(&client, &test_bucket, &filename);
+    test_head_object(&ro_s3client, &test_client.bucket_name, &filename).await;
+
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // HEAD the object that cannot be read, should return 403
+        assert!(try_head_object(&ro_s3client, &test_client.bucket_name, &filename2).await.is_err());
+    }
+
+    // ... but it can be as the original owner
+    test_head_object(&test_client.s3, &test_client.bucket_name, &filename2).await;
 
     // GET the object
-    test_get_object(&client, &test_bucket, &filename);
-    test_get_object_range(&client, &test_bucket, &filename);
+    test_get_object(&ro_s3client, &test_client.bucket_name, &filename).await;
+    test_get_object_range(&ro_s3client, &test_client.bucket_name, &filename).await;
+
+    // add two objects to test the listing by paging
+    for i in 1..3 {
+        test_client.put_test_object(format!("test_object_{}", i)).await;
+    }
+
+    // list items with paging using list object API v1
+    list_items_in_bucket_paged_v1(&ro_s3client, &test_client.bucket_name).await;
+
+    // list items with paging using list object API v2
+    if cfg!(not(feature = "disable_ceph_unsupported")) {
+        // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
+        list_items_in_bucket_paged_v2(&ro_s3client, &test_client.bucket_name).await;
+    }
 
     // copy the object to change its settings
-    test_copy_object(&client, &test_bucket, &filename);
+    test_copy_object(&test_client.s3, &test_client.bucket_name, &filename).await;
 
+    // delete object, will also allow drop() to remove the bucket
+    test_delete_object(&test_client.s3, &test_client.bucket_name, &filename).await;
+
+    // remove test objects used for pagination tests
+    for i in 1..3 {
+        test_client.delete_object(format!("test_object_{}", i)).await;
+    }
+}
+
+#[tokio::test]
+// test against utf8 files
+async fn test_puts_gets_deletes_utf8() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let utf8_filename = format!("test[über]file@{}", get_time().sec);
     // UTF8 filenames
     test_put_object_with_filename(
-        &client,
-        &test_bucket,
+        &test_client.s3,
+        &test_client.bucket_name,
         &utf8_filename,
         &"tests/sample-data/no_credentials",
-    );
+    ).await;
 
-    test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
+    test_copy_object_utf8(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
+    test_delete_object(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
+}
 
-    test_delete_object(&client, &test_bucket, &utf8_filename);
+#[tokio::test]
+// test against binary files
+async fn test_puts_gets_deletes_binary() {
+    init_logging();
 
-    // test failure responses
-    test_get_object_no_such_object(&client, &test_bucket, &binary_filename);
+    let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let binary_filename = format!("test_file_b{}", get_time().sec);
 
     // Binary objects:
     test_put_object_with_filename(
-        &client,
-        &test_bucket,
+        &test_client.s3,
+        &test_client.bucket_name,
         &binary_filename,
         &"tests/sample-data/binary-file",
-    );
-    test_get_object(&client, &test_bucket, &binary_filename);
-    test_get_object_blocking_read(&client, &test_bucket, &binary_filename);
+    ).await;
+    test_get_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+    test_get_object_blocking_read(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+    test_delete_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+}
 
-    // PUT an object via stream
-    let another_filename = format!("streaming{}", filename);
-    test_put_object_stream_with_filename(
-        &client,
-        &test_bucket,
-        &another_filename,
-        &"tests/sample-data/binary-file",
-    );
+#[tokio::test]
+// test metadata ops
+async fn test_puts_gets_deletes_metadata() {
+    init_logging();
 
-    // metadata tests
+    let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
     let mut metadata = HashMap::<String, String>::new();
     metadata.insert(
         "rusoto-metadata-some".to_string(),
@@ -146,65 +343,277 @@ fn test_all_the_things() {
     metadata.insert("rusoto-metadata-none".to_string(), "".to_string());
 
     test_put_object_with_metadata(
-        &client,
-        &test_bucket,
+        &test_client.s3,
+        &test_client.bucket_name,
         &metadata_filename,
         &"tests/sample-data/no_credentials",
         &metadata,
-    );
+    ).await;
 
-    test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-    test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-
-    // list items with paging using list object API v1
-    list_items_in_bucket_paged_v1(&client, &test_bucket);
-
-    // list items with paging using list object API v2
-    if cfg!(not(feature = "disable_ceph_unsupported")) {
-        // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
-        list_items_in_bucket_paged_v2(&client, &test_bucket);
-    }
-
-    test_delete_object(&client, &test_bucket, &metadata_filename);
-    test_delete_object(&client, &test_bucket, &binary_filename);
-    test_delete_object(&client, &test_bucket, &another_filename);
-
-    // DELETE the object
-    test_delete_object(&client, &test_bucket, &filename);
-
-    let filename = format!("{}_for_presigned", filename);
-    // PUT an object for presigned url
-    test_put_object_with_filename(
-        &client,
-        &test_bucket,
-        &filename,
-        &"tests/sample-data/no_credentials",
-    );
-    // generate a presigned url
-    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
-    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &filename);
-    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
-    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
-
-    let utf8_filename = format!("{}_for_presigned", utf8_filename);
-    // UTF8 filenames for presigned url
-    test_put_object_with_filename(
-        &client,
-        &test_bucket,
-        &utf8_filename,
-        &"tests/sample-data/no_credentials",
-    );
-    // generate a presigned url
-    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-
-    // delete the test bucket
-    test_delete_bucket(&client, &test_bucket);
+    test_head_object_with_metadata(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &metadata_filename,
+        &metadata,
+    ).await;
+    test_get_object_with_metadata(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &metadata_filename,
+        &metadata,
+    ).await;
+    test_delete_object(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &metadata_filename,
+    ).await;
 }
 
-fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+#[tokio::test]
+// test object ops using presigned urls
+async fn test_puts_gets_deletes_presigned_url() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let filename = format!("test_file_{}_for_presigned", get_time().sec);
+    // PUT an object for presigned url
+    test_put_object_with_filename(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &filename,
+        &"tests/sample-data/no_credentials",
+    ).await;
+
+    let credentials = DefaultCredentialsProvider::new()
+        .unwrap()
+        .credentials()
+        .await
+        .unwrap();
+
+    // generate a presigned url
+    test_get_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &filename,
+    ).await;
+    test_get_object_with_expired_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &filename,
+    ).await;
+    test_put_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &filename,
+    ).await;
+    test_delete_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &filename,
+    ).await;
+
+    let utf8_filename = format!("test[über]file@{}_for_presigned", get_time().sec);
+    // UTF8 filenames for presigned url
+    test_put_object_with_filename(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &utf8_filename,
+        &"tests/sample-data/no_credentials",
+    ).await;
+    // generate a presigned url
+    test_get_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &utf8_filename,
+    ).await;
+    test_get_object_with_expired_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &utf8_filename,
+    ).await;
+    test_put_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &utf8_filename,
+    ).await;
+    test_delete_object_with_presigned_url(
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &utf8_filename,
+    ).await;
+}
+
+#[tokio::test]
+async fn test_multipart_stream_uploads() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
+    let credentials = DefaultCredentialsProvider::new()
+        .unwrap()
+        .credentials()
+        .await
+        .unwrap();
+
+    // test put via multipart upload
+    test_multipart_upload(
+        &test_client.s3,
+        &test_client.region,
+        &credentials,
+        &test_client.bucket_name,
+        &multipart_filename,
+    ).await;
+
+    // PUT an object via stream
+    let streaming_filename = format!("streaming_test_file_{}", get_time().sec);
+    test_put_object_stream_with_filename(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &streaming_filename,
+        &"tests/sample-data/binary-file",
+    ).await;
+
+    test_delete_object(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &multipart_filename,
+    ).await;
+
+    test_delete_object(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &streaming_filename,
+    ).await;
+}
+
+#[tokio::test]
+async fn test_list_objects_encoding() {
+    init_logging();
+
+    let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let filename = "a%2Fb/c/test_file".to_owned();
+    let prefix = "a%2Fb/c".to_owned();
+    test_client.put_test_object(filename.clone()).await;
+
+    let list_obj_req_v1 = ListObjectsRequest {
+        bucket: bucket_name.clone(),
+        marker: Some(prefix.clone()),
+        prefix: Some(prefix.clone()),
+        ..Default::default()
+    };
+
+    let resp_v1 = test_client
+        .s3
+        .list_objects(list_obj_req_v1)
+        .await
+        .expect("failed to list objects v1");
+
+    assert!(&resp_v1.contents.is_some());
+    let contents_v1 = resp_v1.contents.clone().unwrap();
+    assert_eq!(contents_v1.len(), 1);
+
+    let object = &contents_v1[0];
+    assert!(&object.key.is_some());
+
+    let key = object.key.clone().unwrap();
+    assert_eq!(key, filename);
+
+    // wrap up v1 list obj test with getting the obj with the key returned
+    let get_obj_req = GetObjectRequest {
+        bucket: bucket_name.clone(),
+        key: key.clone(),
+        ..Default::default()
+    };
+    assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
+
+    let list_obj_req_v2 = ListObjectsV2Request {
+        bucket: bucket_name.clone(),
+        prefix: Some(prefix.clone()),
+        ..Default::default()
+    };
+    let resp_v2 = &test_client
+        .s3
+        .list_objects_v2(list_obj_req_v2)
+        .await
+        .expect("failed to list objects v2");
+
+    assert!(&resp_v2.contents.is_some());
+    let contents_v2 = resp_v2.contents.clone().unwrap();
+    assert_eq!(contents_v2.len(), 1);
+
+    let object = &contents_v2[0];
+    assert!(&object.key.is_some());
+
+    let key = object.key.clone().unwrap();
+    assert_eq!(key, filename);
+
+    // wrap up v2 list obj test with getting the obj with the key returned
+    let get_obj_req = GetObjectRequest {
+        bucket: bucket_name.clone(),
+        key: key.clone(),
+        ..Default::default()
+    };
+    assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
+
+    test_delete_object(&test_client.s3, &bucket_name, &key).await;
+}
+
+#[tokio::test]
+async fn test_name_space_truncate() {
+    init_logging();
+
+    let bucket_name = format!("test-name-space-{}", get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let filename_spaces = "spaces     ".to_owned();
+    test_client.put_test_object(filename_spaces.clone()).await;
+
+    let req = ListObjectsV2Request {
+        bucket: bucket_name.clone(),
+        ..Default::default()
+    };
+
+    let key = &test_client
+        .s3
+        .list_objects_v2(req)
+        .await
+        .unwrap()
+        .contents
+        .unwrap()[0]
+        .clone()
+        .key
+        .unwrap();
+
+    assert_eq!(*key, filename_spaces);
+    test_delete_object(&test_client.s3, &bucket_name, &filename_spaces).await;
+}
+
+async fn test_multipart_upload(
+    client: &S3Client,
+    region: &Region,
+    credentials: &AwsCredentials,
+    bucket: &str,
+    filename: &str,
+) {
     let create_multipart_req = CreateMultipartUploadRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -214,7 +623,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
     // start the multipart upload and note the upload_id generated
     let response = client
         .create_multipart_upload(create_multipart_req)
-        .sync()
+        .await
         .expect("Couldn't create multipart upload");
     println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
@@ -241,7 +650,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
         let part_number = part_req1.part_number;
         let response = client
             .upload_part(part_req1)
-            .sync()
+            .await
             .expect("Couldn't upload a file part");
         println!("{:#?}", response);
         completed_parts.push(CompletedPart {
@@ -261,6 +670,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
             .put(&presigned_multipart_put)
             .body(String::from("foo"))
             .send()
+            .await
             .expect("Multipart put with presigned url failed");
         assert_eq!(res.status(), http::StatusCode::OK);
         let e_tag = res.headers().get("ETAG").unwrap().to_str().unwrap();
@@ -285,7 +695,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
 
     let response = client
         .complete_multipart_upload(complete_req)
-        .sync()
+        .await
         .expect("Couldn't complete multipart upload");
     println!("{:#?}", response);
 
@@ -298,7 +708,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
     };
     let upload_multi_response = client
         .create_multipart_upload(create_multipart_req2)
-        .sync()
+        .await
         .expect("Couldn't create multipart upload2");
     println!("{:#?}", upload_multi_response);
     let upload_id2 = upload_multi_response.upload_id.unwrap();
@@ -312,7 +722,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
     };
     let copy_response = client
         .upload_part_copy(upload_part_copy_req)
-        .sync()
+        .await
         .expect("Should have had copy part work");
     println!("copy response: {:#?}", copy_response);
 
@@ -326,7 +736,7 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
     };
     let copy_response2 = client
         .upload_part_copy(upload_part_copy_req2)
-        .sync()
+        .await
         .expect("Should have had copy part work");
     println!("copy response2: {:#?}", copy_response2);
 
@@ -341,11 +751,14 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
             part_number: Some(2),
         },
     ];
+
     let completed_upload2 = CompletedMultipartUpload {
         parts: Some(completed_parts_2),
     };
+
     let complete_req2 = CompleteMultipartUploadRequest {
         bucket: bucket.to_owned(),
+
         key: filename.to_owned(),
         upload_id: upload_id2.to_owned(),
         multipart_upload: Some(completed_upload2),
@@ -354,34 +767,18 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
 
     let response2 = client
         .complete_multipart_upload(complete_req2)
-        .sync()
+        .await
         .expect("Couldn't complete multipart upload2");
     println!("{:#?}", response2);
-
-    // delete the completed file
-    test_delete_object(client, bucket, filename);
 }
 
-fn test_create_bucket(client: &TestClient, bucket: &str) {
-    let create_bucket_req = CreateBucketRequest {
-        bucket: bucket.to_owned(),
-        ..Default::default()
-    };
-
-    let result = client
-        .create_bucket(create_bucket_req)
-        .sync()
-        .expect("Couldn't create bucket");
-    println!("{:#?}", result);
-}
-
-fn test_delete_bucket(client: &TestClient, bucket: &str) {
+async fn test_delete_bucket(client: &S3Client, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest {
         bucket: bucket.to_owned(),
         ..Default::default()
     };
 
-    let result = client.delete_bucket(delete_bucket_req).sync();
+    let result = client.delete_bucket(delete_bucket_req).await;
     println!("{:#?}", result);
     match result {
         Err(e) => match e {
@@ -395,8 +792,8 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
     }
 }
 
-fn test_put_object_with_filename(
-    client: &TestClient,
+async fn test_put_object_with_filename(
+    client: &S3Client,
     bucket: &str,
     dest_filename: &str,
     local_filename: &str,
@@ -412,21 +809,45 @@ fn test_put_object_with_filename(
                 body: Some(contents.into()),
                 ..Default::default()
             };
-            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
 }
 
-fn test_put_object_stream_with_filename(
-    client: &TestClient,
+async fn test_put_object_with_filename_and_acl(
+    client: &S3Client,
+    bucket: &str,
+    dest_filename: &str,
+    local_filename: &str,
+    acl: Option<String>,
+) {
+    let mut f = File::open(local_filename).unwrap();
+    let mut contents: Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            let req = PutObjectRequest {
+                bucket: bucket.to_owned(),
+                key: dest_filename.to_owned(),
+                body: Some(contents.into()),
+                acl,
+                ..Default::default()
+            };
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
+            println!("{:#?}", result);
+        }
+    }
+}
+
+async fn test_put_object_stream_with_filename(
+    client: &S3Client,
     bucket: &str,
     dest_filename: &str,
     local_filename: &str,
 ) {
     let meta = ::std::fs::metadata(local_filename).unwrap();
-    let fs = FsPool::default();
-    let read_stream = fs.read(local_filename.to_owned());
+    let read_stream = fs::read(local_filename.to_owned()).into_stream().map_ok(|b| Bytes::from(b));
     let req = PutObjectRequest {
         bucket: bucket.to_owned(),
         key: dest_filename.to_owned(),
@@ -434,25 +855,30 @@ fn test_put_object_stream_with_filename(
         body: Some(StreamingBody::new(read_stream)),
         ..Default::default()
     };
-    let result = client.put_object(req).sync().expect("Couldn't PUT object");
+    let result = client.put_object(req).await.expect("Couldn't PUT object");
     println!("{:#?}", result);
 }
 
-fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
+async fn try_head_object(
+    client: &S3Client,
+    bucket: &str,
+    filename: &str,
+) -> Result<rusoto_s3::HeadObjectOutput, rusoto_core::RusotoError<rusoto_s3::HeadObjectError>> {
     let head_req = HeadObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
         ..Default::default()
     };
 
-    let result = client
-        .head_object(head_req)
-        .sync()
-        .expect("Couldn't HEAD object");
+    client.head_object(head_req).await
+}
+
+async fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
+    let result = try_head_object(client, bucket, filename).await.expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
-fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_get_object(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -461,17 +887,17 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
     let stream = result.body.unwrap();
-    let body = stream.concat2().wait().unwrap();
+    let body = stream.map_ok(|b| bytes::BytesMut::from(&b[..])).try_concat().await.unwrap();
 
     assert!(body.len() > 0);
 }
 
-fn test_get_object_blocking_read(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_get_object_blocking_read(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -480,7 +906,7 @@ fn test_get_object_blocking_read(client: &TestClient, bucket: &str, filename: &s
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
@@ -491,20 +917,20 @@ fn test_get_object_blocking_read(client: &TestClient, bucket: &str, filename: &s
     assert!(body.len() > 0);
 }
 
-fn test_get_object_no_such_object(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_get_object_no_such_object(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
         ..Default::default()
     };
 
-    match client.get_object(get_req).sync() {
+    match client.get_object(get_req).await {
         Err(RusotoError::Service(GetObjectError::NoSuchKey(_))) => (),
         r => panic!("unexpected response {:?}", r),
     };
 }
 
-fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_get_object_range(client: &S3Client, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -514,13 +940,13 @@ fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object (range)");
     println!("\nget object range result: {:#?}", result);
     assert_eq!(result.content_length.unwrap(), 2);
 }
 
-fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_copy_object(client: &S3Client, bucket: &str, filename: &str) {
     let req = CopyObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -533,12 +959,12 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client
         .copy_object(req)
-        .sync()
+        .await
         .expect("Couldn't copy object");
     println!("{:#?}", result);
 }
 
-fn test_copy_object_utf8(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_copy_object_utf8(client: &S3Client, bucket: &str, filename: &str) {
     let req = CopyObjectRequest {
         bucket: bucket.to_owned(),
         key: format!("{}", filename.to_owned()),
@@ -551,12 +977,12 @@ fn test_copy_object_utf8(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client
         .copy_object(req)
-        .sync()
+        .await
         .expect("Couldn't copy object (utf8)");
     println!("{:#?}", result);
 }
 
-fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
+async fn test_delete_object(client: &S3Client, bucket: &str, filename: &str) {
     let del_req = DeleteObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -565,30 +991,12 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client
         .delete_object(del_req)
-        .sync()
+        .await
         .expect("Couldn't delete object");
     println!("{:#?}", result);
 }
 
-fn test_list_buckets(client: &TestClient) {
-    let result = client.list_buckets().sync().expect("Couldn't list buckets");
-    println!("\nbuckets available: {:#?}", result);
-}
-
-fn list_items_in_bucket(client: &TestClient, bucket: &str) {
-    let list_obj_req = ListObjectsV2Request {
-        bucket: bucket.to_owned(),
-        start_after: Some("foo".to_owned()),
-        ..Default::default()
-    };
-    let result = client
-        .list_objects_v2(list_obj_req)
-        .sync()
-        .expect("Couldn't list items in bucket (v2)");
-    println!("Items in bucket: {:#?}", result);
-}
-
-fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
+async fn list_items_in_bucket_paged_v1(client: &S3Client, bucket: &str) {
     let mut list_request = ListObjectsRequest {
         delimiter: Some("/".to_owned()),
         bucket: bucket.to_owned(),
@@ -598,7 +1006,7 @@ fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
 
     let response1 = client
         .list_objects(list_request.clone())
-        .sync()
+        .await
         .expect("list objects failed");
     println!("Items in bucket, page 1: {:#?}", response1);
     let contents1 = response1.contents.unwrap();
@@ -609,7 +1017,7 @@ fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
     list_request.max_keys = Some(1000);
     let response2 = client
         .list_objects(list_request)
-        .sync()
+        .await
         .expect("list objects failed");
     println!("Items in buckut, page 2: {:#?}", response2);
     let contents2 = response2.contents.unwrap();
@@ -618,7 +1026,7 @@ fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
 }
 
 // Assuming there's already more than three item in our test bucket:
-fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
+async fn list_items_in_bucket_paged_v2(client: &S3Client, bucket: &str) {
     let mut list_obj_req = ListObjectsV2Request {
         bucket: bucket.to_owned(),
         max_keys: Some(1),
@@ -626,7 +1034,7 @@ fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
     };
     let result1 = client
         .list_objects_v2(list_obj_req.clone())
-        .sync()
+        .await
         .expect("list objects v2 failed");
     println!("Items in bucket, page 1: {:#?}", result1);
     assert!(result1.next_continuation_token.is_some());
@@ -634,7 +1042,7 @@ fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
     list_obj_req.continuation_token = result1.next_continuation_token;
     let result2 = client
         .list_objects_v2(list_obj_req)
-        .sync()
+        .await
         .expect("list objects v2 paging failed");
     println!("Items in bucket, page 2: {:#?}", result2);
     // For the second call it the token is in `continuation_token` not `next_continuation_token`
@@ -645,7 +1053,7 @@ fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
     );
 }
 
-fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
+async fn test_put_bucket_cors(client: &S3Client, bucket: &str) {
     let cors_rules = vec![CORSRule {
         allowed_methods: vec!["PUT".to_owned(), "POST".to_owned(), "DELETE".to_owned()],
         allowed_origins: vec!["http://www.example.com".to_owned()],
@@ -667,13 +1075,13 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
 
     let result = client
         .put_bucket_cors(req)
-        .sync()
+        .await
         .expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
 }
 
-fn test_put_object_with_metadata(
-    client: &TestClient,
+async fn test_put_object_with_metadata(
+    client: &S3Client,
     bucket: &str,
     dest_filename: &str,
     local_filename: &str,
@@ -691,14 +1099,14 @@ fn test_put_object_with_metadata(
                 metadata: Some(metadata.clone()),
                 ..Default::default()
             };
-            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).await.expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
 }
 
-fn test_head_object_with_metadata(
-    client: &TestClient,
+async fn test_head_object_with_metadata(
+    client: &S3Client,
     bucket: &str,
     filename: &str,
     metadata: &HashMap<String, String>,
@@ -711,7 +1119,7 @@ fn test_head_object_with_metadata(
 
     let result = client
         .head_object(head_req)
-        .sync()
+        .await
         .expect("Couldn't HEAD object");
     println!("{:#?}", result);
 
@@ -719,8 +1127,8 @@ fn test_head_object_with_metadata(
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_get_object_with_metadata(
-    client: &TestClient,
+async fn test_get_object_with_metadata(
+    client: &S3Client,
     bucket: &str,
     filename: &str,
     metadata: &HashMap<String, String>,
@@ -733,7 +1141,7 @@ fn test_get_object_with_metadata(
 
     let result = client
         .get_object(get_req)
-        .sync()
+        .await
         .expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
@@ -741,7 +1149,7 @@ fn test_get_object_with_metadata(
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_get_object_with_presigned_url(
+async fn test_get_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -754,17 +1162,15 @@ fn test_get_object_with_presigned_url(
     };
     let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("get object presigned url: {:#?}", presigned_url);
-    let mut res = reqwest::get(&presigned_url).expect("Couldn't get object via presigned url");
+    let res = reqwest::get(&presigned_url).await.expect("Couldn't get object via presigned url");
     assert_eq!(res.status(), http::StatusCode::OK);
-    let size = res.content_length()
-        .unwrap_or(0);
+    let size = res.content_length().unwrap_or(0);
     assert!(size > 0);
-    let mut buf: Vec<u8> = vec![];
-    res.copy_to(&mut buf).expect("Copying failed");
+    let buf = res.bytes().await.expect("Copying failed");
     assert!(buf.len() > 0);
 }
 
-fn test_get_object_with_expired_presigned_url(
+async fn test_get_object_with_expired_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -781,11 +1187,11 @@ fn test_get_object_with_expired_presigned_url(
     let presigned_url = req.get_presigned_url(region, credentials, &opt);
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).expect("Presigned url failure");
+    let res = reqwest::get(&presigned_url).await.expect("Presigned url failure");
     assert_eq!(res.status(), http::StatusCode::FORBIDDEN);
 }
 
-fn test_put_object_with_presigned_url(
+async fn test_put_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -805,11 +1211,12 @@ fn test_put_object_with_presigned_url(
         .put(&presigned_url)
         .json(&map)
         .send()
+        .await
         .expect("Put obj with presigned url failed");
     assert_eq!(res.status(), http::StatusCode::OK);
 }
 
-fn test_delete_object_with_presigned_url(
+async fn test_delete_object_with_presigned_url(
     region: &Region,
     credentials: &AwsCredentials,
     bucket: &str,
@@ -825,7 +1232,7 @@ fn test_delete_object_with_presigned_url(
     let client = reqwest::Client::new();
     let res = client
         .delete(&presigned_url)
-        .send()
+        .send().await
         .expect("Delete of presigned url obj failed");
     assert_eq!(res.status(), http::StatusCode::NO_CONTENT);
 }

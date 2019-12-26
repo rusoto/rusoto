@@ -22,23 +22,42 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Publishing walkthrough:
 
-1. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential` and `rusoto_mock` if needed and each service that changed since previous release.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project.  Make sure the root Rusoto README example gets updated with the new version. The `skeptical` package will also need to be set to use the new version of Rusoto - do this in a PR after the release and publish has been completed.
-2. Merge release PR.
-3. Publish new version of `rusoto_credential` if changes have been made to it.
-4. Publish new version of `rusoto_core` if changes have been made to it.
-5. Publish new version of `rusoto_mock` if it changes have been made to it.
-6. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes >2 hours on a low end Macbook. The script can be run again if an issue comes up without problems - crates.io prevents republishing.
-7. Tag master branch with the new version.  Example: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."` then `git push --tags origin`.
+1. Ensure all PRs included in the release are reflected in [the CHANGELOG](https://github.com/rusoto/rusoto/blob/master/CHANGELOG.md). If in doubt, add an entry so it's recorded. Can be a separate PR or part of the one below.
+2. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential`, `rusoto_signature` and `rusoto_mock`.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project. Make sure the root Rusoto README example gets updated with the new version. Also verify all uses of `rusoto_credential` get updated, as they often use `0.42` instead of `0.43.0` and can be missed while using `grep`.
+3. Run integration tests on the release branch: `make integration_test`.
+4. Merge release PR. See below for [release checklist](https://github.com/rusoto/rusoto/blob/update-releasing-doc/RELEASING.md#publishing-pr-checklist).
+5. Publish new version of `rusoto_credential`.
+6. Publish new version of `rusoto_signature`.
+7. Publish new version of `rusoto_core`.
+8. Publish new version of `rusoto_mock`.
+9. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes >4 hours on a low end Macbook. The script can be run again if an issue comes up without problems - crates.io prevents republishing.
+10. Tag master branch with the new version.  Example: `git tag -a rusoto-v0.41.0 -m "Rusoto 0.41.0 release."` then `git push --tags origin`.
+11. Update the `skeptical` package to use the newly published version of Rusoto.
+
+### Publishing PR checklist
+
+```
+Release checklist:
+
+- [ ] run integration tests on this branch
+- [ ] merge this PR
+- [ ] run integration tests on master
+- [ ] publish new crates
+- [ ] tag new releases
+```
 
 ### Git tags
 
-Due to multiple crates being in the repo, releases for each crate will be in the format `crate-vmajor.minor.patch`.
+Due to multiple crates being in the repo, releases for each crate will be in the format `crate-vmajor.minor.patch`. Rusoto core, service crates, credentials and `rusoto_mock` will all have the same versions for a new release:
 
 Examples:
 
-* `rusoto-v0.21.0`
-* `credentials-v0.3.0`
-* `mock-v0.27.0`
+* `rusoto-v0.43.0`
+* `credentials-v0.43.0`
+* `signature-v0.43.0`
+* `mock-v0.43.0`
+
+When bug fixes for a crate are published, all crates get a new release.
 
 ### Release notes
 
