@@ -5877,7 +5877,7 @@ pub struct DBProxyTarget {
     pub rds_resource_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) for the RDS DB instance or Aurora DB cluster.</p>
     pub target_arn: Option<String>,
-    /// <p>The DB cluster identifier when the target represents an Aurora DB cluster. This field is blank when the target represents an </p>
+    /// <p>The DB cluster identifier when the target represents an Aurora DB cluster. This field is blank when the target represents an RDS DB instance.</p>
     pub tracked_cluster_id: Option<String>,
     /// <p>Specifies the kind of database, such as an RDS DB instance or an Aurora DB cluster, that the target represents.</p>
     pub type_: Option<String>,
@@ -11369,6 +11369,8 @@ pub struct ModifyDBInstanceMessage {
     pub backup_retention_period: Option<i64>,
     /// <p>Indicates the certificate that needs to be associated with the instance.</p>
     pub ca_certificate_identifier: Option<String>,
+    /// <p><p>A value that indicates whether the DB instance is restarted when you rotate your SSL/TLS certificate.</p> <p>By default, the DB instance is restarted when you rotate your SSL/TLS certificate. The certificate is not updated until the DB instance is restarted.</p> <important> <p>Set this parameter only if you are <i>not</i> using SSL/TLS to connect to the DB instance.</p> </important> <p>If you are using SSL/TLS to connect to the DB instance, follow the appropriate instructions for your DB engine to rotate your SSL/TLS certificate:</p> <ul> <li> <p>For more information about rotating your SSL/TLS certificate for RDS DB engines, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL-certificate-rotation.html"> Rotating Your SSL/TLS Certificate.</a> in the <i>Amazon RDS User Guide.</i> </p> </li> <li> <p>For more information about rotating your SSL/TLS certificate for Aurora DB engines, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.SSL-certificate-rotation.html"> Rotating Your SSL/TLS Certificate</a> in the <i>Amazon Aurora User Guide.</i> </p> </li> </ul></p>
+    pub certificate_rotation_restart: Option<bool>,
     /// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance.</p> <p>A change to the <code>CloudwatchLogsExportConfiguration</code> parameter is always applied to the DB instance immediately. Therefore, the <code>ApplyImmediately</code> parameter has no effect.</p>
     pub cloudwatch_logs_export_configuration: Option<CloudwatchLogsExportConfiguration>,
     /// <p>A value that indicates whether to copy all tags from the DB instance to snapshots of the DB instance. By default, tags are not copied.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Copying tags to snapshots is managed by the DB cluster. Setting this value for an Aurora DB instance has no effect on the DB cluster setting. For more information, see <code>ModifyDBCluster</code>.</p>
@@ -11477,6 +11479,12 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.ca_certificate_identifier {
             params.put(
                 &format!("{}{}", prefix, "CACertificateIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.certificate_rotation_restart {
+            params.put(
+                &format!("{}{}", prefix, "CertificateRotationRestart"),
                 &field_value,
             );
         }
@@ -27418,7 +27426,7 @@ pub trait Rds {
         input: CopyDBParameterGroupMessage,
     ) -> Result<CopyDBParameterGroupResult, RusotoError<CopyDBParameterGroupError>>;
 
-    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn copy_db_snapshot(
         &self,
         input: CopyDBSnapshotMessage,
@@ -28629,7 +28637,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
+    /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBSnapshot">Copying a DB Snapshot</a> in the <i>Amazon RDS User Guide.</i> </p>
     async fn copy_db_snapshot(
         &self,
         input: CopyDBSnapshotMessage,

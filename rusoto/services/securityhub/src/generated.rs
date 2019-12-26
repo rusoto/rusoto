@@ -67,6 +67,99 @@ pub struct ActionTarget {
     pub name: String,
 }
 
+/// <p>Information about an Availability Zone.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AvailabilityZone {
+    /// <p>The ID of the subnet. You can specify one subnet per Availability Zone.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_id: Option<String>,
+    /// <p>The name of the Availability Zone.</p>
+    #[serde(rename = "ZoneName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zone_name: Option<String>,
+}
+
+/// <p>A distribution configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudFrontDistributionDetails {
+    /// <p>The domain name corresponding to the distribution.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The entity tag is a hash of the object.</p>
+    #[serde(rename = "ETag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub e_tag: Option<String>,
+    /// <p>The date and time that the distribution was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<String>,
+    /// <p>A complex type that controls whether access logs are written for the distribution.</p>
+    #[serde(rename = "Logging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging: Option<AwsCloudFrontDistributionLogging>,
+    /// <p>A complex type that contains information about origins for this distribution.</p>
+    #[serde(rename = "Origins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origins: Option<AwsCloudFrontDistributionOrigins>,
+    /// <p>Indicates the current status of the distribution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution.</p>
+    #[serde(rename = "WebAclId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_id: Option<String>,
+}
+
+/// <p>A complex type that controls whether access logs are written for the distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudFrontDistributionLogging {
+    /// <p>The Amazon S3 bucket to store the access logs in.</p>
+    #[serde(rename = "Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>With this field, you can enable or disable the selected distribution.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Specifies whether you want CloudFront to include cookies in access logs.</p>
+    #[serde(rename = "IncludeCookies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_cookies: Option<bool>,
+    /// <p>An optional string that you want CloudFront to prefix to the access log filenames for this distribution.</p>
+    #[serde(rename = "Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+}
+
+/// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudFrontDistributionOriginItem {
+    /// <p>Amazon S3 origins: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>A unique identifier for the origin or origin group.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin.</p>
+    #[serde(rename = "OriginPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_path: Option<String>,
+}
+
+/// <p>A complex type that contains information about origins and origin groups for this distribution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCloudFrontDistributionOrigins {
+    /// <p>A complex type that contains origins or origin groups for this distribution.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<AwsCloudFrontDistributionOriginItem>>,
+}
+
 /// <p>The details of an Amazon EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsEc2InstanceDetails {
@@ -108,6 +201,51 @@ pub struct AwsEc2InstanceDetails {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Information about a load balancer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElbv2LoadBalancerDetails {
+    /// <p>The Availability Zones for the load balancer.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
+    /// <p>The ID of the Amazon Route 53 hosted zone associated with the load balancer.</p>
+    #[serde(rename = "CanonicalHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canonical_hosted_zone_id: Option<String>,
+    /// <p>The date and time the load balancer was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The public DNS name of the load balancer.</p>
+    #[serde(rename = "DNSName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
+    /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are ipv4 (for IPv4 addresses) and dualstack (for IPv4 and IPv6 addresses).</p>
+    #[serde(rename = "IpAddressType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_type: Option<String>,
+    /// <p>The nodes of an Internet-facing load balancer have public IP addresses.</p>
+    #[serde(rename = "Scheme")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheme: Option<String>,
+    /// <p>The IDs of the security groups for the load balancer.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The state of the load balancer.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<LoadBalancerState>,
+    /// <p>The type of load balancer.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The ID of the VPC for the load balancer.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
 /// <p>IAM access key details related to a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsIamAccessKeyDetails {
@@ -115,14 +253,252 @@ pub struct AwsIamAccessKeyDetails {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
+    /// <p>The ID of the principal associated with an access key.</p>
+    #[serde(rename = "PrincipalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_id: Option<String>,
+    /// <p>The name of the principal.</p>
+    #[serde(rename = "PrincipalName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_name: Option<String>,
+    /// <p>The type of principal associated with an access key.</p>
+    #[serde(rename = "PrincipalType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_type: Option<String>,
     /// <p>The status of the IAM access key related to a finding.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The user associated with the IAM access key related to a finding.</p>
-    #[serde(rename = "UserName")]
+}
+
+/// <p>Contains information about an IAM role, including all of the role's policies.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsIamRoleDetails {
+    /// <p>The trust policy that grants permission to assume the role.</p>
+    #[serde(rename = "AssumeRolePolicyDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_name: Option<String>,
+    pub assume_role_policy_document: Option<String>,
+    /// <p>The date and time, in ISO 8601 date-time format, when the role was created.</p>
+    #[serde(rename = "CreateDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_date: Option<String>,
+    /// <p>The maximum session duration (in seconds) that you want to set for the specified role.</p>
+    #[serde(rename = "MaxSessionDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_session_duration: Option<i64>,
+    /// <p>The path to the role.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The stable and unique string identifying the role.</p>
+    #[serde(rename = "RoleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_id: Option<String>,
+    /// <p>The friendly name that identifies the role.</p>
+    #[serde(rename = "RoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+}
+
+/// <p>Contains metadata about a customer master key (CMK).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsKmsKeyDetails {
+    /// <p>The twelve-digit account ID of the AWS account that owns the CMK.</p>
+    #[serde(rename = "AWSAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
+    /// <p>The date and time when the CMK was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The globally unique identifier for the CMK.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_id: Option<String>,
+    /// <p>The manager of the CMK. CMKs in your AWS account are either customer managed or AWS managed.</p>
+    #[serde(rename = "KeyManager")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_manager: Option<String>,
+    /// <p>The state of the CMK.</p>
+    #[serde(rename = "KeyState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_state: Option<String>,
+    /// <p>The source of the CMK's key material. When this value is AWS_KMS, AWS KMS created the key material. When this value is EXTERNAL, the key material was imported from your existing key management infrastructure or the CMK lacks key material. When this value is AWS_CLOUDHSM, the key material was created in the AWS CloudHSM cluster associated with a custom key store.</p>
+    #[serde(rename = "Origin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<String>,
+}
+
+/// <p>The code for the Lambda function. You can specify either an object in Amazon S3, or upload a deployment package directly.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionCode {
+    /// <p>An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.</p>
+    #[serde(rename = "S3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket: Option<String>,
+    /// <p>The Amazon S3 key of the deployment package.</p>
+    #[serde(rename = "S3Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key: Option<String>,
+    /// <p>For versioned objects, the version of the deployment package object to use.</p>
+    #[serde(rename = "S3ObjectVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_object_version: Option<String>,
+    /// <p>The base64-encoded contents of the deployment package. AWS SDK and AWS CLI clients handle the encoding for you.</p>
+    #[serde(rename = "ZipFile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zip_file: Option<String>,
+}
+
+/// <p>The dead-letter queue for failed asynchronous invocations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionDeadLetterConfig {
+    /// <p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.</p>
+    #[serde(rename = "TargetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+}
+
+/// <p>Details about a function's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionDetails {
+    /// <p>An <code>AwsLambdaFunctionCode</code> object.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<AwsLambdaFunctionCode>,
+    /// <p>The SHA256 hash of the function's deployment package.</p>
+    #[serde(rename = "CodeSha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_sha_256: Option<String>,
+    /// <p>The function's dead letter queue.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<AwsLambdaFunctionDeadLetterConfig>,
+    /// <p>The function's environment variables.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<AwsLambdaFunctionEnvironment>,
+    /// <p>The name of the function.</p>
+    #[serde(rename = "FunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p>The function that Lambda calls to begin executing your function.</p>
+    #[serde(rename = "Handler")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub handler: Option<String>,
+    /// <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer managed CMK.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The date and time that the function was last updated, in ISO-8601 format (YYYY-MM-DDThh:mm:ss.sTZD).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The function's layers.</p>
+    #[serde(rename = "Layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layers: Option<Vec<AwsLambdaFunctionLayer>>,
+    /// <p>For Lambda@Edge functions, the ARN of the master function.</p>
+    #[serde(rename = "MasterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_arn: Option<String>,
+    /// <p>The memory that's allocated to the function.</p>
+    #[serde(rename = "MemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>The latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+    /// <p>The function's execution role.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>The runtime environment for the Lambda function.</p>
+    #[serde(rename = "Runtime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime: Option<String>,
+    /// <p>The amount of time that Lambda allows a function to run before stopping it.</p>
+    #[serde(rename = "Timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<i64>,
+    /// <p>The function's AWS X-Ray tracing configuration.</p>
+    #[serde(rename = "TracingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tracing_config: Option<AwsLambdaFunctionTracingConfig>,
+    /// <p>The version of the Lambda function.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// <p>The function's networking configuration.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<AwsLambdaFunctionVpcConfig>,
+}
+
+/// <p>A function's environment variable settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionEnvironment {
+    /// <p>An <code>AwsLambdaFunctionEnvironmentError</code> object.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<AwsLambdaFunctionEnvironmentError>,
+    /// <p>Environment variable key-value pairs.</p>
+    #[serde(rename = "Variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Error messages for environment variables that couldn't be applied.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionEnvironmentError {
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>An AWS Lambda layer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionLayer {
+    /// <p>The Amazon Resource Name (ARN) of the function layer.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The size of the layer archive in bytes.</p>
+    #[serde(rename = "CodeSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_size: Option<i64>,
+}
+
+/// <p>The function's AWS X-Ray tracing configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionTracingConfig {
+    /// <p>The tracing mode.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+}
+
+/// <p>The VPC security groups and subnets that are attached to a Lambda function. For more information, see VPC Settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaFunctionVpcConfig {
+    /// <p>A list of VPC security groups IDs.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of VPC subnet IDs.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 /// <p>The details of an Amazon S3 bucket.</p>
@@ -588,6 +964,61 @@ pub struct AwsSecurityFindingFilters {
     pub workflow_state: Option<Vec<StringFilter>>,
 }
 
+/// <p>A wrapper type for the topic's Amazon Resource Name (ARN).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsSnsTopicDetails {
+    /// <p>The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK.</p>
+    #[serde(rename = "KmsMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>The subscription's owner.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// <p>Subscription is an embedded property that describes the subscription endpoints of an Amazon SNS topic.</p>
+    #[serde(rename = "Subscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription: Option<Vec<AwsSnsTopicSubscription>>,
+    /// <p>The name of the topic.</p>
+    #[serde(rename = "TopicName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_name: Option<String>,
+}
+
+/// <p>A wrapper type for the attributes of an Amazon SNS subscription.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsSnsTopicSubscription {
+    /// <p>The subscription's endpoint (format depends on the protocol).</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<String>,
+    /// <p>The subscription's protocol.</p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+}
+
+/// <p>Data about a queue.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsSqsQueueDetails {
+    /// <p>The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of maxReceiveCount is exceeded. </p>
+    #[serde(rename = "DeadLetterTargetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_target_arn: Option<String>,
+    /// <p>The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again.</p>
+    #[serde(rename = "KmsDataKeyReusePeriodSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_data_key_reuse_period_seconds: Option<i64>,
+    /// <p>The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK.</p>
+    #[serde(rename = "KmsMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>The name of the new queue.</p>
+    #[serde(rename = "QueueName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_name: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDisableStandardsRequest {
     /// <p>The ARNs of the standards subscriptions to disable.</p>
@@ -622,7 +1053,7 @@ pub struct BatchEnableStandardsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchImportFindingsRequest {
-    /// <p>A list of findings to import. To successfully import a finding, it must follow the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html">AWS Security Finding Format</a>.</p>
+    /// <p>A list of findings to import. To successfully import a finding, it must follow the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html">AWS Security Finding Format</a>. Maximum of 100 findings per request.</p>
     #[serde(rename = "Findings")]
     pub findings: Vec<AwsSecurityFinding>,
 }
@@ -642,7 +1073,7 @@ pub struct BatchImportFindingsResponse {
     pub success_count: i64,
 }
 
-/// <p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p>
+/// <p><p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p> <p>Values include the following:</p> <ul> <li> <p>Allowed values are the following:</p> <ul> <li> <p> <code>PASSED</code> - Compliance check passed for all evaluated resources.</p> </li> <li> <p> <code>WARNING</code> - Some information is missing or this check is not supported given your configuration.</p> </li> <li> <p> <code>FAILED</code> - Compliance check failed for at least one evaluated resource.</p> </li> <li> <p> <code>NOT_AVAILABLE</code> - Check could not be performed due to a service outage or API error.</p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Compliance {
     /// <p>The result of a compliance check.</p>
@@ -1338,6 +1769,19 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Information about the state of the load balancer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LoadBalancerState {
+    /// <p>The state code. The initial state of the load balancer is provisioning. After the load balancer is fully set up and ready to route traffic, its state is active. If the load balancer could not be set up, its state is failed. </p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>A description of the state.</p>
+    #[serde(rename = "Reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
 /// <p>A list of malware related to a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Malware {
@@ -1625,18 +2069,46 @@ pub struct Resource {
 /// <p>Additional details about a resource related to a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDetails {
+    /// <p>Details about a CloudFront distribution.</p>
+    #[serde(rename = "AwsCloudFrontDistribution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_cloud_front_distribution: Option<AwsCloudFrontDistributionDetails>,
     /// <p>Details about an Amazon EC2 instance related to a finding.</p>
     #[serde(rename = "AwsEc2Instance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_ec_2_instance: Option<AwsEc2InstanceDetails>,
+    /// <p>Details about a load balancer.</p>
+    #[serde(rename = "AwsElbv2LoadBalancer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_elbv_2_load_balancer: Option<AwsElbv2LoadBalancerDetails>,
     /// <p>Details about an IAM access key related to a finding.</p>
     #[serde(rename = "AwsIamAccessKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iam_access_key: Option<AwsIamAccessKeyDetails>,
+    /// <p>Details about an IAM role.</p>
+    #[serde(rename = "AwsIamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iam_role: Option<AwsIamRoleDetails>,
+    /// <p>Details about a KMS key.</p>
+    #[serde(rename = "AwsKmsKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_kms_key: Option<AwsKmsKeyDetails>,
+    /// <p>Details about a Lambda function.</p>
+    #[serde(rename = "AwsLambdaFunction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_lambda_function: Option<AwsLambdaFunctionDetails>,
     /// <p>Details about an Amazon S3 Bucket related to a finding.</p>
     #[serde(rename = "AwsS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_s3_bucket: Option<AwsS3BucketDetails>,
+    /// <p>Details about an SNS topic.</p>
+    #[serde(rename = "AwsSnsTopic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_sns_topic: Option<AwsSnsTopicDetails>,
+    /// <p>Details about an SQS queue.</p>
+    #[serde(rename = "AwsSqsQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_sqs_queue: Option<AwsSqsQueueDetails>,
     /// <p>Details about a container resource related to a finding.</p>
     #[serde(rename = "Container")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4061,7 +4533,7 @@ pub trait SecurityHub {
         RusotoError<EnableImportFindingsForProductError>,
     >;
 
-    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
+    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
     async fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
@@ -4816,7 +5288,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
+    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
     async fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,

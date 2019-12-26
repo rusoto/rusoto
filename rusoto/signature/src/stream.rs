@@ -100,8 +100,9 @@ impl AsyncRead for ImplAsyncRead {
             }
         }
         let available = std::cmp::min(buf.len(), this.buffer.len());
-        let mut bytes = this.buffer.split_to(available);
-        buf.copy_from_slice(bytes.as_mut());
+        let bytes = this.buffer.split_to(available);
+        let (left, _) = buf.split_at_mut(available);
+        left.copy_from_slice(&bytes[..available]);
         Poll::Ready(Ok(available))
     }
 }
