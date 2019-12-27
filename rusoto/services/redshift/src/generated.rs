@@ -18003,7 +18003,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18057,7 +18057,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18106,7 +18106,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18156,7 +18156,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18208,7 +18208,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18257,7 +18257,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18304,7 +18304,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18353,7 +18353,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18401,7 +18401,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18451,7 +18451,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18500,7 +18500,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18549,7 +18549,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18598,7 +18598,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18648,7 +18648,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18697,7 +18697,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18746,7 +18746,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18795,7 +18795,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18844,7 +18844,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -18920,7 +18920,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19021,7 +19021,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19286,7 +19286,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19335,7 +19335,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19385,7 +19385,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19434,7 +19434,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19483,7 +19483,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19532,7 +19532,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19581,7 +19581,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19630,7 +19630,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19679,7 +19679,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19728,7 +19728,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19780,7 +19780,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19829,7 +19829,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19878,7 +19878,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19927,7 +19927,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -19973,7 +19973,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20022,7 +20022,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20071,7 +20071,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20121,7 +20121,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20173,7 +20173,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20222,7 +20222,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20271,7 +20271,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20320,7 +20320,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20367,7 +20367,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20416,7 +20416,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20466,7 +20466,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20514,7 +20514,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20563,7 +20563,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20612,7 +20612,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20661,7 +20661,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20707,7 +20707,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20756,7 +20756,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20802,7 +20802,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20851,7 +20851,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20905,7 +20905,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -20954,7 +20954,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21001,7 +21001,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21050,7 +21050,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21099,7 +21099,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21149,7 +21149,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21198,7 +21198,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21274,7 +21274,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21323,7 +21323,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21372,7 +21372,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21426,7 +21426,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21475,7 +21475,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21525,7 +21525,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21574,7 +21574,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21622,7 +21622,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21671,7 +21671,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21719,7 +21719,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21773,7 +21773,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21827,7 +21827,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21876,7 +21876,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21925,7 +21925,7 @@ impl Redshift for RedshiftClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();

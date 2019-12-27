@@ -121,28 +121,26 @@ impl TestS3Client {
             .await
             .expect("Failed to put test object");
     }
+
+    async fn cleanup(&self) {
+        if self.bucket_deleted {
+            return;
+        }
+
+        let delete_bucket_req = DeleteBucketRequest {
+            bucket: self.bucket_name.clone(),
+            ..Default::default()
+        };
+
+        let s3 = self.s3.clone();
+        let bucket_name = self.bucket_name.clone();
+
+        match s3.delete_bucket(delete_bucket_req).await {
+            Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
+            Err(e) => println!("Failed to delete S3 bucket: {}", e),
+        };
+    }
 }
-
-// impl Drop for TestS3Client {
-//     fn drop(&mut self) {
-//         if self.bucket_deleted {
-//             return;
-//         }
-//         let delete_bucket_req = DeleteBucketRequest {
-//             bucket: self.bucket_name.clone(),
-//             ..Default::default()
-//         };
-
-//         let s3 = self.s3.clone();
-//         let bucket_name = self.bucket_name.clone();
-//         futures::executor::block_on(async move { 
-//             match s3.delete_bucket(delete_bucket_req).await {
-//                 Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
-//                 Err(e) => println!("Failed to delete S3 bucket: {}", e),
-//             }
-//         });
-//     }
-// }
 
 // inititializes logging
 fn init_logging() {
@@ -195,6 +193,7 @@ async fn test_bucket_creation_deletion() {
 
     test_delete_bucket(&test_client.s3, &bucket_name).await;
     test_client.bucket_deleted = true;
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -278,6 +277,8 @@ async fn test_puts_gets_deletes() {
     for i in 1..3 {
         test_client.delete_object(format!("test_object_{}", i)).await;
     }
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -300,6 +301,8 @@ async fn test_puts_gets_deletes_utf8() {
 
     test_copy_object_utf8(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
     test_delete_object(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -323,6 +326,8 @@ async fn test_puts_gets_deletes_binary() {
     test_get_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
     test_get_object_blocking_read(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
     test_delete_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -367,6 +372,8 @@ async fn test_puts_gets_deletes_metadata() {
         &test_client.bucket_name,
         &metadata_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -452,6 +459,8 @@ async fn test_puts_gets_deletes_presigned_url() {
         &test_client.bucket_name,
         &utf8_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -498,6 +507,8 @@ async fn test_multipart_stream_uploads() {
         &test_client.bucket_name,
         &streaming_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -573,6 +584,8 @@ async fn test_list_objects_encoding() {
     assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
 
     test_delete_object(&test_client.s3, &bucket_name, &key).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -605,6 +618,8 @@ async fn test_name_space_truncate() {
 
     assert_eq!(*key, filename_spaces);
     test_delete_object(&test_client.s3, &bucket_name, &filename_spaces).await;
+
+    test_client.cleanup().await;
 }
 
 async fn test_multipart_upload(

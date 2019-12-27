@@ -35,7 +35,6 @@ use rusoto_core::{Region, HttpClient};
 
 use rusoto_ec2::{Ec2Client, Ec2, DescribeSpotInstanceRequestsRequest};
 use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
-use tokio;
 
 #[tokio::main]
 async fn main() {
