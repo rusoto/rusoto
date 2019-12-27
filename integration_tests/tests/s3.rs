@@ -640,7 +640,6 @@ async fn test_multipart_upload(
         .create_multipart_upload(create_multipart_req)
         .await
         .expect("Couldn't create multipart upload");
-    println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
 
     // create 2 upload parts
@@ -667,7 +666,6 @@ async fn test_multipart_upload(
             .upload_part(part_req1)
             .await
             .expect("Couldn't upload a file part");
-        println!("{:#?}", response);
         completed_parts.push(CompletedPart {
             e_tag: response.e_tag.clone(),
             part_number: Some(part_number),
@@ -699,7 +697,6 @@ async fn test_multipart_upload(
     let completed_upload = CompletedMultipartUpload {
         parts: Some(completed_parts),
     };
-
     let complete_req = CompleteMultipartUploadRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -712,7 +709,6 @@ async fn test_multipart_upload(
         .complete_multipart_upload(complete_req)
         .await
         .expect("Couldn't complete multipart upload");
-    println!("{:#?}", response);
 
     // Add copy upload part to this test
     // https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPartCopy.html
@@ -725,7 +721,6 @@ async fn test_multipart_upload(
         .create_multipart_upload(create_multipart_req2)
         .await
         .expect("Couldn't create multipart upload2");
-    println!("{:#?}", upload_multi_response);
     let upload_id2 = upload_multi_response.upload_id.unwrap();
     let upload_part_copy_req = UploadPartCopyRequest {
         key: filename.to_owned(),
@@ -739,7 +734,6 @@ async fn test_multipart_upload(
         .upload_part_copy(upload_part_copy_req)
         .await
         .expect("Should have had copy part work");
-    println!("copy response: {:#?}", copy_response);
 
     let upload_part_copy_req2 = UploadPartCopyRequest {
         key: filename.to_owned(),
@@ -753,7 +747,6 @@ async fn test_multipart_upload(
         .upload_part_copy(upload_part_copy_req2)
         .await
         .expect("Should have had copy part work");
-    println!("copy response2: {:#?}", copy_response2);
 
     // complete the upload_part_copy upload:
     let completed_parts_2 = vec![
@@ -784,7 +777,6 @@ async fn test_multipart_upload(
         .complete_multipart_upload(complete_req2)
         .await
         .expect("Couldn't complete multipart upload2");
-    println!("{:#?}", response2);
 }
 
 async fn test_delete_bucket(client: &S3Client, bucket: &str) {
@@ -794,7 +786,6 @@ async fn test_delete_bucket(client: &S3Client, bucket: &str) {
     };
 
     let result = client.delete_bucket(delete_bucket_req).await;
-    println!("{:#?}", result);
     match result {
         Err(e) => match e {
             RusotoError::Unknown(ref e) => panic!(

@@ -99,7 +99,7 @@ impl HttpResponse {
     /// Buffer the full response body in memory, resulting in a `BufferedHttpResponse`.
     pub async fn buffer(&mut self) -> Result<BufferedHttpResponse, HttpDispatchError> {
         let mut bytes = BytesMut::new();
-        for try_chunk in self.body.next().await {
+        while let Some(try_chunk) = self.body.next().await {
             let chunk = try_chunk.map_err(|e| HttpDispatchError {
                 message: format!("Error obtaining body: {}", e),
             })?;
