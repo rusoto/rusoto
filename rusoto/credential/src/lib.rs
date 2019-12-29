@@ -372,6 +372,7 @@ impl<P: ProvideAwsCredentials + 'static> Clone for AutoRefreshingFutureInner<P> 
 }
 
 /// Future returned from `AutoRefreshingProvider`.
+#[derive(Clone)]
 pub struct AutoRefreshingProviderFuture<P: ProvideAwsCredentials + 'static> {
     inner: AutoRefreshingFutureInner<P>,
 }
@@ -429,6 +430,7 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
 /// is as locked down as possible using security best practices for your operating system.
 ///
 /// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
+#[derive(Clone)]
 pub struct DefaultCredentialsProvider(AutoRefreshingProvider<ChainProvider>);
 
 impl DefaultCredentialsProvider {
@@ -449,6 +451,7 @@ impl ProvideAwsCredentials for DefaultCredentialsProvider {
 }
 
 /// Future returned from `DefaultCredentialsProvider`.
+#[derive(Clone)]
 pub struct DefaultCredentialsProviderFuture(AutoRefreshingProviderFuture<ChainProvider>);
 
 impl Future for DefaultCredentialsProviderFuture {
