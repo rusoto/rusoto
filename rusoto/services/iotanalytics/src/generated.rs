@@ -1778,7 +1778,7 @@ impl BatchPutMessageError {
 }
 impl fmt::Display for BatchPutMessageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchPutMessageError {
@@ -1847,7 +1847,7 @@ impl CancelPipelineReprocessingError {
 }
 impl fmt::Display for CancelPipelineReprocessingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelPipelineReprocessingError {
@@ -1909,7 +1909,7 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateChannelError {
@@ -1972,7 +1972,7 @@ impl CreateDatasetError {
 }
 impl fmt::Display for CreateDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDatasetError {
@@ -2036,7 +2036,7 @@ impl CreateDatasetContentError {
 }
 impl fmt::Display for CreateDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDatasetContentError {
@@ -2100,7 +2100,7 @@ impl CreateDatastoreError {
 }
 impl fmt::Display for CreateDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDatastoreError {
@@ -2165,7 +2165,7 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePipelineError {
@@ -2223,7 +2223,7 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteChannelError {
@@ -2280,7 +2280,7 @@ impl DeleteDatasetError {
 }
 impl fmt::Display for DeleteDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDatasetError {
@@ -2343,7 +2343,7 @@ impl DeleteDatasetContentError {
 }
 impl fmt::Display for DeleteDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDatasetContentError {
@@ -2400,7 +2400,7 @@ impl DeleteDatastoreError {
 }
 impl fmt::Display for DeleteDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDatastoreError {
@@ -2457,7 +2457,7 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePipelineError {
@@ -2514,7 +2514,7 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeChannelError {
@@ -2571,7 +2571,7 @@ impl DescribeDatasetError {
 }
 impl fmt::Display for DescribeDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDatasetError {
@@ -2630,7 +2630,7 @@ impl DescribeDatastoreError {
 }
 impl fmt::Display for DescribeDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDatastoreError {
@@ -2695,7 +2695,7 @@ impl DescribeLoggingOptionsError {
 }
 impl fmt::Display for DescribeLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoggingOptionsError {
@@ -2752,7 +2752,7 @@ impl DescribePipelineError {
 }
 impl fmt::Display for DescribePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePipelineError {
@@ -2811,7 +2811,7 @@ impl GetDatasetContentError {
 }
 impl fmt::Display for GetDatasetContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDatasetContentError {
@@ -2863,7 +2863,7 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListChannelsError {
@@ -2923,7 +2923,7 @@ impl ListDatasetContentsError {
 }
 impl fmt::Display for ListDatasetContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDatasetContentsError {
@@ -2975,7 +2975,7 @@ impl ListDatasetsError {
 }
 impl fmt::Display for ListDatasetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDatasetsError {
@@ -3026,7 +3026,7 @@ impl ListDatastoresError {
 }
 impl fmt::Display for ListDatastoresError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDatastoresError {
@@ -3077,7 +3077,7 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPipelinesError {
@@ -3142,7 +3142,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3197,7 +3197,7 @@ impl PutLoggingOptionsError {
 }
 impl fmt::Display for PutLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLoggingOptionsError {
@@ -3250,7 +3250,7 @@ impl RunPipelineActivityError {
 }
 impl fmt::Display for RunPipelineActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RunPipelineActivityError {
@@ -3308,7 +3308,7 @@ impl SampleChannelDataError {
 }
 impl fmt::Display for SampleChannelDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SampleChannelDataError {
@@ -3382,7 +3382,7 @@ impl StartPipelineReprocessingError {
 }
 impl fmt::Display for StartPipelineReprocessingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartPipelineReprocessingError {
@@ -3445,7 +3445,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3508,7 +3508,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3566,7 +3566,7 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateChannelError {
@@ -3623,7 +3623,7 @@ impl UpdateDatasetError {
 }
 impl fmt::Display for UpdateDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDatasetError {
@@ -3680,7 +3680,7 @@ impl UpdateDatastoreError {
 }
 impl fmt::Display for UpdateDatastoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDatastoreError {
@@ -3742,7 +3742,7 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePipelineError {

@@ -1633,7 +1633,7 @@ impl CreateApiCacheError {
 }
 impl fmt::Display for CreateApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApiCacheError {
@@ -1702,7 +1702,7 @@ impl CreateApiKeyError {
 }
 impl fmt::Display for CreateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApiKeyError {
@@ -1763,7 +1763,7 @@ impl CreateDataSourceError {
 }
 impl fmt::Display for CreateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDataSourceError {
@@ -1817,7 +1817,7 @@ impl CreateFunctionError {
 }
 impl fmt::Display for CreateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFunctionError {
@@ -1880,7 +1880,7 @@ impl CreateGraphqlApiError {
 }
 impl fmt::Display for CreateGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGraphqlApiError {
@@ -1935,7 +1935,7 @@ impl CreateResolverError {
 }
 impl fmt::Display for CreateResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResolverError {
@@ -1991,7 +1991,7 @@ impl CreateTypeError {
 }
 impl fmt::Display for CreateTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTypeError {
@@ -2050,7 +2050,7 @@ impl DeleteApiCacheError {
 }
 impl fmt::Display for DeleteApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApiCacheError {
@@ -2102,7 +2102,7 @@ impl DeleteApiKeyError {
 }
 impl fmt::Display for DeleteApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApiKeyError {
@@ -2160,7 +2160,7 @@ impl DeleteDataSourceError {
 }
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDataSourceError {
@@ -2214,7 +2214,7 @@ impl DeleteFunctionError {
 }
 impl fmt::Display for DeleteFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFunctionError {
@@ -2277,7 +2277,7 @@ impl DeleteGraphqlApiError {
 }
 impl fmt::Display for DeleteGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGraphqlApiError {
@@ -2332,7 +2332,7 @@ impl DeleteResolverError {
 }
 impl fmt::Display for DeleteResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResolverError {
@@ -2388,7 +2388,7 @@ impl DeleteTypeError {
 }
 impl fmt::Display for DeleteTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTypeError {
@@ -2447,7 +2447,7 @@ impl FlushApiCacheError {
 }
 impl fmt::Display for FlushApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for FlushApiCacheError {
@@ -2504,7 +2504,7 @@ impl GetApiCacheError {
 }
 impl fmt::Display for GetApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApiCacheError {
@@ -2563,7 +2563,7 @@ impl GetDataSourceError {
 }
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDataSourceError {
@@ -2610,7 +2610,7 @@ impl GetFunctionError {
 }
 impl fmt::Display for GetFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionError {
@@ -2665,7 +2665,7 @@ impl GetGraphqlApiError {
 }
 impl fmt::Display for GetGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGraphqlApiError {
@@ -2721,7 +2721,7 @@ impl GetIntrospectionSchemaError {
 }
 impl fmt::Display for GetIntrospectionSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntrospectionSchemaError {
@@ -2767,7 +2767,7 @@ impl GetResolverError {
 }
 impl fmt::Display for GetResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResolverError {
@@ -2821,7 +2821,7 @@ impl GetSchemaCreationStatusError {
 }
 impl fmt::Display for GetSchemaCreationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSchemaCreationStatusError {
@@ -2877,7 +2877,7 @@ impl GetTypeError {
 }
 impl fmt::Display for GetTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTypeError {
@@ -2929,7 +2929,7 @@ impl ListApiKeysError {
 }
 impl fmt::Display for ListApiKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApiKeysError {
@@ -2980,7 +2980,7 @@ impl ListDataSourcesError {
 }
 impl fmt::Display for ListDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDataSourcesError {
@@ -3031,7 +3031,7 @@ impl ListFunctionsError {
 }
 impl fmt::Display for ListFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFunctionsError {
@@ -3077,7 +3077,7 @@ impl ListGraphqlApisError {
 }
 impl fmt::Display for ListGraphqlApisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGraphqlApisError {
@@ -3127,7 +3127,7 @@ impl ListResolversError {
 }
 impl fmt::Display for ListResolversError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResolversError {
@@ -3182,7 +3182,7 @@ impl ListResolversByFunctionError {
 }
 impl fmt::Display for ListResolversByFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResolversByFunctionError {
@@ -3243,7 +3243,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3301,7 +3301,7 @@ impl ListTypesError {
 }
 impl fmt::Display for ListTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypesError {
@@ -3360,7 +3360,7 @@ impl StartSchemaCreationError {
 }
 impl fmt::Display for StartSchemaCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSchemaCreationError {
@@ -3422,7 +3422,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3485,7 +3485,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3545,7 +3545,7 @@ impl UpdateApiCacheError {
 }
 impl fmt::Display for UpdateApiCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApiCacheError {
@@ -3609,7 +3609,7 @@ impl UpdateApiKeyError {
 }
 impl fmt::Display for UpdateApiKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApiKeyError {
@@ -3669,7 +3669,7 @@ impl UpdateDataSourceError {
 }
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDataSourceError {
@@ -3723,7 +3723,7 @@ impl UpdateFunctionError {
 }
 impl fmt::Display for UpdateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFunctionError {
@@ -3786,7 +3786,7 @@ impl UpdateGraphqlApiError {
 }
 impl fmt::Display for UpdateGraphqlApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGraphqlApiError {
@@ -3841,7 +3841,7 @@ impl UpdateResolverError {
 }
 impl fmt::Display for UpdateResolverError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResolverError {
@@ -3897,7 +3897,7 @@ impl UpdateTypeError {
 }
 impl fmt::Display for UpdateTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTypeError {

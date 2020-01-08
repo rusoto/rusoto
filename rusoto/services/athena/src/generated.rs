@@ -874,7 +874,7 @@ impl BatchGetNamedQueryError {
 }
 impl fmt::Display for BatchGetNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetNamedQueryError {
@@ -917,7 +917,7 @@ impl BatchGetQueryExecutionError {
 }
 impl fmt::Display for BatchGetQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetQueryExecutionError {
@@ -956,7 +956,7 @@ impl CreateNamedQueryError {
 }
 impl fmt::Display for CreateNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNamedQueryError {
@@ -995,7 +995,7 @@ impl CreateWorkGroupError {
 }
 impl fmt::Display for CreateWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWorkGroupError {
@@ -1034,7 +1034,7 @@ impl DeleteNamedQueryError {
 }
 impl fmt::Display for DeleteNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNamedQueryError {
@@ -1073,7 +1073,7 @@ impl DeleteWorkGroupError {
 }
 impl fmt::Display for DeleteWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWorkGroupError {
@@ -1112,7 +1112,7 @@ impl GetNamedQueryError {
 }
 impl fmt::Display for GetNamedQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetNamedQueryError {
@@ -1151,7 +1151,7 @@ impl GetQueryExecutionError {
 }
 impl fmt::Display for GetQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetQueryExecutionError {
@@ -1190,7 +1190,7 @@ impl GetQueryResultsError {
 }
 impl fmt::Display for GetQueryResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetQueryResultsError {
@@ -1229,7 +1229,7 @@ impl GetWorkGroupError {
 }
 impl fmt::Display for GetWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkGroupError {
@@ -1268,7 +1268,7 @@ impl ListNamedQueriesError {
 }
 impl fmt::Display for ListNamedQueriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNamedQueriesError {
@@ -1307,7 +1307,7 @@ impl ListQueryExecutionsError {
 }
 impl fmt::Display for ListQueryExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListQueryExecutionsError {
@@ -1353,7 +1353,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1393,7 +1393,7 @@ impl ListWorkGroupsError {
 }
 impl fmt::Display for ListWorkGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkGroupsError {
@@ -1437,7 +1437,7 @@ impl StartQueryExecutionError {
 }
 impl fmt::Display for StartQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartQueryExecutionError {
@@ -1477,7 +1477,7 @@ impl StopQueryExecutionError {
 }
 impl fmt::Display for StopQueryExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopQueryExecutionError {
@@ -1521,7 +1521,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1566,7 +1566,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -1606,7 +1606,7 @@ impl UpdateWorkGroupError {
 }
 impl fmt::Display for UpdateWorkGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWorkGroupError {

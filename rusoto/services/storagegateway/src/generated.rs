@@ -2880,7 +2880,7 @@ impl ActivateGatewayError {
 }
 impl fmt::Display for ActivateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ActivateGatewayError {
@@ -2919,7 +2919,7 @@ impl AddCacheError {
 }
 impl fmt::Display for AddCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddCacheError {
@@ -2962,7 +2962,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -3003,7 +3003,7 @@ impl AddUploadBufferError {
 }
 impl fmt::Display for AddUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddUploadBufferError {
@@ -3046,7 +3046,7 @@ impl AddWorkingStorageError {
 }
 impl fmt::Display for AddWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddWorkingStorageError {
@@ -3087,7 +3087,7 @@ impl AssignTapePoolError {
 }
 impl fmt::Display for AssignTapePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssignTapePoolError {
@@ -3126,7 +3126,7 @@ impl AttachVolumeError {
 }
 impl fmt::Display for AttachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachVolumeError {
@@ -3167,7 +3167,7 @@ impl CancelArchivalError {
 }
 impl fmt::Display for CancelArchivalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelArchivalError {
@@ -3208,7 +3208,7 @@ impl CancelRetrievalError {
 }
 impl fmt::Display for CancelRetrievalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelRetrievalError {
@@ -3251,7 +3251,7 @@ impl CreateCachediSCSIVolumeError {
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCachediSCSIVolumeError {
@@ -3294,7 +3294,7 @@ impl CreateNFSFileShareError {
 }
 impl fmt::Display for CreateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNFSFileShareError {
@@ -3337,7 +3337,7 @@ impl CreateSMBFileShareError {
 }
 impl fmt::Display for CreateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSMBFileShareError {
@@ -3385,7 +3385,7 @@ impl CreateSnapshotError {
 }
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSnapshotError {
@@ -3440,7 +3440,7 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
 }
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSnapshotFromVolumeRecoveryPointError {
@@ -3484,7 +3484,7 @@ impl CreateStorediSCSIVolumeError {
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStorediSCSIVolumeError {
@@ -3527,7 +3527,7 @@ impl CreateTapeWithBarcodeError {
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTapeWithBarcodeError {
@@ -3566,7 +3566,7 @@ impl CreateTapesError {
 }
 impl fmt::Display for CreateTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTapesError {
@@ -3609,7 +3609,7 @@ impl DeleteBandwidthRateLimitError {
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBandwidthRateLimitError {
@@ -3652,7 +3652,7 @@ impl DeleteChapCredentialsError {
 }
 impl fmt::Display for DeleteChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteChapCredentialsError {
@@ -3693,7 +3693,7 @@ impl DeleteFileShareError {
 }
 impl fmt::Display for DeleteFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFileShareError {
@@ -3732,7 +3732,7 @@ impl DeleteGatewayError {
 }
 impl fmt::Display for DeleteGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGatewayError {
@@ -3775,7 +3775,7 @@ impl DeleteSnapshotScheduleError {
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSnapshotScheduleError {
@@ -3814,7 +3814,7 @@ impl DeleteTapeError {
 }
 impl fmt::Display for DeleteTapeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTapeError {
@@ -3857,7 +3857,7 @@ impl DeleteTapeArchiveError {
 }
 impl fmt::Display for DeleteTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTapeArchiveError {
@@ -3896,7 +3896,7 @@ impl DeleteVolumeError {
 }
 impl fmt::Display for DeleteVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVolumeError {
@@ -3941,7 +3941,7 @@ impl DescribeAvailabilityMonitorTestError {
 }
 impl fmt::Display for DescribeAvailabilityMonitorTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAvailabilityMonitorTestError {
@@ -3986,7 +3986,7 @@ impl DescribeBandwidthRateLimitError {
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBandwidthRateLimitError {
@@ -4025,7 +4025,7 @@ impl DescribeCacheError {
 }
 impl fmt::Display for DescribeCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCacheError {
@@ -4070,7 +4070,7 @@ impl DescribeCachediSCSIVolumesError {
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCachediSCSIVolumesError {
@@ -4113,7 +4113,7 @@ impl DescribeChapCredentialsError {
 }
 impl fmt::Display for DescribeChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeChapCredentialsError {
@@ -4158,7 +4158,7 @@ impl DescribeGatewayInformationError {
 }
 impl fmt::Display for DescribeGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGatewayInformationError {
@@ -4203,7 +4203,7 @@ impl DescribeMaintenanceStartTimeError {
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceStartTimeError {
@@ -4246,7 +4246,7 @@ impl DescribeNFSFileSharesError {
 }
 impl fmt::Display for DescribeNFSFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNFSFileSharesError {
@@ -4289,7 +4289,7 @@ impl DescribeSMBFileSharesError {
 }
 impl fmt::Display for DescribeSMBFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSMBFileSharesError {
@@ -4332,7 +4332,7 @@ impl DescribeSMBSettingsError {
 }
 impl fmt::Display for DescribeSMBSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSMBSettingsError {
@@ -4375,7 +4375,7 @@ impl DescribeSnapshotScheduleError {
 }
 impl fmt::Display for DescribeSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSnapshotScheduleError {
@@ -4420,7 +4420,7 @@ impl DescribeStorediSCSIVolumesError {
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStorediSCSIVolumesError {
@@ -4463,7 +4463,7 @@ impl DescribeTapeArchivesError {
 }
 impl fmt::Display for DescribeTapeArchivesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTapeArchivesError {
@@ -4508,7 +4508,7 @@ impl DescribeTapeRecoveryPointsError {
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTapeRecoveryPointsError {
@@ -4547,7 +4547,7 @@ impl DescribeTapesError {
 }
 impl fmt::Display for DescribeTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTapesError {
@@ -4590,7 +4590,7 @@ impl DescribeUploadBufferError {
 }
 impl fmt::Display for DescribeUploadBufferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUploadBufferError {
@@ -4633,7 +4633,7 @@ impl DescribeVTLDevicesError {
 }
 impl fmt::Display for DescribeVTLDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVTLDevicesError {
@@ -4676,7 +4676,7 @@ impl DescribeWorkingStorageError {
 }
 impl fmt::Display for DescribeWorkingStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkingStorageError {
@@ -4715,7 +4715,7 @@ impl DetachVolumeError {
 }
 impl fmt::Display for DetachVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachVolumeError {
@@ -4756,7 +4756,7 @@ impl DisableGatewayError {
 }
 impl fmt::Display for DisableGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableGatewayError {
@@ -4795,7 +4795,7 @@ impl JoinDomainError {
 }
 impl fmt::Display for JoinDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for JoinDomainError {
@@ -4836,7 +4836,7 @@ impl ListFileSharesError {
 }
 impl fmt::Display for ListFileSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFileSharesError {
@@ -4875,7 +4875,7 @@ impl ListGatewaysError {
 }
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGatewaysError {
@@ -4916,7 +4916,7 @@ impl ListLocalDisksError {
 }
 impl fmt::Display for ListLocalDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLocalDisksError {
@@ -4959,7 +4959,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4998,7 +4998,7 @@ impl ListTapesError {
 }
 impl fmt::Display for ListTapesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTapesError {
@@ -5041,7 +5041,7 @@ impl ListVolumeInitiatorsError {
 }
 impl fmt::Display for ListVolumeInitiatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVolumeInitiatorsError {
@@ -5084,7 +5084,7 @@ impl ListVolumeRecoveryPointsError {
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVolumeRecoveryPointsError {
@@ -5123,7 +5123,7 @@ impl ListVolumesError {
 }
 impl fmt::Display for ListVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVolumesError {
@@ -5166,7 +5166,7 @@ impl NotifyWhenUploadedError {
 }
 impl fmt::Display for NotifyWhenUploadedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for NotifyWhenUploadedError {
@@ -5205,7 +5205,7 @@ impl RefreshCacheError {
 }
 impl fmt::Display for RefreshCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RefreshCacheError {
@@ -5248,7 +5248,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {
@@ -5287,7 +5287,7 @@ impl ResetCacheError {
 }
 impl fmt::Display for ResetCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetCacheError {
@@ -5330,7 +5330,7 @@ impl RetrieveTapeArchiveError {
 }
 impl fmt::Display for RetrieveTapeArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetrieveTapeArchiveError {
@@ -5373,7 +5373,7 @@ impl RetrieveTapeRecoveryPointError {
 }
 impl fmt::Display for RetrieveTapeRecoveryPointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetrieveTapeRecoveryPointError {
@@ -5416,7 +5416,7 @@ impl SetLocalConsolePasswordError {
 }
 impl fmt::Display for SetLocalConsolePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetLocalConsolePasswordError {
@@ -5459,7 +5459,7 @@ impl SetSMBGuestPasswordError {
 }
 impl fmt::Display for SetSMBGuestPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSMBGuestPasswordError {
@@ -5500,7 +5500,7 @@ impl ShutdownGatewayError {
 }
 impl fmt::Display for ShutdownGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ShutdownGatewayError {
@@ -5545,7 +5545,7 @@ impl StartAvailabilityMonitorTestError {
 }
 impl fmt::Display for StartAvailabilityMonitorTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAvailabilityMonitorTestError {
@@ -5584,7 +5584,7 @@ impl StartGatewayError {
 }
 impl fmt::Display for StartGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartGatewayError {
@@ -5627,7 +5627,7 @@ impl UpdateBandwidthRateLimitError {
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBandwidthRateLimitError {
@@ -5670,7 +5670,7 @@ impl UpdateChapCredentialsError {
 }
 impl fmt::Display for UpdateChapCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateChapCredentialsError {
@@ -5713,7 +5713,7 @@ impl UpdateGatewayInformationError {
 }
 impl fmt::Display for UpdateGatewayInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGatewayInformationError {
@@ -5756,7 +5756,7 @@ impl UpdateGatewaySoftwareNowError {
 }
 impl fmt::Display for UpdateGatewaySoftwareNowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGatewaySoftwareNowError {
@@ -5801,7 +5801,7 @@ impl UpdateMaintenanceStartTimeError {
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMaintenanceStartTimeError {
@@ -5844,7 +5844,7 @@ impl UpdateNFSFileShareError {
 }
 impl fmt::Display for UpdateNFSFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNFSFileShareError {
@@ -5887,7 +5887,7 @@ impl UpdateSMBFileShareError {
 }
 impl fmt::Display for UpdateSMBFileShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSMBFileShareError {
@@ -5930,7 +5930,7 @@ impl UpdateSMBSecurityStrategyError {
 }
 impl fmt::Display for UpdateSMBSecurityStrategyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSMBSecurityStrategyError {
@@ -5973,7 +5973,7 @@ impl UpdateSnapshotScheduleError {
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSnapshotScheduleError {
@@ -6016,7 +6016,7 @@ impl UpdateVTLDeviceTypeError {
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVTLDeviceTypeError {

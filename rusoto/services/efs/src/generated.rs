@@ -474,7 +474,7 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFileSystemError {
@@ -585,7 +585,7 @@ impl CreateMountTargetError {
 }
 impl fmt::Display for CreateMountTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMountTargetError {
@@ -637,7 +637,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -689,7 +689,7 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFileSystemError {
@@ -744,7 +744,7 @@ impl DeleteMountTargetError {
 }
 impl fmt::Display for DeleteMountTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMountTargetError {
@@ -788,7 +788,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -837,7 +837,7 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFileSystemsError {
@@ -890,7 +890,7 @@ impl DescribeLifecycleConfigurationError {
 }
 impl fmt::Display for DescribeLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLifecycleConfigurationError {
@@ -950,7 +950,7 @@ impl DescribeMountTargetSecurityGroupsError {
 }
 impl fmt::Display for DescribeMountTargetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMountTargetSecurityGroupsError {
@@ -1007,7 +1007,7 @@ impl DescribeMountTargetsError {
 }
 impl fmt::Display for DescribeMountTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMountTargetsError {
@@ -1053,7 +1053,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -1127,7 +1127,7 @@ impl ModifyMountTargetSecurityGroupsError {
 }
 impl fmt::Display for ModifyMountTargetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyMountTargetSecurityGroupsError {
@@ -1188,7 +1188,7 @@ impl PutLifecycleConfigurationError {
 }
 impl fmt::Display for PutLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLifecycleConfigurationError {
@@ -1262,7 +1262,7 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFileSystemError {

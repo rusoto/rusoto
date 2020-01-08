@@ -1079,7 +1079,7 @@ impl AddTagsToStreamError {
 }
 impl fmt::Display for AddTagsToStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToStreamError {
@@ -1125,7 +1125,7 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamError {
@@ -1185,7 +1185,7 @@ impl DecreaseStreamRetentionPeriodError {
 }
 impl fmt::Display for DecreaseStreamRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DecreaseStreamRetentionPeriodError {
@@ -1231,7 +1231,7 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStreamError {
@@ -1282,7 +1282,7 @@ impl DeregisterStreamConsumerError {
 }
 impl fmt::Display for DeregisterStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterStreamConsumerError {
@@ -1317,7 +1317,7 @@ impl DescribeLimitsError {
 }
 impl fmt::Display for DescribeLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLimitsError {
@@ -1355,7 +1355,7 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStreamError {
@@ -1405,7 +1405,7 @@ impl DescribeStreamConsumerError {
 }
 impl fmt::Display for DescribeStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStreamConsumerError {
@@ -1447,7 +1447,7 @@ impl DescribeStreamSummaryError {
 }
 impl fmt::Display for DescribeStreamSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStreamSummaryError {
@@ -1504,7 +1504,7 @@ impl DisableEnhancedMonitoringError {
 }
 impl fmt::Display for DisableEnhancedMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableEnhancedMonitoringError {
@@ -1563,7 +1563,7 @@ impl EnableEnhancedMonitoringError {
 }
 impl fmt::Display for EnableEnhancedMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableEnhancedMonitoringError {
@@ -1646,7 +1646,7 @@ impl GetRecordsError {
 }
 impl fmt::Display for GetRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRecordsError {
@@ -1700,7 +1700,7 @@ impl GetShardIteratorError {
 }
 impl fmt::Display for GetShardIteratorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetShardIteratorError {
@@ -1760,7 +1760,7 @@ impl IncreaseStreamRetentionPeriodError {
 }
 impl fmt::Display for IncreaseStreamRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IncreaseStreamRetentionPeriodError {
@@ -1816,7 +1816,7 @@ impl ListShardsError {
 }
 impl fmt::Display for ListShardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListShardsError {
@@ -1877,7 +1877,7 @@ impl ListStreamConsumersError {
 }
 impl fmt::Display for ListStreamConsumersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStreamConsumersError {
@@ -1914,7 +1914,7 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStreamsError {
@@ -1957,7 +1957,7 @@ impl ListTagsForStreamError {
 }
 impl fmt::Display for ListTagsForStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForStreamError {
@@ -2007,7 +2007,7 @@ impl MergeShardsError {
 }
 impl fmt::Display for MergeShardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergeShardsError {
@@ -2085,7 +2085,7 @@ impl PutRecordError {
 }
 impl fmt::Display for PutRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRecordError {
@@ -2168,7 +2168,7 @@ impl PutRecordsError {
 }
 impl fmt::Display for PutRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRecordsError {
@@ -2232,7 +2232,7 @@ impl RegisterStreamConsumerError {
 }
 impl fmt::Display for RegisterStreamConsumerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterStreamConsumerError {
@@ -2287,7 +2287,7 @@ impl RemoveTagsFromStreamError {
 }
 impl fmt::Display for RemoveTagsFromStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromStreamError {
@@ -2338,7 +2338,7 @@ impl SplitShardError {
 }
 impl fmt::Display for SplitShardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SplitShardError {
@@ -2429,7 +2429,7 @@ impl StartStreamEncryptionError {
 }
 impl fmt::Display for StartStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartStreamEncryptionError {
@@ -2490,7 +2490,7 @@ impl StopStreamEncryptionError {
 }
 impl fmt::Display for StopStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopStreamEncryptionError {
@@ -2541,7 +2541,7 @@ impl SubscribeToShardError {
 }
 impl fmt::Display for SubscribeToShardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubscribeToShardError {
@@ -2592,7 +2592,7 @@ impl UpdateShardCountError {
 }
 impl fmt::Display for UpdateShardCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateShardCountError {

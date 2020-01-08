@@ -3384,7 +3384,7 @@ impl CreateCapacityProviderError {
 }
 impl fmt::Display for CreateCapacityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCapacityProviderError {
@@ -3430,7 +3430,7 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterError {
@@ -3502,7 +3502,7 @@ impl CreateServiceError {
 }
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateServiceError {
@@ -3589,7 +3589,7 @@ impl CreateTaskSetError {
 }
 impl fmt::Display for CreateTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTaskSetError {
@@ -3643,7 +3643,7 @@ impl DeleteAccountSettingError {
 }
 impl fmt::Display for DeleteAccountSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccountSettingError {
@@ -3688,7 +3688,7 @@ impl DeleteAttributesError {
 }
 impl fmt::Display for DeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAttributesError {
@@ -3762,7 +3762,7 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterError {
@@ -3822,7 +3822,7 @@ impl DeleteServiceError {
 }
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServiceError {
@@ -3899,7 +3899,7 @@ impl DeleteTaskSetError {
 }
 impl fmt::Display for DeleteTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTaskSetError {
@@ -3961,7 +3961,7 @@ impl DeregisterContainerInstanceError {
 }
 impl fmt::Display for DeregisterContainerInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterContainerInstanceError {
@@ -4009,7 +4009,7 @@ impl DeregisterTaskDefinitionError {
 }
 impl fmt::Display for DeregisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterTaskDefinitionError {
@@ -4056,7 +4056,7 @@ impl DescribeCapacityProvidersError {
 }
 impl fmt::Display for DescribeCapacityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCapacityProvidersError {
@@ -4101,7 +4101,7 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClustersError {
@@ -4157,7 +4157,7 @@ impl DescribeContainerInstancesError {
 }
 impl fmt::Display for DescribeContainerInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeContainerInstancesError {
@@ -4208,7 +4208,7 @@ impl DescribeServicesError {
 }
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServicesError {
@@ -4256,7 +4256,7 @@ impl DescribeTaskDefinitionError {
 }
 impl fmt::Display for DescribeTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTaskDefinitionError {
@@ -4326,7 +4326,7 @@ impl DescribeTaskSetsError {
 }
 impl fmt::Display for DescribeTaskSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTaskSetsError {
@@ -4381,7 +4381,7 @@ impl DescribeTasksError {
 }
 impl fmt::Display for DescribeTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTasksError {
@@ -4422,7 +4422,7 @@ impl DiscoverPollEndpointError {
 }
 impl fmt::Display for DiscoverPollEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DiscoverPollEndpointError {
@@ -4468,7 +4468,7 @@ impl ListAccountSettingsError {
 }
 impl fmt::Display for ListAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccountSettingsError {
@@ -4508,7 +4508,7 @@ impl ListAttributesError {
 }
 impl fmt::Display for ListAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttributesError {
@@ -4552,7 +4552,7 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClustersError {
@@ -4606,7 +4606,7 @@ impl ListContainerInstancesError {
 }
 impl fmt::Display for ListContainerInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListContainerInstancesError {
@@ -4657,7 +4657,7 @@ impl ListServicesError {
 }
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServicesError {
@@ -4710,7 +4710,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4760,7 +4760,7 @@ impl ListTaskDefinitionFamiliesError {
 }
 impl fmt::Display for ListTaskDefinitionFamiliesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTaskDefinitionFamiliesError {
@@ -4807,7 +4807,7 @@ impl ListTaskDefinitionsError {
 }
 impl fmt::Display for ListTaskDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTaskDefinitionsError {
@@ -4858,7 +4858,7 @@ impl ListTasksError {
 }
 impl fmt::Display for ListTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTasksError {
@@ -4905,7 +4905,7 @@ impl PutAccountSettingError {
 }
 impl fmt::Display for PutAccountSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAccountSettingError {
@@ -4952,7 +4952,7 @@ impl PutAccountSettingDefaultError {
 }
 impl fmt::Display for PutAccountSettingDefaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAccountSettingDefaultError {
@@ -5004,7 +5004,7 @@ impl PutAttributesError {
 }
 impl fmt::Display for PutAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAttributesError {
@@ -5075,7 +5075,7 @@ impl PutClusterCapacityProvidersError {
 }
 impl fmt::Display for PutClusterCapacityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutClusterCapacityProvidersError {
@@ -5125,7 +5125,7 @@ impl RegisterContainerInstanceError {
 }
 impl fmt::Display for RegisterContainerInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterContainerInstanceError {
@@ -5172,7 +5172,7 @@ impl RegisterTaskDefinitionError {
 }
 impl fmt::Display for RegisterTaskDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterTaskDefinitionError {
@@ -5243,7 +5243,7 @@ impl RunTaskError {
 }
 impl fmt::Display for RunTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RunTaskError {
@@ -5295,7 +5295,7 @@ impl StartTaskError {
 }
 impl fmt::Display for StartTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartTaskError {
@@ -5342,7 +5342,7 @@ impl StopTaskError {
 }
 impl fmt::Display for StopTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTaskError {
@@ -5399,7 +5399,7 @@ impl SubmitAttachmentStateChangesError {
 }
 impl fmt::Display for SubmitAttachmentStateChangesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubmitAttachmentStateChangesError {
@@ -5449,7 +5449,7 @@ impl SubmitContainerStateChangeError {
 }
 impl fmt::Display for SubmitContainerStateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubmitContainerStateChangeError {
@@ -5501,7 +5501,7 @@ impl SubmitTaskStateChangeError {
 }
 impl fmt::Display for SubmitTaskStateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubmitTaskStateChangeError {
@@ -5557,7 +5557,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5614,7 +5614,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5670,7 +5670,7 @@ impl UpdateClusterSettingsError {
 }
 impl fmt::Display for UpdateClusterSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClusterSettingsError {
@@ -5744,7 +5744,7 @@ impl UpdateContainerAgentError {
 }
 impl fmt::Display for UpdateContainerAgentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContainerAgentError {
@@ -5808,7 +5808,7 @@ impl UpdateContainerInstancesStateError {
 }
 impl fmt::Display for UpdateContainerInstancesStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContainerInstancesStateError {
@@ -5886,7 +5886,7 @@ impl UpdateServiceError {
 }
 impl fmt::Display for UpdateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceError {
@@ -5983,7 +5983,7 @@ impl UpdateServicePrimaryTaskSetError {
 }
 impl fmt::Display for UpdateServicePrimaryTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServicePrimaryTaskSetError {
@@ -6064,7 +6064,7 @@ impl UpdateTaskSetError {
 }
 impl fmt::Display for UpdateTaskSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTaskSetError {

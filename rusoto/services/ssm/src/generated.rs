@@ -7875,7 +7875,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -7927,7 +7927,7 @@ impl CancelCommandError {
 }
 impl fmt::Display for CancelCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelCommandError {
@@ -7974,7 +7974,7 @@ impl CancelMaintenanceWindowExecutionError {
 }
 impl fmt::Display for CancelMaintenanceWindowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelMaintenanceWindowExecutionError {
@@ -8010,7 +8010,7 @@ impl CreateActivationError {
 }
 impl fmt::Display for CreateActivationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateActivationError {
@@ -8105,7 +8105,7 @@ impl CreateAssociationError {
 }
 impl fmt::Display for CreateAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAssociationError {
@@ -8220,7 +8220,7 @@ impl CreateAssociationBatchError {
 }
 impl fmt::Display for CreateAssociationBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAssociationBatchError {
@@ -8298,7 +8298,7 @@ impl CreateDocumentError {
 }
 impl fmt::Display for CreateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDocumentError {
@@ -8352,7 +8352,7 @@ impl CreateMaintenanceWindowError {
 }
 impl fmt::Display for CreateMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMaintenanceWindowError {
@@ -8404,7 +8404,7 @@ impl CreateOpsItemError {
 }
 impl fmt::Display for CreateOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOpsItemError {
@@ -8456,7 +8456,7 @@ impl CreatePatchBaselineError {
 }
 impl fmt::Display for CreatePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePatchBaselineError {
@@ -8514,7 +8514,7 @@ impl CreateResourceDataSyncError {
 }
 impl fmt::Display for CreateResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceDataSyncError {
@@ -8569,7 +8569,7 @@ impl DeleteActivationError {
 }
 impl fmt::Display for DeleteActivationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteActivationError {
@@ -8629,7 +8629,7 @@ impl DeleteAssociationError {
 }
 impl fmt::Display for DeleteAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAssociationError {
@@ -8683,7 +8683,7 @@ impl DeleteDocumentError {
 }
 impl fmt::Display for DeleteDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDocumentError {
@@ -8743,7 +8743,7 @@ impl DeleteInventoryError {
 }
 impl fmt::Display for DeleteInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInventoryError {
@@ -8782,7 +8782,7 @@ impl DeleteMaintenanceWindowError {
 }
 impl fmt::Display for DeleteMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMaintenanceWindowError {
@@ -8820,7 +8820,7 @@ impl DeleteParameterError {
 }
 impl fmt::Display for DeleteParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteParameterError {
@@ -8856,7 +8856,7 @@ impl DeleteParametersError {
 }
 impl fmt::Display for DeleteParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteParametersError {
@@ -8896,7 +8896,7 @@ impl DeletePatchBaselineError {
 }
 impl fmt::Display for DeletePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePatchBaselineError {
@@ -8946,7 +8946,7 @@ impl DeleteResourceDataSyncError {
 }
 impl fmt::Display for DeleteResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceDataSyncError {
@@ -8990,7 +8990,7 @@ impl DeregisterManagedInstanceError {
 }
 impl fmt::Display for DeregisterManagedInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterManagedInstanceError {
@@ -9035,7 +9035,7 @@ impl DeregisterPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for DeregisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterPatchBaselineForPatchGroupError {
@@ -9087,7 +9087,7 @@ impl DeregisterTargetFromMaintenanceWindowError {
 }
 impl fmt::Display for DeregisterTargetFromMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterTargetFromMaintenanceWindowError {
@@ -9133,7 +9133,7 @@ impl DeregisterTaskFromMaintenanceWindowError {
 }
 impl fmt::Display for DeregisterTaskFromMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterTaskFromMaintenanceWindowError {
@@ -9181,7 +9181,7 @@ impl DescribeActivationsError {
 }
 impl fmt::Display for DescribeActivationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActivationsError {
@@ -9244,7 +9244,7 @@ impl DescribeAssociationError {
 }
 impl fmt::Display for DescribeAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssociationError {
@@ -9308,7 +9308,7 @@ impl DescribeAssociationExecutionTargetsError {
 }
 impl fmt::Display for DescribeAssociationExecutionTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssociationExecutionTargetsError {
@@ -9364,7 +9364,7 @@ impl DescribeAssociationExecutionsError {
 }
 impl fmt::Display for DescribeAssociationExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssociationExecutionsError {
@@ -9424,7 +9424,7 @@ impl DescribeAutomationExecutionsError {
 }
 impl fmt::Display for DescribeAutomationExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutomationExecutionsError {
@@ -9492,7 +9492,7 @@ impl DescribeAutomationStepExecutionsError {
 }
 impl fmt::Display for DescribeAutomationStepExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutomationStepExecutionsError {
@@ -9531,7 +9531,7 @@ impl DescribeAvailablePatchesError {
 }
 impl fmt::Display for DescribeAvailablePatchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAvailablePatchesError {
@@ -9578,7 +9578,7 @@ impl DescribeDocumentError {
 }
 impl fmt::Display for DescribeDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDocumentError {
@@ -9631,7 +9631,7 @@ impl DescribeDocumentPermissionError {
 }
 impl fmt::Display for DescribeDocumentPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDocumentPermissionError {
@@ -9684,7 +9684,7 @@ impl DescribeEffectiveInstanceAssociationsError {
 }
 impl fmt::Display for DescribeEffectiveInstanceAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEffectiveInstanceAssociationsError {
@@ -9746,7 +9746,7 @@ impl DescribeEffectivePatchesForPatchBaselineError {
 }
 impl fmt::Display for DescribeEffectivePatchesForPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEffectivePatchesForPatchBaselineError {
@@ -9802,7 +9802,7 @@ impl DescribeInstanceAssociationsStatusError {
 }
 impl fmt::Display for DescribeInstanceAssociationsStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstanceAssociationsStatusError {
@@ -9871,7 +9871,7 @@ impl DescribeInstanceInformationError {
 }
 impl fmt::Display for DescribeInstanceInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstanceInformationError {
@@ -9921,7 +9921,7 @@ impl DescribeInstancePatchStatesError {
 }
 impl fmt::Display for DescribeInstancePatchStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancePatchStatesError {
@@ -9973,7 +9973,7 @@ impl DescribeInstancePatchStatesForPatchGroupError {
 }
 impl fmt::Display for DescribeInstancePatchStatesForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancePatchStatesForPatchGroupError {
@@ -10031,7 +10031,7 @@ impl DescribeInstancePatchesError {
 }
 impl fmt::Display for DescribeInstancePatchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancePatchesError {
@@ -10085,7 +10085,7 @@ impl DescribeInventoryDeletionsError {
 }
 impl fmt::Display for DescribeInventoryDeletionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInventoryDeletionsError {
@@ -10135,7 +10135,7 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionTaskInvocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
@@ -10184,7 +10184,7 @@ impl DescribeMaintenanceWindowExecutionTasksError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowExecutionTasksError {
@@ -10222,7 +10222,7 @@ impl DescribeMaintenanceWindowExecutionsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowExecutionsError {
@@ -10266,7 +10266,7 @@ impl DescribeMaintenanceWindowScheduleError {
 }
 impl fmt::Display for DescribeMaintenanceWindowScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowScheduleError {
@@ -10311,7 +10311,7 @@ impl DescribeMaintenanceWindowTargetsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowTargetsError {
@@ -10356,7 +10356,7 @@ impl DescribeMaintenanceWindowTasksError {
 }
 impl fmt::Display for DescribeMaintenanceWindowTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowTasksError {
@@ -10394,7 +10394,7 @@ impl DescribeMaintenanceWindowsError {
 }
 impl fmt::Display for DescribeMaintenanceWindowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowsError {
@@ -10431,7 +10431,7 @@ impl DescribeMaintenanceWindowsForTargetError {
 }
 impl fmt::Display for DescribeMaintenanceWindowsForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMaintenanceWindowsForTargetError {
@@ -10466,7 +10466,7 @@ impl DescribeOpsItemsError {
 }
 impl fmt::Display for DescribeOpsItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOpsItemsError {
@@ -10525,7 +10525,7 @@ impl DescribeParametersError {
 }
 impl fmt::Display for DescribeParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeParametersError {
@@ -10564,7 +10564,7 @@ impl DescribePatchBaselinesError {
 }
 impl fmt::Display for DescribePatchBaselinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePatchBaselinesError {
@@ -10606,7 +10606,7 @@ impl DescribePatchGroupStateError {
 }
 impl fmt::Display for DescribePatchGroupStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePatchGroupStateError {
@@ -10642,7 +10642,7 @@ impl DescribePatchGroupsError {
 }
 impl fmt::Display for DescribePatchGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePatchGroupsError {
@@ -10677,7 +10677,7 @@ impl DescribePatchPropertiesError {
 }
 impl fmt::Display for DescribePatchPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePatchPropertiesError {
@@ -10722,7 +10722,7 @@ impl DescribeSessionsError {
 }
 impl fmt::Display for DescribeSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSessionsError {
@@ -10766,7 +10766,7 @@ impl GetAutomationExecutionError {
 }
 impl fmt::Display for GetAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAutomationExecutionError {
@@ -10821,7 +10821,7 @@ impl GetCalendarStateError {
 }
 impl fmt::Display for GetCalendarStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCalendarStateError {
@@ -10887,7 +10887,7 @@ impl GetCommandInvocationError {
 }
 impl fmt::Display for GetCommandInvocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCommandInvocationError {
@@ -10926,7 +10926,7 @@ impl GetConnectionStatusError {
 }
 impl fmt::Display for GetConnectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectionStatusError {
@@ -10961,7 +10961,7 @@ impl GetDefaultPatchBaselineError {
 }
 impl fmt::Display for GetDefaultPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDefaultPatchBaselineError {
@@ -11016,7 +11016,7 @@ impl GetDeployablePatchSnapshotForInstanceError {
 }
 impl fmt::Display for GetDeployablePatchSnapshotForInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeployablePatchSnapshotForInstanceError {
@@ -11065,7 +11065,7 @@ impl GetDocumentError {
 }
 impl fmt::Display for GetDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentError {
@@ -11130,7 +11130,7 @@ impl GetInventoryError {
 }
 impl fmt::Display for GetInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInventoryError {
@@ -11181,7 +11181,7 @@ impl GetInventorySchemaError {
 }
 impl fmt::Display for GetInventorySchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInventorySchemaError {
@@ -11223,7 +11223,7 @@ impl GetMaintenanceWindowError {
 }
 impl fmt::Display for GetMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMaintenanceWindowError {
@@ -11268,7 +11268,7 @@ impl GetMaintenanceWindowExecutionError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMaintenanceWindowExecutionError {
@@ -11313,7 +11313,7 @@ impl GetMaintenanceWindowExecutionTaskError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMaintenanceWindowExecutionTaskError {
@@ -11360,7 +11360,7 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
 }
 impl fmt::Display for GetMaintenanceWindowExecutionTaskInvocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
@@ -11405,7 +11405,7 @@ impl GetMaintenanceWindowTaskError {
 }
 impl fmt::Display for GetMaintenanceWindowTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMaintenanceWindowTaskError {
@@ -11444,7 +11444,7 @@ impl GetOpsItemError {
 }
 impl fmt::Display for GetOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOpsItemError {
@@ -11505,7 +11505,7 @@ impl GetOpsSummaryError {
 }
 impl fmt::Display for GetOpsSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOpsSummaryError {
@@ -11560,7 +11560,7 @@ impl GetParameterError {
 }
 impl fmt::Display for GetParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetParameterError {
@@ -11617,7 +11617,7 @@ impl GetParameterHistoryError {
 }
 impl fmt::Display for GetParameterHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetParameterHistoryError {
@@ -11658,7 +11658,7 @@ impl GetParametersError {
 }
 impl fmt::Display for GetParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetParametersError {
@@ -11727,7 +11727,7 @@ impl GetParametersByPathError {
 }
 impl fmt::Display for GetParametersByPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetParametersByPathError {
@@ -11777,7 +11777,7 @@ impl GetPatchBaselineError {
 }
 impl fmt::Display for GetPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPatchBaselineError {
@@ -11816,7 +11816,7 @@ impl GetPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for GetPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPatchBaselineForPatchGroupError {
@@ -11858,7 +11858,7 @@ impl GetServiceSettingError {
 }
 impl fmt::Display for GetServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceSettingError {
@@ -11922,7 +11922,7 @@ impl LabelParameterVersionError {
 }
 impl fmt::Display for LabelParameterVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LabelParameterVersionError {
@@ -11975,7 +11975,7 @@ impl ListAssociationVersionsError {
 }
 impl fmt::Display for ListAssociationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociationVersionsError {
@@ -12017,7 +12017,7 @@ impl ListAssociationsError {
 }
 impl fmt::Display for ListAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociationsError {
@@ -12081,7 +12081,7 @@ impl ListCommandInvocationsError {
 }
 impl fmt::Display for ListCommandInvocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCommandInvocationsError {
@@ -12138,7 +12138,7 @@ impl ListCommandsError {
 }
 impl fmt::Display for ListCommandsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCommandsError {
@@ -12203,7 +12203,7 @@ impl ListComplianceItemsError {
 }
 impl fmt::Display for ListComplianceItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListComplianceItemsError {
@@ -12256,7 +12256,7 @@ impl ListComplianceSummariesError {
 }
 impl fmt::Display for ListComplianceSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListComplianceSummariesError {
@@ -12307,7 +12307,7 @@ impl ListDocumentVersionsError {
 }
 impl fmt::Display for ListDocumentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDocumentVersionsError {
@@ -12352,7 +12352,7 @@ impl ListDocumentsError {
 }
 impl fmt::Display for ListDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDocumentsError {
@@ -12415,7 +12415,7 @@ impl ListInventoryEntriesError {
 }
 impl fmt::Display for ListInventoryEntriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInventoryEntriesError {
@@ -12470,7 +12470,7 @@ impl ListResourceComplianceSummariesError {
 }
 impl fmt::Display for ListResourceComplianceSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceComplianceSummariesError {
@@ -12521,7 +12521,7 @@ impl ListResourceDataSyncError {
 }
 impl fmt::Display for ListResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceDataSyncError {
@@ -12572,7 +12572,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -12637,7 +12637,7 @@ impl ModifyDocumentPermissionError {
 }
 impl fmt::Display for ModifyDocumentPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDocumentPermissionError {
@@ -12718,7 +12718,7 @@ impl PutComplianceItemsError {
 }
 impl fmt::Display for PutComplianceItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutComplianceItemsError {
@@ -12822,7 +12822,7 @@ impl PutInventoryError {
 }
 impl fmt::Display for PutInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutInventoryError {
@@ -12944,7 +12944,7 @@ impl PutParameterError {
 }
 impl fmt::Display for PutParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutParameterError {
@@ -13009,7 +13009,7 @@ impl RegisterDefaultPatchBaselineError {
 }
 impl fmt::Display for RegisterDefaultPatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterDefaultPatchBaselineError {
@@ -13076,7 +13076,7 @@ impl RegisterPatchBaselineForPatchGroupError {
 }
 impl fmt::Display for RegisterPatchBaselineForPatchGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterPatchBaselineForPatchGroupError {
@@ -13140,7 +13140,7 @@ impl RegisterTargetWithMaintenanceWindowError {
 }
 impl fmt::Display for RegisterTargetWithMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterTargetWithMaintenanceWindowError {
@@ -13212,7 +13212,7 @@ impl RegisterTaskWithMaintenanceWindowError {
 }
 impl fmt::Display for RegisterTaskWithMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterTaskWithMaintenanceWindowError {
@@ -13272,7 +13272,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {
@@ -13322,7 +13322,7 @@ impl ResetServiceSettingError {
 }
 impl fmt::Display for ResetServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetServiceSettingError {
@@ -13362,7 +13362,7 @@ impl ResumeSessionError {
 }
 impl fmt::Display for ResumeSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResumeSessionError {
@@ -13419,7 +13419,7 @@ impl SendAutomationSignalError {
 }
 impl fmt::Display for SendAutomationSignalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendAutomationSignalError {
@@ -13507,7 +13507,7 @@ impl SendCommandError {
 }
 impl fmt::Display for SendCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendCommandError {
@@ -13559,7 +13559,7 @@ impl StartAssociationsOnceError {
 }
 impl fmt::Display for StartAssociationsOnceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAssociationsOnceError {
@@ -13639,7 +13639,7 @@ impl StartAutomationExecutionError {
 }
 impl fmt::Display for StartAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAutomationExecutionError {
@@ -13688,7 +13688,7 @@ impl StartSessionError {
 }
 impl fmt::Display for StartSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSessionError {
@@ -13739,7 +13739,7 @@ impl StopAutomationExecutionError {
 }
 impl fmt::Display for StopAutomationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopAutomationExecutionError {
@@ -13781,7 +13781,7 @@ impl TerminateSessionError {
 }
 impl fmt::Display for TerminateSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateSessionError {
@@ -13882,7 +13882,7 @@ impl UpdateAssociationError {
 }
 impl fmt::Display for UpdateAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAssociationError {
@@ -13963,7 +13963,7 @@ impl UpdateAssociationStatusError {
 }
 impl fmt::Display for UpdateAssociationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAssociationStatusError {
@@ -14062,7 +14062,7 @@ impl UpdateDocumentError {
 }
 impl fmt::Display for UpdateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDocumentError {
@@ -14129,7 +14129,7 @@ impl UpdateDocumentDefaultVersionError {
 }
 impl fmt::Display for UpdateDocumentDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDocumentDefaultVersionError {
@@ -14174,7 +14174,7 @@ impl UpdateMaintenanceWindowError {
 }
 impl fmt::Display for UpdateMaintenanceWindowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMaintenanceWindowError {
@@ -14219,7 +14219,7 @@ impl UpdateMaintenanceWindowTargetError {
 }
 impl fmt::Display for UpdateMaintenanceWindowTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMaintenanceWindowTargetError {
@@ -14264,7 +14264,7 @@ impl UpdateMaintenanceWindowTaskError {
 }
 impl fmt::Display for UpdateMaintenanceWindowTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMaintenanceWindowTaskError {
@@ -14307,7 +14307,7 @@ impl UpdateManagedInstanceRoleError {
 }
 impl fmt::Display for UpdateManagedInstanceRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateManagedInstanceRoleError {
@@ -14363,7 +14363,7 @@ impl UpdateOpsItemError {
 }
 impl fmt::Display for UpdateOpsItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateOpsItemError {
@@ -14407,7 +14407,7 @@ impl UpdatePatchBaselineError {
 }
 impl fmt::Display for UpdatePatchBaselineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePatchBaselineError {
@@ -14464,7 +14464,7 @@ impl UpdateResourceDataSyncError {
 }
 impl fmt::Display for UpdateResourceDataSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResourceDataSyncError {
@@ -14514,7 +14514,7 @@ impl UpdateServiceSettingError {
 }
 impl fmt::Display for UpdateServiceSettingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceSettingError {

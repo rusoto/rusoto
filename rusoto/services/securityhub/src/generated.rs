@@ -2362,7 +2362,7 @@ impl AcceptInvitationError {
 }
 impl fmt::Display for AcceptInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptInvitationError {
@@ -2414,7 +2414,7 @@ impl BatchDisableStandardsError {
 }
 impl fmt::Display for BatchDisableStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDisableStandardsError {
@@ -2465,7 +2465,7 @@ impl BatchEnableStandardsError {
 }
 impl fmt::Display for BatchEnableStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchEnableStandardsError {
@@ -2516,7 +2516,7 @@ impl BatchImportFindingsError {
 }
 impl fmt::Display for BatchImportFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchImportFindingsError {
@@ -2572,7 +2572,7 @@ impl CreateActionTargetError {
 }
 impl fmt::Display for CreateActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateActionTargetError {
@@ -2629,7 +2629,7 @@ impl CreateInsightError {
 }
 impl fmt::Display for CreateInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInsightError {
@@ -2686,7 +2686,7 @@ impl CreateMembersError {
 }
 impl fmt::Display for CreateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMembersError {
@@ -2738,7 +2738,7 @@ impl DeclineInvitationsError {
 }
 impl fmt::Display for DeclineInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeclineInvitationsError {
@@ -2789,7 +2789,7 @@ impl DeleteActionTargetError {
 }
 impl fmt::Display for DeleteActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteActionTargetError {
@@ -2845,7 +2845,7 @@ impl DeleteInsightError {
 }
 impl fmt::Display for DeleteInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInsightError {
@@ -2902,7 +2902,7 @@ impl DeleteInvitationsError {
 }
 impl fmt::Display for DeleteInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInvitationsError {
@@ -2959,7 +2959,7 @@ impl DeleteMembersError {
 }
 impl fmt::Display for DeleteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMembersError {
@@ -3013,7 +3013,7 @@ impl DescribeActionTargetsError {
 }
 impl fmt::Display for DescribeActionTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActionTargetsError {
@@ -3069,7 +3069,7 @@ impl DescribeHubError {
 }
 impl fmt::Display for DescribeHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHubError {
@@ -3121,7 +3121,7 @@ impl DescribeProductsError {
 }
 impl fmt::Display for DescribeProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProductsError {
@@ -3189,7 +3189,7 @@ impl DisableImportFindingsForProductError {
 }
 impl fmt::Display for DisableImportFindingsForProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableImportFindingsForProductError {
@@ -3241,7 +3241,7 @@ impl DisableSecurityHubError {
 }
 impl fmt::Display for DisableSecurityHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableSecurityHubError {
@@ -3309,7 +3309,7 @@ impl DisassociateFromMasterAccountError {
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateFromMasterAccountError {
@@ -3368,7 +3368,7 @@ impl DisassociateMembersError {
 }
 impl fmt::Display for DisassociateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateMembersError {
@@ -3437,7 +3437,7 @@ impl EnableImportFindingsForProductError {
 }
 impl fmt::Display for EnableImportFindingsForProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableImportFindingsForProductError {
@@ -3494,7 +3494,7 @@ impl EnableSecurityHubError {
 }
 impl fmt::Display for EnableSecurityHubError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableSecurityHubError {
@@ -3546,7 +3546,7 @@ impl GetEnabledStandardsError {
 }
 impl fmt::Display for GetEnabledStandardsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEnabledStandardsError {
@@ -3597,7 +3597,7 @@ impl GetFindingsError {
 }
 impl fmt::Display for GetFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFindingsError {
@@ -3653,7 +3653,7 @@ impl GetInsightResultsError {
 }
 impl fmt::Display for GetInsightResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInsightResultsError {
@@ -3710,7 +3710,7 @@ impl GetInsightsError {
 }
 impl fmt::Display for GetInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInsightsError {
@@ -3762,7 +3762,7 @@ impl GetInvitationsCountError {
 }
 impl fmt::Display for GetInvitationsCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInvitationsCountError {
@@ -3818,7 +3818,7 @@ impl GetMasterAccountError {
 }
 impl fmt::Display for GetMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMasterAccountError {
@@ -3875,7 +3875,7 @@ impl GetMembersError {
 }
 impl fmt::Display for GetMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMembersError {
@@ -3932,7 +3932,7 @@ impl InviteMembersError {
 }
 impl fmt::Display for InviteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InviteMembersError {
@@ -3987,7 +3987,7 @@ impl ListEnabledProductsForImportError {
 }
 impl fmt::Display for ListEnabledProductsForImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEnabledProductsForImportError {
@@ -4037,7 +4037,7 @@ impl ListInvitationsError {
 }
 impl fmt::Display for ListInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInvitationsError {
@@ -4088,7 +4088,7 @@ impl ListMembersError {
 }
 impl fmt::Display for ListMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMembersError {
@@ -4136,7 +4136,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4181,7 +4181,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4226,7 +4226,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -4276,7 +4276,7 @@ impl UpdateActionTargetError {
 }
 impl fmt::Display for UpdateActionTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateActionTargetError {
@@ -4332,7 +4332,7 @@ impl UpdateFindingsError {
 }
 impl fmt::Display for UpdateFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFindingsError {
@@ -4389,7 +4389,7 @@ impl UpdateInsightError {
 }
 impl fmt::Display for UpdateInsightError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInsightError {

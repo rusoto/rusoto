@@ -145,18 +145,18 @@ pub struct RusotoFuture<T, E> {
 pub(crate) type RusotoHandlerFuture<T, E> =
     Pin<Box<dyn Future<Output = Result<T, RusotoError<E>>> + Send>>;
 
-//pub fn new<T, E>(
-//    future: SignAndDispatchFuture,
-//    handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>,
-//) -> RusotoFuture<T, E>
-//    where
-//        T: 'static,
-//        E: 'static
-//{
-//    RusotoFuture {
-//        inner: dispatch_rusoto_future(future, handler).boxed(),
-//    }
-//}
+// pub fn new<T, E>(
+//     future: SignAndDispatchFuture,
+//     handler: fn(HttpResponse) -> RusotoHandlerFuture<T, E>,
+// ) -> RusotoFuture<T, E>
+// where
+//     T: Send + 'static,
+//     E: Send + From<std::io::Error> + 'static,
+// {
+//     RusotoFuture {
+//         inner: dispatch_rusoto_future(future, handler).boxed(),
+//     }
+// }
 
 impl<T, E> RusotoFuture<T, E> {
     /// Blocks the current thread until the future has resolved.

@@ -8402,7 +8402,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCloudFrontOriginAccessIdentityError {
@@ -8534,7 +8534,7 @@ impl CreateDistributionError {
 }
 impl fmt::Display for CreateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDistributionError {
@@ -8709,7 +8709,7 @@ impl CreateDistributionWithTagsError {
 }
 impl fmt::Display for CreateDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDistributionWithTagsError {
@@ -8811,7 +8811,7 @@ impl CreateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFieldLevelEncryptionConfigError {
@@ -8876,7 +8876,7 @@ impl CreateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for CreateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFieldLevelEncryptionProfileError {
@@ -8974,7 +8974,7 @@ impl CreateInvalidationError {
 }
 impl fmt::Display for CreateInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInvalidationError {
@@ -9041,7 +9041,7 @@ impl CreatePublicKeyError {
 }
 impl fmt::Display for CreatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePublicKeyError {
@@ -9185,7 +9185,7 @@ impl CreateStreamingDistributionError {
 }
 impl fmt::Display for CreateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamingDistributionError {
@@ -9268,7 +9268,7 @@ impl CreateStreamingDistributionWithTagsError {
 }
 impl fmt::Display for CreateStreamingDistributionWithTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamingDistributionWithTagsError {
@@ -9340,7 +9340,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for DeleteCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCloudFrontOriginAccessIdentityError {
@@ -9423,7 +9423,7 @@ impl DeleteDistributionError {
 }
 impl fmt::Display for DeleteDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDistributionError {
@@ -9514,7 +9514,7 @@ impl DeleteFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFieldLevelEncryptionConfigError {
@@ -9605,7 +9605,7 @@ impl DeleteFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFieldLevelEncryptionProfileError {
@@ -9688,7 +9688,7 @@ impl DeletePublicKeyError {
 }
 impl fmt::Display for DeletePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePublicKeyError {
@@ -9777,7 +9777,7 @@ impl DeleteStreamingDistributionError {
 }
 impl fmt::Display for DeleteStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStreamingDistributionError {
@@ -9827,7 +9827,7 @@ impl GetCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCloudFrontOriginAccessIdentityError {
@@ -9876,7 +9876,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
 }
 impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCloudFrontOriginAccessIdentityConfigError {
@@ -9933,7 +9933,7 @@ impl GetDistributionError {
 }
 impl fmt::Display for GetDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDistributionError {
@@ -9988,7 +9988,7 @@ impl GetDistributionConfigError {
 }
 impl fmt::Display for GetDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDistributionConfigError {
@@ -10045,7 +10045,7 @@ impl GetFieldLevelEncryptionError {
 }
 impl fmt::Display for GetFieldLevelEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFieldLevelEncryptionError {
@@ -10104,7 +10104,7 @@ impl GetFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFieldLevelEncryptionConfigError {
@@ -10165,7 +10165,7 @@ impl GetFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFieldLevelEncryptionProfileError {
@@ -10214,7 +10214,7 @@ impl GetFieldLevelEncryptionProfileConfigError {
 }
 impl fmt::Display for GetFieldLevelEncryptionProfileConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFieldLevelEncryptionProfileConfigError {
@@ -10278,7 +10278,7 @@ impl GetInvalidationError {
 }
 impl fmt::Display for GetInvalidationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInvalidationError {
@@ -10334,7 +10334,7 @@ impl GetPublicKeyError {
 }
 impl fmt::Display for GetPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPublicKeyError {
@@ -10389,7 +10389,7 @@ impl GetPublicKeyConfigError {
 }
 impl fmt::Display for GetPublicKeyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPublicKeyConfigError {
@@ -10446,7 +10446,7 @@ impl GetStreamingDistributionError {
 }
 impl fmt::Display for GetStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStreamingDistributionError {
@@ -10505,7 +10505,7 @@ impl GetStreamingDistributionConfigError {
 }
 impl fmt::Display for GetStreamingDistributionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStreamingDistributionConfigError {
@@ -10557,7 +10557,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
 }
 impl fmt::Display for ListCloudFrontOriginAccessIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCloudFrontOriginAccessIdentitiesError {
@@ -10604,7 +10604,7 @@ impl ListDistributionsError {
 }
 impl fmt::Display for ListDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDistributionsError {
@@ -10660,7 +10660,7 @@ impl ListDistributionsByWebACLIdError {
 }
 impl fmt::Display for ListDistributionsByWebACLIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDistributionsByWebACLIdError {
@@ -10712,7 +10712,7 @@ impl ListFieldLevelEncryptionConfigsError {
 }
 impl fmt::Display for ListFieldLevelEncryptionConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFieldLevelEncryptionConfigsError {
@@ -10763,7 +10763,7 @@ impl ListFieldLevelEncryptionProfilesError {
 }
 impl fmt::Display for ListFieldLevelEncryptionProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFieldLevelEncryptionProfilesError {
@@ -10824,7 +10824,7 @@ impl ListInvalidationsError {
 }
 impl fmt::Display for ListInvalidationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInvalidationsError {
@@ -10873,7 +10873,7 @@ impl ListPublicKeysError {
 }
 impl fmt::Display for ListPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPublicKeysError {
@@ -10922,7 +10922,7 @@ impl ListStreamingDistributionsError {
 }
 impl fmt::Display for ListStreamingDistributionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStreamingDistributionsError {
@@ -10990,7 +10990,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -11061,7 +11061,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -11132,7 +11132,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -11193,7 +11193,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
 }
 impl fmt::Display for UpdateCloudFrontOriginAccessIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCloudFrontOriginAccessIdentityError {
@@ -11330,7 +11330,7 @@ impl UpdateDistributionError {
 }
 impl fmt::Display for UpdateDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDistributionError {
@@ -11437,7 +11437,7 @@ impl UpdateFieldLevelEncryptionConfigError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFieldLevelEncryptionConfigError {
@@ -11513,7 +11513,7 @@ impl UpdateFieldLevelEncryptionProfileError {
 }
 impl fmt::Display for UpdateFieldLevelEncryptionProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFieldLevelEncryptionProfileError {
@@ -11615,7 +11615,7 @@ impl UpdatePublicKeyError {
 }
 impl fmt::Display for UpdatePublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePublicKeyError {
@@ -11772,7 +11772,7 @@ impl UpdateStreamingDistributionError {
 }
 impl fmt::Display for UpdateStreamingDistributionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStreamingDistributionError {

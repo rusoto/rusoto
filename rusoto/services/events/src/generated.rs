@@ -1209,7 +1209,7 @@ impl ActivateEventSourceError {
 }
 impl fmt::Display for ActivateEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ActivateEventSourceError {
@@ -1273,7 +1273,7 @@ impl CreateEventBusError {
 }
 impl fmt::Display for CreateEventBusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEventBusError {
@@ -1332,7 +1332,7 @@ impl CreatePartnerEventSourceError {
 }
 impl fmt::Display for CreatePartnerEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePartnerEventSourceError {
@@ -1380,7 +1380,7 @@ impl DeactivateEventSourceError {
 }
 impl fmt::Display for DeactivateEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeactivateEventSourceError {
@@ -1415,7 +1415,7 @@ impl DeleteEventBusError {
 }
 impl fmt::Display for DeleteEventBusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventBusError {
@@ -1448,7 +1448,7 @@ impl DeletePartnerEventSourceError {
 }
 impl fmt::Display for DeletePartnerEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePartnerEventSourceError {
@@ -1496,7 +1496,7 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRuleError {
@@ -1537,7 +1537,7 @@ impl DescribeEventBusError {
 }
 impl fmt::Display for DescribeEventBusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventBusError {
@@ -1578,7 +1578,7 @@ impl DescribeEventSourceError {
 }
 impl fmt::Display for DescribeEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventSourceError {
@@ -1621,7 +1621,7 @@ impl DescribePartnerEventSourceError {
 }
 impl fmt::Display for DescribePartnerEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePartnerEventSourceError {
@@ -1660,7 +1660,7 @@ impl DescribeRuleError {
 }
 impl fmt::Display for DescribeRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRuleError {
@@ -1709,7 +1709,7 @@ impl DisableRuleError {
 }
 impl fmt::Display for DisableRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableRuleError {
@@ -1760,7 +1760,7 @@ impl EnableRuleError {
 }
 impl fmt::Display for EnableRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableRuleError {
@@ -1796,7 +1796,7 @@ impl ListEventBusesError {
 }
 impl fmt::Display for ListEventBusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEventBusesError {
@@ -1829,7 +1829,7 @@ impl ListEventSourcesError {
 }
 impl fmt::Display for ListEventSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEventSourcesError {
@@ -1873,7 +1873,7 @@ impl ListPartnerEventSourceAccountsError {
 }
 impl fmt::Display for ListPartnerEventSourceAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPartnerEventSourceAccountsError {
@@ -1907,7 +1907,7 @@ impl ListPartnerEventSourcesError {
 }
 impl fmt::Display for ListPartnerEventSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPartnerEventSourcesError {
@@ -1947,7 +1947,7 @@ impl ListRuleNamesByTargetError {
 }
 impl fmt::Display for ListRuleNamesByTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRuleNamesByTargetError {
@@ -1986,7 +1986,7 @@ impl ListRulesError {
 }
 impl fmt::Display for ListRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRulesError {
@@ -2027,7 +2027,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2066,7 +2066,7 @@ impl ListTargetsByRuleError {
 }
 impl fmt::Display for ListTargetsByRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTargetsByRuleError {
@@ -2100,7 +2100,7 @@ impl PutEventsError {
 }
 impl fmt::Display for PutEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutEventsError {
@@ -2133,7 +2133,7 @@ impl PutPartnerEventsError {
 }
 impl fmt::Display for PutPartnerEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPartnerEventsError {
@@ -2183,7 +2183,7 @@ impl PutPermissionError {
 }
 impl fmt::Display for PutPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPermissionError {
@@ -2244,7 +2244,7 @@ impl PutRuleError {
 }
 impl fmt::Display for PutRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRuleError {
@@ -2302,7 +2302,7 @@ impl PutTargetsError {
 }
 impl fmt::Display for PutTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutTargetsError {
@@ -2351,7 +2351,7 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemovePermissionError {
@@ -2403,7 +2403,7 @@ impl RemoveTargetsError {
 }
 impl fmt::Display for RemoveTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTargetsError {
@@ -2454,7 +2454,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2497,7 +2497,7 @@ impl TestEventPatternError {
 }
 impl fmt::Display for TestEventPatternError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestEventPatternError {
@@ -2548,7 +2548,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {

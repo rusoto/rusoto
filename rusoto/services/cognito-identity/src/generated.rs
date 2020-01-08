@@ -688,7 +688,7 @@ impl CreateIdentityPoolError {
 }
 impl fmt::Display for CreateIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIdentityPoolError {
@@ -736,7 +736,7 @@ impl DeleteIdentitiesError {
 }
 impl fmt::Display for DeleteIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIdentitiesError {
@@ -791,7 +791,7 @@ impl DeleteIdentityPoolError {
 }
 impl fmt::Display for DeleteIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIdentityPoolError {
@@ -848,7 +848,7 @@ impl DescribeIdentityError {
 }
 impl fmt::Display for DescribeIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityError {
@@ -911,7 +911,7 @@ impl DescribeIdentityPoolError {
 }
 impl fmt::Display for DescribeIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityPoolError {
@@ -999,7 +999,7 @@ impl GetCredentialsForIdentityError {
 }
 impl fmt::Display for GetCredentialsForIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCredentialsForIdentityError {
@@ -1074,7 +1074,7 @@ impl GetIdError {
 }
 impl fmt::Display for GetIdError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdError {
@@ -1147,7 +1147,7 @@ impl GetIdentityPoolRolesError {
 }
 impl fmt::Display for GetIdentityPoolRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityPoolRolesError {
@@ -1215,7 +1215,7 @@ impl GetOpenIdTokenError {
 }
 impl fmt::Display for GetOpenIdTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOpenIdTokenError {
@@ -1302,7 +1302,7 @@ impl GetOpenIdTokenForDeveloperIdentityError {
 }
 impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOpenIdTokenForDeveloperIdentityError {
@@ -1363,7 +1363,7 @@ impl ListIdentitiesError {
 }
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentitiesError {
@@ -1420,7 +1420,7 @@ impl ListIdentityPoolsError {
 }
 impl fmt::Display for ListIdentityPoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentityPoolsError {
@@ -1481,7 +1481,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1555,7 +1555,7 @@ impl LookupDeveloperIdentityError {
 }
 impl fmt::Display for LookupDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LookupDeveloperIdentityError {
@@ -1630,7 +1630,7 @@ impl MergeDeveloperIdentitiesError {
 }
 impl fmt::Display for MergeDeveloperIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergeDeveloperIdentitiesError {
@@ -1708,7 +1708,7 @@ impl SetIdentityPoolRolesError {
 }
 impl fmt::Display for SetIdentityPoolRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityPoolRolesError {
@@ -1767,7 +1767,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1841,7 +1841,7 @@ impl UnlinkDeveloperIdentityError {
 }
 impl fmt::Display for UnlinkDeveloperIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnlinkDeveloperIdentityError {
@@ -1909,7 +1909,7 @@ impl UnlinkIdentityError {
 }
 impl fmt::Display for UnlinkIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnlinkIdentityError {
@@ -1968,7 +1968,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2042,7 +2042,7 @@ impl UpdateIdentityPoolError {
 }
 impl fmt::Display for UpdateIdentityPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIdentityPoolError {

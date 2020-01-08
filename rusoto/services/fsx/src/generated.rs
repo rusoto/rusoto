@@ -1034,7 +1034,7 @@ impl CancelDataRepositoryTaskError {
 }
 impl fmt::Display for CancelDataRepositoryTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelDataRepositoryTaskError {
@@ -1103,7 +1103,7 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBackupError {
@@ -1184,7 +1184,7 @@ impl CreateDataRepositoryTaskError {
 }
 impl fmt::Display for CreateDataRepositoryTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDataRepositoryTaskError {
@@ -1275,7 +1275,7 @@ impl CreateFileSystemError {
 }
 impl fmt::Display for CreateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFileSystemError {
@@ -1369,7 +1369,7 @@ impl CreateFileSystemFromBackupError {
 }
 impl fmt::Display for CreateFileSystemFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFileSystemFromBackupError {
@@ -1436,7 +1436,7 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBackupError {
@@ -1500,7 +1500,7 @@ impl DeleteFileSystemError {
 }
 impl fmt::Display for DeleteFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFileSystemError {
@@ -1552,7 +1552,7 @@ impl DescribeBackupsError {
 }
 impl fmt::Display for DescribeBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBackupsError {
@@ -1613,7 +1613,7 @@ impl DescribeDataRepositoryTasksError {
 }
 impl fmt::Display for DescribeDataRepositoryTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDataRepositoryTasksError {
@@ -1663,7 +1663,7 @@ impl DescribeFileSystemsError {
 }
 impl fmt::Display for DescribeFileSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFileSystemsError {
@@ -1726,7 +1726,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1783,7 +1783,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1844,7 +1844,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -1914,7 +1914,7 @@ impl UpdateFileSystemError {
 }
 impl fmt::Display for UpdateFileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFileSystemError {

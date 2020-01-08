@@ -625,7 +625,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -670,7 +670,7 @@ impl CreateHapgError {
 }
 impl fmt::Display for CreateHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHapgError {
@@ -715,7 +715,7 @@ impl CreateHsmError {
 }
 impl fmt::Display for CreateHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHsmError {
@@ -760,7 +760,7 @@ impl CreateLunaClientError {
 }
 impl fmt::Display for CreateLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLunaClientError {
@@ -805,7 +805,7 @@ impl DeleteHapgError {
 }
 impl fmt::Display for DeleteHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteHapgError {
@@ -850,7 +850,7 @@ impl DeleteHsmError {
 }
 impl fmt::Display for DeleteHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteHsmError {
@@ -895,7 +895,7 @@ impl DeleteLunaClientError {
 }
 impl fmt::Display for DeleteLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLunaClientError {
@@ -940,7 +940,7 @@ impl DescribeHapgError {
 }
 impl fmt::Display for DescribeHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHapgError {
@@ -985,7 +985,7 @@ impl DescribeHsmError {
 }
 impl fmt::Display for DescribeHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHsmError {
@@ -1030,7 +1030,7 @@ impl DescribeLunaClientError {
 }
 impl fmt::Display for DescribeLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLunaClientError {
@@ -1075,7 +1075,7 @@ impl GetConfigError {
 }
 impl fmt::Display for GetConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConfigError {
@@ -1120,7 +1120,7 @@ impl ListAvailableZonesError {
 }
 impl fmt::Display for ListAvailableZonesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAvailableZonesError {
@@ -1165,7 +1165,7 @@ impl ListHapgsError {
 }
 impl fmt::Display for ListHapgsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHapgsError {
@@ -1210,7 +1210,7 @@ impl ListHsmsError {
 }
 impl fmt::Display for ListHsmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHsmsError {
@@ -1255,7 +1255,7 @@ impl ListLunaClientsError {
 }
 impl fmt::Display for ListLunaClientsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLunaClientsError {
@@ -1302,7 +1302,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1347,7 +1347,7 @@ impl ModifyHapgError {
 }
 impl fmt::Display for ModifyHapgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyHapgError {
@@ -1392,7 +1392,7 @@ impl ModifyHsmError {
 }
 impl fmt::Display for ModifyHsmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyHsmError {
@@ -1427,7 +1427,7 @@ impl ModifyLunaClientError {
 }
 impl fmt::Display for ModifyLunaClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyLunaClientError {
@@ -1476,7 +1476,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {

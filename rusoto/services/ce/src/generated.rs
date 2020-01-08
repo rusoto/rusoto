@@ -805,7 +805,7 @@ pub struct GetReservationPurchaseRecommendationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetReservationUtilizationRequest {
-    /// <p>Filters utilization data by dimensions. You can filter by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>SCOPE</p> </li> <li> <p>TENANCY</p> </li> </ul> <p> <code>GetReservationUtilization</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension, and nesting is supported up to only one level deep. If there are multiple values for a dimension, they are OR'd together.</p>
+    /// <p>Filters utilization data by dimensions. You can filter by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>SCOPE</p> </li> <li> <p>TENANCY</p> </li> </ul> <p> <code>GetReservationUtilization</code> uses the same <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension, and nesting is supported up to only one level deep. If there are multiple values for a dimension, they are OR'd together.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Expression>,
@@ -2106,7 +2106,7 @@ impl CreateCostCategoryDefinitionError {
 }
 impl fmt::Display for CreateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCostCategoryDefinitionError {
@@ -2151,7 +2151,7 @@ impl DeleteCostCategoryDefinitionError {
 }
 impl fmt::Display for DeleteCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCostCategoryDefinitionError {
@@ -2196,7 +2196,7 @@ impl DescribeCostCategoryDefinitionError {
 }
 impl fmt::Display for DescribeCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCostCategoryDefinitionError {
@@ -2250,7 +2250,7 @@ impl GetCostAndUsageError {
 }
 impl fmt::Display for GetCostAndUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCostAndUsageError {
@@ -2319,7 +2319,7 @@ impl GetCostAndUsageWithResourcesError {
 }
 impl fmt::Display for GetCostAndUsageWithResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCostAndUsageWithResourcesError {
@@ -2361,7 +2361,7 @@ impl GetCostForecastError {
 }
 impl fmt::Display for GetCostForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCostForecastError {
@@ -2415,7 +2415,7 @@ impl GetDimensionValuesError {
 }
 impl fmt::Display for GetDimensionValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDimensionValuesError {
@@ -2468,7 +2468,7 @@ impl GetReservationCoverageError {
 }
 impl fmt::Display for GetReservationCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReservationCoverageError {
@@ -2521,7 +2521,7 @@ impl GetReservationPurchaseRecommendationError {
 }
 impl fmt::Display for GetReservationPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReservationPurchaseRecommendationError {
@@ -2572,7 +2572,7 @@ impl GetReservationUtilizationError {
 }
 impl fmt::Display for GetReservationUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReservationUtilizationError {
@@ -2618,7 +2618,7 @@ impl GetRightsizingRecommendationError {
 }
 impl fmt::Display for GetRightsizingRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRightsizingRecommendationError {
@@ -2668,7 +2668,7 @@ impl GetSavingsPlansCoverageError {
 }
 impl fmt::Display for GetSavingsPlansCoverageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSavingsPlansCoverageError {
@@ -2714,7 +2714,7 @@ impl GetSavingsPlansPurchaseRecommendationError {
 }
 impl fmt::Display for GetSavingsPlansPurchaseRecommendationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSavingsPlansPurchaseRecommendationError {
@@ -2759,7 +2759,7 @@ impl GetSavingsPlansUtilizationError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSavingsPlansUtilizationError {
@@ -2811,7 +2811,7 @@ impl GetSavingsPlansUtilizationDetailsError {
 }
 impl fmt::Display for GetSavingsPlansUtilizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSavingsPlansUtilizationDetailsError {
@@ -2866,7 +2866,7 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagsError {
@@ -2915,7 +2915,7 @@ impl GetUsageForecastError {
 }
 impl fmt::Display for GetUsageForecastError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUsageForecastError {
@@ -2954,7 +2954,7 @@ impl ListCostCategoryDefinitionsError {
 }
 impl fmt::Display for ListCostCategoryDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCostCategoryDefinitionsError {
@@ -3005,7 +3005,7 @@ impl UpdateCostCategoryDefinitionError {
 }
 impl fmt::Display for UpdateCostCategoryDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCostCategoryDefinitionError {

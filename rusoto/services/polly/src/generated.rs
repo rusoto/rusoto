@@ -459,7 +459,7 @@ impl DeleteLexiconError {
 }
 impl fmt::Display for DeleteLexiconError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLexiconError {
@@ -498,7 +498,7 @@ impl DescribeVoicesError {
 }
 impl fmt::Display for DescribeVoicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVoicesError {
@@ -537,7 +537,7 @@ impl GetLexiconError {
 }
 impl fmt::Display for GetLexiconError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLexiconError {
@@ -587,7 +587,7 @@ impl GetSpeechSynthesisTaskError {
 }
 impl fmt::Display for GetSpeechSynthesisTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSpeechSynthesisTaskError {
@@ -627,7 +627,7 @@ impl ListLexiconsError {
 }
 impl fmt::Display for ListLexiconsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLexiconsError {
@@ -670,7 +670,7 @@ impl ListSpeechSynthesisTasksError {
 }
 impl fmt::Display for ListSpeechSynthesisTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSpeechSynthesisTasksError {
@@ -736,7 +736,7 @@ impl PutLexiconError {
 }
 impl fmt::Display for PutLexiconError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLexiconError {
@@ -854,7 +854,7 @@ impl StartSpeechSynthesisTaskError {
 }
 impl fmt::Display for StartSpeechSynthesisTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSpeechSynthesisTaskError {
@@ -944,7 +944,7 @@ impl SynthesizeSpeechError {
 }
 impl fmt::Display for SynthesizeSpeechError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SynthesizeSpeechError {

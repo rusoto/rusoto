@@ -1225,7 +1225,7 @@ impl CreateBrokerError {
 }
 impl fmt::Display for CreateBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBrokerError {
@@ -1279,7 +1279,7 @@ impl CreateConfigurationError {
 }
 impl fmt::Display for CreateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationError {
@@ -1330,7 +1330,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -1386,7 +1386,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -1438,7 +1438,7 @@ impl DeleteBrokerError {
 }
 impl fmt::Display for DeleteBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBrokerError {
@@ -1489,7 +1489,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -1540,7 +1540,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -1591,7 +1591,7 @@ impl DescribeBrokerError {
 }
 impl fmt::Display for DescribeBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBrokerError {
@@ -1641,7 +1641,7 @@ impl DescribeBrokerEngineTypesError {
 }
 impl fmt::Display for DescribeBrokerEngineTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBrokerEngineTypesError {
@@ -1694,7 +1694,7 @@ impl DescribeBrokerInstanceOptionsError {
 }
 impl fmt::Display for DescribeBrokerInstanceOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBrokerInstanceOptionsError {
@@ -1746,7 +1746,7 @@ impl DescribeConfigurationError {
 }
 impl fmt::Display for DescribeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationError {
@@ -1807,7 +1807,7 @@ impl DescribeConfigurationRevisionError {
 }
 impl fmt::Display for DescribeConfigurationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationRevisionError {
@@ -1858,7 +1858,7 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserError {
@@ -1904,7 +1904,7 @@ impl ListBrokersError {
 }
 impl fmt::Display for ListBrokersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBrokersError {
@@ -1962,7 +1962,7 @@ impl ListConfigurationRevisionsError {
 }
 impl fmt::Display for ListConfigurationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationRevisionsError {
@@ -2010,7 +2010,7 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationsError {
@@ -2060,7 +2060,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -2111,7 +2111,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -2162,7 +2162,7 @@ impl RebootBrokerError {
 }
 impl fmt::Display for RebootBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootBrokerError {
@@ -2218,7 +2218,7 @@ impl UpdateBrokerError {
 }
 impl fmt::Display for UpdateBrokerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBrokerError {
@@ -2277,7 +2277,7 @@ impl UpdateConfigurationError {
 }
 impl fmt::Display for UpdateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationError {
@@ -2334,7 +2334,7 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserError {

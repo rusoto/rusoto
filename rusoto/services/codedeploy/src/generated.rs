@@ -2350,7 +2350,7 @@ impl AddTagsToOnPremisesInstancesError {
 }
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToOnPremisesInstancesError {
@@ -2428,7 +2428,7 @@ impl BatchGetApplicationRevisionsError {
 }
 impl fmt::Display for BatchGetApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetApplicationRevisionsError {
@@ -2489,7 +2489,7 @@ impl BatchGetApplicationsError {
 }
 impl fmt::Display for BatchGetApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetApplicationsError {
@@ -2569,7 +2569,7 @@ impl BatchGetDeploymentGroupsError {
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetDeploymentGroupsError {
@@ -2654,7 +2654,7 @@ impl BatchGetDeploymentInstancesError {
 }
 impl fmt::Display for BatchGetDeploymentInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetDeploymentInstancesError {
@@ -2744,7 +2744,7 @@ impl BatchGetDeploymentTargetsError {
 }
 impl fmt::Display for BatchGetDeploymentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetDeploymentTargetsError {
@@ -2800,7 +2800,7 @@ impl BatchGetDeploymentsError {
 }
 impl fmt::Display for BatchGetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetDeploymentsError {
@@ -2853,7 +2853,7 @@ impl BatchGetOnPremisesInstancesError {
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetOnPremisesInstancesError {
@@ -2939,7 +2939,7 @@ impl ContinueDeploymentError {
 }
 impl fmt::Display for ContinueDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ContinueDeploymentError {
@@ -3014,7 +3014,7 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationError {
@@ -3198,7 +3198,7 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentError {
@@ -3297,7 +3297,7 @@ impl CreateDeploymentConfigError {
 }
 impl fmt::Display for CreateDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentConfigError {
@@ -3545,7 +3545,7 @@ impl CreateDeploymentGroupError {
 }
 impl fmt::Display for CreateDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentGroupError {
@@ -3623,7 +3623,7 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationError {
@@ -3681,7 +3681,7 @@ impl DeleteDeploymentConfigError {
 }
 impl fmt::Display for DeleteDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeploymentConfigError {
@@ -3745,7 +3745,7 @@ impl DeleteDeploymentGroupError {
 }
 impl fmt::Display for DeleteDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeploymentGroupError {
@@ -3812,7 +3812,7 @@ impl DeleteGitHubAccountTokenError {
 }
 impl fmt::Display for DeleteGitHubAccountTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGitHubAccountTokenError {
@@ -3860,7 +3860,7 @@ impl DeregisterOnPremisesInstanceError {
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterOnPremisesInstanceError {
@@ -3910,7 +3910,7 @@ impl GetApplicationError {
 }
 impl fmt::Display for GetApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApplicationError {
@@ -3982,7 +3982,7 @@ impl GetApplicationRevisionError {
 }
 impl fmt::Display for GetApplicationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApplicationRevisionError {
@@ -4032,7 +4032,7 @@ impl GetDeploymentError {
 }
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentError {
@@ -4090,7 +4090,7 @@ impl GetDeploymentConfigError {
 }
 impl fmt::Display for GetDeploymentConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentConfigError {
@@ -4170,7 +4170,7 @@ impl GetDeploymentGroupError {
 }
 impl fmt::Display for GetDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentGroupError {
@@ -4253,7 +4253,7 @@ impl GetDeploymentInstanceError {
 }
 impl fmt::Display for GetDeploymentInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentInstanceError {
@@ -4343,7 +4343,7 @@ impl GetDeploymentTargetError {
 }
 impl fmt::Display for GetDeploymentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentTargetError {
@@ -4399,7 +4399,7 @@ impl GetOnPremisesInstanceError {
 }
 impl fmt::Display for GetOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOnPremisesInstanceError {
@@ -4499,7 +4499,7 @@ impl ListApplicationRevisionsError {
 }
 impl fmt::Display for ListApplicationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationRevisionsError {
@@ -4541,7 +4541,7 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationsError {
@@ -4576,7 +4576,7 @@ impl ListDeploymentConfigsError {
 }
 impl fmt::Display for ListDeploymentConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentConfigsError {
@@ -4632,7 +4632,7 @@ impl ListDeploymentGroupsError {
 }
 impl fmt::Display for ListDeploymentGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentGroupsError {
@@ -4733,7 +4733,7 @@ impl ListDeploymentInstancesError {
 }
 impl fmt::Display for ListDeploymentInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentInstancesError {
@@ -4826,7 +4826,7 @@ impl ListDeploymentTargetsError {
 }
 impl fmt::Display for ListDeploymentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentTargetsError {
@@ -4920,7 +4920,7 @@ impl ListDeploymentsError {
 }
 impl fmt::Display for ListDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentsError {
@@ -4979,7 +4979,7 @@ impl ListGitHubAccountTokenNamesError {
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGitHubAccountTokenNamesError {
@@ -5030,7 +5030,7 @@ impl ListOnPremisesInstancesError {
 }
 impl fmt::Display for ListOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOnPremisesInstancesError {
@@ -5077,7 +5077,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -5130,7 +5130,7 @@ _ => {}
 }
 impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLifecycleEventHookExecutionStatusError {
@@ -5216,7 +5216,7 @@ impl RegisterApplicationRevisionError {
 }
 impl fmt::Display for RegisterApplicationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterApplicationRevisionError {
@@ -5321,7 +5321,7 @@ impl RegisterOnPremisesInstanceError {
 }
 impl fmt::Display for RegisterOnPremisesInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterOnPremisesInstanceError {
@@ -5409,7 +5409,7 @@ impl RemoveTagsFromOnPremisesInstancesError {
 }
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromOnPremisesInstancesError {
@@ -5491,7 +5491,7 @@ impl SkipWaitTimeForInstanceTerminationError {
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SkipWaitTimeForInstanceTerminationError {
@@ -5557,7 +5557,7 @@ impl StopDeploymentError {
 }
 impl fmt::Display for StopDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDeploymentError {
@@ -5633,7 +5633,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5714,7 +5714,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5777,7 +5777,7 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationError {
@@ -6010,7 +6010,7 @@ impl UpdateDeploymentGroupError {
 }
 impl fmt::Display for UpdateDeploymentGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeploymentGroupError {

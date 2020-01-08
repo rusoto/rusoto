@@ -1931,7 +1931,7 @@ impl AcceptDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for AcceptDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptDirectConnectGatewayAssociationProposalError {
@@ -1980,7 +1980,7 @@ impl AllocateConnectionOnInterconnectError {
 }
 impl fmt::Display for AllocateConnectionOnInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocateConnectionOnInterconnectError {
@@ -2037,7 +2037,7 @@ impl AllocateHostedConnectionError {
 }
 impl fmt::Display for AllocateHostedConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocateHostedConnectionError {
@@ -2098,7 +2098,7 @@ impl AllocatePrivateVirtualInterfaceError {
 }
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocatePrivateVirtualInterfaceError {
@@ -2159,7 +2159,7 @@ impl AllocatePublicVirtualInterfaceError {
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocatePublicVirtualInterfaceError {
@@ -2220,7 +2220,7 @@ impl AllocateTransitVirtualInterfaceError {
 }
 impl fmt::Display for AllocateTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocateTransitVirtualInterfaceError {
@@ -2267,7 +2267,7 @@ impl AssociateConnectionWithLagError {
 }
 impl fmt::Display for AssociateConnectionWithLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateConnectionWithLagError {
@@ -2310,7 +2310,7 @@ impl AssociateHostedConnectionError {
 }
 impl fmt::Display for AssociateHostedConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateHostedConnectionError {
@@ -2353,7 +2353,7 @@ impl AssociateVirtualInterfaceError {
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateVirtualInterfaceError {
@@ -2396,7 +2396,7 @@ impl ConfirmConnectionError {
 }
 impl fmt::Display for ConfirmConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmConnectionError {
@@ -2441,7 +2441,7 @@ impl ConfirmPrivateVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmPrivateVirtualInterfaceError {
@@ -2486,7 +2486,7 @@ impl ConfirmPublicVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmPublicVirtualInterfaceError {
@@ -2531,7 +2531,7 @@ impl ConfirmTransitVirtualInterfaceError {
 }
 impl fmt::Display for ConfirmTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmTransitVirtualInterfaceError {
@@ -2570,7 +2570,7 @@ impl CreateBGPPeerError {
 }
 impl fmt::Display for CreateBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBGPPeerError {
@@ -2623,7 +2623,7 @@ impl CreateConnectionError {
 }
 impl fmt::Display for CreateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConnectionError {
@@ -2670,7 +2670,7 @@ impl CreateDirectConnectGatewayError {
 }
 impl fmt::Display for CreateDirectConnectGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectConnectGatewayError {
@@ -2715,7 +2715,7 @@ impl CreateDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectConnectGatewayAssociationError {
@@ -2764,7 +2764,7 @@ impl CreateDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectConnectGatewayAssociationProposalError {
@@ -2821,7 +2821,7 @@ impl CreateInterconnectError {
 }
 impl fmt::Display for CreateInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInterconnectError {
@@ -2872,7 +2872,7 @@ impl CreateLagError {
 }
 impl fmt::Display for CreateLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLagError {
@@ -2933,7 +2933,7 @@ impl CreatePrivateVirtualInterfaceError {
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePrivateVirtualInterfaceError {
@@ -2994,7 +2994,7 @@ impl CreatePublicVirtualInterfaceError {
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePublicVirtualInterfaceError {
@@ -3055,7 +3055,7 @@ impl CreateTransitVirtualInterfaceError {
 }
 impl fmt::Display for CreateTransitVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTransitVirtualInterfaceError {
@@ -3096,7 +3096,7 @@ impl DeleteBGPPeerError {
 }
 impl fmt::Display for DeleteBGPPeerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBGPPeerError {
@@ -3139,7 +3139,7 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConnectionError {
@@ -3184,7 +3184,7 @@ impl DeleteDirectConnectGatewayError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectConnectGatewayError {
@@ -3229,7 +3229,7 @@ impl DeleteDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectConnectGatewayAssociationError {
@@ -3278,7 +3278,7 @@ impl DeleteDirectConnectGatewayAssociationProposalError {
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationProposalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectConnectGatewayAssociationProposalError {
@@ -3325,7 +3325,7 @@ impl DeleteInterconnectError {
 }
 impl fmt::Display for DeleteInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInterconnectError {
@@ -3364,7 +3364,7 @@ impl DeleteLagError {
 }
 impl fmt::Display for DeleteLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLagError {
@@ -3407,7 +3407,7 @@ impl DeleteVirtualInterfaceError {
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVirtualInterfaceError {
@@ -3450,7 +3450,7 @@ impl DescribeConnectionLoaError {
 }
 impl fmt::Display for DescribeConnectionLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConnectionLoaError {
@@ -3493,7 +3493,7 @@ impl DescribeConnectionsError {
 }
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConnectionsError {
@@ -3538,7 +3538,7 @@ impl DescribeConnectionsOnInterconnectError {
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConnectionsOnInterconnectError {
@@ -3587,7 +3587,7 @@ impl DescribeDirectConnectGatewayAssociationProposalsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationProposalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectConnectGatewayAssociationProposalsError {
@@ -3636,7 +3636,7 @@ impl DescribeDirectConnectGatewayAssociationsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectConnectGatewayAssociationsError {
@@ -3681,7 +3681,7 @@ impl DescribeDirectConnectGatewayAttachmentsError {
 }
 impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectConnectGatewayAttachmentsError {
@@ -3726,7 +3726,7 @@ impl DescribeDirectConnectGatewaysError {
 }
 impl fmt::Display for DescribeDirectConnectGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectConnectGatewaysError {
@@ -3769,7 +3769,7 @@ impl DescribeHostedConnectionsError {
 }
 impl fmt::Display for DescribeHostedConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHostedConnectionsError {
@@ -3812,7 +3812,7 @@ impl DescribeInterconnectLoaError {
 }
 impl fmt::Display for DescribeInterconnectLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInterconnectLoaError {
@@ -3855,7 +3855,7 @@ impl DescribeInterconnectsError {
 }
 impl fmt::Display for DescribeInterconnectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInterconnectsError {
@@ -3894,7 +3894,7 @@ impl DescribeLagsError {
 }
 impl fmt::Display for DescribeLagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLagsError {
@@ -3933,7 +3933,7 @@ impl DescribeLoaError {
 }
 impl fmt::Display for DescribeLoaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoaError {
@@ -3976,7 +3976,7 @@ impl DescribeLocationsError {
 }
 impl fmt::Display for DescribeLocationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLocationsError {
@@ -4015,7 +4015,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -4058,7 +4058,7 @@ impl DescribeVirtualGatewaysError {
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVirtualGatewaysError {
@@ -4101,7 +4101,7 @@ impl DescribeVirtualInterfacesError {
 }
 impl fmt::Display for DescribeVirtualInterfacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVirtualInterfacesError {
@@ -4146,7 +4146,7 @@ impl DisassociateConnectionFromLagError {
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateConnectionFromLagError {
@@ -4195,7 +4195,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4236,7 +4236,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -4281,7 +4281,7 @@ impl UpdateDirectConnectGatewayAssociationError {
 }
 impl fmt::Display for UpdateDirectConnectGatewayAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDirectConnectGatewayAssociationError {
@@ -4320,7 +4320,7 @@ impl UpdateLagError {
 }
 impl fmt::Display for UpdateLagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLagError {
@@ -4365,7 +4365,7 @@ impl UpdateVirtualInterfaceAttributesError {
 }
 impl fmt::Display for UpdateVirtualInterfaceAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVirtualInterfaceAttributesError {

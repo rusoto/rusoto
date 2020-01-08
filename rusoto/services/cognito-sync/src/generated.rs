@@ -719,7 +719,7 @@ impl BulkPublishError {
 }
 impl fmt::Display for BulkPublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BulkPublishError {
@@ -782,7 +782,7 @@ impl DeleteDatasetError {
 }
 impl fmt::Display for DeleteDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDatasetError {
@@ -840,7 +840,7 @@ impl DescribeDatasetError {
 }
 impl fmt::Display for DescribeDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDatasetError {
@@ -907,7 +907,7 @@ impl DescribeIdentityPoolUsageError {
 }
 impl fmt::Display for DescribeIdentityPoolUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityPoolUsageError {
@@ -970,7 +970,7 @@ impl DescribeIdentityUsageError {
 }
 impl fmt::Display for DescribeIdentityUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityUsageError {
@@ -1026,7 +1026,7 @@ impl GetBulkPublishDetailsError {
 }
 impl fmt::Display for GetBulkPublishDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBulkPublishDetailsError {
@@ -1082,7 +1082,7 @@ impl GetCognitoEventsError {
 }
 impl fmt::Display for GetCognitoEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCognitoEventsError {
@@ -1151,7 +1151,7 @@ impl GetIdentityPoolConfigurationError {
 }
 impl fmt::Display for GetIdentityPoolConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityPoolConfigurationError {
@@ -1203,7 +1203,7 @@ impl ListDatasetsError {
 }
 impl fmt::Display for ListDatasetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDatasetsError {
@@ -1258,7 +1258,7 @@ impl ListIdentityPoolUsageError {
 }
 impl fmt::Display for ListIdentityPoolUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentityPoolUsageError {
@@ -1309,7 +1309,7 @@ impl ListRecordsError {
 }
 impl fmt::Display for ListRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRecordsError {
@@ -1370,7 +1370,7 @@ impl RegisterDeviceError {
 }
 impl fmt::Display for RegisterDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterDeviceError {
@@ -1428,7 +1428,7 @@ impl SetCognitoEventsError {
 }
 impl fmt::Display for SetCognitoEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetCognitoEventsError {
@@ -1504,7 +1504,7 @@ impl SetIdentityPoolConfigurationError {
 }
 impl fmt::Display for SetIdentityPoolConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityPoolConfigurationError {
@@ -1569,7 +1569,7 @@ impl SubscribeToDatasetError {
 }
 impl fmt::Display for SubscribeToDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubscribeToDatasetError {
@@ -1644,7 +1644,7 @@ impl UnsubscribeFromDatasetError {
 }
 impl fmt::Display for UnsubscribeFromDatasetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnsubscribeFromDatasetError {
@@ -1724,7 +1724,7 @@ impl UpdateRecordsError {
 }
 impl fmt::Display for UpdateRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRecordsError {

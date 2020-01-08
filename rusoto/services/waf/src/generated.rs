@@ -2473,7 +2473,7 @@ impl CreateByteMatchSetError {
 }
 impl fmt::Display for CreateByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateByteMatchSetError {
@@ -2538,7 +2538,7 @@ impl CreateGeoMatchSetError {
 }
 impl fmt::Display for CreateGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGeoMatchSetError {
@@ -2601,7 +2601,7 @@ impl CreateIPSetError {
 }
 impl fmt::Display for CreateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIPSetError {
@@ -2683,7 +2683,7 @@ impl CreateRateBasedRuleError {
 }
 impl fmt::Display for CreateRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRateBasedRuleError {
@@ -2744,7 +2744,7 @@ impl CreateRegexMatchSetError {
 }
 impl fmt::Display for CreateRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRegexMatchSetError {
@@ -2801,7 +2801,7 @@ impl CreateRegexPatternSetError {
 }
 impl fmt::Display for CreateRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRegexPatternSetError {
@@ -2873,7 +2873,7 @@ impl CreateRuleError {
 }
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRuleError {
@@ -2944,7 +2944,7 @@ impl CreateRuleGroupError {
 }
 impl fmt::Display for CreateRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRuleGroupError {
@@ -3020,7 +3020,7 @@ impl CreateSizeConstraintSetError {
 }
 impl fmt::Display for CreateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSizeConstraintSetError {
@@ -3097,7 +3097,7 @@ impl CreateSqlInjectionMatchSetError {
 }
 impl fmt::Display for CreateSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSqlInjectionMatchSetError {
@@ -3176,7 +3176,7 @@ impl CreateWebACLError {
 }
 impl fmt::Display for CreateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWebACLError {
@@ -3244,7 +3244,7 @@ impl CreateXssMatchSetError {
 }
 impl fmt::Display for CreateXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateXssMatchSetError {
@@ -3315,7 +3315,7 @@ impl DeleteByteMatchSetError {
 }
 impl fmt::Display for DeleteByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteByteMatchSetError {
@@ -3380,7 +3380,7 @@ impl DeleteGeoMatchSetError {
 }
 impl fmt::Display for DeleteGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGeoMatchSetError {
@@ -3443,7 +3443,7 @@ impl DeleteIPSetError {
 }
 impl fmt::Display for DeleteIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIPSetError {
@@ -3499,7 +3499,7 @@ impl DeleteLoggingConfigurationError {
 }
 impl fmt::Display for DeleteLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoggingConfigurationError {
@@ -3548,7 +3548,7 @@ impl DeletePermissionPolicyError {
 }
 impl fmt::Display for DeletePermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePermissionPolicyError {
@@ -3630,7 +3630,7 @@ impl DeleteRateBasedRuleError {
 }
 impl fmt::Display for DeleteRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRateBasedRuleError {
@@ -3705,7 +3705,7 @@ impl DeleteRegexMatchSetError {
 }
 impl fmt::Display for DeleteRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRegexMatchSetError {
@@ -3778,7 +3778,7 @@ impl DeleteRegexPatternSetError {
 }
 impl fmt::Display for DeleteRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRegexPatternSetError {
@@ -3853,7 +3853,7 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRuleError {
@@ -3930,7 +3930,7 @@ impl DeleteRuleGroupError {
 }
 impl fmt::Display for DeleteRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRuleGroupError {
@@ -4007,7 +4007,7 @@ impl DeleteSizeConstraintSetError {
 }
 impl fmt::Display for DeleteSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSizeConstraintSetError {
@@ -4084,7 +4084,7 @@ impl DeleteSqlInjectionMatchSetError {
 }
 impl fmt::Display for DeleteSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSqlInjectionMatchSetError {
@@ -4159,7 +4159,7 @@ impl DeleteWebACLError {
 }
 impl fmt::Display for DeleteWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWebACLError {
@@ -4226,7 +4226,7 @@ impl DeleteXssMatchSetError {
 }
 impl fmt::Display for DeleteXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteXssMatchSetError {
@@ -4274,7 +4274,7 @@ impl GetByteMatchSetError {
 }
 impl fmt::Display for GetByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetByteMatchSetError {
@@ -4309,7 +4309,7 @@ impl GetChangeTokenError {
 }
 impl fmt::Display for GetChangeTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetChangeTokenError {
@@ -4351,7 +4351,7 @@ impl GetChangeTokenStatusError {
 }
 impl fmt::Display for GetChangeTokenStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetChangeTokenStatusError {
@@ -4395,7 +4395,7 @@ impl GetGeoMatchSetError {
 }
 impl fmt::Display for GetGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGeoMatchSetError {
@@ -4440,7 +4440,7 @@ impl GetIPSetError {
 }
 impl fmt::Display for GetIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIPSetError {
@@ -4484,7 +4484,7 @@ impl GetLoggingConfigurationError {
 }
 impl fmt::Display for GetLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoggingConfigurationError {
@@ -4527,7 +4527,7 @@ impl GetPermissionPolicyError {
 }
 impl fmt::Display for GetPermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPermissionPolicyError {
@@ -4571,7 +4571,7 @@ impl GetRateBasedRuleError {
 }
 impl fmt::Display for GetRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRateBasedRuleError {
@@ -4631,7 +4631,7 @@ impl GetRateBasedRuleManagedKeysError {
 }
 impl fmt::Display for GetRateBasedRuleManagedKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRateBasedRuleManagedKeysError {
@@ -4677,7 +4677,7 @@ impl GetRegexMatchSetError {
 }
 impl fmt::Display for GetRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRegexMatchSetError {
@@ -4726,7 +4726,7 @@ impl GetRegexPatternSetError {
 }
 impl fmt::Display for GetRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRegexPatternSetError {
@@ -4771,7 +4771,7 @@ impl GetRuleError {
 }
 impl fmt::Display for GetRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRuleError {
@@ -4811,7 +4811,7 @@ impl GetRuleGroupError {
 }
 impl fmt::Display for GetRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRuleGroupError {
@@ -4852,7 +4852,7 @@ impl GetSampledRequestsError {
 }
 impl fmt::Display for GetSampledRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSampledRequestsError {
@@ -4902,7 +4902,7 @@ impl GetSizeConstraintSetError {
 }
 impl fmt::Display for GetSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSizeConstraintSetError {
@@ -4953,7 +4953,7 @@ impl GetSqlInjectionMatchSetError {
 }
 impl fmt::Display for GetSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSqlInjectionMatchSetError {
@@ -4998,7 +4998,7 @@ impl GetWebACLError {
 }
 impl fmt::Display for GetWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWebACLError {
@@ -5043,7 +5043,7 @@ impl GetXssMatchSetError {
 }
 impl fmt::Display for GetXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetXssMatchSetError {
@@ -5096,7 +5096,7 @@ impl ListActivatedRulesInRuleGroupError {
 }
 impl fmt::Display for ListActivatedRulesInRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActivatedRulesInRuleGroupError {
@@ -5136,7 +5136,7 @@ impl ListByteMatchSetsError {
 }
 impl fmt::Display for ListByteMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListByteMatchSetsError {
@@ -5175,7 +5175,7 @@ impl ListGeoMatchSetsError {
 }
 impl fmt::Display for ListGeoMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGeoMatchSetsError {
@@ -5214,7 +5214,7 @@ impl ListIPSetsError {
 }
 impl fmt::Display for ListIPSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIPSetsError {
@@ -5264,7 +5264,7 @@ impl ListLoggingConfigurationsError {
 }
 impl fmt::Display for ListLoggingConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLoggingConfigurationsError {
@@ -5306,7 +5306,7 @@ impl ListRateBasedRulesError {
 }
 impl fmt::Display for ListRateBasedRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRateBasedRulesError {
@@ -5347,7 +5347,7 @@ impl ListRegexMatchSetsError {
 }
 impl fmt::Display for ListRegexMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRegexMatchSetsError {
@@ -5390,7 +5390,7 @@ impl ListRegexPatternSetsError {
 }
 impl fmt::Display for ListRegexPatternSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRegexPatternSetsError {
@@ -5424,7 +5424,7 @@ impl ListRuleGroupsError {
 }
 impl fmt::Display for ListRuleGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRuleGroupsError {
@@ -5462,7 +5462,7 @@ impl ListRulesError {
 }
 impl fmt::Display for ListRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRulesError {
@@ -5505,7 +5505,7 @@ impl ListSizeConstraintSetsError {
 }
 impl fmt::Display for ListSizeConstraintSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSizeConstraintSetsError {
@@ -5548,7 +5548,7 @@ impl ListSqlInjectionMatchSetsError {
 }
 impl fmt::Display for ListSqlInjectionMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSqlInjectionMatchSetsError {
@@ -5591,7 +5591,7 @@ impl ListSubscribedRuleGroupsError {
 }
 impl fmt::Display for ListSubscribedRuleGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscribedRuleGroupsError {
@@ -5657,7 +5657,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -5700,7 +5700,7 @@ impl ListWebACLsError {
 }
 impl fmt::Display for ListWebACLsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWebACLsError {
@@ -5739,7 +5739,7 @@ impl ListXssMatchSetsError {
 }
 impl fmt::Display for ListXssMatchSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListXssMatchSetsError {
@@ -5796,7 +5796,7 @@ impl PutLoggingConfigurationError {
 }
 impl fmt::Display for PutLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLoggingConfigurationError {
@@ -5853,7 +5853,7 @@ impl PutPermissionPolicyError {
 }
 impl fmt::Display for PutPermissionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPermissionPolicyError {
@@ -5920,7 +5920,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5985,7 +5985,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -6070,7 +6070,7 @@ impl UpdateByteMatchSetError {
 }
 impl fmt::Display for UpdateByteMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateByteMatchSetError {
@@ -6158,7 +6158,7 @@ impl UpdateGeoMatchSetError {
 }
 impl fmt::Display for UpdateGeoMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGeoMatchSetError {
@@ -6239,7 +6239,7 @@ impl UpdateIPSetError {
 }
 impl fmt::Display for UpdateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIPSetError {
@@ -6336,7 +6336,7 @@ impl UpdateRateBasedRuleError {
 }
 impl fmt::Display for UpdateRateBasedRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRateBasedRuleError {
@@ -6426,7 +6426,7 @@ impl UpdateRegexMatchSetError {
 }
 impl fmt::Display for UpdateRegexMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRegexMatchSetError {
@@ -6515,7 +6515,7 @@ impl UpdateRegexPatternSetError {
 }
 impl fmt::Display for UpdateRegexPatternSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRegexPatternSetError {
@@ -6595,7 +6595,7 @@ impl UpdateRuleError {
 }
 impl fmt::Display for UpdateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRuleError {
@@ -6668,7 +6668,7 @@ impl UpdateRuleGroupError {
 }
 impl fmt::Display for UpdateRuleGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRuleGroupError {
@@ -6765,7 +6765,7 @@ impl UpdateSizeConstraintSetError {
 }
 impl fmt::Display for UpdateSizeConstraintSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSizeConstraintSetError {
@@ -6859,7 +6859,7 @@ impl UpdateSqlInjectionMatchSetError {
 }
 impl fmt::Display for UpdateSqlInjectionMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSqlInjectionMatchSetError {
@@ -6948,7 +6948,7 @@ impl UpdateWebACLError {
 }
 impl fmt::Display for UpdateWebACLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWebACLError {
@@ -7033,7 +7033,7 @@ impl UpdateXssMatchSetError {
 }
 impl fmt::Display for UpdateXssMatchSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateXssMatchSetError {

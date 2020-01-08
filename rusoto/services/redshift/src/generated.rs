@@ -11027,7 +11027,7 @@ impl AcceptReservedNodeExchangeError {
 }
 impl fmt::Display for AcceptReservedNodeExchangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptReservedNodeExchangeError {
@@ -11083,7 +11083,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
 }
 impl fmt::Display for AuthorizeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AuthorizeClusterSecurityGroupIngressError {
@@ -11186,7 +11186,7 @@ impl AuthorizeSnapshotAccessError {
 }
 impl fmt::Display for AuthorizeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AuthorizeSnapshotAccessError {
@@ -11244,7 +11244,7 @@ impl BatchDeleteClusterSnapshotsError {
 }
 impl fmt::Display for BatchDeleteClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteClusterSnapshotsError {
@@ -11292,7 +11292,7 @@ impl BatchModifyClusterSnapshotsError {
 }
 impl fmt::Display for BatchModifyClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchModifyClusterSnapshotsError {
@@ -11363,7 +11363,7 @@ impl CancelResizeError {
 }
 impl fmt::Display for CancelResizeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelResizeError {
@@ -11451,7 +11451,7 @@ impl CopyClusterSnapshotError {
 }
 impl fmt::Display for CopyClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyClusterSnapshotError {
@@ -11667,7 +11667,7 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterError {
@@ -11760,7 +11760,7 @@ impl CreateClusterParameterGroupError {
 }
 impl fmt::Display for CreateClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterParameterGroupError {
@@ -11843,7 +11843,7 @@ impl CreateClusterSecurityGroupError {
 }
 impl fmt::Display for CreateClusterSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterSecurityGroupError {
@@ -11947,7 +11947,7 @@ impl CreateClusterSnapshotError {
 }
 impl fmt::Display for CreateClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterSnapshotError {
@@ -12061,7 +12061,7 @@ impl CreateClusterSubnetGroupError {
 }
 impl fmt::Display for CreateClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterSubnetGroupError {
@@ -12205,7 +12205,7 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEventSubscriptionError {
@@ -12291,7 +12291,7 @@ impl CreateHsmClientCertificateError {
 }
 impl fmt::Display for CreateHsmClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHsmClientCertificateError {
@@ -12372,7 +12372,7 @@ impl CreateHsmConfigurationError {
 }
 impl fmt::Display for CreateHsmConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHsmConfigurationError {
@@ -12465,7 +12465,7 @@ impl CreateScheduledActionError {
 }
 impl fmt::Display for CreateScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateScheduledActionError {
@@ -12560,7 +12560,7 @@ impl CreateSnapshotCopyGrantError {
 }
 impl fmt::Display for CreateSnapshotCopyGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSnapshotCopyGrantError {
@@ -12650,7 +12650,7 @@ impl CreateSnapshotScheduleError {
 }
 impl fmt::Display for CreateSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSnapshotScheduleError {
@@ -12715,7 +12715,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -12796,7 +12796,7 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterError {
@@ -12858,7 +12858,7 @@ impl DeleteClusterParameterGroupError {
 }
 impl fmt::Display for DeleteClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterParameterGroupError {
@@ -12923,7 +12923,7 @@ impl DeleteClusterSecurityGroupError {
 }
 impl fmt::Display for DeleteClusterSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterSecurityGroupError {
@@ -12984,7 +12984,7 @@ impl DeleteClusterSnapshotError {
 }
 impl fmt::Display for DeleteClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterSnapshotError {
@@ -13052,7 +13052,7 @@ impl DeleteClusterSubnetGroupError {
 }
 impl fmt::Display for DeleteClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterSubnetGroupError {
@@ -13112,7 +13112,7 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventSubscriptionError {
@@ -13173,7 +13173,7 @@ impl DeleteHsmClientCertificateError {
 }
 impl fmt::Display for DeleteHsmClientCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteHsmClientCertificateError {
@@ -13234,7 +13234,7 @@ impl DeleteHsmConfigurationError {
 }
 impl fmt::Display for DeleteHsmConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteHsmConfigurationError {
@@ -13291,7 +13291,7 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScheduledActionError {
@@ -13350,7 +13350,7 @@ impl DeleteSnapshotCopyGrantError {
 }
 impl fmt::Display for DeleteSnapshotCopyGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSnapshotCopyGrantError {
@@ -13409,7 +13409,7 @@ impl DeleteSnapshotScheduleError {
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSnapshotScheduleError {
@@ -13466,7 +13466,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -13506,7 +13506,7 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountAttributesError {
@@ -13564,7 +13564,7 @@ impl DescribeClusterDbRevisionsError {
 }
 impl fmt::Display for DescribeClusterDbRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterDbRevisionsError {
@@ -13625,7 +13625,7 @@ impl DescribeClusterParameterGroupsError {
 }
 impl fmt::Display for DescribeClusterParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterParameterGroupsError {
@@ -13677,7 +13677,7 @@ impl DescribeClusterParametersError {
 }
 impl fmt::Display for DescribeClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterParametersError {
@@ -13737,7 +13737,7 @@ impl DescribeClusterSecurityGroupsError {
 }
 impl fmt::Display for DescribeClusterSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterSecurityGroupsError {
@@ -13805,7 +13805,7 @@ impl DescribeClusterSnapshotsError {
 }
 impl fmt::Display for DescribeClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterSnapshotsError {
@@ -13865,7 +13865,7 @@ impl DescribeClusterSubnetGroupsError {
 }
 impl fmt::Display for DescribeClusterSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterSubnetGroupsError {
@@ -13922,7 +13922,7 @@ impl DescribeClusterTracksError {
 }
 impl fmt::Display for DescribeClusterTracksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterTracksError {
@@ -13962,7 +13962,7 @@ impl DescribeClusterVersionsError {
 }
 impl fmt::Display for DescribeClusterVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterVersionsError {
@@ -14014,7 +14014,7 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClustersError {
@@ -14056,7 +14056,7 @@ impl DescribeDefaultClusterParametersError {
 }
 impl fmt::Display for DescribeDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDefaultClusterParametersError {
@@ -14093,7 +14093,7 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventCategoriesError {
@@ -14149,7 +14149,7 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventSubscriptionsError {
@@ -14189,7 +14189,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -14247,7 +14247,7 @@ impl DescribeHsmClientCertificatesError {
 }
 impl fmt::Display for DescribeHsmClientCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHsmClientCertificatesError {
@@ -14306,7 +14306,7 @@ impl DescribeHsmConfigurationsError {
 }
 impl fmt::Display for DescribeHsmConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHsmConfigurationsError {
@@ -14354,7 +14354,7 @@ impl DescribeLoggingStatusError {
 }
 impl fmt::Display for DescribeLoggingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoggingStatusError {
@@ -14432,7 +14432,7 @@ impl DescribeNodeConfigurationOptionsError {
 }
 impl fmt::Display for DescribeNodeConfigurationOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNodeConfigurationOptionsError {
@@ -14478,7 +14478,7 @@ impl DescribeOrderableClusterOptionsError {
 }
 impl fmt::Display for DescribeOrderableClusterOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrderableClusterOptionsError {
@@ -14545,7 +14545,7 @@ impl DescribeReservedNodeOfferingsError {
 }
 impl fmt::Display for DescribeReservedNodeOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReservedNodeOfferingsError {
@@ -14609,7 +14609,7 @@ impl DescribeReservedNodesError {
 }
 impl fmt::Display for DescribeReservedNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReservedNodesError {
@@ -14664,7 +14664,7 @@ impl DescribeResizeError {
 }
 impl fmt::Display for DescribeResizeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResizeError {
@@ -14723,7 +14723,7 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScheduledActionsError {
@@ -14782,7 +14782,7 @@ impl DescribeSnapshotCopyGrantsError {
 }
 impl fmt::Display for DescribeSnapshotCopyGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSnapshotCopyGrantsError {
@@ -14822,7 +14822,7 @@ impl DescribeSnapshotSchedulesError {
 }
 impl fmt::Display for DescribeSnapshotSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSnapshotSchedulesError {
@@ -14859,7 +14859,7 @@ impl DescribeStorageError {
 }
 impl fmt::Display for DescribeStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStorageError {
@@ -14917,7 +14917,7 @@ impl DescribeTableRestoreStatusError {
 }
 impl fmt::Display for DescribeTableRestoreStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTableRestoreStatusError {
@@ -14972,7 +14972,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -15020,7 +15020,7 @@ impl DisableLoggingError {
 }
 impl fmt::Display for DisableLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableLoggingError {
@@ -15092,7 +15092,7 @@ impl DisableSnapshotCopyError {
 }
 impl fmt::Display for DisableSnapshotCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableSnapshotCopyError {
@@ -15172,7 +15172,7 @@ impl EnableLoggingError {
 }
 impl fmt::Display for EnableLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableLoggingError {
@@ -15307,7 +15307,7 @@ impl EnableSnapshotCopyError {
 }
 impl fmt::Display for EnableSnapshotCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableSnapshotCopyError {
@@ -15373,7 +15373,7 @@ impl GetClusterCredentialsError {
 }
 impl fmt::Display for GetClusterCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetClusterCredentialsError {
@@ -15468,7 +15468,7 @@ impl GetReservedNodeExchangeOfferingsError {
 }
 impl fmt::Display for GetReservedNodeExchangeOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReservedNodeExchangeOfferingsError {
@@ -15670,7 +15670,7 @@ impl ModifyClusterError {
 }
 impl fmt::Display for ModifyClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterError {
@@ -15755,7 +15755,7 @@ impl ModifyClusterDbRevisionError {
 }
 impl fmt::Display for ModifyClusterDbRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterDbRevisionError {
@@ -15813,7 +15813,7 @@ impl ModifyClusterIamRolesError {
 }
 impl fmt::Display for ModifyClusterIamRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterIamRolesError {
@@ -15863,7 +15863,7 @@ impl ModifyClusterMaintenanceError {
 }
 impl fmt::Display for ModifyClusterMaintenanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterMaintenanceError {
@@ -15921,7 +15921,7 @@ impl ModifyClusterParameterGroupError {
 }
 impl fmt::Display for ModifyClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterParameterGroupError {
@@ -15993,7 +15993,7 @@ impl ModifyClusterSnapshotError {
 }
 impl fmt::Display for ModifyClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterSnapshotError {
@@ -16043,7 +16043,7 @@ impl ModifyClusterSnapshotScheduleError {
 }
 impl fmt::Display for ModifyClusterSnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterSnapshotScheduleError {
@@ -16137,7 +16137,7 @@ impl ModifyClusterSubnetGroupError {
 }
 impl fmt::Display for ModifyClusterSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterSubnetGroupError {
@@ -16263,7 +16263,7 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyEventSubscriptionError {
@@ -16352,7 +16352,7 @@ impl ModifyScheduledActionError {
 }
 impl fmt::Display for ModifyScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyScheduledActionError {
@@ -16443,7 +16443,7 @@ impl ModifySnapshotCopyRetentionPeriodError {
 }
 impl fmt::Display for ModifySnapshotCopyRetentionPeriodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifySnapshotCopyRetentionPeriodError {
@@ -16512,7 +16512,7 @@ impl ModifySnapshotScheduleError {
 }
 impl fmt::Display for ModifySnapshotScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifySnapshotScheduleError {
@@ -16592,7 +16592,7 @@ impl PurchaseReservedNodeOfferingError {
 }
 impl fmt::Display for PurchaseReservedNodeOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PurchaseReservedNodeOfferingError {
@@ -16651,7 +16651,7 @@ impl RebootClusterError {
 }
 impl fmt::Display for RebootClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootClusterError {
@@ -16712,7 +16712,7 @@ impl ResetClusterParameterGroupError {
 }
 impl fmt::Display for ResetClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetClusterParameterGroupError {
@@ -16824,7 +16824,7 @@ impl ResizeClusterError {
 }
 impl fmt::Display for ResizeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResizeClusterError {
@@ -17093,7 +17093,7 @@ impl RestoreFromClusterSnapshotError {
 }
 impl fmt::Display for RestoreFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreFromClusterSnapshotError {
@@ -17179,7 +17179,7 @@ impl RestoreTableFromClusterSnapshotError {
 }
 impl fmt::Display for RestoreTableFromClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreTableFromClusterSnapshotError {
@@ -17239,7 +17239,7 @@ impl RevokeClusterSecurityGroupIngressError {
 }
 impl fmt::Display for RevokeClusterSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeClusterSecurityGroupIngressError {
@@ -17312,7 +17312,7 @@ impl RevokeSnapshotAccessError {
 }
 impl fmt::Display for RevokeSnapshotAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeSnapshotAccessError {
@@ -17379,7 +17379,7 @@ impl RotateEncryptionKeyError {
 }
 impl fmt::Display for RotateEncryptionKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RotateEncryptionKeyError {

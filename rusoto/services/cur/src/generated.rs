@@ -149,7 +149,7 @@ impl DeleteReportDefinitionError {
 }
 impl fmt::Display for DeleteReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReportDefinitionError {
@@ -184,7 +184,7 @@ impl DescribeReportDefinitionsError {
 }
 impl fmt::Display for DescribeReportDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReportDefinitionsError {
@@ -219,7 +219,7 @@ impl ModifyReportDefinitionError {
 }
 impl fmt::Display for ModifyReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyReportDefinitionError {
@@ -266,7 +266,7 @@ impl PutReportDefinitionError {
 }
 impl fmt::Display for PutReportDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutReportDefinitionError {

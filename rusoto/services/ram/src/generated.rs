@@ -1081,7 +1081,7 @@ impl AcceptResourceShareInvitationError {
 }
 impl fmt::Display for AcceptResourceShareInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptResourceShareInvitationError {
@@ -1192,7 +1192,7 @@ impl AssociateResourceShareError {
 }
 impl fmt::Display for AssociateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateResourceShareError {
@@ -1280,7 +1280,7 @@ impl AssociateResourceSharePermissionError {
 }
 impl fmt::Display for AssociateResourceSharePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateResourceSharePermissionError {
@@ -1385,7 +1385,7 @@ impl CreateResourceShareError {
 }
 impl fmt::Display for CreateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceShareError {
@@ -1480,7 +1480,7 @@ impl DeleteResourceShareError {
 }
 impl fmt::Display for DeleteResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceShareError {
@@ -1586,7 +1586,7 @@ impl DisassociateResourceShareError {
 }
 impl fmt::Display for DisassociateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateResourceShareError {
@@ -1674,7 +1674,7 @@ impl DisassociateResourceSharePermissionError {
 }
 impl fmt::Display for DisassociateResourceSharePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateResourceSharePermissionError {
@@ -1731,7 +1731,7 @@ impl EnableSharingWithAwsOrganizationError {
 }
 impl fmt::Display for EnableSharingWithAwsOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableSharingWithAwsOrganizationError {
@@ -1791,7 +1791,7 @@ impl GetPermissionError {
 }
 impl fmt::Display for GetPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPermissionError {
@@ -1855,7 +1855,7 @@ impl GetResourcePoliciesError {
 }
 impl fmt::Display for GetResourcePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcePoliciesError {
@@ -1938,7 +1938,7 @@ impl GetResourceShareAssociationsError {
 }
 impl fmt::Display for GetResourceShareAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceShareAssociationsError {
@@ -2025,7 +2025,7 @@ impl GetResourceShareInvitationsError {
 }
 impl fmt::Display for GetResourceShareInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceShareInvitationsError {
@@ -2093,7 +2093,7 @@ impl GetResourceSharesError {
 }
 impl fmt::Display for GetResourceSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceSharesError {
@@ -2197,7 +2197,7 @@ impl ListPendingInvitationResourcesError {
 }
 impl fmt::Display for ListPendingInvitationResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPendingInvitationResourcesError {
@@ -2264,7 +2264,7 @@ impl ListPermissionsError {
 }
 impl fmt::Display for ListPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPermissionsError {
@@ -2326,7 +2326,7 @@ impl ListPrincipalsError {
 }
 impl fmt::Display for ListPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPrincipalsError {
@@ -2410,7 +2410,7 @@ impl ListResourceSharePermissionsError {
 }
 impl fmt::Display for ListResourceSharePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceSharePermissionsError {
@@ -2479,7 +2479,7 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourcesError {
@@ -2559,7 +2559,7 @@ impl PromoteResourceShareCreatedFromPolicyError {
 }
 impl fmt::Display for PromoteResourceShareCreatedFromPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PromoteResourceShareCreatedFromPolicyError {
@@ -2672,7 +2672,7 @@ impl RejectResourceShareInvitationError {
 }
 impl fmt::Display for RejectResourceShareInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectResourceShareInvitationError {
@@ -2750,7 +2750,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2799,7 +2799,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2886,7 +2886,7 @@ impl UpdateResourceShareError {
 }
 impl fmt::Display for UpdateResourceShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResourceShareError {

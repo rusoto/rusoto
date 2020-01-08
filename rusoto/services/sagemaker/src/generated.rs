@@ -8444,7 +8444,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -8484,7 +8484,7 @@ impl AssociateTrialComponentError {
 }
 impl fmt::Display for AssociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateTrialComponentError {
@@ -8512,7 +8512,7 @@ impl CreateAlgorithmError {
 }
 impl fmt::Display for CreateAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAlgorithmError {
@@ -8548,7 +8548,7 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAppError {
@@ -8589,7 +8589,7 @@ impl CreateAutoMLJobError {
 }
 impl fmt::Display for CreateAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAutoMLJobError {
@@ -8617,7 +8617,7 @@ impl CreateCodeRepositoryError {
 }
 impl fmt::Display for CreateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCodeRepositoryError {
@@ -8655,7 +8655,7 @@ impl CreateCompilationJobError {
 }
 impl fmt::Display for CreateCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCompilationJobError {
@@ -8694,7 +8694,7 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainError {
@@ -8730,7 +8730,7 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEndpointError {
@@ -8765,7 +8765,7 @@ impl CreateEndpointConfigError {
 }
 impl fmt::Display for CreateEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEndpointConfigError {
@@ -8800,7 +8800,7 @@ impl CreateExperimentError {
 }
 impl fmt::Display for CreateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateExperimentError {
@@ -8840,7 +8840,7 @@ impl CreateFlowDefinitionError {
 }
 impl fmt::Display for CreateFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFlowDefinitionError {
@@ -8881,7 +8881,7 @@ impl CreateHumanTaskUiError {
 }
 impl fmt::Display for CreateHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHumanTaskUiError {
@@ -8926,7 +8926,7 @@ impl CreateHyperParameterTuningJobError {
 }
 impl fmt::Display for CreateHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHyperParameterTuningJobError {
@@ -8967,7 +8967,7 @@ impl CreateLabelingJobError {
 }
 impl fmt::Display for CreateLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLabelingJobError {
@@ -9001,7 +9001,7 @@ impl CreateModelError {
 }
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateModelError {
@@ -9028,7 +9028,7 @@ impl CreateModelPackageError {
 }
 impl fmt::Display for CreateModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateModelPackageError {
@@ -9068,7 +9068,7 @@ impl CreateMonitoringScheduleError {
 }
 impl fmt::Display for CreateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMonitoringScheduleError {
@@ -9104,7 +9104,7 @@ impl CreateNotebookInstanceError {
 }
 impl fmt::Display for CreateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNotebookInstanceError {
@@ -9141,7 +9141,7 @@ impl CreateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for CreateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNotebookInstanceLifecycleConfigError {
@@ -9168,7 +9168,7 @@ impl CreatePresignedDomainUrlError {
 }
 impl fmt::Display for CreatePresignedDomainUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePresignedDomainUrlError {
@@ -9195,7 +9195,7 @@ impl CreatePresignedNotebookInstanceUrlError {
 }
 impl fmt::Display for CreatePresignedNotebookInstanceUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePresignedNotebookInstanceUrlError {
@@ -9240,7 +9240,7 @@ impl CreateProcessingJobError {
 }
 impl fmt::Display for CreateProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProcessingJobError {
@@ -9287,7 +9287,7 @@ impl CreateTrainingJobError {
 }
 impl fmt::Display for CreateTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTrainingJobError {
@@ -9334,7 +9334,7 @@ impl CreateTransformJobError {
 }
 impl fmt::Display for CreateTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTransformJobError {
@@ -9374,7 +9374,7 @@ impl CreateTrialError {
 }
 impl fmt::Display for CreateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTrialError {
@@ -9410,7 +9410,7 @@ impl CreateTrialComponentError {
 }
 impl fmt::Display for CreateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTrialComponentError {
@@ -9450,7 +9450,7 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserProfileError {
@@ -9491,7 +9491,7 @@ impl CreateWorkteamError {
 }
 impl fmt::Display for CreateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWorkteamError {
@@ -9519,7 +9519,7 @@ impl DeleteAlgorithmError {
 }
 impl fmt::Display for DeleteAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAlgorithmError {
@@ -9555,7 +9555,7 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppError {
@@ -9583,7 +9583,7 @@ impl DeleteCodeRepositoryError {
 }
 impl fmt::Display for DeleteCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCodeRepositoryError {
@@ -9619,7 +9619,7 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainError {
@@ -9647,7 +9647,7 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEndpointError {
@@ -9672,7 +9672,7 @@ impl DeleteEndpointConfigError {
 }
 impl fmt::Display for DeleteEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEndpointConfigError {
@@ -9703,7 +9703,7 @@ impl DeleteExperimentError {
 }
 impl fmt::Display for DeleteExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteExperimentError {
@@ -9738,7 +9738,7 @@ impl DeleteFlowDefinitionError {
 }
 impl fmt::Display for DeleteFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFlowDefinitionError {
@@ -9765,7 +9765,7 @@ impl DeleteModelError {
 }
 impl fmt::Display for DeleteModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteModelError {
@@ -9790,7 +9790,7 @@ impl DeleteModelPackageError {
 }
 impl fmt::Display for DeleteModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteModelPackageError {
@@ -9823,7 +9823,7 @@ impl DeleteMonitoringScheduleError {
 }
 impl fmt::Display for DeleteMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMonitoringScheduleError {
@@ -9850,7 +9850,7 @@ impl DeleteNotebookInstanceError {
 }
 impl fmt::Display for DeleteNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotebookInstanceError {
@@ -9877,7 +9877,7 @@ impl DeleteNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DeleteNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotebookInstanceLifecycleConfigError {
@@ -9902,7 +9902,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -9933,7 +9933,7 @@ impl DeleteTrialError {
 }
 impl fmt::Display for DeleteTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTrialError {
@@ -9968,7 +9968,7 @@ impl DeleteTrialComponentError {
 }
 impl fmt::Display for DeleteTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTrialComponentError {
@@ -10006,7 +10006,7 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserProfileError {
@@ -10042,7 +10042,7 @@ impl DeleteWorkteamError {
 }
 impl fmt::Display for DeleteWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWorkteamError {
@@ -10069,7 +10069,7 @@ impl DescribeAlgorithmError {
 }
 impl fmt::Display for DescribeAlgorithmError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAlgorithmError {
@@ -10100,7 +10100,7 @@ impl DescribeAppError {
 }
 impl fmt::Display for DescribeAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAppError {
@@ -10133,7 +10133,7 @@ impl DescribeAutoMLJobError {
 }
 impl fmt::Display for DescribeAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutoMLJobError {
@@ -10160,7 +10160,7 @@ impl DescribeCodeRepositoryError {
 }
 impl fmt::Display for DescribeCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCodeRepositoryError {
@@ -10193,7 +10193,7 @@ impl DescribeCompilationJobError {
 }
 impl fmt::Display for DescribeCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCompilationJobError {
@@ -10226,7 +10226,7 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainError {
@@ -10253,7 +10253,7 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointError {
@@ -10278,7 +10278,7 @@ impl DescribeEndpointConfigError {
 }
 impl fmt::Display for DescribeEndpointConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointConfigError {
@@ -10309,7 +10309,7 @@ impl DescribeExperimentError {
 }
 impl fmt::Display for DescribeExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExperimentError {
@@ -10344,7 +10344,7 @@ impl DescribeFlowDefinitionError {
 }
 impl fmt::Display for DescribeFlowDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFlowDefinitionError {
@@ -10379,7 +10379,7 @@ impl DescribeHumanTaskUiError {
 }
 impl fmt::Display for DescribeHumanTaskUiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHumanTaskUiError {
@@ -10416,7 +10416,7 @@ impl DescribeHyperParameterTuningJobError {
 }
 impl fmt::Display for DescribeHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHyperParameterTuningJobError {
@@ -10451,7 +10451,7 @@ impl DescribeLabelingJobError {
 }
 impl fmt::Display for DescribeLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLabelingJobError {
@@ -10478,7 +10478,7 @@ impl DescribeModelError {
 }
 impl fmt::Display for DescribeModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeModelError {
@@ -10503,7 +10503,7 @@ impl DescribeModelPackageError {
 }
 impl fmt::Display for DescribeModelPackageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeModelPackageError {
@@ -10538,7 +10538,7 @@ impl DescribeMonitoringScheduleError {
 }
 impl fmt::Display for DescribeMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMonitoringScheduleError {
@@ -10565,7 +10565,7 @@ impl DescribeNotebookInstanceError {
 }
 impl fmt::Display for DescribeNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNotebookInstanceError {
@@ -10592,7 +10592,7 @@ impl DescribeNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for DescribeNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNotebookInstanceLifecycleConfigError {
@@ -10625,7 +10625,7 @@ impl DescribeProcessingJobError {
 }
 impl fmt::Display for DescribeProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProcessingJobError {
@@ -10654,7 +10654,7 @@ impl DescribeSubscribedWorkteamError {
 }
 impl fmt::Display for DescribeSubscribedWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSubscribedWorkteamError {
@@ -10687,7 +10687,7 @@ impl DescribeTrainingJobError {
 }
 impl fmt::Display for DescribeTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrainingJobError {
@@ -10722,7 +10722,7 @@ impl DescribeTransformJobError {
 }
 impl fmt::Display for DescribeTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTransformJobError {
@@ -10755,7 +10755,7 @@ impl DescribeTrialError {
 }
 impl fmt::Display for DescribeTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrialError {
@@ -10790,7 +10790,7 @@ impl DescribeTrialComponentError {
 }
 impl fmt::Display for DescribeTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrialComponentError {
@@ -10825,7 +10825,7 @@ impl DescribeUserProfileError {
 }
 impl fmt::Display for DescribeUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserProfileError {
@@ -10852,7 +10852,7 @@ impl DescribeWorkteamError {
 }
 impl fmt::Display for DescribeWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkteamError {
@@ -10887,7 +10887,7 @@ impl DisassociateTrialComponentError {
 }
 impl fmt::Display for DisassociateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateTrialComponentError {
@@ -10914,7 +10914,7 @@ impl GetSearchSuggestionsError {
 }
 impl fmt::Display for GetSearchSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSearchSuggestionsError {
@@ -10939,7 +10939,7 @@ impl ListAlgorithmsError {
 }
 impl fmt::Display for ListAlgorithmsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAlgorithmsError {
@@ -10964,7 +10964,7 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAppsError {
@@ -10989,7 +10989,7 @@ impl ListAutoMLJobsError {
 }
 impl fmt::Display for ListAutoMLJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAutoMLJobsError {
@@ -11024,7 +11024,7 @@ impl ListCandidatesForAutoMLJobError {
 }
 impl fmt::Display for ListCandidatesForAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCandidatesForAutoMLJobError {
@@ -11051,7 +11051,7 @@ impl ListCodeRepositoriesError {
 }
 impl fmt::Display for ListCodeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCodeRepositoriesError {
@@ -11076,7 +11076,7 @@ impl ListCompilationJobsError {
 }
 impl fmt::Display for ListCompilationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCompilationJobsError {
@@ -11101,7 +11101,7 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainsError {
@@ -11126,7 +11126,7 @@ impl ListEndpointConfigsError {
 }
 impl fmt::Display for ListEndpointConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEndpointConfigsError {
@@ -11151,7 +11151,7 @@ impl ListEndpointsError {
 }
 impl fmt::Display for ListEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEndpointsError {
@@ -11176,7 +11176,7 @@ impl ListExperimentsError {
 }
 impl fmt::Display for ListExperimentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListExperimentsError {
@@ -11201,7 +11201,7 @@ impl ListFlowDefinitionsError {
 }
 impl fmt::Display for ListFlowDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFlowDefinitionsError {
@@ -11226,7 +11226,7 @@ impl ListHumanTaskUisError {
 }
 impl fmt::Display for ListHumanTaskUisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHumanTaskUisError {
@@ -11253,7 +11253,7 @@ impl ListHyperParameterTuningJobsError {
 }
 impl fmt::Display for ListHyperParameterTuningJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHyperParameterTuningJobsError {
@@ -11278,7 +11278,7 @@ impl ListLabelingJobsError {
 }
 impl fmt::Display for ListLabelingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLabelingJobsError {
@@ -11313,7 +11313,7 @@ impl ListLabelingJobsForWorkteamError {
 }
 impl fmt::Display for ListLabelingJobsForWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLabelingJobsForWorkteamError {
@@ -11340,7 +11340,7 @@ impl ListModelPackagesError {
 }
 impl fmt::Display for ListModelPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListModelPackagesError {
@@ -11365,7 +11365,7 @@ impl ListModelsError {
 }
 impl fmt::Display for ListModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListModelsError {
@@ -11390,7 +11390,7 @@ impl ListMonitoringExecutionsError {
 }
 impl fmt::Display for ListMonitoringExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMonitoringExecutionsError {
@@ -11415,7 +11415,7 @@ impl ListMonitoringSchedulesError {
 }
 impl fmt::Display for ListMonitoringSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMonitoringSchedulesError {
@@ -11442,7 +11442,7 @@ impl ListNotebookInstanceLifecycleConfigsError {
 }
 impl fmt::Display for ListNotebookInstanceLifecycleConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNotebookInstanceLifecycleConfigsError {
@@ -11467,7 +11467,7 @@ impl ListNotebookInstancesError {
 }
 impl fmt::Display for ListNotebookInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNotebookInstancesError {
@@ -11492,7 +11492,7 @@ impl ListProcessingJobsError {
 }
 impl fmt::Display for ListProcessingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProcessingJobsError {
@@ -11517,7 +11517,7 @@ impl ListSubscribedWorkteamsError {
 }
 impl fmt::Display for ListSubscribedWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscribedWorkteamsError {
@@ -11542,7 +11542,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -11567,7 +11567,7 @@ impl ListTrainingJobsError {
 }
 impl fmt::Display for ListTrainingJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTrainingJobsError {
@@ -11602,7 +11602,7 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
 }
 impl fmt::Display for ListTrainingJobsForHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTrainingJobsForHyperParameterTuningJobError {
@@ -11629,7 +11629,7 @@ impl ListTransformJobsError {
 }
 impl fmt::Display for ListTransformJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTransformJobsError {
@@ -11654,7 +11654,7 @@ impl ListTrialComponentsError {
 }
 impl fmt::Display for ListTrialComponentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTrialComponentsError {
@@ -11679,7 +11679,7 @@ impl ListTrialsError {
 }
 impl fmt::Display for ListTrialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTrialsError {
@@ -11704,7 +11704,7 @@ impl ListUserProfilesError {
 }
 impl fmt::Display for ListUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserProfilesError {
@@ -11729,7 +11729,7 @@ impl ListWorkteamsError {
 }
 impl fmt::Display for ListWorkteamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkteamsError {
@@ -11754,7 +11754,7 @@ impl RenderUiTemplateError {
 }
 impl fmt::Display for RenderUiTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RenderUiTemplateError {
@@ -11779,7 +11779,7 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchError {
@@ -11812,7 +11812,7 @@ impl StartMonitoringScheduleError {
 }
 impl fmt::Display for StartMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMonitoringScheduleError {
@@ -11847,7 +11847,7 @@ impl StartNotebookInstanceError {
 }
 impl fmt::Display for StartNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartNotebookInstanceError {
@@ -11880,7 +11880,7 @@ impl StopAutoMLJobError {
 }
 impl fmt::Display for StopAutoMLJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopAutoMLJobError {
@@ -11913,7 +11913,7 @@ impl StopCompilationJobError {
 }
 impl fmt::Display for StopCompilationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopCompilationJobError {
@@ -11950,7 +11950,7 @@ impl StopHyperParameterTuningJobError {
 }
 impl fmt::Display for StopHyperParameterTuningJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopHyperParameterTuningJobError {
@@ -11983,7 +11983,7 @@ impl StopLabelingJobError {
 }
 impl fmt::Display for StopLabelingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopLabelingJobError {
@@ -12018,7 +12018,7 @@ impl StopMonitoringScheduleError {
 }
 impl fmt::Display for StopMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopMonitoringScheduleError {
@@ -12045,7 +12045,7 @@ impl StopNotebookInstanceError {
 }
 impl fmt::Display for StopNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopNotebookInstanceError {
@@ -12076,7 +12076,7 @@ impl StopProcessingJobError {
 }
 impl fmt::Display for StopProcessingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopProcessingJobError {
@@ -12109,7 +12109,7 @@ impl StopTrainingJobError {
 }
 impl fmt::Display for StopTrainingJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTrainingJobError {
@@ -12142,7 +12142,7 @@ impl StopTransformJobError {
 }
 impl fmt::Display for StopTransformJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTransformJobError {
@@ -12169,7 +12169,7 @@ impl UpdateCodeRepositoryError {
 }
 impl fmt::Display for UpdateCodeRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCodeRepositoryError {
@@ -12210,7 +12210,7 @@ impl UpdateDomainError {
 }
 impl fmt::Display for UpdateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainError {
@@ -12247,7 +12247,7 @@ impl UpdateEndpointError {
 }
 impl fmt::Display for UpdateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEndpointError {
@@ -12284,7 +12284,7 @@ impl UpdateEndpointWeightsAndCapacitiesError {
 }
 impl fmt::Display for UpdateEndpointWeightsAndCapacitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEndpointWeightsAndCapacitiesError {
@@ -12322,7 +12322,7 @@ impl UpdateExperimentError {
 }
 impl fmt::Display for UpdateExperimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateExperimentError {
@@ -12365,7 +12365,7 @@ impl UpdateMonitoringScheduleError {
 }
 impl fmt::Display for UpdateMonitoringScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMonitoringScheduleError {
@@ -12401,7 +12401,7 @@ impl UpdateNotebookInstanceError {
 }
 impl fmt::Display for UpdateNotebookInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNotebookInstanceError {
@@ -12438,7 +12438,7 @@ impl UpdateNotebookInstanceLifecycleConfigError {
 }
 impl fmt::Display for UpdateNotebookInstanceLifecycleConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNotebookInstanceLifecycleConfigError {
@@ -12476,7 +12476,7 @@ impl UpdateTrialError {
 }
 impl fmt::Display for UpdateTrialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTrialError {
@@ -12517,7 +12517,7 @@ impl UpdateTrialComponentError {
 }
 impl fmt::Display for UpdateTrialComponentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTrialComponentError {
@@ -12563,7 +12563,7 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserProfileError {
@@ -12600,7 +12600,7 @@ impl UpdateWorkteamError {
 }
 impl fmt::Display for UpdateWorkteamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWorkteamError {

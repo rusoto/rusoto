@@ -225,7 +225,7 @@ impl SignedRequest {
 
     /// If the key exists in headers, set it to blank/unoccupied:
     pub fn remove_header(&mut self, key: &str) {
-        let key_lower = key.to_ascii_lowercase().to_string();
+        let key_lower = key.to_ascii_lowercase();
         self.headers.remove(&key_lower);
     }
 

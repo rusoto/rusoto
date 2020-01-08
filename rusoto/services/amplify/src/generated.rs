@@ -1640,7 +1640,7 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAppError {
@@ -1703,7 +1703,7 @@ impl CreateBackendEnvironmentError {
 }
 impl fmt::Display for CreateBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBackendEnvironmentError {
@@ -1767,7 +1767,7 @@ impl CreateBranchError {
 }
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBranchError {
@@ -1820,7 +1820,7 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentError {
@@ -1889,7 +1889,7 @@ impl CreateDomainAssociationError {
 }
 impl fmt::Display for CreateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainAssociationError {
@@ -1954,7 +1954,7 @@ impl CreateWebhookError {
 }
 impl fmt::Display for CreateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWebhookError {
@@ -2012,7 +2012,7 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppError {
@@ -2075,7 +2075,7 @@ impl DeleteBackendEnvironmentError {
 }
 impl fmt::Display for DeleteBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBackendEnvironmentError {
@@ -2134,7 +2134,7 @@ impl DeleteBranchError {
 }
 impl fmt::Display for DeleteBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBranchError {
@@ -2197,7 +2197,7 @@ impl DeleteDomainAssociationError {
 }
 impl fmt::Display for DeleteDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainAssociationError {
@@ -2254,7 +2254,7 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteJobError {
@@ -2311,7 +2311,7 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWebhookError {
@@ -2363,7 +2363,7 @@ impl GenerateAccessLogsError {
 }
 impl fmt::Display for GenerateAccessLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateAccessLogsError {
@@ -2412,7 +2412,7 @@ impl GetAppError {
 }
 impl fmt::Display for GetAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAppError {
@@ -2468,7 +2468,7 @@ impl GetArtifactUrlError {
 }
 impl fmt::Display for GetArtifactUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetArtifactUrlError {
@@ -2522,7 +2522,7 @@ impl GetBackendEnvironmentError {
 }
 impl fmt::Display for GetBackendEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBackendEnvironmentError {
@@ -2573,7 +2573,7 @@ impl GetBranchError {
 }
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBranchError {
@@ -2626,7 +2626,7 @@ impl GetDomainAssociationError {
 }
 impl fmt::Display for GetDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainAssociationError {
@@ -2680,7 +2680,7 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobError {
@@ -2737,7 +2737,7 @@ impl GetWebhookError {
 }
 impl fmt::Display for GetWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWebhookError {
@@ -2784,7 +2784,7 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAppsError {
@@ -2834,7 +2834,7 @@ impl ListArtifactsError {
 }
 impl fmt::Display for ListArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListArtifactsError {
@@ -2884,7 +2884,7 @@ impl ListBackendEnvironmentsError {
 }
 impl fmt::Display for ListBackendEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBackendEnvironmentsError {
@@ -2929,7 +2929,7 @@ impl ListBranchesError {
 }
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBranchesError {
@@ -2976,7 +2976,7 @@ impl ListDomainAssociationsError {
 }
 impl fmt::Display for ListDomainAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainAssociationsError {
@@ -3026,7 +3026,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -3074,7 +3074,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3124,7 +3124,7 @@ impl ListWebhooksError {
 }
 impl fmt::Display for ListWebhooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWebhooksError {
@@ -3180,7 +3180,7 @@ impl StartDeploymentError {
 }
 impl fmt::Display for StartDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDeploymentError {
@@ -3237,7 +3237,7 @@ impl StartJobError {
 }
 impl fmt::Display for StartJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartJobError {
@@ -3294,7 +3294,7 @@ impl StopJobError {
 }
 impl fmt::Display for StopJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopJobError {
@@ -3341,7 +3341,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3386,7 +3386,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3436,7 +3436,7 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAppError {
@@ -3494,7 +3494,7 @@ impl UpdateBranchError {
 }
 impl fmt::Display for UpdateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBranchError {
@@ -3557,7 +3557,7 @@ impl UpdateDomainAssociationError {
 }
 impl fmt::Display for UpdateDomainAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainAssociationError {
@@ -3616,7 +3616,7 @@ impl UpdateWebhookError {
 }
 impl fmt::Display for UpdateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWebhookError {

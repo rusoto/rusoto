@@ -17910,7 +17910,7 @@ impl AddRoleToDBClusterError {
 }
 impl fmt::Display for AddRoleToDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddRoleToDBClusterError {
@@ -17987,7 +17987,7 @@ impl AddRoleToDBInstanceError {
 }
 impl fmt::Display for AddRoleToDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddRoleToDBInstanceError {
@@ -18050,7 +18050,7 @@ impl AddSourceIdentifierToSubscriptionError {
 }
 impl fmt::Display for AddSourceIdentifierToSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddSourceIdentifierToSubscriptionError {
@@ -18112,7 +18112,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -18183,7 +18183,7 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApplyPendingMaintenanceActionError {
@@ -18263,7 +18263,7 @@ impl AuthorizeDBSecurityGroupIngressError {
 }
 impl fmt::Display for AuthorizeDBSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AuthorizeDBSecurityGroupIngressError {
@@ -18328,7 +18328,7 @@ impl BacktrackDBClusterError {
 }
 impl fmt::Display for BacktrackDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BacktrackDBClusterError {
@@ -18398,7 +18398,7 @@ impl CopyDBClusterParameterGroupError {
 }
 impl fmt::Display for CopyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyDBClusterParameterGroupError {
@@ -18498,7 +18498,7 @@ impl CopyDBClusterSnapshotError {
 }
 impl fmt::Display for CopyDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyDBClusterSnapshotError {
@@ -18570,7 +18570,7 @@ impl CopyDBParameterGroupError {
 }
 impl fmt::Display for CopyDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyDBParameterGroupError {
@@ -18647,7 +18647,7 @@ impl CopyDBSnapshotError {
 }
 impl fmt::Display for CopyDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyDBSnapshotError {
@@ -18716,7 +18716,7 @@ impl CopyOptionGroupError {
 }
 impl fmt::Display for CopyOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyOptionGroupError {
@@ -18783,7 +18783,7 @@ impl CreateCustomAvailabilityZoneError {
 }
 impl fmt::Display for CreateCustomAvailabilityZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCustomAvailabilityZoneError {
@@ -18965,7 +18965,7 @@ impl CreateDBClusterError {
 }
 impl fmt::Display for CreateDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBClusterError {
@@ -19076,7 +19076,7 @@ impl CreateDBClusterEndpointError {
 }
 impl fmt::Display for CreateDBClusterEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBClusterEndpointError {
@@ -19141,7 +19141,7 @@ impl CreateDBClusterParameterGroupError {
 }
 impl fmt::Display for CreateDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBClusterParameterGroupError {
@@ -19231,7 +19231,7 @@ impl CreateDBClusterSnapshotError {
 }
 impl fmt::Display for CreateDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBClusterSnapshotError {
@@ -19424,7 +19424,7 @@ impl CreateDBInstanceError {
 }
 impl fmt::Display for CreateDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBInstanceError {
@@ -19653,7 +19653,7 @@ impl CreateDBInstanceReadReplicaError {
 }
 impl fmt::Display for CreateDBInstanceReadReplicaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBInstanceReadReplicaError {
@@ -19735,7 +19735,7 @@ impl CreateDBParameterGroupError {
 }
 impl fmt::Display for CreateDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBParameterGroupError {
@@ -19797,7 +19797,7 @@ impl CreateDBProxyError {
 }
 impl fmt::Display for CreateDBProxyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBProxyError {
@@ -19866,7 +19866,7 @@ impl CreateDBSecurityGroupError {
 }
 impl fmt::Display for CreateDBSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBSecurityGroupError {
@@ -19940,7 +19940,7 @@ impl CreateDBSnapshotError {
 }
 impl fmt::Display for CreateDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBSnapshotError {
@@ -20026,7 +20026,7 @@ impl CreateDBSubnetGroupError {
 }
 impl fmt::Display for CreateDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDBSubnetGroupError {
@@ -20131,7 +20131,7 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEventSubscriptionError {
@@ -20211,7 +20211,7 @@ impl CreateGlobalClusterError {
 }
 impl fmt::Display for CreateGlobalClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGlobalClusterError {
@@ -20272,7 +20272,7 @@ impl CreateOptionGroupError {
 }
 impl fmt::Display for CreateOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOptionGroupError {
@@ -20333,7 +20333,7 @@ impl DeleteCustomAvailabilityZoneError {
 }
 impl fmt::Display for DeleteCustomAvailabilityZoneError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCustomAvailabilityZoneError {
@@ -20415,7 +20415,7 @@ impl DeleteDBClusterError {
 }
 impl fmt::Display for DeleteDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBClusterError {
@@ -20486,7 +20486,7 @@ impl DeleteDBClusterEndpointError {
 }
 impl fmt::Display for DeleteDBClusterEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBClusterEndpointError {
@@ -20548,7 +20548,7 @@ impl DeleteDBClusterParameterGroupError {
 }
 impl fmt::Display for DeleteDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBClusterParameterGroupError {
@@ -20609,7 +20609,7 @@ impl DeleteDBClusterSnapshotError {
 }
 impl fmt::Display for DeleteDBClusterSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBClusterSnapshotError {
@@ -20698,7 +20698,7 @@ impl DeleteDBInstanceError {
 }
 impl fmt::Display for DeleteDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBInstanceError {
@@ -20749,7 +20749,7 @@ impl DeleteDBInstanceAutomatedBackupError {
 }
 impl fmt::Display for DeleteDBInstanceAutomatedBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBInstanceAutomatedBackupError {
@@ -20812,7 +20812,7 @@ impl DeleteDBParameterGroupError {
 }
 impl fmt::Display for DeleteDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBParameterGroupError {
@@ -20867,7 +20867,7 @@ impl DeleteDBProxyError {
 }
 impl fmt::Display for DeleteDBProxyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBProxyError {
@@ -20926,7 +20926,7 @@ impl DeleteDBSecurityGroupError {
 }
 impl fmt::Display for DeleteDBSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBSecurityGroupError {
@@ -20983,7 +20983,7 @@ impl DeleteDBSnapshotError {
 }
 impl fmt::Display for DeleteDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBSnapshotError {
@@ -21051,7 +21051,7 @@ impl DeleteDBSubnetGroupError {
 }
 impl fmt::Display for DeleteDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDBSubnetGroupError {
@@ -21111,7 +21111,7 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventSubscriptionError {
@@ -21170,7 +21170,7 @@ impl DeleteGlobalClusterError {
 }
 impl fmt::Display for DeleteGlobalClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGlobalClusterError {
@@ -21220,7 +21220,7 @@ impl DeleteInstallationMediaError {
 }
 impl fmt::Display for DeleteInstallationMediaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstallationMediaError {
@@ -21276,7 +21276,7 @@ impl DeleteOptionGroupError {
 }
 impl fmt::Display for DeleteOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOptionGroupError {
@@ -21344,7 +21344,7 @@ impl DeregisterDBProxyTargetsError {
 }
 impl fmt::Display for DeregisterDBProxyTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterDBProxyTargetsError {
@@ -21385,7 +21385,7 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountAttributesError {
@@ -21432,7 +21432,7 @@ impl DescribeCertificatesError {
 }
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificatesError {
@@ -21481,7 +21481,7 @@ impl DescribeCustomAvailabilityZonesError {
 }
 impl fmt::Display for DescribeCustomAvailabilityZonesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCustomAvailabilityZonesError {
@@ -21543,7 +21543,7 @@ impl DescribeDBClusterBacktracksError {
 }
 impl fmt::Display for DescribeDBClusterBacktracksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterBacktracksError {
@@ -21595,7 +21595,7 @@ impl DescribeDBClusterEndpointsError {
 }
 impl fmt::Display for DescribeDBClusterEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterEndpointsError {
@@ -21646,7 +21646,7 @@ impl DescribeDBClusterParameterGroupsError {
 }
 impl fmt::Display for DescribeDBClusterParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterParameterGroupsError {
@@ -21699,7 +21699,7 @@ impl DescribeDBClusterParametersError {
 }
 impl fmt::Display for DescribeDBClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterParametersError {
@@ -21748,7 +21748,7 @@ impl DescribeDBClusterSnapshotAttributesError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterSnapshotAttributesError {
@@ -21801,7 +21801,7 @@ impl DescribeDBClusterSnapshotsError {
 }
 impl fmt::Display for DescribeDBClusterSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClusterSnapshotsError {
@@ -21848,7 +21848,7 @@ impl DescribeDBClustersError {
 }
 impl fmt::Display for DescribeDBClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBClustersError {
@@ -21887,7 +21887,7 @@ impl DescribeDBEngineVersionsError {
 }
 impl fmt::Display for DescribeDBEngineVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBEngineVersionsError {
@@ -21929,7 +21929,7 @@ impl DescribeDBInstanceAutomatedBackupsError {
 }
 impl fmt::Display for DescribeDBInstanceAutomatedBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBInstanceAutomatedBackupsError {
@@ -21978,7 +21978,7 @@ impl DescribeDBInstancesError {
 }
 impl fmt::Display for DescribeDBInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBInstancesError {
@@ -22025,7 +22025,7 @@ impl DescribeDBLogFilesError {
 }
 impl fmt::Display for DescribeDBLogFilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBLogFilesError {
@@ -22074,7 +22074,7 @@ impl DescribeDBParameterGroupsError {
 }
 impl fmt::Display for DescribeDBParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBParameterGroupsError {
@@ -22123,7 +22123,7 @@ impl DescribeDBParametersError {
 }
 impl fmt::Display for DescribeDBParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBParametersError {
@@ -22170,7 +22170,7 @@ impl DescribeDBProxiesError {
 }
 impl fmt::Display for DescribeDBProxiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBProxiesError {
@@ -22221,7 +22221,7 @@ impl DescribeDBProxyTargetGroupsError {
 }
 impl fmt::Display for DescribeDBProxyTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBProxyTargetGroupsError {
@@ -22286,7 +22286,7 @@ impl DescribeDBProxyTargetsError {
 }
 impl fmt::Display for DescribeDBProxyTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBProxyTargetsError {
@@ -22337,7 +22337,7 @@ impl DescribeDBSecurityGroupsError {
 }
 impl fmt::Display for DescribeDBSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBSecurityGroupsError {
@@ -22388,7 +22388,7 @@ impl DescribeDBSnapshotAttributesError {
 }
 impl fmt::Display for DescribeDBSnapshotAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBSnapshotAttributesError {
@@ -22435,7 +22435,7 @@ impl DescribeDBSnapshotsError {
 }
 impl fmt::Display for DescribeDBSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBSnapshotsError {
@@ -22484,7 +22484,7 @@ impl DescribeDBSubnetGroupsError {
 }
 impl fmt::Display for DescribeDBSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDBSubnetGroupsError {
@@ -22525,7 +22525,7 @@ impl DescribeEngineDefaultClusterParametersError {
 }
 impl fmt::Display for DescribeEngineDefaultClusterParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEngineDefaultClusterParametersError {
@@ -22564,7 +22564,7 @@ impl DescribeEngineDefaultParametersError {
 }
 impl fmt::Display for DescribeEngineDefaultParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEngineDefaultParametersError {
@@ -22601,7 +22601,7 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventCategoriesError {
@@ -22650,7 +22650,7 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventSubscriptionsError {
@@ -22689,7 +22689,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -22736,7 +22736,7 @@ impl DescribeGlobalClustersError {
 }
 impl fmt::Display for DescribeGlobalClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGlobalClustersError {
@@ -22785,7 +22785,7 @@ impl DescribeInstallationMediaError {
 }
 impl fmt::Display for DescribeInstallationMediaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstallationMediaError {
@@ -22826,7 +22826,7 @@ impl DescribeOptionGroupOptionsError {
 }
 impl fmt::Display for DescribeOptionGroupOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOptionGroupOptionsError {
@@ -22873,7 +22873,7 @@ impl DescribeOptionGroupsError {
 }
 impl fmt::Display for DescribeOptionGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOptionGroupsError {
@@ -22914,7 +22914,7 @@ impl DescribeOrderableDBInstanceOptionsError {
 }
 impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrderableDBInstanceOptionsError {
@@ -22963,7 +22963,7 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePendingMaintenanceActionsError {
@@ -23014,7 +23014,7 @@ impl DescribeReservedDBInstancesError {
 }
 impl fmt::Display for DescribeReservedDBInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReservedDBInstancesError {
@@ -23058,7 +23058,7 @@ impl DescribeReservedDBInstancesOfferingsError {
 }
 impl fmt::Display for DescribeReservedDBInstancesOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReservedDBInstancesOfferingsError {
@@ -23099,7 +23099,7 @@ impl DescribeSourceRegionsError {
 }
 impl fmt::Display for DescribeSourceRegionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSourceRegionsError {
@@ -23157,7 +23157,7 @@ impl DescribeValidDBInstanceModificationsError {
 }
 impl fmt::Display for DescribeValidDBInstanceModificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeValidDBInstanceModificationsError {
@@ -23218,7 +23218,7 @@ impl DownloadDBLogFilePortionError {
 }
 impl fmt::Display for DownloadDBLogFilePortionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DownloadDBLogFilePortionError {
@@ -23284,7 +23284,7 @@ impl FailoverDBClusterError {
 }
 impl fmt::Display for FailoverDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for FailoverDBClusterError {
@@ -23344,7 +23344,7 @@ impl ImportInstallationMediaError {
 }
 impl fmt::Display for ImportInstallationMediaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportInstallationMediaError {
@@ -23406,7 +23406,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -23477,7 +23477,7 @@ impl ModifyCurrentDBClusterCapacityError {
 }
 impl fmt::Display for ModifyCurrentDBClusterCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyCurrentDBClusterCapacityError {
@@ -23609,7 +23609,7 @@ impl ModifyDBClusterError {
 }
 impl fmt::Display for ModifyDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBClusterError {
@@ -23705,7 +23705,7 @@ impl ModifyDBClusterEndpointError {
 }
 impl fmt::Display for ModifyDBClusterEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBClusterEndpointError {
@@ -23769,7 +23769,7 @@ impl ModifyDBClusterParameterGroupError {
 }
 impl fmt::Display for ModifyDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBClusterParameterGroupError {
@@ -23839,7 +23839,7 @@ impl ModifyDBClusterSnapshotAttributeError {
 }
 impl fmt::Display for ModifyDBClusterSnapshotAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBClusterSnapshotAttributeError {
@@ -24026,7 +24026,7 @@ impl ModifyDBInstanceError {
 }
 impl fmt::Display for ModifyDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBInstanceError {
@@ -24100,7 +24100,7 @@ impl ModifyDBParameterGroupError {
 }
 impl fmt::Display for ModifyDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBParameterGroupError {
@@ -24162,7 +24162,7 @@ impl ModifyDBProxyError {
 }
 impl fmt::Display for ModifyDBProxyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBProxyError {
@@ -24222,7 +24222,7 @@ impl ModifyDBProxyTargetGroupError {
 }
 impl fmt::Display for ModifyDBProxyTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBProxyTargetGroupError {
@@ -24270,7 +24270,7 @@ impl ModifyDBSnapshotError {
 }
 impl fmt::Display for ModifyDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBSnapshotError {
@@ -24337,7 +24337,7 @@ impl ModifyDBSnapshotAttributeError {
 }
 impl fmt::Display for ModifyDBSnapshotAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBSnapshotAttributeError {
@@ -24420,7 +24420,7 @@ impl ModifyDBSubnetGroupError {
 }
 impl fmt::Display for ModifyDBSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyDBSubnetGroupError {
@@ -24518,7 +24518,7 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyEventSubscriptionError {
@@ -24581,7 +24581,7 @@ impl ModifyGlobalClusterError {
 }
 impl fmt::Display for ModifyGlobalClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyGlobalClusterError {
@@ -24638,7 +24638,7 @@ impl ModifyOptionGroupError {
 }
 impl fmt::Display for ModifyOptionGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyOptionGroupError {
@@ -24695,7 +24695,7 @@ impl PromoteReadReplicaError {
 }
 impl fmt::Display for PromoteReadReplicaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PromoteReadReplicaError {
@@ -24756,7 +24756,7 @@ impl PromoteReadReplicaDBClusterError {
 }
 impl fmt::Display for PromoteReadReplicaDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PromoteReadReplicaDBClusterError {
@@ -24805,7 +24805,7 @@ impl PurchaseReservedDBInstancesOfferingError {
 }
 impl fmt::Display for PurchaseReservedDBInstancesOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PurchaseReservedDBInstancesOfferingError {
@@ -24869,7 +24869,7 @@ impl RebootDBInstanceError {
 }
 impl fmt::Display for RebootDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootDBInstanceError {
@@ -24971,7 +24971,7 @@ impl RegisterDBProxyTargetsError {
 }
 impl fmt::Display for RegisterDBProxyTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterDBProxyTargetsError {
@@ -25044,7 +25044,7 @@ impl RemoveFromGlobalClusterError {
 }
 impl fmt::Display for RemoveFromGlobalClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveFromGlobalClusterError {
@@ -25113,7 +25113,7 @@ impl RemoveRoleFromDBClusterError {
 }
 impl fmt::Display for RemoveRoleFromDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveRoleFromDBClusterError {
@@ -25182,7 +25182,7 @@ impl RemoveRoleFromDBInstanceError {
 }
 impl fmt::Display for RemoveRoleFromDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveRoleFromDBInstanceError {
@@ -25244,7 +25244,7 @@ impl RemoveSourceIdentifierFromSubscriptionError {
 }
 impl fmt::Display for RemoveSourceIdentifierFromSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveSourceIdentifierFromSubscriptionError {
@@ -25314,7 +25314,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {
@@ -25376,7 +25376,7 @@ impl ResetDBClusterParameterGroupError {
 }
 impl fmt::Display for ResetDBClusterParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetDBClusterParameterGroupError {
@@ -25437,7 +25437,7 @@ impl ResetDBParameterGroupError {
 }
 impl fmt::Display for ResetDBParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetDBParameterGroupError {
@@ -25598,7 +25598,7 @@ impl RestoreDBClusterFromS3Error {
 }
 impl fmt::Display for RestoreDBClusterFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBClusterFromS3Error {
@@ -25804,7 +25804,7 @@ impl RestoreDBClusterFromSnapshotError {
 }
 impl fmt::Display for RestoreDBClusterFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBClusterFromSnapshotError {
@@ -26026,7 +26026,7 @@ impl RestoreDBClusterToPointInTimeError {
 }
 impl fmt::Display for RestoreDBClusterToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBClusterToPointInTimeError {
@@ -26267,7 +26267,7 @@ impl RestoreDBInstanceFromDBSnapshotError {
 }
 impl fmt::Display for RestoreDBInstanceFromDBSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBInstanceFromDBSnapshotError {
@@ -26483,7 +26483,7 @@ impl RestoreDBInstanceFromS3Error {
 }
 impl fmt::Display for RestoreDBInstanceFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBInstanceFromS3Error {
@@ -26733,7 +26733,7 @@ impl RestoreDBInstanceToPointInTimeError {
 }
 impl fmt::Display for RestoreDBInstanceToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDBInstanceToPointInTimeError {
@@ -26833,7 +26833,7 @@ impl RevokeDBSecurityGroupIngressError {
 }
 impl fmt::Display for RevokeDBSecurityGroupIngressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeDBSecurityGroupIngressError {
@@ -26923,7 +26923,7 @@ impl StartActivityStreamError {
 }
 impl fmt::Display for StartActivityStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartActivityStreamError {
@@ -26989,7 +26989,7 @@ impl StartDBClusterError {
 }
 impl fmt::Display for StartDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDBClusterError {
@@ -27112,7 +27112,7 @@ impl StartDBInstanceError {
 }
 impl fmt::Display for StartDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDBInstanceError {
@@ -27201,7 +27201,7 @@ impl StopActivityStreamError {
 }
 impl fmt::Display for StopActivityStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopActivityStreamError {
@@ -27266,7 +27266,7 @@ impl StopDBClusterError {
 }
 impl fmt::Display for StopDBClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDBClusterError {
@@ -27343,7 +27343,7 @@ impl StopDBInstanceError {
 }
 impl fmt::Display for StopDBInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDBInstanceError {

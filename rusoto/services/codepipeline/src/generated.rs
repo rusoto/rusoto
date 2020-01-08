@@ -1955,7 +1955,7 @@ impl AcknowledgeJobError {
 }
 impl fmt::Display for AcknowledgeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcknowledgeJobError {
@@ -2005,7 +2005,7 @@ impl AcknowledgeThirdPartyJobError {
 }
 impl fmt::Display for AcknowledgeThirdPartyJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcknowledgeThirdPartyJobError {
@@ -2059,7 +2059,7 @@ impl CreateCustomActionTypeError {
 }
 impl fmt::Display for CreateCustomActionTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCustomActionTypeError {
@@ -2143,7 +2143,7 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePipelineError {
@@ -2186,7 +2186,7 @@ impl DeleteCustomActionTypeError {
 }
 impl fmt::Display for DeleteCustomActionTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCustomActionTypeError {
@@ -2221,7 +2221,7 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePipelineError {
@@ -2256,7 +2256,7 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWebhookError {
@@ -2293,7 +2293,7 @@ impl DeregisterWebhookWithThirdPartyError {
 }
 impl fmt::Display for DeregisterWebhookWithThirdPartyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterWebhookWithThirdPartyError {
@@ -2335,7 +2335,7 @@ impl DisableStageTransitionError {
 }
 impl fmt::Display for DisableStageTransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableStageTransitionError {
@@ -2376,7 +2376,7 @@ impl EnableStageTransitionError {
 }
 impl fmt::Display for EnableStageTransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableStageTransitionError {
@@ -2410,7 +2410,7 @@ impl GetJobDetailsError {
 }
 impl fmt::Display for GetJobDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobDetailsError {
@@ -2448,7 +2448,7 @@ impl GetPipelineError {
 }
 impl fmt::Display for GetPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPipelineError {
@@ -2491,7 +2491,7 @@ impl GetPipelineExecutionError {
 }
 impl fmt::Display for GetPipelineExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPipelineExecutionError {
@@ -2525,7 +2525,7 @@ impl GetPipelineStateError {
 }
 impl fmt::Display for GetPipelineStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPipelineStateError {
@@ -2570,7 +2570,7 @@ impl GetThirdPartyJobDetailsError {
 }
 impl fmt::Display for GetThirdPartyJobDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetThirdPartyJobDetailsError {
@@ -2621,7 +2621,7 @@ impl ListActionExecutionsError {
 }
 impl fmt::Display for ListActionExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActionExecutionsError {
@@ -2656,7 +2656,7 @@ impl ListActionTypesError {
 }
 impl fmt::Display for ListActionTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActionTypesError {
@@ -2698,7 +2698,7 @@ impl ListPipelineExecutionsError {
 }
 impl fmt::Display for ListPipelineExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPipelineExecutionsError {
@@ -2732,7 +2732,7 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPipelinesError {
@@ -2779,7 +2779,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2814,7 +2814,7 @@ impl ListWebhooksError {
 }
 impl fmt::Display for ListWebhooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWebhooksError {
@@ -2847,7 +2847,7 @@ impl PollForJobsError {
 }
 impl fmt::Display for PollForJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PollForJobsError {
@@ -2882,7 +2882,7 @@ impl PollForThirdPartyJobsError {
 }
 impl fmt::Display for PollForThirdPartyJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PollForThirdPartyJobsError {
@@ -2925,7 +2925,7 @@ impl PutActionRevisionError {
 }
 impl fmt::Display for PutActionRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutActionRevisionError {
@@ -2984,7 +2984,7 @@ impl PutApprovalResultError {
 }
 impl fmt::Display for PutApprovalResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutApprovalResultError {
@@ -3026,7 +3026,7 @@ impl PutJobFailureResultError {
 }
 impl fmt::Display for PutJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutJobFailureResultError {
@@ -3072,7 +3072,7 @@ impl PutJobSuccessResultError {
 }
 impl fmt::Display for PutJobSuccessResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutJobSuccessResultError {
@@ -3125,7 +3125,7 @@ impl PutThirdPartyJobFailureResultError {
 }
 impl fmt::Display for PutThirdPartyJobFailureResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutThirdPartyJobFailureResultError {
@@ -3178,7 +3178,7 @@ impl PutThirdPartyJobSuccessResultError {
 }
 impl fmt::Display for PutThirdPartyJobSuccessResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutThirdPartyJobSuccessResultError {
@@ -3247,7 +3247,7 @@ impl PutWebhookError {
 }
 impl fmt::Display for PutWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutWebhookError {
@@ -3290,7 +3290,7 @@ impl RegisterWebhookWithThirdPartyError {
 }
 impl fmt::Display for RegisterWebhookWithThirdPartyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterWebhookWithThirdPartyError {
@@ -3344,7 +3344,7 @@ impl RetryStageExecutionError {
 }
 impl fmt::Display for RetryStageExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetryStageExecutionError {
@@ -3382,7 +3382,7 @@ impl StartPipelineExecutionError {
 }
 impl fmt::Display for StartPipelineExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartPipelineExecutionError {
@@ -3435,7 +3435,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3489,7 +3489,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3551,7 +3551,7 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePipelineError {

@@ -3415,7 +3415,7 @@ impl ApproveSkillError {
 }
 impl fmt::Display for ApproveSkillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApproveSkillError {
@@ -3454,7 +3454,7 @@ impl AssociateContactWithAddressBookError {
 }
 impl fmt::Display for AssociateContactWithAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateContactWithAddressBookError {
@@ -3505,7 +3505,7 @@ impl AssociateDeviceWithNetworkProfileError {
 }
 impl fmt::Display for AssociateDeviceWithNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDeviceWithNetworkProfileError {
@@ -3556,7 +3556,7 @@ impl AssociateDeviceWithRoomError {
 }
 impl fmt::Display for AssociateDeviceWithRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDeviceWithRoomError {
@@ -3595,7 +3595,7 @@ impl AssociateSkillGroupWithRoomError {
 }
 impl fmt::Display for AssociateSkillGroupWithRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateSkillGroupWithRoomError {
@@ -3646,7 +3646,7 @@ impl AssociateSkillWithSkillGroupError {
 }
 impl fmt::Display for AssociateSkillWithSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateSkillWithSkillGroupError {
@@ -3688,7 +3688,7 @@ impl AssociateSkillWithUsersError {
 }
 impl fmt::Display for AssociateSkillWithUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateSkillWithUsersError {
@@ -3727,7 +3727,7 @@ impl CreateAddressBookError {
 }
 impl fmt::Display for CreateAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAddressBookError {
@@ -3765,7 +3765,7 @@ impl CreateBusinessReportScheduleError {
 }
 impl fmt::Display for CreateBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBusinessReportScheduleError {
@@ -3800,7 +3800,7 @@ impl CreateConferenceProviderError {
 }
 impl fmt::Display for CreateConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConferenceProviderError {
@@ -3838,7 +3838,7 @@ impl CreateContactError {
 }
 impl fmt::Display for CreateContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateContactError {
@@ -3877,7 +3877,7 @@ impl CreateGatewayGroupError {
 }
 impl fmt::Display for CreateGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGatewayGroupError {
@@ -3937,7 +3937,7 @@ impl CreateNetworkProfileError {
 }
 impl fmt::Display for CreateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNetworkProfileError {
@@ -3986,7 +3986,7 @@ impl CreateProfileError {
 }
 impl fmt::Display for CreateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProfileError {
@@ -4026,7 +4026,7 @@ impl CreateRoomError {
 }
 impl fmt::Display for CreateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRoomError {
@@ -4072,7 +4072,7 @@ impl CreateSkillGroupError {
 }
 impl fmt::Display for CreateSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSkillGroupError {
@@ -4117,7 +4117,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -4159,7 +4159,7 @@ impl DeleteAddressBookError {
 }
 impl fmt::Display for DeleteAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAddressBookError {
@@ -4204,7 +4204,7 @@ impl DeleteBusinessReportScheduleError {
 }
 impl fmt::Display for DeleteBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBusinessReportScheduleError {
@@ -4238,7 +4238,7 @@ impl DeleteConferenceProviderError {
 }
 impl fmt::Display for DeleteConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConferenceProviderError {
@@ -4278,7 +4278,7 @@ impl DeleteContactError {
 }
 impl fmt::Display for DeleteContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteContactError {
@@ -4324,7 +4324,7 @@ impl DeleteDeviceError {
 }
 impl fmt::Display for DeleteDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeviceError {
@@ -4371,7 +4371,7 @@ impl DeleteDeviceUsageDataError {
 }
 impl fmt::Display for DeleteDeviceUsageDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeviceUsageDataError {
@@ -4408,7 +4408,7 @@ impl DeleteGatewayGroupError {
 }
 impl fmt::Display for DeleteGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGatewayGroupError {
@@ -4453,7 +4453,7 @@ impl DeleteNetworkProfileError {
 }
 impl fmt::Display for DeleteNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNetworkProfileError {
@@ -4495,7 +4495,7 @@ impl DeleteProfileError {
 }
 impl fmt::Display for DeleteProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProfileError {
@@ -4534,7 +4534,7 @@ impl DeleteRoomError {
 }
 impl fmt::Display for DeleteRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoomError {
@@ -4570,7 +4570,7 @@ impl DeleteRoomSkillParameterError {
 }
 impl fmt::Display for DeleteRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoomSkillParameterError {
@@ -4610,7 +4610,7 @@ impl DeleteSkillAuthorizationError {
 }
 impl fmt::Display for DeleteSkillAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSkillAuthorizationError {
@@ -4651,7 +4651,7 @@ impl DeleteSkillGroupError {
 }
 impl fmt::Display for DeleteSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSkillGroupError {
@@ -4690,7 +4690,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -4720,7 +4720,7 @@ impl DisassociateContactFromAddressBookError {
 }
 impl fmt::Display for DisassociateContactFromAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateContactFromAddressBookError {
@@ -4762,7 +4762,7 @@ impl DisassociateDeviceFromRoomError {
 }
 impl fmt::Display for DisassociateDeviceFromRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDeviceFromRoomError {
@@ -4807,7 +4807,7 @@ impl DisassociateSkillFromSkillGroupError {
 }
 impl fmt::Display for DisassociateSkillFromSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateSkillFromSkillGroupError {
@@ -4850,7 +4850,7 @@ impl DisassociateSkillFromUsersError {
 }
 impl fmt::Display for DisassociateSkillFromUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateSkillFromUsersError {
@@ -4888,7 +4888,7 @@ impl DisassociateSkillGroupFromRoomError {
 }
 impl fmt::Display for DisassociateSkillGroupFromRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateSkillGroupFromRoomError {
@@ -4921,7 +4921,7 @@ impl ForgetSmartHomeAppliancesError {
 }
 impl fmt::Display for ForgetSmartHomeAppliancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ForgetSmartHomeAppliancesError {
@@ -4954,7 +4954,7 @@ impl GetAddressBookError {
 }
 impl fmt::Display for GetAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAddressBookError {
@@ -4987,7 +4987,7 @@ impl GetConferencePreferenceError {
 }
 impl fmt::Display for GetConferencePreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConferencePreferenceError {
@@ -5020,7 +5020,7 @@ impl GetConferenceProviderError {
 }
 impl fmt::Display for GetConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConferenceProviderError {
@@ -5053,7 +5053,7 @@ impl GetContactError {
 }
 impl fmt::Display for GetContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContactError {
@@ -5086,7 +5086,7 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceError {
@@ -5119,7 +5119,7 @@ impl GetGatewayError {
 }
 impl fmt::Display for GetGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGatewayError {
@@ -5152,7 +5152,7 @@ impl GetGatewayGroupError {
 }
 impl fmt::Display for GetGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGatewayGroupError {
@@ -5187,7 +5187,7 @@ impl GetInvitationConfigurationError {
 }
 impl fmt::Display for GetInvitationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInvitationConfigurationError {
@@ -5227,7 +5227,7 @@ impl GetNetworkProfileError {
 }
 impl fmt::Display for GetNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetNetworkProfileError {
@@ -5261,7 +5261,7 @@ impl GetProfileError {
 }
 impl fmt::Display for GetProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetProfileError {
@@ -5294,7 +5294,7 @@ impl GetRoomError {
 }
 impl fmt::Display for GetRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRoomError {
@@ -5327,7 +5327,7 @@ impl GetRoomSkillParameterError {
 }
 impl fmt::Display for GetRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRoomSkillParameterError {
@@ -5360,7 +5360,7 @@ impl GetSkillGroupError {
 }
 impl fmt::Display for GetSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSkillGroupError {
@@ -5389,7 +5389,7 @@ impl ListBusinessReportSchedulesError {
 }
 impl fmt::Display for ListBusinessReportSchedulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBusinessReportSchedulesError {
@@ -5414,7 +5414,7 @@ impl ListConferenceProvidersError {
 }
 impl fmt::Display for ListConferenceProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConferenceProvidersError {
@@ -5445,7 +5445,7 @@ impl ListDeviceEventsError {
 }
 impl fmt::Display for ListDeviceEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeviceEventsError {
@@ -5472,7 +5472,7 @@ impl ListGatewayGroupsError {
 }
 impl fmt::Display for ListGatewayGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGatewayGroupsError {
@@ -5497,7 +5497,7 @@ impl ListGatewaysError {
 }
 impl fmt::Display for ListGatewaysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGatewaysError {
@@ -5522,7 +5522,7 @@ impl ListSkillsError {
 }
 impl fmt::Display for ListSkillsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSkillsError {
@@ -5547,7 +5547,7 @@ impl ListSkillsStoreCategoriesError {
 }
 impl fmt::Display for ListSkillsStoreCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSkillsStoreCategoriesError {
@@ -5574,7 +5574,7 @@ impl ListSkillsStoreSkillsByCategoryError {
 }
 impl fmt::Display for ListSkillsStoreSkillsByCategoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSkillsStoreSkillsByCategoryError {
@@ -5605,7 +5605,7 @@ impl ListSmartHomeAppliancesError {
 }
 impl fmt::Display for ListSmartHomeAppliancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSmartHomeAppliancesError {
@@ -5638,7 +5638,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -5671,7 +5671,7 @@ impl PutConferencePreferenceError {
 }
 impl fmt::Display for PutConferencePreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConferencePreferenceError {
@@ -5713,7 +5713,7 @@ impl PutInvitationConfigurationError {
 }
 impl fmt::Display for PutInvitationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutInvitationConfigurationError {
@@ -5749,7 +5749,7 @@ impl PutRoomSkillParameterError {
 }
 impl fmt::Display for PutRoomSkillParameterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRoomSkillParameterError {
@@ -5789,7 +5789,7 @@ impl PutSkillAuthorizationError {
 }
 impl fmt::Display for PutSkillAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSkillAuthorizationError {
@@ -5835,7 +5835,7 @@ impl RegisterAVSDeviceError {
 }
 impl fmt::Display for RegisterAVSDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterAVSDeviceError {
@@ -5875,7 +5875,7 @@ impl RejectSkillError {
 }
 impl fmt::Display for RejectSkillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectSkillError {
@@ -5909,7 +5909,7 @@ impl ResolveRoomError {
 }
 impl fmt::Display for ResolveRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResolveRoomError {
@@ -5949,7 +5949,7 @@ impl RevokeInvitationError {
 }
 impl fmt::Display for RevokeInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeInvitationError {
@@ -5977,7 +5977,7 @@ impl SearchAddressBooksError {
 }
 impl fmt::Display for SearchAddressBooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchAddressBooksError {
@@ -6002,7 +6002,7 @@ impl SearchContactsError {
 }
 impl fmt::Display for SearchContactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchContactsError {
@@ -6027,7 +6027,7 @@ impl SearchDevicesError {
 }
 impl fmt::Display for SearchDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchDevicesError {
@@ -6052,7 +6052,7 @@ impl SearchNetworkProfilesError {
 }
 impl fmt::Display for SearchNetworkProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchNetworkProfilesError {
@@ -6077,7 +6077,7 @@ impl SearchProfilesError {
 }
 impl fmt::Display for SearchProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchProfilesError {
@@ -6102,7 +6102,7 @@ impl SearchRoomsError {
 }
 impl fmt::Display for SearchRoomsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchRoomsError {
@@ -6127,7 +6127,7 @@ impl SearchSkillGroupsError {
 }
 impl fmt::Display for SearchSkillGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchSkillGroupsError {
@@ -6152,7 +6152,7 @@ impl SearchUsersError {
 }
 impl fmt::Display for SearchUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchUsersError {
@@ -6188,7 +6188,7 @@ impl SendAnnouncementError {
 }
 impl fmt::Display for SendAnnouncementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendAnnouncementError {
@@ -6234,7 +6234,7 @@ impl SendInvitationError {
 }
 impl fmt::Display for SendInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendInvitationError {
@@ -6269,7 +6269,7 @@ impl StartDeviceSyncError {
 }
 impl fmt::Display for StartDeviceSyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDeviceSyncError {
@@ -6306,7 +6306,7 @@ impl StartSmartHomeApplianceDiscoveryError {
 }
 impl fmt::Display for StartSmartHomeApplianceDiscoveryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSmartHomeApplianceDiscoveryError {
@@ -6339,7 +6339,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -6372,7 +6372,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -6417,7 +6417,7 @@ impl UpdateAddressBookError {
 }
 impl fmt::Display for UpdateAddressBookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAddressBookError {
@@ -6463,7 +6463,7 @@ impl UpdateBusinessReportScheduleError {
 }
 impl fmt::Display for UpdateBusinessReportScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBusinessReportScheduleError {
@@ -6497,7 +6497,7 @@ impl UpdateConferenceProviderError {
 }
 impl fmt::Display for UpdateConferenceProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConferenceProviderError {
@@ -6537,7 +6537,7 @@ impl UpdateContactError {
 }
 impl fmt::Display for UpdateContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContactError {
@@ -6581,7 +6581,7 @@ impl UpdateDeviceError {
 }
 impl fmt::Display for UpdateDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeviceError {
@@ -6621,7 +6621,7 @@ impl UpdateGatewayError {
 }
 impl fmt::Display for UpdateGatewayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGatewayError {
@@ -6660,7 +6660,7 @@ impl UpdateGatewayGroupError {
 }
 impl fmt::Display for UpdateGatewayGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGatewayGroupError {
@@ -6720,7 +6720,7 @@ impl UpdateNetworkProfileError {
 }
 impl fmt::Display for UpdateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNetworkProfileError {
@@ -6769,7 +6769,7 @@ impl UpdateProfileError {
 }
 impl fmt::Display for UpdateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProfileError {
@@ -6809,7 +6809,7 @@ impl UpdateRoomError {
 }
 impl fmt::Display for UpdateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoomError {
@@ -6855,7 +6855,7 @@ impl UpdateSkillGroupError {
 }
 impl fmt::Display for UpdateSkillGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSkillGroupError {

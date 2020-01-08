@@ -1309,7 +1309,7 @@ impl AssociateKmsKeyError {
 }
 impl fmt::Display for AssociateKmsKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateKmsKeyError {
@@ -1360,7 +1360,7 @@ impl CancelExportTaskError {
 }
 impl fmt::Display for CancelExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelExportTaskError {
@@ -1423,7 +1423,7 @@ impl CreateExportTaskError {
 }
 impl fmt::Display for CreateExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateExportTaskError {
@@ -1483,7 +1483,7 @@ impl CreateLogGroupError {
 }
 impl fmt::Display for CreateLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLogGroupError {
@@ -1537,7 +1537,7 @@ impl CreateLogStreamError {
 }
 impl fmt::Display for CreateLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLogStreamError {
@@ -1590,7 +1590,7 @@ impl DeleteDestinationError {
 }
 impl fmt::Display for DeleteDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDestinationError {
@@ -1641,7 +1641,7 @@ impl DeleteLogGroupError {
 }
 impl fmt::Display for DeleteLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLogGroupError {
@@ -1692,7 +1692,7 @@ impl DeleteLogStreamError {
 }
 impl fmt::Display for DeleteLogStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLogStreamError {
@@ -1745,7 +1745,7 @@ impl DeleteMetricFilterError {
 }
 impl fmt::Display for DeleteMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMetricFilterError {
@@ -1797,7 +1797,7 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourcePolicyError {
@@ -1855,7 +1855,7 @@ impl DeleteRetentionPolicyError {
 }
 impl fmt::Display for DeleteRetentionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRetentionPolicyError {
@@ -1914,7 +1914,7 @@ impl DeleteSubscriptionFilterError {
 }
 impl fmt::Display for DeleteSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSubscriptionFilterError {
@@ -1959,7 +1959,7 @@ impl DescribeDestinationsError {
 }
 impl fmt::Display for DescribeDestinationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDestinationsError {
@@ -2002,7 +2002,7 @@ impl DescribeExportTasksError {
 }
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExportTasksError {
@@ -2043,7 +2043,7 @@ impl DescribeLogGroupsError {
 }
 impl fmt::Display for DescribeLogGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLogGroupsError {
@@ -2089,7 +2089,7 @@ impl DescribeLogStreamsError {
 }
 impl fmt::Display for DescribeLogStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLogStreamsError {
@@ -2140,7 +2140,7 @@ impl DescribeMetricFiltersError {
 }
 impl fmt::Display for DescribeMetricFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMetricFiltersError {
@@ -2185,7 +2185,7 @@ impl DescribeQueriesError {
 }
 impl fmt::Display for DescribeQueriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeQueriesError {
@@ -2229,7 +2229,7 @@ impl DescribeResourcePoliciesError {
 }
 impl fmt::Display for DescribeResourcePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResourcePoliciesError {
@@ -2281,7 +2281,7 @@ impl DescribeSubscriptionFiltersError {
 }
 impl fmt::Display for DescribeSubscriptionFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSubscriptionFiltersError {
@@ -2333,7 +2333,7 @@ impl DisassociateKmsKeyError {
 }
 impl fmt::Display for DisassociateKmsKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateKmsKeyError {
@@ -2379,7 +2379,7 @@ impl FilterLogEventsError {
 }
 impl fmt::Display for FilterLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for FilterLogEventsError {
@@ -2424,7 +2424,7 @@ impl GetLogEventsError {
 }
 impl fmt::Display for GetLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLogEventsError {
@@ -2476,7 +2476,7 @@ impl GetLogGroupFieldsError {
 }
 impl fmt::Display for GetLogGroupFieldsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLogGroupFieldsError {
@@ -2527,7 +2527,7 @@ impl GetLogRecordError {
 }
 impl fmt::Display for GetLogRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLogRecordError {
@@ -2573,7 +2573,7 @@ impl GetQueryResultsError {
 }
 impl fmt::Display for GetQueryResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetQueryResultsError {
@@ -2613,7 +2613,7 @@ impl ListTagsLogGroupError {
 }
 impl fmt::Display for ListTagsLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsLogGroupError {
@@ -2657,7 +2657,7 @@ impl PutDestinationError {
 }
 impl fmt::Display for PutDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutDestinationError {
@@ -2708,7 +2708,7 @@ impl PutDestinationPolicyError {
 }
 impl fmt::Display for PutDestinationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutDestinationPolicyError {
@@ -2768,7 +2768,7 @@ impl PutLogEventsError {
 }
 impl fmt::Display for PutLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLogEventsError {
@@ -2826,7 +2826,7 @@ impl PutMetricFilterError {
 }
 impl fmt::Display for PutMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutMetricFilterError {
@@ -2875,7 +2875,7 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourcePolicyError {
@@ -2927,7 +2927,7 @@ impl PutRetentionPolicyError {
 }
 impl fmt::Display for PutRetentionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRetentionPolicyError {
@@ -2991,7 +2991,7 @@ impl PutSubscriptionFilterError {
 }
 impl fmt::Display for PutSubscriptionFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSubscriptionFilterError {
@@ -3048,7 +3048,7 @@ impl StartQueryError {
 }
 impl fmt::Display for StartQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartQueryError {
@@ -3095,7 +3095,7 @@ impl StopQueryError {
 }
 impl fmt::Display for StopQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopQueryError {
@@ -3135,7 +3135,7 @@ impl TagLogGroupError {
 }
 impl fmt::Display for TagLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagLogGroupError {
@@ -3174,7 +3174,7 @@ impl TestMetricFilterError {
 }
 impl fmt::Display for TestMetricFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestMetricFilterError {
@@ -3208,7 +3208,7 @@ impl UntagLogGroupError {
 }
 impl fmt::Display for UntagLogGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagLogGroupError {

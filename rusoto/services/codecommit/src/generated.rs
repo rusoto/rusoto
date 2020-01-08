@@ -3413,7 +3413,7 @@ _ => {}
 }
 impl fmt::Display for AssociateApprovalRuleTemplateWithRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateApprovalRuleTemplateWithRepositoryError {
@@ -3484,7 +3484,7 @@ _ => {}
 }
 impl fmt::Display for BatchAssociateApprovalRuleTemplateWithRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchAssociateApprovalRuleTemplateWithRepositoriesError {
@@ -3672,7 +3672,7 @@ impl BatchDescribeMergeConflictsError {
 }
 impl fmt::Display for BatchDescribeMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDescribeMergeConflictsError {
@@ -3752,7 +3752,7 @@ _ => {}
 }
 impl fmt::Display for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDisassociateApprovalRuleTemplateFromRepositoriesError {
@@ -3859,7 +3859,7 @@ impl BatchGetCommitsError {
 }
 impl fmt::Display for BatchGetCommitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetCommitsError {
@@ -3952,7 +3952,7 @@ impl BatchGetRepositoriesError {
 }
 impl fmt::Display for BatchGetRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetRepositoriesError {
@@ -4046,7 +4046,7 @@ impl CreateApprovalRuleTemplateError {
 }
 impl fmt::Display for CreateApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApprovalRuleTemplateError {
@@ -4162,7 +4162,7 @@ impl CreateBranchError {
 }
 impl fmt::Display for CreateBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBranchError {
@@ -4421,7 +4421,7 @@ impl CreateCommitError {
 }
 impl fmt::Display for CreateCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCommitError {
@@ -4649,7 +4649,7 @@ impl CreatePullRequestError {
 }
 impl fmt::Display for CreatePullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePullRequestError {
@@ -4810,7 +4810,7 @@ impl CreatePullRequestApprovalRuleError {
 }
 impl fmt::Display for CreatePullRequestApprovalRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePullRequestApprovalRuleError {
@@ -4944,7 +4944,7 @@ impl CreateRepositoryError {
 }
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRepositoryError {
@@ -5247,7 +5247,7 @@ impl CreateUnreferencedMergeCommitError {
 }
 impl fmt::Display for CreateUnreferencedMergeCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUnreferencedMergeCommitError {
@@ -5341,7 +5341,7 @@ impl DeleteApprovalRuleTemplateError {
 }
 impl fmt::Display for DeleteApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApprovalRuleTemplateError {
@@ -5434,7 +5434,7 @@ impl DeleteBranchError {
 }
 impl fmt::Display for DeleteBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBranchError {
@@ -5498,7 +5498,7 @@ impl DeleteCommentContentError {
 }
 impl fmt::Display for DeleteCommentContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCommentContentError {
@@ -5645,7 +5645,7 @@ impl DeleteFileError {
 }
 impl fmt::Display for DeleteFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFileError {
@@ -5784,7 +5784,7 @@ impl DeletePullRequestApprovalRuleError {
 }
 impl fmt::Display for DeletePullRequestApprovalRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePullRequestApprovalRuleError {
@@ -5874,7 +5874,7 @@ impl DeleteRepositoryError {
 }
 impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRepositoryError {
@@ -6065,7 +6065,7 @@ impl DescribeMergeConflictsError {
 }
 impl fmt::Display for DescribeMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMergeConflictsError {
@@ -6206,7 +6206,7 @@ impl DescribePullRequestEventsError {
 }
 impl fmt::Display for DescribePullRequestEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePullRequestEventsError {
@@ -6281,7 +6281,7 @@ _ => {}
 }
 impl fmt::Display for DisassociateApprovalRuleTemplateFromRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateApprovalRuleTemplateFromRepositoryError {
@@ -6400,7 +6400,7 @@ impl EvaluatePullRequestApprovalRulesError {
 }
 impl fmt::Display for EvaluatePullRequestApprovalRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EvaluatePullRequestApprovalRulesError {
@@ -6461,7 +6461,7 @@ impl GetApprovalRuleTemplateError {
 }
 impl fmt::Display for GetApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApprovalRuleTemplateError {
@@ -6553,7 +6553,7 @@ impl GetBlobError {
 }
 impl fmt::Display for GetBlobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBlobError {
@@ -6649,7 +6649,7 @@ impl GetBranchError {
 }
 impl fmt::Display for GetBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBranchError {
@@ -6707,7 +6707,7 @@ impl GetCommentError {
 }
 impl fmt::Display for GetCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCommentError {
@@ -6831,7 +6831,7 @@ impl GetCommentsForComparedCommitError {
 }
 impl fmt::Display for GetCommentsForComparedCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCommentsForComparedCommitError {
@@ -6992,7 +6992,7 @@ impl GetCommentsForPullRequestError {
 }
 impl fmt::Display for GetCommentsForPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCommentsForPullRequestError {
@@ -7095,7 +7095,7 @@ impl GetCommitError {
 }
 impl fmt::Display for GetCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCommitError {
@@ -7231,7 +7231,7 @@ impl GetDifferencesError {
 }
 impl fmt::Display for GetDifferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDifferencesError {
@@ -7346,7 +7346,7 @@ impl GetFileError {
 }
 impl fmt::Display for GetFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFileError {
@@ -7454,7 +7454,7 @@ impl GetFolderError {
 }
 impl fmt::Display for GetFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFolderError {
@@ -7579,7 +7579,7 @@ impl GetMergeCommitError {
 }
 impl fmt::Display for GetMergeCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMergeCommitError {
@@ -7769,7 +7769,7 @@ impl GetMergeConflictsError {
 }
 impl fmt::Display for GetMergeConflictsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMergeConflictsError {
@@ -7924,7 +7924,7 @@ impl GetMergeOptionsError {
 }
 impl fmt::Display for GetMergeOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMergeOptionsError {
@@ -8021,7 +8021,7 @@ impl GetPullRequestError {
 }
 impl fmt::Display for GetPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPullRequestError {
@@ -8128,7 +8128,7 @@ impl GetPullRequestApprovalStatesError {
 }
 impl fmt::Display for GetPullRequestApprovalStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPullRequestApprovalStatesError {
@@ -8237,7 +8237,7 @@ impl GetPullRequestOverrideStateError {
 }
 impl fmt::Display for GetPullRequestOverrideStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPullRequestOverrideStateError {
@@ -8324,7 +8324,7 @@ impl GetRepositoryError {
 }
 impl fmt::Display for GetRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRepositoryError {
@@ -8415,7 +8415,7 @@ impl GetRepositoryTriggersError {
 }
 impl fmt::Display for GetRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRepositoryTriggersError {
@@ -8464,7 +8464,7 @@ impl ListApprovalRuleTemplatesError {
 }
 impl fmt::Display for ListApprovalRuleTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApprovalRuleTemplatesError {
@@ -8525,7 +8525,7 @@ _ => {}
 }
 impl fmt::Display for ListAssociatedApprovalRuleTemplatesForRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociatedApprovalRuleTemplatesForRepositoryError {
@@ -8615,7 +8615,7 @@ impl ListBranchesError {
 }
 impl fmt::Display for ListBranchesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBranchesError {
@@ -8736,7 +8736,7 @@ impl ListPullRequestsError {
 }
 impl fmt::Display for ListPullRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPullRequestsError {
@@ -8793,7 +8793,7 @@ impl ListRepositoriesError {
 }
 impl fmt::Display for ListRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRepositoriesError {
@@ -8905,7 +8905,7 @@ impl ListRepositoriesForApprovalRuleTemplateError {
 }
 impl fmt::Display for ListRepositoriesForApprovalRuleTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRepositoriesForApprovalRuleTemplateError {
@@ -8984,7 +8984,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -9150,7 +9150,7 @@ impl MergeBranchesByFastForwardError {
 }
 impl fmt::Display for MergeBranchesByFastForwardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergeBranchesByFastForwardError {
@@ -9463,7 +9463,7 @@ impl MergeBranchesBySquashError {
 }
 impl fmt::Display for MergeBranchesBySquashError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergeBranchesBySquashError {
@@ -9804,7 +9804,7 @@ impl MergeBranchesByThreeWayError {
 }
 impl fmt::Display for MergeBranchesByThreeWayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergeBranchesByThreeWayError {
@@ -10015,7 +10015,7 @@ impl MergePullRequestByFastForwardError {
 }
 impl fmt::Display for MergePullRequestByFastForwardError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergePullRequestByFastForwardError {
@@ -10337,7 +10337,7 @@ impl MergePullRequestBySquashError {
 }
 impl fmt::Display for MergePullRequestBySquashError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergePullRequestBySquashError {
@@ -10680,7 +10680,7 @@ impl MergePullRequestByThreeWayError {
 }
 impl fmt::Display for MergePullRequestByThreeWayError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MergePullRequestByThreeWayError {
@@ -10860,7 +10860,7 @@ impl OverridePullRequestApprovalRulesError {
 }
 impl fmt::Display for OverridePullRequestApprovalRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for OverridePullRequestApprovalRulesError {
@@ -11069,7 +11069,7 @@ impl PostCommentForComparedCommitError {
 }
 impl fmt::Display for PostCommentForComparedCommitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostCommentForComparedCommitError {
@@ -11314,7 +11314,7 @@ impl PostCommentForPullRequestError {
 }
 impl fmt::Display for PostCommentForPullRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostCommentForPullRequestError {
@@ -11424,7 +11424,7 @@ impl PostCommentReplyError {
 }
 impl fmt::Display for PostCommentReplyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostCommentReplyError {
@@ -11621,7 +11621,7 @@ impl PutFileError {
 }
 impl fmt::Display for PutFileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutFileError {
@@ -11829,7 +11829,7 @@ impl PutRepositoryTriggersError {
 }
 impl fmt::Display for PutRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRepositoryTriggersError {
@@ -11922,7 +11922,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -12111,7 +12111,7 @@ impl TestRepositoryTriggersError {
 }
 impl fmt::Display for TestRepositoryTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestRepositoryTriggersError {
@@ -12210,7 +12210,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -12300,7 +12300,7 @@ impl UpdateApprovalRuleTemplateContentError {
 }
 impl fmt::Display for UpdateApprovalRuleTemplateContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApprovalRuleTemplateContentError {
@@ -12357,7 +12357,7 @@ _ => {}
 }
 impl fmt::Display for UpdateApprovalRuleTemplateDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApprovalRuleTemplateDescriptionError {
@@ -12434,7 +12434,7 @@ impl UpdateApprovalRuleTemplateNameError {
 }
 impl fmt::Display for UpdateApprovalRuleTemplateNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApprovalRuleTemplateNameError {
@@ -12514,7 +12514,7 @@ impl UpdateCommentError {
 }
 impl fmt::Display for UpdateCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCommentError {
@@ -12625,7 +12625,7 @@ impl UpdateDefaultBranchError {
 }
 impl fmt::Display for UpdateDefaultBranchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDefaultBranchError {
@@ -12795,7 +12795,7 @@ impl UpdatePullRequestApprovalRuleContentError {
 }
 impl fmt::Display for UpdatePullRequestApprovalRuleContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePullRequestApprovalRuleContentError {
@@ -12968,7 +12968,7 @@ impl UpdatePullRequestApprovalStateError {
 }
 impl fmt::Display for UpdatePullRequestApprovalStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePullRequestApprovalStateError {
@@ -13054,7 +13054,7 @@ impl UpdatePullRequestDescriptionError {
 }
 impl fmt::Display for UpdatePullRequestDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePullRequestDescriptionError {
@@ -13163,7 +13163,7 @@ impl UpdatePullRequestStatusError {
 }
 impl fmt::Display for UpdatePullRequestStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePullRequestStatusError {
@@ -13241,7 +13241,7 @@ impl UpdatePullRequestTitleError {
 }
 impl fmt::Display for UpdatePullRequestTitleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePullRequestTitleError {
@@ -13339,7 +13339,7 @@ impl UpdateRepositoryDescriptionError {
 }
 impl fmt::Display for UpdateRepositoryDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRepositoryDescriptionError {
@@ -13403,7 +13403,7 @@ impl UpdateRepositoryNameError {
 }
 impl fmt::Display for UpdateRepositoryNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRepositoryNameError {

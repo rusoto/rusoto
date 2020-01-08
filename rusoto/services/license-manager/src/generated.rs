@@ -868,7 +868,7 @@ impl CreateLicenseConfigurationError {
 }
 impl fmt::Display for CreateLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLicenseConfigurationError {
@@ -938,7 +938,7 @@ impl DeleteLicenseConfigurationError {
 }
 impl fmt::Display for DeleteLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLicenseConfigurationError {
@@ -1005,7 +1005,7 @@ impl GetLicenseConfigurationError {
 }
 impl fmt::Display for GetLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLicenseConfigurationError {
@@ -1059,7 +1059,7 @@ impl GetServiceSettingsError {
 }
 impl fmt::Display for GetServiceSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceSettingsError {
@@ -1136,7 +1136,7 @@ impl ListAssociationsForLicenseConfigurationError {
 }
 impl fmt::Display for ListAssociationsForLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociationsForLicenseConfigurationError {
@@ -1210,7 +1210,7 @@ impl ListFailuresForLicenseConfigurationOperationsError {
 }
 impl fmt::Display for ListFailuresForLicenseConfigurationOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFailuresForLicenseConfigurationOperationsError {
@@ -1288,7 +1288,7 @@ impl ListLicenseConfigurationsError {
 }
 impl fmt::Display for ListLicenseConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLicenseConfigurationsError {
@@ -1358,7 +1358,7 @@ impl ListLicenseSpecificationsForResourceError {
 }
 impl fmt::Display for ListLicenseSpecificationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLicenseSpecificationsForResourceError {
@@ -1435,7 +1435,7 @@ impl ListResourceInventoryError {
 }
 impl fmt::Display for ListResourceInventoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceInventoryError {
@@ -1498,7 +1498,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1574,7 +1574,7 @@ impl ListUsageForLicenseConfigurationError {
 }
 impl fmt::Display for ListUsageForLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsageForLicenseConfigurationError {
@@ -1632,7 +1632,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1689,7 +1689,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -1758,7 +1758,7 @@ impl UpdateLicenseConfigurationError {
 }
 impl fmt::Display for UpdateLicenseConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLicenseConfigurationError {
@@ -1841,7 +1841,7 @@ impl UpdateLicenseSpecificationsForResourceError {
 }
 impl fmt::Display for UpdateLicenseSpecificationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLicenseSpecificationsForResourceError {
@@ -1906,7 +1906,7 @@ impl UpdateServiceSettingsError {
 }
 impl fmt::Display for UpdateServiceSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceSettingsError {

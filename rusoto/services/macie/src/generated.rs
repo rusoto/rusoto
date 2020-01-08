@@ -281,7 +281,7 @@ impl AssociateMemberAccountError {
 }
 impl fmt::Display for AssociateMemberAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateMemberAccountError {
@@ -331,7 +331,7 @@ impl AssociateS3ResourcesError {
 }
 impl fmt::Display for AssociateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateS3ResourcesError {
@@ -374,7 +374,7 @@ impl DisassociateMemberAccountError {
 }
 impl fmt::Display for DisassociateMemberAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateMemberAccountError {
@@ -422,7 +422,7 @@ impl DisassociateS3ResourcesError {
 }
 impl fmt::Display for DisassociateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateS3ResourcesError {
@@ -462,7 +462,7 @@ impl ListMemberAccountsError {
 }
 impl fmt::Display for ListMemberAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMemberAccountsError {
@@ -506,7 +506,7 @@ impl ListS3ResourcesError {
 }
 impl fmt::Display for ListS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListS3ResourcesError {
@@ -551,7 +551,7 @@ impl UpdateS3ResourcesError {
 }
 impl fmt::Display for UpdateS3ResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateS3ResourcesError {

@@ -1364,7 +1364,7 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterError {
@@ -1444,7 +1444,7 @@ impl CreateConfigurationError {
 }
 impl fmt::Display for CreateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationError {
@@ -1502,7 +1502,7 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterError {
@@ -1563,7 +1563,7 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterError {
@@ -1629,7 +1629,7 @@ impl DescribeClusterOperationError {
 }
 impl fmt::Display for DescribeClusterOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterOperationError {
@@ -1701,7 +1701,7 @@ impl DescribeConfigurationError {
 }
 impl fmt::Display for DescribeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationError {
@@ -1784,7 +1784,7 @@ impl DescribeConfigurationRevisionError {
 }
 impl fmt::Display for DescribeConfigurationRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationRevisionError {
@@ -1849,7 +1849,7 @@ impl GetBootstrapBrokersError {
 }
 impl fmt::Display for GetBootstrapBrokersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBootstrapBrokersError {
@@ -1907,7 +1907,7 @@ impl ListClusterOperationsError {
 }
 impl fmt::Display for ListClusterOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClusterOperationsError {
@@ -1962,7 +1962,7 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClustersError {
@@ -2041,7 +2041,7 @@ impl ListConfigurationRevisionsError {
 }
 impl fmt::Display for ListConfigurationRevisionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationRevisionsError {
@@ -2108,7 +2108,7 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationsError {
@@ -2164,7 +2164,7 @@ impl ListNodesError {
 }
 impl fmt::Display for ListNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNodesError {
@@ -2215,7 +2215,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2263,7 +2263,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2311,7 +2311,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2375,7 +2375,7 @@ impl UpdateBrokerCountError {
 }
 impl fmt::Display for UpdateBrokerCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBrokerCountError {
@@ -2441,7 +2441,7 @@ impl UpdateBrokerStorageError {
 }
 impl fmt::Display for UpdateBrokerStorageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBrokerStorageError {
@@ -2521,7 +2521,7 @@ impl UpdateClusterConfigurationError {
 }
 impl fmt::Display for UpdateClusterConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClusterConfigurationError {
@@ -2586,7 +2586,7 @@ impl UpdateMonitoringError {
 }
 impl fmt::Display for UpdateMonitoringError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMonitoringError {

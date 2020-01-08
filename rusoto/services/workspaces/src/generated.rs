@@ -1490,7 +1490,7 @@ impl AssociateIpGroupsError {
 }
 impl fmt::Display for AssociateIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateIpGroupsError {
@@ -1554,7 +1554,7 @@ impl AuthorizeIpRulesError {
 }
 impl fmt::Display for AuthorizeIpRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AuthorizeIpRulesError {
@@ -1631,7 +1631,7 @@ impl CopyWorkspaceImageError {
 }
 impl fmt::Display for CopyWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyWorkspaceImageError {
@@ -1694,7 +1694,7 @@ impl CreateIpGroupError {
 }
 impl fmt::Display for CreateIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIpGroupError {
@@ -1741,7 +1741,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -1785,7 +1785,7 @@ impl CreateWorkspacesError {
 }
 impl fmt::Display for CreateWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWorkspacesError {
@@ -1836,7 +1836,7 @@ impl DeleteIpGroupError {
 }
 impl fmt::Display for DeleteIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIpGroupError {
@@ -1877,7 +1877,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -1925,7 +1925,7 @@ impl DeleteWorkspaceImageError {
 }
 impl fmt::Display for DeleteWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWorkspaceImageError {
@@ -1992,7 +1992,7 @@ impl DeregisterWorkspaceDirectoryError {
 }
 impl fmt::Display for DeregisterWorkspaceDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterWorkspaceDirectoryError {
@@ -2029,7 +2029,7 @@ impl DescribeAccountError {
 }
 impl fmt::Display for DescribeAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountError {
@@ -2066,7 +2066,7 @@ impl DescribeAccountModificationsError {
 }
 impl fmt::Display for DescribeAccountModificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountModificationsError {
@@ -2115,7 +2115,7 @@ impl DescribeClientPropertiesError {
 }
 impl fmt::Display for DescribeClientPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClientPropertiesError {
@@ -2157,7 +2157,7 @@ impl DescribeIpGroupsError {
 }
 impl fmt::Display for DescribeIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIpGroupsError {
@@ -2191,7 +2191,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -2226,7 +2226,7 @@ impl DescribeWorkspaceBundlesError {
 }
 impl fmt::Display for DescribeWorkspaceBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspaceBundlesError {
@@ -2263,7 +2263,7 @@ impl DescribeWorkspaceDirectoriesError {
 }
 impl fmt::Display for DescribeWorkspaceDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspaceDirectoriesError {
@@ -2298,7 +2298,7 @@ impl DescribeWorkspaceImagesError {
 }
 impl fmt::Display for DescribeWorkspaceImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspaceImagesError {
@@ -2349,7 +2349,7 @@ impl DescribeWorkspaceSnapshotsError {
 }
 impl fmt::Display for DescribeWorkspaceSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspaceSnapshotsError {
@@ -2393,7 +2393,7 @@ impl DescribeWorkspacesError {
 }
 impl fmt::Display for DescribeWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspacesError {
@@ -2431,7 +2431,7 @@ impl DescribeWorkspacesConnectionStatusError {
 }
 impl fmt::Display for DescribeWorkspacesConnectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkspacesConnectionStatusError {
@@ -2485,7 +2485,7 @@ impl DisassociateIpGroupsError {
 }
 impl fmt::Display for DisassociateIpGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateIpGroupsError {
@@ -2556,7 +2556,7 @@ impl ImportWorkspaceImageError {
 }
 impl fmt::Display for ImportWorkspaceImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportWorkspaceImageError {
@@ -2605,7 +2605,7 @@ impl ListAvailableManagementCidrRangesError {
 }
 impl fmt::Display for ListAvailableManagementCidrRangesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAvailableManagementCidrRangesError {
@@ -2661,7 +2661,7 @@ impl ModifyAccountError {
 }
 impl fmt::Display for ModifyAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyAccountError {
@@ -2712,7 +2712,7 @@ impl ModifyClientPropertiesError {
 }
 impl fmt::Display for ModifyClientPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClientPropertiesError {
@@ -2765,7 +2765,7 @@ impl ModifySelfservicePermissionsError {
 }
 impl fmt::Display for ModifySelfservicePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifySelfservicePermissionsError {
@@ -2811,7 +2811,7 @@ impl ModifyWorkspaceAccessPropertiesError {
 }
 impl fmt::Display for ModifyWorkspaceAccessPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyWorkspaceAccessPropertiesError {
@@ -2863,7 +2863,7 @@ impl ModifyWorkspaceCreationPropertiesError {
 }
 impl fmt::Display for ModifyWorkspaceCreationPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyWorkspaceCreationPropertiesError {
@@ -2942,7 +2942,7 @@ impl ModifyWorkspacePropertiesError {
 }
 impl fmt::Display for ModifyWorkspacePropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyWorkspacePropertiesError {
@@ -2997,7 +2997,7 @@ impl ModifyWorkspaceStateError {
 }
 impl fmt::Display for ModifyWorkspaceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyWorkspaceStateError {
@@ -3026,7 +3026,7 @@ impl RebootWorkspacesError {
 }
 impl fmt::Display for RebootWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootWorkspacesError {
@@ -3051,7 +3051,7 @@ impl RebuildWorkspacesError {
 }
 impl fmt::Display for RebuildWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebuildWorkspacesError {
@@ -3135,7 +3135,7 @@ impl RegisterWorkspaceDirectoryError {
 }
 impl fmt::Display for RegisterWorkspaceDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterWorkspaceDirectoryError {
@@ -3187,7 +3187,7 @@ impl RestoreWorkspaceError {
 }
 impl fmt::Display for RestoreWorkspaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreWorkspaceError {
@@ -3239,7 +3239,7 @@ impl RevokeIpRulesError {
 }
 impl fmt::Display for RevokeIpRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeIpRulesError {
@@ -3269,7 +3269,7 @@ impl StartWorkspacesError {
 }
 impl fmt::Display for StartWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartWorkspacesError {
@@ -3294,7 +3294,7 @@ impl StopWorkspacesError {
 }
 impl fmt::Display for StopWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopWorkspacesError {
@@ -3319,7 +3319,7 @@ impl TerminateWorkspacesError {
 }
 impl fmt::Display for TerminateWorkspacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateWorkspacesError {
@@ -3378,7 +3378,7 @@ impl UpdateRulesOfIpGroupError {
 }
 impl fmt::Display for UpdateRulesOfIpGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRulesOfIpGroupError {

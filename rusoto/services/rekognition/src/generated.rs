@@ -2374,7 +2374,7 @@ impl CompareFacesError {
 }
 impl fmt::Display for CompareFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompareFacesError {
@@ -2445,7 +2445,7 @@ impl CreateCollectionError {
 }
 impl fmt::Display for CreateCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCollectionError {
@@ -2515,7 +2515,7 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProjectError {
@@ -2597,7 +2597,7 @@ impl CreateProjectVersionError {
 }
 impl fmt::Display for CreateProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProjectVersionError {
@@ -2673,7 +2673,7 @@ impl CreateStreamProcessorError {
 }
 impl fmt::Display for CreateStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamProcessorError {
@@ -2741,7 +2741,7 @@ impl DeleteCollectionError {
 }
 impl fmt::Display for DeleteCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCollectionError {
@@ -2806,7 +2806,7 @@ impl DeleteFacesError {
 }
 impl fmt::Display for DeleteFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFacesError {
@@ -2882,7 +2882,7 @@ impl DeleteStreamProcessorError {
 }
 impl fmt::Display for DeleteStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStreamProcessorError {
@@ -2950,7 +2950,7 @@ impl DescribeCollectionError {
 }
 impl fmt::Display for DescribeCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCollectionError {
@@ -3030,7 +3030,7 @@ impl DescribeProjectVersionsError {
 }
 impl fmt::Display for DescribeProjectVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProjectVersionsError {
@@ -3100,7 +3100,7 @@ impl DescribeProjectsError {
 }
 impl fmt::Display for DescribeProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProjectsError {
@@ -3173,7 +3173,7 @@ impl DescribeStreamProcessorError {
 }
 impl fmt::Display for DescribeStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStreamProcessorError {
@@ -3267,7 +3267,7 @@ impl DetectCustomLabelsError {
 }
 impl fmt::Display for DetectCustomLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectCustomLabelsError {
@@ -3347,7 +3347,7 @@ impl DetectFacesError {
 }
 impl fmt::Display for DetectFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectFacesError {
@@ -3424,7 +3424,7 @@ impl DetectLabelsError {
 }
 impl fmt::Display for DetectLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectLabelsError {
@@ -3518,7 +3518,7 @@ impl DetectModerationLabelsError {
 }
 impl fmt::Display for DetectModerationLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectModerationLabelsError {
@@ -3596,7 +3596,7 @@ impl DetectTextError {
 }
 impl fmt::Display for DetectTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectTextError {
@@ -3665,7 +3665,7 @@ impl GetCelebrityInfoError {
 }
 impl fmt::Display for GetCelebrityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCelebrityInfoError {
@@ -3745,7 +3745,7 @@ impl GetCelebrityRecognitionError {
 }
 impl fmt::Display for GetCelebrityRecognitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCelebrityRecognitionError {
@@ -3824,7 +3824,7 @@ impl GetContentModerationError {
 }
 impl fmt::Display for GetContentModerationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContentModerationError {
@@ -3899,7 +3899,7 @@ impl GetFaceDetectionError {
 }
 impl fmt::Display for GetFaceDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFaceDetectionError {
@@ -3972,7 +3972,7 @@ impl GetFaceSearchError {
 }
 impl fmt::Display for GetFaceSearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFaceSearchError {
@@ -4047,7 +4047,7 @@ impl GetLabelDetectionError {
 }
 impl fmt::Display for GetLabelDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLabelDetectionError {
@@ -4122,7 +4122,7 @@ impl GetPersonTrackingError {
 }
 impl fmt::Display for GetPersonTrackingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPersonTrackingError {
@@ -4203,7 +4203,7 @@ impl IndexFacesError {
 }
 impl fmt::Display for IndexFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IndexFacesError {
@@ -4278,7 +4278,7 @@ impl ListCollectionsError {
 }
 impl fmt::Display for ListCollectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCollectionsError {
@@ -4349,7 +4349,7 @@ impl ListFacesError {
 }
 impl fmt::Display for ListFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFacesError {
@@ -4421,7 +4421,7 @@ impl ListStreamProcessorsError {
 }
 impl fmt::Display for ListStreamProcessorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStreamProcessorsError {
@@ -4504,7 +4504,7 @@ impl RecognizeCelebritiesError {
 }
 impl fmt::Display for RecognizeCelebritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RecognizeCelebritiesError {
@@ -4571,7 +4571,7 @@ impl SearchFacesError {
 }
 impl fmt::Display for SearchFacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchFacesError {
@@ -4655,7 +4655,7 @@ impl SearchFacesByImageError {
 }
 impl fmt::Display for SearchFacesByImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchFacesByImageError {
@@ -4754,7 +4754,7 @@ impl StartCelebrityRecognitionError {
 }
 impl fmt::Display for StartCelebrityRecognitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartCelebrityRecognitionError {
@@ -4849,7 +4849,7 @@ impl StartContentModerationError {
 }
 impl fmt::Display for StartContentModerationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartContentModerationError {
@@ -4936,7 +4936,7 @@ impl StartFaceDetectionError {
 }
 impl fmt::Display for StartFaceDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartFaceDetectionError {
@@ -5026,7 +5026,7 @@ impl StartFaceSearchError {
 }
 impl fmt::Display for StartFaceSearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartFaceSearchError {
@@ -5116,7 +5116,7 @@ impl StartLabelDetectionError {
 }
 impl fmt::Display for StartLabelDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartLabelDetectionError {
@@ -5205,7 +5205,7 @@ impl StartPersonTrackingError {
 }
 impl fmt::Display for StartPersonTrackingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartPersonTrackingError {
@@ -5289,7 +5289,7 @@ impl StartProjectVersionError {
 }
 impl fmt::Display for StartProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartProjectVersionError {
@@ -5367,7 +5367,7 @@ impl StartStreamProcessorError {
 }
 impl fmt::Display for StartStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartStreamProcessorError {
@@ -5440,7 +5440,7 @@ impl StopProjectVersionError {
 }
 impl fmt::Display for StopProjectVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopProjectVersionError {
@@ -5517,7 +5517,7 @@ impl StopStreamProcessorError {
 }
 impl fmt::Display for StopStreamProcessorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopStreamProcessorError {

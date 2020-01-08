@@ -214,7 +214,7 @@ impl DescribeServicesError {
 }
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServicesError {
@@ -271,7 +271,7 @@ impl GetAttributeValuesError {
 }
 impl fmt::Display for GetAttributeValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAttributeValuesError {
@@ -328,7 +328,7 @@ impl GetProductsError {
 }
 impl fmt::Display for GetProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetProductsError {

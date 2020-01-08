@@ -260,7 +260,7 @@ async fn list_multipart_upload_parts_happy_path() {
 
     assert_eq!(parts[0].part_number, Some(1));
     assert_eq!(parts[0].e_tag, sstr("\"ddcaa99616d7cd06d0a5abfef6ccebbb\""));
-    assert_eq!(parts[0].size, Some(5242880));
+    assert_eq!(parts[0].size, Some(5_242_880));
     assert_eq!(parts[0].last_modified, sstr("2015-09-08T21:02:04.000Z"));
 }
 

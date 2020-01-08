@@ -230,6 +230,22 @@ pub struct ClassifierEvaluationMetrics {
     #[serde(rename = "F1Score")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub f1_score: Option<f64>,
+    /// <p>Indicates the fraction of labels that are incorrectly predicted. Also seen as the fraction of wrong labels compared to the total number of labels. Scores closer to zero are better.</p>
+    #[serde(rename = "HammingLoss")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hamming_loss: Option<f64>,
+    /// <p>A measure of how accurate the classifier results are for the test data. It is a combination of the <code>Micro Precision</code> and <code>Micro Recall</code> values. The <code>Micro F1Score</code> is the harmonic mean of the two scores. The highest score is 1, and the worst score is 0.</p>
+    #[serde(rename = "MicroF1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub micro_f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the recognizer results in the test data. High precision means that the recognizer returned substantially more relevant results than irrelevant ones. Unlike the Precision metric which comes from averaging the precision of all available labels, this is based on the overall score of all precision scores added together.</p>
+    #[serde(rename = "MicroPrecision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub micro_precision: Option<f64>,
+    /// <p>A measure of how complete the classifier results are for the test data. High recall means that the classifier returned most of the relevant results. Specifically, this indicates how many of the correct categories in the text that the model can predict. It is a percentage of correct categories in the text that can found. Instead of averaging the recall scores of all labels (as with Recall), micro Recall is based on the overall score of all recall scores added together.</p>
+    #[serde(rename = "MicroRecall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub micro_recall: Option<f64>,
     /// <p>A measure of the usefulness of the classifier results in the test data. High precision means that the classifier returned substantially more relevant results than irrelevant ones.</p>
     #[serde(rename = "Precision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,6 +295,10 @@ pub struct ClassifyDocumentResponse {
     #[serde(rename = "Classes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classes: Option<Vec<DocumentClass>>,
+    /// <p>The labels used the document being analyzed. These are used for multi-label trained models. Individual labels represent different categories that are related in some manner and are not multually exclusive. For example, a movie can be just an action movie, or it can be an action movie, a science fiction movie, and a comedy, all at the same time. </p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<DocumentLabel>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -299,6 +319,10 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
+    /// <p>Indicates the mode in which the classifier will be trained. The classifier can be trained in multi-class mode, which identifies one and only one class for each document, or multi-label mode, which identifies one or more labels for each document. In multi-label mode, multiple labels for an individual document are separated by a delimiter. The default delimiter between labels is a pipe (|).</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -779,6 +803,10 @@ pub struct DocumentClassifierFilter {
 /// <p>The input properties for training a document classifier. </p> <p>For more information on how the input file is formatted, see <a>how-document-classification-training-data</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DocumentClassifierInputDataConfig {
+    /// <p>Indicates the delimiter used to separate each label for training a multi-label classifier. The default delimiter between labels is a pipe (|). You can use a different character as a delimiter (if it's an allowed character) by specifying it under Delimiter for labels. If the training documents use a delimiter other than the default or the delimiter you specify, the labels on that line will be combined to make a single unique label, such as LABELLABELLABEL.</p>
+    #[serde(rename = "LabelDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label_delimiter: Option<String>,
     /// <p>The Amazon S3 URI for the input data. The S3 bucket must be in the same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of input files.</p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
@@ -829,6 +857,10 @@ pub struct DocumentClassifierProperties {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+    /// <p>Indicates the mode in which the specific classifier was trained. This also indicates the format of input documents and the format of the confusion matrix. Each classifier can only be trained in one mode and this cannot be changed once the classifier is trained.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p> Provides output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -857,6 +889,20 @@ pub struct DocumentClassifierProperties {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Specifies one of the label or labels that categorize the document being analyzed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DocumentLabel {
+    /// <p>The name of the label.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The confidence score that Amazon Comprehend has this label correctly attributed.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 /// <p>Returns the code for the dominant language in the input text and the level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
@@ -2413,7 +2459,7 @@ impl BatchDetectDominantLanguageError {
 }
 impl fmt::Display for BatchDetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDetectDominantLanguageError {
@@ -2475,7 +2521,7 @@ impl BatchDetectEntitiesError {
 }
 impl fmt::Display for BatchDetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDetectEntitiesError {
@@ -2542,7 +2588,7 @@ impl BatchDetectKeyPhrasesError {
 }
 impl fmt::Display for BatchDetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDetectKeyPhrasesError {
@@ -2605,7 +2651,7 @@ impl BatchDetectSentimentError {
 }
 impl fmt::Display for BatchDetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDetectSentimentError {
@@ -2668,7 +2714,7 @@ impl BatchDetectSyntaxError {
 }
 impl fmt::Display for BatchDetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDetectSyntaxError {
@@ -2724,7 +2770,7 @@ impl ClassifyDocumentError {
 }
 impl fmt::Display for ClassifyDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ClassifyDocumentError {
@@ -2811,7 +2857,7 @@ impl CreateDocumentClassifierError {
 }
 impl fmt::Display for CreateDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDocumentClassifierError {
@@ -2888,7 +2934,7 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEndpointError {
@@ -2977,7 +3023,7 @@ impl CreateEntityRecognizerError {
 }
 impl fmt::Display for CreateEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEntityRecognizerError {
@@ -3054,7 +3100,7 @@ impl DeleteDocumentClassifierError {
 }
 impl fmt::Display for DeleteDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDocumentClassifierError {
@@ -3112,7 +3158,7 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEndpointError {
@@ -3186,7 +3232,7 @@ impl DeleteEntityRecognizerError {
 }
 impl fmt::Display for DeleteEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEntityRecognizerError {
@@ -3249,7 +3295,7 @@ impl DescribeDocumentClassificationJobError {
 }
 impl fmt::Display for DescribeDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDocumentClassificationJobError {
@@ -3310,7 +3356,7 @@ impl DescribeDocumentClassifierError {
 }
 impl fmt::Display for DescribeDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDocumentClassifierError {
@@ -3371,7 +3417,7 @@ impl DescribeDominantLanguageDetectionJobError {
 }
 impl fmt::Display for DescribeDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDominantLanguageDetectionJobError {
@@ -3422,7 +3468,7 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointError {
@@ -3483,7 +3529,7 @@ impl DescribeEntitiesDetectionJobError {
 }
 impl fmt::Display for DescribeEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEntitiesDetectionJobError {
@@ -3542,7 +3588,7 @@ impl DescribeEntityRecognizerError {
 }
 impl fmt::Display for DescribeEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEntityRecognizerError {
@@ -3603,7 +3649,7 @@ impl DescribeKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeKeyPhrasesDetectionJobError {
@@ -3664,7 +3710,7 @@ impl DescribeSentimentDetectionJobError {
 }
 impl fmt::Display for DescribeSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSentimentDetectionJobError {
@@ -3725,7 +3771,7 @@ impl DescribeTopicsDetectionJobError {
 }
 impl fmt::Display for DescribeTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTopicsDetectionJobError {
@@ -3777,7 +3823,7 @@ impl DetectDominantLanguageError {
 }
 impl fmt::Display for DetectDominantLanguageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectDominantLanguageError {
@@ -3829,7 +3875,7 @@ impl DetectEntitiesError {
 }
 impl fmt::Display for DetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectEntitiesError {
@@ -3884,7 +3930,7 @@ impl DetectKeyPhrasesError {
 }
 impl fmt::Display for DetectKeyPhrasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectKeyPhrasesError {
@@ -3937,7 +3983,7 @@ impl DetectSentimentError {
 }
 impl fmt::Display for DetectSentimentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectSentimentError {
@@ -3988,7 +4034,7 @@ impl DetectSyntaxError {
 }
 impl fmt::Display for DetectSyntaxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectSyntaxError {
@@ -4049,7 +4095,7 @@ impl ListDocumentClassificationJobsError {
 }
 impl fmt::Display for ListDocumentClassificationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDocumentClassificationJobsError {
@@ -4108,7 +4154,7 @@ impl ListDocumentClassifiersError {
 }
 impl fmt::Display for ListDocumentClassifiersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDocumentClassifiersError {
@@ -4169,7 +4215,7 @@ impl ListDominantLanguageDetectionJobsError {
 }
 impl fmt::Display for ListDominantLanguageDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDominantLanguageDetectionJobsError {
@@ -4215,7 +4261,7 @@ impl ListEndpointsError {
 }
 impl fmt::Display for ListEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEndpointsError {
@@ -4273,7 +4319,7 @@ impl ListEntitiesDetectionJobsError {
 }
 impl fmt::Display for ListEntitiesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEntitiesDetectionJobsError {
@@ -4330,7 +4376,7 @@ impl ListEntityRecognizersError {
 }
 impl fmt::Display for ListEntityRecognizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEntityRecognizersError {
@@ -4391,7 +4437,7 @@ impl ListKeyPhrasesDetectionJobsError {
 }
 impl fmt::Display for ListKeyPhrasesDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListKeyPhrasesDetectionJobsError {
@@ -4452,7 +4498,7 @@ impl ListSentimentDetectionJobsError {
 }
 impl fmt::Display for ListSentimentDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSentimentDetectionJobsError {
@@ -4500,7 +4546,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4558,7 +4604,7 @@ impl ListTopicsDetectionJobsError {
 }
 impl fmt::Display for ListTopicsDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTopicsDetectionJobsError {
@@ -4633,7 +4679,7 @@ impl StartDocumentClassificationJobError {
 }
 impl fmt::Display for StartDocumentClassificationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDocumentClassificationJobError {
@@ -4696,7 +4742,7 @@ impl StartDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StartDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDominantLanguageDetectionJobError {
@@ -4769,7 +4815,7 @@ impl StartEntitiesDetectionJobError {
 }
 impl fmt::Display for StartEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartEntitiesDetectionJobError {
@@ -4832,7 +4878,7 @@ impl StartKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StartKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartKeyPhrasesDetectionJobError {
@@ -4893,7 +4939,7 @@ impl StartSentimentDetectionJobError {
 }
 impl fmt::Display for StartSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSentimentDetectionJobError {
@@ -4952,7 +4998,7 @@ impl StartTopicsDetectionJobError {
 }
 impl fmt::Display for StartTopicsDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartTopicsDetectionJobError {
@@ -5006,7 +5052,7 @@ impl StopDominantLanguageDetectionJobError {
 }
 impl fmt::Display for StopDominantLanguageDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDominantLanguageDetectionJobError {
@@ -5057,7 +5103,7 @@ impl StopEntitiesDetectionJobError {
 }
 impl fmt::Display for StopEntitiesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopEntitiesDetectionJobError {
@@ -5110,7 +5156,7 @@ impl StopKeyPhrasesDetectionJobError {
 }
 impl fmt::Display for StopKeyPhrasesDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopKeyPhrasesDetectionJobError {
@@ -5161,7 +5207,7 @@ impl StopSentimentDetectionJobError {
 }
 impl fmt::Display for StopSentimentDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopSentimentDetectionJobError {
@@ -5221,7 +5267,7 @@ impl StopTrainingDocumentClassifierError {
 }
 impl fmt::Display for StopTrainingDocumentClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTrainingDocumentClassifierError {
@@ -5282,7 +5328,7 @@ impl StopTrainingEntityRecognizerError {
 }
 impl fmt::Display for StopTrainingEntityRecognizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTrainingEntityRecognizerError {
@@ -5338,7 +5384,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5397,7 +5443,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5466,7 +5512,7 @@ impl UpdateEndpointError {
 }
 impl fmt::Display for UpdateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEndpointError {

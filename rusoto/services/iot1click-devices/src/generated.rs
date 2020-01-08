@@ -405,7 +405,7 @@ impl ClaimDevicesByClaimCodeError {
 }
 impl fmt::Display for ClaimDevicesByClaimCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ClaimDevicesByClaimCodeError {
@@ -449,7 +449,7 @@ impl DescribeDeviceError {
 }
 impl fmt::Display for DescribeDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeviceError {
@@ -509,7 +509,7 @@ impl FinalizeDeviceClaimError {
 }
 impl fmt::Display for FinalizeDeviceClaimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for FinalizeDeviceClaimError {
@@ -555,7 +555,7 @@ impl GetDeviceMethodsError {
 }
 impl fmt::Display for GetDeviceMethodsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceMethodsError {
@@ -608,7 +608,7 @@ impl InitiateDeviceClaimError {
 }
 impl fmt::Display for InitiateDeviceClaimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateDeviceClaimError {
@@ -672,7 +672,7 @@ impl InvokeDeviceMethodError {
 }
 impl fmt::Display for InvokeDeviceMethodError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InvokeDeviceMethodError {
@@ -726,7 +726,7 @@ impl ListDeviceEventsError {
 }
 impl fmt::Display for ListDeviceEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeviceEventsError {
@@ -771,7 +771,7 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevicesError {
@@ -812,7 +812,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -855,7 +855,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -899,7 +899,7 @@ impl UnclaimDeviceError {
 }
 impl fmt::Display for UnclaimDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnclaimDeviceError {
@@ -943,7 +943,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -987,7 +987,7 @@ impl UpdateDeviceStateError {
 }
 impl fmt::Display for UpdateDeviceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeviceStateError {

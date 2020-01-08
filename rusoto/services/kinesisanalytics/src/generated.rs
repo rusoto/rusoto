@@ -1310,7 +1310,7 @@ impl AddApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddApplicationCloudWatchLoggingOptionError {
@@ -1378,7 +1378,7 @@ impl AddApplicationInputError {
 }
 impl fmt::Display for AddApplicationInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddApplicationInputError {
@@ -1452,7 +1452,7 @@ impl AddApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for AddApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddApplicationInputProcessingConfigurationError {
@@ -1521,7 +1521,7 @@ impl AddApplicationOutputError {
 }
 impl fmt::Display for AddApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddApplicationOutputError {
@@ -1590,7 +1590,7 @@ impl AddApplicationReferenceDataSourceError {
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddApplicationReferenceDataSourceError {
@@ -1654,7 +1654,7 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationError {
@@ -1711,7 +1711,7 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationError {
@@ -1783,7 +1783,7 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationCloudWatchLoggingOptionError {
@@ -1862,7 +1862,7 @@ impl DeleteApplicationInputProcessingConfigurationError {
 }
 impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationInputProcessingConfigurationError {
@@ -1935,7 +1935,7 @@ impl DeleteApplicationOutputError {
 }
 impl fmt::Display for DeleteApplicationOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationOutputError {
@@ -2004,7 +2004,7 @@ impl DeleteApplicationReferenceDataSourceError {
 }
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationReferenceDataSourceError {
@@ -2050,7 +2050,7 @@ impl DescribeApplicationError {
 }
 impl fmt::Display for DescribeApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeApplicationError {
@@ -2105,7 +2105,7 @@ impl DiscoverInputSchemaError {
 }
 impl fmt::Display for DiscoverInputSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DiscoverInputSchemaError {
@@ -2135,7 +2135,7 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationsError {
@@ -2180,7 +2180,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2239,7 +2239,7 @@ impl StartApplicationError {
 }
 impl fmt::Display for StartApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartApplicationError {
@@ -2288,7 +2288,7 @@ impl StopApplicationError {
 }
 impl fmt::Display for StopApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopApplicationError {
@@ -2343,7 +2343,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2402,7 +2402,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2468,7 +2468,7 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationError {

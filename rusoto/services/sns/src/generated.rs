@@ -2291,7 +2291,7 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddPermissionError {
@@ -2368,7 +2368,7 @@ impl CheckIfPhoneNumberIsOptedOutError {
 }
 impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CheckIfPhoneNumberIsOptedOutError {
@@ -2457,7 +2457,7 @@ impl ConfirmSubscriptionError {
 }
 impl fmt::Display for ConfirmSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmSubscriptionError {
@@ -2525,7 +2525,7 @@ impl CreatePlatformApplicationError {
 }
 impl fmt::Display for CreatePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePlatformApplicationError {
@@ -2595,7 +2595,7 @@ impl CreatePlatformEndpointError {
 }
 impl fmt::Display for CreatePlatformEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePlatformEndpointError {
@@ -2701,7 +2701,7 @@ impl CreateTopicError {
 }
 impl fmt::Display for CreateTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTopicError {
@@ -2770,7 +2770,7 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEndpointError {
@@ -2835,7 +2835,7 @@ impl DeletePlatformApplicationError {
 }
 impl fmt::Display for DeletePlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePlatformApplicationError {
@@ -2926,7 +2926,7 @@ impl DeleteTopicError {
 }
 impl fmt::Display for DeleteTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTopicError {
@@ -3000,7 +3000,7 @@ impl GetEndpointAttributesError {
 }
 impl fmt::Display for GetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEndpointAttributesError {
@@ -3079,7 +3079,7 @@ impl GetPlatformApplicationAttributesError {
 }
 impl fmt::Display for GetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPlatformApplicationAttributesError {
@@ -3150,7 +3150,7 @@ impl GetSMSAttributesError {
 }
 impl fmt::Display for GetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSMSAttributesError {
@@ -3223,7 +3223,7 @@ impl GetSubscriptionAttributesError {
 }
 impl fmt::Display for GetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSubscriptionAttributesError {
@@ -3301,7 +3301,7 @@ impl GetTopicAttributesError {
 }
 impl fmt::Display for GetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTopicAttributesError {
@@ -3381,7 +3381,7 @@ impl ListEndpointsByPlatformApplicationError {
 }
 impl fmt::Display for ListEndpointsByPlatformApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEndpointsByPlatformApplicationError {
@@ -3452,7 +3452,7 @@ impl ListPhoneNumbersOptedOutError {
 }
 impl fmt::Display for ListPhoneNumbersOptedOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPhoneNumbersOptedOutError {
@@ -3516,7 +3516,7 @@ impl ListPlatformApplicationsError {
 }
 impl fmt::Display for ListPlatformApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPlatformApplicationsError {
@@ -3579,7 +3579,7 @@ impl ListSubscriptionsError {
 }
 impl fmt::Display for ListSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscriptionsError {
@@ -3649,7 +3649,7 @@ impl ListSubscriptionsByTopicError {
 }
 impl fmt::Display for ListSubscriptionsByTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscriptionsByTopicError {
@@ -3727,7 +3727,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3792,7 +3792,7 @@ impl ListTopicsError {
 }
 impl fmt::Display for ListTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTopicsError {
@@ -3862,7 +3862,7 @@ impl OptInPhoneNumberError {
 }
 impl fmt::Display for OptInPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for OptInPhoneNumberError {
@@ -4001,7 +4001,7 @@ impl PublishError {
 }
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PublishError {
@@ -4082,7 +4082,7 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemovePermissionError {
@@ -4153,7 +4153,7 @@ impl SetEndpointAttributesError {
 }
 impl fmt::Display for SetEndpointAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetEndpointAttributesError {
@@ -4232,7 +4232,7 @@ impl SetPlatformApplicationAttributesError {
 }
 impl fmt::Display for SetPlatformApplicationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetPlatformApplicationAttributesError {
@@ -4303,7 +4303,7 @@ impl SetSMSAttributesError {
 }
 impl fmt::Display for SetSMSAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSMSAttributesError {
@@ -4385,7 +4385,7 @@ impl SetSubscriptionAttributesError {
 }
 impl fmt::Display for SetSubscriptionAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSubscriptionAttributesError {
@@ -4464,7 +4464,7 @@ impl SetTopicAttributesError {
 }
 impl fmt::Display for SetTopicAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTopicAttributesError {
@@ -4555,7 +4555,7 @@ impl SubscribeError {
 }
 impl fmt::Display for SubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubscribeError {
@@ -4650,7 +4650,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4731,7 +4731,7 @@ impl UnsubscribeError {
 }
 impl fmt::Display for UnsubscribeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnsubscribeError {
@@ -4824,7 +4824,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {

@@ -560,7 +560,7 @@ impl BatchExecuteStatementError {
 }
 impl fmt::Display for BatchExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchExecuteStatementError {
@@ -621,7 +621,7 @@ impl BeginTransactionError {
 }
 impl fmt::Display for BeginTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BeginTransactionError {
@@ -687,7 +687,7 @@ impl CommitTransactionError {
 }
 impl fmt::Display for CommitTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CommitTransactionError {
@@ -740,7 +740,7 @@ impl ExecuteSqlError {
 }
 impl fmt::Display for ExecuteSqlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecuteSqlError {
@@ -800,7 +800,7 @@ impl ExecuteStatementError {
 }
 impl fmt::Display for ExecuteStatementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecuteStatementError {
@@ -868,7 +868,7 @@ impl RollbackTransactionError {
 }
 impl fmt::Display for RollbackTransactionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RollbackTransactionError {

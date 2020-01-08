@@ -298,7 +298,7 @@ impl DescribeJobExecutionError {
 }
 impl fmt::Display for DescribeJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobExecutionError {
@@ -364,7 +364,7 @@ impl GetPendingJobExecutionsError {
 }
 impl fmt::Display for GetPendingJobExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPendingJobExecutionsError {
@@ -433,7 +433,7 @@ impl StartNextPendingJobExecutionError {
 }
 impl fmt::Display for StartNextPendingJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartNextPendingJobExecutionError {
@@ -501,7 +501,7 @@ impl UpdateJobExecutionError {
 }
 impl fmt::Display for UpdateJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateJobExecutionError {

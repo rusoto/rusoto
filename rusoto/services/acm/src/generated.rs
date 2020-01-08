@@ -600,7 +600,7 @@ impl AddTagsToCertificateError {
 }
 impl fmt::Display for AddTagsToCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToCertificateError {
@@ -648,7 +648,7 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCertificateError {
@@ -690,7 +690,7 @@ impl DescribeCertificateError {
 }
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificateError {
@@ -734,7 +734,7 @@ impl ExportCertificateError {
 }
 impl fmt::Display for ExportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExportCertificateError {
@@ -779,7 +779,7 @@ impl GetCertificateError {
 }
 impl fmt::Display for GetCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCertificateError {
@@ -839,7 +839,7 @@ impl ImportCertificateError {
 }
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportCertificateError {
@@ -877,7 +877,7 @@ impl ListCertificatesError {
 }
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCertificatesError {
@@ -917,7 +917,7 @@ impl ListTagsForCertificateError {
 }
 impl fmt::Display for ListTagsForCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForCertificateError {
@@ -979,7 +979,7 @@ impl RemoveTagsFromCertificateError {
 }
 impl fmt::Display for RemoveTagsFromCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromCertificateError {
@@ -1021,7 +1021,7 @@ impl RenewCertificateError {
 }
 impl fmt::Display for RenewCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RenewCertificateError {
@@ -1087,7 +1087,7 @@ impl RequestCertificateError {
 }
 impl fmt::Display for RequestCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RequestCertificateError {
@@ -1145,7 +1145,7 @@ impl ResendValidationEmailError {
 }
 impl fmt::Display for ResendValidationEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResendValidationEmailError {
@@ -1202,7 +1202,7 @@ impl UpdateCertificateOptionsError {
 }
 impl fmt::Display for UpdateCertificateOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCertificateOptionsError {

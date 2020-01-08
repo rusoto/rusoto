@@ -2070,7 +2070,7 @@ impl AcceptSharedDirectoryError {
 }
 impl fmt::Display for AcceptSharedDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptSharedDirectoryError {
@@ -2137,7 +2137,7 @@ impl AddIpRoutesError {
 }
 impl fmt::Display for AddIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddIpRoutesError {
@@ -2198,7 +2198,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -2247,7 +2247,7 @@ impl CancelSchemaExtensionError {
 }
 impl fmt::Display for CancelSchemaExtensionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelSchemaExtensionError {
@@ -2299,7 +2299,7 @@ impl ConnectDirectoryError {
 }
 impl fmt::Display for ConnectDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConnectDirectoryError {
@@ -2355,7 +2355,7 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAliasError {
@@ -2427,7 +2427,7 @@ impl CreateComputerError {
 }
 impl fmt::Display for CreateComputerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateComputerError {
@@ -2509,7 +2509,7 @@ impl CreateConditionalForwarderError {
 }
 impl fmt::Display for CreateConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConditionalForwarderError {
@@ -2565,7 +2565,7 @@ impl CreateDirectoryError {
 }
 impl fmt::Display for CreateDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectoryError {
@@ -2634,7 +2634,7 @@ impl CreateLogSubscriptionError {
 }
 impl fmt::Display for CreateLogSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLogSubscriptionError {
@@ -2696,7 +2696,7 @@ impl CreateMicrosoftADError {
 }
 impl fmt::Display for CreateMicrosoftADError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMicrosoftADError {
@@ -2755,7 +2755,7 @@ impl CreateSnapshotError {
 }
 impl fmt::Display for CreateSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSnapshotError {
@@ -2817,7 +2817,7 @@ impl CreateTrustError {
 }
 impl fmt::Display for CreateTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTrustError {
@@ -2890,7 +2890,7 @@ impl DeleteConditionalForwarderError {
 }
 impl fmt::Display for DeleteConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConditionalForwarderError {
@@ -2938,7 +2938,7 @@ impl DeleteDirectoryError {
 }
 impl fmt::Display for DeleteDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectoryError {
@@ -2992,7 +2992,7 @@ impl DeleteLogSubscriptionError {
 }
 impl fmt::Display for DeleteLogSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLogSubscriptionError {
@@ -3043,7 +3043,7 @@ impl DeleteSnapshotError {
 }
 impl fmt::Display for DeleteSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSnapshotError {
@@ -3099,7 +3099,7 @@ impl DeleteTrustError {
 }
 impl fmt::Display for DeleteTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTrustError {
@@ -3183,7 +3183,7 @@ impl DeregisterCertificateError {
 }
 impl fmt::Display for DeregisterCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterCertificateError {
@@ -3242,7 +3242,7 @@ impl DeregisterEventTopicError {
 }
 impl fmt::Display for DeregisterEventTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterEventTopicError {
@@ -3311,7 +3311,7 @@ impl DescribeCertificateError {
 }
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificateError {
@@ -3388,7 +3388,7 @@ impl DescribeConditionalForwardersError {
 }
 impl fmt::Display for DescribeConditionalForwardersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConditionalForwardersError {
@@ -3452,7 +3452,7 @@ impl DescribeDirectoriesError {
 }
 impl fmt::Display for DescribeDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectoriesError {
@@ -3522,7 +3522,7 @@ impl DescribeDomainControllersError {
 }
 impl fmt::Display for DescribeDomainControllersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainControllersError {
@@ -3579,7 +3579,7 @@ impl DescribeEventTopicsError {
 }
 impl fmt::Display for DescribeEventTopicsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventTopicsError {
@@ -3648,7 +3648,7 @@ impl DescribeLDAPSSettingsError {
 }
 impl fmt::Display for DescribeLDAPSSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLDAPSSettingsError {
@@ -3719,7 +3719,7 @@ impl DescribeSharedDirectoriesError {
 }
 impl fmt::Display for DescribeSharedDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSharedDirectoriesError {
@@ -3779,7 +3779,7 @@ impl DescribeSnapshotsError {
 }
 impl fmt::Display for DescribeSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSnapshotsError {
@@ -3841,7 +3841,7 @@ impl DescribeTrustsError {
 }
 impl fmt::Display for DescribeTrustsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrustsError {
@@ -3909,7 +3909,7 @@ impl DisableLDAPSError {
 }
 impl fmt::Display for DisableLDAPSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableLDAPSError {
@@ -3958,7 +3958,7 @@ impl DisableRadiusError {
 }
 impl fmt::Display for DisableRadiusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableRadiusError {
@@ -4011,7 +4011,7 @@ impl DisableSsoError {
 }
 impl fmt::Display for DisableSsoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableSsoError {
@@ -4083,7 +4083,7 @@ impl EnableLDAPSError {
 }
 impl fmt::Display for EnableLDAPSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableLDAPSError {
@@ -4143,7 +4143,7 @@ impl EnableRadiusError {
 }
 impl fmt::Display for EnableRadiusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableRadiusError {
@@ -4198,7 +4198,7 @@ impl EnableSsoError {
 }
 impl fmt::Display for EnableSsoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableSsoError {
@@ -4247,7 +4247,7 @@ impl GetDirectoryLimitsError {
 }
 impl fmt::Display for GetDirectoryLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDirectoryLimitsError {
@@ -4294,7 +4294,7 @@ impl GetSnapshotLimitsError {
 }
 impl fmt::Display for GetSnapshotLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSnapshotLimitsError {
@@ -4358,7 +4358,7 @@ impl ListCertificatesError {
 }
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCertificatesError {
@@ -4416,7 +4416,7 @@ impl ListIpRoutesError {
 }
 impl fmt::Display for ListIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIpRoutesError {
@@ -4472,7 +4472,7 @@ impl ListLogSubscriptionsError {
 }
 impl fmt::Display for ListLogSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLogSubscriptionsError {
@@ -4527,7 +4527,7 @@ impl ListSchemaExtensionsError {
 }
 impl fmt::Display for ListSchemaExtensionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSchemaExtensionsError {
@@ -4589,7 +4589,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4680,7 +4680,7 @@ impl RegisterCertificateError {
 }
 impl fmt::Display for RegisterCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterCertificateError {
@@ -4738,7 +4738,7 @@ impl RegisterEventTopicError {
 }
 impl fmt::Display for RegisterEventTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterEventTopicError {
@@ -4800,7 +4800,7 @@ impl RejectSharedDirectoryError {
 }
 impl fmt::Display for RejectSharedDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectSharedDirectoryError {
@@ -4857,7 +4857,7 @@ impl RemoveIpRoutesError {
 }
 impl fmt::Display for RemoveIpRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveIpRoutesError {
@@ -4913,7 +4913,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {
@@ -4985,7 +4985,7 @@ impl ResetUserPasswordError {
 }
 impl fmt::Display for ResetUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetUserPasswordError {
@@ -5043,7 +5043,7 @@ impl RestoreFromSnapshotError {
 }
 impl fmt::Display for RestoreFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreFromSnapshotError {
@@ -5126,7 +5126,7 @@ impl ShareDirectoryError {
 }
 impl fmt::Display for ShareDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ShareDirectoryError {
@@ -5201,7 +5201,7 @@ impl StartSchemaExtensionError {
 }
 impl fmt::Display for StartSchemaExtensionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSchemaExtensionError {
@@ -5259,7 +5259,7 @@ impl UnshareDirectoryError {
 }
 impl fmt::Display for UnshareDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnshareDirectoryError {
@@ -5331,7 +5331,7 @@ impl UpdateConditionalForwarderError {
 }
 impl fmt::Display for UpdateConditionalForwarderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConditionalForwarderError {
@@ -5417,7 +5417,7 @@ impl UpdateNumberOfDomainControllersError {
 }
 impl fmt::Display for UpdateNumberOfDomainControllersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNumberOfDomainControllersError {
@@ -5471,7 +5471,7 @@ impl UpdateRadiusError {
 }
 impl fmt::Display for UpdateRadiusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRadiusError {
@@ -5522,7 +5522,7 @@ impl UpdateTrustError {
 }
 impl fmt::Display for UpdateTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTrustError {
@@ -5578,7 +5578,7 @@ impl VerifyTrustError {
 }
 impl fmt::Display for VerifyTrustError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyTrustError {

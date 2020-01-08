@@ -6314,7 +6314,7 @@ impl AddListenerCertificatesError {
 }
 impl fmt::Display for AddListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddListenerCertificatesError {
@@ -6384,7 +6384,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -6543,7 +6543,7 @@ impl CreateListenerError {
 }
 impl fmt::Display for CreateListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateListenerError {
@@ -6695,7 +6695,7 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoadBalancerError {
@@ -6847,7 +6847,7 @@ impl CreateRuleError {
 }
 impl fmt::Display for CreateRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRuleError {
@@ -6923,7 +6923,7 @@ impl CreateTargetGroupError {
 }
 impl fmt::Display for CreateTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTargetGroupError {
@@ -6972,7 +6972,7 @@ impl DeleteListenerError {
 }
 impl fmt::Display for DeleteListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteListenerError {
@@ -7033,7 +7033,7 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoadBalancerError {
@@ -7089,7 +7089,7 @@ impl DeleteRuleError {
 }
 impl fmt::Display for DeleteRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRuleError {
@@ -7137,7 +7137,7 @@ impl DeleteTargetGroupError {
 }
 impl fmt::Display for DeleteTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTargetGroupError {
@@ -7191,7 +7191,7 @@ impl DeregisterTargetsError {
 }
 impl fmt::Display for DeregisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterTargetsError {
@@ -7231,7 +7231,7 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountLimitsError {
@@ -7280,7 +7280,7 @@ impl DescribeListenerCertificatesError {
 }
 impl fmt::Display for DescribeListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeListenerCertificatesError {
@@ -7341,7 +7341,7 @@ impl DescribeListenersError {
 }
 impl fmt::Display for DescribeListenersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeListenersError {
@@ -7394,7 +7394,7 @@ impl DescribeLoadBalancerAttributesError {
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoadBalancerAttributesError {
@@ -7441,7 +7441,7 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoadBalancersError {
@@ -7502,7 +7502,7 @@ impl DescribeRulesError {
 }
 impl fmt::Display for DescribeRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRulesError {
@@ -7551,7 +7551,7 @@ impl DescribeSSLPoliciesError {
 }
 impl fmt::Display for DescribeSSLPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSSLPoliciesError {
@@ -7619,7 +7619,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -7673,7 +7673,7 @@ impl DescribeTargetGroupAttributesError {
 }
 impl fmt::Display for DescribeTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTargetGroupAttributesError {
@@ -7727,7 +7727,7 @@ impl DescribeTargetGroupsError {
 }
 impl fmt::Display for DescribeTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTargetGroupsError {
@@ -7789,7 +7789,7 @@ impl DescribeTargetHealthError {
 }
 impl fmt::Display for DescribeTargetHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTargetHealthError {
@@ -7947,7 +7947,7 @@ impl ModifyListenerError {
 }
 impl fmt::Display for ModifyListenerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyListenerError {
@@ -8022,7 +8022,7 @@ impl ModifyLoadBalancerAttributesError {
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyLoadBalancerAttributesError {
@@ -8142,7 +8142,7 @@ impl ModifyRuleError {
 }
 impl fmt::Display for ModifyRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyRuleError {
@@ -8208,7 +8208,7 @@ impl ModifyTargetGroupError {
 }
 impl fmt::Display for ModifyTargetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyTargetGroupError {
@@ -8269,7 +8269,7 @@ impl ModifyTargetGroupAttributesError {
 }
 impl fmt::Display for ModifyTargetGroupAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyTargetGroupAttributesError {
@@ -8340,7 +8340,7 @@ impl RegisterTargetsError {
 }
 impl fmt::Display for RegisterTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterTargetsError {
@@ -8401,7 +8401,7 @@ impl RemoveListenerCertificatesError {
 }
 impl fmt::Display for RemoveListenerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveListenerCertificatesError {
@@ -8477,7 +8477,7 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsError {
@@ -8544,7 +8544,7 @@ impl SetIpAddressTypeError {
 }
 impl fmt::Display for SetIpAddressTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIpAddressTypeError {
@@ -8607,7 +8607,7 @@ impl SetRulePrioritiesError {
 }
 impl fmt::Display for SetRulePrioritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetRulePrioritiesError {
@@ -8672,7 +8672,7 @@ impl SetSecurityGroupsError {
 }
 impl fmt::Display for SetSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSecurityGroupsError {
@@ -8756,7 +8756,7 @@ impl SetSubnetsError {
 }
 impl fmt::Display for SetSubnetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSubnetsError {

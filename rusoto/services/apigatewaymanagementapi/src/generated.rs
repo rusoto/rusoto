@@ -110,7 +110,7 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConnectionError {
@@ -153,7 +153,7 @@ impl GetConnectionError {
 }
 impl fmt::Display for GetConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectionError {
@@ -203,7 +203,7 @@ impl PostToConnectionError {
 }
 impl fmt::Display for PostToConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostToConnectionError {

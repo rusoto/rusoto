@@ -174,7 +174,7 @@ impl StsSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
             session_duration: duration
                 .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
-            mfa_serial: mfa_serial,
+            mfa_serial,
             mfa_code: None,
         }
     }
@@ -259,13 +259,13 @@ impl StsAssumeRoleSessionCredentialsProvider {
     ) -> StsAssumeRoleSessionCredentialsProvider {
         StsAssumeRoleSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
-            role_arn: role_arn,
-            session_name: session_name,
-            external_id: external_id,
+            role_arn,
+            session_name,
+            external_id,
             session_duration: session_duration
                 .unwrap_or(Duration::seconds(DEFAULT_ROLE_DURATION_SECONDS as i64)),
-            scope_down_policy: scope_down_policy,
-            mfa_serial: mfa_serial,
+            scope_down_policy,
+            mfa_serial,
             mfa_code: None,
         }
     }
@@ -349,13 +349,13 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
     ) -> StsWebIdentityFederationSessionCredentialsProvider {
         StsWebIdentityFederationSessionCredentialsProvider {
             sts_client: Box::new(sts_client),
-            wif_token: wif_token,
-            wif_provider: wif_provider,
-            role_arn: role_arn,
-            session_name: session_name,
+            wif_token,
+            wif_provider,
+            role_arn,
+            session_name,
             session_duration: session_duration
                 .unwrap_or(Duration::seconds(DEFAULT_DURATION_SECONDS as i64)),
-            scope_down_policy: scope_down_policy,
+            scope_down_policy,
         }
     }
 

@@ -3077,7 +3077,7 @@ impl BatchGetItemError {
 }
 impl fmt::Display for BatchGetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetItemError {
@@ -3137,7 +3137,7 @@ impl BatchWriteItemError {
 }
 impl fmt::Display for BatchWriteItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchWriteItemError {
@@ -3201,7 +3201,7 @@ impl CreateBackupError {
 }
 impl fmt::Display for CreateBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBackupError {
@@ -3258,7 +3258,7 @@ impl CreateGlobalTableError {
 }
 impl fmt::Display for CreateGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGlobalTableError {
@@ -3304,7 +3304,7 @@ impl CreateTableError {
 }
 impl fmt::Display for CreateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTableError {
@@ -3354,7 +3354,7 @@ impl DeleteBackupError {
 }
 impl fmt::Display for DeleteBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBackupError {
@@ -3424,7 +3424,7 @@ impl DeleteItemError {
 }
 impl fmt::Display for DeleteItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteItemError {
@@ -3478,7 +3478,7 @@ impl DeleteTableError {
 }
 impl fmt::Display for DeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTableError {
@@ -3519,7 +3519,7 @@ impl DescribeBackupError {
 }
 impl fmt::Display for DescribeBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBackupError {
@@ -3562,7 +3562,7 @@ impl DescribeContinuousBackupsError {
 }
 impl fmt::Display for DescribeContinuousBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeContinuousBackupsError {
@@ -3607,7 +3607,7 @@ impl DescribeContributorInsightsError {
 }
 impl fmt::Display for DescribeContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeContributorInsightsError {
@@ -3635,7 +3635,7 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointsError {
@@ -3675,7 +3675,7 @@ impl DescribeGlobalTableError {
 }
 impl fmt::Display for DescribeGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGlobalTableError {
@@ -3720,7 +3720,7 @@ impl DescribeGlobalTableSettingsError {
 }
 impl fmt::Display for DescribeGlobalTableSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGlobalTableSettingsError {
@@ -3754,7 +3754,7 @@ impl DescribeLimitsError {
 }
 impl fmt::Display for DescribeLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLimitsError {
@@ -3792,7 +3792,7 @@ impl DescribeTableError {
 }
 impl fmt::Display for DescribeTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTableError {
@@ -3837,7 +3837,7 @@ impl DescribeTableReplicaAutoScalingError {
 }
 impl fmt::Display for DescribeTableReplicaAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTableReplicaAutoScalingError {
@@ -3878,7 +3878,7 @@ impl DescribeTimeToLiveError {
 }
 impl fmt::Display for DescribeTimeToLiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTimeToLiveError {
@@ -3929,7 +3929,7 @@ impl GetItemError {
 }
 impl fmt::Display for GetItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetItemError {
@@ -3965,7 +3965,7 @@ impl ListBackupsError {
 }
 impl fmt::Display for ListBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBackupsError {
@@ -4007,7 +4007,7 @@ impl ListContributorInsightsError {
 }
 impl fmt::Display for ListContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListContributorInsightsError {
@@ -4043,7 +4043,7 @@ impl ListGlobalTablesError {
 }
 impl fmt::Display for ListGlobalTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGlobalTablesError {
@@ -4076,7 +4076,7 @@ impl ListTablesError {
 }
 impl fmt::Display for ListTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTablesError {
@@ -4116,7 +4116,7 @@ impl ListTagsOfResourceError {
 }
 impl fmt::Display for ListTagsOfResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsOfResourceError {
@@ -4184,7 +4184,7 @@ impl PutItemError {
 }
 impl fmt::Display for PutItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutItemError {
@@ -4238,7 +4238,7 @@ impl QueryError {
 }
 impl fmt::Display for QueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for QueryError {
@@ -4307,7 +4307,7 @@ impl RestoreTableFromBackupError {
 }
 impl fmt::Display for RestoreTableFromBackupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreTableFromBackupError {
@@ -4389,7 +4389,7 @@ impl RestoreTableToPointInTimeError {
 }
 impl fmt::Display for RestoreTableToPointInTimeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreTableToPointInTimeError {
@@ -4443,7 +4443,7 @@ impl ScanError {
 }
 impl fmt::Display for ScanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ScanError {
@@ -4494,7 +4494,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4558,7 +4558,7 @@ impl TransactGetItemsError {
 }
 impl fmt::Display for TransactGetItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TransactGetItemsError {
@@ -4637,7 +4637,7 @@ impl TransactWriteItemsError {
 }
 impl fmt::Display for TransactWriteItemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TransactWriteItemsError {
@@ -4691,7 +4691,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -4743,7 +4743,7 @@ impl UpdateContinuousBackupsError {
 }
 impl fmt::Display for UpdateContinuousBackupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContinuousBackupsError {
@@ -4787,7 +4787,7 @@ impl UpdateContributorInsightsError {
 }
 impl fmt::Display for UpdateContributorInsightsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContributorInsightsError {
@@ -4847,7 +4847,7 @@ impl UpdateGlobalTableError {
 }
 impl fmt::Display for UpdateGlobalTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGlobalTableError {
@@ -4921,7 +4921,7 @@ impl UpdateGlobalTableSettingsError {
 }
 impl fmt::Display for UpdateGlobalTableSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGlobalTableSettingsError {
@@ -4993,7 +4993,7 @@ impl UpdateItemError {
 }
 impl fmt::Display for UpdateItemError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateItemError {
@@ -5047,7 +5047,7 @@ impl UpdateTableError {
 }
 impl fmt::Display for UpdateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTableError {
@@ -5108,7 +5108,7 @@ impl UpdateTableReplicaAutoScalingError {
 }
 impl fmt::Display for UpdateTableReplicaAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTableReplicaAutoScalingError {
@@ -5161,7 +5161,7 @@ impl UpdateTimeToLiveError {
 }
 impl fmt::Display for UpdateTimeToLiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTimeToLiveError {

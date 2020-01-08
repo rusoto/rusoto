@@ -758,7 +758,7 @@ impl AddAttachmentsToSetError {
 }
 impl fmt::Display for AddAttachmentsToSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddAttachmentsToSetError {
@@ -818,7 +818,7 @@ impl AddCommunicationToCaseError {
 }
 impl fmt::Display for AddCommunicationToCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddCommunicationToCaseError {
@@ -871,7 +871,7 @@ impl CreateCaseError {
 }
 impl fmt::Display for CreateCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCaseError {
@@ -923,7 +923,7 @@ impl DescribeAttachmentError {
 }
 impl fmt::Display for DescribeAttachmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAttachmentError {
@@ -963,7 +963,7 @@ impl DescribeCasesError {
 }
 impl fmt::Display for DescribeCasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCasesError {
@@ -1006,7 +1006,7 @@ impl DescribeCommunicationsError {
 }
 impl fmt::Display for DescribeCommunicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCommunicationsError {
@@ -1042,7 +1042,7 @@ impl DescribeServicesError {
 }
 impl fmt::Display for DescribeServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServicesError {
@@ -1077,7 +1077,7 @@ impl DescribeSeverityLevelsError {
 }
 impl fmt::Display for DescribeSeverityLevelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSeverityLevelsError {
@@ -1116,7 +1116,7 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckRefreshStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrustedAdvisorCheckRefreshStatusesError {
@@ -1155,7 +1155,7 @@ impl DescribeTrustedAdvisorCheckResultError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckResultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrustedAdvisorCheckResultError {
@@ -1192,7 +1192,7 @@ impl DescribeTrustedAdvisorCheckSummariesError {
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckSummariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrustedAdvisorCheckSummariesError {
@@ -1229,7 +1229,7 @@ impl DescribeTrustedAdvisorChecksError {
 }
 impl fmt::Display for DescribeTrustedAdvisorChecksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrustedAdvisorChecksError {
@@ -1266,7 +1266,7 @@ impl RefreshTrustedAdvisorCheckError {
 }
 impl fmt::Display for RefreshTrustedAdvisorCheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RefreshTrustedAdvisorCheckError {
@@ -1304,7 +1304,7 @@ impl ResolveCaseError {
 }
 impl fmt::Display for ResolveCaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResolveCaseError {

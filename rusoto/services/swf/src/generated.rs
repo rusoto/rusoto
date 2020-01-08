@@ -2932,7 +2932,7 @@ impl CountClosedWorkflowExecutionsError {
 }
 impl fmt::Display for CountClosedWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CountClosedWorkflowExecutionsError {
@@ -2977,7 +2977,7 @@ impl CountOpenWorkflowExecutionsError {
 }
 impl fmt::Display for CountOpenWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CountOpenWorkflowExecutionsError {
@@ -3020,7 +3020,7 @@ impl CountPendingActivityTasksError {
 }
 impl fmt::Display for CountPendingActivityTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CountPendingActivityTasksError {
@@ -3063,7 +3063,7 @@ impl CountPendingDecisionTasksError {
 }
 impl fmt::Display for CountPendingDecisionTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CountPendingDecisionTasksError {
@@ -3113,7 +3113,7 @@ impl DeprecateActivityTypeError {
 }
 impl fmt::Display for DeprecateActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeprecateActivityTypeError {
@@ -3164,7 +3164,7 @@ impl DeprecateDomainError {
 }
 impl fmt::Display for DeprecateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeprecateDomainError {
@@ -3215,7 +3215,7 @@ impl DeprecateWorkflowTypeError {
 }
 impl fmt::Display for DeprecateWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeprecateWorkflowTypeError {
@@ -3259,7 +3259,7 @@ impl DescribeActivityTypeError {
 }
 impl fmt::Display for DescribeActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActivityTypeError {
@@ -3300,7 +3300,7 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainError {
@@ -3343,7 +3343,7 @@ impl DescribeWorkflowExecutionError {
 }
 impl fmt::Display for DescribeWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkflowExecutionError {
@@ -3386,7 +3386,7 @@ impl DescribeWorkflowTypeError {
 }
 impl fmt::Display for DescribeWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWorkflowTypeError {
@@ -3431,7 +3431,7 @@ impl GetWorkflowExecutionHistoryError {
 }
 impl fmt::Display for GetWorkflowExecutionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkflowExecutionHistoryError {
@@ -3474,7 +3474,7 @@ impl ListActivityTypesError {
 }
 impl fmt::Display for ListActivityTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActivityTypesError {
@@ -3519,7 +3519,7 @@ impl ListClosedWorkflowExecutionsError {
 }
 impl fmt::Display for ListClosedWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClosedWorkflowExecutionsError {
@@ -3555,7 +3555,7 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainsError {
@@ -3599,7 +3599,7 @@ impl ListOpenWorkflowExecutionsError {
 }
 impl fmt::Display for ListOpenWorkflowExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOpenWorkflowExecutionsError {
@@ -3649,7 +3649,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3693,7 +3693,7 @@ impl ListWorkflowTypesError {
 }
 impl fmt::Display for ListWorkflowTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkflowTypesError {
@@ -3743,7 +3743,7 @@ impl PollForActivityTaskError {
 }
 impl fmt::Display for PollForActivityTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PollForActivityTaskError {
@@ -3794,7 +3794,7 @@ impl PollForDecisionTaskError {
 }
 impl fmt::Display for PollForDecisionTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PollForDecisionTaskError {
@@ -3840,7 +3840,7 @@ impl RecordActivityTaskHeartbeatError {
 }
 impl fmt::Display for RecordActivityTaskHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RecordActivityTaskHeartbeatError {
@@ -3897,7 +3897,7 @@ impl RegisterActivityTypeError {
 }
 impl fmt::Display for RegisterActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterActivityTypeError {
@@ -3952,7 +3952,7 @@ impl RegisterDomainError {
 }
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterDomainError {
@@ -4011,7 +4011,7 @@ impl RegisterWorkflowTypeError {
 }
 impl fmt::Display for RegisterWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterWorkflowTypeError {
@@ -4058,7 +4058,7 @@ impl RequestCancelWorkflowExecutionError {
 }
 impl fmt::Display for RequestCancelWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RequestCancelWorkflowExecutionError {
@@ -4103,7 +4103,7 @@ impl RespondActivityTaskCanceledError {
 }
 impl fmt::Display for RespondActivityTaskCanceledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RespondActivityTaskCanceledError {
@@ -4148,7 +4148,7 @@ impl RespondActivityTaskCompletedError {
 }
 impl fmt::Display for RespondActivityTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RespondActivityTaskCompletedError {
@@ -4191,7 +4191,7 @@ impl RespondActivityTaskFailedError {
 }
 impl fmt::Display for RespondActivityTaskFailedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RespondActivityTaskFailedError {
@@ -4236,7 +4236,7 @@ impl RespondDecisionTaskCompletedError {
 }
 impl fmt::Display for RespondDecisionTaskCompletedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RespondDecisionTaskCompletedError {
@@ -4279,7 +4279,7 @@ impl SignalWorkflowExecutionError {
 }
 impl fmt::Display for SignalWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SignalWorkflowExecutionError {
@@ -4350,7 +4350,7 @@ impl StartWorkflowExecutionError {
 }
 impl fmt::Display for StartWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartWorkflowExecutionError {
@@ -4405,7 +4405,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4452,7 +4452,7 @@ impl TerminateWorkflowExecutionError {
 }
 impl fmt::Display for TerminateWorkflowExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateWorkflowExecutionError {
@@ -4502,7 +4502,7 @@ impl UndeprecateActivityTypeError {
 }
 impl fmt::Display for UndeprecateActivityTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UndeprecateActivityTypeError {
@@ -4553,7 +4553,7 @@ impl UndeprecateDomainError {
 }
 impl fmt::Display for UndeprecateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UndeprecateDomainError {
@@ -4604,7 +4604,7 @@ impl UndeprecateWorkflowTypeError {
 }
 impl fmt::Display for UndeprecateWorkflowTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UndeprecateWorkflowTypeError {
@@ -4651,7 +4651,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {

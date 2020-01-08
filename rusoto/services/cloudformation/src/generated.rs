@@ -8927,7 +8927,7 @@ impl CancelUpdateStackError {
 }
 impl fmt::Display for CancelUpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelUpdateStackError {
@@ -8974,7 +8974,7 @@ impl ContinueUpdateRollbackError {
 }
 impl fmt::Display for ContinueUpdateRollbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ContinueUpdateRollbackError {
@@ -9035,7 +9035,7 @@ impl CreateChangeSetError {
 }
 impl fmt::Display for CreateChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateChangeSetError {
@@ -9105,7 +9105,7 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStackError {
@@ -9192,7 +9192,7 @@ impl CreateStackInstancesError {
 }
 impl fmt::Display for CreateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStackInstancesError {
@@ -9258,7 +9258,7 @@ impl CreateStackSetError {
 }
 impl fmt::Display for CreateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStackSetError {
@@ -9307,7 +9307,7 @@ impl DeleteChangeSetError {
 }
 impl fmt::Display for DeleteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteChangeSetError {
@@ -9354,7 +9354,7 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStackError {
@@ -9431,7 +9431,7 @@ impl DeleteStackInstancesError {
 }
 impl fmt::Display for DeleteStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStackInstancesError {
@@ -9489,7 +9489,7 @@ impl DeleteStackSetError {
 }
 impl fmt::Display for DeleteStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStackSetError {
@@ -9544,7 +9544,7 @@ impl DeregisterTypeError {
 }
 impl fmt::Display for DeregisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterTypeError {
@@ -9584,7 +9584,7 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountLimitsError {
@@ -9629,7 +9629,7 @@ impl DescribeChangeSetError {
 }
 impl fmt::Display for DescribeChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeChangeSetError {
@@ -9670,7 +9670,7 @@ impl DescribeStackDriftDetectionStatusError {
 }
 impl fmt::Display for DescribeStackDriftDetectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackDriftDetectionStatusError {
@@ -9707,7 +9707,7 @@ impl DescribeStackEventsError {
 }
 impl fmt::Display for DescribeStackEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackEventsError {
@@ -9759,7 +9759,7 @@ impl DescribeStackInstanceError {
 }
 impl fmt::Display for DescribeStackInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackInstanceError {
@@ -9799,7 +9799,7 @@ impl DescribeStackResourceError {
 }
 impl fmt::Display for DescribeStackResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackResourceError {
@@ -9838,7 +9838,7 @@ impl DescribeStackResourceDriftsError {
 }
 impl fmt::Display for DescribeStackResourceDriftsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackResourceDriftsError {
@@ -9875,7 +9875,7 @@ impl DescribeStackResourcesError {
 }
 impl fmt::Display for DescribeStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackResourcesError {
@@ -9920,7 +9920,7 @@ impl DescribeStackSetError {
 }
 impl fmt::Display for DescribeStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackSetError {
@@ -9974,7 +9974,7 @@ impl DescribeStackSetOperationError {
 }
 impl fmt::Display for DescribeStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackSetOperationError {
@@ -10014,7 +10014,7 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStacksError {
@@ -10066,7 +10066,7 @@ impl DescribeTypeError {
 }
 impl fmt::Display for DescribeTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTypeError {
@@ -10114,7 +10114,7 @@ impl DescribeTypeRegistrationError {
 }
 impl fmt::Display for DescribeTypeRegistrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTypeRegistrationError {
@@ -10153,7 +10153,7 @@ impl DetectStackDriftError {
 }
 impl fmt::Display for DetectStackDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectStackDriftError {
@@ -10190,7 +10190,7 @@ impl DetectStackResourceDriftError {
 }
 impl fmt::Display for DetectStackResourceDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectStackResourceDriftError {
@@ -10249,7 +10249,7 @@ impl DetectStackSetDriftError {
 }
 impl fmt::Display for DetectStackSetDriftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectStackSetDriftError {
@@ -10290,7 +10290,7 @@ impl EstimateTemplateCostError {
 }
 impl fmt::Display for EstimateTemplateCostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EstimateTemplateCostError {
@@ -10356,7 +10356,7 @@ impl ExecuteChangeSetError {
 }
 impl fmt::Display for ExecuteChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecuteChangeSetError {
@@ -10398,7 +10398,7 @@ impl GetStackPolicyError {
 }
 impl fmt::Display for GetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStackPolicyError {
@@ -10443,7 +10443,7 @@ impl GetTemplateError {
 }
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTemplateError {
@@ -10490,7 +10490,7 @@ impl GetTemplateSummaryError {
 }
 impl fmt::Display for GetTemplateSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTemplateSummaryError {
@@ -10529,7 +10529,7 @@ impl ListChangeSetsError {
 }
 impl fmt::Display for ListChangeSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListChangeSetsError {
@@ -10566,7 +10566,7 @@ impl ListExportsError {
 }
 impl fmt::Display for ListExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListExportsError {
@@ -10603,7 +10603,7 @@ impl ListImportsError {
 }
 impl fmt::Display for ListImportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListImportsError {
@@ -10648,7 +10648,7 @@ impl ListStackInstancesError {
 }
 impl fmt::Display for ListStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackInstancesError {
@@ -10687,7 +10687,7 @@ impl ListStackResourcesError {
 }
 impl fmt::Display for ListStackResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackResourcesError {
@@ -10745,7 +10745,7 @@ impl ListStackSetOperationResultsError {
 }
 impl fmt::Display for ListStackSetOperationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackSetOperationResultsError {
@@ -10793,7 +10793,7 @@ impl ListStackSetOperationsError {
 }
 impl fmt::Display for ListStackSetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackSetOperationsError {
@@ -10832,7 +10832,7 @@ impl ListStackSetsError {
 }
 impl fmt::Display for ListStackSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackSetsError {
@@ -10869,7 +10869,7 @@ impl ListStacksError {
 }
 impl fmt::Display for ListStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStacksError {
@@ -10914,7 +10914,7 @@ impl ListTypeRegistrationsError {
 }
 impl fmt::Display for ListTypeRegistrationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypeRegistrationsError {
@@ -10961,7 +10961,7 @@ impl ListTypeVersionsError {
 }
 impl fmt::Display for ListTypeVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypeVersionsError {
@@ -11008,7 +11008,7 @@ impl ListTypesError {
 }
 impl fmt::Display for ListTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypesError {
@@ -11066,7 +11066,7 @@ impl RecordHandlerProgressError {
 }
 impl fmt::Display for RecordHandlerProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RecordHandlerProgressError {
@@ -11114,7 +11114,7 @@ impl RegisterTypeError {
 }
 impl fmt::Display for RegisterTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterTypeError {
@@ -11153,7 +11153,7 @@ impl SetStackPolicyError {
 }
 impl fmt::Display for SetStackPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetStackPolicyError {
@@ -11205,7 +11205,7 @@ impl SetTypeDefaultVersionError {
 }
 impl fmt::Display for SetTypeDefaultVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTypeDefaultVersionError {
@@ -11245,7 +11245,7 @@ impl SignalResourceError {
 }
 impl fmt::Display for SignalResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SignalResourceError {
@@ -11304,7 +11304,7 @@ impl StopStackSetOperationError {
 }
 impl fmt::Display for StopStackSetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopStackSetOperationError {
@@ -11360,7 +11360,7 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStackError {
@@ -11445,7 +11445,7 @@ impl UpdateStackInstancesError {
 }
 impl fmt::Display for UpdateStackInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStackInstancesError {
@@ -11532,7 +11532,7 @@ impl UpdateStackSetError {
 }
 impl fmt::Display for UpdateStackSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStackSetError {
@@ -11578,7 +11578,7 @@ impl UpdateTerminationProtectionError {
 }
 impl fmt::Display for UpdateTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTerminationProtectionError {
@@ -11615,7 +11615,7 @@ impl ValidateTemplateError {
 }
 impl fmt::Display for ValidateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ValidateTemplateError {

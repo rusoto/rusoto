@@ -1654,7 +1654,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -1705,7 +1705,7 @@ impl CreateBatchPredictionError {
 }
 impl fmt::Display for CreateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBatchPredictionError {
@@ -1756,7 +1756,7 @@ impl CreateDataSourceFromRDSError {
 }
 impl fmt::Display for CreateDataSourceFromRDSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDataSourceFromRDSError {
@@ -1809,7 +1809,7 @@ impl CreateDataSourceFromRedshiftError {
 }
 impl fmt::Display for CreateDataSourceFromRedshiftError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDataSourceFromRedshiftError {
@@ -1858,7 +1858,7 @@ impl CreateDataSourceFromS3Error {
 }
 impl fmt::Display for CreateDataSourceFromS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDataSourceFromS3Error {
@@ -1905,7 +1905,7 @@ impl CreateEvaluationError {
 }
 impl fmt::Display for CreateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEvaluationError {
@@ -1952,7 +1952,7 @@ impl CreateMLModelError {
 }
 impl fmt::Display for CreateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMLModelError {
@@ -2001,7 +2001,7 @@ impl CreateRealtimeEndpointError {
 }
 impl fmt::Display for CreateRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRealtimeEndpointError {
@@ -2050,7 +2050,7 @@ impl DeleteBatchPredictionError {
 }
 impl fmt::Display for DeleteBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBatchPredictionError {
@@ -2095,7 +2095,7 @@ impl DeleteDataSourceError {
 }
 impl fmt::Display for DeleteDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDataSourceError {
@@ -2140,7 +2140,7 @@ impl DeleteEvaluationError {
 }
 impl fmt::Display for DeleteEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEvaluationError {
@@ -2185,7 +2185,7 @@ impl DeleteMLModelError {
 }
 impl fmt::Display for DeleteMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMLModelError {
@@ -2234,7 +2234,7 @@ impl DeleteRealtimeEndpointError {
 }
 impl fmt::Display for DeleteRealtimeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRealtimeEndpointError {
@@ -2284,7 +2284,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -2329,7 +2329,7 @@ impl DescribeBatchPredictionsError {
 }
 impl fmt::Display for DescribeBatchPredictionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBatchPredictionsError {
@@ -2368,7 +2368,7 @@ impl DescribeDataSourcesError {
 }
 impl fmt::Display for DescribeDataSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDataSourcesError {
@@ -2407,7 +2407,7 @@ impl DescribeEvaluationsError {
 }
 impl fmt::Display for DescribeEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEvaluationsError {
@@ -2446,7 +2446,7 @@ impl DescribeMLModelsError {
 }
 impl fmt::Display for DescribeMLModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMLModelsError {
@@ -2490,7 +2490,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -2535,7 +2535,7 @@ impl GetBatchPredictionError {
 }
 impl fmt::Display for GetBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBatchPredictionError {
@@ -2580,7 +2580,7 @@ impl GetDataSourceError {
 }
 impl fmt::Display for GetDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDataSourceError {
@@ -2625,7 +2625,7 @@ impl GetEvaluationError {
 }
 impl fmt::Display for GetEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEvaluationError {
@@ -2670,7 +2670,7 @@ impl GetMLModelError {
 }
 impl fmt::Display for GetMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMLModelError {
@@ -2725,7 +2725,7 @@ impl PredictError {
 }
 impl fmt::Display for PredictError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PredictError {
@@ -2776,7 +2776,7 @@ impl UpdateBatchPredictionError {
 }
 impl fmt::Display for UpdateBatchPredictionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBatchPredictionError {
@@ -2821,7 +2821,7 @@ impl UpdateDataSourceError {
 }
 impl fmt::Display for UpdateDataSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDataSourceError {
@@ -2866,7 +2866,7 @@ impl UpdateEvaluationError {
 }
 impl fmt::Display for UpdateEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEvaluationError {
@@ -2911,7 +2911,7 @@ impl UpdateMLModelError {
 }
 impl fmt::Display for UpdateMLModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMLModelError {

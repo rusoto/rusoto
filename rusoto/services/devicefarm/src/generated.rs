@@ -3358,7 +3358,7 @@ impl CreateDevicePoolError {
 }
 impl fmt::Display for CreateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDevicePoolError {
@@ -3411,7 +3411,7 @@ impl CreateInstanceProfileError {
 }
 impl fmt::Display for CreateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstanceProfileError {
@@ -3462,7 +3462,7 @@ impl CreateNetworkProfileError {
 }
 impl fmt::Display for CreateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNetworkProfileError {
@@ -3518,7 +3518,7 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProjectError {
@@ -3574,7 +3574,7 @@ impl CreateRemoteAccessSessionError {
 }
 impl fmt::Display for CreateRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRemoteAccessSessionError {
@@ -3612,7 +3612,7 @@ impl CreateTestGridProjectError {
 }
 impl fmt::Display for CreateTestGridProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTestGridProjectError {
@@ -3655,7 +3655,7 @@ impl CreateTestGridUrlError {
 }
 impl fmt::Display for CreateTestGridUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTestGridUrlError {
@@ -3705,7 +3705,7 @@ impl CreateUploadError {
 }
 impl fmt::Display for CreateUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUploadError {
@@ -3755,7 +3755,7 @@ impl CreateVPCEConfigurationError {
 }
 impl fmt::Display for CreateVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVPCEConfigurationError {
@@ -3805,7 +3805,7 @@ impl DeleteDevicePoolError {
 }
 impl fmt::Display for DeleteDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDevicePoolError {
@@ -3858,7 +3858,7 @@ impl DeleteInstanceProfileError {
 }
 impl fmt::Display for DeleteInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstanceProfileError {
@@ -3909,7 +3909,7 @@ impl DeleteNetworkProfileError {
 }
 impl fmt::Display for DeleteNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNetworkProfileError {
@@ -3960,7 +3960,7 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProjectError {
@@ -4015,7 +4015,7 @@ impl DeleteRemoteAccessSessionError {
 }
 impl fmt::Display for DeleteRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRemoteAccessSessionError {
@@ -4066,7 +4066,7 @@ impl DeleteRunError {
 }
 impl fmt::Display for DeleteRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRunError {
@@ -4119,7 +4119,7 @@ impl DeleteTestGridProjectError {
 }
 impl fmt::Display for DeleteTestGridProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTestGridProjectError {
@@ -4170,7 +4170,7 @@ impl DeleteUploadError {
 }
 impl fmt::Display for DeleteUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUploadError {
@@ -4225,7 +4225,7 @@ impl DeleteVPCEConfigurationError {
 }
 impl fmt::Display for DeleteVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVPCEConfigurationError {
@@ -4276,7 +4276,7 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountSettingsError {
@@ -4327,7 +4327,7 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceError {
@@ -4378,7 +4378,7 @@ impl GetDeviceInstanceError {
 }
 impl fmt::Display for GetDeviceInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceInstanceError {
@@ -4429,7 +4429,7 @@ impl GetDevicePoolError {
 }
 impl fmt::Display for GetDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDevicePoolError {
@@ -4486,7 +4486,7 @@ impl GetDevicePoolCompatibilityError {
 }
 impl fmt::Display for GetDevicePoolCompatibilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDevicePoolCompatibilityError {
@@ -4537,7 +4537,7 @@ impl GetInstanceProfileError {
 }
 impl fmt::Display for GetInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceProfileError {
@@ -4584,7 +4584,7 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobError {
@@ -4635,7 +4635,7 @@ impl GetNetworkProfileError {
 }
 impl fmt::Display for GetNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetNetworkProfileError {
@@ -4691,7 +4691,7 @@ impl GetOfferingStatusError {
 }
 impl fmt::Display for GetOfferingStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOfferingStatusError {
@@ -4743,7 +4743,7 @@ impl GetProjectError {
 }
 impl fmt::Display for GetProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetProjectError {
@@ -4798,7 +4798,7 @@ impl GetRemoteAccessSessionError {
 }
 impl fmt::Display for GetRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRemoteAccessSessionError {
@@ -4845,7 +4845,7 @@ impl GetRunError {
 }
 impl fmt::Display for GetRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRunError {
@@ -4896,7 +4896,7 @@ impl GetSuiteError {
 }
 impl fmt::Display for GetSuiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSuiteError {
@@ -4947,7 +4947,7 @@ impl GetTestError {
 }
 impl fmt::Display for GetTestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTestError {
@@ -4993,7 +4993,7 @@ impl GetTestGridProjectError {
 }
 impl fmt::Display for GetTestGridProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTestGridProjectError {
@@ -5038,7 +5038,7 @@ impl GetTestGridSessionError {
 }
 impl fmt::Display for GetTestGridSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTestGridSessionError {
@@ -5088,7 +5088,7 @@ impl GetUploadError {
 }
 impl fmt::Display for GetUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUploadError {
@@ -5134,7 +5134,7 @@ impl GetVPCEConfigurationError {
 }
 impl fmt::Display for GetVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVPCEConfigurationError {
@@ -5194,7 +5194,7 @@ impl InstallToRemoteAccessSessionError {
 }
 impl fmt::Display for InstallToRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InstallToRemoteAccessSessionError {
@@ -5245,7 +5245,7 @@ impl ListArtifactsError {
 }
 impl fmt::Display for ListArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListArtifactsError {
@@ -5296,7 +5296,7 @@ impl ListDeviceInstancesError {
 }
 impl fmt::Display for ListDeviceInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeviceInstancesError {
@@ -5347,7 +5347,7 @@ impl ListDevicePoolsError {
 }
 impl fmt::Display for ListDevicePoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevicePoolsError {
@@ -5398,7 +5398,7 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevicesError {
@@ -5449,7 +5449,7 @@ impl ListInstanceProfilesError {
 }
 impl fmt::Display for ListInstanceProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstanceProfilesError {
@@ -5500,7 +5500,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -5551,7 +5551,7 @@ impl ListNetworkProfilesError {
 }
 impl fmt::Display for ListNetworkProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNetworkProfilesError {
@@ -5611,7 +5611,7 @@ impl ListOfferingPromotionsError {
 }
 impl fmt::Display for ListOfferingPromotionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOfferingPromotionsError {
@@ -5674,7 +5674,7 @@ impl ListOfferingTransactionsError {
 }
 impl fmt::Display for ListOfferingTransactionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOfferingTransactionsError {
@@ -5731,7 +5731,7 @@ impl ListOfferingsError {
 }
 impl fmt::Display for ListOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOfferingsError {
@@ -5783,7 +5783,7 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProjectsError {
@@ -5838,7 +5838,7 @@ impl ListRemoteAccessSessionsError {
 }
 impl fmt::Display for ListRemoteAccessSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRemoteAccessSessionsError {
@@ -5889,7 +5889,7 @@ impl ListRunsError {
 }
 impl fmt::Display for ListRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRunsError {
@@ -5940,7 +5940,7 @@ impl ListSamplesError {
 }
 impl fmt::Display for ListSamplesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSamplesError {
@@ -5991,7 +5991,7 @@ impl ListSuitesError {
 }
 impl fmt::Display for ListSuitesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSuitesError {
@@ -6037,7 +6037,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -6079,7 +6079,7 @@ impl ListTestGridProjectsError {
 }
 impl fmt::Display for ListTestGridProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTestGridProjectsError {
@@ -6127,7 +6127,7 @@ impl ListTestGridSessionActionsError {
 }
 impl fmt::Display for ListTestGridSessionActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTestGridSessionActionsError {
@@ -6180,7 +6180,7 @@ impl ListTestGridSessionArtifactsError {
 }
 impl fmt::Display for ListTestGridSessionArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTestGridSessionArtifactsError {
@@ -6227,7 +6227,7 @@ impl ListTestGridSessionsError {
 }
 impl fmt::Display for ListTestGridSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTestGridSessionsError {
@@ -6277,7 +6277,7 @@ impl ListTestsError {
 }
 impl fmt::Display for ListTestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTestsError {
@@ -6328,7 +6328,7 @@ impl ListUniqueProblemsError {
 }
 impl fmt::Display for ListUniqueProblemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUniqueProblemsError {
@@ -6379,7 +6379,7 @@ impl ListUploadsError {
 }
 impl fmt::Display for ListUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUploadsError {
@@ -6422,7 +6422,7 @@ impl ListVPCEConfigurationsError {
 }
 impl fmt::Display for ListVPCEConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVPCEConfigurationsError {
@@ -6476,7 +6476,7 @@ impl PurchaseOfferingError {
 }
 impl fmt::Display for PurchaseOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PurchaseOfferingError {
@@ -6533,7 +6533,7 @@ impl RenewOfferingError {
 }
 impl fmt::Display for RenewOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RenewOfferingError {
@@ -6590,7 +6590,7 @@ impl ScheduleRunError {
 }
 impl fmt::Display for ScheduleRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ScheduleRunError {
@@ -6642,7 +6642,7 @@ impl StopJobError {
 }
 impl fmt::Display for StopJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopJobError {
@@ -6697,7 +6697,7 @@ impl StopRemoteAccessSessionError {
 }
 impl fmt::Display for StopRemoteAccessSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopRemoteAccessSessionError {
@@ -6748,7 +6748,7 @@ impl StopRunError {
 }
 impl fmt::Display for StopRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopRunError {
@@ -6804,7 +6804,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -6851,7 +6851,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -6901,7 +6901,7 @@ impl UpdateDeviceInstanceError {
 }
 impl fmt::Display for UpdateDeviceInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeviceInstanceError {
@@ -6952,7 +6952,7 @@ impl UpdateDevicePoolError {
 }
 impl fmt::Display for UpdateDevicePoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDevicePoolError {
@@ -7005,7 +7005,7 @@ impl UpdateInstanceProfileError {
 }
 impl fmt::Display for UpdateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInstanceProfileError {
@@ -7056,7 +7056,7 @@ impl UpdateNetworkProfileError {
 }
 impl fmt::Display for UpdateNetworkProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNetworkProfileError {
@@ -7107,7 +7107,7 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProjectError {
@@ -7155,7 +7155,7 @@ impl UpdateTestGridProjectError {
 }
 impl fmt::Display for UpdateTestGridProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTestGridProjectError {
@@ -7205,7 +7205,7 @@ impl UpdateUploadError {
 }
 impl fmt::Display for UpdateUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUploadError {
@@ -7260,7 +7260,7 @@ impl UpdateVPCEConfigurationError {
 }
 impl fmt::Display for UpdateVPCEConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVPCEConfigurationError {

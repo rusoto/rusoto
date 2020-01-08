@@ -1089,7 +1089,7 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterError {
@@ -1159,7 +1159,7 @@ impl CreateFargateProfileError {
 }
 impl fmt::Display for CreateFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFargateProfileError {
@@ -1229,7 +1229,7 @@ impl CreateNodegroupError {
 }
 impl fmt::Display for CreateNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNodegroupError {
@@ -1288,7 +1288,7 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterError {
@@ -1344,7 +1344,7 @@ impl DeleteFargateProfileError {
 }
 impl fmt::Display for DeleteFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFargateProfileError {
@@ -1405,7 +1405,7 @@ impl DeleteNodegroupError {
 }
 impl fmt::Display for DeleteNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNodegroupError {
@@ -1458,7 +1458,7 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterError {
@@ -1513,7 +1513,7 @@ impl DescribeFargateProfileError {
 }
 impl fmt::Display for DescribeFargateProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFargateProfileError {
@@ -1571,7 +1571,7 @@ impl DescribeNodegroupError {
 }
 impl fmt::Display for DescribeNodegroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNodegroupError {
@@ -1623,7 +1623,7 @@ impl DescribeUpdateError {
 }
 impl fmt::Display for DescribeUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUpdateError {
@@ -1674,7 +1674,7 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClustersError {
@@ -1729,7 +1729,7 @@ impl ListFargateProfilesError {
 }
 impl fmt::Display for ListFargateProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFargateProfilesError {
@@ -1785,7 +1785,7 @@ impl ListNodegroupsError {
 }
 impl fmt::Display for ListNodegroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNodegroupsError {
@@ -1827,7 +1827,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1876,7 +1876,7 @@ impl ListUpdatesError {
 }
 impl fmt::Display for ListUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUpdatesError {
@@ -1917,7 +1917,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1956,7 +1956,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2019,7 +2019,7 @@ impl UpdateClusterConfigError {
 }
 impl fmt::Display for UpdateClusterConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClusterConfigError {
@@ -2086,7 +2086,7 @@ impl UpdateClusterVersionError {
 }
 impl fmt::Display for UpdateClusterVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClusterVersionError {
@@ -2155,7 +2155,7 @@ impl UpdateNodegroupConfigError {
 }
 impl fmt::Display for UpdateNodegroupConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNodegroupConfigError {
@@ -2226,7 +2226,7 @@ impl UpdateNodegroupVersionError {
 }
 impl fmt::Display for UpdateNodegroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNodegroupVersionError {

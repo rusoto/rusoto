@@ -901,7 +901,7 @@ impl CheckDomainAvailabilityError {
 }
 impl fmt::Display for CheckDomainAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CheckDomainAvailabilityError {
@@ -946,7 +946,7 @@ impl CheckDomainTransferabilityError {
 }
 impl fmt::Display for CheckDomainTransferabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CheckDomainTransferabilityError {
@@ -992,7 +992,7 @@ impl DeleteTagsForDomainError {
 }
 impl fmt::Display for DeleteTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsForDomainError {
@@ -1034,7 +1034,7 @@ impl DisableDomainAutoRenewError {
 }
 impl fmt::Display for DisableDomainAutoRenewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableDomainAutoRenewError {
@@ -1098,7 +1098,7 @@ impl DisableDomainTransferLockError {
 }
 impl fmt::Display for DisableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableDomainTransferLockError {
@@ -1149,7 +1149,7 @@ impl EnableDomainAutoRenewError {
 }
 impl fmt::Display for EnableDomainAutoRenewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableDomainAutoRenewError {
@@ -1214,7 +1214,7 @@ impl EnableDomainTransferLockError {
 }
 impl fmt::Display for EnableDomainTransferLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableDomainTransferLockError {
@@ -1269,7 +1269,7 @@ impl GetContactReachabilityStatusError {
 }
 impl fmt::Display for GetContactReachabilityStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContactReachabilityStatusError {
@@ -1309,7 +1309,7 @@ impl GetDomainDetailError {
 }
 impl fmt::Display for GetDomainDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainDetailError {
@@ -1348,7 +1348,7 @@ impl GetDomainSuggestionsError {
 }
 impl fmt::Display for GetDomainSuggestionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainSuggestionsError {
@@ -1382,7 +1382,7 @@ impl GetOperationDetailError {
 }
 impl fmt::Display for GetOperationDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOperationDetailError {
@@ -1415,7 +1415,7 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainsError {
@@ -1448,7 +1448,7 @@ impl ListOperationsError {
 }
 impl fmt::Display for ListOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOperationsError {
@@ -1493,7 +1493,7 @@ impl ListTagsForDomainError {
 }
 impl fmt::Display for ListTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForDomainError {
@@ -1555,7 +1555,7 @@ impl RegisterDomainError {
 }
 impl fmt::Display for RegisterDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterDomainError {
@@ -1613,7 +1613,7 @@ impl RenewDomainError {
 }
 impl fmt::Display for RenewDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RenewDomainError {
@@ -1668,7 +1668,7 @@ impl ResendContactReachabilityEmailError {
 }
 impl fmt::Display for ResendContactReachabilityEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResendContactReachabilityEmailError {
@@ -1710,7 +1710,7 @@ impl RetrieveDomainAuthCodeError {
 }
 impl fmt::Display for RetrieveDomainAuthCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetrieveDomainAuthCodeError {
@@ -1771,7 +1771,7 @@ impl TransferDomainError {
 }
 impl fmt::Display for TransferDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TransferDomainError {
@@ -1835,7 +1835,7 @@ impl UpdateDomainContactError {
 }
 impl fmt::Display for UpdateDomainContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainContactError {
@@ -1904,7 +1904,7 @@ impl UpdateDomainContactPrivacyError {
 }
 impl fmt::Display for UpdateDomainContactPrivacyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainContactPrivacyError {
@@ -1971,7 +1971,7 @@ impl UpdateDomainNameserversError {
 }
 impl fmt::Display for UpdateDomainNameserversError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainNameserversError {
@@ -2020,7 +2020,7 @@ impl UpdateTagsForDomainError {
 }
 impl fmt::Display for UpdateTagsForDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTagsForDomainError {
@@ -2055,7 +2055,7 @@ impl ViewBillingError {
 }
 impl fmt::Display for ViewBillingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ViewBillingError {

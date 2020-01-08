@@ -456,7 +456,7 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupError {
@@ -518,7 +518,7 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupError {
@@ -581,7 +581,7 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupError {
@@ -644,7 +644,7 @@ impl GetGroupQueryError {
 }
 impl fmt::Display for GetGroupQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupQueryError {
@@ -707,7 +707,7 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagsError {
@@ -777,7 +777,7 @@ impl ListGroupResourcesError {
 }
 impl fmt::Display for ListGroupResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupResourcesError {
@@ -836,7 +836,7 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsError {
@@ -898,7 +898,7 @@ impl SearchResourcesError {
 }
 impl fmt::Display for SearchResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchResourcesError {
@@ -957,7 +957,7 @@ impl TagError {
 }
 impl fmt::Display for TagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagError {
@@ -1018,7 +1018,7 @@ impl UntagError {
 }
 impl fmt::Display for UntagError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagError {
@@ -1081,7 +1081,7 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupError {
@@ -1146,7 +1146,7 @@ impl UpdateGroupQueryError {
 }
 impl fmt::Display for UpdateGroupQueryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupQueryError {

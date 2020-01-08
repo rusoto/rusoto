@@ -1548,7 +1548,7 @@ impl AddAttributesToFindingsError {
 }
 impl fmt::Display for AddAttributesToFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddAttributesToFindingsError {
@@ -1621,7 +1621,7 @@ impl CreateAssessmentTargetError {
 }
 impl fmt::Display for CreateAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAssessmentTargetError {
@@ -1695,7 +1695,7 @@ impl CreateAssessmentTemplateError {
 }
 impl fmt::Display for CreateAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAssessmentTemplateError {
@@ -1768,7 +1768,7 @@ impl CreateExclusionsPreviewError {
 }
 impl fmt::Display for CreateExclusionsPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateExclusionsPreviewError {
@@ -1828,7 +1828,7 @@ impl CreateResourceGroupError {
 }
 impl fmt::Display for CreateResourceGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceGroupError {
@@ -1894,7 +1894,7 @@ impl DeleteAssessmentRunError {
 }
 impl fmt::Display for DeleteAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAssessmentRunError {
@@ -1961,7 +1961,7 @@ impl DeleteAssessmentTargetError {
 }
 impl fmt::Display for DeleteAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAssessmentTargetError {
@@ -2034,7 +2034,7 @@ impl DeleteAssessmentTemplateError {
 }
 impl fmt::Display for DeleteAssessmentTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAssessmentTemplateError {
@@ -2077,7 +2077,7 @@ impl DescribeAssessmentRunsError {
 }
 impl fmt::Display for DescribeAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssessmentRunsError {
@@ -2118,7 +2118,7 @@ impl DescribeAssessmentTargetsError {
 }
 impl fmt::Display for DescribeAssessmentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssessmentTargetsError {
@@ -2163,7 +2163,7 @@ impl DescribeAssessmentTemplatesError {
 }
 impl fmt::Display for DescribeAssessmentTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAssessmentTemplatesError {
@@ -2201,7 +2201,7 @@ impl DescribeCrossAccountAccessRoleError {
 }
 impl fmt::Display for DescribeCrossAccountAccessRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCrossAccountAccessRoleError {
@@ -2239,7 +2239,7 @@ impl DescribeExclusionsError {
 }
 impl fmt::Display for DescribeExclusionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExclusionsError {
@@ -2278,7 +2278,7 @@ impl DescribeFindingsError {
 }
 impl fmt::Display for DescribeFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFindingsError {
@@ -2317,7 +2317,7 @@ impl DescribeResourceGroupsError {
 }
 impl fmt::Display for DescribeResourceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResourceGroupsError {
@@ -2356,7 +2356,7 @@ impl DescribeRulesPackagesError {
 }
 impl fmt::Display for DescribeRulesPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRulesPackagesError {
@@ -2426,7 +2426,7 @@ impl GetAssessmentReportError {
 }
 impl fmt::Display for GetAssessmentReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAssessmentReportError {
@@ -2480,7 +2480,7 @@ impl GetExclusionsPreviewError {
 }
 impl fmt::Display for GetExclusionsPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetExclusionsPreviewError {
@@ -2531,7 +2531,7 @@ impl GetTelemetryMetadataError {
 }
 impl fmt::Display for GetTelemetryMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTelemetryMetadataError {
@@ -2588,7 +2588,7 @@ impl ListAssessmentRunAgentsError {
 }
 impl fmt::Display for ListAssessmentRunAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssessmentRunAgentsError {
@@ -2639,7 +2639,7 @@ impl ListAssessmentRunsError {
 }
 impl fmt::Display for ListAssessmentRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssessmentRunsError {
@@ -2685,7 +2685,7 @@ impl ListAssessmentTargetsError {
 }
 impl fmt::Display for ListAssessmentTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssessmentTargetsError {
@@ -2741,7 +2741,7 @@ impl ListAssessmentTemplatesError {
 }
 impl fmt::Display for ListAssessmentTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssessmentTemplatesError {
@@ -2792,7 +2792,7 @@ impl ListEventSubscriptionsError {
 }
 impl fmt::Display for ListEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEventSubscriptionsError {
@@ -2843,7 +2843,7 @@ impl ListExclusionsError {
 }
 impl fmt::Display for ListExclusionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListExclusionsError {
@@ -2894,7 +2894,7 @@ impl ListFindingsError {
 }
 impl fmt::Display for ListFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFindingsError {
@@ -2940,7 +2940,7 @@ impl ListRulesPackagesError {
 }
 impl fmt::Display for ListRulesPackagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRulesPackagesError {
@@ -2990,7 +2990,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3048,7 +3048,7 @@ impl PreviewAgentsError {
 }
 impl fmt::Display for PreviewAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PreviewAgentsError {
@@ -3117,7 +3117,7 @@ impl RegisterCrossAccountAccessRoleError {
 }
 impl fmt::Display for RegisterCrossAccountAccessRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterCrossAccountAccessRoleError {
@@ -3186,7 +3186,7 @@ impl RemoveAttributesFromFindingsError {
 }
 impl fmt::Display for RemoveAttributesFromFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveAttributesFromFindingsError {
@@ -3245,7 +3245,7 @@ impl SetTagsForResourceError {
 }
 impl fmt::Display for SetTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTagsForResourceError {
@@ -3323,7 +3323,7 @@ impl StartAssessmentRunError {
 }
 impl fmt::Display for StartAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAssessmentRunError {
@@ -3385,7 +3385,7 @@ impl StopAssessmentRunError {
 }
 impl fmt::Display for StopAssessmentRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopAssessmentRunError {
@@ -3449,7 +3449,7 @@ impl SubscribeToEventError {
 }
 impl fmt::Display for SubscribeToEventError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubscribeToEventError {
@@ -3509,7 +3509,7 @@ impl UnsubscribeFromEventError {
 }
 impl fmt::Display for UnsubscribeFromEventError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnsubscribeFromEventError {
@@ -3568,7 +3568,7 @@ impl UpdateAssessmentTargetError {
 }
 impl fmt::Display for UpdateAssessmentTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAssessmentTargetError {

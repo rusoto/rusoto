@@ -1033,7 +1033,7 @@ impl CreateClusterError {
 }
 impl fmt::Display for CreateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClusterError {
@@ -1116,7 +1116,7 @@ impl CreateParameterGroupError {
 }
 impl fmt::Display for CreateParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateParameterGroupError {
@@ -1182,7 +1182,7 @@ impl CreateSubnetGroupError {
 }
 impl fmt::Display for CreateSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSubnetGroupError {
@@ -1256,7 +1256,7 @@ impl DecreaseReplicationFactorError {
 }
 impl fmt::Display for DecreaseReplicationFactorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DecreaseReplicationFactorError {
@@ -1320,7 +1320,7 @@ impl DeleteClusterError {
 }
 impl fmt::Display for DeleteClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClusterError {
@@ -1387,7 +1387,7 @@ impl DeleteParameterGroupError {
 }
 impl fmt::Display for DeleteParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteParameterGroupError {
@@ -1440,7 +1440,7 @@ impl DeleteSubnetGroupError {
 }
 impl fmt::Display for DeleteSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSubnetGroupError {
@@ -1498,7 +1498,7 @@ impl DescribeClustersError {
 }
 impl fmt::Display for DescribeClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClustersError {
@@ -1550,7 +1550,7 @@ impl DescribeDefaultParametersError {
 }
 impl fmt::Display for DescribeDefaultParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDefaultParametersError {
@@ -1601,7 +1601,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -1659,7 +1659,7 @@ impl DescribeParameterGroupsError {
 }
 impl fmt::Display for DescribeParameterGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeParameterGroupsError {
@@ -1718,7 +1718,7 @@ impl DescribeParametersError {
 }
 impl fmt::Display for DescribeParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeParametersError {
@@ -1763,7 +1763,7 @@ impl DescribeSubnetGroupsError {
 }
 impl fmt::Display for DescribeSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSubnetGroupsError {
@@ -1855,7 +1855,7 @@ impl IncreaseReplicationFactorError {
 }
 impl fmt::Display for IncreaseReplicationFactorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IncreaseReplicationFactorError {
@@ -1925,7 +1925,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -1992,7 +1992,7 @@ impl RebootNodeError {
 }
 impl fmt::Display for RebootNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootNodeError {
@@ -2068,7 +2068,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2143,7 +2143,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2222,7 +2222,7 @@ impl UpdateClusterError {
 }
 impl fmt::Display for UpdateClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClusterError {
@@ -2291,7 +2291,7 @@ impl UpdateParameterGroupError {
 }
 impl fmt::Display for UpdateParameterGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateParameterGroupError {
@@ -2354,7 +2354,7 @@ impl UpdateSubnetGroupError {
 }
 impl fmt::Display for UpdateSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSubnetGroupError {

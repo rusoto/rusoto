@@ -841,7 +841,7 @@ impl AssociateDomainError {
 }
 impl fmt::Display for AssociateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDomainError {
@@ -918,7 +918,7 @@ impl AssociateWebsiteAuthorizationProviderError {
 }
 impl fmt::Display for AssociateWebsiteAuthorizationProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateWebsiteAuthorizationProviderError {
@@ -995,7 +995,7 @@ impl AssociateWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for AssociateWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateWebsiteCertificateAuthorityError {
@@ -1058,7 +1058,7 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFleetError {
@@ -1116,7 +1116,7 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFleetError {
@@ -1185,7 +1185,7 @@ impl DescribeAuditStreamConfigurationError {
 }
 impl fmt::Display for DescribeAuditStreamConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAuditStreamConfigurationError {
@@ -1254,7 +1254,7 @@ impl DescribeCompanyNetworkConfigurationError {
 }
 impl fmt::Display for DescribeCompanyNetworkConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCompanyNetworkConfigurationError {
@@ -1311,7 +1311,7 @@ impl DescribeDeviceError {
 }
 impl fmt::Display for DescribeDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeviceError {
@@ -1380,7 +1380,7 @@ impl DescribeDevicePolicyConfigurationError {
 }
 impl fmt::Display for DescribeDevicePolicyConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDevicePolicyConfigurationError {
@@ -1437,7 +1437,7 @@ impl DescribeDomainError {
 }
 impl fmt::Display for DescribeDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainError {
@@ -1502,7 +1502,7 @@ impl DescribeFleetMetadataError {
 }
 impl fmt::Display for DescribeFleetMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetMetadataError {
@@ -1571,7 +1571,7 @@ impl DescribeIdentityProviderConfigurationError {
 }
 impl fmt::Display for DescribeIdentityProviderConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityProviderConfigurationError {
@@ -1640,7 +1640,7 @@ impl DescribeWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for DescribeWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeWebsiteCertificateAuthorityError {
@@ -1699,7 +1699,7 @@ impl DisassociateDomainError {
 }
 impl fmt::Display for DisassociateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDomainError {
@@ -1777,7 +1777,7 @@ impl DisassociateWebsiteAuthorizationProviderError {
 }
 impl fmt::Display for DisassociateWebsiteAuthorizationProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateWebsiteAuthorizationProviderError {
@@ -1849,7 +1849,7 @@ impl DisassociateWebsiteCertificateAuthorityError {
 }
 impl fmt::Display for DisassociateWebsiteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateWebsiteCertificateAuthorityError {
@@ -1906,7 +1906,7 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevicesError {
@@ -1958,7 +1958,7 @@ impl ListDomainsError {
 }
 impl fmt::Display for ListDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainsError {
@@ -2009,7 +2009,7 @@ impl ListFleetsError {
 }
 impl fmt::Display for ListFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFleetsError {
@@ -2077,7 +2077,7 @@ impl ListWebsiteAuthorizationProvidersError {
 }
 impl fmt::Display for ListWebsiteAuthorizationProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWebsiteAuthorizationProvidersError {
@@ -2139,7 +2139,7 @@ impl ListWebsiteCertificateAuthoritiesError {
 }
 impl fmt::Display for ListWebsiteCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWebsiteCertificateAuthoritiesError {
@@ -2199,7 +2199,7 @@ impl RestoreDomainAccessError {
 }
 impl fmt::Display for RestoreDomainAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreDomainAccessError {
@@ -2258,7 +2258,7 @@ impl RevokeDomainAccessError {
 }
 impl fmt::Display for RevokeDomainAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeDomainAccessError {
@@ -2315,7 +2315,7 @@ impl SignOutUserError {
 }
 impl fmt::Display for SignOutUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SignOutUserError {
@@ -2384,7 +2384,7 @@ impl UpdateAuditStreamConfigurationError {
 }
 impl fmt::Display for UpdateAuditStreamConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAuditStreamConfigurationError {
@@ -2453,7 +2453,7 @@ impl UpdateCompanyNetworkConfigurationError {
 }
 impl fmt::Display for UpdateCompanyNetworkConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCompanyNetworkConfigurationError {
@@ -2522,7 +2522,7 @@ impl UpdateDevicePolicyConfigurationError {
 }
 impl fmt::Display for UpdateDevicePolicyConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDevicePolicyConfigurationError {
@@ -2585,7 +2585,7 @@ impl UpdateDomainMetadataError {
 }
 impl fmt::Display for UpdateDomainMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainMetadataError {
@@ -2646,7 +2646,7 @@ impl UpdateFleetMetadataError {
 }
 impl fmt::Display for UpdateFleetMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFleetMetadataError {
@@ -2715,7 +2715,7 @@ impl UpdateIdentityProviderConfigurationError {
 }
 impl fmt::Display for UpdateIdentityProviderConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIdentityProviderConfigurationError {

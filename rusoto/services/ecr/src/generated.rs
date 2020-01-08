@@ -1332,7 +1332,7 @@ impl BatchCheckLayerAvailabilityError {
 }
 impl fmt::Display for BatchCheckLayerAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchCheckLayerAvailabilityError {
@@ -1377,7 +1377,7 @@ impl BatchDeleteImageError {
 }
 impl fmt::Display for BatchDeleteImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteImageError {
@@ -1422,7 +1422,7 @@ impl BatchGetImageError {
 }
 impl fmt::Display for BatchGetImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetImageError {
@@ -1500,7 +1500,7 @@ impl CompleteLayerUploadError {
 }
 impl fmt::Display for CompleteLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompleteLayerUploadError {
@@ -1569,7 +1569,7 @@ impl CreateRepositoryError {
 }
 impl fmt::Display for CreateRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRepositoryError {
@@ -1628,7 +1628,7 @@ impl DeleteLifecyclePolicyError {
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLifecyclePolicyError {
@@ -1679,7 +1679,7 @@ impl DeleteRepositoryError {
 }
 impl fmt::Display for DeleteRepositoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRepositoryError {
@@ -1736,7 +1736,7 @@ impl DeleteRepositoryPolicyError {
 }
 impl fmt::Display for DeleteRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRepositoryPolicyError {
@@ -1800,7 +1800,7 @@ impl DescribeImageScanFindingsError {
 }
 impl fmt::Display for DescribeImageScanFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImageScanFindingsError {
@@ -1852,7 +1852,7 @@ impl DescribeImagesError {
 }
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImagesError {
@@ -1902,7 +1902,7 @@ impl DescribeRepositoriesError {
 }
 impl fmt::Display for DescribeRepositoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRepositoriesError {
@@ -1944,7 +1944,7 @@ impl GetAuthorizationTokenError {
 }
 impl fmt::Display for GetAuthorizationTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAuthorizationTokenError {
@@ -2006,7 +2006,7 @@ impl GetDownloadUrlForLayerError {
 }
 impl fmt::Display for GetDownloadUrlForLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDownloadUrlForLayerError {
@@ -2062,7 +2062,7 @@ impl GetLifecyclePolicyError {
 }
 impl fmt::Display for GetLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLifecyclePolicyError {
@@ -2119,7 +2119,7 @@ impl GetLifecyclePolicyPreviewError {
 }
 impl fmt::Display for GetLifecyclePolicyPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLifecyclePolicyPreviewError {
@@ -2176,7 +2176,7 @@ impl GetRepositoryPolicyError {
 }
 impl fmt::Display for GetRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRepositoryPolicyError {
@@ -2226,7 +2226,7 @@ impl InitiateLayerUploadError {
 }
 impl fmt::Display for InitiateLayerUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateLayerUploadError {
@@ -2269,7 +2269,7 @@ impl ListImagesError {
 }
 impl fmt::Display for ListImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListImagesError {
@@ -2318,7 +2318,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2381,7 +2381,7 @@ impl PutImageError {
 }
 impl fmt::Display for PutImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutImageError {
@@ -2438,7 +2438,7 @@ impl PutImageScanningConfigurationError {
 }
 impl fmt::Display for PutImageScanningConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutImageScanningConfigurationError {
@@ -2487,7 +2487,7 @@ impl PutImageTagMutabilityError {
 }
 impl fmt::Display for PutImageTagMutabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutImageTagMutabilityError {
@@ -2534,7 +2534,7 @@ impl PutLifecyclePolicyError {
 }
 impl fmt::Display for PutLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLifecyclePolicyError {
@@ -2583,7 +2583,7 @@ impl SetRepositoryPolicyError {
 }
 impl fmt::Display for SetRepositoryPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetRepositoryPolicyError {
@@ -2633,7 +2633,7 @@ impl StartImageScanError {
 }
 impl fmt::Display for StartImageScanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartImageScanError {
@@ -2699,7 +2699,7 @@ impl StartLifecyclePolicyPreviewError {
 }
 impl fmt::Display for StartLifecyclePolicyPreviewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartLifecyclePolicyPreviewError {
@@ -2756,7 +2756,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2813,7 +2813,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2875,7 +2875,7 @@ impl UploadLayerPartError {
 }
 impl fmt::Display for UploadLayerPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadLayerPartError {

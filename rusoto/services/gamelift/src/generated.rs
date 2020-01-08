@@ -3334,7 +3334,7 @@ impl AcceptMatchError {
 }
 impl fmt::Display for AcceptMatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptMatchError {
@@ -3395,7 +3395,7 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAliasError {
@@ -3453,7 +3453,7 @@ impl CreateBuildError {
 }
 impl fmt::Display for CreateBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBuildError {
@@ -3520,7 +3520,7 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFleetError {
@@ -3612,7 +3612,7 @@ impl CreateGameSessionError {
 }
 impl fmt::Display for CreateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGameSessionError {
@@ -3682,7 +3682,7 @@ impl CreateGameSessionQueueError {
 }
 impl fmt::Display for CreateGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGameSessionQueueError {
@@ -3758,7 +3758,7 @@ impl CreateMatchmakingConfigurationError {
 }
 impl fmt::Display for CreateMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMatchmakingConfigurationError {
@@ -3819,7 +3819,7 @@ impl CreateMatchmakingRuleSetError {
 }
 impl fmt::Display for CreateMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMatchmakingRuleSetError {
@@ -3889,7 +3889,7 @@ impl CreatePlayerSessionError {
 }
 impl fmt::Display for CreatePlayerSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePlayerSessionError {
@@ -3966,7 +3966,7 @@ impl CreatePlayerSessionsError {
 }
 impl fmt::Display for CreatePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePlayerSessionsError {
@@ -4025,7 +4025,7 @@ impl CreateScriptError {
 }
 impl fmt::Display for CreateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateScriptError {
@@ -4087,7 +4087,7 @@ impl CreateVpcPeeringAuthorizationError {
 }
 impl fmt::Display for CreateVpcPeeringAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVpcPeeringAuthorizationError {
@@ -4146,7 +4146,7 @@ impl CreateVpcPeeringConnectionError {
 }
 impl fmt::Display for CreateVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVpcPeeringConnectionError {
@@ -4202,7 +4202,7 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAliasError {
@@ -4259,7 +4259,7 @@ impl DeleteBuildError {
 }
 impl fmt::Display for DeleteBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBuildError {
@@ -4321,7 +4321,7 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFleetError {
@@ -4385,7 +4385,7 @@ impl DeleteGameSessionQueueError {
 }
 impl fmt::Display for DeleteGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGameSessionQueueError {
@@ -4454,7 +4454,7 @@ impl DeleteMatchmakingConfigurationError {
 }
 impl fmt::Display for DeleteMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMatchmakingConfigurationError {
@@ -4519,7 +4519,7 @@ impl DeleteMatchmakingRuleSetError {
 }
 impl fmt::Display for DeleteMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMatchmakingRuleSetError {
@@ -4571,7 +4571,7 @@ impl DeleteScalingPolicyError {
 }
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScalingPolicyError {
@@ -4627,7 +4627,7 @@ impl DeleteScriptError {
 }
 impl fmt::Display for DeleteScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScriptError {
@@ -4689,7 +4689,7 @@ impl DeleteVpcPeeringAuthorizationError {
 }
 impl fmt::Display for DeleteVpcPeeringAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVpcPeeringAuthorizationError {
@@ -4748,7 +4748,7 @@ impl DeleteVpcPeeringConnectionError {
 }
 impl fmt::Display for DeleteVpcPeeringConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVpcPeeringConnectionError {
@@ -4799,7 +4799,7 @@ impl DescribeAliasError {
 }
 impl fmt::Display for DescribeAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAliasError {
@@ -4850,7 +4850,7 @@ impl DescribeBuildError {
 }
 impl fmt::Display for DescribeBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBuildError {
@@ -4902,7 +4902,7 @@ impl DescribeEC2InstanceLimitsError {
 }
 impl fmt::Display for DescribeEC2InstanceLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEC2InstanceLimitsError {
@@ -4958,7 +4958,7 @@ impl DescribeFleetAttributesError {
 }
 impl fmt::Display for DescribeFleetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetAttributesError {
@@ -5013,7 +5013,7 @@ impl DescribeFleetCapacityError {
 }
 impl fmt::Display for DescribeFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetCapacityError {
@@ -5064,7 +5064,7 @@ impl DescribeFleetEventsError {
 }
 impl fmt::Display for DescribeFleetEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetEventsError {
@@ -5121,7 +5121,7 @@ impl DescribeFleetPortSettingsError {
 }
 impl fmt::Display for DescribeFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetPortSettingsError {
@@ -5178,7 +5178,7 @@ impl DescribeFleetUtilizationError {
 }
 impl fmt::Display for DescribeFleetUtilizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetUtilizationError {
@@ -5244,7 +5244,7 @@ impl DescribeGameSessionDetailsError {
 }
 impl fmt::Display for DescribeGameSessionDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGameSessionDetailsError {
@@ -5306,7 +5306,7 @@ impl DescribeGameSessionPlacementError {
 }
 impl fmt::Display for DescribeGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGameSessionPlacementError {
@@ -5363,7 +5363,7 @@ impl DescribeGameSessionQueuesError {
 }
 impl fmt::Display for DescribeGameSessionQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGameSessionQueuesError {
@@ -5423,7 +5423,7 @@ impl DescribeGameSessionsError {
 }
 impl fmt::Display for DescribeGameSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGameSessionsError {
@@ -5475,7 +5475,7 @@ impl DescribeInstancesError {
 }
 impl fmt::Display for DescribeInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancesError {
@@ -5523,7 +5523,7 @@ impl DescribeMatchmakingError {
 }
 impl fmt::Display for DescribeMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMatchmakingError {
@@ -5576,7 +5576,7 @@ impl DescribeMatchmakingConfigurationsError {
 }
 impl fmt::Display for DescribeMatchmakingConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMatchmakingConfigurationsError {
@@ -5636,7 +5636,7 @@ impl DescribeMatchmakingRuleSetsError {
 }
 impl fmt::Display for DescribeMatchmakingRuleSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMatchmakingRuleSetsError {
@@ -5691,7 +5691,7 @@ impl DescribePlayerSessionsError {
 }
 impl fmt::Display for DescribePlayerSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePlayerSessionsError {
@@ -5752,7 +5752,7 @@ impl DescribeRuntimeConfigurationError {
 }
 impl fmt::Display for DescribeRuntimeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRuntimeConfigurationError {
@@ -5809,7 +5809,7 @@ impl DescribeScalingPoliciesError {
 }
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingPoliciesError {
@@ -5860,7 +5860,7 @@ impl DescribeScriptError {
 }
 impl fmt::Display for DescribeScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScriptError {
@@ -5914,7 +5914,7 @@ impl DescribeVpcPeeringAuthorizationsError {
 }
 impl fmt::Display for DescribeVpcPeeringAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVpcPeeringAuthorizationsError {
@@ -5974,7 +5974,7 @@ impl DescribeVpcPeeringConnectionsError {
 }
 impl fmt::Display for DescribeVpcPeeringConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVpcPeeringConnectionsError {
@@ -6027,7 +6027,7 @@ impl GetGameSessionLogUrlError {
 }
 impl fmt::Display for GetGameSessionLogUrlError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGameSessionLogUrlError {
@@ -6078,7 +6078,7 @@ impl GetInstanceAccessError {
 }
 impl fmt::Display for GetInstanceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceAccessError {
@@ -6124,7 +6124,7 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAliasesError {
@@ -6169,7 +6169,7 @@ impl ListBuildsError {
 }
 impl fmt::Display for ListBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBuildsError {
@@ -6219,7 +6219,7 @@ impl ListFleetsError {
 }
 impl fmt::Display for ListFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFleetsError {
@@ -6265,7 +6265,7 @@ impl ListScriptsError {
 }
 impl fmt::Display for ListScriptsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListScriptsError {
@@ -6315,7 +6315,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -6366,7 +6366,7 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutScalingPolicyError {
@@ -6423,7 +6423,7 @@ impl RequestUploadCredentialsError {
 }
 impl fmt::Display for RequestUploadCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RequestUploadCredentialsError {
@@ -6481,7 +6481,7 @@ impl ResolveAliasError {
 }
 impl fmt::Display for ResolveAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResolveAliasError {
@@ -6540,7 +6540,7 @@ impl SearchGameSessionsError {
 }
 impl fmt::Display for SearchGameSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchGameSessionsError {
@@ -6592,7 +6592,7 @@ impl StartFleetActionsError {
 }
 impl fmt::Display for StartFleetActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartFleetActionsError {
@@ -6649,7 +6649,7 @@ impl StartGameSessionPlacementError {
 }
 impl fmt::Display for StartGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartGameSessionPlacementError {
@@ -6702,7 +6702,7 @@ impl StartMatchBackfillError {
 }
 impl fmt::Display for StartMatchBackfillError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMatchBackfillError {
@@ -6753,7 +6753,7 @@ impl StartMatchmakingError {
 }
 impl fmt::Display for StartMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMatchmakingError {
@@ -6804,7 +6804,7 @@ impl StopFleetActionsError {
 }
 impl fmt::Display for StopFleetActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopFleetActionsError {
@@ -6861,7 +6861,7 @@ impl StopGameSessionPlacementError {
 }
 impl fmt::Display for StopGameSessionPlacementError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopGameSessionPlacementError {
@@ -6912,7 +6912,7 @@ impl StopMatchmakingError {
 }
 impl fmt::Display for StopMatchmakingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopMatchmakingError {
@@ -6963,7 +6963,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -7014,7 +7014,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -7065,7 +7065,7 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAliasError {
@@ -7116,7 +7116,7 @@ impl UpdateBuildError {
 }
 impl fmt::Display for UpdateBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBuildError {
@@ -7188,7 +7188,7 @@ impl UpdateFleetAttributesError {
 }
 impl fmt::Display for UpdateFleetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFleetAttributesError {
@@ -7259,7 +7259,7 @@ impl UpdateFleetCapacityError {
 }
 impl fmt::Display for UpdateFleetCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFleetCapacityError {
@@ -7338,7 +7338,7 @@ impl UpdateFleetPortSettingsError {
 }
 impl fmt::Display for UpdateFleetPortSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFleetPortSettingsError {
@@ -7404,7 +7404,7 @@ impl UpdateGameSessionError {
 }
 impl fmt::Display for UpdateGameSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGameSessionError {
@@ -7461,7 +7461,7 @@ impl UpdateGameSessionQueueError {
 }
 impl fmt::Display for UpdateGameSessionQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGameSessionQueueError {
@@ -7522,7 +7522,7 @@ impl UpdateMatchmakingConfigurationError {
 }
 impl fmt::Display for UpdateMatchmakingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMatchmakingConfigurationError {
@@ -7588,7 +7588,7 @@ impl UpdateRuntimeConfigurationError {
 }
 impl fmt::Display for UpdateRuntimeConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRuntimeConfigurationError {
@@ -7640,7 +7640,7 @@ impl UpdateScriptError {
 }
 impl fmt::Display for UpdateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateScriptError {
@@ -7694,7 +7694,7 @@ impl ValidateMatchmakingRuleSetError {
 }
 impl fmt::Display for ValidateMatchmakingRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ValidateMatchmakingRuleSetError {

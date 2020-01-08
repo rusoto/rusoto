@@ -1,6 +1,5 @@
 //! The Credentials provider to read from a task's IAM Role.
 
-use std::error::Error;
 use std::time::Duration;
 
 use async_trait::async_trait;
@@ -138,9 +137,7 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
     Request::get(uri).body(Body::empty()).map_err(|error| {
         CredentialsError::new(format!(
             "Error while parsing URI '{}' derived from environment variable '{}': {}",
-            uri,
-            env_var_name,
-            error.description()
+            uri, env_var_name, error
         ))
     })
 }

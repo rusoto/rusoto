@@ -780,7 +780,7 @@ impl CancelRotateSecretError {
 }
 impl fmt::Display for CancelRotateSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelRotateSecretError {
@@ -858,7 +858,7 @@ impl CreateSecretError {
 }
 impl fmt::Display for CreateSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSecretError {
@@ -913,7 +913,7 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourcePolicyError {
@@ -963,7 +963,7 @@ impl DeleteSecretError {
 }
 impl fmt::Display for DeleteSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSecretError {
@@ -1004,7 +1004,7 @@ impl DescribeSecretError {
 }
 impl fmt::Display for DescribeSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSecretError {
@@ -1050,7 +1050,7 @@ impl GetRandomPasswordError {
 }
 impl fmt::Display for GetRandomPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRandomPasswordError {
@@ -1097,7 +1097,7 @@ impl GetResourcePolicyError {
 }
 impl fmt::Display for GetResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcePolicyError {
@@ -1152,7 +1152,7 @@ impl GetSecretValueError {
 }
 impl fmt::Display for GetSecretValueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSecretValueError {
@@ -1205,7 +1205,7 @@ impl ListSecretVersionIdsError {
 }
 impl fmt::Display for ListSecretVersionIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecretVersionIdsError {
@@ -1250,7 +1250,7 @@ impl ListSecretsError {
 }
 impl fmt::Display for ListSecretsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecretsError {
@@ -1309,7 +1309,7 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourcePolicyError {
@@ -1376,7 +1376,7 @@ impl PutSecretValueError {
 }
 impl fmt::Display for PutSecretValueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSecretValueError {
@@ -1430,7 +1430,7 @@ impl RestoreSecretError {
 }
 impl fmt::Display for RestoreSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreSecretError {
@@ -1481,7 +1481,7 @@ impl RotateSecretError {
 }
 impl fmt::Display for RotateSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RotateSecretError {
@@ -1532,7 +1532,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1583,7 +1583,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -1661,7 +1661,7 @@ impl UpdateSecretError {
 }
 impl fmt::Display for UpdateSecretError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSecretError {
@@ -1732,7 +1732,7 @@ impl UpdateSecretVersionStageError {
 }
 impl fmt::Display for UpdateSecretVersionStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSecretVersionStageError {

@@ -780,7 +780,7 @@ impl DescribeAffectedAccountsForOrganizationError {
 }
 impl fmt::Display for DescribeAffectedAccountsForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAffectedAccountsForOrganizationError {
@@ -824,7 +824,7 @@ impl DescribeAffectedEntitiesError {
 }
 impl fmt::Display for DescribeAffectedEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAffectedEntitiesError {
@@ -871,7 +871,7 @@ impl DescribeAffectedEntitiesForOrganizationError {
 }
 impl fmt::Display for DescribeAffectedEntitiesForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAffectedEntitiesForOrganizationError {
@@ -901,7 +901,7 @@ impl DescribeEntityAggregatesError {
 }
 impl fmt::Display for DescribeEntityAggregatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEntityAggregatesError {
@@ -934,7 +934,7 @@ impl DescribeEventAggregatesError {
 }
 impl fmt::Display for DescribeEventAggregatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventAggregatesError {
@@ -969,7 +969,7 @@ impl DescribeEventDetailsError {
 }
 impl fmt::Display for DescribeEventDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventDetailsError {
@@ -1006,7 +1006,7 @@ impl DescribeEventDetailsForOrganizationError {
 }
 impl fmt::Display for DescribeEventDetailsForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventDetailsForOrganizationError {
@@ -1048,7 +1048,7 @@ impl DescribeEventTypesError {
 }
 impl fmt::Display for DescribeEventTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventTypesError {
@@ -1089,7 +1089,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -1134,7 +1134,7 @@ impl DescribeEventsForOrganizationError {
 }
 impl fmt::Display for DescribeEventsForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsForOrganizationError {
@@ -1164,7 +1164,7 @@ impl DescribeHealthServiceStatusForOrganizationError {
 }
 impl fmt::Display for DescribeHealthServiceStatusForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHealthServiceStatusForOrganizationError {
@@ -1201,7 +1201,7 @@ impl DisableHealthServiceAccessForOrganizationError {
 }
 impl fmt::Display for DisableHealthServiceAccessForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableHealthServiceAccessForOrganizationError {
@@ -1242,7 +1242,7 @@ impl EnableHealthServiceAccessForOrganizationError {
 }
 impl fmt::Display for EnableHealthServiceAccessForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableHealthServiceAccessForOrganizationError {

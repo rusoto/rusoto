@@ -2534,7 +2534,7 @@ impl AddInstanceFleetError {
 }
 impl fmt::Display for AddInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddInstanceFleetError {
@@ -2570,7 +2570,7 @@ impl AddInstanceGroupsError {
 }
 impl fmt::Display for AddInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddInstanceGroupsError {
@@ -2603,7 +2603,7 @@ impl AddJobFlowStepsError {
 }
 impl fmt::Display for AddJobFlowStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddJobFlowStepsError {
@@ -2641,7 +2641,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -2680,7 +2680,7 @@ impl CancelStepsError {
 }
 impl fmt::Display for CancelStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelStepsError {
@@ -2725,7 +2725,7 @@ impl CreateSecurityConfigurationError {
 }
 impl fmt::Display for CreateSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSecurityConfigurationError {
@@ -2770,7 +2770,7 @@ impl DeleteSecurityConfigurationError {
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSecurityConfigurationError {
@@ -2809,7 +2809,7 @@ impl DescribeClusterError {
 }
 impl fmt::Display for DescribeClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeClusterError {
@@ -2845,7 +2845,7 @@ impl DescribeJobFlowsError {
 }
 impl fmt::Display for DescribeJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobFlowsError {
@@ -2889,7 +2889,7 @@ impl DescribeSecurityConfigurationError {
 }
 impl fmt::Display for DescribeSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSecurityConfigurationError {
@@ -2928,7 +2928,7 @@ impl DescribeStepError {
 }
 impl fmt::Display for DescribeStepError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStepError {
@@ -2973,7 +2973,7 @@ impl GetBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for GetBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBlockPublicAccessConfigurationError {
@@ -3012,7 +3012,7 @@ impl ListBootstrapActionsError {
 }
 impl fmt::Display for ListBootstrapActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBootstrapActionsError {
@@ -3051,7 +3051,7 @@ impl ListClustersError {
 }
 impl fmt::Display for ListClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListClustersError {
@@ -3090,7 +3090,7 @@ impl ListInstanceFleetsError {
 }
 impl fmt::Display for ListInstanceFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstanceFleetsError {
@@ -3129,7 +3129,7 @@ impl ListInstanceGroupsError {
 }
 impl fmt::Display for ListInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstanceGroupsError {
@@ -3168,7 +3168,7 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstancesError {
@@ -3213,7 +3213,7 @@ impl ListSecurityConfigurationsError {
 }
 impl fmt::Display for ListSecurityConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecurityConfigurationsError {
@@ -3252,7 +3252,7 @@ impl ListStepsError {
 }
 impl fmt::Display for ListStepsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStepsError {
@@ -3291,7 +3291,7 @@ impl ModifyClusterError {
 }
 impl fmt::Display for ModifyClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyClusterError {
@@ -3330,7 +3330,7 @@ impl ModifyInstanceFleetError {
 }
 impl fmt::Display for ModifyInstanceFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyInstanceFleetError {
@@ -3366,7 +3366,7 @@ impl ModifyInstanceGroupsError {
 }
 impl fmt::Display for ModifyInstanceGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyInstanceGroupsError {
@@ -3393,7 +3393,7 @@ impl PutAutoScalingPolicyError {
 }
 impl fmt::Display for PutAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAutoScalingPolicyError {
@@ -3435,7 +3435,7 @@ impl PutBlockPublicAccessConfigurationError {
 }
 impl fmt::Display for PutBlockPublicAccessConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBlockPublicAccessConfigurationError {
@@ -3463,7 +3463,7 @@ impl RemoveAutoScalingPolicyError {
 }
 impl fmt::Display for RemoveAutoScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveAutoScalingPolicyError {
@@ -3499,7 +3499,7 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsError {
@@ -3533,7 +3533,7 @@ impl RunJobFlowError {
 }
 impl fmt::Display for RunJobFlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RunJobFlowError {
@@ -3568,7 +3568,7 @@ impl SetTerminationProtectionError {
 }
 impl fmt::Display for SetTerminationProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTerminationProtectionError {
@@ -3603,7 +3603,7 @@ impl SetVisibleToAllUsersError {
 }
 impl fmt::Display for SetVisibleToAllUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetVisibleToAllUsersError {
@@ -3638,7 +3638,7 @@ impl TerminateJobFlowsError {
 }
 impl fmt::Display for TerminateJobFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateJobFlowsError {

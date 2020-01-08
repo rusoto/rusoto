@@ -1355,7 +1355,7 @@ impl AcceptHandshakeError {
 }
 impl fmt::Display for AcceptHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptHandshakeError {
@@ -1464,7 +1464,7 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachPolicyError {
@@ -1550,7 +1550,7 @@ impl CancelHandshakeError {
 }
 impl fmt::Display for CancelHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelHandshakeError {
@@ -1638,7 +1638,7 @@ impl CreateAccountError {
 }
 impl fmt::Display for CreateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAccountError {
@@ -1731,7 +1731,7 @@ impl CreateGovCloudAccountError {
 }
 impl fmt::Display for CreateGovCloudAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGovCloudAccountError {
@@ -1815,7 +1815,7 @@ impl CreateOrganizationError {
 }
 impl fmt::Display for CreateOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOrganizationError {
@@ -1911,7 +1911,7 @@ impl CreateOrganizationalUnitError {
 }
 impl fmt::Display for CreateOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOrganizationalUnitError {
@@ -2008,7 +2008,7 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePolicyError {
@@ -2092,7 +2092,7 @@ impl DeclineHandshakeError {
 }
 impl fmt::Display for DeclineHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeclineHandshakeError {
@@ -2168,7 +2168,7 @@ impl DeleteOrganizationError {
 }
 impl fmt::Display for DeleteOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOrganizationError {
@@ -2256,7 +2256,7 @@ impl DeleteOrganizationalUnitError {
 }
 impl fmt::Display for DeleteOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOrganizationalUnitError {
@@ -2338,7 +2338,7 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyError {
@@ -2406,7 +2406,7 @@ impl DescribeAccountError {
 }
 impl fmt::Display for DescribeAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountError {
@@ -2488,7 +2488,7 @@ impl DescribeCreateAccountStatusError {
 }
 impl fmt::Display for DescribeCreateAccountStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCreateAccountStatusError {
@@ -2583,7 +2583,7 @@ impl DescribeEffectivePolicyError {
 }
 impl fmt::Display for DescribeEffectivePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEffectivePolicyError {
@@ -2651,7 +2651,7 @@ impl DescribeHandshakeError {
 }
 impl fmt::Display for DescribeHandshakeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHandshakeError {
@@ -2715,7 +2715,7 @@ impl DescribeOrganizationError {
 }
 impl fmt::Display for DescribeOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationError {
@@ -2789,7 +2789,7 @@ impl DescribeOrganizationalUnitError {
 }
 impl fmt::Display for DescribeOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationalUnitError {
@@ -2861,7 +2861,7 @@ impl DescribePolicyError {
 }
 impl fmt::Display for DescribePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePolicyError {
@@ -2959,7 +2959,7 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachPolicyError {
@@ -3045,7 +3045,7 @@ impl DisableAWSServiceAccessError {
 }
 impl fmt::Display for DisableAWSServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableAWSServiceAccessError {
@@ -3146,7 +3146,7 @@ impl DisablePolicyTypeError {
 }
 impl fmt::Display for DisablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisablePolicyTypeError {
@@ -3227,7 +3227,7 @@ impl EnableAWSServiceAccessError {
 }
 impl fmt::Display for EnableAWSServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableAWSServiceAccessError {
@@ -3302,7 +3302,7 @@ impl EnableAllFeaturesError {
 }
 impl fmt::Display for EnableAllFeaturesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableAllFeaturesError {
@@ -3410,7 +3410,7 @@ impl EnablePolicyTypeError {
 }
 impl fmt::Display for EnablePolicyTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnablePolicyTypeError {
@@ -3519,7 +3519,7 @@ impl InviteAccountToOrganizationError {
 }
 impl fmt::Display for InviteAccountToOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InviteAccountToOrganizationError {
@@ -3609,7 +3609,7 @@ impl LeaveOrganizationError {
 }
 impl fmt::Display for LeaveOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LeaveOrganizationError {
@@ -3689,7 +3689,7 @@ impl ListAWSServiceAccessForOrganizationError {
 }
 impl fmt::Display for ListAWSServiceAccessForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAWSServiceAccessForOrganizationError {
@@ -3749,7 +3749,7 @@ impl ListAccountsError {
 }
 impl fmt::Display for ListAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccountsError {
@@ -3817,7 +3817,7 @@ impl ListAccountsForParentError {
 }
 impl fmt::Display for ListAccountsForParentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccountsForParentError {
@@ -3882,7 +3882,7 @@ impl ListChildrenError {
 }
 impl fmt::Display for ListChildrenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListChildrenError {
@@ -3955,7 +3955,7 @@ impl ListCreateAccountStatusError {
 }
 impl fmt::Display for ListCreateAccountStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCreateAccountStatusError {
@@ -4021,7 +4021,7 @@ impl ListHandshakesForAccountError {
 }
 impl fmt::Display for ListHandshakesForAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHandshakesForAccountError {
@@ -4097,7 +4097,7 @@ impl ListHandshakesForOrganizationError {
 }
 impl fmt::Display for ListHandshakesForOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHandshakesForOrganizationError {
@@ -4174,7 +4174,7 @@ impl ListOrganizationalUnitsForParentError {
 }
 impl fmt::Display for ListOrganizationalUnitsForParentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOrganizationalUnitsForParentError {
@@ -4239,7 +4239,7 @@ impl ListParentsError {
 }
 impl fmt::Display for ListParentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListParentsError {
@@ -4304,7 +4304,7 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesError {
@@ -4380,7 +4380,7 @@ impl ListPoliciesForTargetError {
 }
 impl fmt::Display for ListPoliciesForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesForTargetError {
@@ -4439,7 +4439,7 @@ impl ListRootsError {
 }
 impl fmt::Display for ListRootsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRootsError {
@@ -4503,7 +4503,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4577,7 +4577,7 @@ impl ListTargetsForPolicyError {
 }
 impl fmt::Display for ListTargetsForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTargetsForPolicyError {
@@ -4665,7 +4665,7 @@ impl MoveAccountError {
 }
 impl fmt::Display for MoveAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MoveAccountError {
@@ -4767,7 +4767,7 @@ impl RemoveAccountFromOrganizationError {
 }
 impl fmt::Display for RemoveAccountFromOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveAccountFromOrganizationError {
@@ -4845,7 +4845,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4924,7 +4924,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5013,7 +5013,7 @@ impl UpdateOrganizationalUnitError {
 }
 impl fmt::Display for UpdateOrganizationalUnitError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateOrganizationalUnitError {
@@ -5114,7 +5114,7 @@ impl UpdatePolicyError {
 }
 impl fmt::Display for UpdatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePolicyError {

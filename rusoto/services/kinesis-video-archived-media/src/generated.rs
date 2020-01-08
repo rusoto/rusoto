@@ -344,7 +344,7 @@ impl GetDASHStreamingSessionURLError {
 }
 impl fmt::Display for GetDASHStreamingSessionURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDASHStreamingSessionURLError {
@@ -435,7 +435,7 @@ impl GetHLSStreamingSessionURLError {
 }
 impl fmt::Display for GetHLSStreamingSessionURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetHLSStreamingSessionURLError {
@@ -498,7 +498,7 @@ impl GetMediaForFragmentListError {
 }
 impl fmt::Display for GetMediaForFragmentListError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMediaForFragmentListError {
@@ -549,7 +549,7 @@ impl ListFragmentsError {
 }
 impl fmt::Display for ListFragmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFragmentsError {

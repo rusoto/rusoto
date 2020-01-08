@@ -2727,7 +2727,7 @@ impl AddTagsToResourceError {
 }
 impl fmt::Display for AddTagsToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToResourceError {
@@ -2764,7 +2764,7 @@ impl ApplyPendingMaintenanceActionError {
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApplyPendingMaintenanceActionError {
@@ -2832,7 +2832,7 @@ impl CreateEndpointError {
 }
 impl fmt::Display for CreateEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEndpointError {
@@ -2935,7 +2935,7 @@ impl CreateEventSubscriptionError {
 }
 impl fmt::Display for CreateEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEventSubscriptionError {
@@ -3044,7 +3044,7 @@ impl CreateReplicationInstanceError {
 }
 impl fmt::Display for CreateReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReplicationInstanceError {
@@ -3127,7 +3127,7 @@ impl CreateReplicationSubnetGroupError {
 }
 impl fmt::Display for CreateReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReplicationSubnetGroupError {
@@ -3204,7 +3204,7 @@ impl CreateReplicationTaskError {
 }
 impl fmt::Display for CreateReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReplicationTaskError {
@@ -3251,7 +3251,7 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCertificateError {
@@ -3299,7 +3299,7 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConnectionError {
@@ -3343,7 +3343,7 @@ impl DeleteEndpointError {
 }
 impl fmt::Display for DeleteEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEndpointError {
@@ -3386,7 +3386,7 @@ impl DeleteEventSubscriptionError {
 }
 impl fmt::Display for DeleteEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventSubscriptionError {
@@ -3429,7 +3429,7 @@ impl DeleteReplicationInstanceError {
 }
 impl fmt::Display for DeleteReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReplicationInstanceError {
@@ -3474,7 +3474,7 @@ impl DeleteReplicationSubnetGroupError {
 }
 impl fmt::Display for DeleteReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReplicationSubnetGroupError {
@@ -3517,7 +3517,7 @@ impl DeleteReplicationTaskError {
 }
 impl fmt::Display for DeleteReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReplicationTaskError {
@@ -3545,7 +3545,7 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountAttributesError {
@@ -3578,7 +3578,7 @@ impl DescribeCertificatesError {
 }
 impl fmt::Display for DescribeCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificatesError {
@@ -3613,7 +3613,7 @@ impl DescribeConnectionsError {
 }
 impl fmt::Display for DescribeConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConnectionsError {
@@ -3640,7 +3640,7 @@ impl DescribeEndpointTypesError {
 }
 impl fmt::Display for DescribeEndpointTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointTypesError {
@@ -3673,7 +3673,7 @@ impl DescribeEndpointsError {
 }
 impl fmt::Display for DescribeEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointsError {
@@ -3700,7 +3700,7 @@ impl DescribeEventCategoriesError {
 }
 impl fmt::Display for DescribeEventCategoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventCategoriesError {
@@ -3735,7 +3735,7 @@ impl DescribeEventSubscriptionsError {
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventSubscriptionsError {
@@ -3762,7 +3762,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -3789,7 +3789,7 @@ impl DescribeOrderableReplicationInstancesError {
 }
 impl fmt::Display for DescribeOrderableReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrderableReplicationInstancesError {
@@ -3824,7 +3824,7 @@ impl DescribePendingMaintenanceActionsError {
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePendingMaintenanceActionsError {
@@ -3868,7 +3868,7 @@ impl DescribeRefreshSchemasStatusError {
 }
 impl fmt::Display for DescribeRefreshSchemasStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRefreshSchemasStatusError {
@@ -3915,7 +3915,7 @@ impl DescribeReplicationInstanceTaskLogsError {
 }
 impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReplicationInstanceTaskLogsError {
@@ -3953,7 +3953,7 @@ impl DescribeReplicationInstancesError {
 }
 impl fmt::Display for DescribeReplicationInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReplicationInstancesError {
@@ -3990,7 +3990,7 @@ impl DescribeReplicationSubnetGroupsError {
 }
 impl fmt::Display for DescribeReplicationSubnetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReplicationSubnetGroupsError {
@@ -4029,7 +4029,7 @@ impl DescribeReplicationTaskAssessmentResultsError {
 }
 impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReplicationTaskAssessmentResultsError {
@@ -4066,7 +4066,7 @@ impl DescribeReplicationTasksError {
 }
 impl fmt::Display for DescribeReplicationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReplicationTasksError {
@@ -4108,7 +4108,7 @@ impl DescribeSchemasError {
 }
 impl fmt::Display for DescribeSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSchemasError {
@@ -4151,7 +4151,7 @@ impl DescribeTableStatisticsError {
 }
 impl fmt::Display for DescribeTableStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTableStatisticsError {
@@ -4201,7 +4201,7 @@ impl ImportCertificateError {
 }
 impl fmt::Display for ImportCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportCertificateError {
@@ -4238,7 +4238,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -4299,7 +4299,7 @@ impl ModifyEndpointError {
 }
 impl fmt::Display for ModifyEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyEndpointError {
@@ -4394,7 +4394,7 @@ impl ModifyEventSubscriptionError {
 }
 impl fmt::Display for ModifyEventSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyEventSubscriptionError {
@@ -4479,7 +4479,7 @@ impl ModifyReplicationInstanceError {
 }
 impl fmt::Display for ModifyReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyReplicationInstanceError {
@@ -4557,7 +4557,7 @@ impl ModifyReplicationSubnetGroupError {
 }
 impl fmt::Display for ModifyReplicationSubnetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyReplicationSubnetGroupError {
@@ -4620,7 +4620,7 @@ impl ModifyReplicationTaskError {
 }
 impl fmt::Display for ModifyReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ModifyReplicationTaskError {
@@ -4665,7 +4665,7 @@ impl RebootReplicationInstanceError {
 }
 impl fmt::Display for RebootReplicationInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootReplicationInstanceError {
@@ -4722,7 +4722,7 @@ impl RefreshSchemasError {
 }
 impl fmt::Display for RefreshSchemasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RefreshSchemasError {
@@ -4765,7 +4765,7 @@ impl ReloadTablesError {
 }
 impl fmt::Display for ReloadTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReloadTablesError {
@@ -4801,7 +4801,7 @@ impl RemoveTagsFromResourceError {
 }
 impl fmt::Display for RemoveTagsFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromResourceError {
@@ -4850,7 +4850,7 @@ impl StartReplicationTaskError {
 }
 impl fmt::Display for StartReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartReplicationTaskError {
@@ -4896,7 +4896,7 @@ impl StartReplicationTaskAssessmentError {
 }
 impl fmt::Display for StartReplicationTaskAssessmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartReplicationTaskAssessmentError {
@@ -4939,7 +4939,7 @@ impl StopReplicationTaskError {
 }
 impl fmt::Display for StopReplicationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopReplicationTaskError {
@@ -4996,7 +4996,7 @@ impl TestConnectionError {
 }
 impl fmt::Display for TestConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestConnectionError {

@@ -686,7 +686,7 @@ impl CreateCertificateAuthorityError {
 }
 impl fmt::Display for CreateCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCertificateAuthorityError {
@@ -761,7 +761,7 @@ impl CreateCertificateAuthorityAuditReportError {
 }
 impl fmt::Display for CreateCertificateAuthorityAuditReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCertificateAuthorityAuditReportError {
@@ -826,7 +826,7 @@ impl CreatePermissionError {
 }
 impl fmt::Display for CreatePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePermissionError {
@@ -889,7 +889,7 @@ impl DeleteCertificateAuthorityError {
 }
 impl fmt::Display for DeleteCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCertificateAuthorityError {
@@ -940,7 +940,7 @@ impl DeletePermissionError {
 }
 impl fmt::Display for DeletePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePermissionError {
@@ -987,7 +987,7 @@ impl DescribeCertificateAuthorityError {
 }
 impl fmt::Display for DescribeCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificateAuthorityError {
@@ -1039,7 +1039,7 @@ impl DescribeCertificateAuthorityAuditReportError {
 }
 impl fmt::Display for DescribeCertificateAuthorityAuditReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificateAuthorityAuditReportError {
@@ -1094,7 +1094,7 @@ impl GetCertificateError {
 }
 impl fmt::Display for GetCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCertificateError {
@@ -1149,7 +1149,7 @@ impl GetCertificateAuthorityCertificateError {
 }
 impl fmt::Display for GetCertificateAuthorityCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCertificateAuthorityCertificateError {
@@ -1216,7 +1216,7 @@ impl GetCertificateAuthorityCsrError {
 }
 impl fmt::Display for GetCertificateAuthorityCsrError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCertificateAuthorityCsrError {
@@ -1313,7 +1313,7 @@ impl ImportCertificateAuthorityCertificateError {
 }
 impl fmt::Display for ImportCertificateAuthorityCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportCertificateAuthorityCertificateError {
@@ -1379,7 +1379,7 @@ impl IssueCertificateError {
 }
 impl fmt::Display for IssueCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IssueCertificateError {
@@ -1421,7 +1421,7 @@ impl ListCertificateAuthoritiesError {
 }
 impl fmt::Display for ListCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCertificateAuthoritiesError {
@@ -1474,7 +1474,7 @@ impl ListPermissionsError {
 }
 impl fmt::Display for ListPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPermissionsError {
@@ -1521,7 +1521,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -1574,7 +1574,7 @@ impl RestoreCertificateAuthorityError {
 }
 impl fmt::Display for RestoreCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreCertificateAuthorityError {
@@ -1653,7 +1653,7 @@ impl RevokeCertificateError {
 }
 impl fmt::Display for RevokeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeCertificateError {
@@ -1718,7 +1718,7 @@ impl TagCertificateAuthorityError {
 }
 impl fmt::Display for TagCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagCertificateAuthorityError {
@@ -1778,7 +1778,7 @@ impl UntagCertificateAuthorityError {
 }
 impl fmt::Display for UntagCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagCertificateAuthorityError {
@@ -1853,7 +1853,7 @@ impl UpdateCertificateAuthorityError {
 }
 impl fmt::Display for UpdateCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCertificateAuthorityError {

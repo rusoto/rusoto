@@ -290,7 +290,7 @@ impl DeleteTerminologyError {
 }
 impl fmt::Display for DeleteTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTerminologyError {
@@ -342,7 +342,7 @@ impl GetTerminologyError {
 }
 impl fmt::Display for GetTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTerminologyError {
@@ -395,7 +395,7 @@ impl ImportTerminologyError {
 }
 impl fmt::Display for ImportTerminologyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportTerminologyError {
@@ -443,7 +443,7 @@ impl ListTerminologiesError {
 }
 impl fmt::Display for ListTerminologiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTerminologiesError {
@@ -517,7 +517,7 @@ impl TranslateTextError {
 }
 impl fmt::Display for TranslateTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TranslateTextError {

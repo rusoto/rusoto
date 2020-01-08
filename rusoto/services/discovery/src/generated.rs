@@ -1054,7 +1054,7 @@ impl AssociateConfigurationItemsToApplicationError {
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateConfigurationItemsToApplicationError {
@@ -1123,7 +1123,7 @@ impl BatchDeleteImportDataError {
 }
 impl fmt::Display for BatchDeleteImportDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteImportDataError {
@@ -1186,7 +1186,7 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationError {
@@ -1248,7 +1248,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -1312,7 +1312,7 @@ impl DeleteApplicationsError {
 }
 impl fmt::Display for DeleteApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationsError {
@@ -1374,7 +1374,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -1434,7 +1434,7 @@ impl DescribeAgentsError {
 }
 impl fmt::Display for DescribeAgentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAgentsError {
@@ -1501,7 +1501,7 @@ impl DescribeConfigurationsError {
 }
 impl fmt::Display for DescribeConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationsError {
@@ -1582,7 +1582,7 @@ impl DescribeContinuousExportsError {
 }
 impl fmt::Display for DescribeContinuousExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeContinuousExportsError {
@@ -1660,7 +1660,7 @@ impl DescribeExportConfigurationsError {
 }
 impl fmt::Display for DescribeExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExportConfigurationsError {
@@ -1728,7 +1728,7 @@ impl DescribeExportTasksError {
 }
 impl fmt::Display for DescribeExportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExportTasksError {
@@ -1795,7 +1795,7 @@ impl DescribeImportTasksError {
 }
 impl fmt::Display for DescribeImportTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImportTasksError {
@@ -1857,7 +1857,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -1937,7 +1937,7 @@ impl DisassociateConfigurationItemsFromApplicationError {
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateConfigurationItemsFromApplicationError {
@@ -2021,7 +2021,7 @@ impl ExportConfigurationsError {
 }
 impl fmt::Display for ExportConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExportConfigurationsError {
@@ -2089,7 +2089,7 @@ impl GetDiscoverySummaryError {
 }
 impl fmt::Display for GetDiscoverySummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDiscoverySummaryError {
@@ -2157,7 +2157,7 @@ impl ListConfigurationsError {
 }
 impl fmt::Display for ListConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationsError {
@@ -2225,7 +2225,7 @@ impl ListServerNeighborsError {
 }
 impl fmt::Display for ListServerNeighborsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServerNeighborsError {
@@ -2309,7 +2309,7 @@ impl StartContinuousExportError {
 }
 impl fmt::Display for StartContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartContinuousExportError {
@@ -2381,7 +2381,7 @@ impl StartDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDataCollectionByAgentIdsError {
@@ -2447,7 +2447,7 @@ impl StartExportTaskError {
 }
 impl fmt::Display for StartExportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartExportTaskError {
@@ -2512,7 +2512,7 @@ impl StartImportTaskError {
 }
 impl fmt::Display for StartImportTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartImportTaskError {
@@ -2599,7 +2599,7 @@ impl StopContinuousExportError {
 }
 impl fmt::Display for StopContinuousExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopContinuousExportError {
@@ -2671,7 +2671,7 @@ impl StopDataCollectionByAgentIdsError {
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDataCollectionByAgentIdsError {
@@ -2734,7 +2734,7 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationError {

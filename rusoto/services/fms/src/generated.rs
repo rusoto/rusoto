@@ -519,7 +519,7 @@ impl AssociateAdminAccountError {
 }
 impl fmt::Display for AssociateAdminAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateAdminAccountError {
@@ -571,7 +571,7 @@ impl DeleteNotificationChannelError {
 }
 impl fmt::Display for DeleteNotificationChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotificationChannelError {
@@ -616,7 +616,7 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyError {
@@ -667,7 +667,7 @@ impl DisassociateAdminAccountError {
 }
 impl fmt::Display for DisassociateAdminAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateAdminAccountError {
@@ -712,7 +712,7 @@ impl GetAdminAccountError {
 }
 impl fmt::Display for GetAdminAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAdminAccountError {
@@ -754,7 +754,7 @@ impl GetComplianceDetailError {
 }
 impl fmt::Display for GetComplianceDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceDetailError {
@@ -804,7 +804,7 @@ impl GetNotificationChannelError {
 }
 impl fmt::Display for GetNotificationChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetNotificationChannelError {
@@ -854,7 +854,7 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyError {
@@ -902,7 +902,7 @@ impl GetProtectionStatusError {
 }
 impl fmt::Display for GetProtectionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetProtectionStatusError {
@@ -944,7 +944,7 @@ impl ListComplianceStatusError {
 }
 impl fmt::Display for ListComplianceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListComplianceStatusError {
@@ -983,7 +983,7 @@ impl ListMemberAccountsError {
 }
 impl fmt::Display for ListMemberAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMemberAccountsError {
@@ -1032,7 +1032,7 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesError {
@@ -1084,7 +1084,7 @@ impl PutNotificationChannelError {
 }
 impl fmt::Display for PutNotificationChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutNotificationChannelError {
@@ -1144,7 +1144,7 @@ impl PutPolicyError {
 }
 impl fmt::Display for PutPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPolicyError {

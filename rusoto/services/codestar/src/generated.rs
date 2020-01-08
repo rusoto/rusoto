@@ -785,7 +785,7 @@ impl AssociateTeamMemberError {
 }
 impl fmt::Display for AssociateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateTeamMemberError {
@@ -850,7 +850,7 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProjectError {
@@ -890,7 +890,7 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserProfileError {
@@ -930,7 +930,7 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProjectError {
@@ -958,7 +958,7 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserProfileError {
@@ -1008,7 +1008,7 @@ impl DescribeProjectError {
 }
 impl fmt::Display for DescribeProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProjectError {
@@ -1046,7 +1046,7 @@ impl DescribeUserProfileError {
 }
 impl fmt::Display for DescribeUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserProfileError {
@@ -1095,7 +1095,7 @@ impl DisassociateTeamMemberError {
 }
 impl fmt::Display for DisassociateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateTeamMemberError {
@@ -1130,7 +1130,7 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProjectsError {
@@ -1168,7 +1168,7 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourcesError {
@@ -1207,7 +1207,7 @@ impl ListTagsForProjectError {
 }
 impl fmt::Display for ListTagsForProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForProjectError {
@@ -1246,7 +1246,7 @@ impl ListTeamMembersError {
 }
 impl fmt::Display for ListTeamMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTeamMembersError {
@@ -1280,7 +1280,7 @@ impl ListUserProfilesError {
 }
 impl fmt::Display for ListUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserProfilesError {
@@ -1323,7 +1323,7 @@ impl TagProjectError {
 }
 impl fmt::Display for TagProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagProjectError {
@@ -1368,7 +1368,7 @@ impl UntagProjectError {
 }
 impl fmt::Display for UntagProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagProjectError {
@@ -1403,7 +1403,7 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProjectError {
@@ -1465,7 +1465,7 @@ impl UpdateTeamMemberError {
 }
 impl fmt::Display for UpdateTeamMemberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTeamMemberError {
@@ -1505,7 +1505,7 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserProfileError {

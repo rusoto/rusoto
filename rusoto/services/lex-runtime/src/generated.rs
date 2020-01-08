@@ -460,7 +460,7 @@ impl DeleteSessionError {
 }
 impl fmt::Display for DeleteSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSessionError {
@@ -512,7 +512,7 @@ impl GetSessionError {
 }
 impl fmt::Display for GetSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSessionError {
@@ -598,7 +598,7 @@ impl PostContentError {
 }
 impl fmt::Display for PostContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostContentError {
@@ -676,7 +676,7 @@ impl PostTextError {
 }
 impl fmt::Display for PostTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PostTextError {
@@ -751,7 +751,7 @@ impl PutSessionError {
 }
 impl fmt::Display for PutSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSessionError {

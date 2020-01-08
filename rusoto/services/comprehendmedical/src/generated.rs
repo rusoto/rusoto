@@ -837,7 +837,7 @@ impl DescribeEntitiesDetectionV2JobError {
 }
 impl fmt::Display for DescribeEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEntitiesDetectionV2JobError {
@@ -896,7 +896,7 @@ impl DescribePHIDetectionJobError {
 }
 impl fmt::Display for DescribePHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePHIDetectionJobError {
@@ -959,7 +959,7 @@ impl DetectEntitiesError {
 }
 impl fmt::Display for DetectEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectEntitiesError {
@@ -1024,7 +1024,7 @@ impl DetectEntitiesV2Error {
 }
 impl fmt::Display for DetectEntitiesV2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectEntitiesV2Error {
@@ -1087,7 +1087,7 @@ impl DetectPHIError {
 }
 impl fmt::Display for DetectPHIError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectPHIError {
@@ -1150,7 +1150,7 @@ impl InferICD10CMError {
 }
 impl fmt::Display for InferICD10CMError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InferICD10CMError {
@@ -1213,7 +1213,7 @@ impl InferRxNormError {
 }
 impl fmt::Display for InferRxNormError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InferRxNormError {
@@ -1269,7 +1269,7 @@ impl ListEntitiesDetectionV2JobsError {
 }
 impl fmt::Display for ListEntitiesDetectionV2JobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEntitiesDetectionV2JobsError {
@@ -1316,7 +1316,7 @@ impl ListPHIDetectionJobsError {
 }
 impl fmt::Display for ListPHIDetectionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPHIDetectionJobsError {
@@ -1376,7 +1376,7 @@ impl StartEntitiesDetectionV2JobError {
 }
 impl fmt::Display for StartEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartEntitiesDetectionV2JobError {
@@ -1431,7 +1431,7 @@ impl StartPHIDetectionJobError {
 }
 impl fmt::Display for StartPHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartPHIDetectionJobError {
@@ -1485,7 +1485,7 @@ impl StopEntitiesDetectionV2JobError {
 }
 impl fmt::Display for StopEntitiesDetectionV2JobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopEntitiesDetectionV2JobError {
@@ -1532,7 +1532,7 @@ impl StopPHIDetectionJobError {
 }
 impl fmt::Display for StopPHIDetectionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopPHIDetectionJobError {

@@ -1932,7 +1932,7 @@ impl AcceptInvitationError {
 }
 impl fmt::Display for AcceptInvitationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptInvitationError {
@@ -1971,7 +1971,7 @@ impl ArchiveFindingsError {
 }
 impl fmt::Display for ArchiveFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ArchiveFindingsError {
@@ -2010,7 +2010,7 @@ impl CreateDetectorError {
 }
 impl fmt::Display for CreateDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDetectorError {
@@ -2049,7 +2049,7 @@ impl CreateFilterError {
 }
 impl fmt::Display for CreateFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFilterError {
@@ -2088,7 +2088,7 @@ impl CreateIPSetError {
 }
 impl fmt::Display for CreateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIPSetError {
@@ -2127,7 +2127,7 @@ impl CreateMembersError {
 }
 impl fmt::Display for CreateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMembersError {
@@ -2172,7 +2172,7 @@ impl CreatePublishingDestinationError {
 }
 impl fmt::Display for CreatePublishingDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePublishingDestinationError {
@@ -2213,7 +2213,7 @@ impl CreateSampleFindingsError {
 }
 impl fmt::Display for CreateSampleFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSampleFindingsError {
@@ -2254,7 +2254,7 @@ impl CreateThreatIntelSetError {
 }
 impl fmt::Display for CreateThreatIntelSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateThreatIntelSetError {
@@ -2295,7 +2295,7 @@ impl DeclineInvitationsError {
 }
 impl fmt::Display for DeclineInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeclineInvitationsError {
@@ -2334,7 +2334,7 @@ impl DeleteDetectorError {
 }
 impl fmt::Display for DeleteDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDetectorError {
@@ -2373,7 +2373,7 @@ impl DeleteFilterError {
 }
 impl fmt::Display for DeleteFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFilterError {
@@ -2412,7 +2412,7 @@ impl DeleteIPSetError {
 }
 impl fmt::Display for DeleteIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIPSetError {
@@ -2453,7 +2453,7 @@ impl DeleteInvitationsError {
 }
 impl fmt::Display for DeleteInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInvitationsError {
@@ -2492,7 +2492,7 @@ impl DeleteMembersError {
 }
 impl fmt::Display for DeleteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMembersError {
@@ -2537,7 +2537,7 @@ impl DeletePublishingDestinationError {
 }
 impl fmt::Display for DeletePublishingDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePublishingDestinationError {
@@ -2578,7 +2578,7 @@ impl DeleteThreatIntelSetError {
 }
 impl fmt::Display for DeleteThreatIntelSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteThreatIntelSetError {
@@ -2623,7 +2623,7 @@ impl DescribePublishingDestinationError {
 }
 impl fmt::Display for DescribePublishingDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePublishingDestinationError {
@@ -2668,7 +2668,7 @@ impl DisassociateFromMasterAccountError {
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateFromMasterAccountError {
@@ -2709,7 +2709,7 @@ impl DisassociateMembersError {
 }
 impl fmt::Display for DisassociateMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateMembersError {
@@ -2748,7 +2748,7 @@ impl GetDetectorError {
 }
 impl fmt::Display for GetDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDetectorError {
@@ -2787,7 +2787,7 @@ impl GetFilterError {
 }
 impl fmt::Display for GetFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFilterError {
@@ -2826,7 +2826,7 @@ impl GetFindingsError {
 }
 impl fmt::Display for GetFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFindingsError {
@@ -2867,7 +2867,7 @@ impl GetFindingsStatisticsError {
 }
 impl fmt::Display for GetFindingsStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFindingsStatisticsError {
@@ -2906,7 +2906,7 @@ impl GetIPSetError {
 }
 impl fmt::Display for GetIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIPSetError {
@@ -2947,7 +2947,7 @@ impl GetInvitationsCountError {
 }
 impl fmt::Display for GetInvitationsCountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInvitationsCountError {
@@ -2988,7 +2988,7 @@ impl GetMasterAccountError {
 }
 impl fmt::Display for GetMasterAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMasterAccountError {
@@ -3027,7 +3027,7 @@ impl GetMembersError {
 }
 impl fmt::Display for GetMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMembersError {
@@ -3068,7 +3068,7 @@ impl GetThreatIntelSetError {
 }
 impl fmt::Display for GetThreatIntelSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetThreatIntelSetError {
@@ -3107,7 +3107,7 @@ impl InviteMembersError {
 }
 impl fmt::Display for InviteMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InviteMembersError {
@@ -3146,7 +3146,7 @@ impl ListDetectorsError {
 }
 impl fmt::Display for ListDetectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDetectorsError {
@@ -3185,7 +3185,7 @@ impl ListFiltersError {
 }
 impl fmt::Display for ListFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFiltersError {
@@ -3224,7 +3224,7 @@ impl ListFindingsError {
 }
 impl fmt::Display for ListFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFindingsError {
@@ -3263,7 +3263,7 @@ impl ListIPSetsError {
 }
 impl fmt::Display for ListIPSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIPSetsError {
@@ -3302,7 +3302,7 @@ impl ListInvitationsError {
 }
 impl fmt::Display for ListInvitationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInvitationsError {
@@ -3341,7 +3341,7 @@ impl ListMembersError {
 }
 impl fmt::Display for ListMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMembersError {
@@ -3386,7 +3386,7 @@ impl ListPublishingDestinationsError {
 }
 impl fmt::Display for ListPublishingDestinationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPublishingDestinationsError {
@@ -3427,7 +3427,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3468,7 +3468,7 @@ impl ListThreatIntelSetsError {
 }
 impl fmt::Display for ListThreatIntelSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThreatIntelSetsError {
@@ -3509,7 +3509,7 @@ impl StartMonitoringMembersError {
 }
 impl fmt::Display for StartMonitoringMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMonitoringMembersError {
@@ -3550,7 +3550,7 @@ impl StopMonitoringMembersError {
 }
 impl fmt::Display for StopMonitoringMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopMonitoringMembersError {
@@ -3589,7 +3589,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3630,7 +3630,7 @@ impl UnarchiveFindingsError {
 }
 impl fmt::Display for UnarchiveFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnarchiveFindingsError {
@@ -3669,7 +3669,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3708,7 +3708,7 @@ impl UpdateDetectorError {
 }
 impl fmt::Display for UpdateDetectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDetectorError {
@@ -3747,7 +3747,7 @@ impl UpdateFilterError {
 }
 impl fmt::Display for UpdateFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFilterError {
@@ -3788,7 +3788,7 @@ impl UpdateFindingsFeedbackError {
 }
 impl fmt::Display for UpdateFindingsFeedbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFindingsFeedbackError {
@@ -3827,7 +3827,7 @@ impl UpdateIPSetError {
 }
 impl fmt::Display for UpdateIPSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIPSetError {
@@ -3872,7 +3872,7 @@ impl UpdatePublishingDestinationError {
 }
 impl fmt::Display for UpdatePublishingDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePublishingDestinationError {
@@ -3913,7 +3913,7 @@ impl UpdateThreatIntelSetError {
 }
 impl fmt::Display for UpdateThreatIntelSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateThreatIntelSetError {

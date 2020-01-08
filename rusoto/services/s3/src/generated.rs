@@ -15478,7 +15478,7 @@ impl AbortMultipartUploadError {
 }
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AbortMultipartUploadError {
@@ -15516,7 +15516,7 @@ impl CompleteMultipartUploadError {
 }
 impl fmt::Display for CompleteMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompleteMultipartUploadError {
@@ -15560,7 +15560,7 @@ impl CopyObjectError {
 }
 impl fmt::Display for CopyObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyObjectError {
@@ -15613,7 +15613,7 @@ impl CreateBucketError {
 }
 impl fmt::Display for CreateBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBucketError {
@@ -15652,7 +15652,7 @@ impl CreateMultipartUploadError {
 }
 impl fmt::Display for CreateMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMultipartUploadError {
@@ -15688,7 +15688,7 @@ impl DeleteBucketError {
 }
 impl fmt::Display for DeleteBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketError {
@@ -15726,7 +15726,7 @@ impl DeleteBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for DeleteBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketAnalyticsConfigurationError {
@@ -15762,7 +15762,7 @@ impl DeleteBucketCorsError {
 }
 impl fmt::Display for DeleteBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketCorsError {
@@ -15798,7 +15798,7 @@ impl DeleteBucketEncryptionError {
 }
 impl fmt::Display for DeleteBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketEncryptionError {
@@ -15836,7 +15836,7 @@ impl DeleteBucketInventoryConfigurationError {
 }
 impl fmt::Display for DeleteBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketInventoryConfigurationError {
@@ -15872,7 +15872,7 @@ impl DeleteBucketLifecycleError {
 }
 impl fmt::Display for DeleteBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketLifecycleError {
@@ -15910,7 +15910,7 @@ impl DeleteBucketMetricsConfigurationError {
 }
 impl fmt::Display for DeleteBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketMetricsConfigurationError {
@@ -15946,7 +15946,7 @@ impl DeleteBucketPolicyError {
 }
 impl fmt::Display for DeleteBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketPolicyError {
@@ -15982,7 +15982,7 @@ impl DeleteBucketReplicationError {
 }
 impl fmt::Display for DeleteBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketReplicationError {
@@ -16018,7 +16018,7 @@ impl DeleteBucketTaggingError {
 }
 impl fmt::Display for DeleteBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketTaggingError {
@@ -16054,7 +16054,7 @@ impl DeleteBucketWebsiteError {
 }
 impl fmt::Display for DeleteBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBucketWebsiteError {
@@ -16090,7 +16090,7 @@ impl DeleteObjectError {
 }
 impl fmt::Display for DeleteObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteObjectError {
@@ -16126,7 +16126,7 @@ impl DeleteObjectTaggingError {
 }
 impl fmt::Display for DeleteObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteObjectTaggingError {
@@ -16162,7 +16162,7 @@ impl DeleteObjectsError {
 }
 impl fmt::Display for DeleteObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteObjectsError {
@@ -16198,7 +16198,7 @@ impl DeletePublicAccessBlockError {
 }
 impl fmt::Display for DeletePublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePublicAccessBlockError {
@@ -16236,7 +16236,7 @@ impl GetBucketAccelerateConfigurationError {
 }
 impl fmt::Display for GetBucketAccelerateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketAccelerateConfigurationError {
@@ -16272,7 +16272,7 @@ impl GetBucketAclError {
 }
 impl fmt::Display for GetBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketAclError {
@@ -16310,7 +16310,7 @@ impl GetBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for GetBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketAnalyticsConfigurationError {
@@ -16346,7 +16346,7 @@ impl GetBucketCorsError {
 }
 impl fmt::Display for GetBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketCorsError {
@@ -16382,7 +16382,7 @@ impl GetBucketEncryptionError {
 }
 impl fmt::Display for GetBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketEncryptionError {
@@ -16420,7 +16420,7 @@ impl GetBucketInventoryConfigurationError {
 }
 impl fmt::Display for GetBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketInventoryConfigurationError {
@@ -16456,7 +16456,7 @@ impl GetBucketLifecycleError {
 }
 impl fmt::Display for GetBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketLifecycleError {
@@ -16494,7 +16494,7 @@ impl GetBucketLifecycleConfigurationError {
 }
 impl fmt::Display for GetBucketLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketLifecycleConfigurationError {
@@ -16530,7 +16530,7 @@ impl GetBucketLocationError {
 }
 impl fmt::Display for GetBucketLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketLocationError {
@@ -16566,7 +16566,7 @@ impl GetBucketLoggingError {
 }
 impl fmt::Display for GetBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketLoggingError {
@@ -16604,7 +16604,7 @@ impl GetBucketMetricsConfigurationError {
 }
 impl fmt::Display for GetBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketMetricsConfigurationError {
@@ -16640,7 +16640,7 @@ impl GetBucketNotificationError {
 }
 impl fmt::Display for GetBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketNotificationError {
@@ -16678,7 +16678,7 @@ impl GetBucketNotificationConfigurationError {
 }
 impl fmt::Display for GetBucketNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketNotificationConfigurationError {
@@ -16714,7 +16714,7 @@ impl GetBucketPolicyError {
 }
 impl fmt::Display for GetBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketPolicyError {
@@ -16750,7 +16750,7 @@ impl GetBucketPolicyStatusError {
 }
 impl fmt::Display for GetBucketPolicyStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketPolicyStatusError {
@@ -16786,7 +16786,7 @@ impl GetBucketReplicationError {
 }
 impl fmt::Display for GetBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketReplicationError {
@@ -16822,7 +16822,7 @@ impl GetBucketRequestPaymentError {
 }
 impl fmt::Display for GetBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketRequestPaymentError {
@@ -16858,7 +16858,7 @@ impl GetBucketTaggingError {
 }
 impl fmt::Display for GetBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketTaggingError {
@@ -16894,7 +16894,7 @@ impl GetBucketVersioningError {
 }
 impl fmt::Display for GetBucketVersioningError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketVersioningError {
@@ -16930,7 +16930,7 @@ impl GetBucketWebsiteError {
 }
 impl fmt::Display for GetBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBucketWebsiteError {
@@ -16974,7 +16974,7 @@ impl GetObjectError {
 }
 impl fmt::Display for GetObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectError {
@@ -17020,7 +17020,7 @@ impl GetObjectAclError {
 }
 impl fmt::Display for GetObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectAclError {
@@ -17058,7 +17058,7 @@ impl GetObjectLegalHoldError {
 }
 impl fmt::Display for GetObjectLegalHoldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectLegalHoldError {
@@ -17096,7 +17096,7 @@ impl GetObjectLockConfigurationError {
 }
 impl fmt::Display for GetObjectLockConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectLockConfigurationError {
@@ -17132,7 +17132,7 @@ impl GetObjectRetentionError {
 }
 impl fmt::Display for GetObjectRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectRetentionError {
@@ -17168,7 +17168,7 @@ impl GetObjectTaggingError {
 }
 impl fmt::Display for GetObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectTaggingError {
@@ -17204,7 +17204,7 @@ impl GetObjectTorrentError {
 }
 impl fmt::Display for GetObjectTorrentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectTorrentError {
@@ -17240,7 +17240,7 @@ impl GetPublicAccessBlockError {
 }
 impl fmt::Display for GetPublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPublicAccessBlockError {
@@ -17284,7 +17284,7 @@ impl HeadBucketError {
 }
 impl fmt::Display for HeadBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for HeadBucketError {
@@ -17330,7 +17330,7 @@ impl HeadObjectError {
 }
 impl fmt::Display for HeadObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for HeadObjectError {
@@ -17370,7 +17370,7 @@ impl ListBucketAnalyticsConfigurationsError {
 }
 impl fmt::Display for ListBucketAnalyticsConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBucketAnalyticsConfigurationsError {
@@ -17408,7 +17408,7 @@ impl ListBucketInventoryConfigurationsError {
 }
 impl fmt::Display for ListBucketInventoryConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBucketInventoryConfigurationsError {
@@ -17446,7 +17446,7 @@ impl ListBucketMetricsConfigurationsError {
 }
 impl fmt::Display for ListBucketMetricsConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBucketMetricsConfigurationsError {
@@ -17482,7 +17482,7 @@ impl ListBucketsError {
 }
 impl fmt::Display for ListBucketsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBucketsError {
@@ -17518,7 +17518,7 @@ impl ListMultipartUploadsError {
 }
 impl fmt::Display for ListMultipartUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMultipartUploadsError {
@@ -17554,7 +17554,7 @@ impl ListObjectVersionsError {
 }
 impl fmt::Display for ListObjectVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectVersionsError {
@@ -17598,7 +17598,7 @@ impl ListObjectsError {
 }
 impl fmt::Display for ListObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectsError {
@@ -17644,7 +17644,7 @@ impl ListObjectsV2Error {
 }
 impl fmt::Display for ListObjectsV2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectsV2Error {
@@ -17682,7 +17682,7 @@ impl ListPartsError {
 }
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPartsError {
@@ -17720,7 +17720,7 @@ impl PutBucketAccelerateConfigurationError {
 }
 impl fmt::Display for PutBucketAccelerateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketAccelerateConfigurationError {
@@ -17756,7 +17756,7 @@ impl PutBucketAclError {
 }
 impl fmt::Display for PutBucketAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketAclError {
@@ -17794,7 +17794,7 @@ impl PutBucketAnalyticsConfigurationError {
 }
 impl fmt::Display for PutBucketAnalyticsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketAnalyticsConfigurationError {
@@ -17830,7 +17830,7 @@ impl PutBucketCorsError {
 }
 impl fmt::Display for PutBucketCorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketCorsError {
@@ -17866,7 +17866,7 @@ impl PutBucketEncryptionError {
 }
 impl fmt::Display for PutBucketEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketEncryptionError {
@@ -17904,7 +17904,7 @@ impl PutBucketInventoryConfigurationError {
 }
 impl fmt::Display for PutBucketInventoryConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketInventoryConfigurationError {
@@ -17940,7 +17940,7 @@ impl PutBucketLifecycleError {
 }
 impl fmt::Display for PutBucketLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketLifecycleError {
@@ -17978,7 +17978,7 @@ impl PutBucketLifecycleConfigurationError {
 }
 impl fmt::Display for PutBucketLifecycleConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketLifecycleConfigurationError {
@@ -18014,7 +18014,7 @@ impl PutBucketLoggingError {
 }
 impl fmt::Display for PutBucketLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketLoggingError {
@@ -18052,7 +18052,7 @@ impl PutBucketMetricsConfigurationError {
 }
 impl fmt::Display for PutBucketMetricsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketMetricsConfigurationError {
@@ -18088,7 +18088,7 @@ impl PutBucketNotificationError {
 }
 impl fmt::Display for PutBucketNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketNotificationError {
@@ -18126,7 +18126,7 @@ impl PutBucketNotificationConfigurationError {
 }
 impl fmt::Display for PutBucketNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketNotificationConfigurationError {
@@ -18162,7 +18162,7 @@ impl PutBucketPolicyError {
 }
 impl fmt::Display for PutBucketPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketPolicyError {
@@ -18198,7 +18198,7 @@ impl PutBucketReplicationError {
 }
 impl fmt::Display for PutBucketReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketReplicationError {
@@ -18234,7 +18234,7 @@ impl PutBucketRequestPaymentError {
 }
 impl fmt::Display for PutBucketRequestPaymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketRequestPaymentError {
@@ -18270,7 +18270,7 @@ impl PutBucketTaggingError {
 }
 impl fmt::Display for PutBucketTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketTaggingError {
@@ -18306,7 +18306,7 @@ impl PutBucketVersioningError {
 }
 impl fmt::Display for PutBucketVersioningError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketVersioningError {
@@ -18342,7 +18342,7 @@ impl PutBucketWebsiteError {
 }
 impl fmt::Display for PutBucketWebsiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBucketWebsiteError {
@@ -18378,7 +18378,7 @@ impl PutObjectError {
 }
 impl fmt::Display for PutObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectError {
@@ -18422,7 +18422,7 @@ impl PutObjectAclError {
 }
 impl fmt::Display for PutObjectAclError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectAclError {
@@ -18460,7 +18460,7 @@ impl PutObjectLegalHoldError {
 }
 impl fmt::Display for PutObjectLegalHoldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectLegalHoldError {
@@ -18498,7 +18498,7 @@ impl PutObjectLockConfigurationError {
 }
 impl fmt::Display for PutObjectLockConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectLockConfigurationError {
@@ -18534,7 +18534,7 @@ impl PutObjectRetentionError {
 }
 impl fmt::Display for PutObjectRetentionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectRetentionError {
@@ -18570,7 +18570,7 @@ impl PutObjectTaggingError {
 }
 impl fmt::Display for PutObjectTaggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutObjectTaggingError {
@@ -18606,7 +18606,7 @@ impl PutPublicAccessBlockError {
 }
 impl fmt::Display for PutPublicAccessBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPublicAccessBlockError {
@@ -18652,7 +18652,7 @@ impl RestoreObjectError {
 }
 impl fmt::Display for RestoreObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestoreObjectError {
@@ -18690,7 +18690,7 @@ impl SelectObjectContentError {
 }
 impl fmt::Display for SelectObjectContentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SelectObjectContentError {
@@ -18726,7 +18726,7 @@ impl UploadPartError {
 }
 impl fmt::Display for UploadPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadPartError {
@@ -18762,7 +18762,7 @@ impl UploadPartCopyError {
 }
 impl fmt::Display for UploadPartCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadPartCopyError {

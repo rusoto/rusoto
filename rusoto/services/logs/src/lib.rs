@@ -37,8 +37,8 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     const LOG_GROUP_NAME: &'static str = "testing";
-//!     const LOG_STREAM_NAME: &'static str = "testing";
+//!     const LOG_GROUP_NAME: &str = "testing";
+//!     const LOG_STREAM_NAME: &str = "testing";
 //!
 //!     let client = CloudWatchLogsClient::new(Region::UsEast2);
 //!
@@ -62,7 +62,7 @@
 //!         log_events: vec![input_log_event], // > 1 must sort by timestamp ASC
 //!         log_group_name: LOG_GROUP_NAME.to_string(),
 //!         log_stream_name: LOG_STREAM_NAME.to_string(),
-//!         sequence_token: sequence_token,
+//!         sequence_token,
 //!     };
 //!
 //!     let resp = client.put_log_events(put_log_events_request).await;

@@ -4043,7 +4043,7 @@ impl BuildSuggestersError {
 }
 impl fmt::Display for BuildSuggestersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BuildSuggestersError {
@@ -4104,7 +4104,7 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainError {
@@ -4181,7 +4181,7 @@ impl DefineAnalysisSchemeError {
 }
 impl fmt::Display for DefineAnalysisSchemeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DefineAnalysisSchemeError {
@@ -4260,7 +4260,7 @@ impl DefineExpressionError {
 }
 impl fmt::Display for DefineExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DefineExpressionError {
@@ -4339,7 +4339,7 @@ impl DefineIndexFieldError {
 }
 impl fmt::Display for DefineIndexFieldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DefineIndexFieldError {
@@ -4418,7 +4418,7 @@ impl DefineSuggesterError {
 }
 impl fmt::Display for DefineSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DefineSuggesterError {
@@ -4490,7 +4490,7 @@ impl DeleteAnalysisSchemeError {
 }
 impl fmt::Display for DeleteAnalysisSchemeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAnalysisSchemeError {
@@ -4545,7 +4545,7 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainError {
@@ -4614,7 +4614,7 @@ impl DeleteExpressionError {
 }
 impl fmt::Display for DeleteExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteExpressionError {
@@ -4685,7 +4685,7 @@ impl DeleteIndexFieldError {
 }
 impl fmt::Display for DeleteIndexFieldError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIndexFieldError {
@@ -4756,7 +4756,7 @@ impl DeleteSuggesterError {
 }
 impl fmt::Display for DeleteSuggesterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSuggesterError {
@@ -4820,7 +4820,7 @@ impl DescribeAnalysisSchemesError {
 }
 impl fmt::Display for DescribeAnalysisSchemesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAnalysisSchemesError {
@@ -4910,7 +4910,7 @@ impl DescribeAvailabilityOptionsError {
 }
 impl fmt::Display for DescribeAvailabilityOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAvailabilityOptionsError {
@@ -4996,7 +4996,7 @@ impl DescribeDomainEndpointOptionsError {
 }
 impl fmt::Display for DescribeDomainEndpointOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainEndpointOptionsError {
@@ -5054,7 +5054,7 @@ impl DescribeDomainsError {
 }
 impl fmt::Display for DescribeDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainsError {
@@ -5116,7 +5116,7 @@ impl DescribeExpressionsError {
 }
 impl fmt::Display for DescribeExpressionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExpressionsError {
@@ -5179,7 +5179,7 @@ impl DescribeIndexFieldsError {
 }
 impl fmt::Display for DescribeIndexFieldsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIndexFieldsError {
@@ -5242,7 +5242,7 @@ impl DescribeScalingParametersError {
 }
 impl fmt::Display for DescribeScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingParametersError {
@@ -5309,7 +5309,7 @@ impl DescribeServiceAccessPoliciesError {
 }
 impl fmt::Display for DescribeServiceAccessPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServiceAccessPoliciesError {
@@ -5372,7 +5372,7 @@ impl DescribeSuggestersError {
 }
 impl fmt::Display for DescribeSuggestersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSuggestersError {
@@ -5435,7 +5435,7 @@ impl IndexDocumentsError {
 }
 impl fmt::Display for IndexDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IndexDocumentsError {
@@ -5484,7 +5484,7 @@ impl ListDomainNamesError {
 }
 impl fmt::Display for ListDomainNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainNamesError {
@@ -5573,7 +5573,7 @@ impl UpdateAvailabilityOptionsError {
 }
 impl fmt::Display for UpdateAvailabilityOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAvailabilityOptionsError {
@@ -5674,7 +5674,7 @@ impl UpdateDomainEndpointOptionsError {
 }
 impl fmt::Display for UpdateDomainEndpointOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainEndpointOptionsError {
@@ -5755,7 +5755,7 @@ impl UpdateScalingParametersError {
 }
 impl fmt::Display for UpdateScalingParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateScalingParametersError {
@@ -5838,7 +5838,7 @@ impl UpdateServiceAccessPoliciesError {
 }
 impl fmt::Display for UpdateServiceAccessPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceAccessPoliciesError {

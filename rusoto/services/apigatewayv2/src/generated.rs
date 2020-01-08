@@ -3546,7 +3546,7 @@ impl CreateApiError {
 }
 impl fmt::Display for CreateApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApiError {
@@ -3597,7 +3597,7 @@ impl CreateApiMappingError {
 }
 impl fmt::Display for CreateApiMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApiMappingError {
@@ -3648,7 +3648,7 @@ impl CreateAuthorizerError {
 }
 impl fmt::Display for CreateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAuthorizerError {
@@ -3699,7 +3699,7 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentError {
@@ -3754,7 +3754,7 @@ impl CreateDomainNameError {
 }
 impl fmt::Display for CreateDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainNameError {
@@ -3806,7 +3806,7 @@ impl CreateIntegrationError {
 }
 impl fmt::Display for CreateIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIntegrationError {
@@ -3861,7 +3861,7 @@ impl CreateIntegrationResponseError {
 }
 impl fmt::Display for CreateIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIntegrationResponseError {
@@ -3912,7 +3912,7 @@ impl CreateModelError {
 }
 impl fmt::Display for CreateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateModelError {
@@ -3963,7 +3963,7 @@ impl CreateRouteError {
 }
 impl fmt::Display for CreateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRouteError {
@@ -4014,7 +4014,7 @@ impl CreateRouteResponseError {
 }
 impl fmt::Display for CreateRouteResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRouteResponseError {
@@ -4065,7 +4065,7 @@ impl CreateStageError {
 }
 impl fmt::Display for CreateStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStageError {
@@ -4106,7 +4106,7 @@ impl DeleteApiError {
 }
 impl fmt::Display for DeleteApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApiError {
@@ -4150,7 +4150,7 @@ impl DeleteApiMappingError {
 }
 impl fmt::Display for DeleteApiMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApiMappingError {
@@ -4190,7 +4190,7 @@ impl DeleteAuthorizerError {
 }
 impl fmt::Display for DeleteAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAuthorizerError {
@@ -4231,7 +4231,7 @@ impl DeleteCorsConfigurationError {
 }
 impl fmt::Display for DeleteCorsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCorsConfigurationError {
@@ -4270,7 +4270,7 @@ impl DeleteDeploymentError {
 }
 impl fmt::Display for DeleteDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeploymentError {
@@ -4309,7 +4309,7 @@ impl DeleteDomainNameError {
 }
 impl fmt::Display for DeleteDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainNameError {
@@ -4348,7 +4348,7 @@ impl DeleteIntegrationError {
 }
 impl fmt::Display for DeleteIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIntegrationError {
@@ -4389,7 +4389,7 @@ impl DeleteIntegrationResponseError {
 }
 impl fmt::Display for DeleteIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIntegrationResponseError {
@@ -4428,7 +4428,7 @@ impl DeleteModelError {
 }
 impl fmt::Display for DeleteModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteModelError {
@@ -4467,7 +4467,7 @@ impl DeleteRouteError {
 }
 impl fmt::Display for DeleteRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRouteError {
@@ -4506,7 +4506,7 @@ impl DeleteRouteResponseError {
 }
 impl fmt::Display for DeleteRouteResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRouteResponseError {
@@ -4545,7 +4545,7 @@ impl DeleteRouteSettingsError {
 }
 impl fmt::Display for DeleteRouteSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRouteSettingsError {
@@ -4584,7 +4584,7 @@ impl DeleteStageError {
 }
 impl fmt::Display for DeleteStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStageError {
@@ -4621,7 +4621,7 @@ impl GetApiError {
 }
 impl fmt::Display for GetApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApiError {
@@ -4665,7 +4665,7 @@ impl GetApiMappingError {
 }
 impl fmt::Display for GetApiMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApiMappingError {
@@ -4710,7 +4710,7 @@ impl GetApiMappingsError {
 }
 impl fmt::Display for GetApiMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApiMappingsError {
@@ -4755,7 +4755,7 @@ impl GetApisError {
 }
 impl fmt::Display for GetApisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApisError {
@@ -4795,7 +4795,7 @@ impl GetAuthorizerError {
 }
 impl fmt::Display for GetAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAuthorizerError {
@@ -4839,7 +4839,7 @@ impl GetAuthorizersError {
 }
 impl fmt::Display for GetAuthorizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAuthorizersError {
@@ -4879,7 +4879,7 @@ impl GetDeploymentError {
 }
 impl fmt::Display for GetDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentError {
@@ -4923,7 +4923,7 @@ impl GetDeploymentsError {
 }
 impl fmt::Display for GetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentsError {
@@ -4963,7 +4963,7 @@ impl GetDomainNameError {
 }
 impl fmt::Display for GetDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainNameError {
@@ -5007,7 +5007,7 @@ impl GetDomainNamesError {
 }
 impl fmt::Display for GetDomainNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainNamesError {
@@ -5047,7 +5047,7 @@ impl GetIntegrationError {
 }
 impl fmt::Display for GetIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntegrationError {
@@ -5088,7 +5088,7 @@ impl GetIntegrationResponseError {
 }
 impl fmt::Display for GetIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntegrationResponseError {
@@ -5134,7 +5134,7 @@ impl GetIntegrationResponsesError {
 }
 impl fmt::Display for GetIntegrationResponsesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntegrationResponsesError {
@@ -5179,7 +5179,7 @@ impl GetIntegrationsError {
 }
 impl fmt::Display for GetIntegrationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntegrationsError {
@@ -5219,7 +5219,7 @@ impl GetModelError {
 }
 impl fmt::Display for GetModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetModelError {
@@ -5258,7 +5258,7 @@ impl GetModelTemplateError {
 }
 impl fmt::Display for GetModelTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetModelTemplateError {
@@ -5302,7 +5302,7 @@ impl GetModelsError {
 }
 impl fmt::Display for GetModelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetModelsError {
@@ -5342,7 +5342,7 @@ impl GetRouteError {
 }
 impl fmt::Display for GetRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRouteError {
@@ -5381,7 +5381,7 @@ impl GetRouteResponseError {
 }
 impl fmt::Display for GetRouteResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRouteResponseError {
@@ -5425,7 +5425,7 @@ impl GetRouteResponsesError {
 }
 impl fmt::Display for GetRouteResponsesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRouteResponsesError {
@@ -5470,7 +5470,7 @@ impl GetRoutesError {
 }
 impl fmt::Display for GetRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRoutesError {
@@ -5510,7 +5510,7 @@ impl GetStageError {
 }
 impl fmt::Display for GetStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStageError {
@@ -5554,7 +5554,7 @@ impl GetStagesError {
 }
 impl fmt::Display for GetStagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStagesError {
@@ -5604,7 +5604,7 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagsError {
@@ -5655,7 +5655,7 @@ impl ImportApiError {
 }
 impl fmt::Display for ImportApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportApiError {
@@ -5706,7 +5706,7 @@ impl ReimportApiError {
 }
 impl fmt::Display for ReimportApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReimportApiError {
@@ -5757,7 +5757,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5808,7 +5808,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5859,7 +5859,7 @@ impl UpdateApiError {
 }
 impl fmt::Display for UpdateApiError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApiError {
@@ -5910,7 +5910,7 @@ impl UpdateApiMappingError {
 }
 impl fmt::Display for UpdateApiMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApiMappingError {
@@ -5961,7 +5961,7 @@ impl UpdateAuthorizerError {
 }
 impl fmt::Display for UpdateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAuthorizerError {
@@ -6012,7 +6012,7 @@ impl UpdateDeploymentError {
 }
 impl fmt::Display for UpdateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeploymentError {
@@ -6063,7 +6063,7 @@ impl UpdateDomainNameError {
 }
 impl fmt::Display for UpdateDomainNameError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainNameError {
@@ -6114,7 +6114,7 @@ impl UpdateIntegrationError {
 }
 impl fmt::Display for UpdateIntegrationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIntegrationError {
@@ -6169,7 +6169,7 @@ impl UpdateIntegrationResponseError {
 }
 impl fmt::Display for UpdateIntegrationResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIntegrationResponseError {
@@ -6220,7 +6220,7 @@ impl UpdateModelError {
 }
 impl fmt::Display for UpdateModelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateModelError {
@@ -6271,7 +6271,7 @@ impl UpdateRouteError {
 }
 impl fmt::Display for UpdateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRouteError {
@@ -6322,7 +6322,7 @@ impl UpdateRouteResponseError {
 }
 impl fmt::Display for UpdateRouteResponseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRouteResponseError {
@@ -6373,7 +6373,7 @@ impl UpdateStageError {
 }
 impl fmt::Display for UpdateStageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStageError {

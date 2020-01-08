@@ -1453,7 +1453,7 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelJobError {
@@ -1510,7 +1510,7 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateJobError {
@@ -1567,7 +1567,7 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePipelineError {
@@ -1619,7 +1619,7 @@ impl CreatePresetError {
 }
 impl fmt::Display for CreatePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePresetError {
@@ -1675,7 +1675,7 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePipelineError {
@@ -1727,7 +1727,7 @@ impl DeletePresetError {
 }
 impl fmt::Display for DeletePresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePresetError {
@@ -1780,7 +1780,7 @@ impl ListJobsByPipelineError {
 }
 impl fmt::Display for ListJobsByPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsByPipelineError {
@@ -1833,7 +1833,7 @@ impl ListJobsByStatusError {
 }
 impl fmt::Display for ListJobsByStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsByStatusError {
@@ -1879,7 +1879,7 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPipelinesError {
@@ -1924,7 +1924,7 @@ impl ListPresetsError {
 }
 impl fmt::Display for ListPresetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPresetsError {
@@ -1974,7 +1974,7 @@ impl ReadJobError {
 }
 impl fmt::Display for ReadJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReadJobError {
@@ -2025,7 +2025,7 @@ impl ReadPipelineError {
 }
 impl fmt::Display for ReadPipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReadPipelineError {
@@ -2076,7 +2076,7 @@ impl ReadPresetError {
 }
 impl fmt::Display for ReadPresetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReadPresetError {
@@ -2127,7 +2127,7 @@ impl TestRoleError {
 }
 impl fmt::Display for TestRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestRoleError {
@@ -2183,7 +2183,7 @@ impl UpdatePipelineError {
 }
 impl fmt::Display for UpdatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePipelineError {
@@ -2252,7 +2252,7 @@ impl UpdatePipelineNotificationsError {
 }
 impl fmt::Display for UpdatePipelineNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePipelineNotificationsError {
@@ -2315,7 +2315,7 @@ impl UpdatePipelineStatusError {
 }
 impl fmt::Display for UpdatePipelineStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePipelineStatusError {

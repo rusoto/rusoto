@@ -379,7 +379,7 @@ impl CreateContainerError {
 }
 impl fmt::Display for CreateContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateContainerError {
@@ -424,7 +424,7 @@ impl DeleteContainerError {
 }
 impl fmt::Display for DeleteContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteContainerError {
@@ -482,7 +482,7 @@ impl DeleteContainerPolicyError {
 }
 impl fmt::Display for DeleteContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteContainerPolicyError {
@@ -535,7 +535,7 @@ impl DeleteCorsPolicyError {
 }
 impl fmt::Display for DeleteCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCorsPolicyError {
@@ -594,7 +594,7 @@ impl DeleteLifecyclePolicyError {
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLifecyclePolicyError {
@@ -637,7 +637,7 @@ impl DescribeContainerError {
 }
 impl fmt::Display for DescribeContainerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeContainerError {
@@ -690,7 +690,7 @@ impl GetContainerPolicyError {
 }
 impl fmt::Display for GetContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContainerPolicyError {
@@ -741,7 +741,7 @@ impl GetCorsPolicyError {
 }
 impl fmt::Display for GetCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCorsPolicyError {
@@ -796,7 +796,7 @@ impl GetLifecyclePolicyError {
 }
 impl fmt::Display for GetLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLifecyclePolicyError {
@@ -832,7 +832,7 @@ impl ListContainersError {
 }
 impl fmt::Display for ListContainersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListContainersError {
@@ -879,7 +879,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -928,7 +928,7 @@ impl PutContainerPolicyError {
 }
 impl fmt::Display for PutContainerPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutContainerPolicyError {
@@ -973,7 +973,7 @@ impl PutCorsPolicyError {
 }
 impl fmt::Display for PutCorsPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutCorsPolicyError {
@@ -1022,7 +1022,7 @@ impl PutLifecyclePolicyError {
 }
 impl fmt::Display for PutLifecyclePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLifecyclePolicyError {
@@ -1071,7 +1071,7 @@ impl StartAccessLoggingError {
 }
 impl fmt::Display for StartAccessLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAccessLoggingError {
@@ -1118,7 +1118,7 @@ impl StopAccessLoggingError {
 }
 impl fmt::Display for StopAccessLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopAccessLoggingError {
@@ -1163,7 +1163,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1208,7 +1208,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {

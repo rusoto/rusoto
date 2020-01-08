@@ -3644,7 +3644,7 @@ impl AcceptPortfolioShareError {
 }
 impl fmt::Display for AcceptPortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptPortfolioShareError {
@@ -3704,7 +3704,7 @@ impl AssociateBudgetWithResourceError {
 }
 impl fmt::Display for AssociateBudgetWithResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateBudgetWithResourceError {
@@ -3758,7 +3758,7 @@ impl AssociatePrincipalWithPortfolioError {
 }
 impl fmt::Display for AssociatePrincipalWithPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociatePrincipalWithPortfolioError {
@@ -3811,7 +3811,7 @@ impl AssociateProductWithPortfolioError {
 }
 impl fmt::Display for AssociateProductWithPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateProductWithPortfolioError {
@@ -3868,7 +3868,7 @@ impl AssociateServiceActionWithProvisioningArtifactError {
 }
 impl fmt::Display for AssociateServiceActionWithProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateServiceActionWithProvisioningArtifactError {
@@ -3946,7 +3946,7 @@ impl AssociateTagOptionWithResourceError {
 }
 impl fmt::Display for AssociateTagOptionWithResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateTagOptionWithResourceError {
@@ -3990,7 +3990,7 @@ impl BatchAssociateServiceActionWithProvisioningArtifactError {
 }
 impl fmt::Display for BatchAssociateServiceActionWithProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchAssociateServiceActionWithProvisioningArtifactError {
@@ -4029,7 +4029,7 @@ impl BatchDisassociateServiceActionFromProvisioningArtifactError {
 }
 impl fmt::Display for BatchDisassociateServiceActionFromProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDisassociateServiceActionFromProvisioningArtifactError {
@@ -4069,7 +4069,7 @@ impl CopyProductError {
 }
 impl fmt::Display for CopyProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyProductError {
@@ -4118,7 +4118,7 @@ impl CreateConstraintError {
 }
 impl fmt::Display for CreateConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConstraintError {
@@ -4166,7 +4166,7 @@ impl CreatePortfolioError {
 }
 impl fmt::Display for CreatePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePortfolioError {
@@ -4227,7 +4227,7 @@ impl CreatePortfolioShareError {
 }
 impl fmt::Display for CreatePortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePortfolioShareError {
@@ -4274,7 +4274,7 @@ impl CreateProductError {
 }
 impl fmt::Display for CreateProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProductError {
@@ -4327,7 +4327,7 @@ impl CreateProvisionedProductPlanError {
 }
 impl fmt::Display for CreateProvisionedProductPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProvisionedProductPlanError {
@@ -4380,7 +4380,7 @@ impl CreateProvisioningArtifactError {
 }
 impl fmt::Display for CreateProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProvisioningArtifactError {
@@ -4422,7 +4422,7 @@ impl CreateServiceActionError {
 }
 impl fmt::Display for CreateServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateServiceActionError {
@@ -4468,7 +4468,7 @@ impl CreateTagOptionError {
 }
 impl fmt::Display for CreateTagOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagOptionError {
@@ -4508,7 +4508,7 @@ impl DeleteConstraintError {
 }
 impl fmt::Display for DeleteConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConstraintError {
@@ -4559,7 +4559,7 @@ impl DeletePortfolioError {
 }
 impl fmt::Display for DeletePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePortfolioError {
@@ -4616,7 +4616,7 @@ impl DeletePortfolioShareError {
 }
 impl fmt::Display for DeletePortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePortfolioShareError {
@@ -4667,7 +4667,7 @@ impl DeleteProductError {
 }
 impl fmt::Display for DeleteProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProductError {
@@ -4714,7 +4714,7 @@ impl DeleteProvisionedProductPlanError {
 }
 impl fmt::Display for DeleteProvisionedProductPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProvisionedProductPlanError {
@@ -4766,7 +4766,7 @@ impl DeleteProvisioningArtifactError {
 }
 impl fmt::Display for DeleteProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProvisioningArtifactError {
@@ -4808,7 +4808,7 @@ impl DeleteServiceActionError {
 }
 impl fmt::Display for DeleteServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServiceActionError {
@@ -4854,7 +4854,7 @@ impl DeleteTagOptionError {
 }
 impl fmt::Display for DeleteTagOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagOptionError {
@@ -4889,7 +4889,7 @@ impl DescribeConstraintError {
 }
 impl fmt::Display for DescribeConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConstraintError {
@@ -4924,7 +4924,7 @@ impl DescribeCopyProductStatusError {
 }
 impl fmt::Display for DescribeCopyProductStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCopyProductStatusError {
@@ -4957,7 +4957,7 @@ impl DescribePortfolioError {
 }
 impl fmt::Display for DescribePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePortfolioError {
@@ -5008,7 +5008,7 @@ impl DescribePortfolioShareStatusError {
 }
 impl fmt::Display for DescribePortfolioShareStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePortfolioShareStatusError {
@@ -5048,7 +5048,7 @@ impl DescribeProductError {
 }
 impl fmt::Display for DescribeProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProductError {
@@ -5084,7 +5084,7 @@ impl DescribeProductAsAdminError {
 }
 impl fmt::Display for DescribeProductAsAdminError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProductAsAdminError {
@@ -5126,7 +5126,7 @@ impl DescribeProductViewError {
 }
 impl fmt::Display for DescribeProductViewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProductViewError {
@@ -5164,7 +5164,7 @@ impl DescribeProvisionedProductError {
 }
 impl fmt::Display for DescribeProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisionedProductError {
@@ -5208,7 +5208,7 @@ impl DescribeProvisionedProductPlanError {
 }
 impl fmt::Display for DescribeProvisionedProductPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisionedProductPlanError {
@@ -5246,7 +5246,7 @@ impl DescribeProvisioningArtifactError {
 }
 impl fmt::Display for DescribeProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisioningArtifactError {
@@ -5290,7 +5290,7 @@ impl DescribeProvisioningParametersError {
 }
 impl fmt::Display for DescribeProvisioningParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisioningParametersError {
@@ -5324,7 +5324,7 @@ impl DescribeRecordError {
 }
 impl fmt::Display for DescribeRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRecordError {
@@ -5359,7 +5359,7 @@ impl DescribeServiceActionError {
 }
 impl fmt::Display for DescribeServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServiceActionError {
@@ -5403,7 +5403,7 @@ impl DescribeServiceActionExecutionParametersError {
 }
 impl fmt::Display for DescribeServiceActionExecutionParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServiceActionExecutionParametersError {
@@ -5444,7 +5444,7 @@ impl DescribeTagOptionError {
 }
 impl fmt::Display for DescribeTagOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagOptionError {
@@ -5496,7 +5496,7 @@ impl DisableAWSOrganizationsAccessError {
 }
 impl fmt::Display for DisableAWSOrganizationsAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableAWSOrganizationsAccessError {
@@ -5535,7 +5535,7 @@ impl DisassociateBudgetFromResourceError {
 }
 impl fmt::Display for DisassociateBudgetFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateBudgetFromResourceError {
@@ -5579,7 +5579,7 @@ impl DisassociatePrincipalFromPortfolioError {
 }
 impl fmt::Display for DisassociatePrincipalFromPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociatePrincipalFromPortfolioError {
@@ -5631,7 +5631,7 @@ impl DisassociateProductFromPortfolioError {
 }
 impl fmt::Display for DisassociateProductFromPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateProductFromPortfolioError {
@@ -5672,7 +5672,7 @@ impl DisassociateServiceActionFromProvisioningArtifactError {
 }
 impl fmt::Display for DisassociateServiceActionFromProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateServiceActionFromProvisioningArtifactError {
@@ -5718,7 +5718,7 @@ impl DisassociateTagOptionFromResourceError {
 }
 impl fmt::Display for DisassociateTagOptionFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateTagOptionFromResourceError {
@@ -5770,7 +5770,7 @@ impl EnableAWSOrganizationsAccessError {
 }
 impl fmt::Display for EnableAWSOrganizationsAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableAWSOrganizationsAccessError {
@@ -5823,7 +5823,7 @@ impl ExecuteProvisionedProductPlanError {
 }
 impl fmt::Display for ExecuteProvisionedProductPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecuteProvisionedProductPlanError {
@@ -5876,7 +5876,7 @@ impl ExecuteProvisionedProductServiceActionError {
 }
 impl fmt::Display for ExecuteProvisionedProductServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecuteProvisionedProductServiceActionError {
@@ -5922,7 +5922,7 @@ impl GetAWSOrganizationsAccessStatusError {
 }
 impl fmt::Display for GetAWSOrganizationsAccessStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAWSOrganizationsAccessStatusError {
@@ -5967,7 +5967,7 @@ impl ListAcceptedPortfolioSharesError {
 }
 impl fmt::Display for ListAcceptedPortfolioSharesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAcceptedPortfolioSharesError {
@@ -6010,7 +6010,7 @@ impl ListBudgetsForResourceError {
 }
 impl fmt::Display for ListBudgetsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBudgetsForResourceError {
@@ -6055,7 +6055,7 @@ impl ListConstraintsForPortfolioError {
 }
 impl fmt::Display for ListConstraintsForPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConstraintsForPortfolioError {
@@ -6094,7 +6094,7 @@ impl ListLaunchPathsError {
 }
 impl fmt::Display for ListLaunchPathsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLaunchPathsError {
@@ -6146,7 +6146,7 @@ impl ListOrganizationPortfolioAccessError {
 }
 impl fmt::Display for ListOrganizationPortfolioAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOrganizationPortfolioAccessError {
@@ -6183,7 +6183,7 @@ impl ListPortfolioAccessError {
 }
 impl fmt::Display for ListPortfolioAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPortfolioAccessError {
@@ -6216,7 +6216,7 @@ impl ListPortfoliosError {
 }
 impl fmt::Display for ListPortfoliosError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPortfoliosError {
@@ -6258,7 +6258,7 @@ impl ListPortfoliosForProductError {
 }
 impl fmt::Display for ListPortfoliosForProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPortfoliosForProductError {
@@ -6303,7 +6303,7 @@ impl ListPrincipalsForPortfolioError {
 }
 impl fmt::Display for ListPrincipalsForPortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPrincipalsForPortfolioError {
@@ -6348,7 +6348,7 @@ impl ListProvisionedProductPlansError {
 }
 impl fmt::Display for ListProvisionedProductPlansError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisionedProductPlansError {
@@ -6391,7 +6391,7 @@ impl ListProvisioningArtifactsError {
 }
 impl fmt::Display for ListProvisioningArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisioningArtifactsError {
@@ -6436,7 +6436,7 @@ impl ListProvisioningArtifactsForServiceActionError {
 }
 impl fmt::Display for ListProvisioningArtifactsForServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisioningArtifactsForServiceActionError {
@@ -6470,7 +6470,7 @@ impl ListRecordHistoryError {
 }
 impl fmt::Display for ListRecordHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRecordHistoryError {
@@ -6519,7 +6519,7 @@ impl ListResourcesForTagOptionError {
 }
 impl fmt::Display for ListResourcesForTagOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourcesForTagOptionError {
@@ -6556,7 +6556,7 @@ impl ListServiceActionsError {
 }
 impl fmt::Display for ListServiceActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServiceActionsError {
@@ -6600,7 +6600,7 @@ impl ListServiceActionsForProvisioningArtifactError {
 }
 impl fmt::Display for ListServiceActionsForProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServiceActionsForProvisioningArtifactError {
@@ -6645,7 +6645,7 @@ impl ListStackInstancesForProvisionedProductError {
 }
 impl fmt::Display for ListStackInstancesForProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStackInstancesForProvisionedProductError {
@@ -6684,7 +6684,7 @@ impl ListTagOptionsError {
 }
 impl fmt::Display for ListTagOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagOptionsError {
@@ -6728,7 +6728,7 @@ impl ProvisionProductError {
 }
 impl fmt::Display for ProvisionProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ProvisionProductError {
@@ -6765,7 +6765,7 @@ impl RejectPortfolioShareError {
 }
 impl fmt::Display for RejectPortfolioShareError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectPortfolioShareError {
@@ -6800,7 +6800,7 @@ impl ScanProvisionedProductsError {
 }
 impl fmt::Display for ScanProvisionedProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ScanProvisionedProductsError {
@@ -6833,7 +6833,7 @@ impl SearchProductsError {
 }
 impl fmt::Display for SearchProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchProductsError {
@@ -6875,7 +6875,7 @@ impl SearchProductsAsAdminError {
 }
 impl fmt::Display for SearchProductsAsAdminError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchProductsAsAdminError {
@@ -6911,7 +6911,7 @@ impl SearchProvisionedProductsError {
 }
 impl fmt::Display for SearchProvisionedProductsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchProvisionedProductsError {
@@ -6948,7 +6948,7 @@ impl TerminateProvisionedProductError {
 }
 impl fmt::Display for TerminateProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateProvisionedProductError {
@@ -6986,7 +6986,7 @@ impl UpdateConstraintError {
 }
 impl fmt::Display for UpdateConstraintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConstraintError {
@@ -7037,7 +7037,7 @@ impl UpdatePortfolioError {
 }
 impl fmt::Display for UpdatePortfolioError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePortfolioError {
@@ -7083,7 +7083,7 @@ impl UpdateProductError {
 }
 impl fmt::Display for UpdateProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProductError {
@@ -7127,7 +7127,7 @@ impl UpdateProvisionedProductError {
 }
 impl fmt::Display for UpdateProvisionedProductError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProvisionedProductError {
@@ -7179,7 +7179,7 @@ impl UpdateProvisionedProductPropertiesError {
 }
 impl fmt::Display for UpdateProvisionedProductPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProvisionedProductPropertiesError {
@@ -7225,7 +7225,7 @@ impl UpdateProvisioningArtifactError {
 }
 impl fmt::Display for UpdateProvisioningArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProvisioningArtifactError {
@@ -7268,7 +7268,7 @@ impl UpdateServiceActionError {
 }
 impl fmt::Display for UpdateServiceActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceActionError {
@@ -7319,7 +7319,7 @@ impl UpdateTagOptionError {
 }
 impl fmt::Display for UpdateTagOptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTagOptionError {

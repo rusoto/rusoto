@@ -1982,7 +1982,7 @@ impl AssociateFleetError {
 }
 impl fmt::Display for AssociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateFleetError {
@@ -2022,7 +2022,7 @@ impl BatchAssociateUserStackError {
 }
 impl fmt::Display for BatchAssociateUserStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchAssociateUserStackError {
@@ -2051,7 +2051,7 @@ impl BatchDisassociateUserStackError {
 }
 impl fmt::Display for BatchDisassociateUserStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDisassociateUserStackError {
@@ -2107,7 +2107,7 @@ impl CopyImageError {
 }
 impl fmt::Display for CopyImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopyImageError {
@@ -2159,7 +2159,7 @@ impl CreateDirectoryConfigError {
 }
 impl fmt::Display for CreateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectoryConfigError {
@@ -2241,7 +2241,7 @@ impl CreateFleetError {
 }
 impl fmt::Display for CreateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFleetError {
@@ -2342,7 +2342,7 @@ impl CreateImageBuilderError {
 }
 impl fmt::Display for CreateImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateImageBuilderError {
@@ -2395,7 +2395,7 @@ impl CreateImageBuilderStreamingURLError {
 }
 impl fmt::Display for CreateImageBuilderStreamingURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateImageBuilderStreamingURLError {
@@ -2461,7 +2461,7 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStackError {
@@ -2521,7 +2521,7 @@ impl CreateStreamingURLError {
 }
 impl fmt::Display for CreateStreamingURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamingURLError {
@@ -2575,7 +2575,7 @@ impl CreateUsageReportSubscriptionError {
 }
 impl fmt::Display for CreateUsageReportSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUsageReportSubscriptionError {
@@ -2632,7 +2632,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -2676,7 +2676,7 @@ impl DeleteDirectoryConfigError {
 }
 impl fmt::Display for DeleteDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectoryConfigError {
@@ -2720,7 +2720,7 @@ impl DeleteFleetError {
 }
 impl fmt::Display for DeleteFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFleetError {
@@ -2770,7 +2770,7 @@ impl DeleteImageError {
 }
 impl fmt::Display for DeleteImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteImageError {
@@ -2820,7 +2820,7 @@ impl DeleteImageBuilderError {
 }
 impl fmt::Display for DeleteImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteImageBuilderError {
@@ -2864,7 +2864,7 @@ impl DeleteImagePermissionsError {
 }
 impl fmt::Display for DeleteImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteImagePermissionsError {
@@ -2908,7 +2908,7 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStackError {
@@ -2954,7 +2954,7 @@ impl DeleteUsageReportSubscriptionError {
 }
 impl fmt::Display for DeleteUsageReportSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUsageReportSubscriptionError {
@@ -2988,7 +2988,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -3023,7 +3023,7 @@ impl DescribeDirectoryConfigsError {
 }
 impl fmt::Display for DescribeDirectoryConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDirectoryConfigsError {
@@ -3056,7 +3056,7 @@ impl DescribeFleetsError {
 }
 impl fmt::Display for DescribeFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFleetsError {
@@ -3091,7 +3091,7 @@ impl DescribeImageBuildersError {
 }
 impl fmt::Display for DescribeImageBuildersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImageBuildersError {
@@ -3126,7 +3126,7 @@ impl DescribeImagePermissionsError {
 }
 impl fmt::Display for DescribeImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImagePermissionsError {
@@ -3166,7 +3166,7 @@ impl DescribeImagesError {
 }
 impl fmt::Display for DescribeImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeImagesError {
@@ -3202,7 +3202,7 @@ impl DescribeSessionsError {
 }
 impl fmt::Display for DescribeSessionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSessionsError {
@@ -3235,7 +3235,7 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStacksError {
@@ -3279,7 +3279,7 @@ impl DescribeUsageReportSubscriptionsError {
 }
 impl fmt::Display for DescribeUsageReportSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUsageReportSubscriptionsError {
@@ -3317,7 +3317,7 @@ impl DescribeUserStackAssociationsError {
 }
 impl fmt::Display for DescribeUserStackAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserStackAssociationsError {
@@ -3357,7 +3357,7 @@ impl DescribeUsersError {
 }
 impl fmt::Display for DescribeUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUsersError {
@@ -3391,7 +3391,7 @@ impl DisableUserError {
 }
 impl fmt::Display for DisableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableUserError {
@@ -3436,7 +3436,7 @@ impl DisassociateFleetError {
 }
 impl fmt::Display for DisassociateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateFleetError {
@@ -3476,7 +3476,7 @@ impl EnableUserError {
 }
 impl fmt::Display for EnableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableUserError {
@@ -3504,7 +3504,7 @@ impl ExpireSessionError {
 }
 impl fmt::Display for ExpireSessionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExpireSessionError {
@@ -3529,7 +3529,7 @@ impl ListAssociatedFleetsError {
 }
 impl fmt::Display for ListAssociatedFleetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociatedFleetsError {
@@ -3554,7 +3554,7 @@ impl ListAssociatedStacksError {
 }
 impl fmt::Display for ListAssociatedStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssociatedStacksError {
@@ -3587,7 +3587,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3650,7 +3650,7 @@ impl StartFleetError {
 }
 impl fmt::Display for StartFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartFleetError {
@@ -3715,7 +3715,7 @@ impl StartImageBuilderError {
 }
 impl fmt::Display for StartImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartImageBuilderError {
@@ -3757,7 +3757,7 @@ impl StopFleetError {
 }
 impl fmt::Display for StopFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopFleetError {
@@ -3805,7 +3805,7 @@ impl StopImageBuilderError {
 }
 impl fmt::Display for StopImageBuilderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopImageBuilderError {
@@ -3850,7 +3850,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3885,7 +3885,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3932,7 +3932,7 @@ impl UpdateDirectoryConfigError {
 }
 impl fmt::Display for UpdateDirectoryConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDirectoryConfigError {
@@ -4014,7 +4014,7 @@ impl UpdateFleetError {
 }
 impl fmt::Display for UpdateFleetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFleetError {
@@ -4072,7 +4072,7 @@ impl UpdateImagePermissionsError {
 }
 impl fmt::Display for UpdateImagePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateImagePermissionsError {
@@ -4149,7 +4149,7 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStackError {

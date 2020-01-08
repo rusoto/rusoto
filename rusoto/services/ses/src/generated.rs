@@ -6967,7 +6967,7 @@ impl CloneReceiptRuleSetError {
 }
 impl fmt::Display for CloneReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CloneReceiptRuleSetError {
@@ -7034,7 +7034,7 @@ impl CreateConfigurationSetError {
 }
 impl fmt::Display for CreateConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationSetError {
@@ -7126,7 +7126,7 @@ impl CreateConfigurationSetEventDestinationError {
 }
 impl fmt::Display for CreateConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationSetEventDestinationError {
@@ -7204,7 +7204,7 @@ impl CreateConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for CreateConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationSetTrackingOptionsError {
@@ -7260,7 +7260,7 @@ impl CreateCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for CreateCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCustomVerificationEmailTemplateError {
@@ -7317,7 +7317,7 @@ impl CreateReceiptFilterError {
 }
 impl fmt::Display for CreateReceiptFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReceiptFilterError {
@@ -7407,7 +7407,7 @@ impl CreateReceiptRuleError {
 }
 impl fmt::Display for CreateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReceiptRuleError {
@@ -7467,7 +7467,7 @@ impl CreateReceiptRuleSetError {
 }
 impl fmt::Display for CreateReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReceiptRuleSetError {
@@ -7529,7 +7529,7 @@ impl CreateTemplateError {
 }
 impl fmt::Display for CreateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTemplateError {
@@ -7580,7 +7580,7 @@ impl DeleteConfigurationSetError {
 }
 impl fmt::Display for DeleteConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationSetError {
@@ -7636,7 +7636,7 @@ impl DeleteConfigurationSetEventDestinationError {
 }
 impl fmt::Display for DeleteConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationSetEventDestinationError {
@@ -7699,7 +7699,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for DeleteConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationSetTrackingOptionsError {
@@ -7745,7 +7745,7 @@ impl DeleteCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCustomVerificationEmailTemplateError {
@@ -7782,7 +7782,7 @@ impl DeleteIdentityError {
 }
 impl fmt::Display for DeleteIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIdentityError {
@@ -7819,7 +7819,7 @@ impl DeleteIdentityPolicyError {
 }
 impl fmt::Display for DeleteIdentityPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIdentityPolicyError {
@@ -7856,7 +7856,7 @@ impl DeleteReceiptFilterError {
 }
 impl fmt::Display for DeleteReceiptFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReceiptFilterError {
@@ -7901,7 +7901,7 @@ impl DeleteReceiptRuleError {
 }
 impl fmt::Display for DeleteReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReceiptRuleError {
@@ -7948,7 +7948,7 @@ impl DeleteReceiptRuleSetError {
 }
 impl fmt::Display for DeleteReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReceiptRuleSetError {
@@ -7987,7 +7987,7 @@ impl DeleteTemplateError {
 }
 impl fmt::Display for DeleteTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTemplateError {
@@ -8026,7 +8026,7 @@ impl DeleteVerifiedEmailAddressError {
 }
 impl fmt::Display for DeleteVerifiedEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVerifiedEmailAddressError {
@@ -8065,7 +8065,7 @@ impl DescribeActiveReceiptRuleSetError {
 }
 impl fmt::Display for DescribeActiveReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActiveReceiptRuleSetError {
@@ -8112,7 +8112,7 @@ impl DescribeConfigurationSetError {
 }
 impl fmt::Display for DescribeConfigurationSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationSetError {
@@ -8166,7 +8166,7 @@ impl DescribeReceiptRuleError {
 }
 impl fmt::Display for DescribeReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReceiptRuleError {
@@ -8214,7 +8214,7 @@ impl DescribeReceiptRuleSetError {
 }
 impl fmt::Display for DescribeReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReceiptRuleSetError {
@@ -8253,7 +8253,7 @@ impl GetAccountSendingEnabledError {
 }
 impl fmt::Display for GetAccountSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountSendingEnabledError {
@@ -8295,7 +8295,7 @@ impl GetCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for GetCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCustomVerificationEmailTemplateError {
@@ -8334,7 +8334,7 @@ impl GetIdentityDkimAttributesError {
 }
 impl fmt::Display for GetIdentityDkimAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityDkimAttributesError {
@@ -8373,7 +8373,7 @@ impl GetIdentityMailFromDomainAttributesError {
 }
 impl fmt::Display for GetIdentityMailFromDomainAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityMailFromDomainAttributesError {
@@ -8412,7 +8412,7 @@ impl GetIdentityNotificationAttributesError {
 }
 impl fmt::Display for GetIdentityNotificationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityNotificationAttributesError {
@@ -8449,7 +8449,7 @@ impl GetIdentityPoliciesError {
 }
 impl fmt::Display for GetIdentityPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityPoliciesError {
@@ -8488,7 +8488,7 @@ impl GetIdentityVerificationAttributesError {
 }
 impl fmt::Display for GetIdentityVerificationAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityVerificationAttributesError {
@@ -8525,7 +8525,7 @@ impl GetSendQuotaError {
 }
 impl fmt::Display for GetSendQuotaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSendQuotaError {
@@ -8562,7 +8562,7 @@ impl GetSendStatisticsError {
 }
 impl fmt::Display for GetSendStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSendStatisticsError {
@@ -8607,7 +8607,7 @@ impl GetTemplateError {
 }
 impl fmt::Display for GetTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTemplateError {
@@ -8646,7 +8646,7 @@ impl ListConfigurationSetsError {
 }
 impl fmt::Display for ListConfigurationSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConfigurationSetsError {
@@ -8685,7 +8685,7 @@ impl ListCustomVerificationEmailTemplatesError {
 }
 impl fmt::Display for ListCustomVerificationEmailTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCustomVerificationEmailTemplatesError {
@@ -8722,7 +8722,7 @@ impl ListIdentitiesError {
 }
 impl fmt::Display for ListIdentitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentitiesError {
@@ -8759,7 +8759,7 @@ impl ListIdentityPoliciesError {
 }
 impl fmt::Display for ListIdentityPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentityPoliciesError {
@@ -8796,7 +8796,7 @@ impl ListReceiptFiltersError {
 }
 impl fmt::Display for ListReceiptFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReceiptFiltersError {
@@ -8833,7 +8833,7 @@ impl ListReceiptRuleSetsError {
 }
 impl fmt::Display for ListReceiptRuleSetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReceiptRuleSetsError {
@@ -8870,7 +8870,7 @@ impl ListTemplatesError {
 }
 impl fmt::Display for ListTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTemplatesError {
@@ -8909,7 +8909,7 @@ impl ListVerifiedEmailAddressesError {
 }
 impl fmt::Display for ListVerifiedEmailAddressesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVerifiedEmailAddressesError {
@@ -8967,7 +8967,7 @@ impl PutConfigurationSetDeliveryOptionsError {
 }
 impl fmt::Display for PutConfigurationSetDeliveryOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConfigurationSetDeliveryOptionsError {
@@ -9017,7 +9017,7 @@ impl PutIdentityPolicyError {
 }
 impl fmt::Display for PutIdentityPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutIdentityPolicyError {
@@ -9071,7 +9071,7 @@ impl ReorderReceiptRuleSetError {
 }
 impl fmt::Display for ReorderReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReorderReceiptRuleSetError {
@@ -9119,7 +9119,7 @@ impl SendBounceError {
 }
 impl fmt::Display for SendBounceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendBounceError {
@@ -9207,7 +9207,7 @@ impl SendBulkTemplatedEmailError {
 }
 impl fmt::Display for SendBulkTemplatedEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendBulkTemplatedEmailError {
@@ -9264,7 +9264,7 @@ impl SendCustomVerificationEmailError {
 }
 impl fmt::Display for SendCustomVerificationEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendCustomVerificationEmailError {
@@ -9345,7 +9345,7 @@ impl SendEmailError {
 }
 impl fmt::Display for SendEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendEmailError {
@@ -9424,7 +9424,7 @@ impl SendRawEmailError {
 }
 impl fmt::Display for SendRawEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendRawEmailError {
@@ -9516,7 +9516,7 @@ impl SendTemplatedEmailError {
 }
 impl fmt::Display for SendTemplatedEmailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendTemplatedEmailError {
@@ -9568,7 +9568,7 @@ impl SetActiveReceiptRuleSetError {
 }
 impl fmt::Display for SetActiveReceiptRuleSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetActiveReceiptRuleSetError {
@@ -9607,7 +9607,7 @@ impl SetIdentityDkimEnabledError {
 }
 impl fmt::Display for SetIdentityDkimEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityDkimEnabledError {
@@ -9646,7 +9646,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
 }
 impl fmt::Display for SetIdentityFeedbackForwardingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityFeedbackForwardingEnabledError {
@@ -9685,7 +9685,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
 }
 impl fmt::Display for SetIdentityHeadersInNotificationsEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityHeadersInNotificationsEnabledError {
@@ -9722,7 +9722,7 @@ impl SetIdentityMailFromDomainError {
 }
 impl fmt::Display for SetIdentityMailFromDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityMailFromDomainError {
@@ -9761,7 +9761,7 @@ impl SetIdentityNotificationTopicError {
 }
 impl fmt::Display for SetIdentityNotificationTopicError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetIdentityNotificationTopicError {
@@ -9813,7 +9813,7 @@ impl SetReceiptRulePositionError {
 }
 impl fmt::Display for SetReceiptRulePositionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetReceiptRulePositionError {
@@ -9879,7 +9879,7 @@ impl TestRenderTemplateError {
 }
 impl fmt::Display for TestRenderTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestRenderTemplateError {
@@ -9922,7 +9922,7 @@ impl UpdateAccountSendingEnabledError {
 }
 impl fmt::Display for UpdateAccountSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccountSendingEnabledError {
@@ -10001,7 +10001,7 @@ impl UpdateConfigurationSetEventDestinationError {
 }
 impl fmt::Display for UpdateConfigurationSetEventDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationSetEventDestinationError {
@@ -10057,7 +10057,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
 }
 impl fmt::Display for UpdateConfigurationSetReputationMetricsEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
@@ -10110,7 +10110,7 @@ impl UpdateConfigurationSetSendingEnabledError {
 }
 impl fmt::Display for UpdateConfigurationSetSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationSetSendingEnabledError {
@@ -10179,7 +10179,7 @@ impl UpdateConfigurationSetTrackingOptionsError {
 }
 impl fmt::Display for UpdateConfigurationSetTrackingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationSetTrackingOptionsError {
@@ -10233,7 +10233,7 @@ impl UpdateCustomVerificationEmailTemplateError {
 }
 impl fmt::Display for UpdateCustomVerificationEmailTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCustomVerificationEmailTemplateError {
@@ -10317,7 +10317,7 @@ impl UpdateReceiptRuleError {
 }
 impl fmt::Display for UpdateReceiptRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateReceiptRuleError {
@@ -10376,7 +10376,7 @@ impl UpdateTemplateError {
 }
 impl fmt::Display for UpdateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTemplateError {
@@ -10416,7 +10416,7 @@ impl VerifyDomainDkimError {
 }
 impl fmt::Display for VerifyDomainDkimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyDomainDkimError {
@@ -10453,7 +10453,7 @@ impl VerifyDomainIdentityError {
 }
 impl fmt::Display for VerifyDomainIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyDomainIdentityError {
@@ -10490,7 +10490,7 @@ impl VerifyEmailAddressError {
 }
 impl fmt::Display for VerifyEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyEmailAddressError {
@@ -10527,7 +10527,7 @@ impl VerifyEmailIdentityError {
 }
 impl fmt::Display for VerifyEmailIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyEmailIdentityError {
