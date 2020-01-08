@@ -5906,7 +5906,7 @@ impl BatchCreatePartitionError {
 }
 impl fmt::Display for BatchCreatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchCreatePartitionError {
@@ -5954,7 +5954,7 @@ impl BatchDeleteConnectionError {
 }
 impl fmt::Display for BatchDeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteConnectionError {
@@ -6007,7 +6007,7 @@ impl BatchDeletePartitionError {
 }
 impl fmt::Display for BatchDeletePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeletePartitionError {
@@ -6058,7 +6058,7 @@ impl BatchDeleteTableError {
 }
 impl fmt::Display for BatchDeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteTableError {
@@ -6117,7 +6117,7 @@ impl BatchDeleteTableVersionError {
 }
 impl fmt::Display for BatchDeleteTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteTableVersionError {
@@ -6158,7 +6158,7 @@ impl BatchGetCrawlersError {
 }
 impl fmt::Display for BatchGetCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetCrawlersError {
@@ -6211,7 +6211,7 @@ impl BatchGetDevEndpointsError {
 }
 impl fmt::Display for BatchGetDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetDevEndpointsError {
@@ -6257,7 +6257,7 @@ impl BatchGetJobsError {
 }
 impl fmt::Display for BatchGetJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetJobsError {
@@ -6312,7 +6312,7 @@ impl BatchGetPartitionError {
 }
 impl fmt::Display for BatchGetPartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetPartitionError {
@@ -6359,7 +6359,7 @@ impl BatchGetTriggersError {
 }
 impl fmt::Display for BatchGetTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetTriggersError {
@@ -6404,7 +6404,7 @@ impl BatchGetWorkflowsError {
 }
 impl fmt::Display for BatchGetWorkflowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetWorkflowsError {
@@ -6451,7 +6451,7 @@ impl GlueBatchStopJobRunError {
 }
 impl fmt::Display for GlueBatchStopJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GlueBatchStopJobRunError {
@@ -6501,7 +6501,7 @@ impl CancelMLTaskRunError {
 }
 impl fmt::Display for CancelMLTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelMLTaskRunError {
@@ -6547,7 +6547,7 @@ impl CreateClassifierError {
 }
 impl fmt::Display for CreateClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateClassifierError {
@@ -6604,7 +6604,7 @@ impl CreateConnectionError {
 }
 impl fmt::Display for CreateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConnectionError {
@@ -6658,7 +6658,7 @@ impl CreateCrawlerError {
 }
 impl fmt::Display for CreateCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCrawlerError {
@@ -6721,7 +6721,7 @@ impl CreateDatabaseError {
 }
 impl fmt::Display for CreateDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDatabaseError {
@@ -6793,7 +6793,7 @@ impl CreateDevEndpointError {
 }
 impl fmt::Display for CreateDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDevEndpointError {
@@ -6866,7 +6866,7 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateJobError {
@@ -6939,7 +6939,7 @@ impl CreateMLTransformError {
 }
 impl fmt::Display for CreateMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMLTransformError {
@@ -7010,7 +7010,7 @@ impl CreatePartitionError {
 }
 impl fmt::Display for CreatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePartitionError {
@@ -7059,7 +7059,7 @@ impl CreateScriptError {
 }
 impl fmt::Display for CreateScriptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateScriptError {
@@ -7126,7 +7126,7 @@ impl CreateSecurityConfigurationError {
 }
 impl fmt::Display for CreateSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSecurityConfigurationError {
@@ -7195,7 +7195,7 @@ impl CreateTableError {
 }
 impl fmt::Display for CreateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTableError {
@@ -7275,7 +7275,7 @@ impl CreateTriggerError {
 }
 impl fmt::Display for CreateTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTriggerError {
@@ -7359,7 +7359,7 @@ impl CreateUserDefinedFunctionError {
 }
 impl fmt::Display for CreateUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserDefinedFunctionError {
@@ -7427,7 +7427,7 @@ impl CreateWorkflowError {
 }
 impl fmt::Display for CreateWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWorkflowError {
@@ -7470,7 +7470,7 @@ impl DeleteClassifierError {
 }
 impl fmt::Display for DeleteClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteClassifierError {
@@ -7509,7 +7509,7 @@ impl DeleteConnectionError {
 }
 impl fmt::Display for DeleteConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConnectionError {
@@ -7560,7 +7560,7 @@ impl DeleteCrawlerError {
 }
 impl fmt::Display for DeleteCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCrawlerError {
@@ -7611,7 +7611,7 @@ impl DeleteDatabaseError {
 }
 impl fmt::Display for DeleteDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDatabaseError {
@@ -7662,7 +7662,7 @@ impl DeleteDevEndpointError {
 }
 impl fmt::Display for DeleteDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDevEndpointError {
@@ -7708,7 +7708,7 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteJobError {
@@ -7758,7 +7758,7 @@ impl DeleteMLTransformError {
 }
 impl fmt::Display for DeleteMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMLTransformError {
@@ -7809,7 +7809,7 @@ impl DeletePartitionError {
 }
 impl fmt::Display for DeletePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePartitionError {
@@ -7871,7 +7871,7 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourcePolicyError {
@@ -7933,7 +7933,7 @@ impl DeleteSecurityConfigurationError {
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSecurityConfigurationError {
@@ -7984,7 +7984,7 @@ impl DeleteTableError {
 }
 impl fmt::Display for DeleteTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTableError {
@@ -8035,7 +8035,7 @@ impl DeleteTableVersionError {
 }
 impl fmt::Display for DeleteTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTableVersionError {
@@ -8088,7 +8088,7 @@ impl DeleteTriggerError {
 }
 impl fmt::Display for DeleteTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTriggerError {
@@ -8147,7 +8147,7 @@ impl DeleteUserDefinedFunctionError {
 }
 impl fmt::Display for DeleteUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserDefinedFunctionError {
@@ -8200,7 +8200,7 @@ impl DeleteWorkflowError {
 }
 impl fmt::Display for DeleteWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWorkflowError {
@@ -8245,7 +8245,7 @@ impl GetCatalogImportStatusError {
 }
 impl fmt::Display for GetCatalogImportStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCatalogImportStatusError {
@@ -8284,7 +8284,7 @@ impl GetClassifierError {
 }
 impl fmt::Display for GetClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetClassifierError {
@@ -8318,7 +8318,7 @@ impl GetClassifiersError {
 }
 impl fmt::Display for GetClassifiersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetClassifiersError {
@@ -8366,7 +8366,7 @@ impl GetConnectionError {
 }
 impl fmt::Display for GetConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectionError {
@@ -8417,7 +8417,7 @@ impl GetConnectionsError {
 }
 impl fmt::Display for GetConnectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectionsError {
@@ -8458,7 +8458,7 @@ impl GetCrawlerError {
 }
 impl fmt::Display for GetCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCrawlerError {
@@ -8492,7 +8492,7 @@ impl GetCrawlerMetricsError {
 }
 impl fmt::Display for GetCrawlerMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCrawlerMetricsError {
@@ -8525,7 +8525,7 @@ impl GetCrawlersError {
 }
 impl fmt::Display for GetCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCrawlersError {
@@ -8576,7 +8576,7 @@ impl GetDataCatalogEncryptionSettingsError {
 }
 impl fmt::Display for GetDataCatalogEncryptionSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDataCatalogEncryptionSettingsError {
@@ -8631,7 +8631,7 @@ impl GetDatabaseError {
 }
 impl fmt::Display for GetDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDatabaseError {
@@ -8683,7 +8683,7 @@ impl GetDatabasesError {
 }
 impl fmt::Display for GetDatabasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDatabasesError {
@@ -8729,7 +8729,7 @@ impl GetDataflowGraphError {
 }
 impl fmt::Display for GetDataflowGraphError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDataflowGraphError {
@@ -8779,7 +8779,7 @@ impl GetDevEndpointError {
 }
 impl fmt::Display for GetDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDevEndpointError {
@@ -8830,7 +8830,7 @@ impl GetDevEndpointsError {
 }
 impl fmt::Display for GetDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDevEndpointsError {
@@ -8881,7 +8881,7 @@ impl GetJobError {
 }
 impl fmt::Display for GetJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobError {
@@ -8932,7 +8932,7 @@ impl GetJobBookmarkError {
 }
 impl fmt::Display for GetJobBookmarkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobBookmarkError {
@@ -8983,7 +8983,7 @@ impl GetJobRunError {
 }
 impl fmt::Display for GetJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobRunError {
@@ -9034,7 +9034,7 @@ impl GetJobRunsError {
 }
 impl fmt::Display for GetJobRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobRunsError {
@@ -9085,7 +9085,7 @@ impl GetJobsError {
 }
 impl fmt::Display for GetJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobsError {
@@ -9136,7 +9136,7 @@ impl GetMLTaskRunError {
 }
 impl fmt::Display for GetMLTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMLTaskRunError {
@@ -9187,7 +9187,7 @@ impl GetMLTaskRunsError {
 }
 impl fmt::Display for GetMLTaskRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMLTaskRunsError {
@@ -9238,7 +9238,7 @@ impl GetMLTransformError {
 }
 impl fmt::Display for GetMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMLTransformError {
@@ -9289,7 +9289,7 @@ impl GetMLTransformsError {
 }
 impl fmt::Display for GetMLTransformsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMLTransformsError {
@@ -9340,7 +9340,7 @@ impl GetMappingError {
 }
 impl fmt::Display for GetMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMappingError {
@@ -9396,7 +9396,7 @@ impl GetPartitionError {
 }
 impl fmt::Display for GetPartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPartitionError {
@@ -9453,7 +9453,7 @@ impl GetPartitionsError {
 }
 impl fmt::Display for GetPartitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPartitionsError {
@@ -9500,7 +9500,7 @@ impl GetPlanError {
 }
 impl fmt::Display for GetPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPlanError {
@@ -9550,7 +9550,7 @@ impl GetResourcePolicyError {
 }
 impl fmt::Display for GetResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcePolicyError {
@@ -9609,7 +9609,7 @@ impl GetSecurityConfigurationError {
 }
 impl fmt::Display for GetSecurityConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSecurityConfigurationError {
@@ -9668,7 +9668,7 @@ impl GetSecurityConfigurationsError {
 }
 impl fmt::Display for GetSecurityConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSecurityConfigurationsError {
@@ -9724,7 +9724,7 @@ impl GetTableError {
 }
 impl fmt::Display for GetTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTableError {
@@ -9781,7 +9781,7 @@ impl GetTableVersionError {
 }
 impl fmt::Display for GetTableVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTableVersionError {
@@ -9838,7 +9838,7 @@ impl GetTableVersionsError {
 }
 impl fmt::Display for GetTableVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTableVersionsError {
@@ -9895,7 +9895,7 @@ impl GetTablesError {
 }
 impl fmt::Display for GetTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTablesError {
@@ -9947,7 +9947,7 @@ impl GetTagsError {
 }
 impl fmt::Display for GetTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagsError {
@@ -9998,7 +9998,7 @@ impl GetTriggerError {
 }
 impl fmt::Display for GetTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTriggerError {
@@ -10049,7 +10049,7 @@ impl GetTriggersError {
 }
 impl fmt::Display for GetTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTriggersError {
@@ -10113,7 +10113,7 @@ impl GetUserDefinedFunctionError {
 }
 impl fmt::Display for GetUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserDefinedFunctionError {
@@ -10180,7 +10180,7 @@ impl GetUserDefinedFunctionsError {
 }
 impl fmt::Display for GetUserDefinedFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserDefinedFunctionsError {
@@ -10232,7 +10232,7 @@ impl GetWorkflowError {
 }
 impl fmt::Display for GetWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkflowError {
@@ -10283,7 +10283,7 @@ impl GetWorkflowRunError {
 }
 impl fmt::Display for GetWorkflowRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkflowRunError {
@@ -10342,7 +10342,7 @@ impl GetWorkflowRunPropertiesError {
 }
 impl fmt::Display for GetWorkflowRunPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkflowRunPropertiesError {
@@ -10393,7 +10393,7 @@ impl GetWorkflowRunsError {
 }
 impl fmt::Display for GetWorkflowRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetWorkflowRunsError {
@@ -10436,7 +10436,7 @@ impl ImportCatalogToGlueError {
 }
 impl fmt::Display for ImportCatalogToGlueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportCatalogToGlueError {
@@ -10470,7 +10470,7 @@ impl ListCrawlersError {
 }
 impl fmt::Display for ListCrawlersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCrawlersError {
@@ -10518,7 +10518,7 @@ impl ListDevEndpointsError {
 }
 impl fmt::Display for ListDevEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevEndpointsError {
@@ -10569,7 +10569,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -10620,7 +10620,7 @@ impl ListTriggersError {
 }
 impl fmt::Display for ListTriggersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTriggersError {
@@ -10666,7 +10666,7 @@ impl ListWorkflowsError {
 }
 impl fmt::Display for ListWorkflowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkflowsError {
@@ -10719,7 +10719,7 @@ impl PutDataCatalogEncryptionSettingsError {
 }
 impl fmt::Display for PutDataCatalogEncryptionSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutDataCatalogEncryptionSettingsError {
@@ -10776,7 +10776,7 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourcePolicyError {
@@ -10857,7 +10857,7 @@ impl PutWorkflowRunPropertiesError {
 }
 impl fmt::Display for PutWorkflowRunPropertiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutWorkflowRunPropertiesError {
@@ -10911,7 +10911,7 @@ impl ResetJobBookmarkError {
 }
 impl fmt::Display for ResetJobBookmarkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetJobBookmarkError {
@@ -10957,7 +10957,7 @@ impl SearchTablesError {
 }
 impl fmt::Display for SearchTablesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchTablesError {
@@ -11002,7 +11002,7 @@ impl StartCrawlerError {
 }
 impl fmt::Display for StartCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartCrawlerError {
@@ -11063,7 +11063,7 @@ impl StartCrawlerScheduleError {
 }
 impl fmt::Display for StartCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartCrawlerScheduleError {
@@ -11123,7 +11123,7 @@ impl StartExportLabelsTaskRunError {
 }
 impl fmt::Display for StartExportLabelsTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartExportLabelsTaskRunError {
@@ -11189,7 +11189,7 @@ impl StartImportLabelsTaskRunError {
 }
 impl fmt::Display for StartImportLabelsTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartImportLabelsTaskRunError {
@@ -11253,7 +11253,7 @@ impl StartJobRunError {
 }
 impl fmt::Display for StartJobRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartJobRunError {
@@ -11328,7 +11328,7 @@ impl StartMLEvaluationTaskRunError {
 }
 impl fmt::Display for StartMLEvaluationTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMLEvaluationTaskRunError {
@@ -11398,7 +11398,7 @@ impl StartMLLabelingSetGenerationTaskRunError {
 }
 impl fmt::Display for StartMLLabelingSetGenerationTaskRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMLLabelingSetGenerationTaskRunError {
@@ -11462,7 +11462,7 @@ impl StartTriggerError {
 }
 impl fmt::Display for StartTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartTriggerError {
@@ -11529,7 +11529,7 @@ impl StartWorkflowRunError {
 }
 impl fmt::Display for StartWorkflowRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartWorkflowRunError {
@@ -11582,7 +11582,7 @@ impl StopCrawlerError {
 }
 impl fmt::Display for StopCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopCrawlerError {
@@ -11639,7 +11639,7 @@ impl StopCrawlerScheduleError {
 }
 impl fmt::Display for StopCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopCrawlerScheduleError {
@@ -11695,7 +11695,7 @@ impl StopTriggerError {
 }
 impl fmt::Display for StopTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopTriggerError {
@@ -11747,7 +11747,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -11798,7 +11798,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -11849,7 +11849,7 @@ impl UpdateClassifierError {
 }
 impl fmt::Display for UpdateClassifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateClassifierError {
@@ -11900,7 +11900,7 @@ impl UpdateConnectionError {
 }
 impl fmt::Display for UpdateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConnectionError {
@@ -11956,7 +11956,7 @@ impl UpdateCrawlerError {
 }
 impl fmt::Display for UpdateCrawlerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCrawlerError {
@@ -12021,7 +12021,7 @@ impl UpdateCrawlerScheduleError {
 }
 impl fmt::Display for UpdateCrawlerScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCrawlerScheduleError {
@@ -12078,7 +12078,7 @@ impl UpdateDatabaseError {
 }
 impl fmt::Display for UpdateDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDatabaseError {
@@ -12130,7 +12130,7 @@ impl UpdateDevEndpointError {
 }
 impl fmt::Display for UpdateDevEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDevEndpointError {
@@ -12186,7 +12186,7 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateJobError {
@@ -12243,7 +12243,7 @@ impl UpdateMLTransformError {
 }
 impl fmt::Display for UpdateMLTransformError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMLTransformError {
@@ -12300,7 +12300,7 @@ impl UpdatePartitionError {
 }
 impl fmt::Display for UpdatePartitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePartitionError {
@@ -12369,7 +12369,7 @@ impl UpdateTableError {
 }
 impl fmt::Display for UpdateTableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTableError {
@@ -12430,7 +12430,7 @@ impl UpdateTriggerError {
 }
 impl fmt::Display for UpdateTriggerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTriggerError {
@@ -12497,7 +12497,7 @@ impl UpdateUserDefinedFunctionError {
 }
 impl fmt::Display for UpdateUserDefinedFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserDefinedFunctionError {
@@ -12556,7 +12556,7 @@ impl UpdateWorkflowError {
 }
 impl fmt::Display for UpdateWorkflowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWorkflowError {

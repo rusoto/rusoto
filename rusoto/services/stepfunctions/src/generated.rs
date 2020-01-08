@@ -1227,7 +1227,7 @@ impl CreateActivityError {
 }
 impl fmt::Display for CreateActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateActivityError {
@@ -1314,7 +1314,7 @@ impl CreateStateMachineError {
 }
 impl fmt::Display for CreateStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStateMachineError {
@@ -1355,7 +1355,7 @@ impl DeleteActivityError {
 }
 impl fmt::Display for DeleteActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteActivityError {
@@ -1388,7 +1388,7 @@ impl DeleteStateMachineError {
 }
 impl fmt::Display for DeleteStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStateMachineError {
@@ -1428,7 +1428,7 @@ impl DescribeActivityError {
 }
 impl fmt::Display for DescribeActivityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActivityError {
@@ -1469,7 +1469,7 @@ impl DescribeExecutionError {
 }
 impl fmt::Display for DescribeExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeExecutionError {
@@ -1510,7 +1510,7 @@ impl DescribeStateMachineError {
 }
 impl fmt::Display for DescribeStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStateMachineError {
@@ -1555,7 +1555,7 @@ impl DescribeStateMachineForExecutionError {
 }
 impl fmt::Display for DescribeStateMachineForExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStateMachineForExecutionError {
@@ -1603,7 +1603,7 @@ impl GetActivityTaskError {
 }
 impl fmt::Display for GetActivityTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetActivityTaskError {
@@ -1650,7 +1650,7 @@ impl GetExecutionHistoryError {
 }
 impl fmt::Display for GetExecutionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetExecutionHistoryError {
@@ -1685,7 +1685,7 @@ impl ListActivitiesError {
 }
 impl fmt::Display for ListActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActivitiesError {
@@ -1737,7 +1737,7 @@ impl ListExecutionsError {
 }
 impl fmt::Display for ListExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListExecutionsError {
@@ -1773,7 +1773,7 @@ impl ListStateMachinesError {
 }
 impl fmt::Display for ListStateMachinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStateMachinesError {
@@ -1813,7 +1813,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -1857,7 +1857,7 @@ impl SendTaskFailureError {
 }
 impl fmt::Display for SendTaskFailureError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendTaskFailureError {
@@ -1902,7 +1902,7 @@ impl SendTaskHeartbeatError {
 }
 impl fmt::Display for SendTaskHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendTaskHeartbeatError {
@@ -1952,7 +1952,7 @@ impl SendTaskSuccessError {
 }
 impl fmt::Display for SendTaskSuccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendTaskSuccessError {
@@ -2026,7 +2026,7 @@ impl StartExecutionError {
 }
 impl fmt::Display for StartExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartExecutionError {
@@ -2070,7 +2070,7 @@ impl StopExecutionError {
 }
 impl fmt::Display for StopExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopExecutionError {
@@ -2112,7 +2112,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2152,7 +2152,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2221,7 +2221,7 @@ impl UpdateStateMachineError {
 }
 impl fmt::Display for UpdateStateMachineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStateMachineError {

@@ -8357,7 +8357,7 @@ impl AcceptCertificateTransferError {
 }
 impl fmt::Display for AcceptCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptCertificateTransferError {
@@ -8417,7 +8417,7 @@ impl AddThingToBillingGroupError {
 }
 impl fmt::Display for AddThingToBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddThingToBillingGroupError {
@@ -8472,7 +8472,7 @@ impl AddThingToThingGroupError {
 }
 impl fmt::Display for AddThingToThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddThingToThingGroupError {
@@ -8536,7 +8536,7 @@ impl AssociateTargetsWithJobError {
 }
 impl fmt::Display for AssociateTargetsWithJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateTargetsWithJobError {
@@ -8603,7 +8603,7 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachPolicyError {
@@ -8680,7 +8680,7 @@ impl AttachPrincipalPolicyError {
 }
 impl fmt::Display for AttachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachPrincipalPolicyError {
@@ -8752,7 +8752,7 @@ impl AttachSecurityProfileError {
 }
 impl fmt::Display for AttachSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachSecurityProfileError {
@@ -8821,7 +8821,7 @@ impl AttachThingPrincipalError {
 }
 impl fmt::Display for AttachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachThingPrincipalError {
@@ -8884,7 +8884,7 @@ impl CancelAuditMitigationActionsTaskError {
 }
 impl fmt::Display for CancelAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelAuditMitigationActionsTaskError {
@@ -8935,7 +8935,7 @@ impl CancelAuditTaskError {
 }
 impl fmt::Display for CancelAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelAuditTaskError {
@@ -9015,7 +9015,7 @@ impl CancelCertificateTransferError {
 }
 impl fmt::Display for CancelCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelCertificateTransferError {
@@ -9069,7 +9069,7 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelJobError {
@@ -9134,7 +9134,7 @@ impl CancelJobExecutionError {
 }
 impl fmt::Display for CancelJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelJobExecutionError {
@@ -9205,7 +9205,7 @@ impl ClearDefaultAuthorizerError {
 }
 impl fmt::Display for ClearDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ClearDefaultAuthorizerError {
@@ -9275,7 +9275,7 @@ impl ConfirmTopicRuleDestinationError {
 }
 impl fmt::Display for ConfirmTopicRuleDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmTopicRuleDestinationError {
@@ -9344,7 +9344,7 @@ impl CreateAuthorizerError {
 }
 impl fmt::Display for CreateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAuthorizerError {
@@ -9400,7 +9400,7 @@ impl CreateBillingGroupError {
 }
 impl fmt::Display for CreateBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBillingGroupError {
@@ -9464,7 +9464,7 @@ impl CreateCertificateFromCsrError {
 }
 impl fmt::Display for CreateCertificateFromCsrError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCertificateFromCsrError {
@@ -9552,7 +9552,7 @@ impl CreateDomainConfigurationError {
 }
 impl fmt::Display for CreateDomainConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainConfigurationError {
@@ -9634,7 +9634,7 @@ impl CreateDynamicThingGroupError {
 }
 impl fmt::Display for CreateDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDynamicThingGroupError {
@@ -9698,7 +9698,7 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateJobError {
@@ -9764,7 +9764,7 @@ impl CreateKeysAndCertificateError {
 }
 impl fmt::Display for CreateKeysAndCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateKeysAndCertificateError {
@@ -9829,7 +9829,7 @@ impl CreateMitigationActionError {
 }
 impl fmt::Display for CreateMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMitigationActionError {
@@ -9903,7 +9903,7 @@ impl CreateOTAUpdateError {
 }
 impl fmt::Display for CreateOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOTAUpdateError {
@@ -9973,7 +9973,7 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePolicyError {
@@ -10053,7 +10053,7 @@ impl CreatePolicyVersionError {
 }
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePolicyVersionError {
@@ -10128,7 +10128,7 @@ impl CreateProvisioningClaimError {
 }
 impl fmt::Display for CreateProvisioningClaimError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProvisioningClaimError {
@@ -10205,7 +10205,7 @@ impl CreateProvisioningTemplateError {
 }
 impl fmt::Display for CreateProvisioningTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProvisioningTemplateError {
@@ -10289,7 +10289,7 @@ impl CreateProvisioningTemplateVersionError {
 }
 impl fmt::Display for CreateProvisioningTemplateVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProvisioningTemplateVersionError {
@@ -10360,7 +10360,7 @@ impl CreateRoleAliasError {
 }
 impl fmt::Display for CreateRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRoleAliasError {
@@ -10423,7 +10423,7 @@ impl CreateScheduledAuditError {
 }
 impl fmt::Display for CreateScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateScheduledAuditError {
@@ -10481,7 +10481,7 @@ impl CreateSecurityProfileError {
 }
 impl fmt::Display for CreateSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSecurityProfileError {
@@ -10552,7 +10552,7 @@ impl CreateStreamError {
 }
 impl fmt::Display for CreateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStreamError {
@@ -10622,7 +10622,7 @@ impl CreateThingError {
 }
 impl fmt::Display for CreateThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateThingError {
@@ -10678,7 +10678,7 @@ impl CreateThingGroupError {
 }
 impl fmt::Display for CreateThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateThingGroupError {
@@ -10741,7 +10741,7 @@ impl CreateThingTypeError {
 }
 impl fmt::Display for CreateThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateThingTypeError {
@@ -10808,7 +10808,7 @@ impl CreateTopicRuleError {
 }
 impl fmt::Display for CreateTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTopicRuleError {
@@ -10876,7 +10876,7 @@ impl CreateTopicRuleDestinationError {
 }
 impl fmt::Display for CreateTopicRuleDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTopicRuleDestinationError {
@@ -10938,7 +10938,7 @@ impl DeleteAccountAuditConfigurationError {
 }
 impl fmt::Display for DeleteAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccountAuditConfigurationError {
@@ -11004,7 +11004,7 @@ impl DeleteAuthorizerError {
 }
 impl fmt::Display for DeleteAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAuthorizerError {
@@ -11058,7 +11058,7 @@ impl DeleteBillingGroupError {
 }
 impl fmt::Display for DeleteBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBillingGroupError {
@@ -11130,7 +11130,7 @@ impl DeleteCACertificateError {
 }
 impl fmt::Display for DeleteCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCACertificateError {
@@ -11206,7 +11206,7 @@ impl DeleteCertificateError {
 }
 impl fmt::Display for DeleteCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCertificateError {
@@ -11283,7 +11283,7 @@ impl DeleteDomainConfigurationError {
 }
 impl fmt::Display for DeleteDomainConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainConfigurationError {
@@ -11342,7 +11342,7 @@ impl DeleteDynamicThingGroupError {
 }
 impl fmt::Display for DeleteDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDynamicThingGroupError {
@@ -11403,7 +11403,7 @@ impl DeleteJobError {
 }
 impl fmt::Display for DeleteJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteJobError {
@@ -11465,7 +11465,7 @@ impl DeleteJobExecutionError {
 }
 impl fmt::Display for DeleteJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteJobExecutionError {
@@ -11516,7 +11516,7 @@ impl DeleteMitigationActionError {
 }
 impl fmt::Display for DeleteMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMitigationActionError {
@@ -11581,7 +11581,7 @@ impl DeleteOTAUpdateError {
 }
 impl fmt::Display for DeleteOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOTAUpdateError {
@@ -11650,7 +11650,7 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyError {
@@ -11723,7 +11723,7 @@ impl DeletePolicyVersionError {
 }
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyVersionError {
@@ -11801,7 +11801,7 @@ impl DeleteProvisioningTemplateError {
 }
 impl fmt::Display for DeleteProvisioningTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProvisioningTemplateError {
@@ -11878,7 +11878,7 @@ impl DeleteProvisioningTemplateVersionError {
 }
 impl fmt::Display for DeleteProvisioningTemplateVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProvisioningTemplateVersionError {
@@ -11942,7 +11942,7 @@ impl DeleteRegistrationCodeError {
 }
 impl fmt::Display for DeleteRegistrationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRegistrationCodeError {
@@ -12009,7 +12009,7 @@ impl DeleteRoleAliasError {
 }
 impl fmt::Display for DeleteRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoleAliasError {
@@ -12067,7 +12067,7 @@ impl DeleteScheduledAuditError {
 }
 impl fmt::Display for DeleteScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScheduledAuditError {
@@ -12124,7 +12124,7 @@ impl DeleteSecurityProfileError {
 }
 impl fmt::Display for DeleteSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSecurityProfileError {
@@ -12190,7 +12190,7 @@ impl DeleteStreamError {
 }
 impl fmt::Display for DeleteStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStreamError {
@@ -12259,7 +12259,7 @@ impl DeleteThingError {
 }
 impl fmt::Display for DeleteThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteThingError {
@@ -12313,7 +12313,7 @@ impl DeleteThingGroupError {
 }
 impl fmt::Display for DeleteThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteThingGroupError {
@@ -12374,7 +12374,7 @@ impl DeleteThingTypeError {
 }
 impl fmt::Display for DeleteThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteThingTypeError {
@@ -12434,7 +12434,7 @@ impl DeleteTopicRuleError {
 }
 impl fmt::Display for DeleteTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTopicRuleError {
@@ -12501,7 +12501,7 @@ impl DeleteTopicRuleDestinationError {
 }
 impl fmt::Display for DeleteTopicRuleDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTopicRuleDestinationError {
@@ -12550,7 +12550,7 @@ impl DeleteV2LoggingLevelError {
 }
 impl fmt::Display for DeleteV2LoggingLevelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteV2LoggingLevelError {
@@ -12612,7 +12612,7 @@ impl DeprecateThingTypeError {
 }
 impl fmt::Display for DeprecateThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeprecateThingTypeError {
@@ -12661,7 +12661,7 @@ impl DescribeAccountAuditConfigurationError {
 }
 impl fmt::Display for DescribeAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountAuditConfigurationError {
@@ -12714,7 +12714,7 @@ impl DescribeAuditFindingError {
 }
 impl fmt::Display for DescribeAuditFindingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAuditFindingError {
@@ -12775,7 +12775,7 @@ impl DescribeAuditMitigationActionsTaskError {
 }
 impl fmt::Display for DescribeAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAuditMitigationActionsTaskError {
@@ -12826,7 +12826,7 @@ impl DescribeAuditTaskError {
 }
 impl fmt::Display for DescribeAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAuditTaskError {
@@ -12889,7 +12889,7 @@ impl DescribeAuthorizerError {
 }
 impl fmt::Display for DescribeAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAuthorizerError {
@@ -12946,7 +12946,7 @@ impl DescribeBillingGroupError {
 }
 impl fmt::Display for DescribeBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBillingGroupError {
@@ -13015,7 +13015,7 @@ impl DescribeCACertificateError {
 }
 impl fmt::Display for DescribeCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCACertificateError {
@@ -13082,7 +13082,7 @@ impl DescribeCertificateError {
 }
 impl fmt::Display for DescribeCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCertificateError {
@@ -13157,7 +13157,7 @@ impl DescribeDefaultAuthorizerError {
 }
 impl fmt::Display for DescribeDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDefaultAuthorizerError {
@@ -13227,7 +13227,7 @@ impl DescribeDomainConfigurationError {
 }
 impl fmt::Display for DescribeDomainConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDomainConfigurationError {
@@ -13279,7 +13279,7 @@ impl DescribeEndpointError {
 }
 impl fmt::Display for DescribeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEndpointError {
@@ -13326,7 +13326,7 @@ impl DescribeEventConfigurationsError {
 }
 impl fmt::Display for DescribeEventConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventConfigurationsError {
@@ -13385,7 +13385,7 @@ impl DescribeIndexError {
 }
 impl fmt::Display for DescribeIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIndexError {
@@ -13438,7 +13438,7 @@ impl DescribeJobError {
 }
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobError {
@@ -13493,7 +13493,7 @@ impl DescribeJobExecutionError {
 }
 impl fmt::Display for DescribeJobExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobExecutionError {
@@ -13550,7 +13550,7 @@ impl DescribeMitigationActionError {
 }
 impl fmt::Display for DescribeMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMitigationActionError {
@@ -13618,7 +13618,7 @@ impl DescribeProvisioningTemplateError {
 }
 impl fmt::Display for DescribeProvisioningTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisioningTemplateError {
@@ -13687,7 +13687,7 @@ impl DescribeProvisioningTemplateVersionError {
 }
 impl fmt::Display for DescribeProvisioningTemplateVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProvisioningTemplateVersionError {
@@ -13751,7 +13751,7 @@ impl DescribeRoleAliasError {
 }
 impl fmt::Display for DescribeRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRoleAliasError {
@@ -13810,7 +13810,7 @@ impl DescribeScheduledAuditError {
 }
 impl fmt::Display for DescribeScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScheduledAuditError {
@@ -13867,7 +13867,7 @@ impl DescribeSecurityProfileError {
 }
 impl fmt::Display for DescribeSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSecurityProfileError {
@@ -13928,7 +13928,7 @@ impl DescribeStreamError {
 }
 impl fmt::Display for DescribeStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStreamError {
@@ -13991,7 +13991,7 @@ impl DescribeThingError {
 }
 impl fmt::Display for DescribeThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeThingError {
@@ -14044,7 +14044,7 @@ impl DescribeThingGroupError {
 }
 impl fmt::Display for DescribeThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeThingGroupError {
@@ -14112,7 +14112,7 @@ impl DescribeThingRegistrationTaskError {
 }
 impl fmt::Display for DescribeThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeThingRegistrationTaskError {
@@ -14176,7 +14176,7 @@ impl DescribeThingTypeError {
 }
 impl fmt::Display for DescribeThingTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeThingTypeError {
@@ -14239,7 +14239,7 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachPolicyError {
@@ -14310,7 +14310,7 @@ impl DetachPrincipalPolicyError {
 }
 impl fmt::Display for DetachPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachPrincipalPolicyError {
@@ -14369,7 +14369,7 @@ impl DetachSecurityProfileError {
 }
 impl fmt::Display for DetachSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachSecurityProfileError {
@@ -14436,7 +14436,7 @@ impl DetachThingPrincipalError {
 }
 impl fmt::Display for DetachThingPrincipalError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachThingPrincipalError {
@@ -14496,7 +14496,7 @@ impl DisableTopicRuleError {
 }
 impl fmt::Display for DisableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableTopicRuleError {
@@ -14555,7 +14555,7 @@ impl EnableTopicRuleError {
 }
 impl fmt::Display for EnableTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableTopicRuleError {
@@ -14632,7 +14632,7 @@ impl GetCardinalityError {
 }
 impl fmt::Display for GetCardinalityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCardinalityError {
@@ -14709,7 +14709,7 @@ impl GetEffectivePoliciesError {
 }
 impl fmt::Display for GetEffectivePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEffectivePoliciesError {
@@ -14776,7 +14776,7 @@ impl GetIndexingConfigurationError {
 }
 impl fmt::Display for GetIndexingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIndexingConfigurationError {
@@ -14828,7 +14828,7 @@ impl GetJobDocumentError {
 }
 impl fmt::Display for GetJobDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobDocumentError {
@@ -14876,7 +14876,7 @@ impl GetLoggingOptionsError {
 }
 impl fmt::Display for GetLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoggingOptionsError {
@@ -14936,7 +14936,7 @@ impl GetOTAUpdateError {
 }
 impl fmt::Display for GetOTAUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOTAUpdateError {
@@ -15014,7 +15014,7 @@ impl GetPercentilesError {
 }
 impl fmt::Display for GetPercentilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPercentilesError {
@@ -15080,7 +15080,7 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyError {
@@ -15143,7 +15143,7 @@ impl GetPolicyVersionError {
 }
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyVersionError {
@@ -15203,7 +15203,7 @@ impl GetRegistrationCodeError {
 }
 impl fmt::Display for GetRegistrationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRegistrationCodeError {
@@ -15280,7 +15280,7 @@ impl GetStatisticsError {
 }
 impl fmt::Display for GetStatisticsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStatisticsError {
@@ -15336,7 +15336,7 @@ impl GetTopicRuleError {
 }
 impl fmt::Display for GetTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTopicRuleError {
@@ -15393,7 +15393,7 @@ impl GetTopicRuleDestinationError {
 }
 impl fmt::Display for GetTopicRuleDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTopicRuleDestinationError {
@@ -15441,7 +15441,7 @@ impl GetV2LoggingOptionsError {
 }
 impl fmt::Display for GetV2LoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetV2LoggingOptionsError {
@@ -15495,7 +15495,7 @@ impl ListActiveViolationsError {
 }
 impl fmt::Display for ListActiveViolationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListActiveViolationsError {
@@ -15567,7 +15567,7 @@ impl ListAttachedPoliciesError {
 }
 impl fmt::Display for ListAttachedPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttachedPoliciesError {
@@ -15616,7 +15616,7 @@ impl ListAuditFindingsError {
 }
 impl fmt::Display for ListAuditFindingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAuditFindingsError {
@@ -15669,7 +15669,7 @@ impl ListAuditMitigationActionsExecutionsError {
 }
 impl fmt::Display for ListAuditMitigationActionsExecutionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAuditMitigationActionsExecutionsError {
@@ -15722,7 +15722,7 @@ impl ListAuditMitigationActionsTasksError {
 }
 impl fmt::Display for ListAuditMitigationActionsTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAuditMitigationActionsTasksError {
@@ -15767,7 +15767,7 @@ impl ListAuditTasksError {
 }
 impl fmt::Display for ListAuditTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAuditTasksError {
@@ -15822,7 +15822,7 @@ impl ListAuthorizersError {
 }
 impl fmt::Display for ListAuthorizersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAuthorizersError {
@@ -15874,7 +15874,7 @@ impl ListBillingGroupsError {
 }
 impl fmt::Display for ListBillingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBillingGroupsError {
@@ -15932,7 +15932,7 @@ impl ListCACertificatesError {
 }
 impl fmt::Display for ListCACertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCACertificatesError {
@@ -15989,7 +15989,7 @@ impl ListCertificatesError {
 }
 impl fmt::Display for ListCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCertificatesError {
@@ -16050,7 +16050,7 @@ impl ListCertificatesByCAError {
 }
 impl fmt::Display for ListCertificatesByCAError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCertificatesByCAError {
@@ -16115,7 +16115,7 @@ impl ListDomainConfigurationsError {
 }
 impl fmt::Display for ListDomainConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDomainConfigurationsError {
@@ -16172,7 +16172,7 @@ impl ListIndicesError {
 }
 impl fmt::Display for ListIndicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIndicesError {
@@ -16230,7 +16230,7 @@ impl ListJobExecutionsForJobError {
 }
 impl fmt::Display for ListJobExecutionsForJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobExecutionsForJobError {
@@ -16289,7 +16289,7 @@ impl ListJobExecutionsForThingError {
 }
 impl fmt::Display for ListJobExecutionsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobExecutionsForThingError {
@@ -16340,7 +16340,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -16390,7 +16390,7 @@ impl ListMitigationActionsError {
 }
 impl fmt::Display for ListMitigationActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMitigationActionsError {
@@ -16445,7 +16445,7 @@ impl ListOTAUpdatesError {
 }
 impl fmt::Display for ListOTAUpdatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOTAUpdatesError {
@@ -16510,7 +16510,7 @@ impl ListOutgoingCertificatesError {
 }
 impl fmt::Display for ListOutgoingCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOutgoingCertificatesError {
@@ -16567,7 +16567,7 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesError {
@@ -16635,7 +16635,7 @@ impl ListPolicyPrincipalsError {
 }
 impl fmt::Display for ListPolicyPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPolicyPrincipalsError {
@@ -16700,7 +16700,7 @@ impl ListPolicyVersionsError {
 }
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPolicyVersionsError {
@@ -16771,7 +16771,7 @@ impl ListPrincipalPoliciesError {
 }
 impl fmt::Display for ListPrincipalPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPrincipalPoliciesError {
@@ -16838,7 +16838,7 @@ impl ListPrincipalThingsError {
 }
 impl fmt::Display for ListPrincipalThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPrincipalThingsError {
@@ -16908,7 +16908,7 @@ impl ListProvisioningTemplateVersionsError {
 }
 impl fmt::Display for ListProvisioningTemplateVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisioningTemplateVersionsError {
@@ -16968,7 +16968,7 @@ impl ListProvisioningTemplatesError {
 }
 impl fmt::Display for ListProvisioningTemplatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisioningTemplatesError {
@@ -17024,7 +17024,7 @@ impl ListRoleAliasesError {
 }
 impl fmt::Display for ListRoleAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoleAliasesError {
@@ -17071,7 +17071,7 @@ impl ListScheduledAuditsError {
 }
 impl fmt::Display for ListScheduledAuditsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListScheduledAuditsError {
@@ -17118,7 +17118,7 @@ impl ListSecurityProfilesError {
 }
 impl fmt::Display for ListSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecurityProfilesError {
@@ -17178,7 +17178,7 @@ impl ListSecurityProfilesForTargetError {
 }
 impl fmt::Display for ListSecurityProfilesForTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecurityProfilesForTargetError {
@@ -17234,7 +17234,7 @@ impl ListStreamsError {
 }
 impl fmt::Display for ListStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListStreamsError {
@@ -17288,7 +17288,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -17360,7 +17360,7 @@ impl ListTargetsForPolicyError {
 }
 impl fmt::Display for ListTargetsForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTargetsForPolicyError {
@@ -17424,7 +17424,7 @@ impl ListTargetsForSecurityProfileError {
 }
 impl fmt::Display for ListTargetsForSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTargetsForSecurityProfileError {
@@ -17470,7 +17470,7 @@ impl ListThingGroupsError {
 }
 impl fmt::Display for ListThingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingGroupsError {
@@ -17521,7 +17521,7 @@ impl ListThingGroupsForThingError {
 }
 impl fmt::Display for ListThingGroupsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingGroupsForThingError {
@@ -17585,7 +17585,7 @@ impl ListThingPrincipalsError {
 }
 impl fmt::Display for ListThingPrincipalsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingPrincipalsError {
@@ -17648,7 +17648,7 @@ impl ListThingRegistrationTaskReportsError {
 }
 impl fmt::Display for ListThingRegistrationTaskReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingRegistrationTaskReportsError {
@@ -17709,7 +17709,7 @@ impl ListThingRegistrationTasksError {
 }
 impl fmt::Display for ListThingRegistrationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingRegistrationTasksError {
@@ -17765,7 +17765,7 @@ impl ListThingTypesError {
 }
 impl fmt::Display for ListThingTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingTypesError {
@@ -17822,7 +17822,7 @@ impl ListThingsError {
 }
 impl fmt::Display for ListThingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingsError {
@@ -17880,7 +17880,7 @@ impl ListThingsInBillingGroupError {
 }
 impl fmt::Display for ListThingsInBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingsInBillingGroupError {
@@ -17932,7 +17932,7 @@ impl ListThingsInThingGroupError {
 }
 impl fmt::Display for ListThingsInThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListThingsInThingGroupError {
@@ -17988,7 +17988,7 @@ impl ListTopicRuleDestinationsError {
 }
 impl fmt::Display for ListTopicRuleDestinationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTopicRuleDestinationsError {
@@ -18034,7 +18034,7 @@ impl ListTopicRulesError {
 }
 impl fmt::Display for ListTopicRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTopicRulesError {
@@ -18086,7 +18086,7 @@ impl ListV2LoggingLevelsError {
 }
 impl fmt::Display for ListV2LoggingLevelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListV2LoggingLevelsError {
@@ -18132,7 +18132,7 @@ impl ListViolationEventsError {
 }
 impl fmt::Display for ListViolationEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListViolationEventsError {
@@ -18219,7 +18219,7 @@ impl RegisterCACertificateError {
 }
 impl fmt::Display for RegisterCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterCACertificateError {
@@ -18310,7 +18310,7 @@ impl RegisterCertificateError {
 }
 impl fmt::Display for RegisterCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterCertificateError {
@@ -18385,7 +18385,7 @@ impl RegisterThingError {
 }
 impl fmt::Display for RegisterThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterThingError {
@@ -18468,7 +18468,7 @@ impl RejectCertificateTransferError {
 }
 impl fmt::Display for RejectCertificateTransferError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectCertificateTransferError {
@@ -18532,7 +18532,7 @@ impl RemoveThingFromBillingGroupError {
 }
 impl fmt::Display for RemoveThingFromBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveThingFromBillingGroupError {
@@ -18591,7 +18591,7 @@ impl RemoveThingFromThingGroupError {
 }
 impl fmt::Display for RemoveThingFromThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveThingFromThingGroupError {
@@ -18654,7 +18654,7 @@ impl ReplaceTopicRuleError {
 }
 impl fmt::Display for ReplaceTopicRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReplaceTopicRuleError {
@@ -18727,7 +18727,7 @@ impl SearchIndexError {
 }
 impl fmt::Display for SearchIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchIndexError {
@@ -18805,7 +18805,7 @@ impl SetDefaultAuthorizerError {
 }
 impl fmt::Display for SetDefaultAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetDefaultAuthorizerError {
@@ -18879,7 +18879,7 @@ impl SetDefaultPolicyVersionError {
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetDefaultPolicyVersionError {
@@ -18929,7 +18929,7 @@ impl SetLoggingOptionsError {
 }
 impl fmt::Display for SetLoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetLoggingOptionsError {
@@ -18981,7 +18981,7 @@ impl SetV2LoggingLevelError {
 }
 impl fmt::Display for SetV2LoggingLevelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetV2LoggingLevelError {
@@ -19029,7 +19029,7 @@ impl SetV2LoggingOptionsError {
 }
 impl fmt::Display for SetV2LoggingOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetV2LoggingOptionsError {
@@ -19096,7 +19096,7 @@ impl StartAuditMitigationActionsTaskError {
 }
 impl fmt::Display for StartAuditMitigationActionsTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAuditMitigationActionsTaskError {
@@ -19154,7 +19154,7 @@ impl StartOnDemandAuditTaskError {
 }
 impl fmt::Display for StartOnDemandAuditTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartOnDemandAuditTaskError {
@@ -19215,7 +19215,7 @@ impl StartThingRegistrationTaskError {
 }
 impl fmt::Display for StartThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartThingRegistrationTaskError {
@@ -19281,7 +19281,7 @@ impl StopThingRegistrationTaskError {
 }
 impl fmt::Display for StopThingRegistrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopThingRegistrationTaskError {
@@ -19338,7 +19338,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -19407,7 +19407,7 @@ impl TestAuthorizationError {
 }
 impl fmt::Display for TestAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestAuthorizationError {
@@ -19484,7 +19484,7 @@ impl TestInvokeAuthorizerError {
 }
 impl fmt::Display for TestInvokeAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TestInvokeAuthorizerError {
@@ -19566,7 +19566,7 @@ impl TransferCertificateError {
 }
 impl fmt::Display for TransferCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TransferCertificateError {
@@ -19621,7 +19621,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -19675,7 +19675,7 @@ impl UpdateAccountAuditConfigurationError {
 }
 impl fmt::Display for UpdateAccountAuditConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccountAuditConfigurationError {
@@ -19740,7 +19740,7 @@ impl UpdateAuthorizerError {
 }
 impl fmt::Display for UpdateAuthorizerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAuthorizerError {
@@ -19799,7 +19799,7 @@ impl UpdateBillingGroupError {
 }
 impl fmt::Display for UpdateBillingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBillingGroupError {
@@ -19865,7 +19865,7 @@ impl UpdateCACertificateError {
 }
 impl fmt::Display for UpdateCACertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCACertificateError {
@@ -19935,7 +19935,7 @@ impl UpdateCertificateError {
 }
 impl fmt::Display for UpdateCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCertificateError {
@@ -20018,7 +20018,7 @@ impl UpdateDomainConfigurationError {
 }
 impl fmt::Display for UpdateDomainConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainConfigurationError {
@@ -20092,7 +20092,7 @@ impl UpdateDynamicThingGroupError {
 }
 impl fmt::Display for UpdateDynamicThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDynamicThingGroupError {
@@ -20146,7 +20146,7 @@ impl UpdateEventConfigurationsError {
 }
 impl fmt::Display for UpdateEventConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEventConfigurationsError {
@@ -20213,7 +20213,7 @@ impl UpdateIndexingConfigurationError {
 }
 impl fmt::Display for UpdateIndexingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIndexingConfigurationError {
@@ -20265,7 +20265,7 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateJobError {
@@ -20322,7 +20322,7 @@ impl UpdateMitigationActionError {
 }
 impl fmt::Display for UpdateMitigationActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMitigationActionError {
@@ -20390,7 +20390,7 @@ impl UpdateProvisioningTemplateError {
 }
 impl fmt::Display for UpdateProvisioningTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProvisioningTemplateError {
@@ -20452,7 +20452,7 @@ impl UpdateRoleAliasError {
 }
 impl fmt::Display for UpdateRoleAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoleAliasError {
@@ -20509,7 +20509,7 @@ impl UpdateScheduledAuditError {
 }
 impl fmt::Display for UpdateScheduledAuditError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateScheduledAuditError {
@@ -20573,7 +20573,7 @@ impl UpdateSecurityProfileError {
 }
 impl fmt::Display for UpdateSecurityProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSecurityProfileError {
@@ -20635,7 +20635,7 @@ impl UpdateStreamError {
 }
 impl fmt::Display for UpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStreamError {
@@ -20703,7 +20703,7 @@ impl UpdateThingError {
 }
 impl fmt::Display for UpdateThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateThingError {
@@ -20762,7 +20762,7 @@ impl UpdateThingGroupError {
 }
 impl fmt::Display for UpdateThingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateThingGroupError {
@@ -20822,7 +20822,7 @@ impl UpdateThingGroupsForThingError {
 }
 impl fmt::Display for UpdateThingGroupsForThingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateThingGroupsForThingError {
@@ -20888,7 +20888,7 @@ impl UpdateTopicRuleDestinationError {
 }
 impl fmt::Display for UpdateTopicRuleDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTopicRuleDestinationError {
@@ -20943,7 +20943,7 @@ impl ValidateSecurityProfileBehaviorsError {
 }
 impl fmt::Display for ValidateSecurityProfileBehaviorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ValidateSecurityProfileBehaviorsError {

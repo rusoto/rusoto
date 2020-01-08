@@ -1334,7 +1334,7 @@ impl AbortMultipartUploadError {
 }
 impl fmt::Display for AbortMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AbortMultipartUploadError {
@@ -1389,7 +1389,7 @@ impl AbortVaultLockError {
 }
 impl fmt::Display for AbortVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AbortVaultLockError {
@@ -1449,7 +1449,7 @@ impl AddTagsToVaultError {
 }
 impl fmt::Display for AddTagsToVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsToVaultError {
@@ -1509,7 +1509,7 @@ impl CompleteMultipartUploadError {
 }
 impl fmt::Display for CompleteMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompleteMultipartUploadError {
@@ -1566,7 +1566,7 @@ impl CompleteVaultLockError {
 }
 impl fmt::Display for CompleteVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompleteVaultLockError {
@@ -1617,7 +1617,7 @@ impl CreateVaultError {
 }
 impl fmt::Display for CreateVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVaultError {
@@ -1668,7 +1668,7 @@ impl DeleteArchiveError {
 }
 impl fmt::Display for DeleteArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteArchiveError {
@@ -1719,7 +1719,7 @@ impl DeleteVaultError {
 }
 impl fmt::Display for DeleteVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVaultError {
@@ -1778,7 +1778,7 @@ impl DeleteVaultAccessPolicyError {
 }
 impl fmt::Display for DeleteVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVaultAccessPolicyError {
@@ -1837,7 +1837,7 @@ impl DeleteVaultNotificationsError {
 }
 impl fmt::Display for DeleteVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVaultNotificationsError {
@@ -1888,7 +1888,7 @@ impl DescribeJobError {
 }
 impl fmt::Display for DescribeJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobError {
@@ -1939,7 +1939,7 @@ impl DescribeVaultError {
 }
 impl fmt::Display for DescribeVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVaultError {
@@ -1991,7 +1991,7 @@ impl GetDataRetrievalPolicyError {
 }
 impl fmt::Display for GetDataRetrievalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDataRetrievalPolicyError {
@@ -2041,7 +2041,7 @@ impl GetJobOutputError {
 }
 impl fmt::Display for GetJobOutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetJobOutputError {
@@ -2100,7 +2100,7 @@ impl GetVaultAccessPolicyError {
 }
 impl fmt::Display for GetVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVaultAccessPolicyError {
@@ -2151,7 +2151,7 @@ impl GetVaultLockError {
 }
 impl fmt::Display for GetVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVaultLockError {
@@ -2210,7 +2210,7 @@ impl GetVaultNotificationsError {
 }
 impl fmt::Display for GetVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVaultNotificationsError {
@@ -2271,7 +2271,7 @@ impl InitiateJobError {
 }
 impl fmt::Display for InitiateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateJobError {
@@ -2332,7 +2332,7 @@ impl InitiateMultipartUploadError {
 }
 impl fmt::Display for InitiateMultipartUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateMultipartUploadError {
@@ -2389,7 +2389,7 @@ impl InitiateVaultLockError {
 }
 impl fmt::Display for InitiateVaultLockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateVaultLockError {
@@ -2440,7 +2440,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -2499,7 +2499,7 @@ impl ListMultipartUploadsError {
 }
 impl fmt::Display for ListMultipartUploadsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMultipartUploadsError {
@@ -2550,7 +2550,7 @@ impl ListPartsError {
 }
 impl fmt::Display for ListPartsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPartsError {
@@ -2602,7 +2602,7 @@ impl ListProvisionedCapacityError {
 }
 impl fmt::Display for ListProvisionedCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisionedCapacityError {
@@ -2656,7 +2656,7 @@ impl ListTagsForVaultError {
 }
 impl fmt::Display for ListTagsForVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForVaultError {
@@ -2707,7 +2707,7 @@ impl ListVaultsError {
 }
 impl fmt::Display for ListVaultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVaultsError {
@@ -2768,7 +2768,7 @@ impl PurchaseProvisionedCapacityError {
 }
 impl fmt::Display for PurchaseProvisionedCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PurchaseProvisionedCapacityError {
@@ -2827,7 +2827,7 @@ impl RemoveTagsFromVaultError {
 }
 impl fmt::Display for RemoveTagsFromVaultError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsFromVaultError {
@@ -2879,7 +2879,7 @@ impl SetDataRetrievalPolicyError {
 }
 impl fmt::Display for SetDataRetrievalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetDataRetrievalPolicyError {
@@ -2937,7 +2937,7 @@ impl SetVaultAccessPolicyError {
 }
 impl fmt::Display for SetVaultAccessPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetVaultAccessPolicyError {
@@ -2996,7 +2996,7 @@ impl SetVaultNotificationsError {
 }
 impl fmt::Display for SetVaultNotificationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetVaultNotificationsError {
@@ -3052,7 +3052,7 @@ impl UploadArchiveError {
 }
 impl fmt::Display for UploadArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadArchiveError {
@@ -3117,7 +3117,7 @@ impl UploadMultipartPartError {
 }
 impl fmt::Display for UploadMultipartPartError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadMultipartPartError {

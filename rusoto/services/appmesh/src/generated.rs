@@ -1709,7 +1709,7 @@ impl CreateMeshError {
 }
 impl fmt::Display for CreateMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMeshError {
@@ -1789,7 +1789,7 @@ impl CreateRouteError {
 }
 impl fmt::Display for CreateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRouteError {
@@ -1873,7 +1873,7 @@ impl CreateVirtualNodeError {
 }
 impl fmt::Display for CreateVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVirtualNodeError {
@@ -1957,7 +1957,7 @@ impl CreateVirtualRouterError {
 }
 impl fmt::Display for CreateVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVirtualRouterError {
@@ -2043,7 +2043,7 @@ impl CreateVirtualServiceError {
 }
 impl fmt::Display for CreateVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVirtualServiceError {
@@ -2117,7 +2117,7 @@ impl DeleteMeshError {
 }
 impl fmt::Display for DeleteMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMeshError {
@@ -2190,7 +2190,7 @@ impl DeleteRouteError {
 }
 impl fmt::Display for DeleteRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRouteError {
@@ -2267,7 +2267,7 @@ impl DeleteVirtualNodeError {
 }
 impl fmt::Display for DeleteVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVirtualNodeError {
@@ -2344,7 +2344,7 @@ impl DeleteVirtualRouterError {
 }
 impl fmt::Display for DeleteVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVirtualRouterError {
@@ -2417,7 +2417,7 @@ impl DeleteVirtualServiceError {
 }
 impl fmt::Display for DeleteVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVirtualServiceError {
@@ -2483,7 +2483,7 @@ impl DescribeMeshError {
 }
 impl fmt::Display for DescribeMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMeshError {
@@ -2549,7 +2549,7 @@ impl DescribeRouteError {
 }
 impl fmt::Display for DescribeRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRouteError {
@@ -2619,7 +2619,7 @@ impl DescribeVirtualNodeError {
 }
 impl fmt::Display for DescribeVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVirtualNodeError {
@@ -2691,7 +2691,7 @@ impl DescribeVirtualRouterError {
 }
 impl fmt::Display for DescribeVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVirtualRouterError {
@@ -2763,7 +2763,7 @@ impl DescribeVirtualServiceError {
 }
 impl fmt::Display for DescribeVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVirtualServiceError {
@@ -2829,7 +2829,7 @@ impl ListMeshesError {
 }
 impl fmt::Display for ListMeshesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMeshesError {
@@ -2895,7 +2895,7 @@ impl ListRoutesError {
 }
 impl fmt::Display for ListRoutesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoutesError {
@@ -2965,7 +2965,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -3033,7 +3033,7 @@ impl ListVirtualNodesError {
 }
 impl fmt::Display for ListVirtualNodesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVirtualNodesError {
@@ -3103,7 +3103,7 @@ impl ListVirtualRoutersError {
 }
 impl fmt::Display for ListVirtualRoutersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVirtualRoutersError {
@@ -3173,7 +3173,7 @@ impl ListVirtualServicesError {
 }
 impl fmt::Display for ListVirtualServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVirtualServicesError {
@@ -3246,7 +3246,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -3313,7 +3313,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -3385,7 +3385,7 @@ impl UpdateMeshError {
 }
 impl fmt::Display for UpdateMeshError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMeshError {
@@ -3464,7 +3464,7 @@ impl UpdateRouteError {
 }
 impl fmt::Display for UpdateRouteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRouteError {
@@ -3548,7 +3548,7 @@ impl UpdateVirtualNodeError {
 }
 impl fmt::Display for UpdateVirtualNodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVirtualNodeError {
@@ -3632,7 +3632,7 @@ impl UpdateVirtualRouterError {
 }
 impl fmt::Display for UpdateVirtualRouterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVirtualRouterError {
@@ -3718,7 +3718,7 @@ impl UpdateVirtualServiceError {
 }
 impl fmt::Display for UpdateVirtualServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVirtualServiceError {

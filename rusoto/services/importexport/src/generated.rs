@@ -942,7 +942,7 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelJobError {
@@ -1099,7 +1099,7 @@ impl CreateJobError {
 }
 impl fmt::Display for CreateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateJobError {
@@ -1203,7 +1203,7 @@ impl GetShippingLabelError {
 }
 impl fmt::Display for GetShippingLabelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetShippingLabelError {
@@ -1284,7 +1284,7 @@ impl GetStatusError {
 }
 impl fmt::Display for GetStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStatusError {
@@ -1349,7 +1349,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -1517,7 +1517,7 @@ impl UpdateJobError {
 }
 impl fmt::Display for UpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateJobError {
@@ -1660,7 +1660,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -1711,7 +1711,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -1762,7 +1762,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -1816,7 +1816,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -1863,7 +1863,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -1914,7 +1914,7 @@ impl ImportExport for ImportExportClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();

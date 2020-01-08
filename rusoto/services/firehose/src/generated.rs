@@ -1546,7 +1546,7 @@ impl CreateDeliveryStreamError {
 }
 impl fmt::Display for CreateDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeliveryStreamError {
@@ -1589,7 +1589,7 @@ impl DeleteDeliveryStreamError {
 }
 impl fmt::Display for DeleteDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeliveryStreamError {
@@ -1625,7 +1625,7 @@ impl DescribeDeliveryStreamError {
 }
 impl fmt::Display for DescribeDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeliveryStreamError {
@@ -1652,7 +1652,7 @@ impl ListDeliveryStreamsError {
 }
 impl fmt::Display for ListDeliveryStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeliveryStreamsError {
@@ -1699,7 +1699,7 @@ impl ListTagsForDeliveryStreamError {
 }
 impl fmt::Display for ListTagsForDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForDeliveryStreamError {
@@ -1749,7 +1749,7 @@ impl PutRecordError {
 }
 impl fmt::Display for PutRecordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRecordError {
@@ -1800,7 +1800,7 @@ impl PutRecordBatchError {
 }
 impl fmt::Display for PutRecordBatchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRecordBatchError {
@@ -1868,7 +1868,7 @@ impl StartDeliveryStreamEncryptionError {
 }
 impl fmt::Display for StartDeliveryStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDeliveryStreamEncryptionError {
@@ -1930,7 +1930,7 @@ impl StopDeliveryStreamEncryptionError {
 }
 impl fmt::Display for StopDeliveryStreamEncryptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopDeliveryStreamEncryptionError {
@@ -1981,7 +1981,7 @@ impl TagDeliveryStreamError {
 }
 impl fmt::Display for TagDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagDeliveryStreamError {
@@ -2034,7 +2034,7 @@ impl UntagDeliveryStreamError {
 }
 impl fmt::Display for UntagDeliveryStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagDeliveryStreamError {
@@ -2087,7 +2087,7 @@ impl UpdateDestinationError {
 }
 impl fmt::Display for UpdateDestinationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDestinationError {

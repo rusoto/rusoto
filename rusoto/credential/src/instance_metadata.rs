@@ -122,7 +122,7 @@ async fn get_role_name(
         Err(e) => return Err(CredentialsError::new(e)),
     };
 
-    Ok(client.get(uri, timeout).await?.to_owned())
+    Ok(client.get(uri, timeout).await?)
 }
 
 /// Gets the credentials for an EC2 Instances IAM Role.
@@ -142,5 +142,5 @@ async fn get_credentials_from_role(
         Err(e) => return Err(CredentialsError::new(e)),
     };
 
-    Ok(client.get(uri, timeout).await?.to_owned())
+    Ok(client.get(uri, timeout).await?)
 }

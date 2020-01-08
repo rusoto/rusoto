@@ -1292,7 +1292,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -1351,7 +1351,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -1408,7 +1408,7 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserError {
@@ -1477,7 +1477,7 @@ impl DescribeUserHierarchyGroupError {
 }
 impl fmt::Display for DescribeUserHierarchyGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserHierarchyGroupError {
@@ -1546,7 +1546,7 @@ impl DescribeUserHierarchyStructureError {
 }
 impl fmt::Display for DescribeUserHierarchyStructureError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserHierarchyStructureError {
@@ -1597,7 +1597,7 @@ impl GetContactAttributesError {
 }
 impl fmt::Display for GetContactAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContactAttributesError {
@@ -1658,7 +1658,7 @@ impl GetCurrentMetricDataError {
 }
 impl fmt::Display for GetCurrentMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCurrentMetricDataError {
@@ -1722,7 +1722,7 @@ impl GetFederationTokenError {
 }
 impl fmt::Display for GetFederationTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFederationTokenError {
@@ -1780,7 +1780,7 @@ impl GetMetricDataError {
 }
 impl fmt::Display for GetMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMetricDataError {
@@ -1837,7 +1837,7 @@ impl ListContactFlowsError {
 }
 impl fmt::Display for ListContactFlowsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListContactFlowsError {
@@ -1902,7 +1902,7 @@ impl ListHoursOfOperationsError {
 }
 impl fmt::Display for ListHoursOfOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHoursOfOperationsError {
@@ -1959,7 +1959,7 @@ impl ListPhoneNumbersError {
 }
 impl fmt::Display for ListPhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPhoneNumbersError {
@@ -2016,7 +2016,7 @@ impl ListQueuesError {
 }
 impl fmt::Display for ListQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListQueuesError {
@@ -2077,7 +2077,7 @@ impl ListRoutingProfilesError {
 }
 impl fmt::Display for ListRoutingProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoutingProfilesError {
@@ -2140,7 +2140,7 @@ impl ListSecurityProfilesError {
 }
 impl fmt::Display for ListSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSecurityProfilesError {
@@ -2201,7 +2201,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2266,7 +2266,7 @@ impl ListUserHierarchyGroupsError {
 }
 impl fmt::Display for ListUserHierarchyGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserHierarchyGroupsError {
@@ -2323,7 +2323,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -2380,7 +2380,7 @@ impl StartChatContactError {
 }
 impl fmt::Display for StartChatContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartChatContactError {
@@ -2461,7 +2461,7 @@ impl StartOutboundVoiceContactError {
 }
 impl fmt::Display for StartOutboundVoiceContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartOutboundVoiceContactError {
@@ -2520,7 +2520,7 @@ impl StopContactError {
 }
 impl fmt::Display for StopContactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopContactError {
@@ -2577,7 +2577,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2634,7 +2634,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2694,7 +2694,7 @@ impl UpdateContactAttributesError {
 }
 impl fmt::Display for UpdateContactAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateContactAttributesError {
@@ -2754,7 +2754,7 @@ impl UpdateUserHierarchyError {
 }
 impl fmt::Display for UpdateUserHierarchyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserHierarchyError {
@@ -2819,7 +2819,7 @@ impl UpdateUserIdentityInfoError {
 }
 impl fmt::Display for UpdateUserIdentityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserIdentityInfoError {
@@ -2884,7 +2884,7 @@ impl UpdateUserPhoneConfigError {
 }
 impl fmt::Display for UpdateUserPhoneConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserPhoneConfigError {
@@ -2949,7 +2949,7 @@ impl UpdateUserRoutingProfileError {
 }
 impl fmt::Display for UpdateUserRoutingProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserRoutingProfileError {
@@ -3018,7 +3018,7 @@ impl UpdateUserSecurityProfilesError {
 }
 impl fmt::Display for UpdateUserSecurityProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserSecurityProfilesError {

@@ -11001,7 +11001,7 @@ impl AddClientIDToOpenIDConnectProviderError {
 }
 impl fmt::Display for AddClientIDToOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddClientIDToOpenIDConnectProviderError {
@@ -11081,7 +11081,7 @@ impl AddRoleToInstanceProfileError {
 }
 impl fmt::Display for AddRoleToInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddRoleToInstanceProfileError {
@@ -11146,7 +11146,7 @@ impl AddUserToGroupError {
 }
 impl fmt::Display for AddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddUserToGroupError {
@@ -11223,7 +11223,7 @@ impl AttachGroupPolicyError {
 }
 impl fmt::Display for AttachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachGroupPolicyError {
@@ -11309,7 +11309,7 @@ impl AttachRolePolicyError {
 }
 impl fmt::Display for AttachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachRolePolicyError {
@@ -11389,7 +11389,7 @@ impl AttachUserPolicyError {
 }
 impl fmt::Display for AttachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachUserPolicyError {
@@ -11477,7 +11477,7 @@ impl ChangePasswordError {
 }
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ChangePasswordError {
@@ -11543,7 +11543,7 @@ impl CreateAccessKeyError {
 }
 impl fmt::Display for CreateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAccessKeyError {
@@ -11606,7 +11606,7 @@ impl CreateAccountAliasError {
 }
 impl fmt::Display for CreateAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAccountAliasError {
@@ -11676,7 +11676,7 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupError {
@@ -11740,7 +11740,7 @@ impl CreateInstanceProfileError {
 }
 impl fmt::Display for CreateInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstanceProfileError {
@@ -11817,7 +11817,7 @@ impl CreateLoginProfileError {
 }
 impl fmt::Display for CreateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoginProfileError {
@@ -11893,7 +11893,7 @@ impl CreateOpenIDConnectProviderError {
 }
 impl fmt::Display for CreateOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOpenIDConnectProviderError {
@@ -11971,7 +11971,7 @@ impl CreatePolicyError {
 }
 impl fmt::Display for CreatePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePolicyError {
@@ -12050,7 +12050,7 @@ impl CreatePolicyVersionError {
 }
 impl fmt::Display for CreatePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePolicyVersionError {
@@ -12136,7 +12136,7 @@ impl CreateRoleError {
 }
 impl fmt::Display for CreateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRoleError {
@@ -12209,7 +12209,7 @@ impl CreateSAMLProviderError {
 }
 impl fmt::Display for CreateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSAMLProviderError {
@@ -12280,7 +12280,7 @@ impl CreateServiceLinkedRoleError {
 }
 impl fmt::Display for CreateServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateServiceLinkedRoleError {
@@ -12352,7 +12352,7 @@ impl CreateServiceSpecificCredentialError {
 }
 impl fmt::Display for CreateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateServiceSpecificCredentialError {
@@ -12436,7 +12436,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -12502,7 +12502,7 @@ impl CreateVirtualMFADeviceError {
 }
 impl fmt::Display for CreateVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVirtualMFADeviceError {
@@ -12574,7 +12574,7 @@ impl DeactivateMFADeviceError {
 }
 impl fmt::Display for DeactivateMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeactivateMFADeviceError {
@@ -12638,7 +12638,7 @@ impl DeleteAccessKeyError {
 }
 impl fmt::Display for DeleteAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccessKeyError {
@@ -12701,7 +12701,7 @@ impl DeleteAccountAliasError {
 }
 impl fmt::Display for DeleteAccountAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccountAliasError {
@@ -12766,7 +12766,7 @@ impl DeleteAccountPasswordPolicyError {
 }
 impl fmt::Display for DeleteAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccountPasswordPolicyError {
@@ -12836,7 +12836,7 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupError {
@@ -12900,7 +12900,7 @@ impl DeleteGroupPolicyError {
 }
 impl fmt::Display for DeleteGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupPolicyError {
@@ -12970,7 +12970,7 @@ impl DeleteInstanceProfileError {
 }
 impl fmt::Display for DeleteInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstanceProfileError {
@@ -13043,7 +13043,7 @@ impl DeleteLoginProfileError {
 }
 impl fmt::Display for DeleteLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoginProfileError {
@@ -13109,7 +13109,7 @@ impl DeleteOpenIDConnectProviderError {
 }
 impl fmt::Display for DeleteOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOpenIDConnectProviderError {
@@ -13186,7 +13186,7 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyError {
@@ -13265,7 +13265,7 @@ impl DeletePolicyVersionError {
 }
 impl fmt::Display for DeletePolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyVersionError {
@@ -13351,7 +13351,7 @@ impl DeleteRoleError {
 }
 impl fmt::Display for DeleteRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoleError {
@@ -13423,7 +13423,7 @@ impl DeleteRolePermissionsBoundaryError {
 }
 impl fmt::Display for DeleteRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRolePermissionsBoundaryError {
@@ -13493,7 +13493,7 @@ impl DeleteRolePolicyError {
 }
 impl fmt::Display for DeleteRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRolePolicyError {
@@ -13564,7 +13564,7 @@ impl DeleteSAMLProviderError {
 }
 impl fmt::Display for DeleteSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSAMLProviderError {
@@ -13614,7 +13614,7 @@ impl DeleteSSHPublicKeyError {
 }
 impl fmt::Display for DeleteSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSSHPublicKeyError {
@@ -13682,7 +13682,7 @@ impl DeleteServerCertificateError {
 }
 impl fmt::Display for DeleteServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServerCertificateError {
@@ -13746,7 +13746,7 @@ impl DeleteServiceLinkedRoleError {
 }
 impl fmt::Display for DeleteServiceLinkedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServiceLinkedRoleError {
@@ -13799,7 +13799,7 @@ impl DeleteServiceSpecificCredentialError {
 }
 impl fmt::Display for DeleteServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServiceSpecificCredentialError {
@@ -13860,7 +13860,7 @@ impl DeleteSigningCertificateError {
 }
 impl fmt::Display for DeleteSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSigningCertificateError {
@@ -13937,7 +13937,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -13999,7 +13999,7 @@ impl DeleteUserPermissionsBoundaryError {
 }
 impl fmt::Display for DeleteUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserPermissionsBoundaryError {
@@ -14061,7 +14061,7 @@ impl DeleteUserPolicyError {
 }
 impl fmt::Display for DeleteUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserPolicyError {
@@ -14131,7 +14131,7 @@ impl DeleteVirtualMFADeviceError {
 }
 impl fmt::Display for DeleteVirtualMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVirtualMFADeviceError {
@@ -14202,7 +14202,7 @@ impl DetachGroupPolicyError {
 }
 impl fmt::Display for DetachGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachGroupPolicyError {
@@ -14280,7 +14280,7 @@ impl DetachRolePolicyError {
 }
 impl fmt::Display for DetachRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachRolePolicyError {
@@ -14352,7 +14352,7 @@ impl DetachUserPolicyError {
 }
 impl fmt::Display for DetachUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachUserPolicyError {
@@ -14439,7 +14439,7 @@ impl EnableMFADeviceError {
 }
 impl fmt::Display for EnableMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableMFADeviceError {
@@ -14498,7 +14498,7 @@ impl GenerateCredentialReportError {
 }
 impl fmt::Display for GenerateCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateCredentialReportError {
@@ -14550,7 +14550,7 @@ impl GenerateOrganizationsAccessReportError {
 }
 impl fmt::Display for GenerateOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateOrganizationsAccessReportError {
@@ -14612,7 +14612,7 @@ impl GenerateServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GenerateServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateServiceLastAccessedDetailsError {
@@ -14652,7 +14652,7 @@ impl GetAccessKeyLastUsedError {
 }
 impl fmt::Display for GetAccessKeyLastUsedError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccessKeyLastUsedError {
@@ -14701,7 +14701,7 @@ impl GetAccountAuthorizationDetailsError {
 }
 impl fmt::Display for GetAccountAuthorizationDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountAuthorizationDetailsError {
@@ -14755,7 +14755,7 @@ impl GetAccountPasswordPolicyError {
 }
 impl fmt::Display for GetAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountPasswordPolicyError {
@@ -14803,7 +14803,7 @@ impl GetAccountSummaryError {
 }
 impl fmt::Display for GetAccountSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountSummaryError {
@@ -14852,7 +14852,7 @@ impl GetContextKeysForCustomPolicyError {
 }
 impl fmt::Display for GetContextKeysForCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContextKeysForCustomPolicyError {
@@ -14912,7 +14912,7 @@ impl GetContextKeysForPrincipalPolicyError {
 }
 impl fmt::Display for GetContextKeysForPrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetContextKeysForPrincipalPolicyError {
@@ -14985,7 +14985,7 @@ impl GetCredentialReportError {
 }
 impl fmt::Display for GetCredentialReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCredentialReportError {
@@ -15042,7 +15042,7 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupError {
@@ -15097,7 +15097,7 @@ impl GetGroupPolicyError {
 }
 impl fmt::Display for GetGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupPolicyError {
@@ -15152,7 +15152,7 @@ impl GetInstanceProfileError {
 }
 impl fmt::Display for GetInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceProfileError {
@@ -15207,7 +15207,7 @@ impl GetLoginProfileError {
 }
 impl fmt::Display for GetLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoginProfileError {
@@ -15269,7 +15269,7 @@ impl GetOpenIDConnectProviderError {
 }
 impl fmt::Display for GetOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOpenIDConnectProviderError {
@@ -15320,7 +15320,7 @@ impl GetOrganizationsAccessReportError {
 }
 impl fmt::Display for GetOrganizationsAccessReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOrganizationsAccessReportError {
@@ -15381,7 +15381,7 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyError {
@@ -15444,7 +15444,7 @@ impl GetPolicyVersionError {
 }
 impl fmt::Display for GetPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyVersionError {
@@ -15500,7 +15500,7 @@ impl GetRoleError {
 }
 impl fmt::Display for GetRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRoleError {
@@ -15555,7 +15555,7 @@ impl GetRolePolicyError {
 }
 impl fmt::Display for GetRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRolePolicyError {
@@ -15617,7 +15617,7 @@ impl GetSAMLProviderError {
 }
 impl fmt::Display for GetSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSAMLProviderError {
@@ -15675,7 +15675,7 @@ impl GetSSHPublicKeyError {
 }
 impl fmt::Display for GetSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSSHPublicKeyError {
@@ -15730,7 +15730,7 @@ impl GetServerCertificateError {
 }
 impl fmt::Display for GetServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServerCertificateError {
@@ -15787,7 +15787,7 @@ impl GetServiceLastAccessedDetailsError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceLastAccessedDetailsError {
@@ -15848,7 +15848,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
 }
 impl fmt::Display for GetServiceLastAccessedDetailsWithEntitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceLastAccessedDetailsWithEntitiesError {
@@ -15918,7 +15918,7 @@ impl GetServiceLinkedRoleDeletionStatusError {
 }
 impl fmt::Display for GetServiceLinkedRoleDeletionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceLinkedRoleDeletionStatusError {
@@ -15974,7 +15974,7 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserError {
@@ -16029,7 +16029,7 @@ impl GetUserPolicyError {
 }
 impl fmt::Display for GetUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserPolicyError {
@@ -16084,7 +16084,7 @@ impl ListAccessKeysError {
 }
 impl fmt::Display for ListAccessKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccessKeysError {
@@ -16132,7 +16132,7 @@ impl ListAccountAliasesError {
 }
 impl fmt::Display for ListAccountAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccountAliasesError {
@@ -16193,7 +16193,7 @@ impl ListAttachedGroupPoliciesError {
 }
 impl fmt::Display for ListAttachedGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttachedGroupPoliciesError {
@@ -16256,7 +16256,7 @@ impl ListAttachedRolePoliciesError {
 }
 impl fmt::Display for ListAttachedRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttachedRolePoliciesError {
@@ -16319,7 +16319,7 @@ impl ListAttachedUserPoliciesError {
 }
 impl fmt::Display for ListAttachedUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttachedUserPoliciesError {
@@ -16382,7 +16382,7 @@ impl ListEntitiesForPolicyError {
 }
 impl fmt::Display for ListEntitiesForPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEntitiesForPolicyError {
@@ -16438,7 +16438,7 @@ impl ListGroupPoliciesError {
 }
 impl fmt::Display for ListGroupPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupPoliciesError {
@@ -16486,7 +16486,7 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsError {
@@ -16540,7 +16540,7 @@ impl ListGroupsForUserError {
 }
 impl fmt::Display for ListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsForUserError {
@@ -16588,7 +16588,7 @@ impl ListInstanceProfilesError {
 }
 impl fmt::Display for ListInstanceProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstanceProfilesError {
@@ -16644,7 +16644,7 @@ impl ListInstanceProfilesForRoleError {
 }
 impl fmt::Display for ListInstanceProfilesForRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstanceProfilesForRoleError {
@@ -16699,7 +16699,7 @@ impl ListMFADevicesError {
 }
 impl fmt::Display for ListMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMFADevicesError {
@@ -16749,7 +16749,7 @@ impl ListOpenIDConnectProvidersError {
 }
 impl fmt::Display for ListOpenIDConnectProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOpenIDConnectProvidersError {
@@ -16796,7 +16796,7 @@ impl ListPoliciesError {
 }
 impl fmt::Display for ListPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesError {
@@ -16856,7 +16856,7 @@ impl ListPoliciesGrantingServiceAccessError {
 }
 impl fmt::Display for ListPoliciesGrantingServiceAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPoliciesGrantingServiceAccessError {
@@ -16918,7 +16918,7 @@ impl ListPolicyVersionsError {
 }
 impl fmt::Display for ListPolicyVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPolicyVersionsError {
@@ -16974,7 +16974,7 @@ impl ListRolePoliciesError {
 }
 impl fmt::Display for ListRolePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRolePoliciesError {
@@ -17029,7 +17029,7 @@ impl ListRoleTagsError {
 }
 impl fmt::Display for ListRoleTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoleTagsError {
@@ -17077,7 +17077,7 @@ impl ListRolesError {
 }
 impl fmt::Display for ListRolesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRolesError {
@@ -17124,7 +17124,7 @@ impl ListSAMLProvidersError {
 }
 impl fmt::Display for ListSAMLProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSAMLProvidersError {
@@ -17171,7 +17171,7 @@ impl ListSSHPublicKeysError {
 }
 impl fmt::Display for ListSSHPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSSHPublicKeysError {
@@ -17218,7 +17218,7 @@ impl ListServerCertificatesError {
 }
 impl fmt::Display for ListServerCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServerCertificatesError {
@@ -17276,7 +17276,7 @@ impl ListServiceSpecificCredentialsError {
 }
 impl fmt::Display for ListServiceSpecificCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServiceSpecificCredentialsError {
@@ -17331,7 +17331,7 @@ impl ListSigningCertificatesError {
 }
 impl fmt::Display for ListSigningCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSigningCertificatesError {
@@ -17386,7 +17386,7 @@ impl ListUserPoliciesError {
 }
 impl fmt::Display for ListUserPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserPoliciesError {
@@ -17441,7 +17441,7 @@ impl ListUserTagsError {
 }
 impl fmt::Display for ListUserTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserTagsError {
@@ -17489,7 +17489,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -17528,7 +17528,7 @@ impl ListVirtualMFADevicesError {
 }
 impl fmt::Display for ListVirtualMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVirtualMFADevicesError {
@@ -17594,7 +17594,7 @@ impl PutGroupPolicyError {
 }
 impl fmt::Display for PutGroupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutGroupPolicyError {
@@ -17678,7 +17678,7 @@ impl PutRolePermissionsBoundaryError {
 }
 impl fmt::Display for PutRolePermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRolePermissionsBoundaryError {
@@ -17757,7 +17757,7 @@ impl PutRolePolicyError {
 }
 impl fmt::Display for PutRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRolePolicyError {
@@ -17833,7 +17833,7 @@ impl PutUserPermissionsBoundaryError {
 }
 impl fmt::Display for PutUserPermissionsBoundaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutUserPermissionsBoundaryError {
@@ -17904,7 +17904,7 @@ impl PutUserPolicyError {
 }
 impl fmt::Display for PutUserPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutUserPolicyError {
@@ -17976,7 +17976,7 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
 }
 impl fmt::Display for RemoveClientIDFromOpenIDConnectProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveClientIDFromOpenIDConnectProviderError {
@@ -18052,7 +18052,7 @@ impl RemoveRoleFromInstanceProfileError {
 }
 impl fmt::Display for RemoveRoleFromInstanceProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveRoleFromInstanceProfileError {
@@ -18116,7 +18116,7 @@ impl RemoveUserFromGroupError {
 }
 impl fmt::Display for RemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveUserFromGroupError {
@@ -18167,7 +18167,7 @@ impl ResetServiceSpecificCredentialError {
 }
 impl fmt::Display for ResetServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetServiceSpecificCredentialError {
@@ -18235,7 +18235,7 @@ impl ResyncMFADeviceError {
 }
 impl fmt::Display for ResyncMFADeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResyncMFADeviceError {
@@ -18306,7 +18306,7 @@ impl SetDefaultPolicyVersionError {
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetDefaultPolicyVersionError {
@@ -18360,7 +18360,7 @@ impl SetSecurityTokenServicePreferencesError {
 }
 impl fmt::Display for SetSecurityTokenServicePreferencesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetSecurityTokenServicePreferencesError {
@@ -18414,7 +18414,7 @@ impl SimulateCustomPolicyError {
 }
 impl fmt::Display for SimulateCustomPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SimulateCustomPolicyError {
@@ -18476,7 +18476,7 @@ impl SimulatePrincipalPolicyError {
 }
 impl fmt::Display for SimulatePrincipalPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SimulatePrincipalPolicyError {
@@ -18553,7 +18553,7 @@ impl TagRoleError {
 }
 impl fmt::Display for TagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagRoleError {
@@ -18632,7 +18632,7 @@ impl TagUserError {
 }
 impl fmt::Display for TagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagUserError {
@@ -18697,7 +18697,7 @@ impl UntagRoleError {
 }
 impl fmt::Display for UntagRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagRoleError {
@@ -18760,7 +18760,7 @@ impl UntagUserError {
 }
 impl fmt::Display for UntagUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagUserError {
@@ -18823,7 +18823,7 @@ impl UpdateAccessKeyError {
 }
 impl fmt::Display for UpdateAccessKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccessKeyError {
@@ -18897,7 +18897,7 @@ impl UpdateAccountPasswordPolicyError {
 }
 impl fmt::Display for UpdateAccountPasswordPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccountPasswordPolicyError {
@@ -18977,7 +18977,7 @@ impl UpdateAssumeRolePolicyError {
 }
 impl fmt::Display for UpdateAssumeRolePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAssumeRolePolicyError {
@@ -19049,7 +19049,7 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupError {
@@ -19129,7 +19129,7 @@ impl UpdateLoginProfileError {
 }
 impl fmt::Display for UpdateLoginProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLoginProfileError {
@@ -19202,7 +19202,7 @@ impl UpdateOpenIDConnectProviderThumbprintError {
 }
 impl fmt::Display for UpdateOpenIDConnectProviderThumbprintError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateOpenIDConnectProviderThumbprintError {
@@ -19265,7 +19265,7 @@ impl UpdateRoleError {
 }
 impl fmt::Display for UpdateRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoleError {
@@ -19328,7 +19328,7 @@ impl UpdateRoleDescriptionError {
 }
 impl fmt::Display for UpdateRoleDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoleDescriptionError {
@@ -19398,7 +19398,7 @@ impl UpdateSAMLProviderError {
 }
 impl fmt::Display for UpdateSAMLProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSAMLProviderError {
@@ -19448,7 +19448,7 @@ impl UpdateSSHPublicKeyError {
 }
 impl fmt::Display for UpdateSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSSHPublicKeyError {
@@ -19516,7 +19516,7 @@ impl UpdateServerCertificateError {
 }
 impl fmt::Display for UpdateServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServerCertificateError {
@@ -19570,7 +19570,7 @@ impl UpdateServiceSpecificCredentialError {
 }
 impl fmt::Display for UpdateServiceSpecificCredentialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceSpecificCredentialError {
@@ -19631,7 +19631,7 @@ impl UpdateSigningCertificateError {
 }
 impl fmt::Display for UpdateSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSigningCertificateError {
@@ -19715,7 +19715,7 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserError {
@@ -19797,7 +19797,7 @@ impl UploadSSHPublicKeyError {
 }
 impl fmt::Display for UploadSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadSSHPublicKeyError {
@@ -19878,7 +19878,7 @@ impl UploadServerCertificateError {
 }
 impl fmt::Display for UploadServerCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadServerCertificateError {
@@ -19977,7 +19977,7 @@ impl UploadSigningCertificateError {
 }
 impl fmt::Display for UploadSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadSigningCertificateError {
@@ -21112,7 +21112,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21188,7 +21188,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21234,7 +21234,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21283,7 +21283,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21333,7 +21333,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21382,7 +21382,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21429,7 +21429,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21478,7 +21478,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21524,7 +21524,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21573,7 +21573,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21627,7 +21627,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21676,7 +21676,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -21722,7 +21722,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22229,7 +22229,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22549,7 +22549,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22603,7 +22603,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22657,7 +22657,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22706,7 +22706,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22758,7 +22758,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22806,7 +22806,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22854,7 +22854,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22904,7 +22904,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -22956,7 +22956,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23004,7 +23004,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23053,7 +23053,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23099,7 +23099,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23148,7 +23148,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23197,7 +23197,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23246,7 +23246,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23296,7 +23296,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23345,7 +23345,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23391,7 +23391,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23440,7 +23440,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23486,7 +23486,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23533,7 +23533,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23582,7 +23582,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23631,7 +23631,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23683,7 +23683,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23739,7 +23739,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23793,7 +23793,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23842,7 +23842,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23888,7 +23888,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23935,7 +23935,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -23984,7 +23984,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24034,7 +24034,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24083,7 +24083,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24132,7 +24132,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24181,7 +24181,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24230,7 +24230,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24279,7 +24279,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24325,7 +24325,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24374,7 +24374,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24424,7 +24424,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24473,7 +24473,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24523,7 +24523,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24572,7 +24572,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24624,7 +24624,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24673,7 +24673,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24722,7 +24722,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24771,7 +24771,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24818,7 +24818,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24864,7 +24864,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24913,7 +24913,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -24962,7 +24962,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25014,7 +25014,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25063,7 +25063,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25112,7 +25112,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25161,7 +25161,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25208,7 +25208,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25254,7 +25254,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25528,7 +25528,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25660,7 +25660,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -25709,7 +25709,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26018,7 +26018,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26064,7 +26064,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26113,7 +26113,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26299,7 +26299,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26348,7 +26348,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -26397,7 +26397,7 @@ impl Iam for IamClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();

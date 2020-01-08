@@ -25,6 +25,17 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>CDN Authorization credentials</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Authorization {
+    /// <p>The Amazon Resource Name (ARN) for the secret in Secrets Manager that your Content Distribution Network (CDN) uses for authorization to access your endpoint.</p>
+    #[serde(rename = "CdnIdentifierSecret")]
+    pub cdn_identifier_secret: String,
+    /// <p>The Amazon Resource Name (ARN) for the IAM role that allows MediaPackage to communicate with AWS Secrets Manager.</p>
+    #[serde(rename = "SecretsRoleArn")]
+    pub secrets_role_arn: String,
+}
+
 /// <p>A Channel resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -216,6 +227,9 @@ pub struct CreateHarvestJobResponse {
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOriginEndpointRequest {
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the Channel that the OriginEndpoint will be associated with.
     /// This cannot be changed after the OriginEndpoint is created.</p>
     #[serde(rename = "ChannelId")]
@@ -276,6 +290,9 @@ pub struct CreateOriginEndpointResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the Channel the OriginEndpoint is associated with.</p>
     #[serde(rename = "ChannelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -518,6 +535,9 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the Channel the OriginEndpoint is associated with.</p>
     #[serde(rename = "ChannelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -977,6 +997,9 @@ pub struct OriginEndpoint {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the Channel the OriginEndpoint is associated with.</p>
     #[serde(rename = "ChannelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1207,6 +1230,9 @@ pub struct UpdateChannelResponse {
 /// <p>Configuration parameters used to update an existing OriginEndpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateOriginEndpointRequest {
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     #[serde(rename = "CmafPackage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cmaf_package: Option<CmafPackageCreateOrUpdateParameters>,
@@ -1259,6 +1285,9 @@ pub struct UpdateOriginEndpointResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the Channel the OriginEndpoint is associated with.</p>
     #[serde(rename = "ChannelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1364,7 +1393,7 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateChannelError {
@@ -1431,7 +1460,7 @@ impl CreateHarvestJobError {
 }
 impl fmt::Display for CreateHarvestJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHarvestJobError {
@@ -1502,7 +1531,7 @@ impl CreateOriginEndpointError {
 }
 impl fmt::Display for CreateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOriginEndpointError {
@@ -1565,7 +1594,7 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteChannelError {
@@ -1636,7 +1665,7 @@ impl DeleteOriginEndpointError {
 }
 impl fmt::Display for DeleteOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOriginEndpointError {
@@ -1699,7 +1728,7 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeChannelError {
@@ -1768,7 +1797,7 @@ impl DescribeHarvestJobError {
 }
 impl fmt::Display for DescribeHarvestJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeHarvestJobError {
@@ -1839,7 +1868,7 @@ impl DescribeOriginEndpointError {
 }
 impl fmt::Display for DescribeOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOriginEndpointError {
@@ -1902,7 +1931,7 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListChannelsError {
@@ -1965,7 +1994,7 @@ impl ListHarvestJobsError {
 }
 impl fmt::Display for ListHarvestJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHarvestJobsError {
@@ -2034,7 +2063,7 @@ impl ListOriginEndpointsError {
 }
 impl fmt::Display for ListOriginEndpointsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOriginEndpointsError {
@@ -2066,7 +2095,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -2130,7 +2159,7 @@ impl RotateChannelCredentialsError {
 }
 impl fmt::Display for RotateChannelCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RotateChannelCredentialsError {
@@ -2207,7 +2236,7 @@ impl RotateIngestEndpointCredentialsError {
 }
 impl fmt::Display for RotateIngestEndpointCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RotateIngestEndpointCredentialsError {
@@ -2239,7 +2268,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -2264,7 +2293,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -2320,7 +2349,7 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateChannelError {
@@ -2391,7 +2420,7 @@ impl UpdateOriginEndpointError {
 }
 impl fmt::Display for UpdateOriginEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateOriginEndpointError {

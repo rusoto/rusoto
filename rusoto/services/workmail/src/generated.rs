@@ -1061,7 +1061,7 @@ impl AssociateDelegateToResourceError {
 }
 impl fmt::Display for AssociateDelegateToResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDelegateToResourceError {
@@ -1147,7 +1147,7 @@ impl AssociateMemberToGroupError {
 }
 impl fmt::Display for AssociateMemberToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateMemberToGroupError {
@@ -1222,7 +1222,7 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAliasError {
@@ -1299,7 +1299,7 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupError {
@@ -1371,7 +1371,7 @@ impl CreateResourceError {
 }
 impl fmt::Display for CreateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceError {
@@ -1452,7 +1452,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -1513,7 +1513,7 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAliasError {
@@ -1582,7 +1582,7 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupError {
@@ -1651,7 +1651,7 @@ impl DeleteMailboxPermissionsError {
 }
 impl fmt::Display for DeleteMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMailboxPermissionsError {
@@ -1703,7 +1703,7 @@ impl DeleteResourceError {
 }
 impl fmt::Display for DeleteResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceError {
@@ -1771,7 +1771,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -1838,7 +1838,7 @@ impl DeregisterFromWorkMailError {
 }
 impl fmt::Display for DeregisterFromWorkMailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterFromWorkMailError {
@@ -1890,7 +1890,7 @@ impl DescribeGroupError {
 }
 impl fmt::Display for DescribeGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGroupError {
@@ -1935,7 +1935,7 @@ impl DescribeOrganizationError {
 }
 impl fmt::Display for DescribeOrganizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationError {
@@ -1986,7 +1986,7 @@ impl DescribeResourceError {
 }
 impl fmt::Display for DescribeResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResourceError {
@@ -2037,7 +2037,7 @@ impl DescribeUserError {
 }
 impl fmt::Display for DescribeUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserError {
@@ -2105,7 +2105,7 @@ impl DisassociateDelegateFromResourceError {
 }
 impl fmt::Display for DisassociateDelegateFromResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDelegateFromResourceError {
@@ -2197,7 +2197,7 @@ impl DisassociateMemberFromGroupError {
 }
 impl fmt::Display for DisassociateMemberFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateMemberFromGroupError {
@@ -2251,7 +2251,7 @@ impl GetMailboxDetailsError {
 }
 impl fmt::Display for GetMailboxDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMailboxDetailsError {
@@ -2306,7 +2306,7 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAliasesError {
@@ -2365,7 +2365,7 @@ impl ListGroupMembersError {
 }
 impl fmt::Display for ListGroupMembersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupMembersError {
@@ -2417,7 +2417,7 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsError {
@@ -2476,7 +2476,7 @@ impl ListMailboxPermissionsError {
 }
 impl fmt::Display for ListMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMailboxPermissionsError {
@@ -2512,7 +2512,7 @@ impl ListOrganizationsError {
 }
 impl fmt::Display for ListOrganizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOrganizationsError {
@@ -2573,7 +2573,7 @@ impl ListResourceDelegatesError {
 }
 impl fmt::Display for ListResourceDelegatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceDelegatesError {
@@ -2620,7 +2620,7 @@ impl ListResourcesError {
 }
 impl fmt::Display for ListResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourcesError {
@@ -2665,7 +2665,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -2728,7 +2728,7 @@ impl PutMailboxPermissionsError {
 }
 impl fmt::Display for PutMailboxPermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutMailboxPermissionsError {
@@ -2829,7 +2829,7 @@ impl RegisterToWorkMailError {
 }
 impl fmt::Display for RegisterToWorkMailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterToWorkMailError {
@@ -2914,7 +2914,7 @@ impl ResetPasswordError {
 }
 impl fmt::Display for ResetPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetPasswordError {
@@ -2979,7 +2979,7 @@ impl UpdateMailboxQuotaError {
 }
 impl fmt::Display for UpdateMailboxQuotaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMailboxQuotaError {
@@ -3090,7 +3090,7 @@ impl UpdatePrimaryEmailAddressError {
 }
 impl fmt::Display for UpdatePrimaryEmailAddressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePrimaryEmailAddressError {
@@ -3180,7 +3180,7 @@ impl UpdateResourceError {
 }
 impl fmt::Display for UpdateResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResourceError {

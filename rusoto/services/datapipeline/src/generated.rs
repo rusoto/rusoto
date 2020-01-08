@@ -737,7 +737,7 @@ impl ActivatePipelineError {
 }
 impl fmt::Display for ActivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ActivatePipelineError {
@@ -788,7 +788,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -829,7 +829,7 @@ impl CreatePipelineError {
 }
 impl fmt::Display for CreatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePipelineError {
@@ -880,7 +880,7 @@ impl DeactivatePipelineError {
 }
 impl fmt::Display for DeactivatePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeactivatePipelineError {
@@ -926,7 +926,7 @@ impl DeletePipelineError {
 }
 impl fmt::Display for DeletePipelineError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePipelineError {
@@ -978,7 +978,7 @@ impl DescribeObjectsError {
 }
 impl fmt::Display for DescribeObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeObjectsError {
@@ -1031,7 +1031,7 @@ impl DescribePipelinesError {
 }
 impl fmt::Display for DescribePipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePipelinesError {
@@ -1089,7 +1089,7 @@ impl EvaluateExpressionError {
 }
 impl fmt::Display for EvaluateExpressionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EvaluateExpressionError {
@@ -1149,7 +1149,7 @@ impl GetPipelineDefinitionError {
 }
 impl fmt::Display for GetPipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPipelineDefinitionError {
@@ -1190,7 +1190,7 @@ impl ListPipelinesError {
 }
 impl fmt::Display for ListPipelinesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPipelinesError {
@@ -1234,7 +1234,7 @@ impl PollForTaskError {
 }
 impl fmt::Display for PollForTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PollForTaskError {
@@ -1292,7 +1292,7 @@ impl PutPipelineDefinitionError {
 }
 impl fmt::Display for PutPipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutPipelineDefinitionError {
@@ -1343,7 +1343,7 @@ impl QueryObjectsError {
 }
 impl fmt::Display for QueryObjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for QueryObjectsError {
@@ -1394,7 +1394,7 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsError {
@@ -1452,7 +1452,7 @@ impl ReportTaskProgressError {
 }
 impl fmt::Display for ReportTaskProgressError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReportTaskProgressError {
@@ -1498,7 +1498,7 @@ impl ReportTaskRunnerHeartbeatError {
 }
 impl fmt::Display for ReportTaskRunnerHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReportTaskRunnerHeartbeatError {
@@ -1547,7 +1547,7 @@ impl SetStatusError {
 }
 impl fmt::Display for SetStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetStatusError {
@@ -1603,7 +1603,7 @@ impl SetTaskStatusError {
 }
 impl fmt::Display for SetTaskStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTaskStatusError {
@@ -1665,7 +1665,7 @@ impl ValidatePipelineDefinitionError {
 }
 impl fmt::Display for ValidatePipelineDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ValidatePipelineDefinitionError {

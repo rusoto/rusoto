@@ -1050,7 +1050,7 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationError {
@@ -1111,7 +1111,7 @@ impl CreateApplicationVersionError {
 }
 impl fmt::Display for CreateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationVersionError {
@@ -1173,7 +1173,7 @@ impl CreateCloudFormationChangeSetError {
 }
 impl fmt::Display for CreateCloudFormationChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCloudFormationChangeSetError {
@@ -1241,7 +1241,7 @@ impl CreateCloudFormationTemplateError {
 }
 impl fmt::Display for CreateCloudFormationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCloudFormationTemplateError {
@@ -1305,7 +1305,7 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationError {
@@ -1363,7 +1363,7 @@ impl GetApplicationError {
 }
 impl fmt::Display for GetApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApplicationError {
@@ -1424,7 +1424,7 @@ impl GetApplicationPolicyError {
 }
 impl fmt::Display for GetApplicationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetApplicationPolicyError {
@@ -1487,7 +1487,7 @@ impl GetCloudFormationTemplateError {
 }
 impl fmt::Display for GetCloudFormationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCloudFormationTemplateError {
@@ -1556,7 +1556,7 @@ impl ListApplicationDependenciesError {
 }
 impl fmt::Display for ListApplicationDependenciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationDependenciesError {
@@ -1617,7 +1617,7 @@ impl ListApplicationVersionsError {
 }
 impl fmt::Display for ListApplicationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationVersionsError {
@@ -1671,7 +1671,7 @@ impl ListApplicationsError {
 }
 impl fmt::Display for ListApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListApplicationsError {
@@ -1731,7 +1731,7 @@ impl PutApplicationPolicyError {
 }
 impl fmt::Display for PutApplicationPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutApplicationPolicyError {
@@ -1795,7 +1795,7 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationError {

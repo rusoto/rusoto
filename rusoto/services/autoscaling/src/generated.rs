@@ -7040,7 +7040,7 @@ impl AttachInstancesError {
 }
 impl fmt::Display for AttachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachInstancesError {
@@ -7101,7 +7101,7 @@ impl AttachLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for AttachLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachLoadBalancerTargetGroupsError {
@@ -7158,7 +7158,7 @@ impl AttachLoadBalancersError {
 }
 impl fmt::Display for AttachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachLoadBalancersError {
@@ -7210,7 +7210,7 @@ impl BatchDeleteScheduledActionError {
 }
 impl fmt::Display for BatchDeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteScheduledActionError {
@@ -7279,7 +7279,7 @@ impl BatchPutScheduledUpdateGroupActionError {
 }
 impl fmt::Display for BatchPutScheduledUpdateGroupActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchPutScheduledUpdateGroupActionError {
@@ -7330,7 +7330,7 @@ impl CompleteLifecycleActionError {
 }
 impl fmt::Display for CompleteLifecycleActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CompleteLifecycleActionError {
@@ -7402,7 +7402,7 @@ impl CreateAutoScalingGroupError {
 }
 impl fmt::Display for CreateAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAutoScalingGroupError {
@@ -7472,7 +7472,7 @@ impl CreateLaunchConfigurationError {
 }
 impl fmt::Display for CreateLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLaunchConfigurationError {
@@ -7542,7 +7542,7 @@ impl CreateOrUpdateTagsError {
 }
 impl fmt::Display for CreateOrUpdateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateOrUpdateTagsError {
@@ -7610,7 +7610,7 @@ impl DeleteAutoScalingGroupError {
 }
 impl fmt::Display for DeleteAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAutoScalingGroupError {
@@ -7670,7 +7670,7 @@ impl DeleteLaunchConfigurationError {
 }
 impl fmt::Display for DeleteLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLaunchConfigurationError {
@@ -7718,7 +7718,7 @@ impl DeleteLifecycleHookError {
 }
 impl fmt::Display for DeleteLifecycleHookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLifecycleHookError {
@@ -7769,7 +7769,7 @@ impl DeleteNotificationConfigurationError {
 }
 impl fmt::Display for DeleteNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotificationConfigurationError {
@@ -7823,7 +7823,7 @@ impl DeletePolicyError {
 }
 impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePolicyError {
@@ -7873,7 +7873,7 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScheduledActionError {
@@ -7927,7 +7927,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -7977,7 +7977,7 @@ impl DescribeAccountLimitsError {
 }
 impl fmt::Display for DescribeAccountLimitsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountLimitsError {
@@ -8026,7 +8026,7 @@ impl DescribeAdjustmentTypesError {
 }
 impl fmt::Display for DescribeAdjustmentTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAdjustmentTypesError {
@@ -8082,7 +8082,7 @@ impl DescribeAutoScalingGroupsError {
 }
 impl fmt::Display for DescribeAutoScalingGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutoScalingGroupsError {
@@ -8143,7 +8143,7 @@ impl DescribeAutoScalingInstancesError {
 }
 impl fmt::Display for DescribeAutoScalingInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutoScalingInstancesError {
@@ -8195,7 +8195,7 @@ impl DescribeAutoScalingNotificationTypesError {
 }
 impl fmt::Display for DescribeAutoScalingNotificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAutoScalingNotificationTypesError {
@@ -8255,7 +8255,7 @@ impl DescribeLaunchConfigurationsError {
 }
 impl fmt::Display for DescribeLaunchConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLaunchConfigurationsError {
@@ -8307,7 +8307,7 @@ impl DescribeLifecycleHookTypesError {
 }
 impl fmt::Display for DescribeLifecycleHookTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLifecycleHookTypesError {
@@ -8356,7 +8356,7 @@ impl DescribeLifecycleHooksError {
 }
 impl fmt::Display for DescribeLifecycleHooksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLifecycleHooksError {
@@ -8407,7 +8407,7 @@ impl DescribeLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for DescribeLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoadBalancerTargetGroupsError {
@@ -8456,7 +8456,7 @@ impl DescribeLoadBalancersError {
 }
 impl fmt::Display for DescribeLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoadBalancersError {
@@ -8507,7 +8507,7 @@ impl DescribeMetricCollectionTypesError {
 }
 impl fmt::Display for DescribeMetricCollectionTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMetricCollectionTypesError {
@@ -8567,7 +8567,7 @@ impl DescribeNotificationConfigurationsError {
 }
 impl fmt::Display for DescribeNotificationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNotificationConfigurationsError {
@@ -8629,7 +8629,7 @@ impl DescribePoliciesError {
 }
 impl fmt::Display for DescribePoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePoliciesError {
@@ -8687,7 +8687,7 @@ impl DescribeScalingActivitiesError {
 }
 impl fmt::Display for DescribeScalingActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingActivitiesError {
@@ -8739,7 +8739,7 @@ impl DescribeScalingProcessTypesError {
 }
 impl fmt::Display for DescribeScalingProcessTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingProcessTypesError {
@@ -8795,7 +8795,7 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScheduledActionsError {
@@ -8850,7 +8850,7 @@ impl DescribeTagsError {
 }
 impl fmt::Display for DescribeTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTagsError {
@@ -8902,7 +8902,7 @@ impl DescribeTerminationPolicyTypesError {
 }
 impl fmt::Display for DescribeTerminationPolicyTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTerminationPolicyTypesError {
@@ -8949,7 +8949,7 @@ impl DetachInstancesError {
 }
 impl fmt::Display for DetachInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachInstancesError {
@@ -9000,7 +9000,7 @@ impl DetachLoadBalancerTargetGroupsError {
 }
 impl fmt::Display for DetachLoadBalancerTargetGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachLoadBalancerTargetGroupsError {
@@ -9047,7 +9047,7 @@ impl DetachLoadBalancersError {
 }
 impl fmt::Display for DetachLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachLoadBalancersError {
@@ -9096,7 +9096,7 @@ impl DisableMetricsCollectionError {
 }
 impl fmt::Display for DisableMetricsCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableMetricsCollectionError {
@@ -9145,7 +9145,7 @@ impl EnableMetricsCollectionError {
 }
 impl fmt::Display for EnableMetricsCollectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableMetricsCollectionError {
@@ -9192,7 +9192,7 @@ impl EnterStandbyError {
 }
 impl fmt::Display for EnterStandbyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnterStandbyError {
@@ -9248,7 +9248,7 @@ impl ExecutePolicyError {
 }
 impl fmt::Display for ExecutePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExecutePolicyError {
@@ -9296,7 +9296,7 @@ impl ExitStandbyError {
 }
 impl fmt::Display for ExitStandbyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExitStandbyError {
@@ -9350,7 +9350,7 @@ impl PutLifecycleHookError {
 }
 impl fmt::Display for PutLifecycleHookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutLifecycleHookError {
@@ -9420,7 +9420,7 @@ impl PutNotificationConfigurationError {
 }
 impl fmt::Display for PutNotificationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutNotificationConfigurationError {
@@ -9483,7 +9483,7 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutScalingPolicyError {
@@ -9554,7 +9554,7 @@ impl PutScheduledUpdateGroupActionError {
 }
 impl fmt::Display for PutScheduledUpdateGroupActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutScheduledUpdateGroupActionError {
@@ -9607,7 +9607,7 @@ impl RecordLifecycleActionHeartbeatError {
 }
 impl fmt::Display for RecordLifecycleActionHeartbeatError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RecordLifecycleActionHeartbeatError {
@@ -9661,7 +9661,7 @@ impl ResumeProcessesError {
 }
 impl fmt::Display for ResumeProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResumeProcessesError {
@@ -9718,7 +9718,7 @@ impl SetDesiredCapacityError {
 }
 impl fmt::Display for SetDesiredCapacityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetDesiredCapacityError {
@@ -9766,7 +9766,7 @@ impl SetInstanceHealthError {
 }
 impl fmt::Display for SetInstanceHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetInstanceHealthError {
@@ -9822,7 +9822,7 @@ impl SetInstanceProtectionError {
 }
 impl fmt::Display for SetInstanceProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetInstanceProtectionError {
@@ -9877,7 +9877,7 @@ impl SuspendProcessesError {
 }
 impl fmt::Display for SuspendProcessesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SuspendProcessesError {
@@ -9936,7 +9936,7 @@ impl TerminateInstanceInAutoScalingGroupError {
 }
 impl fmt::Display for TerminateInstanceInAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateInstanceInAutoScalingGroupError {
@@ -10006,7 +10006,7 @@ impl UpdateAutoScalingGroupError {
 }
 impl fmt::Display for UpdateAutoScalingGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAutoScalingGroupError {
@@ -10461,7 +10461,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10510,7 +10510,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10560,7 +10560,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10614,7 +10614,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10663,7 +10663,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10847,7 +10847,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11002,7 +11002,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11050,7 +11050,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11099,7 +11099,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11148,7 +11148,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11201,7 +11201,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11250,7 +11250,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11299,7 +11299,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11348,7 +11348,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11402,7 +11402,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11451,7 +11451,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11500,7 +11500,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11554,7 +11554,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11603,7 +11603,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11649,7 +11649,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11697,7 +11697,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11746,7 +11746,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11795,7 +11795,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11843,7 +11843,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11892,7 +11892,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11944,7 +11944,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11993,7 +11993,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12096,7 +12096,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12169,7 +12169,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12215,7 +12215,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12291,7 +12291,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12367,7 +12367,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12497,7 +12497,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -12575,7 +12575,7 @@ impl Autoscaling for AutoscalingClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();

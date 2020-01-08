@@ -3168,7 +3168,7 @@ impl AddFacetToObjectError {
 }
 impl fmt::Display for AddFacetToObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddFacetToObjectError {
@@ -3243,7 +3243,7 @@ impl ApplySchemaError {
 }
 impl fmt::Display for ApplySchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApplySchemaError {
@@ -3328,7 +3328,7 @@ impl AttachObjectError {
 }
 impl fmt::Display for AttachObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachObjectError {
@@ -3405,7 +3405,7 @@ impl AttachPolicyError {
 }
 impl fmt::Display for AttachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachPolicyError {
@@ -3497,7 +3497,7 @@ impl AttachToIndexError {
 }
 impl fmt::Display for AttachToIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachToIndexError {
@@ -3580,7 +3580,7 @@ impl AttachTypedLinkError {
 }
 impl fmt::Display for AttachTypedLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachTypedLinkError {
@@ -3646,7 +3646,7 @@ impl BatchReadError {
 }
 impl fmt::Display for BatchReadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchReadError {
@@ -3714,7 +3714,7 @@ impl BatchWriteError {
 }
 impl fmt::Display for BatchWriteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchWriteError {
@@ -3785,7 +3785,7 @@ impl CreateDirectoryError {
 }
 impl fmt::Display for CreateDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDirectoryError {
@@ -3864,7 +3864,7 @@ impl CreateFacetError {
 }
 impl fmt::Display for CreateFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFacetError {
@@ -3950,7 +3950,7 @@ impl CreateIndexError {
 }
 impl fmt::Display for CreateIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIndexError {
@@ -4037,7 +4037,7 @@ impl CreateObjectError {
 }
 impl fmt::Display for CreateObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateObjectError {
@@ -4104,7 +4104,7 @@ impl CreateSchemaError {
 }
 impl fmt::Display for CreateSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSchemaError {
@@ -4192,7 +4192,7 @@ impl CreateTypedLinkFacetError {
 }
 impl fmt::Display for CreateTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTypedLinkFacetError {
@@ -4270,7 +4270,7 @@ impl DeleteDirectoryError {
 }
 impl fmt::Display for DeleteDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDirectoryError {
@@ -4345,7 +4345,7 @@ impl DeleteFacetError {
 }
 impl fmt::Display for DeleteFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFacetError {
@@ -4420,7 +4420,7 @@ impl DeleteObjectError {
 }
 impl fmt::Display for DeleteObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteObjectError {
@@ -4490,7 +4490,7 @@ impl DeleteSchemaError {
 }
 impl fmt::Display for DeleteSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSchemaError {
@@ -4565,7 +4565,7 @@ impl DeleteTypedLinkFacetError {
 }
 impl fmt::Display for DeleteTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTypedLinkFacetError {
@@ -4646,7 +4646,7 @@ impl DetachFromIndexError {
 }
 impl fmt::Display for DetachFromIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachFromIndexError {
@@ -4722,7 +4722,7 @@ impl DetachObjectError {
 }
 impl fmt::Display for DetachObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachObjectError {
@@ -4797,7 +4797,7 @@ impl DetachPolicyError {
 }
 impl fmt::Display for DetachPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachPolicyError {
@@ -4872,7 +4872,7 @@ impl DetachTypedLinkError {
 }
 impl fmt::Display for DetachTypedLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachTypedLinkError {
@@ -4942,7 +4942,7 @@ impl DisableDirectoryError {
 }
 impl fmt::Display for DisableDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableDirectoryError {
@@ -5011,7 +5011,7 @@ impl EnableDirectoryError {
 }
 impl fmt::Display for EnableDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableDirectoryError {
@@ -5085,7 +5085,7 @@ impl GetAppliedSchemaVersionError {
 }
 impl fmt::Display for GetAppliedSchemaVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAppliedSchemaVersionError {
@@ -5143,7 +5143,7 @@ impl GetDirectoryError {
 }
 impl fmt::Display for GetDirectoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDirectoryError {
@@ -5210,7 +5210,7 @@ impl GetFacetError {
 }
 impl fmt::Display for GetFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFacetError {
@@ -5286,7 +5286,7 @@ impl GetLinkAttributesError {
 }
 impl fmt::Display for GetLinkAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLinkAttributesError {
@@ -5367,7 +5367,7 @@ impl GetObjectAttributesError {
 }
 impl fmt::Display for GetObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectAttributesError {
@@ -5445,7 +5445,7 @@ impl GetObjectInformationError {
 }
 impl fmt::Display for GetObjectInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetObjectInformationError {
@@ -5509,7 +5509,7 @@ impl GetSchemaAsJsonError {
 }
 impl fmt::Display for GetSchemaAsJsonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSchemaAsJsonError {
@@ -5600,7 +5600,7 @@ impl GetTypedLinkFacetInformationError {
 }
 impl fmt::Display for GetTypedLinkFacetInformationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTypedLinkFacetInformationError {
@@ -5678,7 +5678,7 @@ impl ListAppliedSchemaArnsError {
 }
 impl fmt::Display for ListAppliedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAppliedSchemaArnsError {
@@ -5753,7 +5753,7 @@ impl ListAttachedIndicesError {
 }
 impl fmt::Display for ListAttachedIndicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttachedIndicesError {
@@ -5836,7 +5836,7 @@ impl ListDevelopmentSchemaArnsError {
 }
 impl fmt::Display for ListDevelopmentSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevelopmentSchemaArnsError {
@@ -5900,7 +5900,7 @@ impl ListDirectoriesError {
 }
 impl fmt::Display for ListDirectoriesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDirectoriesError {
@@ -5979,7 +5979,7 @@ impl ListFacetAttributesError {
 }
 impl fmt::Display for ListFacetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFacetAttributesError {
@@ -6049,7 +6049,7 @@ impl ListFacetNamesError {
 }
 impl fmt::Display for ListFacetNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFacetNamesError {
@@ -6142,7 +6142,7 @@ impl ListIncomingTypedLinksError {
 }
 impl fmt::Display for ListIncomingTypedLinksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIncomingTypedLinksError {
@@ -6228,7 +6228,7 @@ impl ListIndexError {
 }
 impl fmt::Display for ListIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIndexError {
@@ -6296,7 +6296,7 @@ impl ListManagedSchemaArnsError {
 }
 impl fmt::Display for ListManagedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListManagedSchemaArnsError {
@@ -6385,7 +6385,7 @@ impl ListObjectAttributesError {
 }
 impl fmt::Display for ListObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectAttributesError {
@@ -6470,7 +6470,7 @@ impl ListObjectChildrenError {
 }
 impl fmt::Display for ListObjectChildrenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectChildrenError {
@@ -6556,7 +6556,7 @@ impl ListObjectParentPathsError {
 }
 impl fmt::Display for ListObjectParentPathsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectParentPathsError {
@@ -6640,7 +6640,7 @@ impl ListObjectParentsError {
 }
 impl fmt::Display for ListObjectParentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectParentsError {
@@ -6720,7 +6720,7 @@ impl ListObjectPoliciesError {
 }
 impl fmt::Display for ListObjectPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListObjectPoliciesError {
@@ -6814,7 +6814,7 @@ impl ListOutgoingTypedLinksError {
 }
 impl fmt::Display for ListOutgoingTypedLinksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOutgoingTypedLinksError {
@@ -6905,7 +6905,7 @@ impl ListPolicyAttachmentsError {
 }
 impl fmt::Display for ListPolicyAttachmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPolicyAttachmentsError {
@@ -6988,7 +6988,7 @@ impl ListPublishedSchemaArnsError {
 }
 impl fmt::Display for ListPublishedSchemaArnsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPublishedSchemaArnsError {
@@ -7063,7 +7063,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -7155,7 +7155,7 @@ impl ListTypedLinkFacetAttributesError {
 }
 impl fmt::Display for ListTypedLinkFacetAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypedLinkFacetAttributesError {
@@ -7237,7 +7237,7 @@ impl ListTypedLinkFacetNamesError {
 }
 impl fmt::Display for ListTypedLinkFacetNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTypedLinkFacetNamesError {
@@ -7311,7 +7311,7 @@ impl LookupPolicyError {
 }
 impl fmt::Display for LookupPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LookupPolicyError {
@@ -7383,7 +7383,7 @@ impl PublishSchemaError {
 }
 impl fmt::Display for PublishSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PublishSchemaError {
@@ -7452,7 +7452,7 @@ impl PutSchemaFromJsonError {
 }
 impl fmt::Display for PutSchemaFromJsonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSchemaFromJsonError {
@@ -7536,7 +7536,7 @@ impl RemoveFacetFromObjectError {
 }
 impl fmt::Display for RemoveFacetFromObjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveFacetFromObjectError {
@@ -7606,7 +7606,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -7675,7 +7675,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -7759,7 +7759,7 @@ impl UpdateFacetError {
 }
 impl fmt::Display for UpdateFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFacetError {
@@ -7846,7 +7846,7 @@ impl UpdateLinkAttributesError {
 }
 impl fmt::Display for UpdateLinkAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLinkAttributesError {
@@ -7940,7 +7940,7 @@ impl UpdateObjectAttributesError {
 }
 impl fmt::Display for UpdateObjectAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateObjectAttributesError {
@@ -8006,7 +8006,7 @@ impl UpdateSchemaError {
 }
 impl fmt::Display for UpdateSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSchemaError {
@@ -8099,7 +8099,7 @@ impl UpdateTypedLinkFacetError {
 }
 impl fmt::Display for UpdateTypedLinkFacetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTypedLinkFacetError {
@@ -8188,7 +8188,7 @@ impl UpgradeAppliedSchemaError {
 }
 impl fmt::Display for UpgradeAppliedSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpgradeAppliedSchemaError {
@@ -8275,7 +8275,7 @@ impl UpgradePublishedSchemaError {
 }
 impl fmt::Display for UpgradePublishedSchemaError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpgradePublishedSchemaError {

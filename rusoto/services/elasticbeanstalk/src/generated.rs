@@ -7374,7 +7374,7 @@ impl AbortEnvironmentUpdateError {
 }
 impl fmt::Display for AbortEnvironmentUpdateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AbortEnvironmentUpdateError {
@@ -7434,7 +7434,7 @@ impl ApplyEnvironmentManagedActionError {
 }
 impl fmt::Display for ApplyEnvironmentManagedActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApplyEnvironmentManagedActionError {
@@ -7474,7 +7474,7 @@ impl CheckDNSAvailabilityError {
 }
 impl fmt::Display for CheckDNSAvailabilityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CheckDNSAvailabilityError {
@@ -7526,7 +7526,7 @@ impl ComposeEnvironmentsError {
 }
 impl fmt::Display for ComposeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ComposeEnvironmentsError {
@@ -7574,7 +7574,7 @@ impl CreateApplicationError {
 }
 impl fmt::Display for CreateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationError {
@@ -7659,7 +7659,7 @@ impl CreateApplicationVersionError {
 }
 impl fmt::Display for CreateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateApplicationVersionError {
@@ -7730,7 +7730,7 @@ impl CreateConfigurationTemplateError {
 }
 impl fmt::Display for CreateConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConfigurationTemplateError {
@@ -7786,7 +7786,7 @@ impl CreateEnvironmentError {
 }
 impl fmt::Display for CreateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEnvironmentError {
@@ -7852,7 +7852,7 @@ impl CreatePlatformVersionError {
 }
 impl fmt::Display for CreatePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePlatformVersionError {
@@ -7919,7 +7919,7 @@ impl CreateStorageLocationError {
 }
 impl fmt::Display for CreateStorageLocationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStorageLocationError {
@@ -7968,7 +7968,7 @@ impl DeleteApplicationError {
 }
 impl fmt::Display for DeleteApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationError {
@@ -8044,7 +8044,7 @@ impl DeleteApplicationVersionError {
 }
 impl fmt::Display for DeleteApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteApplicationVersionError {
@@ -8098,7 +8098,7 @@ impl DeleteConfigurationTemplateError {
 }
 impl fmt::Display for DeleteConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationTemplateError {
@@ -8139,7 +8139,7 @@ impl DeleteEnvironmentConfigurationError {
 }
 impl fmt::Display for DeleteEnvironmentConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEnvironmentConfigurationError {
@@ -8211,7 +8211,7 @@ impl DeletePlatformVersionError {
 }
 impl fmt::Display for DeletePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePlatformVersionError {
@@ -8263,7 +8263,7 @@ impl DescribeAccountAttributesError {
 }
 impl fmt::Display for DescribeAccountAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAccountAttributesError {
@@ -8304,7 +8304,7 @@ impl DescribeApplicationVersionsError {
 }
 impl fmt::Display for DescribeApplicationVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeApplicationVersionsError {
@@ -8341,7 +8341,7 @@ impl DescribeApplicationsError {
 }
 impl fmt::Display for DescribeApplicationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeApplicationsError {
@@ -8388,7 +8388,7 @@ impl DescribeConfigurationOptionsError {
 }
 impl fmt::Display for DescribeConfigurationOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationOptionsError {
@@ -8439,7 +8439,7 @@ impl DescribeConfigurationSettingsError {
 }
 impl fmt::Display for DescribeConfigurationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationSettingsError {
@@ -8495,7 +8495,7 @@ impl DescribeEnvironmentHealthError {
 }
 impl fmt::Display for DescribeEnvironmentHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentHealthError {
@@ -8547,7 +8547,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
 }
 impl fmt::Display for DescribeEnvironmentManagedActionHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentManagedActionHistoryError {
@@ -8600,7 +8600,7 @@ impl DescribeEnvironmentManagedActionsError {
 }
 impl fmt::Display for DescribeEnvironmentManagedActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentManagedActionsError {
@@ -8651,7 +8651,7 @@ impl DescribeEnvironmentResourcesError {
 }
 impl fmt::Display for DescribeEnvironmentResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentResourcesError {
@@ -8690,7 +8690,7 @@ impl DescribeEnvironmentsError {
 }
 impl fmt::Display for DescribeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentsError {
@@ -8727,7 +8727,7 @@ impl DescribeEventsError {
 }
 impl fmt::Display for DescribeEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEventsError {
@@ -8781,7 +8781,7 @@ impl DescribeInstancesHealthError {
 }
 impl fmt::Display for DescribeInstancesHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancesHealthError {
@@ -8840,7 +8840,7 @@ impl DescribePlatformVersionError {
 }
 impl fmt::Display for DescribePlatformVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePlatformVersionError {
@@ -8882,7 +8882,7 @@ impl ListAvailableSolutionStacksError {
 }
 impl fmt::Display for ListAvailableSolutionStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAvailableSolutionStacksError {
@@ -8936,7 +8936,7 @@ impl ListPlatformVersionsError {
 }
 impl fmt::Display for ListPlatformVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPlatformVersionsError {
@@ -9000,7 +9000,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -9049,7 +9049,7 @@ impl RebuildEnvironmentError {
 }
 impl fmt::Display for RebuildEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebuildEnvironmentError {
@@ -9088,7 +9088,7 @@ impl RequestEnvironmentInfoError {
 }
 impl fmt::Display for RequestEnvironmentInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RequestEnvironmentInfoError {
@@ -9125,7 +9125,7 @@ impl RestartAppServerError {
 }
 impl fmt::Display for RestartAppServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestartAppServerError {
@@ -9162,7 +9162,7 @@ impl RetrieveEnvironmentInfoError {
 }
 impl fmt::Display for RetrieveEnvironmentInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetrieveEnvironmentInfoError {
@@ -9199,7 +9199,7 @@ impl SwapEnvironmentCNAMEsError {
 }
 impl fmt::Display for SwapEnvironmentCNAMEsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SwapEnvironmentCNAMEsError {
@@ -9244,7 +9244,7 @@ impl TerminateEnvironmentError {
 }
 impl fmt::Display for TerminateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateEnvironmentError {
@@ -9283,7 +9283,7 @@ impl UpdateApplicationError {
 }
 impl fmt::Display for UpdateApplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationError {
@@ -9332,7 +9332,7 @@ impl UpdateApplicationResourceLifecycleError {
 }
 impl fmt::Display for UpdateApplicationResourceLifecycleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationResourceLifecycleError {
@@ -9371,7 +9371,7 @@ impl UpdateApplicationVersionError {
 }
 impl fmt::Display for UpdateApplicationVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateApplicationVersionError {
@@ -9427,7 +9427,7 @@ impl UpdateConfigurationTemplateError {
 }
 impl fmt::Display for UpdateConfigurationTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConfigurationTemplateError {
@@ -9482,7 +9482,7 @@ impl UpdateEnvironmentError {
 }
 impl fmt::Display for UpdateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEnvironmentError {
@@ -9562,7 +9562,7 @@ impl UpdateTagsForResourceError {
 }
 impl fmt::Display for UpdateTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTagsForResourceError {
@@ -9626,7 +9626,7 @@ impl ValidateConfigurationSettingsError {
 }
 impl fmt::Display for ValidateConfigurationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ValidateConfigurationSettingsError {
@@ -10019,7 +10019,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10068,7 +10068,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10117,7 +10117,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10166,7 +10166,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10216,7 +10216,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10266,7 +10266,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10315,7 +10315,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10364,7 +10364,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10412,7 +10412,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10569,7 +10569,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10617,7 +10617,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10667,7 +10667,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10716,7 +10716,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10766,7 +10766,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10816,7 +10816,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10865,7 +10865,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10923,7 +10923,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -10977,7 +10977,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11029,7 +11029,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11078,7 +11078,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11127,7 +11127,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11176,7 +11176,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11225,7 +11225,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11276,7 +11276,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11325,7 +11325,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11374,7 +11374,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11505,7 +11505,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11581,7 +11581,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11630,7 +11630,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11684,7 +11684,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11734,7 +11734,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11784,7 +11784,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11833,7 +11833,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
@@ -11912,7 +11912,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         } else {
             let reader = EventReader::new_with_config(
                 xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(true),
+                ParserConfig::new().trim_whitespace(false),
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();

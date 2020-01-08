@@ -3388,7 +3388,7 @@ impl AssociateRoleToGroupError {
 }
 impl fmt::Display for AssociateRoleToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateRoleToGroupError {
@@ -3433,7 +3433,7 @@ impl AssociateServiceRoleToAccountError {
 }
 impl fmt::Display for AssociateServiceRoleToAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateServiceRoleToAccountError {
@@ -3469,7 +3469,7 @@ impl CreateConnectorDefinitionError {
 }
 impl fmt::Display for CreateConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConnectorDefinitionError {
@@ -3506,7 +3506,7 @@ impl CreateConnectorDefinitionVersionError {
 }
 impl fmt::Display for CreateConnectorDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateConnectorDefinitionVersionError {
@@ -3539,7 +3539,7 @@ impl CreateCoreDefinitionError {
 }
 impl fmt::Display for CreateCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCoreDefinitionError {
@@ -3576,7 +3576,7 @@ impl CreateCoreDefinitionVersionError {
 }
 impl fmt::Display for CreateCoreDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCoreDefinitionVersionError {
@@ -3609,7 +3609,7 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentError {
@@ -3642,7 +3642,7 @@ impl CreateDeviceDefinitionError {
 }
 impl fmt::Display for CreateDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeviceDefinitionError {
@@ -3679,7 +3679,7 @@ impl CreateDeviceDefinitionVersionError {
 }
 impl fmt::Display for CreateDeviceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeviceDefinitionVersionError {
@@ -3712,7 +3712,7 @@ impl CreateFunctionDefinitionError {
 }
 impl fmt::Display for CreateFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFunctionDefinitionError {
@@ -3749,7 +3749,7 @@ impl CreateFunctionDefinitionVersionError {
 }
 impl fmt::Display for CreateFunctionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFunctionDefinitionVersionError {
@@ -3782,7 +3782,7 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupError {
@@ -3826,7 +3826,7 @@ impl CreateGroupCertificateAuthorityError {
 }
 impl fmt::Display for CreateGroupCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupCertificateAuthorityError {
@@ -3860,7 +3860,7 @@ impl CreateGroupVersionError {
 }
 impl fmt::Display for CreateGroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupVersionError {
@@ -3893,7 +3893,7 @@ impl CreateLoggerDefinitionError {
 }
 impl fmt::Display for CreateLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoggerDefinitionError {
@@ -3930,7 +3930,7 @@ impl CreateLoggerDefinitionVersionError {
 }
 impl fmt::Display for CreateLoggerDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoggerDefinitionVersionError {
@@ -3963,7 +3963,7 @@ impl CreateResourceDefinitionError {
 }
 impl fmt::Display for CreateResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceDefinitionError {
@@ -4000,7 +4000,7 @@ impl CreateResourceDefinitionVersionError {
 }
 impl fmt::Display for CreateResourceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceDefinitionVersionError {
@@ -4040,7 +4040,7 @@ impl CreateSoftwareUpdateJobError {
 }
 impl fmt::Display for CreateSoftwareUpdateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSoftwareUpdateJobError {
@@ -4078,7 +4078,7 @@ impl CreateSubscriptionDefinitionError {
 }
 impl fmt::Display for CreateSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSubscriptionDefinitionError {
@@ -4115,7 +4115,7 @@ impl CreateSubscriptionDefinitionVersionError {
 }
 impl fmt::Display for CreateSubscriptionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSubscriptionDefinitionVersionError {
@@ -4150,7 +4150,7 @@ impl DeleteConnectorDefinitionError {
 }
 impl fmt::Display for DeleteConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConnectorDefinitionError {
@@ -4183,7 +4183,7 @@ impl DeleteCoreDefinitionError {
 }
 impl fmt::Display for DeleteCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCoreDefinitionError {
@@ -4216,7 +4216,7 @@ impl DeleteDeviceDefinitionError {
 }
 impl fmt::Display for DeleteDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeviceDefinitionError {
@@ -4249,7 +4249,7 @@ impl DeleteFunctionDefinitionError {
 }
 impl fmt::Display for DeleteFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFunctionDefinitionError {
@@ -4282,7 +4282,7 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupError {
@@ -4315,7 +4315,7 @@ impl DeleteLoggerDefinitionError {
 }
 impl fmt::Display for DeleteLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoggerDefinitionError {
@@ -4348,7 +4348,7 @@ impl DeleteResourceDefinitionError {
 }
 impl fmt::Display for DeleteResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceDefinitionError {
@@ -4385,7 +4385,7 @@ impl DeleteSubscriptionDefinitionError {
 }
 impl fmt::Display for DeleteSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSubscriptionDefinitionError {
@@ -4427,7 +4427,7 @@ impl DisassociateRoleFromGroupError {
 }
 impl fmt::Display for DisassociateRoleFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateRoleFromGroupError {
@@ -4465,7 +4465,7 @@ impl DisassociateServiceRoleFromAccountError {
 }
 impl fmt::Display for DisassociateServiceRoleFromAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateServiceRoleFromAccountError {
@@ -4505,7 +4505,7 @@ impl GetAssociatedRoleError {
 }
 impl fmt::Display for GetAssociatedRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAssociatedRoleError {
@@ -4539,7 +4539,7 @@ impl GetBulkDeploymentStatusError {
 }
 impl fmt::Display for GetBulkDeploymentStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBulkDeploymentStatusError {
@@ -4579,7 +4579,7 @@ impl GetConnectivityInfoError {
 }
 impl fmt::Display for GetConnectivityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectivityInfoError {
@@ -4613,7 +4613,7 @@ impl GetConnectorDefinitionError {
 }
 impl fmt::Display for GetConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectorDefinitionError {
@@ -4650,7 +4650,7 @@ impl GetConnectorDefinitionVersionError {
 }
 impl fmt::Display for GetConnectorDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectorDefinitionVersionError {
@@ -4683,7 +4683,7 @@ impl GetCoreDefinitionError {
 }
 impl fmt::Display for GetCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCoreDefinitionError {
@@ -4716,7 +4716,7 @@ impl GetCoreDefinitionVersionError {
 }
 impl fmt::Display for GetCoreDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCoreDefinitionVersionError {
@@ -4749,7 +4749,7 @@ impl GetDeploymentStatusError {
 }
 impl fmt::Display for GetDeploymentStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeploymentStatusError {
@@ -4782,7 +4782,7 @@ impl GetDeviceDefinitionError {
 }
 impl fmt::Display for GetDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceDefinitionError {
@@ -4819,7 +4819,7 @@ impl GetDeviceDefinitionVersionError {
 }
 impl fmt::Display for GetDeviceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceDefinitionVersionError {
@@ -4852,7 +4852,7 @@ impl GetFunctionDefinitionError {
 }
 impl fmt::Display for GetFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionDefinitionError {
@@ -4889,7 +4889,7 @@ impl GetFunctionDefinitionVersionError {
 }
 impl fmt::Display for GetFunctionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionDefinitionVersionError {
@@ -4922,7 +4922,7 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupError {
@@ -4966,7 +4966,7 @@ impl GetGroupCertificateAuthorityError {
 }
 impl fmt::Display for GetGroupCertificateAuthorityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupCertificateAuthorityError {
@@ -5011,7 +5011,7 @@ impl GetGroupCertificateConfigurationError {
 }
 impl fmt::Display for GetGroupCertificateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupCertificateConfigurationError {
@@ -5045,7 +5045,7 @@ impl GetGroupVersionError {
 }
 impl fmt::Display for GetGroupVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupVersionError {
@@ -5078,7 +5078,7 @@ impl GetLoggerDefinitionError {
 }
 impl fmt::Display for GetLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoggerDefinitionError {
@@ -5115,7 +5115,7 @@ impl GetLoggerDefinitionVersionError {
 }
 impl fmt::Display for GetLoggerDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoggerDefinitionVersionError {
@@ -5148,7 +5148,7 @@ impl GetResourceDefinitionError {
 }
 impl fmt::Display for GetResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceDefinitionError {
@@ -5185,7 +5185,7 @@ impl GetResourceDefinitionVersionError {
 }
 impl fmt::Display for GetResourceDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceDefinitionVersionError {
@@ -5220,7 +5220,7 @@ impl GetServiceRoleForAccountError {
 }
 impl fmt::Display for GetServiceRoleForAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceRoleForAccountError {
@@ -5255,7 +5255,7 @@ impl GetSubscriptionDefinitionError {
 }
 impl fmt::Display for GetSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSubscriptionDefinitionError {
@@ -5292,7 +5292,7 @@ impl GetSubscriptionDefinitionVersionError {
 }
 impl fmt::Display for GetSubscriptionDefinitionVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSubscriptionDefinitionVersionError {
@@ -5329,7 +5329,7 @@ impl ListBulkDeploymentDetailedReportsError {
 }
 impl fmt::Display for ListBulkDeploymentDetailedReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBulkDeploymentDetailedReportsError {
@@ -5362,7 +5362,7 @@ impl ListBulkDeploymentsError {
 }
 impl fmt::Display for ListBulkDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBulkDeploymentsError {
@@ -5399,7 +5399,7 @@ impl ListConnectorDefinitionVersionsError {
 }
 impl fmt::Display for ListConnectorDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConnectorDefinitionVersionsError {
@@ -5426,7 +5426,7 @@ impl ListConnectorDefinitionsError {
 }
 impl fmt::Display for ListConnectorDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListConnectorDefinitionsError {
@@ -5461,7 +5461,7 @@ impl ListCoreDefinitionVersionsError {
 }
 impl fmt::Display for ListCoreDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCoreDefinitionVersionsError {
@@ -5488,7 +5488,7 @@ impl ListCoreDefinitionsError {
 }
 impl fmt::Display for ListCoreDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCoreDefinitionsError {
@@ -5519,7 +5519,7 @@ impl ListDeploymentsError {
 }
 impl fmt::Display for ListDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeploymentsError {
@@ -5556,7 +5556,7 @@ impl ListDeviceDefinitionVersionsError {
 }
 impl fmt::Display for ListDeviceDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeviceDefinitionVersionsError {
@@ -5583,7 +5583,7 @@ impl ListDeviceDefinitionsError {
 }
 impl fmt::Display for ListDeviceDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDeviceDefinitionsError {
@@ -5618,7 +5618,7 @@ impl ListFunctionDefinitionVersionsError {
 }
 impl fmt::Display for ListFunctionDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFunctionDefinitionVersionsError {
@@ -5645,7 +5645,7 @@ impl ListFunctionDefinitionsError {
 }
 impl fmt::Display for ListFunctionDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFunctionDefinitionsError {
@@ -5687,7 +5687,7 @@ impl ListGroupCertificateAuthoritiesError {
 }
 impl fmt::Display for ListGroupCertificateAuthoritiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupCertificateAuthoritiesError {
@@ -5721,7 +5721,7 @@ impl ListGroupVersionsError {
 }
 impl fmt::Display for ListGroupVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupVersionsError {
@@ -5748,7 +5748,7 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsError {
@@ -5783,7 +5783,7 @@ impl ListLoggerDefinitionVersionsError {
 }
 impl fmt::Display for ListLoggerDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLoggerDefinitionVersionsError {
@@ -5810,7 +5810,7 @@ impl ListLoggerDefinitionsError {
 }
 impl fmt::Display for ListLoggerDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLoggerDefinitionsError {
@@ -5845,7 +5845,7 @@ impl ListResourceDefinitionVersionsError {
 }
 impl fmt::Display for ListResourceDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceDefinitionVersionsError {
@@ -5872,7 +5872,7 @@ impl ListResourceDefinitionsError {
 }
 impl fmt::Display for ListResourceDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceDefinitionsError {
@@ -5907,7 +5907,7 @@ impl ListSubscriptionDefinitionVersionsError {
 }
 impl fmt::Display for ListSubscriptionDefinitionVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscriptionDefinitionVersionsError {
@@ -5936,7 +5936,7 @@ impl ListSubscriptionDefinitionsError {
 }
 impl fmt::Display for ListSubscriptionDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSubscriptionDefinitionsError {
@@ -5967,7 +5967,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -6000,7 +6000,7 @@ impl ResetDeploymentsError {
 }
 impl fmt::Display for ResetDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetDeploymentsError {
@@ -6033,7 +6033,7 @@ impl StartBulkDeploymentError {
 }
 impl fmt::Display for StartBulkDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartBulkDeploymentError {
@@ -6066,7 +6066,7 @@ impl StopBulkDeploymentError {
 }
 impl fmt::Display for StopBulkDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopBulkDeploymentError {
@@ -6099,7 +6099,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -6132,7 +6132,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -6172,7 +6172,7 @@ impl UpdateConnectivityInfoError {
 }
 impl fmt::Display for UpdateConnectivityInfoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConnectivityInfoError {
@@ -6208,7 +6208,7 @@ impl UpdateConnectorDefinitionError {
 }
 impl fmt::Display for UpdateConnectorDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateConnectorDefinitionError {
@@ -6241,7 +6241,7 @@ impl UpdateCoreDefinitionError {
 }
 impl fmt::Display for UpdateCoreDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCoreDefinitionError {
@@ -6274,7 +6274,7 @@ impl UpdateDeviceDefinitionError {
 }
 impl fmt::Display for UpdateDeviceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeviceDefinitionError {
@@ -6307,7 +6307,7 @@ impl UpdateFunctionDefinitionError {
 }
 impl fmt::Display for UpdateFunctionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFunctionDefinitionError {
@@ -6340,7 +6340,7 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupError {
@@ -6384,7 +6384,7 @@ impl UpdateGroupCertificateConfigurationError {
 }
 impl fmt::Display for UpdateGroupCertificateConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupCertificateConfigurationError {
@@ -6418,7 +6418,7 @@ impl UpdateLoggerDefinitionError {
 }
 impl fmt::Display for UpdateLoggerDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLoggerDefinitionError {
@@ -6451,7 +6451,7 @@ impl UpdateResourceDefinitionError {
 }
 impl fmt::Display for UpdateResourceDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResourceDefinitionError {
@@ -6488,7 +6488,7 @@ impl UpdateSubscriptionDefinitionError {
 }
 impl fmt::Display for UpdateSubscriptionDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSubscriptionDefinitionError {

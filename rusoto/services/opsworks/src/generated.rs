@@ -3280,7 +3280,7 @@ impl AssignInstanceError {
 }
 impl fmt::Display for AssignInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssignInstanceError {
@@ -3313,7 +3313,7 @@ impl AssignVolumeError {
 }
 impl fmt::Display for AssignVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssignVolumeError {
@@ -3346,7 +3346,7 @@ impl AssociateElasticIpError {
 }
 impl fmt::Display for AssociateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateElasticIpError {
@@ -3381,7 +3381,7 @@ impl AttachElasticLoadBalancerError {
 }
 impl fmt::Display for AttachElasticLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachElasticLoadBalancerError {
@@ -3414,7 +3414,7 @@ impl CloneStackError {
 }
 impl fmt::Display for CloneStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CloneStackError {
@@ -3447,7 +3447,7 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAppError {
@@ -3480,7 +3480,7 @@ impl CreateDeploymentError {
 }
 impl fmt::Display for CreateDeploymentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDeploymentError {
@@ -3513,7 +3513,7 @@ impl CreateInstanceError {
 }
 impl fmt::Display for CreateInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstanceError {
@@ -3546,7 +3546,7 @@ impl CreateLayerError {
 }
 impl fmt::Display for CreateLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLayerError {
@@ -3573,7 +3573,7 @@ impl CreateStackError {
 }
 impl fmt::Display for CreateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateStackError {
@@ -3598,7 +3598,7 @@ impl CreateUserProfileError {
 }
 impl fmt::Display for CreateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserProfileError {
@@ -3629,7 +3629,7 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppError {
@@ -3662,7 +3662,7 @@ impl DeleteInstanceError {
 }
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstanceError {
@@ -3695,7 +3695,7 @@ impl DeleteLayerError {
 }
 impl fmt::Display for DeleteLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLayerError {
@@ -3728,7 +3728,7 @@ impl DeleteStackError {
 }
 impl fmt::Display for DeleteStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteStackError {
@@ -3761,7 +3761,7 @@ impl DeleteUserProfileError {
 }
 impl fmt::Display for DeleteUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserProfileError {
@@ -3796,7 +3796,7 @@ impl DeregisterEcsClusterError {
 }
 impl fmt::Display for DeregisterEcsClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterEcsClusterError {
@@ -3831,7 +3831,7 @@ impl DeregisterElasticIpError {
 }
 impl fmt::Display for DeregisterElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterElasticIpError {
@@ -3864,7 +3864,7 @@ impl DeregisterInstanceError {
 }
 impl fmt::Display for DeregisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterInstanceError {
@@ -3899,7 +3899,7 @@ impl DeregisterRdsDbInstanceError {
 }
 impl fmt::Display for DeregisterRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterRdsDbInstanceError {
@@ -3932,7 +3932,7 @@ impl DeregisterVolumeError {
 }
 impl fmt::Display for DeregisterVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterVolumeError {
@@ -3967,7 +3967,7 @@ impl DescribeAgentVersionsError {
 }
 impl fmt::Display for DescribeAgentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAgentVersionsError {
@@ -4000,7 +4000,7 @@ impl DescribeAppsError {
 }
 impl fmt::Display for DescribeAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAppsError {
@@ -4033,7 +4033,7 @@ impl DescribeCommandsError {
 }
 impl fmt::Display for DescribeCommandsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCommandsError {
@@ -4068,7 +4068,7 @@ impl DescribeDeploymentsError {
 }
 impl fmt::Display for DescribeDeploymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeploymentsError {
@@ -4103,7 +4103,7 @@ impl DescribeEcsClustersError {
 }
 impl fmt::Display for DescribeEcsClustersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEcsClustersError {
@@ -4136,7 +4136,7 @@ impl DescribeElasticIpsError {
 }
 impl fmt::Display for DescribeElasticIpsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeElasticIpsError {
@@ -4173,7 +4173,7 @@ impl DescribeElasticLoadBalancersError {
 }
 impl fmt::Display for DescribeElasticLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeElasticLoadBalancersError {
@@ -4206,7 +4206,7 @@ impl DescribeInstancesError {
 }
 impl fmt::Display for DescribeInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInstancesError {
@@ -4239,7 +4239,7 @@ impl DescribeLayersError {
 }
 impl fmt::Display for DescribeLayersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLayersError {
@@ -4276,7 +4276,7 @@ impl DescribeLoadBasedAutoScalingError {
 }
 impl fmt::Display for DescribeLoadBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLoadBasedAutoScalingError {
@@ -4303,7 +4303,7 @@ impl DescribeMyUserProfileError {
 }
 impl fmt::Display for DescribeMyUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMyUserProfileError {
@@ -4328,7 +4328,7 @@ impl DescribeOperatingSystemsError {
 }
 impl fmt::Display for DescribeOperatingSystemsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOperatingSystemsError {
@@ -4361,7 +4361,7 @@ impl DescribePermissionsError {
 }
 impl fmt::Display for DescribePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePermissionsError {
@@ -4394,7 +4394,7 @@ impl DescribeRaidArraysError {
 }
 impl fmt::Display for DescribeRaidArraysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRaidArraysError {
@@ -4429,7 +4429,7 @@ impl DescribeRdsDbInstancesError {
 }
 impl fmt::Display for DescribeRdsDbInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRdsDbInstancesError {
@@ -4464,7 +4464,7 @@ impl DescribeServiceErrorsError {
 }
 impl fmt::Display for DescribeServiceErrorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeServiceErrorsError {
@@ -4501,7 +4501,7 @@ impl DescribeStackProvisioningParametersError {
 }
 impl fmt::Display for DescribeStackProvisioningParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackProvisioningParametersError {
@@ -4536,7 +4536,7 @@ impl DescribeStackSummaryError {
 }
 impl fmt::Display for DescribeStackSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStackSummaryError {
@@ -4569,7 +4569,7 @@ impl DescribeStacksError {
 }
 impl fmt::Display for DescribeStacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeStacksError {
@@ -4606,7 +4606,7 @@ impl DescribeTimeBasedAutoScalingError {
 }
 impl fmt::Display for DescribeTimeBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTimeBasedAutoScalingError {
@@ -4641,7 +4641,7 @@ impl DescribeUserProfilesError {
 }
 impl fmt::Display for DescribeUserProfilesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserProfilesError {
@@ -4674,7 +4674,7 @@ impl DescribeVolumesError {
 }
 impl fmt::Display for DescribeVolumesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeVolumesError {
@@ -4709,7 +4709,7 @@ impl DetachElasticLoadBalancerError {
 }
 impl fmt::Display for DetachElasticLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachElasticLoadBalancerError {
@@ -4744,7 +4744,7 @@ impl DisassociateElasticIpError {
 }
 impl fmt::Display for DisassociateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateElasticIpError {
@@ -4779,7 +4779,7 @@ impl GetHostnameSuggestionError {
 }
 impl fmt::Display for GetHostnameSuggestionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetHostnameSuggestionError {
@@ -4812,7 +4812,7 @@ impl GrantAccessError {
 }
 impl fmt::Display for GrantAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GrantAccessError {
@@ -4845,7 +4845,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -4878,7 +4878,7 @@ impl RebootInstanceError {
 }
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootInstanceError {
@@ -4911,7 +4911,7 @@ impl RegisterEcsClusterError {
 }
 impl fmt::Display for RegisterEcsClusterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterEcsClusterError {
@@ -4944,7 +4944,7 @@ impl RegisterElasticIpError {
 }
 impl fmt::Display for RegisterElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterElasticIpError {
@@ -4977,7 +4977,7 @@ impl RegisterInstanceError {
 }
 impl fmt::Display for RegisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterInstanceError {
@@ -5012,7 +5012,7 @@ impl RegisterRdsDbInstanceError {
 }
 impl fmt::Display for RegisterRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterRdsDbInstanceError {
@@ -5045,7 +5045,7 @@ impl RegisterVolumeError {
 }
 impl fmt::Display for RegisterVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterVolumeError {
@@ -5080,7 +5080,7 @@ impl SetLoadBasedAutoScalingError {
 }
 impl fmt::Display for SetLoadBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetLoadBasedAutoScalingError {
@@ -5113,7 +5113,7 @@ impl SetPermissionError {
 }
 impl fmt::Display for SetPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetPermissionError {
@@ -5148,7 +5148,7 @@ impl SetTimeBasedAutoScalingError {
 }
 impl fmt::Display for SetTimeBasedAutoScalingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetTimeBasedAutoScalingError {
@@ -5181,7 +5181,7 @@ impl StartInstanceError {
 }
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartInstanceError {
@@ -5214,7 +5214,7 @@ impl StartStackError {
 }
 impl fmt::Display for StartStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartStackError {
@@ -5247,7 +5247,7 @@ impl StopInstanceError {
 }
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopInstanceError {
@@ -5280,7 +5280,7 @@ impl StopStackError {
 }
 impl fmt::Display for StopStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopStackError {
@@ -5313,7 +5313,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -5346,7 +5346,7 @@ impl UnassignInstanceError {
 }
 impl fmt::Display for UnassignInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnassignInstanceError {
@@ -5379,7 +5379,7 @@ impl UnassignVolumeError {
 }
 impl fmt::Display for UnassignVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnassignVolumeError {
@@ -5412,7 +5412,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -5445,7 +5445,7 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAppError {
@@ -5478,7 +5478,7 @@ impl UpdateElasticIpError {
 }
 impl fmt::Display for UpdateElasticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateElasticIpError {
@@ -5511,7 +5511,7 @@ impl UpdateInstanceError {
 }
 impl fmt::Display for UpdateInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInstanceError {
@@ -5544,7 +5544,7 @@ impl UpdateLayerError {
 }
 impl fmt::Display for UpdateLayerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLayerError {
@@ -5571,7 +5571,7 @@ impl UpdateMyUserProfileError {
 }
 impl fmt::Display for UpdateMyUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMyUserProfileError {
@@ -5604,7 +5604,7 @@ impl UpdateRdsDbInstanceError {
 }
 impl fmt::Display for UpdateRdsDbInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRdsDbInstanceError {
@@ -5637,7 +5637,7 @@ impl UpdateStackError {
 }
 impl fmt::Display for UpdateStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateStackError {
@@ -5670,7 +5670,7 @@ impl UpdateUserProfileError {
 }
 impl fmt::Display for UpdateUserProfileError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserProfileError {
@@ -5703,7 +5703,7 @@ impl UpdateVolumeError {
 }
 impl fmt::Display for UpdateVolumeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVolumeError {

@@ -26,7 +26,7 @@ impl Error {
             let typ = pieces.last().expect("Expected error type");
 
             Some(Error {
-                typ: typ.to_string(),
+                typ: (*typ).to_string(),
                 msg,
             })
         } else {

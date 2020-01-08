@@ -266,7 +266,7 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
                     [key, value] if !key.is_empty() && !value.is_empty() => {
                         if let Some(current) = profile.clone() {
                             let values = result.entry(current).or_insert_with(HashMap::new);
-                            (*values).insert(key.to_string(), value.to_string());
+                            (*values).insert((*key).to_string(), (*value).to_string());
                         }
                         (result, profile)
                     }

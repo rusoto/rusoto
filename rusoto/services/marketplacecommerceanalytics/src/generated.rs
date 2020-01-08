@@ -125,7 +125,7 @@ impl GenerateDataSetError {
 }
 impl fmt::Display for GenerateDataSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateDataSetError {
@@ -160,7 +160,7 @@ impl StartSupportDataExportError {
 }
 impl fmt::Display for StartSupportDataExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartSupportDataExportError {

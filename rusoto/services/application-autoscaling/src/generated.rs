@@ -686,7 +686,7 @@ impl DeleteScalingPolicyError {
 }
 impl fmt::Display for DeleteScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScalingPolicyError {
@@ -737,7 +737,7 @@ impl DeleteScheduledActionError {
 }
 impl fmt::Display for DeleteScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScheduledActionError {
@@ -788,7 +788,7 @@ impl DeregisterScalableTargetError {
 }
 impl fmt::Display for DeregisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterScalableTargetError {
@@ -839,7 +839,7 @@ impl DescribeScalableTargetsError {
 }
 impl fmt::Display for DescribeScalableTargetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalableTargetsError {
@@ -890,7 +890,7 @@ impl DescribeScalingActivitiesError {
 }
 impl fmt::Display for DescribeScalingActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingActivitiesError {
@@ -948,7 +948,7 @@ impl DescribeScalingPoliciesError {
 }
 impl fmt::Display for DescribeScalingPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingPoliciesError {
@@ -1000,7 +1000,7 @@ impl DescribeScheduledActionsError {
 }
 impl fmt::Display for DescribeScheduledActionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScheduledActionsError {
@@ -1057,7 +1057,7 @@ impl PutScalingPolicyError {
 }
 impl fmt::Display for PutScalingPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutScalingPolicyError {
@@ -1109,7 +1109,7 @@ impl PutScheduledActionError {
 }
 impl fmt::Display for PutScheduledActionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutScheduledActionError {
@@ -1161,7 +1161,7 @@ impl RegisterScalableTargetError {
 }
 impl fmt::Display for RegisterScalableTargetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterScalableTargetError {

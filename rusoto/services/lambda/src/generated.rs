@@ -1940,7 +1940,7 @@ impl AddLayerVersionPermissionError {
 }
 impl fmt::Display for AddLayerVersionPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddLayerVersionPermissionError {
@@ -2009,7 +2009,7 @@ impl AddPermissionError {
 }
 impl fmt::Display for AddPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddPermissionError {
@@ -2068,7 +2068,7 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAliasError {
@@ -2133,7 +2133,7 @@ impl CreateEventSourceMappingError {
 }
 impl fmt::Display for CreateEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEventSourceMappingError {
@@ -2197,7 +2197,7 @@ impl CreateFunctionError {
 }
 impl fmt::Display for CreateFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFunctionError {
@@ -2250,7 +2250,7 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAliasError {
@@ -2314,7 +2314,7 @@ impl DeleteEventSourceMappingError {
 }
 impl fmt::Display for DeleteEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventSourceMappingError {
@@ -2373,7 +2373,7 @@ impl DeleteFunctionError {
 }
 impl fmt::Display for DeleteFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFunctionError {
@@ -2438,7 +2438,7 @@ impl DeleteFunctionConcurrencyError {
 }
 impl fmt::Display for DeleteFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFunctionConcurrencyError {
@@ -2500,7 +2500,7 @@ impl DeleteFunctionEventInvokeConfigError {
 }
 impl fmt::Display for DeleteFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFunctionEventInvokeConfigError {
@@ -2541,7 +2541,7 @@ impl DeleteLayerVersionError {
 }
 impl fmt::Display for DeleteLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLayerVersionError {
@@ -2607,7 +2607,7 @@ impl DeleteProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for DeleteProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProvisionedConcurrencyConfigError {
@@ -2649,7 +2649,7 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountSettingsError {
@@ -2696,7 +2696,7 @@ impl GetAliasError {
 }
 impl fmt::Display for GetAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAliasError {
@@ -2753,7 +2753,7 @@ impl GetEventSourceMappingError {
 }
 impl fmt::Display for GetEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEventSourceMappingError {
@@ -2804,7 +2804,7 @@ impl GetFunctionError {
 }
 impl fmt::Display for GetFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionError {
@@ -2861,7 +2861,7 @@ impl GetFunctionConcurrencyError {
 }
 impl fmt::Display for GetFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionConcurrencyError {
@@ -2918,7 +2918,7 @@ impl GetFunctionConfigurationError {
 }
 impl fmt::Display for GetFunctionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionConfigurationError {
@@ -2979,7 +2979,7 @@ impl GetFunctionEventInvokeConfigError {
 }
 impl fmt::Display for GetFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFunctionEventInvokeConfigError {
@@ -3032,7 +3032,7 @@ impl GetLayerVersionError {
 }
 impl fmt::Display for GetLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLayerVersionError {
@@ -3089,7 +3089,7 @@ impl GetLayerVersionByArnError {
 }
 impl fmt::Display for GetLayerVersionByArnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLayerVersionByArnError {
@@ -3146,7 +3146,7 @@ impl GetLayerVersionPolicyError {
 }
 impl fmt::Display for GetLayerVersionPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLayerVersionPolicyError {
@@ -3197,7 +3197,7 @@ impl GetPolicyError {
 }
 impl fmt::Display for GetPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPolicyError {
@@ -3267,7 +3267,7 @@ impl GetProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for GetProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetProvisionedConcurrencyConfigError {
@@ -3409,7 +3409,7 @@ impl InvokeError {
 }
 impl fmt::Display for InvokeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InvokeError {
@@ -3483,7 +3483,7 @@ impl InvokeAsyncError {
 }
 impl fmt::Display for InvokeAsyncError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InvokeAsyncError {
@@ -3535,7 +3535,7 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAliasesError {
@@ -3592,7 +3592,7 @@ impl ListEventSourceMappingsError {
 }
 impl fmt::Display for ListEventSourceMappingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEventSourceMappingsError {
@@ -3653,7 +3653,7 @@ impl ListFunctionEventInvokeConfigsError {
 }
 impl fmt::Display for ListFunctionEventInvokeConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFunctionEventInvokeConfigsError {
@@ -3699,7 +3699,7 @@ impl ListFunctionsError {
 }
 impl fmt::Display for ListFunctionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListFunctionsError {
@@ -3751,7 +3751,7 @@ impl ListLayerVersionsError {
 }
 impl fmt::Display for ListLayerVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLayerVersionsError {
@@ -3797,7 +3797,7 @@ impl ListLayersError {
 }
 impl fmt::Display for ListLayersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLayersError {
@@ -3857,7 +3857,7 @@ impl ListProvisionedConcurrencyConfigsError {
 }
 impl fmt::Display for ListProvisionedConcurrencyConfigsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProvisionedConcurrencyConfigsError {
@@ -3906,7 +3906,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -3963,7 +3963,7 @@ impl ListVersionsByFunctionError {
 }
 impl fmt::Display for ListVersionsByFunctionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVersionsByFunctionError {
@@ -4025,7 +4025,7 @@ impl PublishLayerVersionError {
 }
 impl fmt::Display for PublishLayerVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PublishLayerVersionError {
@@ -4094,7 +4094,7 @@ impl PublishVersionError {
 }
 impl fmt::Display for PublishVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PublishVersionError {
@@ -4161,7 +4161,7 @@ impl PutFunctionConcurrencyError {
 }
 impl fmt::Display for PutFunctionConcurrencyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutFunctionConcurrencyError {
@@ -4223,7 +4223,7 @@ impl PutFunctionEventInvokeConfigError {
 }
 impl fmt::Display for PutFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutFunctionEventInvokeConfigError {
@@ -4291,7 +4291,7 @@ impl PutProvisionedConcurrencyConfigError {
 }
 impl fmt::Display for PutProvisionedConcurrencyConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutProvisionedConcurrencyConfigError {
@@ -4360,7 +4360,7 @@ impl RemoveLayerVersionPermissionError {
 }
 impl fmt::Display for RemoveLayerVersionPermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveLayerVersionPermissionError {
@@ -4419,7 +4419,7 @@ impl RemovePermissionError {
 }
 impl fmt::Display for RemovePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemovePermissionError {
@@ -4471,7 +4471,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4522,7 +4522,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -4583,7 +4583,7 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAliasError {
@@ -4656,7 +4656,7 @@ impl UpdateEventSourceMappingError {
 }
 impl fmt::Display for UpdateEventSourceMappingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEventSourceMappingError {
@@ -4730,7 +4730,7 @@ impl UpdateFunctionCodeError {
 }
 impl fmt::Display for UpdateFunctionCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFunctionCodeError {
@@ -4806,7 +4806,7 @@ impl UpdateFunctionConfigurationError {
 }
 impl fmt::Display for UpdateFunctionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFunctionConfigurationError {
@@ -4869,7 +4869,7 @@ impl UpdateFunctionEventInvokeConfigError {
 }
 impl fmt::Display for UpdateFunctionEventInvokeConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFunctionEventInvokeConfigError {

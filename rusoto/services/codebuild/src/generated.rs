@@ -617,7 +617,7 @@ pub struct EnvironmentVariable {
     /// <p>The name or key of the environment variable.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER<em>STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plain text format.</p> </li> <li> <p> <code>SECRETS</em>MANAGER</code>: An environment variable stored in AWS Secrets Manager.</p> </li> </ul></p>
+    /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER<em>STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plain text format. This is the default value.</p> </li> <li> <p> <code>SECRETS</em>MANAGER</code>: An environment variable stored in AWS Secrets Manager.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1532,6 +1532,10 @@ pub struct StartBuildInput {
     #[serde(rename = "computeTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type_override: Option<String>,
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) that overrides the one specified in the build project. The CMK key encrypts the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    #[serde(rename = "encryptionKeyOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key_override: Option<String>,
     /// <p>A container type for this build that overrides the one specified in the build project.</p>
     #[serde(rename = "environmentTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1942,7 +1946,7 @@ impl BatchDeleteBuildsError {
 }
 impl fmt::Display for BatchDeleteBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeleteBuildsError {
@@ -1975,7 +1979,7 @@ impl BatchGetBuildsError {
 }
 impl fmt::Display for BatchGetBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetBuildsError {
@@ -2008,7 +2012,7 @@ impl BatchGetProjectsError {
 }
 impl fmt::Display for BatchGetProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetProjectsError {
@@ -2041,7 +2045,7 @@ impl BatchGetReportGroupsError {
 }
 impl fmt::Display for BatchGetReportGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetReportGroupsError {
@@ -2074,7 +2078,7 @@ impl BatchGetReportsError {
 }
 impl fmt::Display for BatchGetReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetReportsError {
@@ -2117,7 +2121,7 @@ impl CreateProjectError {
 }
 impl fmt::Display for CreateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProjectError {
@@ -2166,7 +2170,7 @@ impl CreateReportGroupError {
 }
 impl fmt::Display for CreateReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReportGroupError {
@@ -2216,7 +2220,7 @@ impl CreateWebhookError {
 }
 impl fmt::Display for CreateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWebhookError {
@@ -2252,7 +2256,7 @@ impl DeleteProjectError {
 }
 impl fmt::Display for DeleteProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProjectError {
@@ -2285,7 +2289,7 @@ impl DeleteReportError {
 }
 impl fmt::Display for DeleteReportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReportError {
@@ -2318,7 +2322,7 @@ impl DeleteReportGroupError {
 }
 impl fmt::Display for DeleteReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReportGroupError {
@@ -2351,7 +2355,7 @@ impl DeleteResourcePolicyError {
 }
 impl fmt::Display for DeleteResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourcePolicyError {
@@ -2393,7 +2397,7 @@ impl DeleteSourceCredentialsError {
 }
 impl fmt::Display for DeleteSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSourceCredentialsError {
@@ -2437,7 +2441,7 @@ impl DeleteWebhookError {
 }
 impl fmt::Display for DeleteWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWebhookError {
@@ -2477,7 +2481,7 @@ impl DescribeTestCasesError {
 }
 impl fmt::Display for DescribeTestCasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTestCasesError {
@@ -2516,7 +2520,7 @@ impl GetResourcePolicyError {
 }
 impl fmt::Display for GetResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcePolicyError {
@@ -2566,7 +2570,7 @@ impl ImportSourceCredentialsError {
 }
 impl fmt::Display for ImportSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportSourceCredentialsError {
@@ -2608,7 +2612,7 @@ impl InvalidateProjectCacheError {
 }
 impl fmt::Display for InvalidateProjectCacheError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InvalidateProjectCacheError {
@@ -2642,7 +2646,7 @@ impl ListBuildsError {
 }
 impl fmt::Display for ListBuildsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBuildsError {
@@ -2682,7 +2686,7 @@ impl ListBuildsForProjectError {
 }
 impl fmt::Display for ListBuildsForProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBuildsForProjectError {
@@ -2712,7 +2716,7 @@ impl ListCuratedEnvironmentImagesError {
 }
 impl fmt::Display for ListCuratedEnvironmentImagesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCuratedEnvironmentImagesError {
@@ -2743,7 +2747,7 @@ impl ListProjectsError {
 }
 impl fmt::Display for ListProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProjectsError {
@@ -2776,7 +2780,7 @@ impl ListReportGroupsError {
 }
 impl fmt::Display for ListReportGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReportGroupsError {
@@ -2809,7 +2813,7 @@ impl ListReportsError {
 }
 impl fmt::Display for ListReportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReportsError {
@@ -2851,7 +2855,7 @@ impl ListReportsForReportGroupError {
 }
 impl fmt::Display for ListReportsForReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReportsForReportGroupError {
@@ -2885,7 +2889,7 @@ impl ListSharedProjectsError {
 }
 impl fmt::Display for ListSharedProjectsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSharedProjectsError {
@@ -2918,7 +2922,7 @@ impl ListSharedReportGroupsError {
 }
 impl fmt::Display for ListSharedReportGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSharedReportGroupsError {
@@ -2945,7 +2949,7 @@ impl ListSourceCredentialsError {
 }
 impl fmt::Display for ListSourceCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListSourceCredentialsError {
@@ -2981,7 +2985,7 @@ impl PutResourcePolicyError {
 }
 impl fmt::Display for PutResourcePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourcePolicyError {
@@ -3025,7 +3029,7 @@ impl StartBuildError {
 }
 impl fmt::Display for StartBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartBuildError {
@@ -3065,7 +3069,7 @@ impl StopBuildError {
 }
 impl fmt::Display for StopBuildError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopBuildError {
@@ -3104,7 +3108,7 @@ impl UpdateProjectError {
 }
 impl fmt::Display for UpdateProjectError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateProjectError {
@@ -3143,7 +3147,7 @@ impl UpdateReportGroupError {
 }
 impl fmt::Display for UpdateReportGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateReportGroupError {
@@ -3187,7 +3191,7 @@ impl UpdateWebhookError {
 }
 impl fmt::Display for UpdateWebhookError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateWebhookError {

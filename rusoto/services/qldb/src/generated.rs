@@ -508,7 +508,7 @@ impl CreateLedgerError {
 }
 impl fmt::Display for CreateLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLedgerError {
@@ -561,7 +561,7 @@ impl DeleteLedgerError {
 }
 impl fmt::Display for DeleteLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLedgerError {
@@ -599,7 +599,7 @@ impl DescribeJournalS3ExportError {
 }
 impl fmt::Display for DescribeJournalS3ExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJournalS3ExportError {
@@ -637,7 +637,7 @@ impl DescribeLedgerError {
 }
 impl fmt::Display for DescribeLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeLedgerError {
@@ -678,7 +678,7 @@ impl ExportJournalToS3Error {
 }
 impl fmt::Display for ExportJournalToS3Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExportJournalToS3Error {
@@ -722,7 +722,7 @@ impl GetBlockError {
 }
 impl fmt::Display for GetBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBlockError {
@@ -769,7 +769,7 @@ impl GetDigestError {
 }
 impl fmt::Display for GetDigestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDigestError {
@@ -816,7 +816,7 @@ impl GetRevisionError {
 }
 impl fmt::Display for GetRevisionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRevisionError {
@@ -845,7 +845,7 @@ impl ListJournalS3ExportsError {
 }
 impl fmt::Display for ListJournalS3ExportsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJournalS3ExportsError {
@@ -872,7 +872,7 @@ impl ListJournalS3ExportsForLedgerError {
 }
 impl fmt::Display for ListJournalS3ExportsForLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJournalS3ExportsForLedgerError {
@@ -897,7 +897,7 @@ impl ListLedgersError {
 }
 impl fmt::Display for ListLedgersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListLedgersError {
@@ -937,7 +937,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -976,7 +976,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -1015,7 +1015,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -1054,7 +1054,7 @@ impl UpdateLedgerError {
 }
 impl fmt::Display for UpdateLedgerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLedgerError {

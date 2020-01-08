@@ -160,7 +160,7 @@ impl DeleteThingShadowError {
 }
 impl fmt::Display for DeleteThingShadowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteThingShadowError {
@@ -237,7 +237,7 @@ impl GetThingShadowError {
 }
 impl fmt::Display for GetThingShadowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetThingShadowError {
@@ -292,7 +292,7 @@ impl PublishError {
 }
 impl fmt::Display for PublishError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PublishError {
@@ -374,7 +374,7 @@ impl UpdateThingShadowError {
 }
 impl fmt::Display for UpdateThingShadowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateThingShadowError {

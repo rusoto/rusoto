@@ -1807,7 +1807,7 @@ impl AbortDocumentVersionUploadError {
 }
 impl fmt::Display for AbortDocumentVersionUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AbortDocumentVersionUploadError {
@@ -1867,7 +1867,7 @@ impl ActivateUserError {
 }
 impl fmt::Display for ActivateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ActivateUserError {
@@ -1927,7 +1927,7 @@ impl AddResourcePermissionsError {
 }
 impl fmt::Display for AddResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddResourcePermissionsError {
@@ -2004,7 +2004,7 @@ impl CreateCommentError {
 }
 impl fmt::Display for CreateCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCommentError {
@@ -2088,7 +2088,7 @@ impl CreateCustomMetadataError {
 }
 impl fmt::Display for CreateCustomMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCustomMetadataError {
@@ -2169,7 +2169,7 @@ impl CreateFolderError {
 }
 impl fmt::Display for CreateFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateFolderError {
@@ -2237,7 +2237,7 @@ impl CreateLabelsError {
 }
 impl fmt::Display for CreateLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLabelsError {
@@ -2293,7 +2293,7 @@ impl CreateNotificationSubscriptionError {
 }
 impl fmt::Display for CreateNotificationSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNotificationSubscriptionError {
@@ -2350,7 +2350,7 @@ impl CreateUserError {
 }
 impl fmt::Display for CreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserError {
@@ -2411,7 +2411,7 @@ impl DeactivateUserError {
 }
 impl fmt::Display for DeactivateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeactivateUserError {
@@ -2482,7 +2482,7 @@ impl DeleteCommentError {
 }
 impl fmt::Display for DeleteCommentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCommentError {
@@ -2558,7 +2558,7 @@ impl DeleteCustomMetadataError {
 }
 impl fmt::Display for DeleteCustomMetadataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCustomMetadataError {
@@ -2637,7 +2637,7 @@ impl DeleteDocumentError {
 }
 impl fmt::Display for DeleteDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDocumentError {
@@ -2714,7 +2714,7 @@ impl DeleteFolderError {
 }
 impl fmt::Display for DeleteFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFolderError {
@@ -2798,7 +2798,7 @@ impl DeleteFolderContentsError {
 }
 impl fmt::Display for DeleteFolderContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteFolderContentsError {
@@ -2859,7 +2859,7 @@ impl DeleteLabelsError {
 }
 impl fmt::Display for DeleteLabelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLabelsError {
@@ -2921,7 +2921,7 @@ impl DeleteNotificationSubscriptionError {
 }
 impl fmt::Display for DeleteNotificationSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotificationSubscriptionError {
@@ -2979,7 +2979,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -3042,7 +3042,7 @@ impl DescribeActivitiesError {
 }
 impl fmt::Display for DescribeActivitiesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeActivitiesError {
@@ -3108,7 +3108,7 @@ impl DescribeCommentsError {
 }
 impl fmt::Display for DescribeCommentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCommentsError {
@@ -3190,7 +3190,7 @@ impl DescribeDocumentVersionsError {
 }
 impl fmt::Display for DescribeDocumentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDocumentVersionsError {
@@ -3266,7 +3266,7 @@ impl DescribeFolderContentsError {
 }
 impl fmt::Display for DescribeFolderContentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeFolderContentsError {
@@ -3323,7 +3323,7 @@ impl DescribeGroupsError {
 }
 impl fmt::Display for DescribeGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeGroupsError {
@@ -3377,7 +3377,7 @@ impl DescribeNotificationSubscriptionsError {
 }
 impl fmt::Display for DescribeNotificationSubscriptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNotificationSubscriptionsError {
@@ -3437,7 +3437,7 @@ impl DescribeResourcePermissionsError {
 }
 impl fmt::Display for DescribeResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResourcePermissionsError {
@@ -3501,7 +3501,7 @@ impl DescribeRootFoldersError {
 }
 impl fmt::Display for DescribeRootFoldersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRootFoldersError {
@@ -3572,7 +3572,7 @@ impl DescribeUsersError {
 }
 impl fmt::Display for DescribeUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUsersError {
@@ -3635,7 +3635,7 @@ impl GetCurrentUserError {
 }
 impl fmt::Display for GetCurrentUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCurrentUserError {
@@ -3704,7 +3704,7 @@ impl GetDocumentError {
 }
 impl fmt::Display for GetDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentError {
@@ -3767,7 +3767,7 @@ impl GetDocumentPathError {
 }
 impl fmt::Display for GetDocumentPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentPathError {
@@ -3840,7 +3840,7 @@ impl GetDocumentVersionError {
 }
 impl fmt::Display for GetDocumentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentVersionError {
@@ -3911,7 +3911,7 @@ impl GetFolderError {
 }
 impl fmt::Display for GetFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFolderError {
@@ -3972,7 +3972,7 @@ impl GetFolderPathError {
 }
 impl fmt::Display for GetFolderPathError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFolderPathError {
@@ -4031,7 +4031,7 @@ impl GetResourcesError {
 }
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcesError {
@@ -4142,7 +4142,7 @@ impl InitiateDocumentVersionUploadError {
 }
 impl fmt::Display for InitiateDocumentVersionUploadError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateDocumentVersionUploadError {
@@ -4210,7 +4210,7 @@ impl RemoveAllResourcePermissionsError {
 }
 impl fmt::Display for RemoveAllResourcePermissionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveAllResourcePermissionsError {
@@ -4269,7 +4269,7 @@ impl RemoveResourcePermissionError {
 }
 impl fmt::Display for RemoveResourcePermissionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveResourcePermissionError {
@@ -4356,7 +4356,7 @@ impl UpdateDocumentError {
 }
 impl fmt::Display for UpdateDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDocumentError {
@@ -4449,7 +4449,7 @@ impl UpdateDocumentVersionError {
 }
 impl fmt::Display for UpdateDocumentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDocumentVersionError {
@@ -4536,7 +4536,7 @@ impl UpdateFolderError {
 }
 impl fmt::Display for UpdateFolderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateFolderError {
@@ -4617,7 +4617,7 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserError {

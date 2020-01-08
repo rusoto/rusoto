@@ -1341,7 +1341,7 @@ impl CancelJobError {
 }
 impl fmt::Display for CancelJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelJobError {
@@ -1380,7 +1380,7 @@ impl CreateComputeEnvironmentError {
 }
 impl fmt::Display for CreateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateComputeEnvironmentError {
@@ -1419,7 +1419,7 @@ impl CreateJobQueueError {
 }
 impl fmt::Display for CreateJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateJobQueueError {
@@ -1458,7 +1458,7 @@ impl DeleteComputeEnvironmentError {
 }
 impl fmt::Display for DeleteComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteComputeEnvironmentError {
@@ -1497,7 +1497,7 @@ impl DeleteJobQueueError {
 }
 impl fmt::Display for DeleteJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteJobQueueError {
@@ -1536,7 +1536,7 @@ impl DeregisterJobDefinitionError {
 }
 impl fmt::Display for DeregisterJobDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterJobDefinitionError {
@@ -1577,7 +1577,7 @@ impl DescribeComputeEnvironmentsError {
 }
 impl fmt::Display for DescribeComputeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeComputeEnvironmentsError {
@@ -1616,7 +1616,7 @@ impl DescribeJobDefinitionsError {
 }
 impl fmt::Display for DescribeJobDefinitionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobDefinitionsError {
@@ -1655,7 +1655,7 @@ impl DescribeJobQueuesError {
 }
 impl fmt::Display for DescribeJobQueuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobQueuesError {
@@ -1694,7 +1694,7 @@ impl DescribeJobsError {
 }
 impl fmt::Display for DescribeJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeJobsError {
@@ -1729,7 +1729,7 @@ impl ListJobsError {
 }
 impl fmt::Display for ListJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListJobsError {
@@ -1768,7 +1768,7 @@ impl RegisterJobDefinitionError {
 }
 impl fmt::Display for RegisterJobDefinitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterJobDefinitionError {
@@ -1803,7 +1803,7 @@ impl SubmitJobError {
 }
 impl fmt::Display for SubmitJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SubmitJobError {
@@ -1842,7 +1842,7 @@ impl TerminateJobError {
 }
 impl fmt::Display for TerminateJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateJobError {
@@ -1881,7 +1881,7 @@ impl UpdateComputeEnvironmentError {
 }
 impl fmt::Display for UpdateComputeEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateComputeEnvironmentError {
@@ -1920,7 +1920,7 @@ impl UpdateJobQueueError {
 }
 impl fmt::Display for UpdateJobQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateJobQueueError {

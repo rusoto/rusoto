@@ -5765,7 +5765,7 @@ impl BatchUpdateScheduleError {
 }
 impl fmt::Display for BatchUpdateScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchUpdateScheduleError {
@@ -5840,7 +5840,7 @@ impl CreateChannelError {
 }
 impl fmt::Display for CreateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateChannelError {
@@ -5905,7 +5905,7 @@ impl CreateInputError {
 }
 impl fmt::Display for CreateInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInputError {
@@ -5974,7 +5974,7 @@ impl CreateInputSecurityGroupError {
 }
 impl fmt::Display for CreateInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInputSecurityGroupError {
@@ -6047,7 +6047,7 @@ impl CreateMultiplexError {
 }
 impl fmt::Display for CreateMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMultiplexError {
@@ -6130,7 +6130,7 @@ impl CreateMultiplexProgramError {
 }
 impl fmt::Display for CreateMultiplexProgramError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMultiplexProgramError {
@@ -6185,7 +6185,7 @@ impl CreateTagsError {
 }
 impl fmt::Display for CreateTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTagsError {
@@ -6256,7 +6256,7 @@ impl DeleteChannelError {
 }
 impl fmt::Display for DeleteChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteChannelError {
@@ -6331,7 +6331,7 @@ impl DeleteInputError {
 }
 impl fmt::Display for DeleteInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInputError {
@@ -6407,7 +6407,7 @@ impl DeleteInputSecurityGroupError {
 }
 impl fmt::Display for DeleteInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInputSecurityGroupError {
@@ -6481,7 +6481,7 @@ impl DeleteMultiplexError {
 }
 impl fmt::Display for DeleteMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMultiplexError {
@@ -6562,7 +6562,7 @@ impl DeleteMultiplexProgramError {
 }
 impl fmt::Display for DeleteMultiplexProgramError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMultiplexProgramError {
@@ -6639,7 +6639,7 @@ impl DeleteReservationError {
 }
 impl fmt::Display for DeleteReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReservationError {
@@ -6709,7 +6709,7 @@ impl DeleteScheduleError {
 }
 impl fmt::Display for DeleteScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScheduleError {
@@ -6763,7 +6763,7 @@ impl DeleteTagsError {
 }
 impl fmt::Display for DeleteTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTagsError {
@@ -6829,7 +6829,7 @@ impl DescribeChannelError {
 }
 impl fmt::Display for DescribeChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeChannelError {
@@ -6898,7 +6898,7 @@ impl DescribeInputError {
 }
 impl fmt::Display for DescribeInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInputError {
@@ -6981,7 +6981,7 @@ impl DescribeInputSecurityGroupError {
 }
 impl fmt::Display for DescribeInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeInputSecurityGroupError {
@@ -7052,7 +7052,7 @@ impl DescribeMultiplexError {
 }
 impl fmt::Display for DescribeMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMultiplexError {
@@ -7127,7 +7127,7 @@ impl DescribeMultiplexProgramError {
 }
 impl fmt::Display for DescribeMultiplexProgramError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMultiplexProgramError {
@@ -7198,7 +7198,7 @@ impl DescribeOfferingError {
 }
 impl fmt::Display for DescribeOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOfferingError {
@@ -7269,7 +7269,7 @@ impl DescribeReservationError {
 }
 impl fmt::Display for DescribeReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReservationError {
@@ -7340,7 +7340,7 @@ impl DescribeScheduleError {
 }
 impl fmt::Display for DescribeScheduleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScheduleError {
@@ -7404,7 +7404,7 @@ impl ListChannelsError {
 }
 impl fmt::Display for ListChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListChannelsError {
@@ -7473,7 +7473,7 @@ impl ListInputSecurityGroupsError {
 }
 impl fmt::Display for ListInputSecurityGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInputSecurityGroupsError {
@@ -7536,7 +7536,7 @@ impl ListInputsError {
 }
 impl fmt::Display for ListInputsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInputsError {
@@ -7610,7 +7610,7 @@ impl ListMultiplexProgramsError {
 }
 impl fmt::Display for ListMultiplexProgramsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMultiplexProgramsError {
@@ -7674,7 +7674,7 @@ impl ListMultiplexesError {
 }
 impl fmt::Display for ListMultiplexesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMultiplexesError {
@@ -7737,7 +7737,7 @@ impl ListOfferingsError {
 }
 impl fmt::Display for ListOfferingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOfferingsError {
@@ -7802,7 +7802,7 @@ impl ListReservationsError {
 }
 impl fmt::Display for ListReservationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReservationsError {
@@ -7857,7 +7857,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -7930,7 +7930,7 @@ impl PurchaseOfferingError {
 }
 impl fmt::Display for PurchaseOfferingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PurchaseOfferingError {
@@ -8005,7 +8005,7 @@ impl StartChannelError {
 }
 impl fmt::Display for StartChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartChannelError {
@@ -8080,7 +8080,7 @@ impl StartMultiplexError {
 }
 impl fmt::Display for StartMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartMultiplexError {
@@ -8155,7 +8155,7 @@ impl StopChannelError {
 }
 impl fmt::Display for StopChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopChannelError {
@@ -8230,7 +8230,7 @@ impl StopMultiplexError {
 }
 impl fmt::Display for StopMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopMultiplexError {
@@ -8300,7 +8300,7 @@ impl UpdateChannelError {
 }
 impl fmt::Display for UpdateChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateChannelError {
@@ -8383,7 +8383,7 @@ impl UpdateChannelClassError {
 }
 impl fmt::Display for UpdateChannelClassError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateChannelClassError {
@@ -8454,7 +8454,7 @@ impl UpdateInputError {
 }
 impl fmt::Display for UpdateInputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInputError {
@@ -8527,7 +8527,7 @@ impl UpdateInputSecurityGroupError {
 }
 impl fmt::Display for UpdateInputSecurityGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInputSecurityGroupError {
@@ -8601,7 +8601,7 @@ impl UpdateMultiplexError {
 }
 impl fmt::Display for UpdateMultiplexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMultiplexError {
@@ -8682,7 +8682,7 @@ impl UpdateMultiplexProgramError {
 }
 impl fmt::Display for UpdateMultiplexProgramError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateMultiplexProgramError {
@@ -8759,7 +8759,7 @@ impl UpdateReservationError {
 }
 impl fmt::Display for UpdateReservationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateReservationError {

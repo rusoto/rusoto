@@ -381,7 +381,7 @@ impl DescribeReportCreationError {
 }
 impl fmt::Display for DescribeReportCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeReportCreationError {
@@ -438,7 +438,7 @@ impl GetComplianceSummaryError {
 }
 impl fmt::Display for GetComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceSummaryError {
@@ -489,7 +489,7 @@ impl GetResourcesError {
 }
 impl fmt::Display for GetResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourcesError {
@@ -540,7 +540,7 @@ impl GetTagKeysError {
 }
 impl fmt::Display for GetTagKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagKeysError {
@@ -591,7 +591,7 @@ impl GetTagValuesError {
 }
 impl fmt::Display for GetTagValuesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTagValuesError {
@@ -653,7 +653,7 @@ impl StartReportCreationError {
 }
 impl fmt::Display for StartReportCreationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartReportCreationError {
@@ -700,7 +700,7 @@ impl TagResourcesError {
 }
 impl fmt::Display for TagResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourcesError {
@@ -745,7 +745,7 @@ impl UntagResourcesError {
 }
 impl fmt::Display for UntagResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourcesError {

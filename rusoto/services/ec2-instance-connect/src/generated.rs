@@ -98,7 +98,7 @@ impl SendSSHPublicKeyError {
 }
 impl fmt::Display for SendSSHPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendSSHPublicKeyError {

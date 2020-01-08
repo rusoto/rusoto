@@ -1204,7 +1204,7 @@ impl CreateAppError {
 }
 impl fmt::Display for CreateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAppError {
@@ -1297,7 +1297,7 @@ impl CreateReplicationJobError {
 }
 impl fmt::Display for CreateReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateReplicationJobError {
@@ -1358,7 +1358,7 @@ impl DeleteAppError {
 }
 impl fmt::Display for DeleteAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppError {
@@ -1427,7 +1427,7 @@ impl DeleteAppLaunchConfigurationError {
 }
 impl fmt::Display for DeleteAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppLaunchConfigurationError {
@@ -1496,7 +1496,7 @@ impl DeleteAppReplicationConfigurationError {
 }
 impl fmt::Display for DeleteAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAppReplicationConfigurationError {
@@ -1563,7 +1563,7 @@ impl DeleteReplicationJobError {
 }
 impl fmt::Display for DeleteReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteReplicationJobError {
@@ -1623,7 +1623,7 @@ impl DeleteServerCatalogError {
 }
 impl fmt::Display for DeleteServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServerCatalogError {
@@ -1682,7 +1682,7 @@ impl DisassociateConnectorError {
 }
 impl fmt::Display for DisassociateConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateConnectorError {
@@ -1744,7 +1744,7 @@ impl GenerateChangeSetError {
 }
 impl fmt::Display for GenerateChangeSetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateChangeSetError {
@@ -1807,7 +1807,7 @@ impl GenerateTemplateError {
 }
 impl fmt::Display for GenerateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateTemplateError {
@@ -1864,7 +1864,7 @@ impl GetAppError {
 }
 impl fmt::Display for GetAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAppError {
@@ -1931,7 +1931,7 @@ impl GetAppLaunchConfigurationError {
 }
 impl fmt::Display for GetAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAppLaunchConfigurationError {
@@ -2000,7 +2000,7 @@ impl GetAppReplicationConfigurationError {
 }
 impl fmt::Display for GetAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAppReplicationConfigurationError {
@@ -2037,7 +2037,7 @@ impl GetConnectorsError {
 }
 impl fmt::Display for GetConnectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConnectorsError {
@@ -2084,7 +2084,7 @@ impl GetReplicationJobsError {
 }
 impl fmt::Display for GetReplicationJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReplicationJobsError {
@@ -2133,7 +2133,7 @@ impl GetReplicationRunsError {
 }
 impl fmt::Display for GetReplicationRunsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetReplicationRunsError {
@@ -2168,7 +2168,7 @@ impl GetServersError {
 }
 impl fmt::Display for GetServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServersError {
@@ -2231,7 +2231,7 @@ impl ImportServerCatalogError {
 }
 impl fmt::Display for ImportServerCatalogError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportServerCatalogError {
@@ -2288,7 +2288,7 @@ impl LaunchAppError {
 }
 impl fmt::Display for LaunchAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LaunchAppError {
@@ -2345,7 +2345,7 @@ impl ListAppsError {
 }
 impl fmt::Display for ListAppsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAppsError {
@@ -2412,7 +2412,7 @@ impl PutAppLaunchConfigurationError {
 }
 impl fmt::Display for PutAppLaunchConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAppLaunchConfigurationError {
@@ -2481,7 +2481,7 @@ impl PutAppReplicationConfigurationError {
 }
 impl fmt::Display for PutAppReplicationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAppReplicationConfigurationError {
@@ -2546,7 +2546,7 @@ impl StartAppReplicationError {
 }
 impl fmt::Display for StartAppReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartAppReplicationError {
@@ -2615,7 +2615,7 @@ impl StartOnDemandReplicationRunError {
 }
 impl fmt::Display for StartOnDemandReplicationRunError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartOnDemandReplicationRunError {
@@ -2678,7 +2678,7 @@ impl StopAppReplicationError {
 }
 impl fmt::Display for StopAppReplicationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopAppReplicationError {
@@ -2737,7 +2737,7 @@ impl TerminateAppError {
 }
 impl fmt::Display for TerminateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TerminateAppError {
@@ -2794,7 +2794,7 @@ impl UpdateAppError {
 }
 impl fmt::Display for UpdateAppError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAppError {
@@ -2880,7 +2880,7 @@ impl UpdateReplicationJobError {
 }
 impl fmt::Display for UpdateReplicationJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateReplicationJobError {

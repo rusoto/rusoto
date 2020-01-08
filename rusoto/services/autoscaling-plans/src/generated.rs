@@ -505,7 +505,7 @@ impl CreateScalingPlanError {
 }
 impl fmt::Display for CreateScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateScalingPlanError {
@@ -550,7 +550,7 @@ impl DeleteScalingPlanError {
 }
 impl fmt::Display for DeleteScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteScalingPlanError {
@@ -603,7 +603,7 @@ impl DescribeScalingPlanResourcesError {
 }
 impl fmt::Display for DescribeScalingPlanResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingPlanResourcesError {
@@ -654,7 +654,7 @@ impl DescribeScalingPlansError {
 }
 impl fmt::Display for DescribeScalingPlansError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeScalingPlansError {
@@ -693,7 +693,7 @@ impl GetScalingPlanResourceForecastDataError {
 }
 impl fmt::Display for GetScalingPlanResourceForecastDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetScalingPlanResourceForecastDataError {
@@ -736,7 +736,7 @@ impl UpdateScalingPlanError {
 }
 impl fmt::Display for UpdateScalingPlanError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateScalingPlanError {

@@ -393,25 +393,25 @@ pub struct CloudFormationStackRecordSourceInfo {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CopySnapshotRequest {
-    /// <p><p>The date of the automatic snapshot to copy for the new manual snapshot.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The date of the source automatic snapshot to copy. Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "restoreDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_date: Option<String>,
     /// <p>The AWS Region where the source manual or automatic snapshot is located.</p>
     #[serde(rename = "sourceRegion")]
     pub source_region: String,
-    /// <p><p>The name of the source resource from which the automatic snapshot was created.</p> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The name of the source instance or disk from which the source automatic snapshot was created.</p> <p>Constraint:</p> <ul> <li> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "sourceResourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_resource_name: Option<String>,
-    /// <p><p>The name of the source instance or disk snapshot to be copied.</p> <note> <p>Define this parameter only when copying a manual snapshot as another manual snapshot.</p> </note></p>
+    /// <p><p>The name of the source manual snapshot to copy.</p> <p>Constraint:</p> <ul> <li> <p>Define this parameter only when copying a manual snapshot as another manual snapshot.</p> </li> </ul></p>
     #[serde(rename = "sourceSnapshotName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_snapshot_name: Option<String>,
-    /// <p>The name of the new instance or disk snapshot to be created as a copy.</p>
+    /// <p>The name of the new manual snapshot to be created as a copy.</p>
     #[serde(rename = "targetSnapshotName")]
     pub target_snapshot_name: String,
-    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot of the specified source instance or disk.</p> <p>Constraints:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "useLatestRestorableAutoSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_latest_restorable_auto_snapshot: Option<bool>,
@@ -454,18 +454,18 @@ pub struct CreateDiskFromSnapshotRequest {
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
     pub disk_name: String,
-    /// <p>The name of the disk snapshot (e.g., <code>my-snapshot</code>) from which to create the new storage disk.</p> <p>This parameter cannot be defined together with the <code>source disk name</code> parameter. The <code>disk snapshot name</code> and <code>source disk name</code> parameters are mutually exclusive.</p>
+    /// <p><p>The name of the disk snapshot (e.g., <code>my-snapshot</code>) from which to create the new storage disk.</p> <p>Constraint:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>source disk name</code> parameter. The <code>disk snapshot name</code> and <code>source disk name</code> parameters are mutually exclusive.</p> </li> </ul></p>
     #[serde(rename = "diskSnapshotName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_snapshot_name: Option<String>,
-    /// <p><p>The date of the automatic snapshot to use for the new disk.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The date of the automatic snapshot to use for the new disk. Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "restoreDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_date: Option<String>,
     /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
     #[serde(rename = "sizeInGb")]
     pub size_in_gb: i64,
-    /// <p><p>The name of the source disk from which the source automatic snapshot was created.</p> <p>This parameter cannot be defined together with the <code>disk snapshot name</code> parameter. The <code>source disk name</code> and <code>disk snapshot name</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The name of the source disk from which the source automatic snapshot was created.</p> <p>Constraints:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>disk snapshot name</code> parameter. The <code>source disk name</code> and <code>disk snapshot name</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "sourceDiskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_disk_name: Option<String>,
@@ -473,7 +473,7 @@ pub struct CreateDiskFromSnapshotRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>Constraints:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new disk from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "useLatestRestorableAutoSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_latest_restorable_auto_snapshot: Option<bool>,
@@ -627,7 +627,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     /// <p>The names for your new instances.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
-    /// <p>The name of the instance snapshot on which you are basing your new instances. Use the get instance snapshots operation to return information about your existing snapshots.</p> <p>This parameter cannot be defined together with the <code>source instance name</code> parameter. The <code>instance snapshot name</code> and <code>source instance name</code> parameters are mutually exclusive.</p>
+    /// <p><p>The name of the instance snapshot on which you are basing your new instances. Use the get instance snapshots operation to return information about your existing snapshots.</p> <p>Constraint:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>source instance name</code> parameter. The <code>instance snapshot name</code> and <code>source instance name</code> parameters are mutually exclusive.</p> </li> </ul></p>
     #[serde(rename = "instanceSnapshotName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_snapshot_name: Option<String>,
@@ -635,11 +635,11 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p><p>The date of the automatic snapshot to use for the new instance.</p> <p>Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> </ul> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The date of the automatic snapshot to use for the new instance. Use the <code>get auto snapshots</code> operation to identify the dates of the available automatic snapshots.</p> <p>Constraints:</p> <ul> <li> <p>Must be specified in <code>YYYY-MM-DD</code> format.</p> </li> <li> <p>This parameter cannot be defined together with the <code>use latest restorable auto snapshot</code> parameter. The <code>restore date</code> and <code>use latest restorable auto snapshot</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "restoreDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_date: Option<String>,
-    /// <p><p>The name of the source instance from which the source automatic snapshot was created.</p> <p>This parameter cannot be defined together with the <code>instance snapshot name</code> parameter. The <code>source instance name</code> and <code>instance snapshot name</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>The name of the source instance from which the source automatic snapshot was created.</p> <p>Constraints:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>instance snapshot name</code> parameter. The <code>source instance name</code> and <code>instance snapshot name</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "sourceInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_instance_name: Option<String>,
@@ -647,7 +647,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> <note> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </note></p>
+    /// <p><p>A Boolean value to indicate whether to use the latest available automatic snapshot.</p> <p>Constraints:</p> <ul> <li> <p>This parameter cannot be defined together with the <code>restore date</code> parameter. The <code>use latest restorable auto snapshot</code> and <code>restore date</code> parameters are mutually exclusive.</p> </li> <li> <p>Define this parameter only when creating a new instance from an automatic snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "useLatestRestorableAutoSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_latest_restorable_auto_snapshot: Option<bool>,
@@ -933,10 +933,10 @@ pub struct CreateRelationalDatabaseSnapshotResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAutoSnapshotRequest {
-    /// <p>The date of the automatic snapshot to delete in <code>YYYY-MM-DD</code> format.</p> <p>Use the <code>get auto snapshots</code> operation to get the available automatic snapshots for a resource.</p>
+    /// <p>The date of the automatic snapshot to delete in <code>YYYY-MM-DD</code> format. Use the <code>get auto snapshots</code> operation to get the available automatic snapshots for a resource.</p>
     #[serde(rename = "date")]
     pub date: String,
-    /// <p>The name of the source resource from which to delete the automatic snapshot.</p>
+    /// <p>The name of the source instance or disk from which to delete the automatic snapshot.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
 }
@@ -1238,7 +1238,7 @@ pub struct DisableAddOnRequest {
     /// <p>The add-on type to disable.</p>
     #[serde(rename = "addOnType")]
     pub add_on_type: String,
-    /// <p>The name of the source resource from which to disable the add-on.</p>
+    /// <p>The name of the source resource for which to disable the add-on.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
 }
@@ -1642,7 +1642,7 @@ pub struct GetActiveNamesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAutoSnapshotsRequest {
-    /// <p>The name of the source resource from which to get automatic snapshot information.</p>
+    /// <p>The name of the source instance or disk from which to get automatic snapshot information.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
 }
@@ -1650,11 +1650,11 @@ pub struct GetAutoSnapshotsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetAutoSnapshotsResult {
-    /// <p>An array of objects that describe the automatic snapshots that are available for the specified source resource.asdf</p>
+    /// <p>An array of objects that describe the automatic snapshots that are available for the specified source instance or disk.</p>
     #[serde(rename = "autoSnapshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_snapshots: Option<Vec<AutoSnapshotDetails>>,
-    /// <p>The name of the source resource for the automatic snapshots.</p>
+    /// <p>The name of the source instance or disk for the automatic snapshots.</p>
     #[serde(rename = "resourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
@@ -3578,6 +3578,10 @@ pub struct RelationalDatabase {
     #[serde(rename = "backupRetentionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_retention_enabled: Option<bool>,
+    /// <p>The certificate associated with the database.</p>
+    #[serde(rename = "caCertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_certificate_identifier: Option<String>,
     /// <p>The timestamp when the database was created. Formatted in Unix time.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4182,6 +4186,10 @@ pub struct UpdateRelationalDatabaseRequest {
     #[serde(rename = "applyImmediately")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_immediately: Option<bool>,
+    /// <p>Indicates the certificate that needs to be associated with the database.</p>
+    #[serde(rename = "caCertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_certificate_identifier: Option<String>,
     /// <p>When <code>true</code>, disables automated backup retention for your database.</p> <p>Disabling backup retention deletes all automated database backups. Before disabling this, you may want to create a snapshot of your database using the <code>create relational database snapshot</code> operation.</p> <p>Updates are applied during the next maintenance window because this can result in an outage.</p>
     #[serde(rename = "disableBackupRetention")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4279,7 +4287,7 @@ impl AllocateStaticIpError {
 }
 impl fmt::Display for AllocateStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AllocateStaticIpError {
@@ -4348,7 +4356,7 @@ impl AttachDiskError {
 }
 impl fmt::Display for AttachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachDiskError {
@@ -4433,7 +4441,7 @@ impl AttachInstancesToLoadBalancerError {
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachInstancesToLoadBalancerError {
@@ -4518,7 +4526,7 @@ impl AttachLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachLoadBalancerTlsCertificateError {
@@ -4589,7 +4597,7 @@ impl AttachStaticIpError {
 }
 impl fmt::Display for AttachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AttachStaticIpError {
@@ -4668,7 +4676,7 @@ impl CloseInstancePublicPortsError {
 }
 impl fmt::Display for CloseInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CloseInstancePublicPortsError {
@@ -4737,7 +4745,7 @@ impl CopySnapshotError {
 }
 impl fmt::Display for CopySnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CopySnapshotError {
@@ -4816,7 +4824,7 @@ impl CreateCloudFormationStackError {
 }
 impl fmt::Display for CreateCloudFormationStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCloudFormationStackError {
@@ -4885,7 +4893,7 @@ impl CreateDiskError {
 }
 impl fmt::Display for CreateDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDiskError {
@@ -4960,7 +4968,7 @@ impl CreateDiskFromSnapshotError {
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDiskFromSnapshotError {
@@ -5031,7 +5039,7 @@ impl CreateDiskSnapshotError {
 }
 impl fmt::Display for CreateDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDiskSnapshotError {
@@ -5100,7 +5108,7 @@ impl CreateDomainError {
 }
 impl fmt::Display for CreateDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainError {
@@ -5171,7 +5179,7 @@ impl CreateDomainEntryError {
 }
 impl fmt::Display for CreateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateDomainEntryError {
@@ -5246,7 +5254,7 @@ impl CreateInstanceSnapshotError {
 }
 impl fmt::Display for CreateInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstanceSnapshotError {
@@ -5317,7 +5325,7 @@ impl CreateInstancesError {
 }
 impl fmt::Display for CreateInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstancesError {
@@ -5400,7 +5408,7 @@ impl CreateInstancesFromSnapshotError {
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateInstancesFromSnapshotError {
@@ -5471,7 +5479,7 @@ impl CreateKeyPairError {
 }
 impl fmt::Display for CreateKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateKeyPairError {
@@ -5542,7 +5550,7 @@ impl CreateLoadBalancerError {
 }
 impl fmt::Display for CreateLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoadBalancerError {
@@ -5627,7 +5635,7 @@ impl CreateLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateLoadBalancerTlsCertificateError {
@@ -5706,7 +5714,7 @@ impl CreateRelationalDatabaseError {
 }
 impl fmt::Display for CreateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRelationalDatabaseError {
@@ -5791,7 +5799,7 @@ impl CreateRelationalDatabaseFromSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRelationalDatabaseFromSnapshotError {
@@ -5876,7 +5884,7 @@ impl CreateRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRelationalDatabaseSnapshotError {
@@ -5940,7 +5948,7 @@ impl DeleteAutoSnapshotError {
 }
 impl fmt::Display for DeleteAutoSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAutoSnapshotError {
@@ -6008,7 +6016,7 @@ impl DeleteDiskError {
 }
 impl fmt::Display for DeleteDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDiskError {
@@ -6079,7 +6087,7 @@ impl DeleteDiskSnapshotError {
 }
 impl fmt::Display for DeleteDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDiskSnapshotError {
@@ -6148,7 +6156,7 @@ impl DeleteDomainError {
 }
 impl fmt::Display for DeleteDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainError {
@@ -6219,7 +6227,7 @@ impl DeleteDomainEntryError {
 }
 impl fmt::Display for DeleteDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDomainEntryError {
@@ -6290,7 +6298,7 @@ impl DeleteInstanceError {
 }
 impl fmt::Display for DeleteInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstanceError {
@@ -6365,7 +6373,7 @@ impl DeleteInstanceSnapshotError {
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteInstanceSnapshotError {
@@ -6436,7 +6444,7 @@ impl DeleteKeyPairError {
 }
 impl fmt::Display for DeleteKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteKeyPairError {
@@ -6509,7 +6517,7 @@ impl DeleteKnownHostKeysError {
 }
 impl fmt::Display for DeleteKnownHostKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteKnownHostKeysError {
@@ -6580,7 +6588,7 @@ impl DeleteLoadBalancerError {
 }
 impl fmt::Display for DeleteLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoadBalancerError {
@@ -6665,7 +6673,7 @@ impl DeleteLoadBalancerTlsCertificateError {
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteLoadBalancerTlsCertificateError {
@@ -6744,7 +6752,7 @@ impl DeleteRelationalDatabaseError {
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRelationalDatabaseError {
@@ -6829,7 +6837,7 @@ impl DeleteRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRelationalDatabaseSnapshotError {
@@ -6898,7 +6906,7 @@ impl DetachDiskError {
 }
 impl fmt::Display for DetachDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachDiskError {
@@ -6983,7 +6991,7 @@ impl DetachInstancesFromLoadBalancerError {
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachInstancesFromLoadBalancerError {
@@ -7054,7 +7062,7 @@ impl DetachStaticIpError {
 }
 impl fmt::Display for DetachStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetachStaticIpError {
@@ -7118,7 +7126,7 @@ impl DisableAddOnError {
 }
 impl fmt::Display for DisableAddOnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableAddOnError {
@@ -7192,7 +7200,7 @@ impl DownloadDefaultKeyPairError {
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DownloadDefaultKeyPairError {
@@ -7256,7 +7264,7 @@ impl EnableAddOnError {
 }
 impl fmt::Display for EnableAddOnError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableAddOnError {
@@ -7326,7 +7334,7 @@ impl ExportSnapshotError {
 }
 impl fmt::Display for ExportSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ExportSnapshotError {
@@ -7397,7 +7405,7 @@ impl GetActiveNamesError {
 }
 impl fmt::Display for GetActiveNamesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetActiveNamesError {
@@ -7461,7 +7469,7 @@ impl GetAutoSnapshotsError {
 }
 impl fmt::Display for GetAutoSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAutoSnapshotsError {
@@ -7531,7 +7539,7 @@ impl GetBlueprintsError {
 }
 impl fmt::Display for GetBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBlueprintsError {
@@ -7600,7 +7608,7 @@ impl GetBundlesError {
 }
 impl fmt::Display for GetBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBundlesError {
@@ -7685,7 +7693,7 @@ impl GetCloudFormationStackRecordsError {
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCloudFormationStackRecordsError {
@@ -7752,7 +7760,7 @@ impl GetDiskError {
 }
 impl fmt::Display for GetDiskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDiskError {
@@ -7823,7 +7831,7 @@ impl GetDiskSnapshotError {
 }
 impl fmt::Display for GetDiskSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDiskSnapshotError {
@@ -7894,7 +7902,7 @@ impl GetDiskSnapshotsError {
 }
 impl fmt::Display for GetDiskSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDiskSnapshotsError {
@@ -7961,7 +7969,7 @@ impl GetDisksError {
 }
 impl fmt::Display for GetDisksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDisksError {
@@ -8030,7 +8038,7 @@ impl GetDomainError {
 }
 impl fmt::Display for GetDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainError {
@@ -8099,7 +8107,7 @@ impl GetDomainsError {
 }
 impl fmt::Display for GetDomainsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDomainsError {
@@ -8178,7 +8186,7 @@ impl GetExportSnapshotRecordsError {
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetExportSnapshotRecordsError {
@@ -8247,7 +8255,7 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceError {
@@ -8326,7 +8334,7 @@ impl GetInstanceAccessDetailsError {
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceAccessDetailsError {
@@ -8401,7 +8409,7 @@ impl GetInstanceMetricDataError {
 }
 impl fmt::Display for GetInstanceMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceMetricDataError {
@@ -8476,7 +8484,7 @@ impl GetInstancePortStatesError {
 }
 impl fmt::Display for GetInstancePortStatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstancePortStatesError {
@@ -8549,7 +8557,7 @@ impl GetInstanceSnapshotError {
 }
 impl fmt::Display for GetInstanceSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceSnapshotError {
@@ -8624,7 +8632,7 @@ impl GetInstanceSnapshotsError {
 }
 impl fmt::Display for GetInstanceSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceSnapshotsError {
@@ -8695,7 +8703,7 @@ impl GetInstanceStateError {
 }
 impl fmt::Display for GetInstanceStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceStateError {
@@ -8764,7 +8772,7 @@ impl GetInstancesError {
 }
 impl fmt::Display for GetInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstancesError {
@@ -8833,7 +8841,7 @@ impl GetKeyPairError {
 }
 impl fmt::Display for GetKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetKeyPairError {
@@ -8902,7 +8910,7 @@ impl GetKeyPairsError {
 }
 impl fmt::Display for GetKeyPairsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetKeyPairsError {
@@ -8973,7 +8981,7 @@ impl GetLoadBalancerError {
 }
 impl fmt::Display for GetLoadBalancerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoadBalancerError {
@@ -9052,7 +9060,7 @@ impl GetLoadBalancerMetricDataError {
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoadBalancerMetricDataError {
@@ -9137,7 +9145,7 @@ impl GetLoadBalancerTlsCertificatesError {
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoadBalancerTlsCertificatesError {
@@ -9208,7 +9216,7 @@ impl GetLoadBalancersError {
 }
 impl fmt::Display for GetLoadBalancersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetLoadBalancersError {
@@ -9277,7 +9285,7 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOperationError {
@@ -9348,7 +9356,7 @@ impl GetOperationsError {
 }
 impl fmt::Display for GetOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOperationsError {
@@ -9427,7 +9435,7 @@ impl GetOperationsForResourceError {
 }
 impl fmt::Display for GetOperationsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOperationsForResourceError {
@@ -9496,7 +9504,7 @@ impl GetRegionsError {
 }
 impl fmt::Display for GetRegionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRegionsError {
@@ -9571,7 +9579,7 @@ impl GetRelationalDatabaseError {
 }
 impl fmt::Display for GetRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseError {
@@ -9656,7 +9664,7 @@ impl GetRelationalDatabaseBlueprintsError {
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseBlueprintsError {
@@ -9741,7 +9749,7 @@ impl GetRelationalDatabaseBundlesError {
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseBundlesError {
@@ -9824,7 +9832,7 @@ impl GetRelationalDatabaseEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseEventsError {
@@ -9909,7 +9917,7 @@ impl GetRelationalDatabaseLogEventsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseLogEventsError {
@@ -9994,7 +10002,7 @@ impl GetRelationalDatabaseLogStreamsError {
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseLogStreamsError {
@@ -10081,7 +10089,7 @@ impl GetRelationalDatabaseMasterUserPasswordError {
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseMasterUserPasswordError {
@@ -10168,7 +10176,7 @@ impl GetRelationalDatabaseMetricDataError {
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseMetricDataError {
@@ -10253,7 +10261,7 @@ impl GetRelationalDatabaseParametersError {
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseParametersError {
@@ -10338,7 +10346,7 @@ impl GetRelationalDatabaseSnapshotError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseSnapshotError {
@@ -10423,7 +10431,7 @@ impl GetRelationalDatabaseSnapshotsError {
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabaseSnapshotsError {
@@ -10498,7 +10506,7 @@ impl GetRelationalDatabasesError {
 }
 impl fmt::Display for GetRelationalDatabasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRelationalDatabasesError {
@@ -10567,7 +10575,7 @@ impl GetStaticIpError {
 }
 impl fmt::Display for GetStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStaticIpError {
@@ -10636,7 +10644,7 @@ impl GetStaticIpsError {
 }
 impl fmt::Display for GetStaticIpsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetStaticIpsError {
@@ -10707,7 +10715,7 @@ impl ImportKeyPairError {
 }
 impl fmt::Display for ImportKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportKeyPairError {
@@ -10776,7 +10784,7 @@ impl IsVpcPeeredError {
 }
 impl fmt::Display for IsVpcPeeredError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for IsVpcPeeredError {
@@ -10855,7 +10863,7 @@ impl OpenInstancePublicPortsError {
 }
 impl fmt::Display for OpenInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for OpenInstancePublicPortsError {
@@ -10922,7 +10930,7 @@ impl PeerVpcError {
 }
 impl fmt::Display for PeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PeerVpcError {
@@ -10997,7 +11005,7 @@ impl PutInstancePublicPortsError {
 }
 impl fmt::Display for PutInstancePublicPortsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutInstancePublicPortsError {
@@ -11068,7 +11076,7 @@ impl RebootInstanceError {
 }
 impl fmt::Display for RebootInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootInstanceError {
@@ -11147,7 +11155,7 @@ impl RebootRelationalDatabaseError {
 }
 impl fmt::Display for RebootRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RebootRelationalDatabaseError {
@@ -11218,7 +11226,7 @@ impl ReleaseStaticIpError {
 }
 impl fmt::Display for ReleaseStaticIpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReleaseStaticIpError {
@@ -11289,7 +11297,7 @@ impl StartInstanceError {
 }
 impl fmt::Display for StartInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartInstanceError {
@@ -11368,7 +11376,7 @@ impl StartRelationalDatabaseError {
 }
 impl fmt::Display for StartRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartRelationalDatabaseError {
@@ -11437,7 +11445,7 @@ impl StopInstanceError {
 }
 impl fmt::Display for StopInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopInstanceError {
@@ -11512,7 +11520,7 @@ impl StopRelationalDatabaseError {
 }
 impl fmt::Display for StopRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopRelationalDatabaseError {
@@ -11581,7 +11589,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -11650,7 +11658,7 @@ impl UnpeerVpcError {
 }
 impl fmt::Display for UnpeerVpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UnpeerVpcError {
@@ -11721,7 +11729,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -11792,7 +11800,7 @@ impl UpdateDomainEntryError {
 }
 impl fmt::Display for UpdateDomainEntryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDomainEntryError {
@@ -11875,7 +11883,7 @@ impl UpdateLoadBalancerAttributeError {
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateLoadBalancerAttributeError {
@@ -11954,7 +11962,7 @@ impl UpdateRelationalDatabaseError {
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRelationalDatabaseError {
@@ -12039,7 +12047,7 @@ impl UpdateRelationalDatabaseParametersError {
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRelationalDatabaseParametersError {
@@ -12097,7 +12105,7 @@ pub trait Lightsail {
         input: CloseInstancePublicPortsRequest,
     ) -> Result<CloseInstancePublicPortsResult, RusotoError<CloseInstancePublicPortsError>>;
 
-    /// <p><p>Copies a manual instance or disk snapshot as another manual snapshot, or copies an automatic instance or disk snapshot as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p> <note> <p>Database snapshots cannot be copied at this time.</p> </note></p>
+    /// <p>Copies a manual snapshot of an instance or disk as another manual snapshot, or copies an automatic snapshot of an instance or disk as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p>
     async fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -12202,7 +12210,7 @@ pub trait Lightsail {
         RusotoError<CreateRelationalDatabaseSnapshotError>,
     >;
 
-    /// <p>Deletes an automatic snapshot for an instance or disk.</p>
+    /// <p>Deletes an automatic snapshot of an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn delete_auto_snapshot(
         &self,
         input: DeleteAutoSnapshotRequest,
@@ -12336,7 +12344,7 @@ pub trait Lightsail {
         input: GetActiveNamesRequest,
     ) -> Result<GetActiveNamesResult, RusotoError<GetActiveNamesError>>;
 
-    /// <p>Returns the available automatic snapshots for the specified resource name. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    /// <p>Returns the available automatic snapshots for an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn get_auto_snapshots(
         &self,
         input: GetAutoSnapshotsRequest,
@@ -12717,7 +12725,7 @@ pub trait Lightsail {
         input: UpdateRelationalDatabaseRequest,
     ) -> Result<UpdateRelationalDatabaseResult, RusotoError<UpdateRelationalDatabaseError>>;
 
-    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which parameter updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn update_relational_database_parameters(
         &self,
         input: UpdateRelationalDatabaseParametersRequest,
@@ -12946,7 +12954,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p><p>Copies a manual instance or disk snapshot as another manual snapshot, or copies an automatic instance or disk snapshot as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p> <note> <p>Database snapshots cannot be copied at this time.</p> </note></p>
+    /// <p>Copies a manual snapshot of an instance or disk as another manual snapshot, or copies an automatic snapshot of an instance or disk as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p>
     async fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -13422,7 +13430,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Deletes an automatic snapshot for an instance or disk.</p>
+    /// <p>Deletes an automatic snapshot of an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn delete_auto_snapshot(
         &self,
         input: DeleteAutoSnapshotRequest,
@@ -14024,7 +14032,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Returns the available automatic snapshots for the specified resource name. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
+    /// <p>Returns the available automatic snapshots for an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn get_auto_snapshots(
         &self,
         input: GetAutoSnapshotsRequest,
@@ -15784,7 +15792,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which parameter updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn update_relational_database_parameters(
         &self,
         input: UpdateRelationalDatabaseParametersRequest,

@@ -33,7 +33,7 @@ pub type RusotoResult<T, E> = Result<T, RusotoError<E>>;
 impl<E> From<XmlParseError> for RusotoError<E> {
     fn from(err: XmlParseError) -> Self {
         let XmlParseError(message) = err;
-        RusotoError::ParseError(message.to_string())
+        RusotoError::ParseError(message)
     }
 }
 

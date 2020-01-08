@@ -55,7 +55,7 @@ pub trait GenerateErrorTypes {
                 {error_from_body_impl}
                 impl fmt::Display for {type_name} {{
                     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
-                        write!(f, \"{{}}\", self.description())
+                        write!(f, \"{{}}\", self.to_string())
                     }}
                 }}
                 impl Error for {type_name} {{

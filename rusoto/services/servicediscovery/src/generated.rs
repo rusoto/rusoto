@@ -959,7 +959,7 @@ impl CreateHttpNamespaceError {
 }
 impl fmt::Display for CreateHttpNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHttpNamespaceError {
@@ -1018,7 +1018,7 @@ impl CreatePrivateDnsNamespaceError {
 }
 impl fmt::Display for CreatePrivateDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePrivateDnsNamespaceError {
@@ -1077,7 +1077,7 @@ impl CreatePublicDnsNamespaceError {
 }
 impl fmt::Display for CreatePublicDnsNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePublicDnsNamespaceError {
@@ -1128,7 +1128,7 @@ impl CreateServiceError {
 }
 impl fmt::Display for CreateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateServiceError {
@@ -1179,7 +1179,7 @@ impl DeleteNamespaceError {
 }
 impl fmt::Display for DeleteNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNamespaceError {
@@ -1225,7 +1225,7 @@ impl DeleteServiceError {
 }
 impl fmt::Display for DeleteServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteServiceError {
@@ -1280,7 +1280,7 @@ impl DeregisterInstanceError {
 }
 impl fmt::Display for DeregisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeregisterInstanceError {
@@ -1327,7 +1327,7 @@ impl DiscoverInstancesError {
 }
 impl fmt::Display for DiscoverInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DiscoverInstancesError {
@@ -1372,7 +1372,7 @@ impl GetInstanceError {
 }
 impl fmt::Display for GetInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstanceError {
@@ -1423,7 +1423,7 @@ impl GetInstancesHealthStatusError {
 }
 impl fmt::Display for GetInstancesHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInstancesHealthStatusError {
@@ -1463,7 +1463,7 @@ impl GetNamespaceError {
 }
 impl fmt::Display for GetNamespaceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetNamespaceError {
@@ -1502,7 +1502,7 @@ impl GetOperationError {
 }
 impl fmt::Display for GetOperationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOperationError {
@@ -1541,7 +1541,7 @@ impl GetServiceError {
 }
 impl fmt::Display for GetServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetServiceError {
@@ -1580,7 +1580,7 @@ impl ListInstancesError {
 }
 impl fmt::Display for ListInstancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListInstancesError {
@@ -1614,7 +1614,7 @@ impl ListNamespacesError {
 }
 impl fmt::Display for ListNamespacesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListNamespacesError {
@@ -1647,7 +1647,7 @@ impl ListOperationsError {
 }
 impl fmt::Display for ListOperationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListOperationsError {
@@ -1680,7 +1680,7 @@ impl ListServicesError {
 }
 impl fmt::Display for ListServicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListServicesError {
@@ -1735,7 +1735,7 @@ impl RegisterInstanceError {
 }
 impl fmt::Display for RegisterInstanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterInstanceError {
@@ -1797,7 +1797,7 @@ impl UpdateInstanceCustomHealthStatusError {
 }
 impl fmt::Display for UpdateInstanceCustomHealthStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateInstanceCustomHealthStatusError {
@@ -1843,7 +1843,7 @@ impl UpdateServiceError {
 }
 impl fmt::Display for UpdateServiceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateServiceError {

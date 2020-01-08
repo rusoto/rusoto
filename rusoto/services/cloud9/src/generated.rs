@@ -384,7 +384,7 @@ impl CreateEnvironmentEC2Error {
 }
 impl fmt::Display for CreateEnvironmentEC2Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEnvironmentEC2Error {
@@ -469,7 +469,7 @@ impl CreateEnvironmentMembershipError {
 }
 impl fmt::Display for CreateEnvironmentMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateEnvironmentMembershipError {
@@ -540,7 +540,7 @@ impl DeleteEnvironmentError {
 }
 impl fmt::Display for DeleteEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEnvironmentError {
@@ -625,7 +625,7 @@ impl DeleteEnvironmentMembershipError {
 }
 impl fmt::Display for DeleteEnvironmentMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEnvironmentMembershipError {
@@ -710,7 +710,7 @@ impl DescribeEnvironmentMembershipsError {
 }
 impl fmt::Display for DescribeEnvironmentMembershipsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentMembershipsError {
@@ -787,7 +787,7 @@ impl DescribeEnvironmentStatusError {
 }
 impl fmt::Display for DescribeEnvironmentStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentStatusError {
@@ -860,7 +860,7 @@ impl DescribeEnvironmentsError {
 }
 impl fmt::Display for DescribeEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEnvironmentsError {
@@ -931,7 +931,7 @@ impl ListEnvironmentsError {
 }
 impl fmt::Display for ListEnvironmentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListEnvironmentsError {
@@ -1002,7 +1002,7 @@ impl UpdateEnvironmentError {
 }
 impl fmt::Display for UpdateEnvironmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEnvironmentError {
@@ -1087,7 +1087,7 @@ impl UpdateEnvironmentMembershipError {
 }
 impl fmt::Display for UpdateEnvironmentMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEnvironmentMembershipError {

@@ -1567,7 +1567,7 @@ impl AcceptQualificationRequestError {
 }
 impl fmt::Display for AcceptQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AcceptQualificationRequestError {
@@ -1606,7 +1606,7 @@ impl ApproveAssignmentError {
 }
 impl fmt::Display for ApproveAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ApproveAssignmentError {
@@ -1651,7 +1651,7 @@ impl AssociateQualificationWithWorkerError {
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateQualificationWithWorkerError {
@@ -1696,7 +1696,7 @@ impl CreateAdditionalAssignmentsForHITError {
 }
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAdditionalAssignmentsForHITError {
@@ -1735,7 +1735,7 @@ impl CreateHITError {
 }
 impl fmt::Display for CreateHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHITError {
@@ -1774,7 +1774,7 @@ impl CreateHITTypeError {
 }
 impl fmt::Display for CreateHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHITTypeError {
@@ -1813,7 +1813,7 @@ impl CreateHITWithHITTypeError {
 }
 impl fmt::Display for CreateHITWithHITTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateHITWithHITTypeError {
@@ -1856,7 +1856,7 @@ impl CreateQualificationTypeError {
 }
 impl fmt::Display for CreateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateQualificationTypeError {
@@ -1895,7 +1895,7 @@ impl CreateWorkerBlockError {
 }
 impl fmt::Display for CreateWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateWorkerBlockError {
@@ -1934,7 +1934,7 @@ impl DeleteHITError {
 }
 impl fmt::Display for DeleteHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteHITError {
@@ -1977,7 +1977,7 @@ impl DeleteQualificationTypeError {
 }
 impl fmt::Display for DeleteQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteQualificationTypeError {
@@ -2016,7 +2016,7 @@ impl DeleteWorkerBlockError {
 }
 impl fmt::Display for DeleteWorkerBlockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteWorkerBlockError {
@@ -2061,7 +2061,7 @@ impl DisassociateQualificationFromWorkerError {
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateQualificationFromWorkerError {
@@ -2100,7 +2100,7 @@ impl GetAccountBalanceError {
 }
 impl fmt::Display for GetAccountBalanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountBalanceError {
@@ -2139,7 +2139,7 @@ impl GetAssignmentError {
 }
 impl fmt::Display for GetAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAssignmentError {
@@ -2178,7 +2178,7 @@ impl GetFileUploadURLError {
 }
 impl fmt::Display for GetFileUploadURLError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetFileUploadURLError {
@@ -2213,7 +2213,7 @@ impl GetHITError {
 }
 impl fmt::Display for GetHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetHITError {
@@ -2252,7 +2252,7 @@ impl GetQualificationScoreError {
 }
 impl fmt::Display for GetQualificationScoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetQualificationScoreError {
@@ -2291,7 +2291,7 @@ impl GetQualificationTypeError {
 }
 impl fmt::Display for GetQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetQualificationTypeError {
@@ -2330,7 +2330,7 @@ impl ListAssignmentsForHITError {
 }
 impl fmt::Display for ListAssignmentsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAssignmentsForHITError {
@@ -2369,7 +2369,7 @@ impl ListBonusPaymentsError {
 }
 impl fmt::Display for ListBonusPaymentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBonusPaymentsError {
@@ -2408,7 +2408,7 @@ impl ListHITsError {
 }
 impl fmt::Display for ListHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHITsError {
@@ -2453,7 +2453,7 @@ impl ListHITsForQualificationTypeError {
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListHITsForQualificationTypeError {
@@ -2496,7 +2496,7 @@ impl ListQualificationRequestsError {
 }
 impl fmt::Display for ListQualificationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListQualificationRequestsError {
@@ -2535,7 +2535,7 @@ impl ListQualificationTypesError {
 }
 impl fmt::Display for ListQualificationTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListQualificationTypesError {
@@ -2580,7 +2580,7 @@ impl ListReviewPolicyResultsForHITError {
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReviewPolicyResultsForHITError {
@@ -2619,7 +2619,7 @@ impl ListReviewableHITsError {
 }
 impl fmt::Display for ListReviewableHITsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListReviewableHITsError {
@@ -2658,7 +2658,7 @@ impl ListWorkerBlocksError {
 }
 impl fmt::Display for ListWorkerBlocksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkerBlocksError {
@@ -2703,7 +2703,7 @@ impl ListWorkersWithQualificationTypeError {
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListWorkersWithQualificationTypeError {
@@ -2742,7 +2742,7 @@ impl NotifyWorkersError {
 }
 impl fmt::Display for NotifyWorkersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for NotifyWorkersError {
@@ -2781,7 +2781,7 @@ impl RejectAssignmentError {
 }
 impl fmt::Display for RejectAssignmentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectAssignmentError {
@@ -2826,7 +2826,7 @@ impl RejectQualificationRequestError {
 }
 impl fmt::Display for RejectQualificationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RejectQualificationRequestError {
@@ -2865,7 +2865,7 @@ impl SendBonusError {
 }
 impl fmt::Display for SendBonusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendBonusError {
@@ -2908,7 +2908,7 @@ impl SendTestEventNotificationError {
 }
 impl fmt::Display for SendTestEventNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SendTestEventNotificationError {
@@ -2947,7 +2947,7 @@ impl UpdateExpirationForHITError {
 }
 impl fmt::Display for UpdateExpirationForHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateExpirationForHITError {
@@ -2986,7 +2986,7 @@ impl UpdateHITReviewStatusError {
 }
 impl fmt::Display for UpdateHITReviewStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateHITReviewStatusError {
@@ -3025,7 +3025,7 @@ impl UpdateHITTypeOfHITError {
 }
 impl fmt::Display for UpdateHITTypeOfHITError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateHITTypeOfHITError {
@@ -3070,7 +3070,7 @@ impl UpdateNotificationSettingsError {
 }
 impl fmt::Display for UpdateNotificationSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNotificationSettingsError {
@@ -3113,7 +3113,7 @@ impl UpdateQualificationTypeError {
 }
 impl fmt::Display for UpdateQualificationTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateQualificationTypeError {

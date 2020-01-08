@@ -621,7 +621,7 @@ impl AssociateDRTLogBucketError {
 }
 impl fmt::Display for AssociateDRTLogBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDRTLogBucketError {
@@ -688,7 +688,7 @@ impl AssociateDRTRoleError {
 }
 impl fmt::Display for AssociateDRTRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDRTRoleError {
@@ -758,7 +758,7 @@ impl CreateProtectionError {
 }
 impl fmt::Display for CreateProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProtectionError {
@@ -804,7 +804,7 @@ impl CreateSubscriptionError {
 }
 impl fmt::Display for CreateSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSubscriptionError {
@@ -848,7 +848,7 @@ impl DeleteProtectionError {
 }
 impl fmt::Display for DeleteProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProtectionError {
@@ -895,7 +895,7 @@ impl DeleteSubscriptionError {
 }
 impl fmt::Display for DeleteSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSubscriptionError {
@@ -935,7 +935,7 @@ impl DescribeAttackError {
 }
 impl fmt::Display for DescribeAttackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAttackError {
@@ -974,7 +974,7 @@ impl DescribeDRTAccessError {
 }
 impl fmt::Display for DescribeDRTAccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDRTAccessError {
@@ -1019,7 +1019,7 @@ impl DescribeEmergencyContactSettingsError {
 }
 impl fmt::Display for DescribeEmergencyContactSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeEmergencyContactSettingsError {
@@ -1063,7 +1063,7 @@ impl DescribeProtectionError {
 }
 impl fmt::Display for DescribeProtectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeProtectionError {
@@ -1105,7 +1105,7 @@ impl DescribeSubscriptionError {
 }
 impl fmt::Display for DescribeSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSubscriptionError {
@@ -1176,7 +1176,7 @@ impl DisassociateDRTLogBucketError {
 }
 impl fmt::Display for DisassociateDRTLogBucketError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDRTLogBucketError {
@@ -1233,7 +1233,7 @@ impl DisassociateDRTRoleError {
 }
 impl fmt::Display for DisassociateDRTRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDRTRoleError {
@@ -1269,7 +1269,7 @@ impl GetSubscriptionStateError {
 }
 impl fmt::Display for GetSubscriptionStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSubscriptionStateError {
@@ -1312,7 +1312,7 @@ impl ListAttacksError {
 }
 impl fmt::Display for ListAttacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttacksError {
@@ -1359,7 +1359,7 @@ impl ListProtectionsError {
 }
 impl fmt::Display for ListProtectionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProtectionsError {
@@ -1419,7 +1419,7 @@ impl UpdateEmergencyContactSettingsError {
 }
 impl fmt::Display for UpdateEmergencyContactSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateEmergencyContactSettingsError {
@@ -1477,7 +1477,7 @@ impl UpdateSubscriptionError {
 }
 impl fmt::Display for UpdateSubscriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSubscriptionError {

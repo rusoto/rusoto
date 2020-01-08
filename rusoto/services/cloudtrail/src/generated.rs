@@ -942,7 +942,7 @@ impl AddTagsError {
 }
 impl fmt::Display for AddTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddTagsError {
@@ -1135,7 +1135,7 @@ impl CreateTrailError {
 }
 impl fmt::Display for CreateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateTrailError {
@@ -1228,7 +1228,7 @@ impl DeleteTrailError {
 }
 impl fmt::Display for DeleteTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTrailError {
@@ -1279,7 +1279,7 @@ impl DescribeTrailsError {
 }
 impl fmt::Display for DescribeTrailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeTrailsError {
@@ -1333,7 +1333,7 @@ impl GetEventSelectorsError {
 }
 impl fmt::Display for GetEventSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEventSelectorsError {
@@ -1397,7 +1397,7 @@ impl GetInsightSelectorsError {
 }
 impl fmt::Display for GetInsightSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetInsightSelectorsError {
@@ -1449,7 +1449,7 @@ impl GetTrailError {
 }
 impl fmt::Display for GetTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTrailError {
@@ -1502,7 +1502,7 @@ impl GetTrailStatusError {
 }
 impl fmt::Display for GetTrailStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTrailStatusError {
@@ -1555,7 +1555,7 @@ impl ListPublicKeysError {
 }
 impl fmt::Display for ListPublicKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPublicKeysError {
@@ -1621,7 +1621,7 @@ impl ListTagsError {
 }
 impl fmt::Display for ListTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsError {
@@ -1665,7 +1665,7 @@ impl ListTrailsError {
 }
 impl fmt::Display for ListTrailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTrailsError {
@@ -1731,7 +1731,7 @@ impl LookupEventsError {
 }
 impl fmt::Display for LookupEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LookupEventsError {
@@ -1817,7 +1817,7 @@ impl PutEventSelectorsError {
 }
 impl fmt::Display for PutEventSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutEventSelectorsError {
@@ -1915,7 +1915,7 @@ impl PutInsightSelectorsError {
 }
 impl fmt::Display for PutInsightSelectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutInsightSelectorsError {
@@ -1993,7 +1993,7 @@ impl RemoveTagsError {
 }
 impl fmt::Display for RemoveTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RemoveTagsError {
@@ -2067,7 +2067,7 @@ impl StartLoggingError {
 }
 impl fmt::Display for StartLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartLoggingError {
@@ -2140,7 +2140,7 @@ impl StopLoggingError {
 }
 impl fmt::Display for StopLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopLoggingError {
@@ -2329,7 +2329,7 @@ impl UpdateTrailError {
 }
 impl fmt::Display for UpdateTrailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateTrailError {

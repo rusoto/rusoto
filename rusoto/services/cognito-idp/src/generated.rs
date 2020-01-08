@@ -4090,7 +4090,7 @@ impl AddCustomAttributesError {
 }
 impl fmt::Display for AddCustomAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AddCustomAttributesError {
@@ -4157,7 +4157,7 @@ impl AdminAddUserToGroupError {
 }
 impl fmt::Display for AdminAddUserToGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminAddUserToGroupError {
@@ -4251,7 +4251,7 @@ impl AdminConfirmSignUpError {
 }
 impl fmt::Display for AdminConfirmSignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminConfirmSignUpError {
@@ -4379,7 +4379,7 @@ impl AdminCreateUserError {
 }
 impl fmt::Display for AdminCreateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminCreateUserError {
@@ -4452,7 +4452,7 @@ impl AdminDeleteUserError {
 }
 impl fmt::Display for AdminDeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminDeleteUserError {
@@ -4527,7 +4527,7 @@ impl AdminDeleteUserAttributesError {
 }
 impl fmt::Display for AdminDeleteUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminDeleteUserAttributesError {
@@ -4611,7 +4611,7 @@ impl AdminDisableProviderForUserError {
 }
 impl fmt::Display for AdminDisableProviderForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminDisableProviderForUserError {
@@ -4675,7 +4675,7 @@ impl AdminDisableUserError {
 }
 impl fmt::Display for AdminDisableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminDisableUserError {
@@ -4738,7 +4738,7 @@ impl AdminEnableUserError {
 }
 impl fmt::Display for AdminEnableUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminEnableUserError {
@@ -4808,7 +4808,7 @@ impl AdminForgetDeviceError {
 }
 impl fmt::Display for AdminForgetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminForgetDeviceError {
@@ -4874,7 +4874,7 @@ impl AdminGetDeviceError {
 }
 impl fmt::Display for AdminGetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminGetDeviceError {
@@ -4937,7 +4937,7 @@ impl AdminGetUserError {
 }
 impl fmt::Display for AdminGetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminGetUserError {
@@ -5057,7 +5057,7 @@ impl AdminInitiateAuthError {
 }
 impl fmt::Display for AdminInitiateAuthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminInitiateAuthError {
@@ -5148,7 +5148,7 @@ impl AdminLinkProviderForUserError {
 }
 impl fmt::Display for AdminLinkProviderForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminLinkProviderForUserError {
@@ -5214,7 +5214,7 @@ impl AdminListDevicesError {
 }
 impl fmt::Display for AdminListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminListDevicesError {
@@ -5287,7 +5287,7 @@ impl AdminListGroupsForUserError {
 }
 impl fmt::Display for AdminListGroupsForUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminListGroupsForUserError {
@@ -5369,7 +5369,7 @@ impl AdminListUserAuthEventsError {
 }
 impl fmt::Display for AdminListUserAuthEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminListUserAuthEventsError {
@@ -5445,7 +5445,7 @@ impl AdminRemoveUserFromGroupError {
 }
 impl fmt::Display for AdminRemoveUserFromGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminRemoveUserFromGroupError {
@@ -5567,7 +5567,7 @@ impl AdminResetUserPasswordError {
 }
 impl fmt::Display for AdminResetUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminResetUserPasswordError {
@@ -5749,7 +5749,7 @@ impl AdminRespondToAuthChallengeError {
 }
 impl fmt::Display for AdminRespondToAuthChallengeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminRespondToAuthChallengeError {
@@ -5845,7 +5845,7 @@ impl AdminSetUserMFAPreferenceError {
 }
 impl fmt::Display for AdminSetUserMFAPreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminSetUserMFAPreferenceError {
@@ -5922,7 +5922,7 @@ impl AdminSetUserPasswordError {
 }
 impl fmt::Display for AdminSetUserPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminSetUserPasswordError {
@@ -5985,7 +5985,7 @@ impl AdminSetUserSettingsError {
 }
 impl fmt::Display for AdminSetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminSetUserSettingsError {
@@ -6068,7 +6068,7 @@ impl AdminUpdateAuthEventFeedbackError {
 }
 impl fmt::Display for AdminUpdateAuthEventFeedbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminUpdateAuthEventFeedbackError {
@@ -6151,7 +6151,7 @@ impl AdminUpdateDeviceStatusError {
 }
 impl fmt::Display for AdminUpdateDeviceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminUpdateDeviceStatusError {
@@ -6276,7 +6276,7 @@ impl AdminUpdateUserAttributesError {
 }
 impl fmt::Display for AdminUpdateUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminUpdateUserAttributesError {
@@ -6356,7 +6356,7 @@ impl AdminUserGlobalSignOutError {
 }
 impl fmt::Display for AdminUserGlobalSignOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AdminUserGlobalSignOutError {
@@ -6424,7 +6424,7 @@ impl AssociateSoftwareTokenError {
 }
 impl fmt::Display for AssociateSoftwareTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateSoftwareTokenError {
@@ -6508,7 +6508,7 @@ impl ChangePasswordError {
 }
 impl fmt::Display for ChangePasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ChangePasswordError {
@@ -6607,7 +6607,7 @@ impl ConfirmDeviceError {
 }
 impl fmt::Display for ConfirmDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmDeviceError {
@@ -6739,7 +6739,7 @@ impl ConfirmForgotPasswordError {
 }
 impl fmt::Display for ConfirmForgotPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmForgotPasswordError {
@@ -6851,7 +6851,7 @@ impl ConfirmSignUpError {
 }
 impl fmt::Display for ConfirmSignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConfirmSignUpError {
@@ -6927,7 +6927,7 @@ impl CreateGroupError {
 }
 impl fmt::Display for CreateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGroupError {
@@ -7010,7 +7010,7 @@ impl CreateIdentityProviderError {
 }
 impl fmt::Display for CreateIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIdentityProviderError {
@@ -7080,7 +7080,7 @@ impl CreateResourceServerError {
 }
 impl fmt::Display for CreateResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateResourceServerError {
@@ -7154,7 +7154,7 @@ impl CreateUserImportJobError {
 }
 impl fmt::Display for CreateUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserImportJobError {
@@ -7239,7 +7239,7 @@ impl CreateUserPoolError {
 }
 impl fmt::Display for CreateUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserPoolError {
@@ -7325,7 +7325,7 @@ impl CreateUserPoolClientError {
 }
 impl fmt::Display for CreateUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserPoolClientError {
@@ -7389,7 +7389,7 @@ impl CreateUserPoolDomainError {
 }
 impl fmt::Display for CreateUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateUserPoolDomainError {
@@ -7446,7 +7446,7 @@ impl DeleteGroupError {
 }
 impl fmt::Display for DeleteGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteGroupError {
@@ -7520,7 +7520,7 @@ impl DeleteIdentityProviderError {
 }
 impl fmt::Display for DeleteIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIdentityProviderError {
@@ -7584,7 +7584,7 @@ impl DeleteResourceServerError {
 }
 impl fmt::Display for DeleteResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceServerError {
@@ -7656,7 +7656,7 @@ impl DeleteUserError {
 }
 impl fmt::Display for DeleteUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserError {
@@ -7741,7 +7741,7 @@ impl DeleteUserAttributesError {
 }
 impl fmt::Display for DeleteUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserAttributesError {
@@ -7806,7 +7806,7 @@ impl DeleteUserPoolError {
 }
 impl fmt::Display for DeleteUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserPoolError {
@@ -7870,7 +7870,7 @@ impl DeleteUserPoolClientError {
 }
 impl fmt::Display for DeleteUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserPoolClientError {
@@ -7926,7 +7926,7 @@ impl DeleteUserPoolDomainError {
 }
 impl fmt::Display for DeleteUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUserPoolDomainError {
@@ -7992,7 +7992,7 @@ impl DescribeIdentityProviderError {
 }
 impl fmt::Display for DescribeIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeIdentityProviderError {
@@ -8059,7 +8059,7 @@ impl DescribeResourceServerError {
 }
 impl fmt::Display for DescribeResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeResourceServerError {
@@ -8133,7 +8133,7 @@ impl DescribeRiskConfigurationError {
 }
 impl fmt::Display for DescribeRiskConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRiskConfigurationError {
@@ -8197,7 +8197,7 @@ impl DescribeUserImportJobError {
 }
 impl fmt::Display for DescribeUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserImportJobError {
@@ -8259,7 +8259,7 @@ impl DescribeUserPoolError {
 }
 impl fmt::Display for DescribeUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserPoolError {
@@ -8327,7 +8327,7 @@ impl DescribeUserPoolClientError {
 }
 impl fmt::Display for DescribeUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserPoolClientError {
@@ -8387,7 +8387,7 @@ impl DescribeUserPoolDomainError {
 }
 impl fmt::Display for DescribeUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeUserPoolDomainError {
@@ -8465,7 +8465,7 @@ impl ForgetDeviceError {
 }
 impl fmt::Display for ForgetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ForgetDeviceError {
@@ -8584,7 +8584,7 @@ impl ForgotPasswordError {
 }
 impl fmt::Display for ForgotPasswordError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ForgotPasswordError {
@@ -8651,7 +8651,7 @@ impl GetCSVHeaderError {
 }
 impl fmt::Display for GetCSVHeaderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetCSVHeaderError {
@@ -8730,7 +8730,7 @@ impl GetDeviceError {
 }
 impl fmt::Display for GetDeviceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDeviceError {
@@ -8791,7 +8791,7 @@ impl GetGroupError {
 }
 impl fmt::Display for GetGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGroupError {
@@ -8860,7 +8860,7 @@ impl GetIdentityProviderByIdentifierError {
 }
 impl fmt::Display for GetIdentityProviderByIdentifierError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIdentityProviderByIdentifierError {
@@ -8911,7 +8911,7 @@ impl GetSigningCertificateError {
 }
 impl fmt::Display for GetSigningCertificateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSigningCertificateError {
@@ -8966,7 +8966,7 @@ impl GetUICustomizationError {
 }
 impl fmt::Display for GetUICustomizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUICustomizationError {
@@ -9038,7 +9038,7 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserError {
@@ -9191,7 +9191,7 @@ impl GetUserAttributeVerificationCodeError {
 }
 impl fmt::Display for GetUserAttributeVerificationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserAttributeVerificationCodeError {
@@ -9267,7 +9267,7 @@ impl GetUserPoolMfaConfigError {
 }
 impl fmt::Display for GetUserPoolMfaConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserPoolMfaConfigError {
@@ -9334,7 +9334,7 @@ impl GlobalSignOutError {
 }
 impl fmt::Display for GlobalSignOutError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GlobalSignOutError {
@@ -9444,7 +9444,7 @@ impl InitiateAuthError {
 }
 impl fmt::Display for InitiateAuthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InitiateAuthError {
@@ -9532,7 +9532,7 @@ impl ListDevicesError {
 }
 impl fmt::Display for ListDevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDevicesError {
@@ -9593,7 +9593,7 @@ impl ListGroupsError {
 }
 impl fmt::Display for ListGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGroupsError {
@@ -9656,7 +9656,7 @@ impl ListIdentityProvidersError {
 }
 impl fmt::Display for ListIdentityProvidersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListIdentityProvidersError {
@@ -9717,7 +9717,7 @@ impl ListResourceServersError {
 }
 impl fmt::Display for ListResourceServersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceServersError {
@@ -9778,7 +9778,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -9835,7 +9835,7 @@ impl ListUserImportJobsError {
 }
 impl fmt::Display for ListUserImportJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserImportJobsError {
@@ -9896,7 +9896,7 @@ impl ListUserPoolClientsError {
 }
 impl fmt::Display for ListUserPoolClientsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserPoolClientsError {
@@ -9948,7 +9948,7 @@ impl ListUserPoolsError {
 }
 impl fmt::Display for ListUserPoolsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUserPoolsError {
@@ -10004,7 +10004,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -10061,7 +10061,7 @@ impl ListUsersInGroupError {
 }
 impl fmt::Display for ListUsersInGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersInGroupError {
@@ -10189,7 +10189,7 @@ impl ResendConfirmationCodeError {
 }
 impl fmt::Display for ResendConfirmationCodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResendConfirmationCodeError {
@@ -10362,7 +10362,7 @@ impl RespondToAuthChallengeError {
 }
 impl fmt::Display for RespondToAuthChallengeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RespondToAuthChallengeError {
@@ -10461,7 +10461,7 @@ impl SetRiskConfigurationError {
 }
 impl fmt::Display for SetRiskConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetRiskConfigurationError {
@@ -10521,7 +10521,7 @@ impl SetUICustomizationError {
 }
 impl fmt::Display for SetUICustomizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetUICustomizationError {
@@ -10596,7 +10596,7 @@ impl SetUserMFAPreferenceError {
 }
 impl fmt::Display for SetUserMFAPreferenceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetUserMFAPreferenceError {
@@ -10675,7 +10675,7 @@ impl SetUserPoolMfaConfigError {
 }
 impl fmt::Display for SetUserPoolMfaConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetUserPoolMfaConfigError {
@@ -10746,7 +10746,7 @@ impl SetUserSettingsError {
 }
 impl fmt::Display for SetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SetUserSettingsError {
@@ -10852,7 +10852,7 @@ impl SignUpError {
 }
 impl fmt::Display for SignUpError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SignUpError {
@@ -10925,7 +10925,7 @@ impl StartUserImportJobError {
 }
 impl fmt::Display for StartUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartUserImportJobError {
@@ -10990,7 +10990,7 @@ impl StopUserImportJobError {
 }
 impl fmt::Display for StopUserImportJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopUserImportJobError {
@@ -11048,7 +11048,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -11105,7 +11105,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -11186,7 +11186,7 @@ impl UpdateAuthEventFeedbackError {
 }
 impl fmt::Display for UpdateAuthEventFeedbackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAuthEventFeedbackError {
@@ -11269,7 +11269,7 @@ impl UpdateDeviceStatusError {
 }
 impl fmt::Display for UpdateDeviceStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateDeviceStatusError {
@@ -11330,7 +11330,7 @@ impl UpdateGroupError {
 }
 impl fmt::Display for UpdateGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGroupError {
@@ -11404,7 +11404,7 @@ impl UpdateIdentityProviderError {
 }
 impl fmt::Display for UpdateIdentityProviderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateIdentityProviderError {
@@ -11468,7 +11468,7 @@ impl UpdateResourceServerError {
 }
 impl fmt::Display for UpdateResourceServerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateResourceServerError {
@@ -11614,7 +11614,7 @@ impl UpdateUserAttributesError {
 }
 impl fmt::Display for UpdateUserAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserAttributesError {
@@ -11722,7 +11722,7 @@ impl UpdateUserPoolError {
 }
 impl fmt::Display for UpdateUserPoolError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserPoolError {
@@ -11812,7 +11812,7 @@ impl UpdateUserPoolClientError {
 }
 impl fmt::Display for UpdateUserPoolClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserPoolClientError {
@@ -11878,7 +11878,7 @@ impl UpdateUserPoolDomainError {
 }
 impl fmt::Display for UpdateUserPoolDomainError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserPoolDomainError {
@@ -11984,7 +11984,7 @@ impl VerifySoftwareTokenError {
 }
 impl fmt::Display for VerifySoftwareTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifySoftwareTokenError {
@@ -12086,7 +12086,7 @@ impl VerifyUserAttributeError {
 }
 impl fmt::Display for VerifyUserAttributeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyUserAttributeError {

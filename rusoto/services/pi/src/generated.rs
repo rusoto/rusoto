@@ -282,7 +282,7 @@ impl DescribeDimensionKeysError {
 }
 impl fmt::Display for DescribeDimensionKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDimensionKeysError {
@@ -329,7 +329,7 @@ impl GetResourceMetricsError {
 }
 impl fmt::Display for GetResourceMetricsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceMetricsError {

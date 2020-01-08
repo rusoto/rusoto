@@ -225,7 +225,7 @@ impl BatchMeterUsageError {
 }
 impl fmt::Display for BatchMeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchMeterUsageError {
@@ -299,7 +299,7 @@ impl MeterUsageError {
 }
 impl fmt::Display for MeterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for MeterUsageError {
@@ -376,7 +376,7 @@ impl RegisterUsageError {
 }
 impl fmt::Display for RegisterUsageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegisterUsageError {
@@ -438,7 +438,7 @@ impl ResolveCustomerError {
 }
 impl fmt::Display for ResolveCustomerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResolveCustomerError {

@@ -24,6 +24,24 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The state of an application discovered through Migration Hub import, the AWS Agentless Discovery Connector, or the AWS Application Discovery Agent.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ApplicationState {
+    /// <p>The configurationId from the Application Discovery Service that uniquely identifies an application.</p>
+    #[serde(rename = "ApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    /// <p>The current status of an application.</p>
+    #[serde(rename = "ApplicationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_status: Option<String>,
+    /// <p>The timestamp when the application status was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateCreatedArtifactRequest {
     /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>
@@ -218,6 +236,35 @@ pub struct ImportMigrationTaskRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ImportMigrationTaskResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListApplicationStatesRequest {
+    /// <p>The configurationIds from the Application Discovery Service that uniquely identifies your applications.</p>
+    #[serde(rename = "ApplicationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_ids: Option<Vec<String>>,
+    /// <p>Maximum number of results to be returned per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListApplicationStatesResult {
+    /// <p>A list of Applications that exist in Application Discovery Service.</p>
+    #[serde(rename = "ApplicationStateList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_state_list: Option<Vec<ApplicationState>>,
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCreatedArtifactsRequest {
@@ -572,7 +619,7 @@ impl AssociateCreatedArtifactError {
 }
 impl fmt::Display for AssociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateCreatedArtifactError {
@@ -672,7 +719,7 @@ impl AssociateDiscoveredResourceError {
 }
 impl fmt::Display for AssociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociateDiscoveredResourceError {
@@ -759,7 +806,7 @@ impl CreateProgressUpdateStreamError {
 }
 impl fmt::Display for CreateProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateProgressUpdateStreamError {
@@ -851,7 +898,7 @@ impl DeleteProgressUpdateStreamError {
 }
 impl fmt::Display for DeleteProgressUpdateStreamError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteProgressUpdateStreamError {
@@ -935,7 +982,7 @@ impl DescribeApplicationStateError {
 }
 impl fmt::Display for DescribeApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeApplicationStateError {
@@ -1007,7 +1054,7 @@ impl DescribeMigrationTaskError {
 }
 impl fmt::Display for DescribeMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeMigrationTaskError {
@@ -1098,7 +1145,7 @@ impl DisassociateCreatedArtifactError {
 }
 impl fmt::Display for DisassociateCreatedArtifactError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateCreatedArtifactError {
@@ -1191,7 +1238,7 @@ impl DisassociateDiscoveredResourceError {
 }
 impl fmt::Display for DisassociateDiscoveredResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociateDiscoveredResourceError {
@@ -1276,7 +1323,7 @@ impl ImportMigrationTaskError {
 }
 impl fmt::Display for ImportMigrationTaskError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportMigrationTaskError {
@@ -1290,6 +1337,69 @@ impl Error for ImportMigrationTaskError {
             ImportMigrationTaskError::ResourceNotFound(ref cause) => cause,
             ImportMigrationTaskError::ServiceUnavailable(ref cause) => cause,
             ImportMigrationTaskError::UnauthorizedOperation(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListApplicationStates
+#[derive(Debug, PartialEq)]
+pub enum ListApplicationStatesError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>The home region is not set. Set the home region to continue.</p>
+    HomeRegionNotSet(String),
+    /// <p>Exception raised when an internal, configuration, or dependency error is encountered.</p>
+    InternalServerError(String),
+    /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
+    InvalidInput(String),
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListApplicationStatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationStatesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListApplicationStatesError::AccessDenied(err.msg))
+                }
+                "HomeRegionNotSetException" => {
+                    return RusotoError::Service(ListApplicationStatesError::HomeRegionNotSet(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(ListApplicationStatesError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListApplicationStatesError::InvalidInput(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListApplicationStatesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListApplicationStatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
+    }
+}
+impl Error for ListApplicationStatesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListApplicationStatesError::AccessDenied(ref cause) => cause,
+            ListApplicationStatesError::HomeRegionNotSet(ref cause) => cause,
+            ListApplicationStatesError::InternalServerError(ref cause) => cause,
+            ListApplicationStatesError::InvalidInput(ref cause) => cause,
+            ListApplicationStatesError::ServiceUnavailable(ref cause) => cause,
         }
     }
 }
@@ -1349,7 +1459,7 @@ impl ListCreatedArtifactsError {
 }
 impl fmt::Display for ListCreatedArtifactsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListCreatedArtifactsError {
@@ -1424,7 +1534,7 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDiscoveredResourcesError {
@@ -1496,7 +1606,7 @@ impl ListMigrationTasksError {
 }
 impl fmt::Display for ListMigrationTasksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMigrationTasksError {
@@ -1565,7 +1675,7 @@ impl ListProgressUpdateStreamsError {
 }
 impl fmt::Display for ListProgressUpdateStreamsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListProgressUpdateStreamsError {
@@ -1654,7 +1764,7 @@ impl NotifyApplicationStateError {
 }
 impl fmt::Display for NotifyApplicationStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for NotifyApplicationStateError {
@@ -1746,7 +1856,7 @@ impl NotifyMigrationTaskStateError {
 }
 impl fmt::Display for NotifyMigrationTaskStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for NotifyMigrationTaskStateError {
@@ -1833,7 +1943,7 @@ impl PutResourceAttributesError {
 }
 impl fmt::Display for PutResourceAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourceAttributesError {
@@ -1909,6 +2019,12 @@ pub trait MigrationHub {
         &self,
         input: ImportMigrationTaskRequest,
     ) -> Result<ImportMigrationTaskResult, RusotoError<ImportMigrationTaskError>>;
+
+    /// <p>Lists all the migration statuses for your applications. If you use the optional <code>ApplicationIds</code> parameter, only the migration statuses for those applications will be returned.</p>
+    async fn list_application_states(
+        &self,
+        input: ListApplicationStatesRequest,
+    ) -> Result<ListApplicationStatesResult, RusotoError<ListApplicationStatesError>>;
 
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
     async fn list_created_artifacts(
@@ -2257,6 +2373,34 @@ impl MigrationHub for MigrationHubClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ImportMigrationTaskError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the migration statuses for your applications. If you use the optional <code>ApplicationIds</code> parameter, only the migration statuses for those applications will be returned.</p>
+    async fn list_application_states(
+        &self,
+        input: ListApplicationStatesRequest,
+    ) -> Result<ListApplicationStatesResult, RusotoError<ListApplicationStatesError>> {
+        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSMigrationHub.ListApplicationStates");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListApplicationStatesResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListApplicationStatesError::from_response(response))
         }
     }
 

@@ -617,7 +617,7 @@ impl CreateBudgetError {
 }
 impl fmt::Display for CreateBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBudgetError {
@@ -681,7 +681,7 @@ impl CreateNotificationError {
 }
 impl fmt::Display for CreateNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateNotificationError {
@@ -746,7 +746,7 @@ impl CreateSubscriberError {
 }
 impl fmt::Display for CreateSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSubscriberError {
@@ -799,7 +799,7 @@ impl DeleteBudgetError {
 }
 impl fmt::Display for DeleteBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBudgetError {
@@ -850,7 +850,7 @@ impl DeleteNotificationError {
 }
 impl fmt::Display for DeleteNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteNotificationError {
@@ -901,7 +901,7 @@ impl DeleteSubscriberError {
 }
 impl fmt::Display for DeleteSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSubscriberError {
@@ -952,7 +952,7 @@ impl DescribeBudgetError {
 }
 impl fmt::Display for DescribeBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBudgetError {
@@ -1027,7 +1027,7 @@ impl DescribeBudgetPerformanceHistoryError {
 }
 impl fmt::Display for DescribeBudgetPerformanceHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBudgetPerformanceHistoryError {
@@ -1090,7 +1090,7 @@ impl DescribeBudgetsError {
 }
 impl fmt::Display for DescribeBudgetsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeBudgetsError {
@@ -1167,7 +1167,7 @@ impl DescribeNotificationsForBudgetError {
 }
 impl fmt::Display for DescribeNotificationsForBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeNotificationsForBudgetError {
@@ -1244,7 +1244,7 @@ impl DescribeSubscribersForNotificationError {
 }
 impl fmt::Display for DescribeSubscribersForNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeSubscribersForNotificationError {
@@ -1297,7 +1297,7 @@ impl UpdateBudgetError {
 }
 impl fmt::Display for UpdateBudgetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBudgetError {
@@ -1353,7 +1353,7 @@ impl UpdateNotificationError {
 }
 impl fmt::Display for UpdateNotificationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateNotificationError {
@@ -1410,7 +1410,7 @@ impl UpdateSubscriberError {
 }
 impl fmt::Display for UpdateSubscriberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateSubscriberError {

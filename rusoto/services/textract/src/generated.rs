@@ -553,7 +553,7 @@ impl AnalyzeDocumentError {
 }
 impl fmt::Display for AnalyzeDocumentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AnalyzeDocumentError {
@@ -641,7 +641,7 @@ impl DetectDocumentTextError {
 }
 impl fmt::Display for DetectDocumentTextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DetectDocumentTextError {
@@ -713,7 +713,7 @@ impl GetDocumentAnalysisError {
 }
 impl fmt::Display for GetDocumentAnalysisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentAnalysisError {
@@ -786,7 +786,7 @@ impl GetDocumentTextDetectionError {
 }
 impl fmt::Display for GetDocumentTextDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDocumentTextDetectionError {
@@ -888,7 +888,7 @@ impl StartDocumentAnalysisError {
 }
 impl fmt::Display for StartDocumentAnalysisError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDocumentAnalysisError {
@@ -1005,7 +1005,7 @@ impl StartDocumentTextDetectionError {
 }
 impl fmt::Display for StartDocumentTextDetectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartDocumentTextDetectionError {

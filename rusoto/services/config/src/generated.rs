@@ -3566,7 +3566,7 @@ impl BatchGetAggregateResourceConfigError {
 }
 impl fmt::Display for BatchGetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetAggregateResourceConfigError {
@@ -3601,7 +3601,7 @@ impl BatchGetResourceConfigError {
 }
 impl fmt::Display for BatchGetResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchGetResourceConfigError {
@@ -3638,7 +3638,7 @@ impl DeleteAggregationAuthorizationError {
 }
 impl fmt::Display for DeleteAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAggregationAuthorizationError {
@@ -3676,7 +3676,7 @@ impl DeleteConfigRuleError {
 }
 impl fmt::Display for DeleteConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigRuleError {
@@ -3714,7 +3714,7 @@ impl DeleteConfigurationAggregatorError {
 }
 impl fmt::Display for DeleteConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationAggregatorError {
@@ -3751,7 +3751,7 @@ impl DeleteConfigurationRecorderError {
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConfigurationRecorderError {
@@ -3791,7 +3791,7 @@ impl DeleteConformancePackError {
 }
 impl fmt::Display for DeleteConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteConformancePackError {
@@ -3834,7 +3834,7 @@ impl DeleteDeliveryChannelError {
 }
 impl fmt::Display for DeleteDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteDeliveryChannelError {
@@ -3877,7 +3877,7 @@ impl DeleteEvaluationResultsError {
 }
 impl fmt::Display for DeleteEvaluationResultsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEvaluationResultsError {
@@ -3929,7 +3929,7 @@ impl DeleteOrganizationConfigRuleError {
 }
 impl fmt::Display for DeleteOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOrganizationConfigRuleError {
@@ -3984,7 +3984,7 @@ impl DeleteOrganizationConformancePackError {
 }
 impl fmt::Display for DeleteOrganizationConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteOrganizationConformancePackError {
@@ -4025,7 +4025,7 @@ impl DeletePendingAggregationRequestError {
 }
 impl fmt::Display for DeletePendingAggregationRequestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePendingAggregationRequestError {
@@ -4071,7 +4071,7 @@ impl DeleteRemediationConfigurationError {
 }
 impl fmt::Display for DeleteRemediationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRemediationConfigurationError {
@@ -4109,7 +4109,7 @@ impl DeleteRemediationExceptionsError {
 }
 impl fmt::Display for DeleteRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRemediationExceptionsError {
@@ -4144,7 +4144,7 @@ impl DeleteResourceConfigError {
 }
 impl fmt::Display for DeleteResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteResourceConfigError {
@@ -4188,7 +4188,7 @@ impl DeleteRetentionConfigurationError {
 }
 impl fmt::Display for DeleteRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRetentionConfigurationError {
@@ -4238,7 +4238,7 @@ impl DeliverConfigSnapshotError {
 }
 impl fmt::Display for DeliverConfigSnapshotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeliverConfigSnapshotError {
@@ -4291,7 +4291,7 @@ impl DescribeAggregateComplianceByConfigRulesError {
 }
 impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAggregateComplianceByConfigRulesError {
@@ -4346,7 +4346,7 @@ impl DescribeAggregationAuthorizationsError {
 }
 impl fmt::Display for DescribeAggregationAuthorizationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeAggregationAuthorizationsError {
@@ -4399,7 +4399,7 @@ impl DescribeComplianceByConfigRuleError {
 }
 impl fmt::Display for DescribeComplianceByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeComplianceByConfigRuleError {
@@ -4445,7 +4445,7 @@ impl DescribeComplianceByResourceError {
 }
 impl fmt::Display for DescribeComplianceByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeComplianceByResourceError {
@@ -4497,7 +4497,7 @@ impl DescribeConfigRuleEvaluationStatusError {
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigRuleEvaluationStatusError {
@@ -4541,7 +4541,7 @@ impl DescribeConfigRulesError {
 }
 impl fmt::Display for DescribeConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigRulesError {
@@ -4584,7 +4584,7 @@ _ => {}
 }
 impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationAggregatorSourcesStatusError {
@@ -4651,7 +4651,7 @@ impl DescribeConfigurationAggregatorsError {
 }
 impl fmt::Display for DescribeConfigurationAggregatorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationAggregatorsError {
@@ -4695,7 +4695,7 @@ impl DescribeConfigurationRecorderStatusError {
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationRecorderStatusError {
@@ -4734,7 +4734,7 @@ impl DescribeConfigurationRecordersError {
 }
 impl fmt::Display for DescribeConfigurationRecordersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConfigurationRecordersError {
@@ -4801,7 +4801,7 @@ impl DescribeConformancePackComplianceError {
 }
 impl fmt::Display for DescribeConformancePackComplianceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConformancePackComplianceError {
@@ -4851,7 +4851,7 @@ impl DescribeConformancePackStatusError {
 }
 impl fmt::Display for DescribeConformancePackStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConformancePackStatusError {
@@ -4901,7 +4901,7 @@ impl DescribeConformancePacksError {
 }
 impl fmt::Display for DescribeConformancePacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeConformancePacksError {
@@ -4940,7 +4940,7 @@ impl DescribeDeliveryChannelStatusError {
 }
 impl fmt::Display for DescribeDeliveryChannelStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeliveryChannelStatusError {
@@ -4975,7 +4975,7 @@ impl DescribeDeliveryChannelsError {
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeDeliveryChannelsError {
@@ -5037,7 +5037,7 @@ impl DescribeOrganizationConfigRuleStatusesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRuleStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationConfigRuleStatusesError {
@@ -5102,7 +5102,7 @@ impl DescribeOrganizationConfigRulesError {
 }
 impl fmt::Display for DescribeOrganizationConfigRulesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationConfigRulesError {
@@ -5147,7 +5147,7 @@ _ => {}
 }
 impl fmt::Display for DescribeOrganizationConformancePackStatusesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationConformancePackStatusesError {
@@ -5214,7 +5214,7 @@ impl DescribeOrganizationConformancePacksError {
 }
 impl fmt::Display for DescribeOrganizationConformancePacksError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeOrganizationConformancePacksError {
@@ -5270,7 +5270,7 @@ impl DescribePendingAggregationRequestsError {
 }
 impl fmt::Display for DescribePendingAggregationRequestsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribePendingAggregationRequestsError {
@@ -5301,7 +5301,7 @@ impl DescribeRemediationConfigurationsError {
 }
 impl fmt::Display for DescribeRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRemediationConfigurationsError {
@@ -5343,7 +5343,7 @@ impl DescribeRemediationExceptionsError {
 }
 impl fmt::Display for DescribeRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRemediationExceptionsError {
@@ -5390,7 +5390,7 @@ impl DescribeRemediationExecutionStatusError {
 }
 impl fmt::Display for DescribeRemediationExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRemediationExecutionStatusError {
@@ -5444,7 +5444,7 @@ impl DescribeRetentionConfigurationsError {
 }
 impl fmt::Display for DescribeRetentionConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeRetentionConfigurationsError {
@@ -5497,7 +5497,7 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAggregateComplianceDetailsByConfigRuleError {
@@ -5554,7 +5554,7 @@ impl GetAggregateConfigRuleComplianceSummaryError {
 }
 impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAggregateConfigRuleComplianceSummaryError {
@@ -5611,7 +5611,7 @@ impl GetAggregateDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAggregateDiscoveredResourceCountsError {
@@ -5666,7 +5666,7 @@ impl GetAggregateResourceConfigError {
 }
 impl fmt::Display for GetAggregateResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAggregateResourceConfigError {
@@ -5719,7 +5719,7 @@ impl GetComplianceDetailsByConfigRuleError {
 }
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceDetailsByConfigRuleError {
@@ -5758,7 +5758,7 @@ impl GetComplianceDetailsByResourceError {
 }
 impl fmt::Display for GetComplianceDetailsByResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceDetailsByResourceError {
@@ -5787,7 +5787,7 @@ impl GetComplianceSummaryByConfigRuleError {
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceSummaryByConfigRuleError {
@@ -5822,7 +5822,7 @@ impl GetComplianceSummaryByResourceTypeError {
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetComplianceSummaryByResourceTypeError {
@@ -5889,7 +5889,7 @@ impl GetConformancePackComplianceDetailsError {
 }
 impl fmt::Display for GetConformancePackComplianceDetailsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConformancePackComplianceDetailsError {
@@ -5946,7 +5946,7 @@ impl GetConformancePackComplianceSummaryError {
 }
 impl fmt::Display for GetConformancePackComplianceSummaryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetConformancePackComplianceSummaryError {
@@ -5992,7 +5992,7 @@ impl GetDiscoveredResourceCountsError {
 }
 impl fmt::Display for GetDiscoveredResourceCountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetDiscoveredResourceCountsError {
@@ -6055,7 +6055,7 @@ impl GetOrganizationConfigRuleDetailedStatusError {
 }
 impl fmt::Display for GetOrganizationConfigRuleDetailedStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOrganizationConfigRuleDetailedStatusError {
@@ -6104,7 +6104,7 @@ _ => {}
 }
 impl fmt::Display for GetOrganizationConformancePackDetailedStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetOrganizationConformancePackDetailedStatusError {
@@ -6170,7 +6170,7 @@ impl GetResourceConfigHistoryError {
 }
 impl fmt::Display for GetResourceConfigHistoryError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetResourceConfigHistoryError {
@@ -6227,7 +6227,7 @@ impl ListAggregateDiscoveredResourcesError {
 }
 impl fmt::Display for ListAggregateDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAggregateDiscoveredResourcesError {
@@ -6280,7 +6280,7 @@ impl ListDiscoveredResourcesError {
 }
 impl fmt::Display for ListDiscoveredResourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListDiscoveredResourcesError {
@@ -6329,7 +6329,7 @@ impl ListTagsForResourceError {
 }
 impl fmt::Display for ListTagsForResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTagsForResourceError {
@@ -6368,7 +6368,7 @@ impl PutAggregationAuthorizationError {
 }
 impl fmt::Display for PutAggregationAuthorizationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutAggregationAuthorizationError {
@@ -6427,7 +6427,7 @@ impl PutConfigRuleError {
 }
 impl fmt::Display for PutConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConfigRuleError {
@@ -6503,7 +6503,7 @@ impl PutConfigurationAggregatorError {
 }
 impl fmt::Display for PutConfigurationAggregatorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConfigurationAggregatorError {
@@ -6566,7 +6566,7 @@ impl PutConfigurationRecorderError {
 }
 impl fmt::Display for PutConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConfigurationRecorderError {
@@ -6632,7 +6632,7 @@ impl PutConformancePackError {
 }
 impl fmt::Display for PutConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutConformancePackError {
@@ -6711,7 +6711,7 @@ impl PutDeliveryChannelError {
 }
 impl fmt::Display for PutDeliveryChannelError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutDeliveryChannelError {
@@ -6762,7 +6762,7 @@ impl PutEvaluationsError {
 }
 impl fmt::Display for PutEvaluationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutEvaluationsError {
@@ -6843,7 +6843,7 @@ impl PutOrganizationConfigRuleError {
 }
 impl fmt::Display for PutOrganizationConfigRuleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutOrganizationConfigRuleError {
@@ -6902,7 +6902,7 @@ _ => {}
 }
 impl fmt::Display for PutOrganizationConformancePackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutOrganizationConformancePackError {
@@ -6952,7 +6952,7 @@ impl PutRemediationConfigurationsError {
 }
 impl fmt::Display for PutRemediationConfigurationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRemediationConfigurationsError {
@@ -6988,7 +6988,7 @@ impl PutRemediationExceptionsError {
 }
 impl fmt::Display for PutRemediationExceptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRemediationExceptionsError {
@@ -7037,7 +7037,7 @@ impl PutResourceConfigError {
 }
 impl fmt::Display for PutResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutResourceConfigError {
@@ -7083,7 +7083,7 @@ impl PutRetentionConfigurationError {
 }
 impl fmt::Display for PutRetentionConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutRetentionConfigurationError {
@@ -7133,7 +7133,7 @@ impl SelectResourceConfigError {
 }
 impl fmt::Display for SelectResourceConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SelectResourceConfigError {
@@ -7193,7 +7193,7 @@ impl StartConfigRulesEvaluationError {
 }
 impl fmt::Display for StartConfigRulesEvaluationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartConfigRulesEvaluationError {
@@ -7240,7 +7240,7 @@ impl StartConfigurationRecorderError {
 }
 impl fmt::Display for StartConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartConfigurationRecorderError {
@@ -7290,7 +7290,7 @@ impl StartRemediationExecutionError {
 }
 impl fmt::Display for StartRemediationExecutionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartRemediationExecutionError {
@@ -7327,7 +7327,7 @@ impl StopConfigurationRecorderError {
 }
 impl fmt::Display for StopConfigurationRecorderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StopConfigurationRecorderError {
@@ -7365,7 +7365,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -7399,7 +7399,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {

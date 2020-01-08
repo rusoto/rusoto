@@ -187,7 +187,7 @@ pub struct CodeHook {
 /// <p>Provides the settings needed for conversation logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConversationLogsRequest {
-    /// <p>The Amazon Resource Name (ARN) of an IAM role with permission to write to your CloudWatch Logs for text logs and your S3 bucket for audio logs. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/conversation-logs.html">Creating Conversation Logs</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of an IAM role with permission to write to your CloudWatch Logs for text logs and your S3 bucket for audio logs. If audio encryption is enabled, this role also provides access permission for the AWS KMS key used for encrypting audio logs. For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/conversation-logs-role-and-policy.html">Creating an IAM Role and Policy for Conversation Logs</a>.</p>
     #[serde(rename = "iamRoleArn")]
     pub iam_role_arn: String,
     /// <p>The settings for your conversation logs. You can log the conversation text, conversation audio, or both.</p>
@@ -203,7 +203,7 @@ pub struct ConversationLogsResponse {
     #[serde(rename = "iamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
-    /// <p>The settings for your conversation logs.</p>
+    /// <p>The settings for your conversation logs. You can log text, audio, or both.</p>
     #[serde(rename = "logSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_settings: Option<Vec<LogSettingsResponse>>,
@@ -1314,7 +1314,7 @@ pub struct IntentMetadata {
     pub version: Option<String>,
 }
 
-/// <p>Settings used to configure conversation logs.</p>
+/// <p>Settings used to configure delivery mode and destination for conversation logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LogSettingsRequest {
     /// <p>Where the logs will be delivered. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
@@ -1352,7 +1352,7 @@ pub struct LogSettingsResponse {
     #[serde(rename = "resourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The resource prefix of the S3 object or CloudWatch Logs log entry where logs are delivered. For both S3 and CloudWatch Logs, the prefix is:</p> <p> <code>aws/lex/bot-name/bot-alias/bot-version</code> </p>
+    /// <p>The resource prefix is the first part of the S3 object key within the S3 bucket that you specified to contain audio logs. For CloudWatch Logs it is the prefix of the log stream name within the log group that you specified. </p>
     #[serde(rename = "resourcePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_prefix: Option<String>,
@@ -1400,7 +1400,7 @@ pub struct PutBotAliasRequest {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
-    /// <p>Settings that determine how Amazon Lex uses conversation logs for the alias.</p>
+    /// <p>Settings for conversation logs for the alias.</p>
     #[serde(rename = "conversationLogs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conversation_logs: Option<ConversationLogsRequest>,
@@ -1993,7 +1993,7 @@ impl CreateBotVersionError {
 }
 impl fmt::Display for CreateBotVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBotVersionError {
@@ -2058,7 +2058,7 @@ impl CreateIntentVersionError {
 }
 impl fmt::Display for CreateIntentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateIntentVersionError {
@@ -2125,7 +2125,7 @@ impl CreateSlotTypeVersionError {
 }
 impl fmt::Display for CreateSlotTypeVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateSlotTypeVersionError {
@@ -2188,7 +2188,7 @@ impl DeleteBotError {
 }
 impl fmt::Display for DeleteBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBotError {
@@ -2251,7 +2251,7 @@ impl DeleteBotAliasError {
 }
 impl fmt::Display for DeleteBotAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBotAliasError {
@@ -2321,7 +2321,7 @@ impl DeleteBotChannelAssociationError {
 }
 impl fmt::Display for DeleteBotChannelAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBotChannelAssociationError {
@@ -2383,7 +2383,7 @@ impl DeleteBotVersionError {
 }
 impl fmt::Display for DeleteBotVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteBotVersionError {
@@ -2446,7 +2446,7 @@ impl DeleteIntentError {
 }
 impl fmt::Display for DeleteIntentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIntentError {
@@ -2509,7 +2509,7 @@ impl DeleteIntentVersionError {
 }
 impl fmt::Display for DeleteIntentVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteIntentVersionError {
@@ -2572,7 +2572,7 @@ impl DeleteSlotTypeError {
 }
 impl fmt::Display for DeleteSlotTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSlotTypeError {
@@ -2637,7 +2637,7 @@ impl DeleteSlotTypeVersionError {
 }
 impl fmt::Display for DeleteSlotTypeVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteSlotTypeVersionError {
@@ -2690,7 +2690,7 @@ impl DeleteUtterancesError {
 }
 impl fmt::Display for DeleteUtterancesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteUtterancesError {
@@ -2739,7 +2739,7 @@ impl GetBotError {
 }
 impl fmt::Display for GetBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotError {
@@ -2790,7 +2790,7 @@ impl GetBotAliasError {
 }
 impl fmt::Display for GetBotAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotAliasError {
@@ -2836,7 +2836,7 @@ impl GetBotAliasesError {
 }
 impl fmt::Display for GetBotAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotAliasesError {
@@ -2890,7 +2890,7 @@ impl GetBotChannelAssociationError {
 }
 impl fmt::Display for GetBotChannelAssociationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotChannelAssociationError {
@@ -2942,7 +2942,7 @@ impl GetBotChannelAssociationsError {
 }
 impl fmt::Display for GetBotChannelAssociationsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotChannelAssociationsError {
@@ -2992,7 +2992,7 @@ impl GetBotVersionsError {
 }
 impl fmt::Display for GetBotVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotVersionsError {
@@ -3043,7 +3043,7 @@ impl GetBotsError {
 }
 impl fmt::Display for GetBotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotsError {
@@ -3094,7 +3094,7 @@ impl GetBuiltinIntentError {
 }
 impl fmt::Display for GetBuiltinIntentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBuiltinIntentError {
@@ -3140,7 +3140,7 @@ impl GetBuiltinIntentsError {
 }
 impl fmt::Display for GetBuiltinIntentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBuiltinIntentsError {
@@ -3185,7 +3185,7 @@ impl GetBuiltinSlotTypesError {
 }
 impl fmt::Display for GetBuiltinSlotTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBuiltinSlotTypesError {
@@ -3235,7 +3235,7 @@ impl GetExportError {
 }
 impl fmt::Display for GetExportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetExportError {
@@ -3286,7 +3286,7 @@ impl GetImportError {
 }
 impl fmt::Display for GetImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetImportError {
@@ -3337,7 +3337,7 @@ impl GetIntentError {
 }
 impl fmt::Display for GetIntentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntentError {
@@ -3388,7 +3388,7 @@ impl GetIntentVersionsError {
 }
 impl fmt::Display for GetIntentVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntentVersionsError {
@@ -3439,7 +3439,7 @@ impl GetIntentsError {
 }
 impl fmt::Display for GetIntentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetIntentsError {
@@ -3490,7 +3490,7 @@ impl GetSlotTypeError {
 }
 impl fmt::Display for GetSlotTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSlotTypeError {
@@ -3541,7 +3541,7 @@ impl GetSlotTypeVersionsError {
 }
 impl fmt::Display for GetSlotTypeVersionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSlotTypeVersionsError {
@@ -3592,7 +3592,7 @@ impl GetSlotTypesError {
 }
 impl fmt::Display for GetSlotTypesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetSlotTypesError {
@@ -3638,7 +3638,7 @@ impl GetUtterancesViewError {
 }
 impl fmt::Display for GetUtterancesViewError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUtterancesViewError {
@@ -3691,7 +3691,7 @@ impl PutBotError {
 }
 impl fmt::Display for PutBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBotError {
@@ -3748,7 +3748,7 @@ impl PutBotAliasError {
 }
 impl fmt::Display for PutBotAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutBotAliasError {
@@ -3805,7 +3805,7 @@ impl PutIntentError {
 }
 impl fmt::Display for PutIntentError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutIntentError {
@@ -3862,7 +3862,7 @@ impl PutSlotTypeError {
 }
 impl fmt::Display for PutSlotTypeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutSlotTypeError {
@@ -3909,7 +3909,7 @@ impl StartImportError {
 }
 impl fmt::Display for StartImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartImportError {

@@ -1499,7 +1499,7 @@ impl CancelKeyDeletionError {
 }
 impl fmt::Display for CancelKeyDeletionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CancelKeyDeletionError {
@@ -1564,7 +1564,7 @@ impl ConnectCustomKeyStoreError {
 }
 impl fmt::Display for ConnectCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ConnectCustomKeyStoreError {
@@ -1631,7 +1631,7 @@ impl CreateAliasError {
 }
 impl fmt::Display for CreateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAliasError {
@@ -1712,7 +1712,7 @@ impl CreateCustomKeyStoreError {
 }
 impl fmt::Display for CreateCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateCustomKeyStoreError {
@@ -1786,7 +1786,7 @@ impl CreateGrantError {
 }
 impl fmt::Display for CreateGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateGrantError {
@@ -1873,7 +1873,7 @@ impl CreateKeyError {
 }
 impl fmt::Display for CreateKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateKeyError {
@@ -1960,7 +1960,7 @@ impl DecryptError {
 }
 impl fmt::Display for DecryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DecryptError {
@@ -2017,7 +2017,7 @@ impl DeleteAliasError {
 }
 impl fmt::Display for DeleteAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAliasError {
@@ -2074,7 +2074,7 @@ impl DeleteCustomKeyStoreError {
 }
 impl fmt::Display for DeleteCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteCustomKeyStoreError {
@@ -2145,7 +2145,7 @@ impl DeleteImportedKeyMaterialError {
 }
 impl fmt::Display for DeleteImportedKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteImportedKeyMaterialError {
@@ -2190,7 +2190,7 @@ impl DescribeCustomKeyStoresError {
 }
 impl fmt::Display for DescribeCustomKeyStoresError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeCustomKeyStoresError {
@@ -2239,7 +2239,7 @@ impl DescribeKeyError {
 }
 impl fmt::Display for DescribeKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DescribeKeyError {
@@ -2295,7 +2295,7 @@ impl DisableKeyError {
 }
 impl fmt::Display for DisableKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableKeyError {
@@ -2366,7 +2366,7 @@ impl DisableKeyRotationError {
 }
 impl fmt::Display for DisableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisableKeyRotationError {
@@ -2421,7 +2421,7 @@ impl DisconnectCustomKeyStoreError {
 }
 impl fmt::Display for DisconnectCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisconnectCustomKeyStoreError {
@@ -2481,7 +2481,7 @@ impl EnableKeyError {
 }
 impl fmt::Display for EnableKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableKeyError {
@@ -2551,7 +2551,7 @@ impl EnableKeyRotationError {
 }
 impl fmt::Display for EnableKeyRotationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EnableKeyRotationError {
@@ -2625,7 +2625,7 @@ impl EncryptError {
 }
 impl fmt::Display for EncryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for EncryptError {
@@ -2700,7 +2700,7 @@ impl GenerateDataKeyError {
 }
 impl fmt::Display for GenerateDataKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateDataKeyError {
@@ -2779,7 +2779,7 @@ impl GenerateDataKeyPairError {
 }
 impl fmt::Display for GenerateDataKeyPairError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateDataKeyPairError {
@@ -2872,7 +2872,7 @@ impl GenerateDataKeyPairWithoutPlaintextError {
 }
 impl fmt::Display for GenerateDataKeyPairWithoutPlaintextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateDataKeyPairWithoutPlaintextError {
@@ -2965,7 +2965,7 @@ impl GenerateDataKeyWithoutPlaintextError {
 }
 impl fmt::Display for GenerateDataKeyWithoutPlaintextError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateDataKeyWithoutPlaintextError {
@@ -3024,7 +3024,7 @@ impl GenerateRandomError {
 }
 impl fmt::Display for GenerateRandomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GenerateRandomError {
@@ -3080,7 +3080,7 @@ impl GetKeyPolicyError {
 }
 impl fmt::Display for GetKeyPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetKeyPolicyError {
@@ -3148,7 +3148,7 @@ impl GetKeyRotationStatusError {
 }
 impl fmt::Display for GetKeyRotationStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetKeyRotationStatusError {
@@ -3217,7 +3217,7 @@ impl GetParametersForImportError {
 }
 impl fmt::Display for GetParametersForImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetParametersForImportError {
@@ -3300,7 +3300,7 @@ impl GetPublicKeyError {
 }
 impl fmt::Display for GetPublicKeyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPublicKeyError {
@@ -3395,7 +3395,7 @@ impl ImportKeyMaterialError {
 }
 impl fmt::Display for ImportKeyMaterialError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ImportKeyMaterialError {
@@ -3457,7 +3457,7 @@ impl ListAliasesError {
 }
 impl fmt::Display for ListAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAliasesError {
@@ -3519,7 +3519,7 @@ impl ListGrantsError {
 }
 impl fmt::Display for ListGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListGrantsError {
@@ -3577,7 +3577,7 @@ impl ListKeyPoliciesError {
 }
 impl fmt::Display for ListKeyPoliciesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListKeyPoliciesError {
@@ -3624,7 +3624,7 @@ impl ListKeysError {
 }
 impl fmt::Display for ListKeysError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListKeysError {
@@ -3674,7 +3674,7 @@ impl ListResourceTagsError {
 }
 impl fmt::Display for ListResourceTagsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListResourceTagsError {
@@ -3732,7 +3732,7 @@ impl ListRetirableGrantsError {
 }
 impl fmt::Display for ListRetirableGrantsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRetirableGrantsError {
@@ -3806,7 +3806,7 @@ impl PutKeyPolicyError {
 }
 impl fmt::Display for PutKeyPolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutKeyPolicyError {
@@ -3891,7 +3891,7 @@ impl ReEncryptError {
 }
 impl fmt::Display for ReEncryptError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ReEncryptError {
@@ -3963,7 +3963,7 @@ impl RetireGrantError {
 }
 impl fmt::Display for RetireGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RetireGrantError {
@@ -4027,7 +4027,7 @@ impl RevokeGrantError {
 }
 impl fmt::Display for RevokeGrantError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RevokeGrantError {
@@ -4087,7 +4087,7 @@ impl ScheduleKeyDeletionError {
 }
 impl fmt::Display for ScheduleKeyDeletionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ScheduleKeyDeletionError {
@@ -4155,7 +4155,7 @@ impl SignError {
 }
 impl fmt::Display for SignError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SignError {
@@ -4218,7 +4218,7 @@ impl TagResourceError {
 }
 impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for TagResourceError {
@@ -4274,7 +4274,7 @@ impl UntagResourceError {
 }
 impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UntagResourceError {
@@ -4326,7 +4326,7 @@ impl UpdateAliasError {
 }
 impl fmt::Display for UpdateAliasError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAliasError {
@@ -4411,7 +4411,7 @@ impl UpdateCustomKeyStoreError {
 }
 impl fmt::Display for UpdateCustomKeyStoreError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateCustomKeyStoreError {
@@ -4475,7 +4475,7 @@ impl UpdateKeyDescriptionError {
 }
 impl fmt::Display for UpdateKeyDescriptionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateKeyDescriptionError {
@@ -4548,7 +4548,7 @@ impl VerifyError {
 }
 impl fmt::Display for VerifyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for VerifyError {

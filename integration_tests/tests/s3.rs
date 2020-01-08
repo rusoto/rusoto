@@ -121,28 +121,26 @@ impl TestS3Client {
             .await
             .expect("Failed to put test object");
     }
+
+    async fn cleanup(&self) {
+        if self.bucket_deleted {
+            return;
+        }
+
+        let delete_bucket_req = DeleteBucketRequest {
+            bucket: self.bucket_name.clone(),
+            ..Default::default()
+        };
+
+        let s3 = self.s3.clone();
+        let bucket_name = self.bucket_name.clone();
+
+        match s3.delete_bucket(delete_bucket_req).await {
+            Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
+            Err(e) => println!("Failed to delete S3 bucket: {}", e),
+        };
+    }
 }
-
-// impl Drop for TestS3Client {
-//     fn drop(&mut self) {
-//         if self.bucket_deleted {
-//             return;
-//         }
-//         let delete_bucket_req = DeleteBucketRequest {
-//             bucket: self.bucket_name.clone(),
-//             ..Default::default()
-//         };
-
-//         let s3 = self.s3.clone();
-//         let bucket_name = self.bucket_name.clone();
-//         futures::executor::block_on(async move { 
-//             match s3.delete_bucket(delete_bucket_req).await {
-//                 Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
-//                 Err(e) => println!("Failed to delete S3 bucket: {}", e),
-//             }
-//         });
-//     }
-// }
 
 // inititializes logging
 fn init_logging() {
@@ -195,6 +193,7 @@ async fn test_bucket_creation_deletion() {
 
     test_delete_bucket(&test_client.s3, &bucket_name).await;
     test_client.bucket_deleted = true;
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -278,6 +277,8 @@ async fn test_puts_gets_deletes() {
     for i in 1..3 {
         test_client.delete_object(format!("test_object_{}", i)).await;
     }
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -300,6 +301,8 @@ async fn test_puts_gets_deletes_utf8() {
 
     test_copy_object_utf8(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
     test_delete_object(&test_client.s3, &test_client.bucket_name, &utf8_filename).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -323,6 +326,8 @@ async fn test_puts_gets_deletes_binary() {
     test_get_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
     test_get_object_blocking_read(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
     test_delete_object(&test_client.s3, &test_client.bucket_name, &binary_filename).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -367,6 +372,8 @@ async fn test_puts_gets_deletes_metadata() {
         &test_client.bucket_name,
         &metadata_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -452,6 +459,8 @@ async fn test_puts_gets_deletes_presigned_url() {
         &test_client.bucket_name,
         &utf8_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -498,6 +507,8 @@ async fn test_multipart_stream_uploads() {
         &test_client.bucket_name,
         &streaming_filename,
     ).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -573,6 +584,8 @@ async fn test_list_objects_encoding() {
     assert!(test_client.s3.get_object(get_obj_req).await.is_ok());
 
     test_delete_object(&test_client.s3, &bucket_name, &key).await;
+
+    test_client.cleanup().await;
 }
 
 #[tokio::test]
@@ -605,6 +618,8 @@ async fn test_name_space_truncate() {
 
     assert_eq!(*key, filename_spaces);
     test_delete_object(&test_client.s3, &bucket_name, &filename_spaces).await;
+
+    test_client.cleanup().await;
 }
 
 async fn test_multipart_upload(
@@ -625,7 +640,6 @@ async fn test_multipart_upload(
         .create_multipart_upload(create_multipart_req)
         .await
         .expect("Couldn't create multipart upload");
-    println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
 
     // create 2 upload parts
@@ -652,7 +666,6 @@ async fn test_multipart_upload(
             .upload_part(part_req1)
             .await
             .expect("Couldn't upload a file part");
-        println!("{:#?}", response);
         completed_parts.push(CompletedPart {
             e_tag: response.e_tag.clone(),
             part_number: Some(part_number),
@@ -684,7 +697,6 @@ async fn test_multipart_upload(
     let completed_upload = CompletedMultipartUpload {
         parts: Some(completed_parts),
     };
-
     let complete_req = CompleteMultipartUploadRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -697,7 +709,6 @@ async fn test_multipart_upload(
         .complete_multipart_upload(complete_req)
         .await
         .expect("Couldn't complete multipart upload");
-    println!("{:#?}", response);
 
     // Add copy upload part to this test
     // https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPartCopy.html
@@ -710,7 +721,6 @@ async fn test_multipart_upload(
         .create_multipart_upload(create_multipart_req2)
         .await
         .expect("Couldn't create multipart upload2");
-    println!("{:#?}", upload_multi_response);
     let upload_id2 = upload_multi_response.upload_id.unwrap();
     let upload_part_copy_req = UploadPartCopyRequest {
         key: filename.to_owned(),
@@ -724,7 +734,6 @@ async fn test_multipart_upload(
         .upload_part_copy(upload_part_copy_req)
         .await
         .expect("Should have had copy part work");
-    println!("copy response: {:#?}", copy_response);
 
     let upload_part_copy_req2 = UploadPartCopyRequest {
         key: filename.to_owned(),
@@ -738,7 +747,6 @@ async fn test_multipart_upload(
         .upload_part_copy(upload_part_copy_req2)
         .await
         .expect("Should have had copy part work");
-    println!("copy response2: {:#?}", copy_response2);
 
     // complete the upload_part_copy upload:
     let completed_parts_2 = vec![
@@ -769,7 +777,6 @@ async fn test_multipart_upload(
         .complete_multipart_upload(complete_req2)
         .await
         .expect("Couldn't complete multipart upload2");
-    println!("{:#?}", response2);
 }
 
 async fn test_delete_bucket(client: &S3Client, bucket: &str) {
@@ -779,7 +786,6 @@ async fn test_delete_bucket(client: &S3Client, bucket: &str) {
     };
 
     let result = client.delete_bucket(delete_bucket_req).await;
-    println!("{:#?}", result);
     match result {
         Err(e) => match e {
             RusotoError::Unknown(ref e) => panic!(

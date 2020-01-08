@@ -104,7 +104,7 @@ impl InvokeEndpointError {
 }
 impl fmt::Display for InvokeEndpointError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InvokeEndpointError {

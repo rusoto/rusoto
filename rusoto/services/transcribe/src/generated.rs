@@ -666,7 +666,7 @@ impl CreateVocabularyError {
 }
 impl fmt::Display for CreateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVocabularyError {
@@ -721,7 +721,7 @@ impl CreateVocabularyFilterError {
 }
 impl fmt::Display for CreateVocabularyFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVocabularyFilterError {
@@ -771,7 +771,7 @@ impl DeleteTranscriptionJobError {
 }
 impl fmt::Display for DeleteTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteTranscriptionJobError {
@@ -821,7 +821,7 @@ impl DeleteVocabularyError {
 }
 impl fmt::Display for DeleteVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVocabularyError {
@@ -876,7 +876,7 @@ impl DeleteVocabularyFilterError {
 }
 impl fmt::Display for DeleteVocabularyFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVocabularyFilterError {
@@ -927,7 +927,7 @@ impl GetTranscriptionJobError {
 }
 impl fmt::Display for GetTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetTranscriptionJobError {
@@ -978,7 +978,7 @@ impl GetVocabularyError {
 }
 impl fmt::Display for GetVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVocabularyError {
@@ -1029,7 +1029,7 @@ impl GetVocabularyFilterError {
 }
 impl fmt::Display for GetVocabularyFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVocabularyFilterError {
@@ -1077,7 +1077,7 @@ impl ListTranscriptionJobsError {
 }
 impl fmt::Display for ListTranscriptionJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListTranscriptionJobsError {
@@ -1122,7 +1122,7 @@ impl ListVocabulariesError {
 }
 impl fmt::Display for ListVocabulariesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVocabulariesError {
@@ -1169,7 +1169,7 @@ impl ListVocabularyFiltersError {
 }
 impl fmt::Display for ListVocabularyFiltersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVocabularyFiltersError {
@@ -1221,7 +1221,7 @@ impl StartTranscriptionJobError {
 }
 impl fmt::Display for StartTranscriptionJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for StartTranscriptionJobError {
@@ -1277,7 +1277,7 @@ impl UpdateVocabularyError {
 }
 impl fmt::Display for UpdateVocabularyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVocabularyError {
@@ -1333,7 +1333,7 @@ impl UpdateVocabularyFilterError {
 }
 impl fmt::Display for UpdateVocabularyFilterError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVocabularyFilterError {

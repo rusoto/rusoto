@@ -157,7 +157,7 @@ impl CredentialsError {
 
 impl fmt::Display for CredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.message)
     }
 }
 
@@ -169,13 +169,13 @@ impl Error for CredentialsError {
 
 impl From<ParseError> for CredentialsError {
     fn from(err: ParseError) -> CredentialsError {
-        CredentialsError::new(err.description())
+        CredentialsError::new(err)
     }
 }
 
 impl From<IoError> for CredentialsError {
     fn from(err: IoError) -> CredentialsError {
-        CredentialsError::new(err.description())
+        CredentialsError::new(err)
     }
 }
 
@@ -187,7 +187,7 @@ impl From<HyperError> for CredentialsError {
 
 impl From<serde_json::Error> for CredentialsError {
     fn from(err: serde_json::Error) -> CredentialsError {
-        CredentialsError::new(err.description())
+        CredentialsError::new(err)
     }
 }
 

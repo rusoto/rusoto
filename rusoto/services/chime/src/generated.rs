@@ -2629,7 +2629,7 @@ impl AssociatePhoneNumberWithUserError {
 }
 impl fmt::Display for AssociatePhoneNumberWithUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociatePhoneNumberWithUserError {
@@ -2722,7 +2722,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorError {
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociatePhoneNumbersWithVoiceConnectorError {
@@ -2819,7 +2819,7 @@ impl AssociatePhoneNumbersWithVoiceConnectorGroupError {
 }
 impl fmt::Display for AssociatePhoneNumbersWithVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {
@@ -2904,7 +2904,7 @@ impl BatchCreateAttendeeError {
 }
 impl fmt::Display for BatchCreateAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchCreateAttendeeError {
@@ -2977,7 +2977,7 @@ impl BatchCreateRoomMembershipError {
 }
 impl fmt::Display for BatchCreateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchCreateRoomMembershipError {
@@ -3053,7 +3053,7 @@ impl BatchDeletePhoneNumberError {
 }
 impl fmt::Display for BatchDeletePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchDeletePhoneNumberError {
@@ -3122,7 +3122,7 @@ impl BatchSuspendUserError {
 }
 impl fmt::Display for BatchSuspendUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchSuspendUserError {
@@ -3195,7 +3195,7 @@ impl BatchUnsuspendUserError {
 }
 impl fmt::Display for BatchUnsuspendUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchUnsuspendUserError {
@@ -3272,7 +3272,7 @@ impl BatchUpdatePhoneNumberError {
 }
 impl fmt::Display for BatchUpdatePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchUpdatePhoneNumberError {
@@ -3341,7 +3341,7 @@ impl BatchUpdateUserError {
 }
 impl fmt::Display for BatchUpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for BatchUpdateUserError {
@@ -3410,7 +3410,7 @@ impl CreateAccountError {
 }
 impl fmt::Display for CreateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAccountError {
@@ -3486,7 +3486,7 @@ impl CreateAttendeeError {
 }
 impl fmt::Display for CreateAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateAttendeeError {
@@ -3556,7 +3556,7 @@ impl CreateBotError {
 }
 impl fmt::Display for CreateBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateBotError {
@@ -3625,7 +3625,7 @@ impl CreateMeetingError {
 }
 impl fmt::Display for CreateMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateMeetingError {
@@ -3709,7 +3709,7 @@ impl CreatePhoneNumberOrderError {
 }
 impl fmt::Display for CreatePhoneNumberOrderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreatePhoneNumberOrderError {
@@ -3779,7 +3779,7 @@ impl CreateRoomError {
 }
 impl fmt::Display for CreateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRoomError {
@@ -3859,7 +3859,7 @@ impl CreateRoomMembershipError {
 }
 impl fmt::Display for CreateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateRoomMembershipError {
@@ -3942,7 +3942,7 @@ impl CreateVoiceConnectorError {
 }
 impl fmt::Display for CreateVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVoiceConnectorError {
@@ -4031,7 +4031,7 @@ impl CreateVoiceConnectorGroupError {
 }
 impl fmt::Display for CreateVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for CreateVoiceConnectorGroupError {
@@ -4106,7 +4106,7 @@ impl DeleteAccountError {
 }
 impl fmt::Display for DeleteAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAccountError {
@@ -4176,7 +4176,7 @@ impl DeleteAttendeeError {
 }
 impl fmt::Display for DeleteAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteAttendeeError {
@@ -4250,7 +4250,7 @@ impl DeleteEventsConfigurationError {
 }
 impl fmt::Display for DeleteEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteEventsConfigurationError {
@@ -4318,7 +4318,7 @@ impl DeleteMeetingError {
 }
 impl fmt::Display for DeleteMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteMeetingError {
@@ -4391,7 +4391,7 @@ impl DeletePhoneNumberError {
 }
 impl fmt::Display for DeletePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeletePhoneNumberError {
@@ -4455,7 +4455,7 @@ impl DeleteRoomError {
 }
 impl fmt::Display for DeleteRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoomError {
@@ -4522,7 +4522,7 @@ impl DeleteRoomMembershipError {
 }
 impl fmt::Display for DeleteRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteRoomMembershipError {
@@ -4601,7 +4601,7 @@ impl DeleteVoiceConnectorError {
 }
 impl fmt::Display for DeleteVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorError {
@@ -4686,7 +4686,7 @@ impl DeleteVoiceConnectorGroupError {
 }
 impl fmt::Display for DeleteVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorGroupError {
@@ -4772,7 +4772,7 @@ impl DeleteVoiceConnectorOriginationError {
 }
 impl fmt::Display for DeleteVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorOriginationError {
@@ -4861,7 +4861,7 @@ impl DeleteVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for DeleteVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorStreamingConfigurationError {
@@ -4946,7 +4946,7 @@ impl DeleteVoiceConnectorTerminationError {
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorTerminationError {
@@ -5035,7 +5035,7 @@ impl DeleteVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for DeleteVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DeleteVoiceConnectorTerminationCredentialsError {
@@ -5120,7 +5120,7 @@ impl DisassociatePhoneNumberFromUserError {
 }
 impl fmt::Display for DisassociatePhoneNumberFromUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociatePhoneNumberFromUserError {
@@ -5209,7 +5209,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorError {
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociatePhoneNumbersFromVoiceConnectorError {
@@ -5302,7 +5302,7 @@ impl DisassociatePhoneNumbersFromVoiceConnectorGroupError {
 }
 impl fmt::Display for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {
@@ -5379,7 +5379,7 @@ impl GetAccountError {
 }
 impl fmt::Display for GetAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountError {
@@ -5452,7 +5452,7 @@ impl GetAccountSettingsError {
 }
 impl fmt::Display for GetAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAccountSettingsError {
@@ -5521,7 +5521,7 @@ impl GetAttendeeError {
 }
 impl fmt::Display for GetAttendeeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetAttendeeError {
@@ -5583,7 +5583,7 @@ impl GetBotError {
 }
 impl fmt::Display for GetBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetBotError {
@@ -5659,7 +5659,7 @@ impl GetEventsConfigurationError {
 }
 impl fmt::Display for GetEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetEventsConfigurationError {
@@ -5727,7 +5727,7 @@ impl GetGlobalSettingsError {
 }
 impl fmt::Display for GetGlobalSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetGlobalSettingsError {
@@ -5795,7 +5795,7 @@ impl GetMeetingError {
 }
 impl fmt::Display for GetMeetingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetMeetingError {
@@ -5864,7 +5864,7 @@ impl GetPhoneNumberError {
 }
 impl fmt::Display for GetPhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPhoneNumberError {
@@ -5937,7 +5937,7 @@ impl GetPhoneNumberOrderError {
 }
 impl fmt::Display for GetPhoneNumberOrderError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPhoneNumberOrderError {
@@ -6009,7 +6009,7 @@ impl GetPhoneNumberSettingsError {
 }
 impl fmt::Display for GetPhoneNumberSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetPhoneNumberSettingsError {
@@ -6072,7 +6072,7 @@ impl GetRoomError {
 }
 impl fmt::Display for GetRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetRoomError {
@@ -6140,7 +6140,7 @@ impl GetUserError {
 }
 impl fmt::Display for GetUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserError {
@@ -6209,7 +6209,7 @@ impl GetUserSettingsError {
 }
 impl fmt::Display for GetUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetUserSettingsError {
@@ -6282,7 +6282,7 @@ impl GetVoiceConnectorError {
 }
 impl fmt::Display for GetVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorError {
@@ -6359,7 +6359,7 @@ impl GetVoiceConnectorGroupError {
 }
 impl fmt::Display for GetVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorGroupError {
@@ -6444,7 +6444,7 @@ impl GetVoiceConnectorLoggingConfigurationError {
 }
 impl fmt::Display for GetVoiceConnectorLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorLoggingConfigurationError {
@@ -6529,7 +6529,7 @@ impl GetVoiceConnectorOriginationError {
 }
 impl fmt::Display for GetVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorOriginationError {
@@ -6614,7 +6614,7 @@ impl GetVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for GetVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorStreamingConfigurationError {
@@ -6699,7 +6699,7 @@ impl GetVoiceConnectorTerminationError {
 }
 impl fmt::Display for GetVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorTerminationError {
@@ -6784,7 +6784,7 @@ impl GetVoiceConnectorTerminationHealthError {
 }
 impl fmt::Display for GetVoiceConnectorTerminationHealthError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for GetVoiceConnectorTerminationHealthError {
@@ -6853,7 +6853,7 @@ impl InviteUsersError {
 }
 impl fmt::Display for InviteUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for InviteUsersError {
@@ -6922,7 +6922,7 @@ impl ListAccountsError {
 }
 impl fmt::Display for ListAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAccountsError {
@@ -6991,7 +6991,7 @@ impl ListAttendeesError {
 }
 impl fmt::Display for ListAttendeesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListAttendeesError {
@@ -7055,7 +7055,7 @@ impl ListBotsError {
 }
 impl fmt::Display for ListBotsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListBotsError {
@@ -7118,7 +7118,7 @@ impl ListMeetingsError {
 }
 impl fmt::Display for ListMeetingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListMeetingsError {
@@ -7189,7 +7189,7 @@ impl ListPhoneNumberOrdersError {
 }
 impl fmt::Display for ListPhoneNumberOrdersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPhoneNumberOrdersError {
@@ -7252,7 +7252,7 @@ impl ListPhoneNumbersError {
 }
 impl fmt::Display for ListPhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListPhoneNumbersError {
@@ -7319,7 +7319,7 @@ impl ListRoomMembershipsError {
 }
 impl fmt::Display for ListRoomMembershipsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoomMembershipsError {
@@ -7382,7 +7382,7 @@ impl ListRoomsError {
 }
 impl fmt::Display for ListRoomsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListRoomsError {
@@ -7450,7 +7450,7 @@ impl ListUsersError {
 }
 impl fmt::Display for ListUsersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListUsersError {
@@ -7522,7 +7522,7 @@ impl ListVoiceConnectorGroupsError {
 }
 impl fmt::Display for ListVoiceConnectorGroupsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVoiceConnectorGroupsError {
@@ -7606,7 +7606,7 @@ impl ListVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for ListVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVoiceConnectorTerminationCredentialsError {
@@ -7674,7 +7674,7 @@ impl ListVoiceConnectorsError {
 }
 impl fmt::Display for ListVoiceConnectorsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ListVoiceConnectorsError {
@@ -7742,7 +7742,7 @@ impl LogoutUserError {
 }
 impl fmt::Display for LogoutUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for LogoutUserError {
@@ -7819,7 +7819,7 @@ impl PutEventsConfigurationError {
 }
 impl fmt::Display for PutEventsConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutEventsConfigurationError {
@@ -7904,7 +7904,7 @@ impl PutVoiceConnectorLoggingConfigurationError {
 }
 impl fmt::Display for PutVoiceConnectorLoggingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutVoiceConnectorLoggingConfigurationError {
@@ -7989,7 +7989,7 @@ impl PutVoiceConnectorOriginationError {
 }
 impl fmt::Display for PutVoiceConnectorOriginationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutVoiceConnectorOriginationError {
@@ -8074,7 +8074,7 @@ impl PutVoiceConnectorStreamingConfigurationError {
 }
 impl fmt::Display for PutVoiceConnectorStreamingConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutVoiceConnectorStreamingConfigurationError {
@@ -8166,7 +8166,7 @@ impl PutVoiceConnectorTerminationError {
 }
 impl fmt::Display for PutVoiceConnectorTerminationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutVoiceConnectorTerminationError {
@@ -8252,7 +8252,7 @@ impl PutVoiceConnectorTerminationCredentialsError {
 }
 impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for PutVoiceConnectorTerminationCredentialsError {
@@ -8322,7 +8322,7 @@ impl RegenerateSecurityTokenError {
 }
 impl fmt::Display for RegenerateSecurityTokenError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RegenerateSecurityTokenError {
@@ -8390,7 +8390,7 @@ impl ResetPersonalPINError {
 }
 impl fmt::Display for ResetPersonalPINError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for ResetPersonalPINError {
@@ -8470,7 +8470,7 @@ impl RestorePhoneNumberError {
 }
 impl fmt::Display for RestorePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for RestorePhoneNumberError {
@@ -8556,7 +8556,7 @@ impl SearchAvailablePhoneNumbersError {
 }
 impl fmt::Display for SearchAvailablePhoneNumbersError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchAvailablePhoneNumbersError {
@@ -8625,7 +8625,7 @@ impl UpdateAccountError {
 }
 impl fmt::Display for UpdateAccountError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccountError {
@@ -8707,7 +8707,7 @@ impl UpdateAccountSettingsError {
 }
 impl fmt::Display for UpdateAccountSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateAccountSettingsError {
@@ -8772,7 +8772,7 @@ impl UpdateBotError {
 }
 impl fmt::Display for UpdateBotError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateBotError {
@@ -8841,7 +8841,7 @@ impl UpdateGlobalSettingsError {
 }
 impl fmt::Display for UpdateGlobalSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateGlobalSettingsError {
@@ -8913,7 +8913,7 @@ impl UpdatePhoneNumberError {
 }
 impl fmt::Display for UpdatePhoneNumberError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePhoneNumberError {
@@ -8987,7 +8987,7 @@ impl UpdatePhoneNumberSettingsError {
 }
 impl fmt::Display for UpdatePhoneNumberSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdatePhoneNumberSettingsError {
@@ -9050,7 +9050,7 @@ impl UpdateRoomError {
 }
 impl fmt::Display for UpdateRoomError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoomError {
@@ -9117,7 +9117,7 @@ impl UpdateRoomMembershipError {
 }
 impl fmt::Display for UpdateRoomMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateRoomMembershipError {
@@ -9185,7 +9185,7 @@ impl UpdateUserError {
 }
 impl fmt::Display for UpdateUserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserError {
@@ -9258,7 +9258,7 @@ impl UpdateUserSettingsError {
 }
 impl fmt::Display for UpdateUserSettingsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateUserSettingsError {
@@ -9333,7 +9333,7 @@ impl UpdateVoiceConnectorError {
 }
 impl fmt::Display for UpdateVoiceConnectorError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVoiceConnectorError {
@@ -9417,7 +9417,7 @@ impl UpdateVoiceConnectorGroupError {
 }
 impl fmt::Display for UpdateVoiceConnectorGroupError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UpdateVoiceConnectorGroupError {

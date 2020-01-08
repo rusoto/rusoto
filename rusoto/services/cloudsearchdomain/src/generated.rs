@@ -374,7 +374,7 @@ impl SearchError {
 }
 impl fmt::Display for SearchError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SearchError {
@@ -405,7 +405,7 @@ impl SuggestError {
 }
 impl fmt::Display for SuggestError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for SuggestError {
@@ -438,7 +438,7 @@ impl UploadDocumentsError {
 }
 impl fmt::Display for UploadDocumentsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
+        write!(f, "{}", self.to_string())
     }
 }
 impl Error for UploadDocumentsError {
