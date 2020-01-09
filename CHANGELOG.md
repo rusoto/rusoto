@@ -16,6 +16,7 @@
 - Add Debug trait to generated Clients
 - Add `rusoto_ec2::filter!` macro
 - Improve `InstanceMetadataProvider` to avoid cloning unnecessarily
+- Remove deprecated `Error::description` implementations
 
 ## [0.42.0] - 2019-11-18
 
